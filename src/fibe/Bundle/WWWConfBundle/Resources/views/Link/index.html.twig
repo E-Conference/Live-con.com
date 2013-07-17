@@ -1,0 +1,51 @@
+{% extends "fibeWWWConfBundle::base.html.twig" %}
+
+{% block title %}Index{% endblock title %}
+{% block body %}
+
+{{ parent() }}
+
+<div class="hero-unit">
+        <h1>SWC event linker</h1>
+        <p>This app has been made to manage a conference using SWC ontology.</p>
+        <div class="row-fluid">
+            <div class="span4">
+                <div class="btn-group">
+                    <a href="{{ path('wwwconf_schedule') }}" role="button" class="btn btn-success btn-large">
+                      <i class="icon-calendar icon-white"></i> Manage schedule 
+                    </a>
+
+                    {% if app.user.wwwConf|length>0 %}
+                    <a href="{{ path('wwwconf_schedule') }}" role="button" class="btn dropdown-toggle btn-success btn-large" data-toggle="dropdown">
+                        <i class="icon-list icon-white"></i> 
+                    </a>
+                    <ul class="dropdown-menu">
+                        {% for conf in app.user.wwwConf %} 
+                            <li><a href="{{ path('wwwconf_schedule_confId', { 'confId': conf.id}) }}">{{ conf.confName }}</a></li>
+                        {% endfor %}
+                    </ul>  
+                    {% endif %}
+                    
+                  
+                </div>
+                
+            </div>
+			      <div class="span4"> 
+                <a href="{{ path('wwwconf_conference_show') }}" role="button" class="btn btn-primary btn-large"><i class="icon-cog icon-white"></i> Manage conferences </a>
+            </div>
+            
+            <!--<div class="span3">
+                <p><a href="{{ path('wwwconf_link_create') }}" disabled="disabled" class="btn btn-primary btn-large btn-success">New link <i class="icon-plus icon-white"></i></a></p>
+            </div>
+            <div class="span3">
+                <p><a href="{{ path('wwwconf_link_list') }}" class="btn btn-info btn-large">See links »</a></p>
+            </div>-->
+        </div>
+      </div>
+      
+
+{% endblock body %}
+
+
+
+

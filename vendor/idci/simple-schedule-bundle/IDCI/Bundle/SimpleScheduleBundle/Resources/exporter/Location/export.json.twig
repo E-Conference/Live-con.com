@@ -1,0 +1,7 @@
+{
+    "id": "{{ entity.id }}",
+    "name": "{{ entity.name }}",
+    "description": "{% autoescape 'js' %}{{ entity.description }}{% endautoescape %}",
+    "latitude": "{{ entity.latitude }}",
+    "longitude": "{{ entity.longitude }}"
+}

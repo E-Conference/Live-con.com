@@ -1,0 +1,37 @@
+{% extends "fibeWWWConfBundle::base.html.twig" %}
+
+
+{% block title %}Login to enter into schedule admin area{% endblock title %} 
+
+{% block body %}
+  
+  {% if error %}
+    <div class="alert alert-error">{{ error.message }}</div>
+  {% endif %}
+  
+  <div class="hero-unit">
+    <div class="img-wrapper" style="width:8em;float:left;margin:1em 2em 2em">
+        <img src="{{ asset('bundles/fibewwwconf/img/schedule.png') }}" alt="schedule icon"/>
+    </div> 
+        <h1>SWC Event Manager</h1>
+        <h3>The restfull event manager</h3>
+        <p>Import or create your dataset, manage your events and keep your data opened!.</p>
+  </div>
+  <div class="container">
+    <p class="text-info">Demo version ! Connect with login : <strong>"admin"</strong>, password : <strong>"admin"</strong>.</p>
+        <form   action="{{ path('login_check') }}" method="post">
+        
+            <label for="username">Login :</label>
+            <input type="text" id="username" name="_username" value="{{ last_username }}" />
+
+            <label for="password">Password :</label>
+            <input type="password" id="password" name="_password" />
+            <br />
+            <input class="btn btn-success" type="submit" value="Connexion" />
+        </form>
+  </div>
+         
+    
+  
+ 
+{% endblock %} 

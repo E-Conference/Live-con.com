@@ -1,0 +1,32 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Link Type</th>
+            <th>Name</th>
+            <th>Uri</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for xproperty in entity.xproperties %}
+            <tr>
+                <td>{{ xproperty.xNamespace }}</td>
+                <td>{{ xproperty.xKey }}</td>
+                <td>{{ xproperty.xValue }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+
+    {% if with_form is defined and with_form %}
+    <tfoot>
+        <tr>
+            <td colspan="3">
+                <form action="{{ path('admin_schedule_xproperty_add', { 'calendar_entity_id': entity.id}) }}" method="post">
+                    {{ form_widget(xproperty_form) }}
+                    <button type="submit" class="btn btn-primary">{% trans %}Add{% endtrans %}</button>
+                </form>
+            </td>
+        </tr>
+    </tfoot>
+    {% endif %}
+</table>

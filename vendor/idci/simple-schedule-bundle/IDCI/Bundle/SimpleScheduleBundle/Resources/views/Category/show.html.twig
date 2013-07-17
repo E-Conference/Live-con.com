@@ -1,0 +1,54 @@
+{% extends "IDCISimpleScheduleBundle::adminbase.html.twig" %}
+
+{% block body %}
+
+{{ parent() }}
+
+<div class="page-header">
+  <h1>Category</h1>
+</div>
+
+<table class="table table-bordered table-striped record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Color</th>
+            <td>
+                <div style="width:28px;height:28px;border:1px solid #222;background:{{ entity.color }}" title="{{ entity.color }}">
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td>{{ entity.name }}</td>
+        </tr>
+        <tr>
+            <th>Slug</th>
+            <td>{{ entity.slug }}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{ entity.description }}</td>
+        </tr>
+        <tr>
+            <th>Level</th>
+            <td>{{ entity.level }}</td>
+        </tr>
+        <tr>
+            <th>Tree</th>
+            <td>{{ entity.tree }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a class="btn" href="{{ path('admin_schedule_category') }}">
+            {% trans %}Back to the list{% endtrans %}
+        </a>
+    </li>
+</ul>
+{% endblock body %}

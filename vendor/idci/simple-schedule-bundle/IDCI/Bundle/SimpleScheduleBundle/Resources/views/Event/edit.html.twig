@@ -1,0 +1,32 @@
+{% extends "IDCISimpleScheduleBundle::adminbase.html.twig" %}
+
+{% block body %}
+
+{{ parent() }}
+
+<div class="page-header">
+  <h1>{% trans %}Edit{% endtrans %}</h1>
+</div>
+
+<form action="{{ path('admin_schedule_event_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(form) }}>
+    {% include "IDCISimpleScheduleBundle:Event:form.html.twig" %}
+    <button type="submit" class="btn btn-primary">{% trans %}Edit{% endtrans %}</button>
+</form>
+
+{% include "IDCISimpleScheduleBundle:Event:xproperties.html.twig" with {"with_form": true} %}
+{% include "IDCISimpleScheduleBundle:Event:relation.html.twig" with {"with_form": true} %}
+
+<ul class="record_actions">
+    <li>
+        <a class="btn" href="{{ path('admin_schedule_event') }}">
+            {% trans %}Back to the list{% endtrans %}
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('admin_schedule_event_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit" class="btn btn-danger">{% trans %}Delete{% endtrans %}</button>
+        </form>
+    </li>
+</ul>
+{% endblock body %}

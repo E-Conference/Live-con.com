@@ -1,0 +1,51 @@
+<event id="{{ entity.id }}">
+  <name>{{ entity.summary }}</name>
+  <created_at>{{ entity.createdAt | date('Y-m-d H:i') }}</created_at>
+  <end_at>{{ entity.endAt | date('Y-m-d H:i') }}</end_at>
+  <start_at>{{ entity.startAt | date('Y-m-d H:i') }}</start_at>
+  <is_transparent>{{ entity.isTransparent }}</is_transparent>
+  <resources>{{ entity.resources }}</resources>
+  <duration>{{ entity.duration }}</duration> 
+  <last_modified_at>{{ entity.lastModifiedAt | date('Y-m-d H:i') }}</last_modified_at>
+  <description><![CDATA[{{ entity.description }}]]></description>
+  <comment>{{ entity.comment }}</comment>
+  <url>{{ entity.url }}</url>
+  <organizer>{{ entity.organizer }}</organizer>
+  <revision_sequence>{{ entity.revisionSequence }}</revision_sequence>
+  <attendees>{{ entity.attendees }}</attendees>
+  <contacts>{{ entity.contacts }}</contacts>
+  <excluded_dates>{{ entity.excludedDates }}</excluded_dates>  
+  <included_dates>{{ entity.includedDates }}</included_dates>
+  <classification>{{ entity.classification }}</classification>
+  <rrule>
+    {% autoescape false %}
+    {% for freq, bys in entity.includedRule.__toArray() %}
+          <frequency>{{ freq }}</frequency>
+          {% for by, values in bys %}
+          <by name="{{ by }}">{{ values |join('|') }}</by>
+          {% endfor %}
+    {% endfor %}
+    {% endautoescape %}
+  </rrule>
+  <location id="{{ entity.location.id }}">
+      <name>{{ entity.location.name }}</name>
+      <description><![CDATA[{{ entity.location.description }}]]></description>
+      {% if entity.hasGeo() %}
+      <latitude>{{ entity.geoLatitude }}</latitude>
+      <longitude>{{ entity.geoLongitude }}</longitude>
+      {% endif %}
+  </location>
+  {% for category in entity.categories %}
+  <category id="{{ category.id }}" color="{{ category.color }}">
+    <name>{{ category.name }}</name>
+    <slug>{{ category.slug }}</slug>
+  </category>
+  {% endfor %}
+  {% for xproperty in entity.xProperties %}
+  <xproperty id="{{ xproperty.id }}" calendarEntity="{{ xproperty.calendarEntity }}">
+    <xnamespace>{{ xproperty.xNamespace }}</xnamespace>
+    <xkey>{{ xproperty.xKey }}</xkey>
+    <xvalue>{{ xproperty.xValue }}</xvalue>
+  </xproperty>
+  {% endfor %}
+</event>

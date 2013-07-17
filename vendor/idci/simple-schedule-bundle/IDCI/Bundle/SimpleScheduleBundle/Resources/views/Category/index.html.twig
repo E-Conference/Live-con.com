@@ -1,0 +1,61 @@
+{% extends "IDCISimpleScheduleBundle::adminbase.html.twig" %}
+
+{% block body %}
+
+{{ parent() }}
+
+<div class="page-header">
+    <h1>{% trans %}Categories{% endtrans %}</h1>
+</div>
+
+<p>
+    {{ pagerfanta(pager, 'twitter_bootstrap') }}
+</p>
+
+<ul class="list_actions">
+    <li>
+        <a class="btn btn-primary" href="{{ path('admin_schedule_category_new') }}">
+            {% trans %}Create a new entry{% endtrans %}
+        </a>
+    </li>
+</ul>
+
+<table class="table table-bordered table-striped table-condensed records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Color</th>
+            <th>Name</th>
+            <th>Slug</th>
+            <th colspan="3">{% trans %}Actions{% endtrans %}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in pager.currentPageResults %}
+        <tr>
+            <td><a href="{{ path('admin_schedule_category_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>
+                <div style="width:28px;height:28px;border:1px solid #222;background:{{ entity.color }}" title="{{ entity.color }}">
+                </div>
+            </td>
+            <td>{{ entity }}</td>
+            <td>{{ entity.slug }}</td>
+            <td>
+                <a class="btn btn-block" href="{{ path('admin_schedule_category_show', { 'id': entity.id }) }}">{% trans %}show{% endtrans %}</a>
+            </td>
+            <td>
+                <a class="btn btn-block btn-primary" href="{{ path('admin_schedule_category_edit', { 'id': entity.id }) }}">{% trans %}edit{% endtrans %}</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul class="list_actions">
+    <li>
+        <a class="btn btn-primary" href="{{ path('admin_schedule_category_new') }}">
+            {% trans %}Create a new entry{% endtrans %}
+        </a>
+    </li>
+</ul>
+{% endblock body %}

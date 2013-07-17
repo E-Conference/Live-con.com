@@ -1,0 +1,38 @@
+{% set enclosure = '"' %}
+{% set delimiter = ',' %}
+
+{% autoescape false %}
+{% spaceless %}
+
+{{ enclosure }}{{ entity.id }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.summary }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.createdAt | date('Y-m-d H:i') }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.endAt | date('Y-m-d H:i') }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.startAt | date('Y-m-d H:i') }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.isTransparent }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.resources }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.duration }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.lastModifiedAt | date('Y-m-d H:i') }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.description }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.comment }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.url }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.organizer }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.revisionSequence }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.attendees }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.contacts }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.excludedDates }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.includedDates }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.classification }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.location.id }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.location.name }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.location.description }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.includedRule }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.location.latitude }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.location.longitude }}{{ enclosure }}{{ delimiter }}
+
+{% for category in entity.categories %}
+    {{ enclosure }}{{ category }}|{{ enclosure }}{{ delimiter }}
+{% endfor %}
+
+{% endspaceless %}
+{% endautoescape %}

@@ -1,0 +1,52 @@
+jms_security_extra:
+    secure_all_services: false
+    expressions: true
+
+security:
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+        fibe\SecurityBundle\Entity\User: sha512
+
+    role_hierarchy:
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        main:
+            entity: { class: fibe\SecurityBundle\Entity\User, property: username } 
+        
+#        in_memory:
+#            memory:
+#                users:
+#                    #define here the user password of the "admin" account
+#                    admin: { password: wwwconfTER, roles: [ 'ROLE_ADMIN' ] }
+
+    firewalls:
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+
+        main_login:
+            # Cette expression régulière permet de prendre /login (mais pas /login_check !)
+            pattern:   ^/login$
+            anonymous: true # On autorise les anonymes sur ce pare-feu
+    
+        api:
+            pattern:   ^/api/
+            anonymous: true 
+    
+    
+        main:
+            pattern:   ^/
+            anonymous: false
+            provider:  main
+            form_login:
+                login_path: login
+                check_path: login_check
+                default_target_path: wwwconf_link_index
+            logout:
+                path:   logout
+                target: /login
+
+    access_control:
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

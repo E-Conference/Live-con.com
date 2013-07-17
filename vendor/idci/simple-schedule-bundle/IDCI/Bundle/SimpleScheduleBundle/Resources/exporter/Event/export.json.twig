@@ -1,0 +1,55 @@
+{
+    "id": "{{ entity.id }}",
+    "name": "{{ entity.summary }}",
+    "created_at": "{{ entity.createdAt | date('Y-m-d H:i') }}",
+    "end_at": "{{ entity.endAt | date('Y-m-d H:i') }}",
+    "start_at": "{{ entity.startAt | date('Y-m-d H:i') }}",
+    "is_transparent": "{{ entity.isTransparent }}",
+    "resources": "{{ entity.resources }}",
+    "duration": "{{ entity.duration }}",
+    "last_modified_at": "{{ entity.lastModifiedAt | date('Y-m-d H:i') }}",
+    "description": "{% autoescape 'js' %}{{ entity.description }}{% endautoescape %}",
+    "comment": "{{ entity.comment }}",
+    "url": "{{ entity.url }}",
+    "organizer": "{{ entity.organizer }}",
+    "revision_sequence": "{{ entity.revisionSequence }}",
+    "attendees": "{{ entity.attendees }}",
+    "contacts": "{{ entity.contacts }}",
+    "excluded_dates": "{{ entity.excludedDates }}",
+    "included_dates": "{{ entity.includedDates }}",
+    "classification": "{{ entity.classification }}",
+    "r_rule": "{% autoescape false %}{{ entity.includedRule }}{% endautoescape %}",
+    "location":
+    {
+        "id": "{{ entity.location.id }}",
+        "name": "{{ entity.location.name }}",
+        {% if entity.hasGeo() %}
+        "latitude": "{{ entity.location.latitude }}",
+        "latitude": "{{ entity.location.longitude }}",
+        {% endif %}
+        "description": "{% autoescape 'js' %}{{ entity.location.description }}{% endautoescape %}"
+    },
+    {% spaceless %}
+    "categories":
+    [
+    {% for category in entity.categories %}
+        {% if loop.first %}
+        { "id": "{{ category.id }}", "name": "{{ category.name }}", "slug": "{{ category.slug }}", "color": "{{ category.color }}" }
+        {% else %}
+        ,{ "id": "{{ category.id }}", "name": "{{ category.name }}", "slug": "{{ category.slug }}", "color": "{{ category.color }}" }
+        {% endif %}
+    {% endfor %}
+    ],
+    "xproperties":
+    [
+    {% for xproperty in entity.xProperties %}
+        {% if loop.first %}
+        { "id": "{{ xproperty.id }}","xNamespace": "{{ xproperty.xNamespace }}","xKey": "{{ xproperty.xKey }}","xValue": "{{ xproperty.xValue }}" }
+        {% else %}
+,{ "id": "{{ xproperty.id }}","xNamespace": "{{ xproperty.xNamespace }}","xKey": "{{ xproperty.xKey }}","xValue": "{{ xproperty.xValue }}" }
+        {% endif %}
+    {% endfor %}
+    ]
+    {% endspaceless %}
+    
+}

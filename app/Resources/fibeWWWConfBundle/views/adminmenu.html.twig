@@ -1,0 +1,54 @@
+<div class="navbar navbar-static-top navbar-inverse">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="{{ path('wwwconf_link_index') }}" title="Go back to Index">WWWConf</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li>
+                        <a href="{{ path('wwwconf_schedule') }}" title="manage schedule">Manage schedule</a>
+                    </li>
+                    
+                    
+                    {% if app.user.wwwConf|length>0 %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu"> 
+                            {% for conf in app.user.wwwConf %} 
+                            <li><a href="{{ path('wwwconf_schedule_confId', { 'confId': conf.id}) }}">{{ conf.confName }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li> 
+                    {% endif %}
+                    
+                    
+                    <li class="divider-vertical"></li>
+                    <li class="divider-vertical"></li>
+                    <li>
+                        <a href="{{ path('admin_schedule_status') }}" title="Status">Status</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('admin_schedule_location') }}" title="Location">Location</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('admin_schedule_category') }}" title="Category">Category</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('admin_schedule_event') }}" title="Event">Event</a>
+                    </li>
+                </ul>
+                <ul class="nav pull-right">
+                  <li>
+                        <a href="{{ path('logout') }}" title="logout">Log out {{ app.user.username }}</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
