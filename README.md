@@ -24,7 +24,7 @@ In your git xterm enter those commands :
 
 	
 	
-Next, create a parameters.yml file and copy this text in :
+Next, create a parameters.yml file with this text :
 
 
 
@@ -77,12 +77,12 @@ Finally, create your user using the Git xterm :
 Start your Apache server and go to :
 
 
-	- http://localhost/WWWConf/WWWConference/web/app_dev.php/admin/
+	- http://localhost/WWWConf/web/
 	
 	
 	You are ready to use the WWWConference Bundle !!!!!!!!! Welcome!!!!!!!!
 
-	
+	One of the most common issue is that folders app/cache and app/logs don't have write access by Symfony. To fix this, do a chmod or refer to [a link](http://symfony.com/doc/current/book/installation.html#configuration-and-setup) for more informations. 
 	
 	
 #USER MANUAL
