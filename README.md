@@ -30,7 +30,6 @@ Next, create a parameters.yml file with this text :
 
 <code>
 parameters:
-
     database_driver:   pdo_mysql
     database_host:     127.0.0.1
     database_port:     ~
@@ -73,16 +72,17 @@ Now to create the database and install the assets.
 ----------------
 Finally, create your user using the Git xterm :
     php app/console fos:user:create admin admin@example.com admin
+    
 ----------------		
 Start your Apache server and go to :
 
 
-	- http://localhost/WWWConf/web/
+    - http://localhost/WWWConf/web/
 	
 	
-	You are ready to use the WWWConference Bundle !!!!!!!!! Welcome!!!!!!!!
+You are ready to use the WWWConference Bundle !!!!!!!!! Welcome!!!!!!!!
 
-	One of the most common issue is that folders app/cache and app/logs don't have write access by Symfony. To fix this, do a chmod or refer to [a link](http://symfony.com/doc/current/book/installation.html#configuration-and-setup) for more informations. 
+One of the most common issue is that folders app/cache and app/logs don't have write access by Symfony. To fix this, do a chmod or refer to [a link](http://symfony.com/doc/current/book/installation.html#configuration-and-setup) for more informations. 
 	
 	
 #USER MANUAL
