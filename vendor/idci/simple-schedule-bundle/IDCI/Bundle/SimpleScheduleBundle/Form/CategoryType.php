@@ -21,7 +21,7 @@ class CategoryType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('color')
-            ->add('pardent')
+            ->add('parent')
         ;
     }
 
