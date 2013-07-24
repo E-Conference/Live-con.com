@@ -27,3 +27,10 @@ assetic:
 
 #swiftmailer:
 #    delivery_address: me@example.com
+#    transport:  smtp
+#    encryption: ssl
+#    auth_mode:  login
+#    host:       smtp.gmail.com
+#    username:   your_username
+#    password:   your_password
+ 

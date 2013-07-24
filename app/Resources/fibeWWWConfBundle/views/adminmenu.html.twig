@@ -33,19 +33,25 @@
                         <a href="{{ path('admin_schedule_event') }}" title="Event">Event</a>
                     </li>
                 </ul> 
-                <ul class="nav pull-right">
-                    <li> 
-                        <a style="padding-right:5px;" href="{{ path('fos_user_profile_edit') }}" title="Profile">
-                            <i class="icon-user icon-white"></i> {{ app.user.username }}
-                        </a>
-                    </li>
+                <ul class="nav pull-right"> 
                     <li class="dropdown">
                         <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-user icon-white"></i> {{ app.user.username }}
                             <b class="caret"></b>
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu"> 
+                            <li> 
+                                <a style="padding-right:5px;" href="{{ path('fos_user_profile_edit') }}" title="Profile">
+                                    <i class="icon-user icon-white"></i> Profile
+                                </a>
+                            </li>
                             <li>
-                                <a href="{{ path('logout') }}" title="logout"> logout</a>
+                                <a href="{{ path('fos_user_change_password') }}" title="logout">
+                                    <i class="icon-edit icon-white"></i> change password</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('logout') }}" title="logout">
+                                    <i class="icon-remove icon-white"></i> logout</a>
                             </li>
                         </ul>
                     </li> 
