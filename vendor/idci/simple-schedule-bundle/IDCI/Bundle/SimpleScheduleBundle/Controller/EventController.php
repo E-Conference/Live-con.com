@@ -46,19 +46,8 @@ class EventController extends Controller
      */
     public function indexAction(Request $request)
     {
-    
-        //confManagerEvents
-        $em = $this->getDoctrine()->getManager(); 
-        $currentManager=$this->get('security.context')->getToken()->getUser();
-        $entities=[]; 
-        $confs = $currentManager->getWwwConf();
-        foreach($confs as $conf){
-            $events = $conf->getConfEvents();
-            foreach($events as $event){ 
-                $entities[] = $event;  
-            } 
-        } 
-        //confManagerEvents
+     
+        $entities=$this->get('security.context')->getToken()->getUser()->getWwwConf()->getConfEvents()->toArray(); 
          
 
         $adapter = new ArrayAdapter($entities);
@@ -86,22 +75,7 @@ class EventController extends Controller
     {
     
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id);
-        
-        //confManagerEvents 
-        $currentManager=$this->get('security.context')->getToken()->getUser();
-        $entities=[]; 
-        $confs = $currentManager->getWwwConf();
-        foreach($confs as $conf){
-            $events = $conf->getConfEvents();
-            foreach($events as $event){ 
-                $entities[] = $event;  
-            } 
-        } 
-        if (!in_array($entity, $entities)) {
-            throw new AccessDeniedException('Look at your own events !!'); 
-        }
-        //confManagerEvents
+        $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id); 
         
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Event entity.');
@@ -181,23 +155,7 @@ class EventController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id);
-
-
-        //confManagerEvents
-        $currentManager=$this->get('security.context')->getToken()->getUser();
-        $entities=[]; 
-        $confs = $currentManager->getWwwConf();
-        foreach($confs as $conf){
-            $events = $conf->getConfEvents();
-            foreach($events as $event){ 
-                $entities[] = $event;  
-            } 
-        } 
-        if (!in_array($entity, $entities)) {
-            throw new AccessDeniedException('Look at your own events !!'); 
-        }
-        $WwwConf = $entity->getWwwConf();
-        //confManagerEvents
+ 
 
 
         if (!$entity) {
@@ -243,24 +201,7 @@ class EventController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id);
-        
-        
-
-        //confManagerEvents 
-        $currentManager=$this->get('security.context')->getToken()->getUser();
-        $entities=[]; 
-        $confs = $currentManager->getWwwConf();
-        foreach($confs as $conf){
-            $events = $conf->getConfEvents();
-            foreach($events as $event){ 
-                $entities[] = $event;  
-            } 
-        } 
-        if (!in_array($entity, $entities)) {
-            throw new AccessDeniedException('Look at your own events !!'); 
-        }
-        //confManagerEvents
+        $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id); 
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Event entity.');

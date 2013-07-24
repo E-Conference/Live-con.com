@@ -50,14 +50,11 @@ class ScheduleController extends Controller
  */
     public function scheduleConfIdAction(Request $request,$confId)
     {
-    
-        $em = $this->getDoctrine()->getManager(); 
-        $entity  =  $this->getDoctrine()
-                         ->getRepository('fibeWWWConfBundle:WwwConf')
-                         ->find($confId);
-        if($entity && $entity->getConfManager() == $this->get('security.context')->getToken()->getUser() )
+     
+        $user = $this->get('security.context')->getToken()->getUser();
+        if($user->getWwwConf())
         {
-            return array('currentConf' => $entity);
+            return array('currentConf' => $user->getWwwConf());
         }
         return $this->redirect($this->generateUrl('wwwconf_schedule'));
     } 

@@ -33,6 +33,16 @@ class ConfEvent extends Event
     {
 	    parent::__construct();
     }
+
+    /**
+     * toString
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+	    parent::__toString();
+    }
     
     
     /**

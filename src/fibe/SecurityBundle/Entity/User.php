@@ -19,15 +19,14 @@ class User extends BaseUser
     * @ORM\Column(type="integer")
     * @ORM\GeneratedValue(strategy="AUTO")
     */
-    protected $id;
-
-
-    /**
-    * wwwConf
-    *
-    * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", mappedBy="confManager", cascade={"persist", "remove"}) 
-    */
+    protected $id; 
     
+    /**
+     * wwwConf
+     *
+     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="confManagers", cascade={"persist"})
+     * @ORM\JoinColumn(name="wwwConf_id", referencedColumnName="id")
+     */
     protected $wwwConf;
     
     
@@ -36,8 +35,7 @@ class User extends BaseUser
      */
     public function __construct()
     {
-	    parent::__construct(); 
-        $this->wwwConf = new \Doctrine\Common\Collections\ArrayCollection();
+	    parent::__construct();
     }
     
     /**
@@ -48,38 +46,29 @@ class User extends BaseUser
     public function getId()
     {
         return $this->id;
-    }
-
+    }  
+    
+    
     /**
-     * Add wwwConf
+     * Set wwwConf
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $wwwConf
-     * @return User
+     * @return ConfEvent
      */
-    public function addWwwConf(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $wwwConf)
+    public function setWwwConf(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $wwwConf = null)
     {
-        $this->wwwConf[] = $wwwConf;
+        $this->wwwConf = $wwwConf;
     
         return $this;
     }
 
     /**
-     * Remove wwwConf
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $wwwConf
-     */
-    public function removeWwwConf(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $wwwConf)
-    {
-        $this->wwwConf->removeElement($wwwConf);
-    }
-
-    /**
      * Get wwwConf
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
      */
     public function getWwwConf()
     {
         return $this->wwwConf;
-    }
+    }  
 }

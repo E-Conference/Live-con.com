@@ -10,20 +10,15 @@
             <div class="nav-collapse collapse">
                 <ul class="nav">
                     <li>
-                        <a href="{{ path('wwwconf_schedule') }}" title="manage schedule">Manage schedule</a>
+                        <a href="{{ path('wwwconf_schedule') }}" title="manage schedule">Schedule</a>
                     </li>
                     
                     
-                    {% if app.user.wwwConf|length>0 %}
+                    {% if app.user.wwwConf %}
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <a href="{{ path('wwwconf_schedule_confId', { 'confId': app.user.wwwConf.id}) }}" class="dropdown-toggle" data-toggle="dropdown">
                             <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu"> 
-                            {% for conf in app.user.wwwConf %} 
-                            <li><a href="{{ path('wwwconf_schedule_confId', { 'confId': conf.id}) }}">{{ conf.confName }}</a></li>
-                            {% endfor %}
-                        </ul>
+                        </a> 
                     </li> 
                     {% endif %}
                     

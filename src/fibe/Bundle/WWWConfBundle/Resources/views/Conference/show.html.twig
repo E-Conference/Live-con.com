@@ -4,42 +4,35 @@
 {% block body %}
 
 {{ parent() }}
-
-<div class="hero-unit">
-    <h1>Manage conferences</h1>
- 
-</div> 
+<header class="jumbotron subhead" id="overview">
+    <div class="page-header">
+            <h1>Conference</h1>
+          </div>
+</header> 
     <div class="container"> 
-    {% if confManager.wwwConf|length > 0 %}
-        <div class="accordion" id="accordion">
-            {% for conf in confManager.wwwConf %} 
-                <div class="accordion-group">
-                    <div class="accordion-heading" style="background-color:#eee;">
-                        <a class="accordion-toggle"  data-toggle="collapse" data-parent="#accordion" href="#collapse{{ conf.id }}">
-                            {{ conf.confName }}
-                        </a>
-                    </div>
-                    <div id="collapse{{ conf.id }}" class="accordion-body collapse">
-                        <div class="accordion-inner" style="background-color:#f9f9f9;">
-                            <p><strong>id : </strong>{{ conf.id }} <i class="muted">( <strong><i>wwwconf_id</i></strong> parameter to query restfull service )</i></p>
-                            <p><strong>uri : </strong>{{ conf.confUri }}</p>
-                            <p><strong>sparql endpoint : </strong>{{ conf.confOwlUri }} </p>
-                            <p><strong>{{ conf.confEvents|length }} events</strong> </p> 
-                            <a href="{{ path('wwwconf_schedule_confId', { 'confId': conf.id}) }}"  role="button" class="btn btn-primary btn-mini">
-                               <i class="icon-cog icon-white"></i> schedule view
-                            </a>
-                            <button onclick="deleteConf({{ conf.id }})"  class="btn-danger btn-mini">
-                               <i class="icon-remove icon-white"></i> Delete 
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
+        <div class="well well-large">
+        {% if confManager.wwwConf  %}
+            {{ confManager.wwwConf.confName }}
+            <p><strong>id : </strong>{{ confManager.wwwConf.id }} <i class="muted">( <strong><i>wwwconf_id</i></strong> parameter to query restfull service )</i></p>
+            <p><strong>uri : </strong>{{ confManager.wwwConf.confUri }}</p>
+            <p><strong>sparql endpoint : </strong>{{ confManager.wwwConf.confOwlUri }} </p>
+            <p><strong>{{ confManager.wwwConf.confEvents|length }} events</strong> </p> 
+            <a href="{{ path('wwwconf_schedule_confId', { 'confId': confManager.wwwConf.id}) }}"  role="button" class="btn btn-primary btn-mini">
+               <i class="icon-calendar icon-white"></i> schedule view
+            </a>
+            <button onclick="deleteConf({{ confManager.wwwConf.id }})"  class="btn-danger btn-mini">
+               <i class="icon-remove icon-white"></i> Delete 
+            </button> 
+        {% else %}
+            <p class="muted"><i>No conference</i></p> 
+        {% endif %} 
         </div>
-    {% else %}
-        <p class="muted"><i>No conference</i></p> 
-    {% endif %} 
-    <hr/>
+        <br/>
+        <section id="misc">
+          <div class="page-header">
+            <h1>Create conference <small>import and go !</small></h1>
+          </div> 
+        </section>
         <h3 class="text-info">Add conference</h3>
          
         <form id="SWCLinkForm">   

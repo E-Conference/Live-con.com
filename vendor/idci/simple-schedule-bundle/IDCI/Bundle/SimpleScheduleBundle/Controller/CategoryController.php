@@ -21,7 +21,6 @@ use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Category controller.
@@ -40,25 +39,7 @@ class CategoryController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('IDCISimpleScheduleBundle:Category')->getOrdered();
-        
-        //confManagerCategories
-        $currentManager=$this->get('security.context')->getToken()->getUser();
-        $confs = $currentManager->getWwwConf();
-        $entities2 = [];
-        foreach($confs as $conf){
-            $events = $conf->getConfEvents();
-            foreach($events as $event){ 
-                $categories = $event->getCategories();
-                foreach($categories as $category){ 
-                    if (in_array($category, $entities) && !in_array($category, $entities2)) {
-                        $entities2[] = $category;
-                    }
-                } 
-            } 
-        }
-        $entities = $entities2;
-        //confManagerCategories
-        
+
         $adapter = new ArrayAdapter($entities);
         $pager = new PagerFanta($adapter);
         $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
@@ -84,15 +65,16 @@ class CategoryController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IDCISimpleScheduleBundle:Category')->find($id);
-        
-        
+
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Category entity.');
         }
- 
+
+        $deleteForm = $this->createDeleteForm($id);
 
         return array(
-            'entity'      => $entity, 
+            'entity'      => $entity,
+            'delete_form' => $deleteForm->createView(),
         );
     }
 
@@ -127,9 +109,7 @@ class CategoryController extends Controller
         $form->bind($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager(); 
-            
-            
+            $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
@@ -148,7 +128,7 @@ class CategoryController extends Controller
             'entity' => $entity,
             'form'   => $form->createView(),
         );
-    }  
+    }
 
     /**
      * Displays a form to edit an existing Category entity.
@@ -166,8 +146,7 @@ class CategoryController extends Controller
         }
 
         $editForm = $this->createForm(new CategoryType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
-
+        $deleteForm = $this->createDeleteForm($id);  
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),

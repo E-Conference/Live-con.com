@@ -82,7 +82,7 @@ Start your Apache server and go to :
 	
 You are ready to use the WWWConference Bundle !!!!!!!!! Welcome!!!!!!!!
 
-One of the most common issue is that folders app/cache and app/logs don't have write access by Symfony. To fix this, do a chmod or [a refer here](http://symfony.com/doc/current/book/installation.html#configuration-and-setup) for more informations. 
+One of the most common issue is that folders app/cache and app/logs don't have write access by Symfony. To fix this, do a chmod or [refer here](http://symfony.com/doc/current/book/installation.html#configuration-and-setup) for more informations. 
 	
 	
 #USER MANUAL

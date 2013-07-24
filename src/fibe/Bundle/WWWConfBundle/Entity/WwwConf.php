@@ -52,16 +52,15 @@ class WwwConf
     * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\ConfEvent", mappedBy="wwwConf",cascade={"persist", "remove"})
     
     */
-    private $confEvents;
-    
+    private $confEvents; 
 
-   /**
+    /**
     * confManager
     *
-    * @ORM\ManyToOne(targetEntity="fibe\SecurityBundle\Entity\User", inversedBy="wwwConf", cascade={"persist"})
-    * @ORM\JoinColumn(name="confManager_id", referencedColumnName="id", onDelete="Set null")
+    * @ORM\OneToMany(targetEntity="fibe\SecurityBundle\Entity\User", mappedBy="wwwConf",cascade={"persist"})
+    
     */
-    private $confManager;
+    private $confManagers;
     
     public function __toString() 
     {
@@ -71,20 +70,28 @@ class WwwConf
     public function getId()
     {
         return $this->id;
-    }
+    } 
     
-    
-    public function setConfManager(\fibe\SecurityBundle\Entity\User $confManager = null)
+
+    /**
+     * confEvents
+     */
+     
+    public function addConfManager(\fibe\SecurityBundle\Entity\User $confManager = null)
     {
-        $this->confManager = $confManager;
+        $this->confManagers[] = $confManager;
     
         return $this;
     }
     
-    
-    public function getConfManager()
+    public function removeConfManager(\fibe\SecurityBundle\Entity\User $confManager)
     {
-        return $this->confManager;
+        $this->confManagers->removeElement($confManager);
+    }
+    
+    public function getConfManagers()
+    {
+        return $this->confManagers;
     }
     
     
@@ -100,7 +107,6 @@ class WwwConf
     {
         return $this->confOwlUri;
     }
-    
     
     
     

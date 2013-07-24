@@ -21,7 +21,7 @@ class CategoryType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('color')
-            ->add('parent')
+            ->add('pardent')
         ;
     }
 
@@ -34,6 +34,6 @@ class CategoryType extends AbstractType
 
     public function getName()
     {
-        return 'idci_bundle_simpleschedulebundle_categorytype';
+        return 'idci_simpleschedule_category_type'; 
     }
 }
