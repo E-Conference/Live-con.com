@@ -95,7 +95,6 @@ class WwwConf
     }
     
     
-    
     public function setConfOwlUri($ConfOwlUri)
     {
         $this->confOwlUri = $ConfOwlUri;

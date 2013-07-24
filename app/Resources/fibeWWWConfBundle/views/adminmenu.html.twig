@@ -9,18 +9,13 @@
             <a class="brand" href="{{ path('wwwconf_link_index') }}" title="Go back to Index">WWWConf</a>
             <div class="nav-collapse collapse">
                 <ul class="nav">
-                    <li>
-                        <a href="{{ path('wwwconf_schedule') }}" title="manage schedule">Schedule</a>
-                    </li>
-                    
-                    
                     {% if app.user.wwwConf %}
-                    <li class="dropdown">
-                        <a href="{{ path('wwwconf_schedule_confId', { 'confId': app.user.wwwConf.id}) }}" class="dropdown-toggle" data-toggle="dropdown">
-                            <b class="caret"></b>
-                        </a> 
-                    </li> 
+                    <li>
+                        <a href="{{ path('wwwconf_schedule_confId', { 'confId': app.user.wwwConf.id}) }}" title="manage schedule">Schedule</a>
+                    </li>
                     {% endif %}
+                    
+                     
                     
                     
                     <li class="divider-vertical"></li>
@@ -37,11 +32,23 @@
                     <li>
                         <a href="{{ path('admin_schedule_event') }}" title="Event">Event</a>
                     </li>
-                </ul>
+                </ul> 
                 <ul class="nav pull-right">
-                  <li>
-                        <a href="{{ path('logout') }}" title="logout">Log out {{ app.user.username }}</a>
+                    <li> 
+                        <a style="padding-right:5px;" href="{{ path('fos_user_profile_edit') }}" title="Profile">
+                            <i class="icon-user icon-white"></i> {{ app.user.username }}
+                        </a>
                     </li>
+                    <li class="dropdown">
+                        <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{{ path('logout') }}" title="logout"> logout</a>
+                            </li>
+                        </ul>
+                    </li> 
                 </ul>
             </div>
         </div>

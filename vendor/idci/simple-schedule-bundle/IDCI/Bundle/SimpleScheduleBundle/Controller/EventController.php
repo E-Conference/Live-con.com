@@ -47,8 +47,8 @@ class EventController extends Controller
     public function indexAction(Request $request)
     {
      
-        $entities=$this->get('security.context')->getToken()->getUser()->getWwwConf()->getConfEvents()->toArray(); 
-         
+        $em = $this->getDoctrine()->getManager();
+        $entities=$em->getRepository('IDCISimpleScheduleBundle:Event')->findAll();
 
         $adapter = new ArrayAdapter($entities);
         $pager = new PagerFanta($adapter);

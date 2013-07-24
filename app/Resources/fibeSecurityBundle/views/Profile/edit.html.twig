@@ -1,0 +1,24 @@
+{% extends "fibeWWWConfBundle::base.html.twig" %}
+
+{% block title %}Index{% endblock title %}
+{% block body %}
+
+{{ parent() }} 
+<form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(form) }} method="POST" class="fos_user_profile_edit">
+    {{ form_widget(form) }}
+    <div>
+        <button class="btn btn-success" type="submit" > 
+            <i class="icon-ok icon-white"></i>
+            {{ 'submit'|trans }}
+        </button>
+    </div>
+</form>
+{% endblock body %}
+
+{%  block javascripts %}  
+{% endblock %}
+
+
+
+
+ 

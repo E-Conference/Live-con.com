@@ -11,16 +11,13 @@
         <div class="row-fluid">
             <div class="span4">
                 <div class="btn-group">
+                    {% if app.user.wwwConf %}
                     <a href="{{ path('wwwconf_schedule') }}" role="button" class="btn btn-success btn-large">
                       <i class="icon-calendar icon-white"></i> Manage schedule 
                     </a>
-
-                    {% if app.user.wwwConf %}
-                    <a href="{{ path('wwwconf_schedule') }}" role="button" class="btn dropdown-toggle btn-success btn-large" data-toggle="dropdown">
-                        <i class="icon-list icon-white"></i> 
-                    </a>
-                     
                     {% endif %}
+ 
+                     
                     
                   
                 </div>
