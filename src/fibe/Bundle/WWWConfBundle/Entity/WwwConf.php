@@ -50,7 +50,6 @@ class WwwConf
     * confEvents
     *
     * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\ConfEvent", mappedBy="wwwConf",cascade={"persist", "remove"})
-    
     */
     private $confEvents; 
 
@@ -58,7 +57,6 @@ class WwwConf
     * confManager
     *
     * @ORM\OneToMany(targetEntity="fibe\SecurityBundle\Entity\User", mappedBy="wwwConf",cascade={"persist"})
-    
     */
     private $confManagers;
     

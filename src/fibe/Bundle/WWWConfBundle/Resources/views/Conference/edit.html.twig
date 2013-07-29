@@ -4,47 +4,68 @@
 {% block body %}
 
 {{ parent() }}
-<header class="jumbotron subhead" id="overview">
+<header class="subhead" id="overview">
     <div class="page-header">
-            <h1>Conference</h1>
+            <h1>Edit Conference</h1>
           </div>
 </header> 
     <div class="container"> 
         <div class="well well-large">
-        {% if confManager.wwwConf  %}
-            {{ confManager.wwwConf.confName }}
-            <p><strong>id : </strong>{{ confManager.wwwConf.id }} <i class="muted">( <strong><i>wwwconf_id</i></strong> parameter to query restfull service )</i></p>
-            <p><strong>uri : </strong>{{ confManager.wwwConf.confUri }}</p>
-            <p><strong>sparql endpoint : </strong>{{ confManager.wwwConf.confOwlUri }} </p>
-            <p><strong>{{ confManager.wwwConf.confEvents|length }} events</strong> </p> 
-            <a href="{{ path('wwwconf_schedule_confId', { 'confId': confManager.wwwConf.id}) }}"  role="button" class="btn btn-primary btn-mini">
+            <div>
+                <button id="toggleConfNameForm" role="button" title="change name" class="btn btn-mini">
+                   <i class="icon-edit"></i>
+                </button>
+                <h3 id="confName" style=" float:left; " class="text-info">{{ wwwConf.confName }} 
+                </h3>
+                    
+                <form id="confNameForm" style="padding:2em 1em 0em ;"  class="input-append" method="POST" action="">
+                     {{ form_widget(form.confName) }} 
+                     {{ form_errors(form.confName) }} 
+                    <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     {{ form_rest(form )}}</div> 
+                    <button  id="SPRQLEPURLBtn"  class="btn">
+                      <i class="icon-arrow-right"></i> 
+                    </button>
+                </form>
+
+            
+            </div>
+            
+            <p style=" clear:both;"><small> <b> {{ wwwConf.confEvents|length }} events</b></small></p>
+
+            <a href="{{ path('wwwconf_schedule_confId', { 'confId': wwwConf.id}) }}"  role="button" class="btn btn-primary btn-mini">
                <i class="icon-calendar icon-white"></i> schedule view
             </a>
-            <button onclick="deleteConf({{ confManager.wwwConf.id }})"  class="btn-danger btn-mini">
-               <i class="icon-remove icon-white"></i> Delete 
-            </button> 
-        {% else %}
-            <p class="muted"><i>No conference</i></p> 
-        {% endif %} 
-        </div>
-        <br/>
-        <section id="misc">
-          <div class="page-header">
-            <h1>Create conference <small>import and go !</small></h1>
-          </div> 
-        </section>
-        <h3 class="text-info">Add conference</h3>
-         
-        <form id="SWCLinkForm">   
-            {{ form_widget(confManagerForm) }} 
-            <button  id="SPRQLEPURLBtn"  class="btn">
-              Process import <i class="icon-arrow-right"></i> 
+            <br/> 
+            <br/>  
+        </div>  
+        <form class="input-append">
+            <label for="EventImport">
+                <h3 class="text-success">Import Events from file  </h3>
+                <h5 class="text-info">Please, provide a OWL/RDF file</h5>
+                <h5 class="muted"><i>(such as : http://data.semanticweb.org/conference/eswc/2013/complete)</i></h5>
+            </label>
+            <input id="EventImport" name="EventImport" type="text"/>
+            <button type="submit" id="EventImport" class="btn">
+              Process import<i class="icon-arrow-right"></i> 
             </button>
-        </form>
+        </fomr>
     </div> 
 
 
 {% endblock body %}
+
+{%  block stylesheets %}
+    <style type="text/css">
+        #confNameForm > *{
+            margin-top:1.5em;
+            margin-bottom:0.35em;
+        }
+        #toggleConfNameForm{
+            margin:2em 1em 0em 0em ; 
+            float:left;
+        } 
+    </style>
+{% endblock %}
 
 {%  block javascripts %} 
 
@@ -64,52 +85,37 @@
                                if(callback)callback();
                   }
               });
-          }
-          
-          function deleteConf(confId){
-                if(prompt("write 'delete' to delete the conference","delete ?")=="delete"){
-                    $.ajax({
-                        type: "POST", 
-                        url: "{{ app.request.getBaseURL() }}/admin/manage-conference/delete-"+confId , 
-                        async: false,
-                        success:function(a,b,c) {
-                                    window.location.reload();
-                        }
-                    });
-                }
-          }
-         
+          } 
           
          $(document).ready(function(){
-            
-            var confOwlUriHelper = '<h4 class="text-success">Import SWC Ontology <i>(optional)<i></h4>\
-                                    <h4>Please, provide a complete Conf RDF File </h4>\
-                                    <h5 class="muted"><i>(such as : http://data.semanticweb.org/conference/eswc/2013/complete)</i></h5>';
-            
-            var confUriHelper ='<h4 class="text-success">Sparql config </h4>\
-                                <h4>Please provide a valid Sparql endpoint url </h4>\
-                                <h5 class="muted"><i>(such as : http://data.semanticweb.org/sparql)</i></h5>';
+             
+            $('#confNameForm').hide();
+            $('#toggleConfNameForm').toggle(function(){
+                $('#confNameForm').toggle();
+                $('#confName').toggle();
+            },function(){
+                $('#confNameForm').toggle();
+                $('#confName').toggle();
+            });
           
                 
         /////////  init multiple Symf conf forms  END    /////////
         /////////  init multiple Symf conf forms  END    /////////
         /////////  init multiple Symf conf forms  END    /////////
-            
-            $('#myModal').modal();  
-
-            var confOwlUriInput = $('#fibe_bundle_wwwconfbundle_wwwconftype_confOwlUri' );
-            var confUriInput    = $('#fibe_bundle_wwwconfbundle_wwwconftype_confUri' );
-            var confNameInput   = $('#fibe_bundle_wwwconfbundle_wwwconftype_confName' );
+             
+            var confOwlUriInput = $('#EventImport' );
+            //var confUriInput    = $('#fibe_bundle_wwwconfbundle_wwwconftype_confUri' );
+            //var confNameInput   = $('#fibe_bundle_wwwconfbundle_wwwconftype_confName' );
 
             var isConfOwlUriInputOK = false;
-            var isConfUriInputOK = false; 
-            var isconfNameInputOK = true; 
+            //var isConfUriInputOK = false; 
+            //var isconfNameInputOK = true; 
             
             confOwlUriInput.change(function(){ isConfOwlUriInputOK = false});
-            confUriInput.change(function(){isConfUriInputOK = false});  
+            //confUriInput.change(function(){isConfUriInputOK = false});  
             
             var ConfRdfFile; 
-            var confName;
+            //var confName;
             var owlLessMode=false;
             
             
@@ -117,7 +123,7 @@
             confOwlUriInput.before(confOwlUriHelper) 
             $('#SWCLinkForm label').remove();
             
-            $('#SWCLinkForm').submit(function(event) {
+            $('#EventImport').submit(function(event) {
                 event.preventDefault(); 
                 if(confOwlUriInput.val() == "" ){
                     isConfOwlUriInputOK = true;
@@ -158,7 +164,7 @@
                     });
                 }
                 
-                
+                /*
                 //test confUriInput : sparql endpoint
                 if(!isConfUriInputOK){
                     $.ajax({
@@ -177,7 +183,7 @@
                         } 
                     }); 
                 }
-                
+                */
                 
               return false;
             }); 
@@ -186,7 +192,7 @@
                 if(isConfUriInputOK && isConfOwlUriInputOK && isconfNameInputOK ) { 
                     $.ajax({ //form post
                             type: "POST",
-                            url:"{{ path('wwwconf_conference_show') }}",
+                            url:"{{ path('wwwconf_conference_edit') }}",
                             async: false,
                             cache: false,
                             data: $('#SWCLinkForm').serialize(),

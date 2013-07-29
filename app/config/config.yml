@@ -70,7 +70,7 @@ twig:
     form:
         resources:
             - 'IDCISimpleScheduleBundle:Form:duration_widget.html.twig'
-            
+
 fos_user:
     db_driver:     orm                              # Le type de BDD à utiliser, nous utilisons l'ORM Doctrine depuis le début
     firewall_name: main                             # Le nom du firewall derrière lequel on utilisera ces utilisateurs
@@ -80,15 +80,7 @@ fos_user:
     from_email:
         address:        noreply@wwwconf.com
         sender_name:    WWWConf schedule manager
-    resetting:
-        email:
-            template: fibeSecurityBundle:User:resetting.html.twig
-            from_email:
-                address:        resetting@wwwconf.com
-                sender_name:    WWWConf schedule Resetting
-    registration:
-        confirmation:
-            from_email:
-                address:        registration@wwwconf.com
-                sender_name:    WWWConf schedule manager Registration
-    
+#    registration:
+#        confirmation:
+#            enabled:    true # change to true for required email confirmation
+

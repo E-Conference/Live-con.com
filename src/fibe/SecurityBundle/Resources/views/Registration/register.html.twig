@@ -1,0 +1,85 @@
+{% extends "fibeWWWConfBundle::base.html.twig" %}
+
+{% block title %}Index{% endblock title %}
+{% block body %}
+
+{{ parent() }} 
+
+{% trans_default_domain 'FOSUserBundle' %}
+<div class="container">
+    <header class="subhead" id="overview">
+        <div class="page-header">
+            <h1>Register a manager</h1>
+        </div>
+    </header>
+    <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="form-horizontal" > 
+        <p>
+            <div class="control-group">
+                <label class="control-label" >
+                    {{ form_label(form.username) }}
+                </label> 
+                <div class="controls">
+                    {{ form_widget(form.username) }}
+                    {{ form_errors(form.username) }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" >
+                    {{ form_label(form.email) }}
+                </label> 
+                <div class="controls">
+                    {{ form_widget(form.email) }}
+                    {{ form_errors(form.email) }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" >
+                    {{ form_label(form.plainPassword.first) }}
+                </label> 
+                <div class="controls">
+                    {{ form_widget(form.plainPassword.first) }}
+                    {{ form_errors(form.plainPassword.first) }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" >
+                    {{ form_label(form.plainPassword.second) }}
+                </label> 
+                <div class="controls">
+                    {{ form_widget(form.plainPassword.second) }}
+                    {{ form_errors(form.plainPassword.second) }}
+                </div>
+            </div> 
+            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
+                {{ form_rest(form) }}
+            </div>
+            <div class="control-group">
+                <label class="control-label" >
+                    Super admin ? <br/><small><i>( can manage users )</i></small>
+                </label> 
+                <div class="controls">
+                    <input id="fos_user_registration_form_is_admin" name="fibe_security_bundle[is_admin]" type="checkbox" />
+                </div>
+            </div> 
+            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
+                {{ form_rest(form  )}}
+            </div> 
+		</p>
+		<div class="control-group">
+	        <div class="controls">
+            <button type="submit" class="btn btn-success">
+            	<i class="icon-plus icon-white"></i> Register user
+        	</button>
+        </div>
+     
+	</form>
+<div>
+{% endblock body %}
+
+{%  block javascripts %}
+{% endblock %}
+
+
+
+
+ 

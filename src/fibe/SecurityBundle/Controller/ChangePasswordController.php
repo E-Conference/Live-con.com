@@ -45,6 +45,9 @@ class ChangePasswordController extends ContainerAware
         $form = $formFactory->createForm();
         $form->setData($user);
 
+        $url = $this->container->get('router')->generate('fos_user_profile_edit');
+        $response = new RedirectResponse($url);
+
         if ($request->isMethod('POST')) {
             $form->bind($request);
 
@@ -56,21 +59,16 @@ class ChangePasswordController extends ContainerAware
                 $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_SUCCESS, $event);
 
                 $userManager->updateUser($user);
-
-                if (null === $response = $event->getResponse()) {
-                    $url = $this->container->get('router')->generate('fos_user_profile_edit');
-                    $response = new RedirectResponse($url);
-                }
-
                 $dispatcher->dispatch(FOSUserEvents::CHANGE_PASSWORD_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+                 
+            }else{
 
-                return $response;
+                $this->container->get('session')->getFlashBag()->add(
+                    'error',
+                    'Submition error, please try again.'
+                );
             }
         }
-
-        return $this->container->get('templating')->renderResponse(
-            'fibeSecurityBundle:ChangePassword:changePassword.html.'.$this->container->getParameter('fos_user.template.engine'),
-            array('form' => $form->createView())
-        );
+        return $response;
     }
 }

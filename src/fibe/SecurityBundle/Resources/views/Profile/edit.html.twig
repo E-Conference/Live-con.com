@@ -5,20 +5,38 @@
 
 {{ parent() }} 
 <div class="container">
-    <header class="subhead" id="overview">
-        <div class="page-header">
-                <h1>Profile</h1>
-              </div>
-    </header>
-    <form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(form) }} method="POST" class="fos_user_profile_edit">
-        {{ form_widget(form) }}
-        <div>
-            <button class="btn btn-success" type="submit" > 
-                <i class="icon-ok icon-white"></i>
-                {{ 'submit'|trans }}
-            </button>
-        </div>
-    </form>
+    <div>
+        <header class="subhead" id="overview">
+            <div class="page-header">
+                    <h1>Profile</h1>
+                  </div>
+        </header>
+        <form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(formEdit) }} method="POST" class="fos_user_profile_edit">
+            {{ form_widget(formEdit) }}
+            <div>
+                <button class="btn btn-success" type="submit" > 
+                    <i class="icon-ok icon-white"></i>
+                    {{ 'submit'|trans }}
+                </button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <header class="subhead" id="overview">
+            <div class="page-header">
+                    <h1>Change password</h1>
+                  </div>
+        </header>
+        <form action="{{ path('fos_user_change_password') }}" {{ form_enctype(formPwd) }} method="POST" class="fos_user_change_password">
+            {{ form_widget(formPwd) }}
+            <div>
+                <button class="btn btn-success" type="submit" > 
+                    <i class="icon-ok icon-white"></i>
+                    {{ 'submit'|trans }}
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock body %}
 

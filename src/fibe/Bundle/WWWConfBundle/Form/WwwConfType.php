@@ -14,12 +14,7 @@ class WwwConfType extends AbstractType
         $builder
             ->add('confName', null, array('required' => false,
                                           'attr'  => array(
-                                                    'placeholder'   => 'Conference name')))
-            ->add('confOwlUri', null, array('required' => false,
-                                            'attr'     => array(
-                                                    'placeholder'   => 'complete rdf file url')))
-            ->add('confUri', null, array('attr'     => array(
-                                                    'placeholder'   => 'Sparql endpoint url')))
+                                                    'placeholder'   => 'Conference name'))) 
         ;
     }
 

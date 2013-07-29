@@ -42,16 +42,22 @@
                         <ul class="dropdown-menu"> 
                             <li> 
                                 <a style="padding-right:5px;" href="{{ path('fos_user_profile_edit') }}" title="Profile">
-                                    <i class="icon-user icon-white"></i> Profile
+                                    <i class="icon-user "></i> Profile
                                 </a>
                             </li>
+                            {% if is_granted("ROLE_ADMIN") %} 
                             <li>
-                                <a href="{{ path('fos_user_change_password') }}" title="logout">
-                                    <i class="icon-edit icon-white"></i> change password</a>
+                                <a href="javascript:alert('TODO');" title="Manage manager">
+                                    <i class="icon-list "></i> Manage manager</a>
                             </li>
                             <li>
+                                <a href="{{ path('fos_user_registration_register') }}" title="Add manager">
+                                    <i class="icon-plus "></i> Add manager</a>
+                            </li>
+                            {% endif %}  
+                            <li>
                                 <a href="{{ path('logout') }}" title="logout">
-                                    <i class="icon-remove icon-white"></i> logout</a>
+                                    <i class="icon-off "></i> Logout</a>
                             </li>
                         </ul>
                     </li> 

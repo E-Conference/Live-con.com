@@ -18,19 +18,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  * @author Christophe Coevoet <stof@notk.org>
  */
 class ProfileController extends ContainerAware
-{
-    /**
-     * Show the user
-     */
-    public function showAction()
-    {
-        $user = $this->container->get('security.context')->getToken()->getUser();
-        if (!is_object($user) || !$user instanceof UserInterface) {
-            throw new AccessDeniedException('This user does not have access to this section.');
-        } 
-        return $this->container->get('templating')->renderResponse('fibeSecurityBundle:Profile:show.html.'.$this->container->getParameter('fos_user.template.engine'), array('user' => $user));
-    }
-
+{ 
     /**
      * Edit the user
      */
@@ -44,27 +32,31 @@ class ProfileController extends ContainerAware
         /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
         $dispatcher = $this->container->get('event_dispatcher');
 
-        $event = new GetResponseUserEvent($user, $request);
-        $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $event);
 
-        if (null !== $event->getResponse()) {
-            return $event->getResponse();
+
+        $eventEdit = new GetResponseUserEvent($user, $request); 
+        $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_INITIALIZE, $eventEdit); 
+
+        if (null !== $eventEdit->getResponse()){
+            return $eventEdit->getResponse();
         }
 
-        /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
-        $formFactory = $this->container->get('fos_user.profile.form.factory');
+        $formEdit = $this->container->get('fos_user.profile.form.factory')->createForm();
+        $formPwd = $this->container->get('fos_user.change_password.form.factory')->createForm();
+        $formEdit->setData($user);
+        $formPwd->setData($user);
 
-        $form = $formFactory->createForm();
-        $form->setData($user);
+
+
 
         if ('POST' === $request->getMethod()) {
-            $form->bind($request);
+            $formEdit->bind($request);
 
-            if ($form->isValid()) {
+            if ($formEdit->isValid()) {
                 /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
                 $userManager = $this->container->get('fos_user.user_manager');
 
-                $event = new FormEvent($form, $request);
+                $event = new FormEvent($formEdit, $request);
                 $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_SUCCESS, $event);
 
                 $userManager->updateUser($user);
@@ -76,12 +68,22 @@ class ProfileController extends ContainerAware
 
                 $dispatcher->dispatch(FOSUserEvents::PROFILE_EDIT_COMPLETED, new FilterUserResponseEvent($user, $request, $response)); 
                 return $response;
+            }else{
+
+                $this->container->get('session')->getFlashBag()->add(
+                    'error',
+                    'Submition error, please try again.'
+                );
+
             }
         }
 
         return $this->container->get('templating')->renderResponse(
             'fibeSecurityBundle:Profile:edit.html.'.$this->container->getParameter('fos_user.template.engine'),
-            array('form' => $form->createView())
+            array(
+                'formEdit' => $formEdit->createView(),
+                'formPwd' => $formPwd->createView()
+            )
         );
     }
 }

@@ -1,15 +1,7 @@
 <?php
+ 
 
-/*
- * This file is part of the FOSUserBundle package.
- *
- * (c) FriendsOfSymfony <http://friendsofsymfony.github.com/>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace FOS\UserBundle\Controller;
+namespace fibe\SecurityBundle\Controller;
 
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
@@ -21,7 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use FOS\UserBundle\Model\UserInterface; 
+use FOS\UserBundle\Model\UserInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
 
 /**
  * Controller managing the registration
@@ -31,37 +25,65 @@ use FOS\UserBundle\Model\UserInterface;
  */
 class RegistrationController extends ContainerAware
 {
-    /** 
-    */
     public function registerAction(Request $request)
     {
-        if( ! $this->get('security.context')->isGranted('ROLE_ADMIN') )
+        if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') )
         {
             // Sinon on déclenche une exception "Accès Interdit"
-            throw new AccessDeniedHttpException('Access denied');
-        } 
+            throw new AccessDeniedHttpException('Access reserved to admin');
+        }
+        /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
+        $formFactory = $this->container->get('fos_user.registration.form.factory');
+        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+        $userManager = $this->container->get('fos_user.user_manager');
+        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
+        $dispatcher = $this->container->get('event_dispatcher');
 
+        $user = $userManager->createUser();
+        $user->setEnabled(true);
+
+        $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, new UserEvent($user, $request));
+
+        $form = $formFactory->createForm();
+        $form->setData($user);
         if ('POST' === $request->getMethod()) {
-            $form->bind($request);
-
+            $form->bind($request); 
             if ($form->isValid()) {
                 $event = new FormEvent($form, $request);
-                $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
-
+                $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event); 
+                if($_POST['fibe_security_bundle']["is_admin"] === "on"){
+                    $user->addRole('ROLE_ADMIN');
+                }
+ 
+                $conf=$this->container->get('doctrine')
+                                      ->getRepository('fibeWWWConfBundle:WwwConf')
+                                      ->find(1) ; 
+                $user->setWwwConf($conf);
                 $userManager->updateUser($user);
-
-                if (null === $response = $event->getResponse()) {
-                    $url = $this->container->get('router')->generate('fos_user_registration_confirmed');
+                if (null === $response = $event->getResponse() ) {
+                    $url = $this->container->get('router')->generate('fos_user_registration_register');
                     $response = new RedirectResponse($url);
                 }
+                //comment to avoid auto registering ; It's also used to auto flash message....
+                //$dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
 
-                $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+                $this->container->get('session')->getFlashBag()->add(
+                    'success',
+                    'The user has been successfully registered.'
+                );
 
                 return $response;
+            }else {
+
+                $this->container->get('session')->getFlashBag()->add(
+                    'error',
+                    'Submition error, please try again.'
+                );
+
             }
         }
 
-        return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:register.html.'.$this->getEngine(), array(
+        return $this->container->get('templating')->renderResponse('fibeSecurityBundle:Registration:register.html.'.$this->getEngine(), array(
             'form' => $form->createView(),
         ));
     }
@@ -79,7 +101,7 @@ class RegistrationController extends ContainerAware
             throw new NotFoundHttpException(sprintf('The user with email "%s" does not exist', $email));
         }
 
-        return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:checkEmail.html.'.$this->getEngine(), array(
+        return $this->container->get('templating')->renderResponse('fibeSecurityBundle:Registration:checkEmail.html.'.$this->getEngine(), array(
             'user' => $user,
         ));
     }
@@ -119,21 +141,7 @@ class RegistrationController extends ContainerAware
         return $response;
     }
 
-    /**
-     * Tell the user his account is now confirmed
-     */
-    public function confirmedAction()
-    {
-        $user = $this->container->get('security.context')->getToken()->getUser();
-        if (!is_object($user) || !$user instanceof UserInterface) {
-            throw new AccessDeniedException('This user does not have access to this section.');
-        }
-
-        return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:confirmed.html.'.$this->getEngine(), array(
-            'user' => $user,
-        ));
-    }
-
+ 
     protected function getEngine()
     {
         return $this->container->getParameter('fos_user.template.engine');
