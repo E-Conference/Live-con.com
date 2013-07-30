@@ -40,30 +40,16 @@ class ScheduleController extends Controller
  */
     public function scheduleAction()
     {
-        return array();
-    }
+        $user = $this->get('security.context')->getToken()->getUser(); 
+        return array('currentConf' => $user->getWwwConf());     
     
-
-/**
- *  @Route("/conf-{confId}", name="wwwconf_schedule_confId")
- *  @Template("fibeWWWConfBundle:Schedule:schedule.html.twig")
- */
-    public function scheduleConfIdAction(Request $request,$confId)
-    {
-     
-        $user = $this->get('security.context')->getToken()->getUser();
-        if($user->getWwwConf())
-        {
-            return array('currentConf' => $user->getWwwConf());
-        }
-        return $this->redirect($this->generateUrl('wwwconf_schedule'));
-    } 
-
+}    
+ 
 /**
  *   return all events contained in the given date week
- * @Route("/getEvents/{confId}", name="wwwconf_getevents")
+ * @Route("/getEvents", name="wwwconf_getevents")
  */
-    public function getEventsAction(Request $request,$confId=null)
+    public function getEventsAction(Request $request)
     {
     
 	    $em = $this->getDoctrine()->getManager();
@@ -116,31 +102,12 @@ class ScheduleController extends Controller
             $JSONArray['error'] = null;
             $JSONArray['issort'] = true;
 
-            $eventsEntities=[];
-            if($confId==null){
-                $confs = $currentManager->getWwwConf();
-                foreach($confs as $conf){
-                    $events = $conf->getConfEvents();
-                    foreach($events as $event){ 
-                        $eventsEntities[] = $event;  
-                    } 
-                }
-            }else
-            {
-                $conf  =  $this->getDoctrine()
-                                 ->getRepository('fibeWWWConfBundle:WwwConf')
-                                 ->find($confId);
-                                 
-                if($conf && $conf->getConfManager() == $currentManager){
-                    $events = $conf->getConfEvents();
-                    foreach($events as $event){ 
-                        $eventsEntities[] = $event;  
-                    } 
-                }else
-                {
-                    $response = new Response(json_encode("permission denied"));
-                }
-            }
+            $eventsEntities=[];  
+            $events = $currentManager->getWwwConf()->getConfEvents();
+            foreach($events as $event){ 
+                $eventsEntities[] = $event;  
+            }  
+
             $JSONArray['events'] = array();
             for ($i = 0; $i < count($eventsEntities); $i++) {
 
@@ -171,11 +138,11 @@ class ScheduleController extends Controller
                 );       
             }
 
-        }else if( $methodParam=="add" && $confId!=null)
+        }else if( $methodParam=="add" )
         {
             $conf = $this->getDoctrine()
                          ->getRepository('fibeWWWConfBundle:WwwConf')
-                         ->find($confId);
+                         ->find(1);
                              
             if($conf && $conf->getConfManager() == $currentManager){
                       
@@ -242,20 +209,10 @@ class ScheduleController extends Controller
           
         
         //confManagerEvents 
-        $currentManager=$this->get('security.context')->getToken()->getUser();
-        $entities=[]; 
-        $confs = $currentManager->getWwwConf();
-        foreach($confs as $conf){
-            $events = $conf->getConfEvents();
-            foreach($events as $event){ 
-                $entities[] = $event;  
-            } 
-        }
-        
-        if (!in_array($entity, $entities)) {
-            throw new AccessDeniedException('Look at your own events !!'); 
-        }
+        $currentManager=$this->get('security.context')->getToken()->getUser(); 
         $WwwConf = $entity->getWwwConf();
+        $events = $WwwConf->getConfEvents(); 
+         
         //confManagerEvents
         
         

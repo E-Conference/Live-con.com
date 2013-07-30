@@ -41,7 +41,7 @@ class ConfEvent extends Event
      */
     public function __toString()
     {
-	    parent::__toString();
+	    return parent::__toString();
     }
     
     

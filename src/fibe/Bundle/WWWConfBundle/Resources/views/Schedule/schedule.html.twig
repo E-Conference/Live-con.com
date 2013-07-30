@@ -115,7 +115,7 @@
                 {% endfor %}  
             {% endif %}
              
-            var DATA_FEED_URL = {% if currentConf %}"{{ path('wwwconf_getevents', { 'confId': currentConf.id }) }}"{% else %}"{{ path('wwwconf_getevents') }}"{% endif %};
+            var DATA_FEED_URL = "{{ path('wwwconf_getevents') }}";
             //alert(DATA_FEED_URL);
             var op = {
                 view: view,

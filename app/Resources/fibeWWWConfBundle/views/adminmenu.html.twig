@@ -11,7 +11,7 @@
                 <ul class="nav">
                     {% if app.user.wwwConf %}
                     <li>
-                        <a href="{{ path('wwwconf_schedule_confId', { 'confId': app.user.wwwConf.id}) }}" title="manage schedule">Schedule</a>
+                        <a href="{{ path('wwwconf_schedule') }}" title="manage schedule">Schedule</a>
                     </li>
                     {% endif %}
                     

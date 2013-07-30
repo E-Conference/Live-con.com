@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use fibe\SecurityBundle\Entity\User;
 use fibe\SecurityBundle\Form\UserType;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * User controller.
@@ -20,12 +21,17 @@ class UserController extends Controller
     /**
      * Lists all User entities.
      *
-     * @Route("/", name="wwwconf_user_list")
+     * @Route("/list", name="wwwconf_user_list")
      * @Method("GET")
      * @Template()
      */
     public function indexAction()
     {
+        if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') )
+        {
+            // Sinon on déclenche une exception "Accès Interdit"
+            throw new AccessDeniedHttpException('Access reserved to admin');
+        }
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('fibeSecurityBundle:User')->findAll();
@@ -33,47 +39,12 @@ class UserController extends Controller
 
         foreach($entities as $entity ){
             $delete_forms[] = $this->createDeleteForm($entity->getId())->createView();
-        } 
+        }
         return array(
             'entities'     => $entities,
             'delete_forms' => $delete_forms,
         );
-    } 
-
-    /**
-     * Edits an existing User entity.
-     *
-     * @Route("/{id}", name="user_update")
-     * @Method("PUT")
-     * @Template("fibeSecurityBundle:User:edit.html.twig")
-     */
-    public function updateAction(Request $request, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('fibeSecurityBundle:User')->find($id);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find User entity.');
-        }
-
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new UserType(), $entity);
-        $editForm->bind($request);
-
-        if ($editForm->isValid()) {
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('user_edit', array('id' => $id)));
-        }
-
-        return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        );
-    }
+    }  
 
     /**
      * Deletes a User entity.
@@ -83,6 +54,11 @@ class UserController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') )
+        {
+            // Sinon on déclenche une exception "Accès Interdit"
+            throw new AccessDeniedHttpException('Access reserved to admin');
+        }
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -96,9 +72,18 @@ class UserController extends Controller
 
             $em->remove($entity);
             $em->flush();
+                $this->container->get('session')->getFlashBag()->add(
+                    'success',
+                    'The user has been successfully removed.'
+                );
+        }else{
+                $this->container->get('session')->getFlashBag()->add(
+                    'error',
+                    'Submition error, please try again.'
+                ); 
         }
 
-        return $this->redirect($this->generateUrl('user'));
+        return $this->redirect($this->generateUrl('wwwconf_user_list'));
     }
 
     /**
@@ -110,6 +95,12 @@ class UserController extends Controller
      */
     private function createDeleteForm($id)
     {
+        throw new AccessDeniedHttpException('Unavailable on demo version');
+        if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') )
+        {
+            // Sinon on déclenche une exception "Accès Interdit"
+            throw new AccessDeniedHttpException('Access reserved to admin');
+        }
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
             ->getForm()
