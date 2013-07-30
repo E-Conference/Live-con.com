@@ -47,8 +47,8 @@
                             </li>
                             {% if is_granted("ROLE_ADMIN") %} 
                             <li>
-                                <a href="javascript:alert('TODO');" title="Manage manager">
-                                    <i class="icon-list "></i> Manage manager</a>
+                                <a href="{{ path('wwwconf_user_list') }}" title="Manage manager">
+                                    <i class="icon-list "></i> Manage user</a>
                             </li>
                             <li>
                                 <a href="{{ path('fos_user_registration_register') }}" title="Add manager">
