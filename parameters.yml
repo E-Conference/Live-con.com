@@ -7,7 +7,7 @@ parameters:
     database_password: dataconfTER
 
     mailer_transport:  smtp
-    mailer_host:       127.0.0.1
+    mailer_host:       localhost
     mailer_user:       ~
     mailer_password:   ~
 

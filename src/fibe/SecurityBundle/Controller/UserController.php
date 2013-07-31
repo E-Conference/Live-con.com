@@ -36,15 +36,63 @@ class UserController extends Controller
 
         $entities = $em->getRepository('fibeSecurityBundle:User')->findAll();
         $delete_forms= array();
+        $update_forms= array();
 
         foreach($entities as $entity ){
             $delete_forms[] = $this->createDeleteForm($entity->getId())->createView();
+            $user = new User();
+
+            $update_forms[] = $this->createFormBuilder($user)
+                                    ->add('roles')
+                                    ->getForm();
         }
         return array(
             'entities'     => $entities,
             'delete_forms' => $delete_forms,
+            'update_forms' => $update_forms,
         );
-    }  
+    }
+
+    
+    /**
+     * update User entity.
+     *
+     * @Route("/toggle/{id}", name="wwwconf_user_toggle_role") 
+     * @Template()
+     */
+    public function updateAction(Request $request, $id)
+    {
+        if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') )
+        {
+            // Sinon on déclenche une exception "Accès Interdit"
+            throw new AccessDeniedHttpException('Access reserved to admin');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository('fibeSecurityBundle:User')->find($id);
+        if($user->hasRole('ROLE_ADMIN'))
+        {
+          $user->removeRole('ROLE_ADMIN');
+          $em->persist($user);
+          $em->flush();
+          $this->container->get('session')->getFlashBag()->add(
+              'success',
+              'The user has been successfully demoted to manager.'
+          );
+        } else
+        {
+          $user->addRole('ROLE_ADMIN');
+          $em->persist($user);
+          $em->flush();
+          $this->container->get('session')->getFlashBag()->add(
+              'success',
+              'The user has been successfully promoted to admin.'
+          );
+        }
+        return $this->redirect($this->generateUrl('wwwconf_user_list')); 
+    }
+
+
 
     /**
      * Deletes a User entity.
@@ -54,11 +102,7 @@ class UserController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
-        if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') )
-        {
-            // Sinon on déclenche une exception "Accès Interdit"
-            throw new AccessDeniedHttpException('Access reserved to admin');
-        }
+        throw new AccessDeniedHttpException('Unavailable on demo version');
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -95,7 +139,6 @@ class UserController extends Controller
      */
     private function createDeleteForm($id)
     {
-        throw new AccessDeniedHttpException('Unavailable on demo version');
         if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') )
         {
             // Sinon on déclenche une exception "Accès Interdit"
