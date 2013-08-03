@@ -102,24 +102,26 @@
     
     <script type="text/javascript">
         $(document).ready(function() {
-           var view="week";          
+            var view="week";          
            
-            {% if currentConf %}
-                var FirstDay = moment('5000-10-10');
-                {% for events in currentConf.confEvents %}
-                    {% if date(events.startAt) > date("1980-01-02") %}
-                        if(moment('{{events.startAt|date("Y-m-d")}}').isBefore(FirstDay)){
-                            var FirstDay = moment('{{events.startAt|date("Y-m-d")}}');
-                        }
-                    {% endif %}
-                {% endfor %}  
-            {% endif %}
-             
+
+           // calcule du premier jour
+            var FirstDay = moment('5000-10-10');
+            {% for events in currentConf.confEvents %}
+                {% if date(events.startAt) > date("1980-01-02") %}
+                    
+                    if(moment('{{events.startAt|date("Y-m-d")}}').isBefore(FirstDay)){
+                        FirstDay = moment('{{events.startAt|date("Y-m-d")}}');
+                    }
+
+                {% endif %}
+            {% endfor %}  
+            
             var DATA_FEED_URL = "{{ path('wwwconf_getevents') }}";
             //alert(DATA_FEED_URL);
             var op = {
                 view: view,
-                add: {% if currentConf %}true{% else %}false{% endif %},
+                add: true,
                 theme:1,
                 showday: new Date({% if currentConf %}FirstDay.format(){% else %}{% endif %}),
                 EditCmdhandler:Edit,
@@ -138,7 +140,7 @@
             var $dv = $("#calhead");
             var _MH = document.documentElement.clientHeight;
             var dvH = $dv.height() + 2;
-            op.height = _MH - dvH;
+            op.height = _MH - dvH -  $('.navbar').height();
             op.eventItems =[];
 
             var p = $("#gridcontainer").bcalendar(op).BcalGetOp();
@@ -170,20 +172,22 @@
                         break;
                 }
                 $("#errorpannel").hide();
-                $("#loadingpannel").html(t).show();    
+                $("#loadingpannel").html(t).fadeIn("2000");    
             }
             function cal_afterrequest(type)
             {
                 switch(type)
                 {
                     case 1:
-                        $("#loadingpannel").hide();
+                        $("#loadingpannel").fadeOut("2000");
                         break;
                     case 2:
                     case 3:
                     case 4:
                         $("#loadingpannel").html("Success!");
-                        window.setTimeout(function(){ $("#loadingpannel").hide();},2000);
+                        window.setTimeout(function(){ 
+                            $("#loadingpannel").fadeOut("2000");
+                        },2000);
                     break;
                 }              
                
@@ -198,7 +202,7 @@
                 if(data)
                 {
                     var url = StrFormat(eurl,data);
-                    OpenModelWindow(url,{ width: 600, height: 400, caption:"Edit event",onclose:function(){
+                    OpenModelWindow(url,{ width: $(window).width()*0.9, height: $(window).height()*0.8, caption:"Edit event",onclose:function(){
                        $("#gridcontainer").reload();
                     }});
                 }
@@ -314,7 +318,12 @@
 	-->
 <link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/css/bootstrap-responsive.css') }}" />
 
-
+    <style type="text/css">
+        .bbit-window {
+            left: 10%;
+            width: 80%;
+        }
+    </style>
     <link href="{{ asset('wdcalendar/css/dailog.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('wdcalendar/css/calendar.css') }}" rel="stylesheet" type="text/css" /> 
     <link href="{{ asset('wdcalendar/css/dp.css') }}" rel="stylesheet" type="text/css" />   

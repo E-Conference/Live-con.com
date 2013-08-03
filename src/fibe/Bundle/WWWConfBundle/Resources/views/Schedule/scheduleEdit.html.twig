@@ -2,9 +2,14 @@
 
 
 {% block body %}
- 
-
-    <form id="event"  class="form-horizontal" > 
+<div class="container">
+    <header class="subhead" id="overview">
+        <div class="page-header">
+            <h2>Edit an event</h2>
+        </div>
+    </header>
+<div class="row-fluid well">
+    <form id="event" class="span6" class="form-horizontal" > 
         <p>  
             <div class="control-group">
                 <label class="control-label" >
@@ -40,7 +45,7 @@
                 <label class="control-label" >
                     {{ form_label(formEvent.startAt) }}
                 </label> 
-                <div class="controls input-append">
+                <div class="datetimepicker-input controls input-append">
                     {{ form_widget(formEvent.startAt) }}
                     <span class="add-on"><i class="icon-th"></i></span>
                     {{ form_errors(formEvent.startAt) }}
@@ -51,7 +56,7 @@
                 <label class="control-label" >
                     {{ form_label(formEvent.endAt) }}
                 </label> 
-                <div class="controls input-append">
+                <div class="datetimepicker-input controls input-append">
                     {{ form_widget(formEvent.endAt) }}
                     <span class="add-on"><i class="icon-th"></i></span>
                     {{ form_errors(formEvent.endAt) }}
@@ -136,130 +141,131 @@
 <!--                  xproperties                    -->
 
 
+    <div class="span6">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Link Type</th>
+                    <th>Name</th>
+                    <th>Uri</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                {% for xproperty in entity.xproperties %}
+                    <tr>
+                        <td>{{ xproperty.xNamespace }}</td>
+                        <td>{{ xproperty.xKey }}</td>
+                        <td>{{ xproperty.xValue }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Link Type</th>
-            <th>Name</th>
-            <th>Uri</th>
-        </tr>
-    </thead>
-    
-    <tbody>
-        {% for xproperty in entity.xproperties %}
-            <tr>
-                <td>{{ xproperty.xNamespace }}</td>
-                <td>{{ xproperty.xKey }}</td>
-                <td>{{ xproperty.xValue }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-
-    <tfoot>
-        <tr>
-            <td colspan="3">
-                <form id="xpropertyForm" class="form-horizontal">
-                    <div class="control-group">
-                        <label class="control-label" for="idci_bundle_simpleschedulebundle_xpropertytype_xnamespace">
-                            {{ form_label(xproperty_form.xnamespace) }}
-                        </label>
-                        <div class="controls">
-                            {{ form_widget(xproperty_form.xnamespace) }}
-                            {{ form_errors(xproperty_form.xnamespace) }}
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="idci_bundle_simpleschedulebundle_xpropertytype_xkey">
-                            {{ form_label(xproperty_form.xkey) }}
-                        </label> 
-                        <div class="controls">
-                            {{ form_widget(xproperty_form.xkey) }}
-                            {{ form_errors(xproperty_form.xkey) }}
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="idci_bundle_simpleschedulebundle_xpropertytype_xvalue">
-                            {{ form_label(xproperty_form.xvalue) }}
-                        </label> 
-                        <div class="controls">
-                            {{ form_widget(xproperty_form.xvalue) }}
-                            {{ form_errors(xproperty_form.xvalue) }}
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <div class="controls">
-                            <button type="submit" class="btn btn-primary">{% trans %}Add xproperty{% endtrans %}</button>
-                        </div>
-                    </div>  
-                    <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     {{ form_rest(xproperty_form )}}</div> 
-                </form>
-            </td>
-        </tr>
-    </tfoot>
-</table>
-
-
-
-<!--                  Relation                    -->
+            <tfoot>
+                <tr>
+                    <td colspan="3">
+                        <form id="xpropertyForm" class="form-horizontal">
+                            <div class="control-group">
+                                <label class="control-label" for="idci_bundle_simpleschedulebundle_xpropertytype_xnamespace">
+                                    {{ form_label(xproperty_form.xnamespace) }}
+                                </label>
+                                <div class="controls">
+                                    {{ form_widget(xproperty_form.xnamespace) }}
+                                    {{ form_errors(xproperty_form.xnamespace) }}
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="idci_bundle_simpleschedulebundle_xpropertytype_xkey">
+                                    {{ form_label(xproperty_form.xkey) }}
+                                </label> 
+                                <div class="controls">
+                                    {{ form_widget(xproperty_form.xkey) }}
+                                    {{ form_errors(xproperty_form.xkey) }}
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="idci_bundle_simpleschedulebundle_xpropertytype_xvalue">
+                                    {{ form_label(xproperty_form.xvalue) }}
+                                </label> 
+                                <div class="controls">
+                                    {{ form_widget(xproperty_form.xvalue) }}
+                                    {{ form_errors(xproperty_form.xvalue) }}
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <button type="submit" class="btn btn-primary">{% trans %}Add xproperty{% endtrans %}</button>
+                                </div>
+                            </div>  
+                            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     {{ form_rest(xproperty_form )}}</div> 
+                        </form>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
 
 
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>id</th>
-            <th>Relation</th>
-            <th>startAt</th>
-            <th>summary</th>
-        </tr>
-    </thead>
+        <!--                  Relation                    -->
 
-    <tbody>
-        {% for relation in entity.getRelateds() %} 
-            <tr> 
-                <td>{{ relation.id }}</td>
-                <td>{{ relation.relationType }}</td>
-                <td>{{ relation.relatedTo.startAt | date('Y-m-d') }}</td>
-                <td>{{ relation.relatedTo.summary }}</td>
-            </tr> 
-        {% endfor %}
-    </tbody>
 
-    <tfoot>
-        <tr>
-            <td colspan="4">
-                <form id="relationForm"  class="form-horizontal">
-                    <div class="control-group">
-                        <label class="control-label" for="idci_simpleschedule_calendarentityrelation_type_relatedTo">
-                            {{ form_label(relation_form.relatedTo) }}
-                        </label> 
-                        <div class="controls">
-                            {{ form_widget(relation_form.relatedTo) }}
-                            {{ form_errors(relation_form.relatedTo) }}
-                        </div>
-                    </div>  
-                    <div class="control-group">
-                        <label class="control-label" for="idci_simpleschedule_calendarentityrelation_type_relationType">
-                            {{ form_label(relation_form.relationType) }}
-                        </label> 
-                        <div class="controls">
-                            {{ form_widget(relation_form.relationType) }}
-                            {{ form_errors(relation_form.relationType) }}
-                        </div>
-                    </div>   
-                    <div class="control-group">
-                        <div class="controls">
-                            <button type="submit" class="btn btn-primary">{% trans %}Add relation{% endtrans %}</button>
-                        </div>
-                    </div>  
-                    <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     {{ form_rest(relation_form )}}</div> 
-                </form>
-            </td>
-        </tr>
-    </tfoot>
-</table>
 
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Relation</th>
+                    <th>startAt</th>
+                    <th>summary</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for relation in entity.getRelateds() %} 
+                    <tr> 
+                        <td>{{ relation.id }}</td>
+                        <td>{{ relation.relationType }}</td>
+                        <td>{{ relation.relatedTo.startAt | date('Y-m-d') }}</td>
+                        <td>{{ relation.relatedTo.summary }}</td>
+                    </tr> 
+                {% endfor %}
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td colspan="4">
+                        <form id="relationForm"  class="form-horizontal">
+                            <div class="control-group">
+                                <label class="control-label" for="idci_simpleschedule_calendarentityrelation_type_relatedTo">
+                                    {{ form_label(relation_form.relatedTo) }}
+                                </label> 
+                                <div class="controls">
+                                    {{ form_widget(relation_form.relatedTo) }}
+                                    {{ form_errors(relation_form.relatedTo) }}
+                                </div>
+                            </div>  
+                            <div class="control-group">
+                                <label class="control-label" for="idci_simpleschedule_calendarentityrelation_type_relationType">
+                                    {{ form_label(relation_form.relationType) }}
+                                </label> 
+                                <div class="controls">
+                                    {{ form_widget(relation_form.relationType) }}
+                                    {{ form_errors(relation_form.relationType) }}
+                                </div>
+                            </div>   
+                            <div class="control-group">
+                                <div class="controls">
+                                    <button type="submit" class="btn btn-primary">{% trans %}Add relation{% endtrans %}</button>
+                                </div>
+                            </div>  
+                            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     {{ form_rest(relation_form )}}</div> 
+                        </form>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
 {% endblock body %}
 
 
@@ -267,27 +273,15 @@
 
  {% block stylesheets %}
  <style type="text/css"> 
-
-    .form-horizontal .control-group {
-       margin-bottom: 7px; 
+    .control-group .controls {
+        margin-left: 200px;
     }
-    .form-horizontal .control-label{
-        width: 90px;
+    .datetimepicker-input{
+        position: relative;
+        left: -159px;
     }
-    .form-horizontal .controls {
-        margin-left: 110px;
-    }
-    .ui-menu .ui-menu-item a{
-        line-height: 1;
-        font-size: .8em;
-        width: 442px;
-    } 
-    
-    body #event .control-group .input-append {
-        margin-left: 20px;
-    }
-    .datetimepicker { 
-        margin-top: 0px; 
+    .add-on{
+        margin-top: 1px;
     }
  </style>
 {% endblock stylesheets %}

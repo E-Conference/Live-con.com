@@ -4,41 +4,25 @@
 {% block body %}
 
 {{ parent() }}
-<header class="subhead" id="overview">
+<header class="subhead container" id="overview">
     <div class="page-header">
-            <h1>Edit Conference</h1>
-          </div>
+        <h1 id="confName" title="double click to change name">{{ wwwConf.confName }}
+            <small> <b> {{ wwwConf.confEvents|length }} events</b></small>
+        </h1> 
+        
+            
+        <form id="confNameForm"  class="input-append" method="POST" action="">
+             {{ form_widget(form.confName) }} 
+             {{ form_errors(form.confName) }} 
+            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(form) }}</div> 
+            <button  id="SPRQLEPURLBtn"  class="btn">
+              <i class="icon-edit"></i> 
+            </button>
+        </form>
+  </div>
 </header> 
-    <div class="container"> 
-        <div class="well well-large">
-            <div>
-                <button id="toggleConfNameForm" role="button" title="change name" class="btn btn-mini">
-                   <i class="icon-edit"></i>
-                </button>
-                <h3 id="confName" style=" float:left; " class="text-info">{{ wwwConf.confName }} 
-                </h3>
-                    
-                <form id="confNameForm" style="padding:2em 1em 0em ;"  class="input-append" method="POST" action="">
-                     {{ form_widget(form.confName) }} 
-                     {{ form_errors(form.confName) }} 
-                    <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     {{ form_rest(form )}}</div> 
-                    <button  id="SPRQLEPURLBtn"  class="btn">
-                      <i class="icon-arrow-right"></i> 
-                    </button>
-                </form>
-
-            
-            </div>
-            
-            <p style=" clear:both;"><small> <b> {{ wwwConf.confEvents|length }} events</b></small></p>
-
-            <a href="{{ path('wwwconf_schedule_confId', { 'confId': wwwConf.id}) }}"  role="button" class="btn btn-primary btn-mini">
-               <i class="icon-calendar icon-white"></i> schedule view
-            </a>
-            <br/> 
-            <br/>  
-        </div>  
-        <form class="input-append">
+    <div class="container">   
+        <form id="EventImportForm"  class="input-append">
             <label for="EventImport">
                 <h3 class="text-success">Import Events from file  </h3>
                 <h5 class="text-info">Please, provide a OWL/RDF file</h5>
@@ -46,9 +30,9 @@
             </label>
             <input id="EventImport" name="EventImport" type="text"/>
             <button type="submit" id="EventImport" class="btn">
-              Process import<i class="icon-arrow-right"></i> 
+              Process import <i class="icon-arrow-right"></i> 
             </button>
-        </fomr>
+        </form>
     </div> 
 
 
@@ -63,7 +47,14 @@
         #toggleConfNameForm{
             margin:2em 1em 0em 0em ; 
             float:left;
-        } 
+        }
+        #confName:hover{
+            border: 1px solid #ddd;
+            padding: 0px;
+        }
+        #confName{
+            padding: 1px;
+        }
     </style>
 {% endblock %}
 
@@ -73,7 +64,7 @@
         <script src="{{ asset('bundles/fibewwwconf/js/moment.min.js') }}" type="text/javascript" ></script>
          <script type="text/javascript" >
          
-    
+    /*
 
           function FormPost(uri,form,callback){
               $.ajax({
@@ -86,16 +77,13 @@
                   }
               });
           } 
-          
+      */    
          $(document).ready(function(){
              
             $('#confNameForm').hide();
-            $('#toggleConfNameForm').toggle(function(){
-                $('#confNameForm').toggle();
-                $('#confName').toggle();
-            },function(){
-                $('#confNameForm').toggle();
-                $('#confName').toggle();
+            $('#confName').dblclick(function(){
+                $('#confNameForm').show();
+                $(this).hide();
             });
           
                 
@@ -119,33 +107,41 @@
             var owlLessMode=false;
             
             
-            confUriInput.before(confUriHelper) 
-            confOwlUriInput.before(confOwlUriHelper) 
-            $('#SWCLinkForm label').remove();
-            
-            $('#EventImport').submit(function(event) {
+            // confUriInput.before(confUriHelper) 
+            // confOwlUriInput.before(confOwlUriHelper) 
+            // $('#SWCLinkForm label').remove();
+            confOwlUriInput.change(function(){
+                    $(this).parent().removeClass('control-group error');
+            });
+            $('#EventImportForm').submit(function(event) {
                 event.preventDefault(); 
                 if(confOwlUriInput.val() == "" ){
+                    isConfOwlUriInputOK = false;
+                    confOwlUriInput.parent().addClass('control-group error');
+                }else{
                     isConfOwlUriInputOK = true;
-                    confOwlUriInput.parent().addClass('control-group success');
-                    owlLessMode=true;
-                    if(confNameInput.val() != "" ){
-                        isconfNameInputOK = true;
-                        confNameInput.parent().addClass('control-group success'); 
-                        send();
-                    }else{
-                        isconfNameInputOK = false;
-                        confNameInput.parent().addClass('control-group error');
+                }
+
+    //                 isConfOwlUriInputOK = true;
+    //                 confOwlUriInput.parent().addClass('control-group error');
+    //                 owlLessMode=true;
+    //                 if(confNameInput.val() != "" ){
+    //                     isconfNameInputOK = true;
+    //                     confNameInput.parent().addClass('control-group success'); 
+    //                     send();
+    //                 }else{
+    //                     isconfNameInputOK = false;
+    //                     confNameInput.parent().addClass('control-group error');
                     
-                    }
-                }else
-				{
-					owlLessMode=false;
-				}
+    //                 }
+    //             }else
+				// {
+				// 	owlLessMode=false;
+				// }
                 
                 //test confUriInput : owl file
                 
-                if( !isConfOwlUriInputOK )
+                if( isConfOwlUriInputOK )
                 {
                     run(confOwlUriInput.val(),function(dataArray,confname)
                     {
@@ -153,10 +149,25 @@
 					    isConfOwlUriInputOK = true;
                         ConfRdfFile = dataArray ; 
                         confName=confname;
-                        confNameInput.val(confName);
-                        confNameInput.parent().addClass('control-group success');
                         confOwlUriInput.parent().addClass('control-group success');
-                        send();
+                        $.ajax({ //DBimport
+                            type: "POST",
+                            cache: false, 
+                            url: "{{ app.request.getBaseURL() }}/admin/link/DBimport/1" ,
+                            data: "dataArray=" + JSON.stringify(ConfRdfFile, null),
+                            success:function(a,b,c)
+                            {
+                                if(ConfRdfFile!=undefined)
+                                    alert('"'+confName+'" has been well added :\n\t'+ConfRdfFile.events.length+' events\n\t'+ConfRdfFile.locations.length+' locations\n');
+                                window.location.reload();
+                                
+                            },
+                            error:function(a,b,c)
+                            { 
+                                alert("The conf file has been found, but import failed");
+                                confOwlUriInput.parent().addClass('control-group error');
+                            },
+                        });
                         
                     },function()
                     {
@@ -187,7 +198,7 @@
                 
               return false;
             }); 
-            
+            /*
             function send(){
                 if(isConfUriInputOK && isConfOwlUriInputOK && isconfNameInputOK ) { 
                     $.ajax({ //form post
@@ -229,7 +240,7 @@
                             },
                         });
                 }
-            }
+            }*/
          }); 
          </script>   
 {% endblock %}

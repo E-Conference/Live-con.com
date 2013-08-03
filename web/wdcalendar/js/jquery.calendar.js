@@ -2033,7 +2033,8 @@ var __SCOLLEVENTTEMP = '<DIV style="WIDTH:${width};top:${top};left:${left};" tit
                     alert(i18n.xgcalendar.view_no_ready); return;
                 }
                 var dvwkH = $dvwkcontaienr.height() + 2;
-                var calH = option.height - 8 - dvwkH;
+                
+                var calH = option.height - 8 - dvwkH  ;
                 $dvtec.height(calH);
                 if (typeof (option.scoll) == "undefined") {
                     var currentday = new Date();

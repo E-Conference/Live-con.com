@@ -40,8 +40,11 @@ class ScheduleController extends Controller
  */
     public function scheduleAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser(); 
-        return array('currentConf' => $user->getWwwConf());     
+
+        $conf = $this->getDoctrine()
+                     ->getRepository('fibeWWWConfBundle:WwwConf')
+                     ->find(1); 
+        return array('currentConf' => $conf);     
     
 }    
  
@@ -59,7 +62,7 @@ class ScheduleController extends Controller
 	    $postData = $request->request->all();
         $currentManager=$this->get('security.context')->getToken()->getUser();
 	    
-      $JSONArray = array();
+        $JSONArray = array();
 	    
 	    if( $methodParam=="list")
 	    {
@@ -102,11 +105,7 @@ class ScheduleController extends Controller
             $JSONArray['error'] = null;
             $JSONArray['issort'] = true;
 
-            $eventsEntities=[];  
-            $events = $currentManager->getWwwConf()->getConfEvents();
-            foreach($events as $event){ 
-                $eventsEntities[] = $event;  
-            }  
+            $eventsEntities = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findAll();
 
             $JSONArray['events'] = array();
             for ($i = 0; $i < count($eventsEntities); $i++) {
@@ -142,11 +141,8 @@ class ScheduleController extends Controller
         {
             $conf = $this->getDoctrine()
                          ->getRepository('fibeWWWConfBundle:WwwConf')
-                         ->find(1);
-                             
-            if($conf && $conf->getConfManager() == $currentManager){
-                      
-                    
+                         ->find(1); 
+                
                 $event= new Event();
                 $startAt=new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get()));
                 $event->setStartAt($startAt );  
@@ -165,15 +161,7 @@ class ScheduleController extends Controller
 
                 $JSONArray['Data'] = $event->getId();
                 $JSONArray['IsSuccess'] = true;
-                $JSONArray['Msg'] = "add success";
-                
-            }else
-            {
-                $JSONArray['Data'] = $event->getId();
-                $JSONArray['IsSuccess'] = false;
-                $JSONArray['Msg'] = "permission denied";
-            }
-              
+                $JSONArray['Msg'] = "add success"; 
         }else if( $methodParam=="update")
         { 
                 
@@ -207,15 +195,9 @@ class ScheduleController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id);
           
-        
-        //confManagerEvents 
-        $currentManager=$this->get('security.context')->getToken()->getUser(); 
-        $WwwConf = $entity->getWwwConf();
-        $events = $WwwConf->getConfEvents(); 
+        $conf = $em->getRepository('fibeWWWConfBundle:WwwConf')
+                    ->find(1); 
          
-        //confManagerEvents
-        
-        
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Event entity.');
         }
@@ -223,8 +205,7 @@ class ScheduleController extends Controller
         $form = $this->createForm(new EventType(), $entity);
         $deleteForm =  $this->createFormBuilder(array('id' => $id))
                             ->add('id', 'hidden')
-                            ->getForm()
-                        ;
+                            ->getForm();
 
         $xproperty = new XProperty();
         $xproperty->setCalendarEntity($entity);
@@ -240,7 +221,7 @@ class ScheduleController extends Controller
             'delete_form'       => $deleteForm->createView(),
             'xproperty_form'    => $xpropertyForm->createView(),
             'relation_form'     => $relationForm->createView(),
-            'SparqlUrl'         => ($WwwConf?$WwwConf->getConfUri():null)
+            'SparqlUrl'         => $conf->getConfUri()
         );
       
     }
@@ -259,31 +240,28 @@ class ScheduleController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id);
 
-        if (!$entity) {
-          $JSONArray['IsSuccess'] = false;
-          $JSONArray['Msg'] = "entity not found"; 
-          $response = new Response(json_encode($JSONArray));
-          $response->headers->set('Content-Type', 'application/json');
-          return $response;
-        }
-        
-        $JSONArray['Data'] = $id;
- 
-        $editForm = $this->createForm(new EventType(), $entity);
-        $editForm->bind($request); 
-        if ($editForm->isValid()) { 
-            $em->persist($entity);
-            $em->flush();
- 
-          $JSONArray['IsSuccess'] = true;
-          $JSONArray['Msg'] = "update success"; 
-          
-          
+        if ($entity) {
+
+            $JSONArray['Data'] = $id;
+     
+            $editForm = $this->createForm(new EventType(), $entity);
+            $editForm->bind($request); 
+            if ($editForm->isValid()) { 
+                $em->persist($entity);
+                $em->flush();
+     
+              $JSONArray['IsSuccess'] = true;
+              $JSONArray['Msg'] = "update succses";
+            }else{
+              $JSONArray['IsSuccess'] = false;
+              $JSONArray['Msg'] = "update failed";
+            }
         }else{
+
           $JSONArray['IsSuccess'] = false;
-          $JSONArray['Msg'] = "update failed"; 
-        
+          $JSONArray['Msg'] = "entity not found";
         }
+        
         $response = new Response(json_encode($JSONArray));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -312,8 +290,15 @@ class ScheduleController extends Controller
         if ($form->isValid()) {
             $em->persist($entity);
             $em->flush();
+            $this->container->get('session')->getFlashBag()->add(
+                     'success',
+                     'Event successfully updated'
+                     );
         } else {
-            die('todo: flash message');
+            $this->container->get('session')->getFlashBag()->add(
+                     'error',
+                     'Submission failed'
+                     );
         }
 
         $response = new Response(json_encode("ok"));
