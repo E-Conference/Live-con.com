@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Status;
+use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 
 class databaseCommand extends ContainerAwareCommand
 {
@@ -38,6 +39,10 @@ class databaseCommand extends ContainerAwareCommand
         $status->setValue('CANCELLED')
                ->setDiscr('CANCELLED'); 
         $em->persist($status);
+
+        // conf
+        $conf = new WwwConf(); 
+        $em->persist($conf);
 
         //TODO category
         /*
