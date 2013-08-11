@@ -1,13 +1,14 @@
 <div class="navbar navbar-static-top navbar-inverse">
     <div class="navbar-inner">
         <div class="container">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
+				<span class="glyphicon glyphicon-resize-small glyphicon-white ">
             </a>
             <a class="brand" href="{{ path('wwwconf_link_index') }}" title="Go back to Index">WWWConf</a>
-            <div class="nav-collapse collapse">
+              <div class="nav-collapse collapse navbar-responsive-collapse">
                 <ul class="nav">
                     <li>
                         <a href="{{ path('wwwconf_schedule') }}" title="manage schedule">Schedule</a>
@@ -37,10 +38,13 @@
                     <li>
                         <a href="{{ path('admin_schedule_event') }}" title="Event">Event</a>
                     </li>
+					 <li>
+                        <a href="{{ path('wwwconf_person_index') }}" title="Person">Person</a>
+                    </li>
                 </ul>
                 <ul class="nav pull-right">
                   <li>
-                        <a href="{{ path('logout') }}" title="logout">Log out {{ app.user.username }}</a>
+                        <a href="{{ path('logout') }}" title="logout" class='btn btn-danger'><span class="glyphicon glyphicon-off glyphicon-white "></span></a>
                     </li>
                 </ul>
             </div>

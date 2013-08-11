@@ -180,6 +180,8 @@ class EventController extends Controller
         $relation = new CalendarEntityRelation();
         $relation->setCalendarEntity($entity);
         $relationForm = $this->createForm(new CalendarEntityRelationType($entity), $relation);
+		
+		$WwwConf="";
 
         return array(
             'entity'            => $entity,

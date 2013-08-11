@@ -36,7 +36,7 @@ body
 	margin: 0;
 	background-color: #E8F1F8;
 	font-size: 12px;
-	font-family: "Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;
+	font-family: "arial","Lucida Sans Unicode",Arial,Verdana,sans-serif;
 	padding: 0;
 	height: 100%;
 	width:100%;
@@ -44,12 +44,13 @@ body
 
 div, span, td
 {
-	font-family: "Lucida Grande","Lucida Sans Unicode",Arial,Verdana,sans-serif;
+	font-family: "arial","Lucida Sans Unicode",Arial,Verdana,sans-serif;
+	font-weight:bold;
 }
 a:link, a:visited
 {
 	text-decoration: none;
-	color: #333;
+	color: #5b5b5b;
 }
 input
 {
@@ -186,17 +187,17 @@ span.showtoday
 span.fprev
 {
     width:18px;
-    background:url("./images/icons/resultset_previous.png") no-repeat 1px bottom;
+  
 }
 span.fnext
 {
     width:18px;
-    background:url("./images/icons/resultset_next.png") no-repeat 1px bottom;
+   
 }
 span.showdayflash
 {
     padding-left:20px;
-    background:url("./images/icons/date_reflash.png") no-repeat 1px 50%;
+    background:url("./images/icons/refresh_icon.png") no-repeat 1px 50%;
 }
 .size1
 {
@@ -332,8 +333,10 @@ div.clear
 
 div.cHead
 {
-    background: url(images/calendar/headbg.gif) repeat-x top;
-    border: 1px solid #99bbe8;
+    background: #330033;
+    border: 1px solid #330033;
+	border-radius:2px;
+	color:with;
     border-top: 0px;
     font-weight: bold;
     display: block;
@@ -350,9 +353,10 @@ div.cHead
  div.cHead div.ftitle
 {
     background:url("images/calendar/grid.png") no-repeat left ;
-    color:#15428b;
+    color:#999999;
     margin-left:10px;
     padding-left:20px;
+	font-size: 21px
 }
  div.cHead div.ptogtitle
 {
@@ -373,6 +377,7 @@ div.cHead
 {
    padding: 1px 4px 1px 4px;
    background:#fad163; 
+   border-radius:2px;
 }
 
 div.cHead div.ptogtitle input
@@ -385,12 +390,13 @@ div.cHead div.ptogtitle input
 
 div.ctoolbar
 {
-    BORDER-RIGHT: #99bbe8 1px solid;	
-    BORDER-TOP: #99bbe8 0px solid;	
-    BACKGROUND: #ccc url(images/calendar/tbg.gif)  repeat-x 50% top;	
+    BORDER-RIGHT: #330033 1px solid;	
+    BORDER-TOP: #330033 0px solid;	
+    BACKGROUND: #330033 ;	
     OVERFLOW: hidden;	
-    BORDER-LEFT: #99bbe8 1px solid;
-    BORDER-BOTTOM: #99bbe8 1px solid;	
+    BORDER-LEFT: #330033 1px solid;
+    BORDER-BOTTOM: #330033 1px solid;	
+	BORDER-RADIUS:2px;
     POSITION: relative;
     HEIGHT: 25px
 }
@@ -418,6 +424,9 @@ div.ctoolbar div.fbutton span
     float: left;
     display: block;		
     height:18px;
+	color:#999999;
+	font-weight:bold;
+	border-radius:10px;
 }
 
 div.ctoolbar div.fbutton.fcurrent
@@ -425,7 +434,7 @@ div.ctoolbar div.fbutton.fcurrent
     border: #555 1px solid;
     padding: 0;
     cursor: pointer;
-    background-color: #EDF1D5;
+    background-color: whitesmoke;
 }
 
 div.ctoolbar div.fbutton.fcurrent div
@@ -439,7 +448,7 @@ div.ctoolbar div.fbutton.fcurrent div
 	
 div.ctoolbar div.fbutton:hover, .div.ctoolbar div.fbutton.fbOver
 {
-    border: #466094 1px solid;
+    border: black 1px solid;
     padding: 0;
     cursor: pointer;
     background-color: #EDF1D5;

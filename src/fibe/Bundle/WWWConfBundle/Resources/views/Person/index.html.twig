@@ -1,0 +1,79 @@
+{% extends "fibeWWWConfBundle::base.html.twig" %}
+
+{% block body -%}
+{{ parent() }}
+
+    <h1>Person list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Createdat</th>
+                <th>Agent</th>
+                <th>Name</th>
+                <th>Title</th>
+                <th>Img</th>
+                <th>Depiction</th>
+                <th>Familyname</th>
+                <th>Givenname</th>
+                <th>Based_near</th>
+                <th>Knows</th>
+                <th>Age</th>
+                <th>Made</th>
+                <th>Primary_topic</th>
+                <th>Project</th>
+                <th>Organization</th>
+                <th>Group</th>
+                <th>Member</th>
+                <th>Document</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('person_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{% if entity.createdAt %}{{ entity.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.agent }}</td>
+                <td>{{ entity.name }}</td>
+                <td>{{ entity.title }}</td>
+                <td>{{ entity.img }}</td>
+                <td>{{ entity.depiction }}</td>
+                <td>{{ entity.familyName }}</td>
+                <td>{{ entity.givenName }}</td>
+                <td>{{ entity.basednear }}</td>
+                <td>{{ entity.knows }}</td>
+                <td>{{ entity.age }}</td>
+                <td>{{ entity.made }}</td>
+                <td>{{ entity.primarytopic }}</td>
+                <td>{{ entity.project }}</td>
+                <td>{{ entity.organization }}</td>
+                <td>{{ entity.group }}</td>
+                <td>{{ entity.member }}</td>
+                <td>{{ entity.document }}</td>
+                <td>{{ entity.image }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('person_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('person_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('person_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

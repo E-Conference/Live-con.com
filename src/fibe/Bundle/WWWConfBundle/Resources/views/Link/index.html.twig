@@ -12,12 +12,12 @@
             <div class="span4">
                 <div class="btn-group">
                     <a href="{{ path('wwwconf_schedule') }}" role="button" class="btn btn-success btn-large">
-                      <i class="icon-calendar icon-white"></i> Manage schedule 
+                      <span class="glyphicon glyphicon-calendar glyphicon-white"></span> Manage schedule 
                     </a>
 
                     {% if app.user.wwwConf %}
                     <a href="{{ path('wwwconf_schedule') }}" role="button" class="btn dropdown-toggle btn-success btn-large" data-toggle="dropdown">
-                        <i class="icon-list icon-white"></i> 
+                         <span class="glyphicon glyphicon-list glyphicon-white"></span> 
                     </a>
                      
                     {% endif %}
@@ -27,7 +27,7 @@
                 
             </div>
 			      <div class="span4"> 
-                <a href="{{ path('wwwconf_conference_show') }}" role="button" class="btn btn-primary btn-large"><i class="icon-cog icon-white"></i> Manage conference </a>
+                <a href="{{ path('wwwconf_conference_show') }}" role="button" class="btn btn-primary btn-large"><span class="glyphicon glyphicon-cog glyphicon-white"></span> Manage conference </a>
             </div> 
         </div>
       </div>

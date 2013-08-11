@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert; 
 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Event; 
+use fibe\Bundle\WWWConfBundle\Entity\Person;
 
 /**
  * ConfEvent
@@ -23,6 +24,12 @@ class ConfEvent extends Event
      * @ORM\JoinColumn(name="wwwConf_id", referencedColumnName="id")
      */
     private $wwwConf;
+	
+	/**
+     * 
+     * @ORM\ManyToMany(targetEntity="Person")
+     */
+    protected $persons;
     
     
     
@@ -41,7 +48,7 @@ class ConfEvent extends Event
      */
     public function __toString()
     {
-	    parent::__toString();
+	    return parent::__toString();
     }
     
     

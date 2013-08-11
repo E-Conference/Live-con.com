@@ -15,7 +15,7 @@
 <ul class="list_actions">
     <li>
         <a class="btn btn-primary" href="{{ path('admin_schedule_location_new') }}">
-            {% trans %}Create a new entry{% endtrans %}
+            {% trans %}<i class="icon icon-plus icon-white"></i>{% endtrans %}
         </a>
     </li>
 </ul>
@@ -40,10 +40,10 @@
             <td>{{ entity.latitude }}</td>
             <td>{{ entity.longitude }}</td>
             <td>
-                <a class="btn btn-block" href="{{ path('admin_schedule_location_show', { 'id': entity.id }) }}">{% trans %}show{% endtrans %}</a>
+                <a class="btn btn-block btn-info btn-small" href="{{ path('admin_schedule_location_show', { 'id': entity.id }) }}">{% trans %}<i class="icon icon-eye-open icon-white"></i>{% endtrans %}</a>
             </td>
             <td>
-                <a class="btn btn-block btn-primary" href="{{ path('admin_schedule_location_edit', { 'id': entity.id }) }}">{% trans %}edit{% endtrans %}</a>
+                <a class="btn btn-block btn-warning btn-small" href="{{ path('admin_schedule_location_edit', { 'id': entity.id }) }}">{% trans %}<i class="icon icon-edit icon-white"></i>{% endtrans %}</a>
              </td> 
         </tr>
     {% endfor %}
@@ -53,8 +53,10 @@
 <ul class="list_actions">
     <li>
         <a class="btn btn-primary" href="{{ path('admin_schedule_location_new') }}">
-            {% trans %}Create a new entry{% endtrans %}
+            {% trans %}<span class="class="glyphicon glyphicon-plus"></span>{% endtrans %}
         </a>
     </li>
 </ul>
+
+
 {% endblock body %}

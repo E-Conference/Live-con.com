@@ -23,9 +23,17 @@ class EventType extends LocationAwareCalendarEntityType
             ->add('endAt', 'datetime', array(  
                 'widget' =>'single_text',
                 'format' =>'dd/MM/yyyy HH:mm', 
-                'attr' => array('class' => 'datetimepicker')
+             
             ))
-            ->add('isTransparent', null, array(
+			
+			 ->add('startAt', 'datetime', array(  
+                'widget' =>'single_text',
+                'format' =>'dd/MM/yyyy HH:mm', 
+              
+            ))
+			
+            ->add('isTransparent', null, array( 
+			    'label' => 'is Transparent',
                 'required' => false
             ))
         ;
