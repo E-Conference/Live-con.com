@@ -405,13 +405,13 @@
 
             switch (option.view) {
                 case "day":
-                    BuildDaysAndWeekView(showday, 1, events, config);
+                    BuildDaysAndWeekView(showday, 1, events, config, datelessEvents);
                     break;
                 case "week":
-                    BuildDaysAndWeekView(showday, 7, events, config);
+                    BuildDaysAndWeekView(showday, 7, events, config, datelessEvents);
                     break;
                 case "month":
-                    BuildMonthView(showday, events, config);
+                    BuildMonthView(showday, events, config, datelessEvents);
                     break;
                 default:
                     alert(i18n.xgcalendar.no_implement);
@@ -422,7 +422,7 @@
         }
 
         //build day view
-        function BuildDaysAndWeekView(startday, l, events, config) {
+        function BuildDaysAndWeekView(startday, l, events, config, datelessEvents) {
             var days = [];
             if (l == 1) {
                 var show = dateFormat.call(startday, i18n.xgcalendar.dateformat.Md);
@@ -465,11 +465,11 @@
             html.push("<table style=\"height: 1008px\" id=\"tgTable\" class=\"tg-timedevents\" cellspacing=\"0\" cellpadding=\"0\"><tbody>");
             BuildDayScollEventContainer(html, days, scollDayEvents);
             html.push("</tbody></table></td></tr></tbody></table></div>");
-            gridcontainer.html(html.join(""));
-            html = null;
+            gridcontainer.html(html.join(""))
+;            html = null;
         }
         //build month view
-        function BuildMonthView(showday, events, config) { 
+        function BuildMonthView(showday, events, config, datelessEvents) { 
             var cc = "<div id='cal-month-cc' class='cc'><div id='cal-month-cc-header'><div class='cc-close' id='cal-month-closebtn'></div><div id='cal-month-cc-title' class='cc-title'></div></div><div id='cal-month-cc-body' class='cc-body'><div id='cal-month-cc-content' class='st-contents'><table class='st-grid' cellSpacing='0' cellPadding='0'><tbody></tbody></table></div></div></div>";
             var html = [];
             html.push(cc);
@@ -482,7 +482,7 @@
                 html.push("<th class=\"mv-dayname\" title=\"", __WDAY[i], "\">", __WDAY[i], "");
             }
             html.push("</tr></tbody></table>");
-            html.push("</div>");
+            html.push("</div>");œ
             var bH = GetMonthViewBodyHeight() - GetMonthViewHeaderHeight();
 
             html.push("<div id=\"mvEventContainer\" class=\"mv-event-container\" style=\"height:", bH, "px;", "\">");

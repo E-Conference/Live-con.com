@@ -104,7 +104,7 @@
 <link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/css/bootstrap-responsive.css') }}" />
 
     <style type="text/css">
-        /*popup size*/
+        /*popup size*/ 
         .bbit-window { 
             left: 10%;
             width: 80%;
@@ -113,9 +113,9 @@
         .sidebar  {
             height: calc(100% + 41px); /*-sidebar size*/
             position: fixed;
-            top: 41px; 
-            width: 20%; 
-            right: calc(-20% + 3em);
+            top: 41px; /*-sidebar size*/
+            width: 210px; 
+            right: -170px;
             z-index: 0;
         }
 
@@ -218,14 +218,14 @@
             function initSidebar(){
                 $('.open-sidebar-btn').toggle(function(){
                     $('.sidebar').animate({ 
-                        right: "+=20%", 
+                        right: "+=170px", 
                         }, {
                             duration: 800, 
                             easing:"easeOutQuart"
                     });
                 },function(){
                     $('.sidebar').animate({ 
-                        right: "-=20%", 
+                        right: "-=170px", 
                         }, {
                             duration: 800, 
                             easing:"easeOutQuart"
