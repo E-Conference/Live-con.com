@@ -70,11 +70,13 @@ Now to create the database and install the assets.
 
 
 ----------------
-Create your user using the Git xterm :
+	Create your user using the Git xterm :
+	
     	php app/console fos:user:create admin admin@example.com admin
     
 ----------------
-Finally populate database with basic conference informations :
+	Finally populate database with basic conference informations :
+
     	php app/console wwwconf:database:init
     
 ----------------		
