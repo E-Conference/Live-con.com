@@ -67,6 +67,7 @@ Now to create the database and install the assets.
 Create your user using the Git xterm :
 
     	php app/console fos:user:create admin admin@example.com admin
+    	php app/console fos:user:promote admin ROLE_ADMIN
     
 ----------------
 Finally populate database with basic conference informations :
@@ -80,6 +81,7 @@ In one copy-paste :
 		php app/console doctrine:schema:update --force
 		php app/console assets:install web
     	php app/console fos:user:create admin admin@example.com admin
+    	php app/console fos:user:promote admin ROLE_ADMIN
     	php app/console wwwconf:database:init
     
 ----------------		
