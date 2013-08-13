@@ -54,12 +54,6 @@ parameters:
 For  "database_user" put your mysql user name, and "database_password" , and use your mysql password.
 After that, save and add this file to : WWWConference/app/config
 
-Return in your Git xterm : 
-
-
-	cd WWWConference 
-	composer update 
-
 ----------------
 Now to create the database and install the assets.
 	In your Git xterm :
