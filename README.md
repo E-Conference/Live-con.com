@@ -74,6 +74,15 @@ Finally populate database with basic conference informations :
     	php app/console wwwconf:database:init
     
 ----------------		
+In one copy-paste :
+
+		php app/console doctrine:database:create
+		php app/console doctrine:schema:update --force
+		php app/console assets:install web
+    	php app/console fos:user:create admin admin@example.com admin
+    	php app/console wwwconf:database:init
+    
+----------------		
 Start your Apache server and go to :
 
 
