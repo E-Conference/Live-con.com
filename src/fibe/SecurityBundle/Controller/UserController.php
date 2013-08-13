@@ -107,24 +107,24 @@ class UserController extends Controller
         $form->bind($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('fibeSecurityBundle:User')->find($id);
+          $em = $this->getDoctrine()->getManager();
+          $entity = $em->getRepository('fibeSecurityBundle:User')->find($id);
 
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find User entity.');
-            }
+          if (!$entity) {
+              throw $this->createNotFoundException('Unable to find User entity.');
+          }
 
-            $em->remove($entity);
-            $em->flush();
-                $this->container->get('session')->getFlashBag()->add(
-                    'success',
-                    'The user has been successfully removed.'
-                );
+          $em->remove($entity);
+          $em->flush();
+            $this->container->get('session')->getFlashBag()->add(
+                'success',
+                'The user has been successfully removed.'
+            );
         }else{
-                $this->container->get('session')->getFlashBag()->add(
-                    'error',
-                    'Submition error, please try again.'
-                ); 
+          $this->container->get('session')->getFlashBag()->add(
+              'error',
+              'Submition error, please try again.'
+          ); 
         }
 
         return $this->redirect($this->generateUrl('wwwconf_user_list'));

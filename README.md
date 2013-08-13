@@ -70,14 +70,18 @@ Now to create the database and install the assets.
 
 
 ----------------
-Finally, create your user using the Git xterm :
-    php app/console fos:user:create admin admin@example.com admin
+Create your user using the Git xterm :
+    	php app/console fos:user:create admin admin@example.com admin
+    
+----------------
+Finally populate database with basic conference informations :
+    	php app/console wwwconf:database:init
     
 ----------------		
 Start your Apache server and go to :
 
 
-    - http://localhost/WWWConf/web/
+    - http://localhost/WWWConf/web/app_dev.php/
 	
 	
 You are ready to use the WWWConference Bundle !!!!!!!!! Welcome!!!!!!!!

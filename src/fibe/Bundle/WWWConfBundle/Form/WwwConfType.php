@@ -14,8 +14,7 @@ class WwwConfType extends AbstractType
         $builder
             ->add('confName', null, array('required' => false,
                                           'attr'  => array(
-                                                    'placeholder'   => 'Conference name')))
-            ->add('confUri')
+                                                    'placeholder'   => 'Conference name'))) 
         ;
     }
 
