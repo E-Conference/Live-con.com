@@ -30,10 +30,9 @@ class ConferenceController extends Controller
     public function editAction(Request $request)
     {
       $em = $this->getDoctrine()->getManager();       
-  	  $confManager = $this->get('security.context')->getToken()->getUser();
-      $wwwConf = $confManager->getWwwConf();
-      if(!$wwwConf)
-        $wwwConf = new WwwConf();
+      $wwwConf = $this->getDoctrine()
+                   ->getRepository('fibeWWWConfBundle:WwwConf')
+                   ->find(1); 
       $form = $this->createForm(new WwwConfType(), $wwwConf);
       
       $request = $this->get('request');
