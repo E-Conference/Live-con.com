@@ -128,12 +128,14 @@ class ScheduleController extends Controller
                     $start->format('m/d/Y H:i'),
                     $end->format('m/d/Y H:i'),
                     1,                                  // disable alarm clock icon
-                    ($duration % 86400 == 86399 || $duration % 86400 == 0 ) ? 1 : 0,     // all day event
+                    (($duration+86400) % 86400 == 86399 || ($duration+86400) % 86400 == 0 ) && $duration !== 0  ? 1 : 0,     // all day event
                     0,                                  // ??
                     $category?$category->getId():null,                 // color
                     1,                                  // editable
                     $eventsEntities[$i]->getLocation()?$eventsEntities[$i]->getLocation()->getName():null, // location if exists
-                    null                                // $attends
+                    null,                                // $attends
+                    ($duration == 0 ) ? 1 : 0,  //instant event
+
                 );       
             }
 

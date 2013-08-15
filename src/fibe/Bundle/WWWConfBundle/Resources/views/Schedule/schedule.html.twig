@@ -103,12 +103,17 @@
     -->
 <link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/css/bootstrap-responsive.css') }}" />
 
+    <link href="{{ asset('wdcalendar/css/dailog.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('wdcalendar/css/calendar.css') }}" rel="stylesheet" type="text/css" /> 
+    <link href="{{ asset('wdcalendar/css/dp.css') }}" rel="stylesheet" type="text/css" />   
+    <link href="{{ asset('wdcalendar/css/alert.css') }}" rel="stylesheet" type="text/css" /> 
+    <link href="{{ asset('wdcalendar/css/main.css') }}" rel="stylesheet" type="text/css" /> 
     <style type="text/css">
         /*popup size*/ 
         .bbit-window { 
             left: 10%;
             width: 80%;
-        }
+        } 
 
         .sidebar  {
             height: calc(100% + 41px); /*-sidebar size*/
@@ -118,25 +123,25 @@
             right: -170px;
             z-index: 0;
         }
+        .sidebar-content {
+            z-index: 10;
+            padding: 1em;
+            position: relative;
+            left: 36px; /*-open-sidebar-btn size*/
+            height: 100%;
+            background-color: #eee;
+            overflow-y : scroll;
+        }
 
         .open-sidebar-btn{
             z-index: 0;  
             position: absolute;
         } 
 
-        .sidebar-content {
-            padding: 1em;
-            position: relative;
-            left: 40px; /*-open-sidebar-btn size*/
-            height: 100%;
-            background-color: #eee;
+        #dateless_events > div{
+            margin-bottom: 1px;
         }
     </style>
-    <link href="{{ asset('wdcalendar/css/dailog.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('wdcalendar/css/calendar.css') }}" rel="stylesheet" type="text/css" /> 
-    <link href="{{ asset('wdcalendar/css/dp.css') }}" rel="stylesheet" type="text/css" />   
-    <link href="{{ asset('wdcalendar/css/alert.css') }}" rel="stylesheet" type="text/css" /> 
-    <link href="{{ asset('wdcalendar/css/main.css') }}" rel="stylesheet" type="text/css" /> 
 
 {% endblock stylesheets %}
 
@@ -216,16 +221,16 @@
 
 
             function initSidebar(){
-                $('.open-sidebar-btn').toggle(function(){
+                $('.open-sidebar-btn').toggle(function(){ 
                     $('.sidebar').animate({ 
-                        right: "+=170px", 
+                        right: "+="+$(".sidebar-content").width()+"px", 
                         }, {
                             duration: 800, 
                             easing:"easeOutQuart"
                     });
                 },function(){
                     $('.sidebar').animate({ 
-                        right: "-=170px", 
+                        right: "-="+$(".sidebar-content").width()+"px", 
                         }, {
                             duration: 800, 
                             easing:"easeOutQuart"
