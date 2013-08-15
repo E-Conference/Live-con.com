@@ -10,7 +10,7 @@ use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
  
 /**
  * @ORM\Entity
- * @ORM\Table(name="wwwconf_manager")
+ * @ORM\Table(name="manager")
  */
 class User extends BaseUser
 {

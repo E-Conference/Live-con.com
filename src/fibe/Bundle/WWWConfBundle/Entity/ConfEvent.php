@@ -10,7 +10,7 @@ use IDCI\Bundle\SimpleScheduleBundle\Entity\Event;
 /**
  * ConfEvent
  *
- * @ORM\Entity  
+ * @ORM\Entity
  * @ORM\Entity(repositoryClass="IDCI\Bundle\SimpleScheduleBundle\Repository\EventRepository")
  */
 class ConfEvent extends Event

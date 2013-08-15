@@ -11,7 +11,7 @@ use fibe\SecurityBundle\Entity\User;
  * WwwConf
  *
  * @ORM\Entity
- * @ORM\Table(name="wwwconf_swc") 
+ * @ORM\Table(name="conference") 
  */
 class WwwConf
 {

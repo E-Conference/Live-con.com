@@ -416,7 +416,6 @@
                     },
                     year    : 2013
                   };
-                  
                   sidebar.append( 
                     $(BuildMonthDayEvent(e,showday,1))
                   );
@@ -1803,7 +1802,7 @@
                         d[3] = end;
                     }
                     Ind(d);
-                    render();
+                    // render();
                 }
             }
         }

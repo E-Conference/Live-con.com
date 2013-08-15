@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Purpose: This class of property provides a framework for defining non-standard properties
  *
  * @ORM\Entity(repositoryClass="IDCI\Bundle\SimpleScheduleBundle\Repository\XPropertyRepository")
+ * @ORM\Table(name="xproperty")
  */
 class XProperty
 {

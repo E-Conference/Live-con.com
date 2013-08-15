@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * This entity is based on the "VEVENT", "VTODO", "VJOURNAL" Component from the RFC2445
  *
  * @ORM\Entity(repositoryClass="IDCI\Bundle\SimpleScheduleBundle\Repository\CalendarEntityRelationRepository")
- * @ORM\Table(name="idci_schedule_entity_relation")
+ * @ORM\Table(name="relation")
  */
 class CalendarEntityRelation
 {

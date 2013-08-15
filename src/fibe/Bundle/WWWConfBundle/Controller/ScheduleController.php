@@ -64,55 +64,57 @@ class ScheduleController extends Controller
 	    
         $JSONArray = array();
 	    
-	    if( $methodParam=="list")
-	    {
-            $jsdate = $postData['showdate'];
-            $type= $postData['viewtype']; 
-            if(preg_match('@(\d+)/(\d+)/(\d+)\s+(\d+):(\d+)@', $jsdate, $matches)==1){
-            $jsdate = mktime($matches[4], $matches[5], 0, $matches[1], $matches[2], $matches[3]);
-            //echo $matches[4] ."-". $matches[5] ."-". 0  ."-". $matches[1] ."-". $matches[2] ."-". $matches[3];
-            }else if(preg_match('@(\d+)/(\d+)/(\d+)@', $jsdate, $matches)==1){
-            $jsdate = mktime(0, 0, 0, $matches[1], $matches[2], $matches[3]);
-            //echo 0 ."-". 0 ."-". 0 ."-". $matches[1] ."-". $matches[2] ."-". $matches[3];
-            }
+	    // if( $methodParam=="list")
+	    // {
+            // $type= $postData['viewtype']; 
+            // $jsdate = $postData['showdate'];
+            // if(preg_match('@(\d+)/(\d+)/(\d+)\s+(\d+):(\d+)@', $jsdate, $matches)==1){
+            // $jsdate = mktime($matches[4], $matches[5], 0, $matches[1], $matches[2], $matches[3]);
+            // //echo $matches[4] ."-". $matches[5] ."-". 0  ."-". $matches[1] ."-". $matches[2] ."-". $matches[3];
+            // }else if(preg_match('@(\d+)/(\d+)/(\d+)@', $jsdate, $matches)==1){
+            // $jsdate = mktime(0, 0, 0, $matches[1], $matches[2], $matches[3]);
+            // //echo 0 ."-". 0 ."-". 0 ."-". $matches[1] ."-". $matches[2] ."-". $matches[3];
+            // }
 
-            //echo $jsdate . "+" . $type;
-            switch($type){
-            case "month":
-              $st = mktime(0, 0, 0, date("m", $jsdate), 1, date("Y", $jsdate));
-              $et = mktime(0, 0, -1, date("m", $jsdate)+1, 1, date("Y", $jsdate));
-              break;
-            case "week":
-              //suppose first day of a week is monday 
-              $monday  =  date("d", $jsdate) - date('N', $jsdate) + 1;
-              //echo date('N', $jsdate);
-              $st = mktime(0,0,0,date("m", $jsdate), $monday, date("Y", $jsdate));
-              $et = mktime(0,0,-1,date("m", $jsdate), $monday+7, date("Y", $jsdate));
-              break;
-            case "day":
-              $st = mktime(0, 0, 0, date("m", $jsdate), date("d", $jsdate), date("Y", $jsdate));
-              $et = mktime(0, 0, -1, date("m", $jsdate), date("d", $jsdate)+1, date("Y", $jsdate));
-              break;
-            }
+            // //echo $jsdate . "+" . $type;
+            // switch($type){
+            // case "month":
+            //   $st = mktime(0, 0, 0, date("m", $jsdate), 1, date("Y", $jsdate));
+            //   $et = mktime(0, 0, -1, date("m", $jsdate)+1, 1, date("Y", $jsdate));
+            //   break;
+            // case "week":
+            //   //suppose first day of a week is monday 
+            //   $monday  =  date("d", $jsdate) - date('N', $jsdate) + 1;
+            //   //echo date('N', $jsdate);
+            //   $st = mktime(0,0,0,date("m", $jsdate), $monday, date("Y", $jsdate));
+            //   $et = mktime(0,0,-1,date("m", $jsdate), $monday+7, date("Y", $jsdate));
+            //   break;
+            // case "day":
+            //   $st = mktime(0, 0, 0, date("m", $jsdate), date("d", $jsdate), date("Y", $jsdate));
+            //   $et = mktime(0, 0, -1, date("m", $jsdate), date("d", $jsdate)+1, date("Y", $jsdate));
+            //   break;
+            // }
             //echo $st . "--" . $et;
-           
+            
 
-            $week_start = date($st);
-            $week_end = date($et); 
+            // $week_start = date($getData->get('start', ''));
+            // $week_end = date($getData->get('end', '')); 
   
-            $JSONArray['start'] = $week_start;
-            $JSONArray['end'] = $week_end;
+            // $JSONArray['start'] = $week_start;
+            // $JSONArray['end'] = $week_end;
             $JSONArray['error'] = null;
             $JSONArray['issort'] = true;
 
             $eventsEntities = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findAll();
 
             $JSONArray['events'] = array();
+            $JSONArray['instant_events'] = array();
             for ($i = 0; $i < count($eventsEntities); $i++) {
 
                 $start =  $eventsEntities[$i]->getStartAt() ; 
                 $end =  $eventsEntities[$i]->getEndAt() ; 
                 $duration =   $end->diff($start) ; 
+
                 $duration = ($duration->y * 365 * 24 * 60 * 60) + 
                             ($duration->m * 30 * 24 * 60 * 60) + 
                             ($duration->d * 24 * 60 * 60) + 
@@ -121,62 +123,64 @@ class ScheduleController extends Controller
                             $duration->s; 
                 //echo $eventsEntities[$i]->getSummary().", ".$duration % 86400 ." .... ";
                 $category = $eventsEntities[$i]->getCategories();
-                $category = $category[0];  
-                $JSONArray['events'][] = array(
-                    $eventsEntities[$i]->getId(),
-                    $eventsEntities[$i]->getSummary(),
-                    $start->format('m/d/Y H:i'),
-                    $end->format('m/d/Y H:i'),
-                    1,                                  // disable alarm clock icon
-                    (($duration+86400) % 86400 == 86399 || ($duration+86400) % 86400 == 0 ) && $duration !== 0  ? 1 : 0,     // all day event
-                    0,                                  // ??
-                    $category?$category->getId():null,                 // color
-                    1,                                  // editable
-                    $eventsEntities[$i]->getLocation()?$eventsEntities[$i]->getLocation()->getName():null, // location if exists
-                    null,                                // $attends
-                    ($duration == 0 ) ? 1 : 0,  //instant event
+                $category = $category[0];
+                $event = array(
+                    "id" => $eventsEntities[$i]->getId(),
+                    "duration" => $duration,
+                    "title" => $eventsEntities[$i]->getSummary(),
+                    "allDay" => (($duration+86400) % 86400 == 86399 || ($duration+86400) % 86400 == 0 ) && $duration !== 1  ? 1 : 0,     // all day event
+                    "start" => $start->format('m/d/Y H:i'),
+                    "end" => $end->format('m/d/Y H:i'),
+                    "color" => $category?$category->getColor():null,                 // color 
 
                 );       
+                if($duration !== 1)
+                {
+                    $JSONArray['events'][] = $event;
+                }else
+                {
+                    $JSONArray['instant_events'][] = $event;
+                }
             }
 
-        }else if( $methodParam=="add" )
-        {
-            $conf = $this->getDoctrine()
-                         ->getRepository('fibeWWWConfBundle:WwwConf')
-                         ->find(1); 
+        // }else if( $methodParam=="add" )
+        // {
+        //     $conf = $this->getDoctrine()
+        //                  ->getRepository('fibeWWWConfBundle:WwwConf')
+        //                  ->find(1); 
                 
-                $event= new Event();
-                $startAt=new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get()));
-                $event->setStartAt($startAt );  
-                if($postData['isallday']=="true"){
-                  $endAt = new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()));   
-                  $event->setEndAt($endAt->add(new \DateInterval('PT23H59M59S'))); 
-                }
-                else {
-                  $event->setEndAt(new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()))); 
-                }
-                $event->setSummary($postData['title']);
-                $event->setWwwConf($conf);
+        //         $event= new Event();
+        //         $startAt=new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get()));
+        //         $event->setStartAt($startAt );  
+        //         if($postData['isallday']=="true"){
+        //           $endAt = new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()));   
+        //           $event->setEndAt($endAt->add(new \DateInterval('PT23H59M59S'))); 
+        //         }
+        //         else {
+        //           $event->setEndAt(new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()))); 
+        //         }
+        //         $event->setSummary($postData['title']);
+        //         $event->setWwwConf($conf);
                 
-                $em->persist($event);
-                $em->flush();  
+        //         $em->persist($event);
+        //         $em->flush();  
 
-                $JSONArray['Data'] = $event->getId();
-                $JSONArray['IsSuccess'] = true;
-                $JSONArray['Msg'] = "add success"; 
-        }else if( $methodParam=="update")
-        { 
+        //         $JSONArray['Data'] = $event->getId();
+        //         $JSONArray['IsSuccess'] = true;
+        //         $JSONArray['Msg'] = "add success"; 
+        // }else if( $methodParam=="update")
+        // { 
                 
-            $event = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($postData['calendarId']);
-            $startAt = new \DateTime($postData['CalendarStartTime'], new \DateTimeZone(date_default_timezone_get()));
-            $endAt =new \DateTime($postData['CalendarEndTime'], new \DateTimeZone(date_default_timezone_get()));
-            $event->setStartAt( $startAt );
-            $event->setEndAt( $endAt );
-            $em->persist($event);
-            $em->flush();
-            $JSONArray['IsSuccess'] = true;
-            $JSONArray['Msg'] = "Successfully";
-        }
+        //     $event = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($postData['calendarId']);
+        //     $startAt = new \DateTime($postData['CalendarStartTime'], new \DateTimeZone(date_default_timezone_get()));
+        //     $endAt =new \DateTime($postData['CalendarEndTime'], new \DateTimeZone(date_default_timezone_get()));
+        //     $event->setStartAt( $startAt );
+        //     $event->setEndAt( $endAt );
+        //     $em->persist($event);
+        //     $em->flush();
+        //     $JSONArray['IsSuccess'] = true;
+        //     $JSONArray['Msg'] = "Successfully";
+        // }
 	    
         $response = new Response(json_encode($JSONArray));
         $response->headers->set('Content-Type', 'application/json');
