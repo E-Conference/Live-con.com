@@ -416,6 +416,7 @@
                     },
                     year    : 2013
                   };
+                  
                   sidebar.append( 
                     $(BuildMonthDayEvent(e,showday,1))
                   );
@@ -840,6 +841,7 @@
             return ret.join("");
         }
         function BuildDayEvent(theme, e, index) {
+            console.log("BuildDayEvent :",theme, e, index)
             var p = { bdcolor: theme[0], bgcolor2: theme[0], bgcolor1: theme[2], width: "70%", icon: "", title: "", data: "" };
             p.starttime = pZero(e.st.hour) + ":" + pZero(e.st.minute);
             p.endtime = pZero(e.et.hour) + ":" + pZero(e.et.minute);
@@ -1144,7 +1146,7 @@
             //return htr;
         }
         function BuildMonthDayEvent(e, cday, length,dontShow) {
-            dontShow || console.log("BuildMonthDayEvent : "+e.event[1],e,cday,length);
+            !dontShow || console.log("BuildMonthDayEvent : "+e.event[1],e,cday,length);
             var theme;
             if (e.event[7] && e.event[7] >= 0) {
                 theme = tc(e.event[7]);
@@ -1861,7 +1863,7 @@
             tId = Ind(newdata);
 
             realsedragevent();
-            //render(); 
+            render(); 
             
             /*
             var buddle = $("#bbit-cal-buddle");
