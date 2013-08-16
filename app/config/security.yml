@@ -10,7 +10,7 @@ security:
     providers:
         main:
             entity: { class: fibe\SecurityBundle\Entity\User, property: username } 
-        
+
 #        in_memory:
 #            memory:
 #                users:
@@ -27,12 +27,12 @@ security:
             # Cette expression régulière permet de prendre /login (mais pas /login_check !)
             pattern:   ^/login$
             anonymous: true # On autorise les anonymes sur ce pare-feu
-    
+
         api:
             pattern:   ^/api/
             anonymous: true 
-    
-    
+
+
         main:
             pattern:   ^/
             anonymous: false

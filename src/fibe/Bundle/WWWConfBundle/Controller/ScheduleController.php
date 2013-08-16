@@ -128,12 +128,12 @@ class ScheduleController extends Controller
                     "id" => $eventsEntities[$i]->getId(),
                     "duration" => $duration,
                     "title" => $eventsEntities[$i]->getSummary(),
-                    "allDay" => (($duration+86400) % 86400 == 86399 || ($duration+86400) % 86400 == 0 ) && $duration !== 1  ? 1 : 0,     // all day event
+                    "allDay" => (($duration+86400) % 86400 == 86399 || ($duration+86400) % 86400 == 0 ) && ($duration !== 1 || $duration !== 0)  ? 1 : 0,     // all day event
                     "start" => $start->format('m/d/Y H:i'),
                     "end" => $end->format('m/d/Y H:i'),
                     "color" => $category?$category->getColor():null,                 // color
                 );       
-                if($duration !== 1)
+                if($duration !== 1 && $duration !== 0)
                 {
                     $JSONArray['events'][] = $event;
                 }else
@@ -164,7 +164,7 @@ class ScheduleController extends Controller
                 $em->persist($event);
                 $em->flush();  
 
-                $JSONArray['Data'] = $event->getId();
+                $JSONArray['id'] = $event->getId();
                 $JSONArray['IsSuccess'] = true;
                 $JSONArray['Msg'] = "add success"; 
         }else if( $methodParam=="update")

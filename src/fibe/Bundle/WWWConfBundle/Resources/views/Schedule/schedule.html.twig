@@ -111,7 +111,14 @@
         margin: 0;
     }
 
+    #bootstrap_alert{
+        position: fixed;
+        top: 5em;
+        right: 2em ;
+        min-width: 20em;
+        z-index: 1000; 
 
+    }
 
 
     </style>
@@ -130,16 +137,17 @@
     <script type="text/javascript">
         $(document).ready(function() {    
  
+            //event edit popup
             $modal = $('#modal').hide();
             $modalBody = $modal.find(".modal-body");
 
            // calcule du premier jour
-            var FirstDay = moment('5000-10-10');
+            var firstDay = moment('5000-10-10');
             {% for events in currentConf.confEvents %}
                 {% if date(events.startAt) > date("1980-01-02") %}
                     
-                    if(moment('{{events.startAt|date("Y-m-d")}}').isBefore(FirstDay)){
-                        FirstDay = moment('{{events.startAt|date("Y-m-d")}}');
+                    if(moment('{{events.startAt|date("Y-m-d")}}').isBefore(firstDay)){
+                        firstDay = moment('{{events.startAt|date("Y-m-d")}}');
                     }
 
                 {% endif %}
@@ -148,7 +156,7 @@
             var DATA_FEED_URL = "{{ path('wwwconf_getevents') }}";
             //alert(DATA_FEED_URL);    
             var op = { 
-                showday       : new Date({% if currentConf %}FirstDay.format(){% else %}{% endif %}), 
+                showday       : new Date({% if currentConf %}firstDay.format(){% else %}{% endif %}), 
                 url           : DATA_FEED_URL + "?method=list",  
                 quickAddUrl   : DATA_FEED_URL + "?method=add", 
                 quickUpdateUrl: DATA_FEED_URL + "?method=update",
@@ -161,8 +169,18 @@
         /* initialize the calendar
         -----------------------------------------------------------------*/
         var $calendar = $('#calendar');
-        $calendar.fullCalendar({
+        $calendar.fullCalendar({ 
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            }, 
             editable: true,
+            //fist day
+            year: firstDay.year(), 
+            month: firstDay.month(),
+            date: firstDay.date(),
+            //get events
             events: function(start, end, callback) { 
                 $.ajax({
                     url: op.url,
@@ -170,29 +188,10 @@
                     success: function(doc) {  
                         if(callback)callback(doc.events);
                         setInstantEvents(doc.instant_events);
-                        
-
                     }
                 });
-            }, 
-            eventClick: function(calEvent, jsEvent, view) {
- 
-                $('.fc-event').click(function(){
-                    $modal.modal("show");
-                    $.ajax({
-                        url: op.updateUrl+"?id="+calEvent.id,  
-                        success: function(doc) {  
-                            $modalBody.html(doc);
-                        }
-                    });
-                }); 
+            },
 
-            },
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-            },
             selectable: true, 
             selectHelper: true,
             select: function(start, end, allDay) {
@@ -207,16 +206,30 @@
                     $.post(
                             op.quickAddUrl,
                             formatDate(e),
-                            function(doc) {  
-                                console.log(doc);
+                            function(response) {  
+                                bootstrapAlert("success","event has been well added","Success");
+                                e.id=response.id;
+                                $calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                             },
                             'json'
                     );
-                    $calendar.fullCalendar('renderEvent',e,true  ); // 3rd arg make the event "stick"
+                    bootstrapAlert("info","add request sent <i class='icon-spinner icon-spin icon-large'></i>","Info");
                 }
                 $calendar.fullCalendar('unselect');
             },
+            eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
 
+                    $.post(
+                            op.quickUpdateUrl,
+                            formatDate($.extend({}, event)),
+                            function(doc) {  
+                                bootstrapAlert("success","event has been well updated","Success"); 
+                            },
+                            'json'
+                    );
+                    bootstrapAlert("info","update request sent <i class='icon-spinner icon-spin icon-large'></i>","Info");
+
+            },
             eventDataTransform: function(data){return data;},
             editable: true,
             droppable: true, // this allows things to be dropped onto the calendar !!!
@@ -225,10 +238,11 @@
                             op.quickUpdateUrl,
                             formatDate($.extend({}, e)),
                             function(doc) {  
-                                console.log(doc);
+                                bootstrapAlert("success","event has been well updated","Success"); 
                             },
                             'json'
                     );
+                    bootstrapAlert("info","update request sent <i class='icon-spinner icon-spin icon-large'></i>","Info");
             },
             drop: function(date, allDay) { // this function is called when something is dropped
             
@@ -239,51 +253,85 @@
                 var copiedEventObject = $.extend({}, originalEventObject);
                 
                 // assign it the date that was reported 
-                copiedEventObject.start = date;
-                copiedEventObject.end = moment(date).add("hours",1);
+                copiedEventObject.start  = date;
+                copiedEventObject.end    = moment(date).add("hours",1);
                 copiedEventObject.allDay = allDay; 
  
                 $.post(
                         op.quickUpdateUrl,
                         formatDate(copiedEventObject),
-                        function(doc) {  
-                            console.log(doc);
+                        function(doc) {   
+                                bootstrapAlert("success","event has been well updated","Success"); 
                         },
                         'json'
                 );
+                bootstrapAlert("info","update request sent <i class='icon-spinner icon-spin icon-large'></i>","Info");
                 // render the event on the calendar
                 // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-                $calendar.fullCalendar('renderEvent', copiedEventObject, true);
+                $calendar.fullCalendar('renderEvent', copiedEventObject);
                 
                 $(this).remove(); 
-                console.log(copiedEventObject);
+                //console.log(copiedEventObject);
                 
                 
             }
+        }); 
+        $calendar.fullCalendar('changeView', "agendaWeek" );
+
+        $calendar.fullCalendar("eventClick",function(calEvent, jsEvent, view) { 
+                $('.fc-event').click(function(){
+                    $.ajax({
+                        url: op.updateUrl+"?id="+calEvent.id,  
+                        success: function(doc) {  
+                            $modal.modal("show");
+                            $modalBody.html(doc);
+                        }
+                    });
+                    bootstrapAlert("info","edit request sent <i class='icon-spinner icon-spin icon-large'></i>","Info");
+                });  
+            }); 
         });
 
+    var bootstrapAlertTimeout;
+    function bootstrapAlert(c,msg,title){
+        var $body = $("body");
+        var $bootstrapAlert = $('#bootstrap_alert').length < 1 ? $('<div id="bootstrap_alert"></div>').prependTo($body) : $('#bootstrap_alert');
+        $bootstrapAlert.attr("class","")
+                       .addClass("alert alert-"+c) 
+                       .html('<button type="button" class="close" data-dismiss="alert">&times;</button> <strong> '+title+' </strong>' +msg);
+        if(!$bootstrapAlert.is(":visible"))$bootstrapAlert.hide().fadeIn();
+        clearInterval(bootstrapAlertTimeout);
+        bootstrapAlertTimeout=setInterval(function(){
+                 $bootstrapAlert.fadeOut(1500);
+            },5000);
+    }
 
-    
-            
-        });
 
     function setInstantEvents(instant_events){
         var ctn = $('#external-events').html("");
 
         var event =  "<div class='external-event'></div>";
         for (var i in instant_events){
-            var $event = $(event).appendTo(ctn); 
-            $event.html(instant_events[i]['title'])
+            var current_event = instant_events[i];
+            console.log(current_event); 
+
+            var $event = $(event).appendTo(ctn)
+                                 .html(current_event['title'])
+                                 .css({
+                                    "background-color": current_event.color,
+                                    "border-color": current_event.border_color || current_event.color,
+                                 });  
+
             // store the Event Object in the DOM element so we can get to it later
-            $event.data('eventObject', instant_events[i]);
+            $event.data('eventObject', current_event);
             
             // make the event draggable using jQuery UI
             $event.draggable({
                 start: function(event, ui) { 
                     $(this).css("z-index", 10);  
             }, 
-                zIndex: 20,
-                revert: true,      // will cause the event to go back to its
+                zIndex        : 20,
+                revert        : true,      // will cause the event to go back to its
                 revertDuration: 0  //  original position after the drag
             });
         }
@@ -293,7 +341,7 @@
         e.start = moment(e.start).format();
         e.end = moment(e.end).format();
         return e;
-     }
+     } 
     </script>    
 	
 {% endblock javascripts %}
