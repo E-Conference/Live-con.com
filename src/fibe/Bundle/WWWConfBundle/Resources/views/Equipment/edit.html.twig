@@ -7,7 +7,7 @@
         <input type="hidden" name="_method" value="PUT" />
         {{ form_widget(edit_form) }}
         <p>
-            <button type="submit">Edit</button>
+            <button type="submit" class="btn btn-default"> <span class="class="glyphicon glyphicon-ok"></span></button>
         </p>
     </form>
 
@@ -21,7 +21,7 @@
         <form action="{{ path('equipment_delete', { 'id': entity.id }) }}" method="post">
             <input type="hidden" name="_method" value="DELETE" />
             {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
+            <button type="submit" class="btn btn-danger> <span class="class="glyphicon glyphicon-remove glyphicon-white"></span></button>
         </form>
     </li>
 </ul>

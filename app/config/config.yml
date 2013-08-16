@@ -60,21 +60,27 @@ doctrine:
 
 # Swiftmailer Configuration
 swiftmailer:
-    transport: %mailer_transport%
-    host:      %mailer_host%
-    username:  %mailer_user%
-    password:  %mailer_password%
-    spool:     { type: memory }
-
+    transport:  %mailer_transport%
+    host:       %mailer_host%
+    username:   %mailer_user%
+    password:   %mailer_password%
 twig:
     form:
         resources:
             - 'IDCISimpleScheduleBundle:Form:duration_widget.html.twig'
             - 'fibeWWWConfBundle:Form:my_form_div.html.twig'
             
+
 fos_user:
     db_driver:     orm                              # Le type de BDD à utiliser, nous utilisons l'ORM Doctrine depuis le début
     firewall_name: main                             # Le nom du firewall derrière lequel on utilisera ces utilisateurs
     user_class:    fibe\SecurityBundle\Entity\User  # La classe de l'entité User que nous utilisons         
+    service:
+        mailer: fos_user.mailer.twig_swift
+    from_email:
+        address:        noreply@wwwconf.com
+        sender_name:    WWWConf schedule manager
+#    registration:
+#        confirmation:
+#            enabled:    true # change to true for required email confirmation
 
- 

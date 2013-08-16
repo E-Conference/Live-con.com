@@ -253,7 +253,7 @@
             option.enableDrag = false;
         }
         //template for month and date
-var __SCOLLEVENTTEMP = '<DIV style="WIDTH:${width};top:${top};left:${left};" title="${title}" class="chip chip${i} ${drag}">\
+        var __SCOLLEVENTTEMP = '<DIV style="WIDTH:${width};top:${top};left:${left};" title="${title}" class="chip chip${i} ${drag}">\
                           <div class="dhdV" style="display:none">${data}</div>\
                           <DIV style="BORDER-BOTTOM-COLOR:${bdcolor}" class=ct>&nbsp;</DIV>\
                           <DL style="BORDER-BOTTOM-COLOR:${bdcolor}; BACKGROUND-COLOR:${bgcolor1}; BORDER-TOP-COLOR: ${bdcolor}; HEIGHT: ${height}px; BORDER-RIGHT-COLOR:${bdcolor}; BORDER-LEFT-COLOR:${bdcolor}">\
@@ -376,7 +376,7 @@ var __SCOLLEVENTTEMP = '<DIV style="WIDTH:${width};top:${top};left:${left};" tit
             //params needed
             //viewType, showday, events, config			
             var showday = new Date(option.showday.getFullYear(), option.showday.getMonth(), option.showday.getDate());
-            var events = option.eventItems;
+            var eventsTmp = option.eventItems;
             var config = { view: option.view, weekstartday: option.weekstartday, theme: option.theme };
             if (option.view == "day" || option.view == "week") {
                 var $dvtec = $("#dvtec");
@@ -384,6 +384,25 @@ var __SCOLLEVENTTEMP = '<DIV style="WIDTH:${width};top:${top};left:${left};" tit
                     option.scoll = $dvtec.attr("scrollTop"); //get scroll bar position
                 }
             }
+
+
+
+            //date less or instant events are pushed into the sidebar 
+            var datelessEvents = [];
+            var events = [];
+            for(var i=0;i<eventsTmp.length;i++){
+                var start = eventsTmp[i][2];
+                var end = eventsTmp[i][3];
+                if(moment(end).diff(start)==3600000)
+                    datelessEvents.push(eventsTmp[i]);
+                else
+                    events.push(eventsTmp[i]); 
+            } 
+            //date less or instant events are pushed into the sidebar 
+
+
+
+
             switch (option.view) {
                 case "day":
                     BuildDaysAndWeekView(showday, 1, events, config);
@@ -2033,7 +2052,8 @@ var __SCOLLEVENTTEMP = '<DIV style="WIDTH:${width};top:${top};left:${left};" tit
                     alert(i18n.xgcalendar.view_no_ready); return;
                 }
                 var dvwkH = $dvwkcontaienr.height() + 2;
-                var calH = option.height - 8 - dvwkH;
+                
+                var calH = option.height - 8 - dvwkH  ;
                 $dvtec.height(calH);
                 if (typeof (option.scoll) == "undefined") {
                     var currentday = new Date();

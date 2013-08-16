@@ -2,8 +2,12 @@
 
 {% block body -%}
     <h1>Equipment list</h1>
-
-    <table class="records_list">
+	
+	 <a  class="btn btn-info" href="{{ path('equipment_new') }}">
+                 <span class="glyphicon glyphicon-plus glyphicon-white"></span>
+     </a>
+	 
+    <table class=" table-hover records_list">
         <thead>
             <tr>
                 <th>Id</th>
@@ -21,10 +25,10 @@
                 <td>
                 <ul>
                     <li>
-                        <a href="{{ path('equipment_show', { 'id': entity.id }) }}">show</a>
+                        <a class="btn btn-default" href="{{ path('equipment_show', { 'id': entity.id }) }}"> <span class="glyphicon glyphicon-eye-open"></span></a>
                     </li>
                     <li>
-                        <a href="{{ path('equipment_edit', { 'id': entity.id }) }}">edit</a>
+                        <a class="btn btn-warning" href="{{ path('equipment_edit', { 'id': entity.id }) }}"> <span class="glyphicon glyphicon-edit glyphicon-white"></span></a>
                     </li>
                 </ul>
                 </td>
@@ -35,8 +39,8 @@
 
         <ul>
         <li>
-            <a href="{{ path('equipment_new') }}">
-                Create a new entry
+            <a  class="btn btn-info" href="{{ path('equipment_new') }}">
+                 <span class="glyphicon glyphicon-plus glyphicon-white"></span>
             </a>
         </li>
     </ul>

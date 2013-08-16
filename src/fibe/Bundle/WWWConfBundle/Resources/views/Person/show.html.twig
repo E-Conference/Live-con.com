@@ -91,20 +91,20 @@
 
         <ul class="record_actions">
     <li>
-        <a href="{{ path('wwwconf_person_index') }}">
-            Back to the list
+        <a class="btn btn-warning"  href="{{ path('wwwconf_person_index') }}">
+            <span class="glyphicon glyphicon-list glyphicon-white"></span>
         </a>
     </li>
     <li>
-        <a href="{{ path('person_edit', { 'id': entity.id }) }}">
-            Edit
+        <a class="btn btn-warning" href="{{ path('person_edit', { 'id': entity.id }) }}">
+           <span class="glyphicon glyphicon-edit glyphicon-white"></span>
         </a>
     </li>
     <li>
         <form action="{{ path('person_delete', { 'id': entity.id }) }}" method="post">
             <input type="hidden" name="_method" value="DELETE" />
             {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
+            <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-remove glyphicon-white"></span></button>
         </form>
     </li>
 </ul>

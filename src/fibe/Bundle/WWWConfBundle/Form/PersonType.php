@@ -11,9 +11,9 @@ class PersonType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('createdAt', 'date', array(
-							'input'  => 'datetime',
-							'widget' => 'choice',
+            ->add('createdAt', 'datetime', array(
+							   'widget' =>'single_text',
+							   'format' =>'dd/MM/yyyy HH:mm', 
 						))
             ->add('agent')
             ->add('name')

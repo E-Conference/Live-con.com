@@ -7,9 +7,6 @@ security:
         Symfony\Component\Security\Core\User\User: plaintext
         fibe\SecurityBundle\Entity\User: sha512
 
-    role_hierarchy:
-        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
-
     providers:
         main:
             entity: { class: fibe\SecurityBundle\Entity\User, property: username } 

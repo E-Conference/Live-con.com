@@ -4,8 +4,11 @@
 {{ parent() }}
 
     <h1>Person list</h1>
-
-    <table class="records_list">
+  <a class="btn btn-info" href="{{ path('person_new') }}">
+                 <span class="glyphicon glyphicon-plus glyphicon-white"></span>  
+   </a>
+   
+    <table class="table table-hover records_list">
         <thead>
             <tr>
                 <th>Id</th>
@@ -69,11 +72,7 @@
         </tbody>
     </table>
 
-        <ul>
-        <li>
-            <a href="{{ path('person_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
+       
+          
+ 
     {% endblock %}

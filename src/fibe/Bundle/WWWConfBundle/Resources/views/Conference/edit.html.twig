@@ -1,0 +1,253 @@
+{% extends "fibeWWWConfBundle::base.html.twig" %}
+
+{% block title %}Index{% endblock title %}
+{% block body %}
+
+{{ parent() }}
+<header class="subhead container" id="overview">
+    <div class="page-header">
+        <h1 id="confName" title="double click to change name">{{ wwwConf.confName }}
+            <small> <b> {{ wwwConf.confEvents|length }} events</b></small>
+        </h1> 
+        
+            
+        <form id="confNameForm"  class="input-append" method="POST" action="">
+             {{ form_widget(form.confName) }} 
+             {{ form_errors(form.confName) }} 
+            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(form) }}</div> 
+            <button  id="SPRQLEPURLBtn"  class="btn">
+              <i class="icon-edit"></i> 
+            </button>
+        </form>
+  </div>
+</header> 
+    <div class="container">   
+        <form id="EventImportForm"  class="input-append">
+            <label for="EventImport">
+                <h3 class="text-success">Import Events from file  </h3>
+                <h5 class="text-info">Please, provide a OWL/RDF file</h5>
+                <h5 class="muted"><i>(such as : http://data.semanticweb.org/conference/eswc/2013/complete)</i></h5>
+            </label>
+            <input id="EventImport" name="EventImport" type="text"/>
+            <button type="submit" id="EventImport" class="btn">
+              Process import <i class="icon-arrow-right"></i> 
+            </button>
+        </form>
+    </div> 
+
+
+{% endblock body %}
+
+{%  block stylesheets %}
+    <style type="text/css">
+        #confNameForm > *{
+            margin-top:1.5em;
+            margin-bottom:0.35em;
+        }
+        #toggleConfNameForm{
+            margin:2em 1em 0em 0em ; 
+            float:left;
+        }
+        #confName:hover{
+            border: 1px solid #ddd;
+            padding: 0px;
+        }
+        #confName{
+            padding: 1px;
+        }
+    </style>
+{% endblock %}
+
+{%  block javascripts %} 
+
+        <script src="{{ asset('bundles/fibewwwconf/js/OWLImporter.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibewwwconf/js/moment.min.js') }}" type="text/javascript" ></script>
+        <script type="text/javascript" >
+         
+    /*
+
+          function FormPost(uri,form,callback){
+              $.ajax({
+                  type: "POST",
+                  url:uri,
+                  async: false,
+                  data: form.serialize(),
+                  success:function(a,b,c) { 
+                               if(callback)callback();
+                  }
+              });
+          } 
+      */    
+         $(document).ready(function(){
+             
+            $('#confNameForm').hide();
+            $('#confName').dblclick(function(){
+                $('#confNameForm').show();
+                $(this).hide();
+            });
+          
+                
+        /////////  init multiple Symf conf forms  END    /////////
+        /////////  init multiple Symf conf forms  END    /////////
+        /////////  init multiple Symf conf forms  END    /////////
+             
+            var confOwlUriInput = $('#EventImport' );
+            //var confUriInput    = $('#fibe_bundle_wwwconfbundle_wwwconftype_confUri' );
+            //var confNameInput   = $('#fibe_bundle_wwwconfbundle_wwwconftype_confName' );
+
+            var isConfOwlUriInputOK = false;
+            //var isConfUriInputOK = false; 
+            //var isconfNameInputOK = true; 
+            
+            confOwlUriInput.change(function(){ isConfOwlUriInputOK = false});
+            //confUriInput.change(function(){isConfUriInputOK = false});  
+            
+            var ConfRdfFile; 
+            //var confName;
+            var owlLessMode=false;
+            
+            
+            // confUriInput.before(confUriHelper) 
+            // confOwlUriInput.before(confOwlUriHelper) 
+            // $('#SWCLinkForm label').remove();
+            confOwlUriInput.change(function(){
+                    $(this).parent().removeClass('control-group error');
+            });
+            $('#EventImportForm').submit(function(event) {
+                event.preventDefault(); 
+                if(confOwlUriInput.val() == "" ){
+                    isConfOwlUriInputOK = false;
+                    confOwlUriInput.parent().addClass('control-group error');
+                }else{
+                    isConfOwlUriInputOK = true;
+                }
+
+    //                 isConfOwlUriInputOK = true;
+    //                 confOwlUriInput.parent().addClass('control-group error');
+    //                 owlLessMode=true;
+    //                 if(confNameInput.val() != "" ){
+    //                     isconfNameInputOK = true;
+    //                     confNameInput.parent().addClass('control-group success'); 
+    //                     send();
+    //                 }else{
+    //                     isconfNameInputOK = false;
+    //                     confNameInput.parent().addClass('control-group error');
+                    
+    //                 }
+    //             }else
+				// {
+				// 	owlLessMode=false;
+				// }
+                
+                //test confUriInput : owl file
+                
+                if( isConfOwlUriInputOK )
+                {
+                    run(confOwlUriInput.val(),function(dataArray,confname)
+                    {
+						owlLessMode=false;
+					    isConfOwlUriInputOK = true;
+                        ConfRdfFile = dataArray ; 
+                        confName=confname;
+                        confOwlUriInput.parent().addClass('control-group success');
+                        $.ajax({ //DBimport
+                            type: "POST",
+                            cache: false, 
+                            url: "{{ app.request.getBaseURL() }}/admin/link/DBimport/1" ,
+                            data: "dataArray=" + JSON.stringify(ConfRdfFile, null),
+                            success:function(a,b,c)
+                            {
+                                if(ConfRdfFile!=undefined)
+                                    alert('"'+confName+'" has been well added :\n\t'+ConfRdfFile.events.length+' events\n\t'+ConfRdfFile.locations.length+' locations\n');
+                                window.location.reload();
+                                
+                            },
+                            error:function(a,b,c)
+                            { 
+                                alert("The conf file has been found, but import failed");
+                                confOwlUriInput.parent().addClass('control-group error');
+                            },
+                        });
+                        
+                    },function()
+                    {
+                        confOwlUriInput.parent().addClass('control-group error');
+                    });
+                }
+                
+                /*
+                //test confUriInput : sparql endpoint
+                if(!isConfUriInputOK){
+                    $.ajax({
+                        type: "GET",
+                        cache: false,
+                        url:confUriInput.val()+'?query=SELECT+DISTINCT+*+WHERE+%7B+%3Fs+%3Fp+%3Fo+%7D%0D%0ALIMIT+1', 
+                        success:function()
+                        { 
+                            confUriInput.parent().addClass('control-group success');
+                            isConfUriInputOK = true;
+                            send();
+                        },
+                        error:function() 
+                        { 
+                            confUriInput.parent().addClass('control-group error');
+                        } 
+                    }); 
+                }
+                */
+                
+              return false;
+            }); 
+            /*
+            function send(){
+                if(isConfUriInputOK && isConfOwlUriInputOK && isconfNameInputOK ) { 
+                    $.ajax({ //form post
+                            type: "POST",
+                            url:"{{ path('wwwconf_conference_edit') }}",
+                            async: false,
+                            cache: false,
+                            data: $('#SWCLinkForm').serialize(),
+                            success:function(wwwConfId,b,c) 
+                            { 
+								if(owlLessMode==false){
+								    confOwlUriInput.parent().addClass('control-group success');
+								    $.ajax({ //DBimport
+								        type: "POST",
+								        cache: false, 
+								        url: "{{ app.request.getBaseURL() }}/admin/link/DBimport/"+wwwConfId ,
+								        data: "dataArray=" + JSON.stringify(ConfRdfFile, null),
+								        success:function(a,b,c)
+								        {
+								            if(ConfRdfFile!=undefined)
+								                alert('"'+confName+'" has been well added :\n\t'+ConfRdfFile.events.length+' events\n\t'+ConfRdfFile.locations.length+' locations\n');
+								            window.location.reload();
+								            
+								        },
+								        error:function(a,b,c)
+								        { 
+								            alert("The conf file has been found, but import failed");
+								            confOwlUriInput.parent().addClass('control-group error');
+								        },
+								    });
+								}else
+								{
+									window.location.reload();
+								}
+                            }
+                            ,error:function(a,b,c)
+                            {
+                                confOwlUriInput.parent().addClass('control-group error');
+                            },
+                        });
+                }
+            }*/
+         }); 
+         </script>   
+{% endblock %}
+
+
+
+
+
+
+

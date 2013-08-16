@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\UserInterface; 
 
 /**
  * Controller managing the registration
@@ -31,22 +31,15 @@ use FOS\UserBundle\Model\UserInterface;
  */
 class RegistrationController extends ContainerAware
 {
+    /** 
+    */
     public function registerAction(Request $request)
     {
-        /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
-        $formFactory = $this->container->get('fos_user.registration.form.factory');
-        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
-        $userManager = $this->container->get('fos_user.user_manager');
-        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
-        $dispatcher = $this->container->get('event_dispatcher');
-
-        $user = $userManager->createUser();
-        $user->setEnabled(true);
-
-        $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, new UserEvent($user, $request));
-
-        $form = $formFactory->createForm();
-        $form->setData($user);
+        if( ! $this->get('security.context')->isGranted('ROLE_ADMIN') )
+        {
+            // Sinon on déclenche une exception "Accès Interdit"
+            throw new AccessDeniedHttpException('Access denied');
+        } 
 
         if ('POST' === $request->getMethod()) {
             $form->bind($request);

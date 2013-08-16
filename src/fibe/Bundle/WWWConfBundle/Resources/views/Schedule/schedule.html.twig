@@ -81,10 +81,65 @@
      
   </div>
  
+
+ <div class="sidebar"> 
+     <div class="open-sidebar-btn btn"><i class="icon-trash"></i></div>
+     <div class="sidebar-content">
+        <h5>dateless events</h5>
+        <div id="dateless_events"></div>
+     </div>
+ </div>
  
 
 
 {% endblock %}
+
+
+
+ {% block stylesheets %}
+ 
+    <!--
+    <link rel='stylesheet' type='text/css' href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/start/jquery-ui.css' />
+    -->
+<link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/css/bootstrap-responsive.css') }}" />
+
+    <style type="text/css">
+        /*popup size*/
+        .bbit-window { 
+            left: 10%;
+            width: 80%;
+        }
+
+        .sidebar  {
+            height: calc(100% + 41px); /*-sidebar size*/
+            position: fixed;
+            top: 41px; 
+            width: 20%; 
+            right: calc(-20% + 3em);
+            z-index: 0;
+        }
+
+        .open-sidebar-btn{
+            z-index: 0;  
+            position: absolute;
+        } 
+
+        .sidebar-content {
+            padding: 1em;
+            position: relative;
+            left: 40px; /*-open-sidebar-btn size*/
+            height: 100%;
+            background-color: #eee;
+        }
+    </style>
+    <link href="{{ asset('wdcalendar/css/dailog.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('wdcalendar/css/calendar.css') }}" rel="stylesheet" type="text/css" /> 
+    <link href="{{ asset('wdcalendar/css/dp.css') }}" rel="stylesheet" type="text/css" />   
+    <link href="{{ asset('wdcalendar/css/alert.css') }}" rel="stylesheet" type="text/css" /> 
+    <link href="{{ asset('wdcalendar/css/main.css') }}" rel="stylesheet" type="text/css" /> 
+
+{% endblock stylesheets %}
+
 
 
 {%  block javascripts %}    
@@ -102,29 +157,31 @@
     
     <script type="text/javascript">
         $(document).ready(function() {
-           var view="week";          
-           
-            {% if currentConf %}
-                var FirstDay = moment('5000-10-10');
-                {% for events in currentConf.confEvents %}
-                    {% if date(events.startAt) > date("1980-01-02") %}
-                        if(moment('{{events.startAt|date("Y-m-d")}}').isBefore(FirstDay)){
-                            var FirstDay = moment('{{events.startAt|date("Y-m-d")}}');
-                        }
-                    {% endif %}
-                {% endfor %}  
-            {% endif %}
-             
-            var DATA_FEED_URL = {% if currentConf %}"{{ path('wwwconf_getevents', { 'confId': currentConf.id }) }}"{% else %}"{{ path('wwwconf_getevents') }}"{% endif %};
+            var view="week";          
+            initSidebar();
+
+            
+
+           // calcule du premier jour
+            var FirstDay = moment('5000-10-10');
+            {% for events in currentConf.confEvents %}
+                {% if date(events.startAt) > date("1980-01-02") %}
+                    
+                    if(moment('{{events.startAt|date("Y-m-d")}}').isBefore(FirstDay)){
+                        FirstDay = moment('{{events.startAt|date("Y-m-d")}}');
+                    }
+
+                {% endif %}
+            {% endfor %}  
+            
+            var DATA_FEED_URL = "{{ path('wwwconf_getevents') }}";
             //alert(DATA_FEED_URL);
             var op = {
                 view: view,
-                add: {% if currentConf %}true{% else %}false{% endif %},
+                add: true,
                 theme:1,
                 showday: new Date({% if currentConf %}FirstDay.format(){% else %}{% endif %}),
-                EditCmdhandler:Edit,
-                DeleteCmdhandler:Delete,
-                ViewCmdhandler:View,    
+                EditCmdhandler:Edit, 
                 onWeekOrMonthToDay:wtd,
                 onBeforeRequestData: cal_beforerequest,
                 onAfterRequestData: cal_afterrequest,
@@ -133,12 +190,13 @@
                 url: DATA_FEED_URL + "?method=list",  
                 quickAddUrl: DATA_FEED_URL + "?method=add", 
                 quickUpdateUrl: DATA_FEED_URL + "?method=update",
-                quickDeleteUrl: DATA_FEED_URL + "?method=remove"        
+                quickDeleteUrl: DATA_FEED_URL + "?method=remove",
+                datalessSelector : '#dateless_events'
             };
             var $dv = $("#calhead");
             var _MH = document.documentElement.clientHeight;
             var dvH = $dv.height() + 2;
-            op.height = _MH - dvH;
+            op.height = _MH - dvH -  $('.navbar').height();
             op.eventItems =[];
 
             var p = $("#gridcontainer").bcalendar(op).BcalGetOp();
@@ -155,6 +213,26 @@
                             }
                      } 
             });
+
+
+            function initSidebar(){
+                $('.open-sidebar-btn').toggle(function(){
+                    $('.sidebar').animate({ 
+                        right: "+=20%", 
+                        }, {
+                            duration: 800, 
+                            easing:"easeOutQuart"
+                    });
+                },function(){
+                    $('.sidebar').animate({ 
+                        right: "-=20%", 
+                        }, {
+                            duration: 800, 
+                            easing:"easeOutQuart"
+                    });
+                });
+            }
+            // ajax feedback log
             function cal_beforerequest(type)
             {
                 var t="Loading data...";
@@ -170,20 +248,22 @@
                         break;
                 }
                 $("#errorpannel").hide();
-                $("#loadingpannel").html(t).show();    
+                $("#loadingpannel").html(t).fadeIn("2000");    
             }
             function cal_afterrequest(type)
             {
                 switch(type)
                 {
                     case 1:
-                        $("#loadingpannel").hide();
+                        $("#loadingpannel").fadeOut("2000");
                         break;
                     case 2:
                     case 3:
                     case 4:
                         $("#loadingpannel").html("Success!");
-                        window.setTimeout(function(){ $("#loadingpannel").hide();},2000);
+                        window.setTimeout(function(){ 
+                            $("#loadingpannel").fadeOut("2000");
+                        },2000);
                     break;
                 }              
                
@@ -198,26 +278,11 @@
                 if(data)
                 {
                     var url = StrFormat(eurl,data);
-                    OpenModelWindow(url,{ width: 600, height: 400, caption:"Edit event",onclose:function(){
+                    OpenModelWindow(url,{ width: $(window).width()*0.9, height: $(window).height()*0.8, caption:"Edit event",onclose:function(){
                        $("#gridcontainer").reload();
                     }});
                 }
-            }    
-            function View(data)
-            {
-                var str = "";
-                $.each(data, function(i, item){
-                    str += "[" + i + "]: " + item + "\n";
-                });
-                alert(str);               
-            }    
-            function Delete(data,callback)
-            {           
-                
-                $.alerts.okButton="Ok";  
-                $.alerts.cancelButton="Cancel";  
-                hiConfirm("Are You Sure to Delete this Event", 'Confirm',function(r){ r && callback(0);});           
-            }
+            }     
             function wtd(p)
             {
                if (p && p.datestrshow) {
@@ -303,25 +368,6 @@
 {% endblock javascripts %}
 
 
-
-
-
-
- {% block stylesheets %}
- 
-    <!--
-	<link rel='stylesheet' type='text/css' href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/start/jquery-ui.css' />
-	-->
-<link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/css/bootstrap-responsive.css') }}" />
-
-
-    <link href="{{ asset('wdcalendar/css/dailog.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('wdcalendar/css/calendar.css') }}" rel="stylesheet" type="text/css" /> 
-    <link href="{{ asset('wdcalendar/css/dp.css') }}" rel="stylesheet" type="text/css" />   
-    <link href="{{ asset('wdcalendar/css/alert.css') }}" rel="stylesheet" type="text/css" /> 
-    <link href="{{ asset('wdcalendar/css/main.css') }}" rel="stylesheet" type="text/css" /> 
-
-{% endblock stylesheets %}
 
 
 

@@ -8,7 +8,7 @@
   <h1>Location</h1>
 </div>
 
-<table class="table table-bordered table-striped record_properties">
+<table class="table table-hover record_properties">
     <tbody>
         <tr>
             <th>Id</th>
@@ -35,13 +35,13 @@
 
 <ul class="record_actions">
     <li>
-        <a class="btn" href="{{ path('admin_schedule_location') }}">
-            {% trans %}Back to the list{% endtrans %}
+        <a class="btn btn-success" href="{{ path('admin_schedule_location') }}">
+           <span class="glyphicon glyphicon-list glyphicon-white"></span>
         </a>
     </li>
     <li>
-        <a class="btn btn-primary" href="{{ path('admin_schedule_location_edit', { 'id': entity.id }) }}">
-            {% trans %}Edit{% endtrans %}
+        <a class="btn btn-warning" href="{{ path('admin_schedule_location_edit', { 'id': entity.id }) }}">
+           <span class="class="glyphicon glyphicon-edit glyphicon-white"></span>
         </a>
     </li> 
 </ul>

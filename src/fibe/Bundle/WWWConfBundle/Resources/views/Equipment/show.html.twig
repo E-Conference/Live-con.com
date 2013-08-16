@@ -3,7 +3,7 @@
 {% block body -%}
     <h1>Equipment</h1>
 
-    <table class="record_properties">
+    <table class="table-hover record_properties">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -22,20 +22,20 @@
 
         <ul class="record_actions">
     <li>
-        <a href="{{ path('equipment') }}">
-            Back to the list
+        <a class="btn btn-warning" href="{{ path('equipment') }}">
+          <span class="glyphicon glyphicon-list glyphicon-white"></span>  
         </a>
     </li>
     <li>
-        <a href="{{ path('equipment_edit', { 'id': entity.id }) }}">
-            Edit
+        <a class="btn btn-warning" href="{{ path('equipment_edit', { 'id': entity.id }) }}">  <a  class="btn btn-info" href="{{ path('equipment_new') }}">
+                 <span class="glyphicon glyphicon-edit glyphicon-white"></span>       
         </a>
     </li>
     <li>
         <form action="{{ path('equipment_delete', { 'id': entity.id }) }}" method="post">
             <input type="hidden" name="_method" value="DELETE" />
             {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
+            <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-remove glyphicon-white"></span></button>
         </form>
     </li>
 </ul>
