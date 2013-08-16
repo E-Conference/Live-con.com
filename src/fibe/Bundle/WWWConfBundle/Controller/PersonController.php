@@ -7,13 +7,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use fibe\Bundle\WWWConfBundle\Entity\Person;
 use fibe\Bundle\WWWConfBundle\Form\PersonType;
 
 /**
  * Person controller.
- * @ORM\Entity(repositoryClass="IDCI\Bundle\SimpleScheduleBundle\Repository\PersonRepository")
+ * @Route("/person")
  */
 class PersonController extends Controller
 {

@@ -217,7 +217,7 @@
                     }else{
                         
                         events[i]['setStartAt']= defaultDate ;
-                        events[i]['setEndAt']=moment().add('h', 1).format('YYYY-MM-DDTHH:mm:ss Z') ;
+                        events[i]['setEndAt']=moment().format('YYYY-MM-DDTHH:mm:ss Z') ;
                     }
                 }
             

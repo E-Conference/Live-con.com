@@ -1,6 +1,11 @@
-{% extends '::base.html.twig' %}
+{% extends "fibeWWWConfBundle::base.html.twig" %}
 
-{% block body -%}
+{% block title %}Index{% endblock title %}
+{% block body %}
+
+{{ parent() }}
+
+
     <h1>Person list</h1>
 
     <table class="records_list">

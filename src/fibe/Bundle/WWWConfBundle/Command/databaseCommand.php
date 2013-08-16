@@ -42,6 +42,7 @@ class databaseCommand extends ContainerAwareCommand
 
         // conf
         $conf = new WwwConf(); 
+        $conf->setConfName("Conference");
         $em->persist($conf);
 
         //TODO category

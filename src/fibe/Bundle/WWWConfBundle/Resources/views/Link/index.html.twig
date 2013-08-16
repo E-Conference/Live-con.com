@@ -9,20 +9,18 @@
         <h1>SWC event linker</h1>
         <p>This app has been made to manage a conference using SWC ontology.</p>
         <div class="row-fluid">
-            <div class="col-lg-4">
-                <div class="btn-group">
-                    {% if app.user.wwwConf %}
-                    <a href="{{ path('wwwconf_schedule') }}" role="button" class="btn btn-success btn-large">
-                      <span class="glyphicon glyphicon-calendar glyphicon-white"></span> Manage schedule 
-                    </a>
-					 {% endif %}
 
-                    {% if app.user.wwwConf %}
-                    <a href="{{ path('wwwconf_schedule') }}" role="button" class="btn dropdown-toggle btn-success btn-large" data-toggle="dropdown">
-                         <span class="glyphicon glyphicon-list glyphicon-white"></span> 
-                    </a>
+            <div class="col-lg-4">
+                 <div class="btn-group"> 
+                    <a href="{{ path('wwwconf_schedule') }}" role="button" class="btn btn-success btn-large">
+                      <i class="icon-calendar icon-white"></i> Manage schedule 
+                    </a> 
+					
+ 
                      
-                    {% endif %}
+                    
+                  
+
                 </div>
             </div>
 			       <div class="col-lg-4">

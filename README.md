@@ -54,12 +54,6 @@ parameters:
 For  "database_user" put your mysql user name, and "database_password" , and use your mysql password.
 After that, save and add this file to : WWWConference/app/config
 
-Return in your Git xterm : 
-
-
-	cd WWWConference 
-	composer update 
-
 ----------------
 Now to create the database and install the assets.
 	In your Git xterm :
@@ -70,19 +64,36 @@ Now to create the database and install the assets.
 
 
 ----------------
-Finally, create your user using the Git xterm :
-    php app/console fos:user:create admin admin@example.com admin
+Create your user using the Git xterm :
+
+    	php app/console fos:user:create admin admin@example.com admin
+    	php app/console fos:user:promote admin ROLE_ADMIN
+    
+----------------
+Finally populate database with basic conference informations :
+
+    	php app/console wwwconf:database:init
+    
+----------------		
+In one copy-paste :
+
+		php app/console doctrine:database:create
+		php app/console doctrine:schema:update --force
+		php app/console assets:install web
+    	php app/console fos:user:create admin admin@example.com admin
+    	php app/console fos:user:promote admin ROLE_ADMIN
+    	php app/console wwwconf:database:init
     
 ----------------		
 Start your Apache server and go to :
 
 
-    - http://localhost/WWWConf/web/
+    - http://localhost/WWWConf/web/app_dev.php/
 	
 	
 You are ready to use the WWWConference Bundle !!!!!!!!! Welcome!!!!!!!!
 
-One of the most common issue is that folders app/cache and app/logs don't have write access by Symfony. To fix this, do a chmod or [refer here](http://symfony.com/doc/current/book/installation.html#configuration-and-setup) for more informations. 
+One of the most common issue is that folders app/cache and app/logs don't have write access by Symfony. To fix this, do a chmod or [refer here](http://symfony.com/doc/current/book/installation.html#configuration-and-setup) for more informations. or run the "cache" script ( ./cache ) 
 	
 	
 #USER MANUAL

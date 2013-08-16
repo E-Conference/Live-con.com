@@ -3,18 +3,23 @@
         <div class="container">
             
             <a class="brand" href="{{ path('wwwconf_link_index') }}" title="Go back to Index">WWWConf</a>
+
 			<a class="btn btn-navbar" data-toggle="collapse" data-target="#menu_wwconf">
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
             </a>
               <div class="nav-collapse collapse navbar-responsive-collapse" id="menu_wwconf">
-                <ul class="nav  navbar-nav">
-                    {% if app.user.wwwConf %}
+              
+                    <ul class="nav"> 
                     <li>
                         <a href="{{ path('wwwconf_schedule') }}" title="manage schedule">Schedule</a>
-                    </li>
-                    {% endif %}
+                    </li> 
+           
+                    
+                     
+                    
+                    
                     <li class="divider-vertical"></li>
                     <li class="divider-vertical"></li>
                     <li>

@@ -12,7 +12,8 @@ use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
  *
  * This class define a Person.
  *   @ORM\Table(name="person")
- *  @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\PersonRepository")
+ *   @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\PersonRepository")
+ * 	
  */
 class Person
 {
