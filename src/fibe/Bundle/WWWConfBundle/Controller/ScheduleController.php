@@ -64,8 +64,8 @@ class ScheduleController extends Controller
 	    
         $JSONArray = array();
 	    
-	    // if( $methodParam=="list")
-	    // {
+	    if( $methodParam=="list")
+	    {
             // $type= $postData['viewtype']; 
             // $jsdate = $postData['showdate'];
             // if(preg_match('@(\d+)/(\d+)/(\d+)\s+(\d+):(\d+)@', $jsdate, $matches)==1){
@@ -131,8 +131,7 @@ class ScheduleController extends Controller
                     "allDay" => (($duration+86400) % 86400 == 86399 || ($duration+86400) % 86400 == 0 ) && $duration !== 1  ? 1 : 0,     // all day event
                     "start" => $start->format('m/d/Y H:i'),
                     "end" => $end->format('m/d/Y H:i'),
-                    "color" => $category?$category->getColor():null,                 // color 
-
+                    "color" => $category?$category->getColor():null,                 // color
                 );       
                 if($duration !== 1)
                 {
@@ -143,44 +142,44 @@ class ScheduleController extends Controller
                 }
             }
 
-        // }else if( $methodParam=="add" )
-        // {
-        //     $conf = $this->getDoctrine()
-        //                  ->getRepository('fibeWWWConfBundle:WwwConf')
-        //                  ->find(1); 
+        }else if( $methodParam=="add" )
+        {
+            $conf = $this->getDoctrine()
+                         ->getRepository('fibeWWWConfBundle:WwwConf')
+                         ->find(1); 
                 
-        //         $event= new Event();
-        //         $startAt=new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get()));
-        //         $event->setStartAt($startAt );  
-        //         if($postData['isallday']=="true"){
-        //           $endAt = new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()));   
-        //           $event->setEndAt($endAt->add(new \DateInterval('PT23H59M59S'))); 
-        //         }
-        //         else {
-        //           $event->setEndAt(new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()))); 
-        //         }
-        //         $event->setSummary($postData['title']);
-        //         $event->setWwwConf($conf);
+                $event= new Event();
+                $startAt=new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get()));
+                $event->setStartAt($startAt );  
+                if($postData['allDay']=="true"){
+                  $endAt = new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()));   
+                  $event->setEndAt($endAt->add(new \DateInterval('PT23H59M59S'))); 
+                }
+                else {
+                  $event->setEndAt(new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()))); 
+                }
+                $event->setSummary($postData['title']);
+                $event->setWwwConf($conf);
                 
-        //         $em->persist($event);
-        //         $em->flush();  
+                $em->persist($event);
+                $em->flush();  
 
-        //         $JSONArray['Data'] = $event->getId();
-        //         $JSONArray['IsSuccess'] = true;
-        //         $JSONArray['Msg'] = "add success"; 
-        // }else if( $methodParam=="update")
-        // { 
+                $JSONArray['Data'] = $event->getId();
+                $JSONArray['IsSuccess'] = true;
+                $JSONArray['Msg'] = "add success"; 
+        }else if( $methodParam=="update")
+        { 
                 
-        //     $event = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($postData['calendarId']);
-        //     $startAt = new \DateTime($postData['CalendarStartTime'], new \DateTimeZone(date_default_timezone_get()));
-        //     $endAt =new \DateTime($postData['CalendarEndTime'], new \DateTimeZone(date_default_timezone_get()));
-        //     $event->setStartAt( $startAt );
-        //     $event->setEndAt( $endAt );
-        //     $em->persist($event);
-        //     $em->flush();
-        //     $JSONArray['IsSuccess'] = true;
-        //     $JSONArray['Msg'] = "Successfully";
-        // }
+            $event = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($postData['id']);
+            $startAt = new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get()));
+            $endAt =new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()));
+            $event->setStartAt( $startAt );
+            $event->setEndAt( $endAt );
+            $em->persist($event);
+            $em->flush();
+            $JSONArray['IsSuccess'] = true;
+            $JSONArray['Msg'] = "Successfully";
+        }
 	    
         $response = new Response(json_encode($JSONArray));
         $response->headers->set('Content-Type', 'application/json');

@@ -8,20 +8,17 @@
 
 {% block body %}
 {{ parent() }}
- 
- 
-<div id='wrap'>
+  
+      
 
-<div id='external-events'>
-    <h4>Draggable Events</h4>
-    <div class='external-event'>My Event 1</div>
-    <div class='external-event'>My Event 2</div>
-    <div class='external-event'>My Event 3</div>
-    <div class='external-event'>My Event 4</div>
-    <div class='external-event'>My Event 5</div> 
-</div>
+    <div id='calendar'></div>
 
-<div id='calendar'></div>
+     <div id="sidebar">  
+        <h4>Draggable Events</h4>
+        <div id='external-events'>
+        </div>
+     </div> 
+ 
 
  
 
@@ -41,60 +38,68 @@
 <link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.print.css') }}" rel='stylesheet' media='print' />
     <style type="text/css">
         
-    body {
-        text-align: center;
-        font-size: 14px;
-        font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-        }
-    
-    #wrap > div {
-        margin-top: 40px; 
-    } 
-
-    #wrap {
-        width: 1100px;
-        margin: 0 auto;
-        }
-        
-    #external-events {
+  
+    #calendar {
+        position: relative; 
+        margin-top: 40px;
         float: left;
-        width: 150px;
-        padding: 0 10px;
-        border: 1px solid #ccc;
-        background: #eee;
-        text-align: left;
-        }
+        width: 80%;
+    }
         
-    #external-events h4 {
+    #sidebar {
+        /*position: fixed;*/
+        position: absolute;
+        right: 0; 
+        top: 0;
+        margin-top: 41px;
+        padding: 1em 0.5em;
+        /*height: 100%; */
+        width: 15%;
+        padding: 0 10px; 
+        background: #eee;
+        z-index: 1;
+    }
+        
+    #sidebar h4 {
         font-size: 16px;
         margin-top: 0;
         padding-top: 1em;
-        }
+    }
+
+    #external-events{
+        border: 1px solid #ccc;
+        padding: 1em 0.5em;
+        margin: 0;
+        position: relative; 
+        z-index: 2; 
+        /*overflow:    auto;
+        height: calc(100% - 50px);*/ /*sidebar h4 height*/
+
+    }
         
     .external-event { /* try to mimick the look of a real event */
-        margin: 10px 0;
+        margin-bottom: 1em;
         padding: 2px 4px;
         background: #3366CC;
         color: #fff;
         font-size: .85em;
         cursor: pointer;
-        }
+    }
         
-    #external-events p {
+    #sidebar p {
         margin: 1.5em 0;
         font-size: 11px;
         color: #666;
-        }
+    }
         
-    #external-events p input {
+    #sidebar p input {
         margin: 0;
         vertical-align: middle;
-        }
+    }
 
-    #calendar {
-        float: right;
-        width: 900px;
-        }
+
+
+
 
     </style>
 
@@ -110,9 +115,8 @@
 
     
     <script type="text/javascript">
-        $(document).ready(function() {   
-            // initSidebar();
-
+        $(document).ready(function() {    
+ 
             
 
            // calcule du premier jour
@@ -138,49 +142,19 @@
             };
 
 
-
-
-        /* initialize the external events
-        -----------------------------------------------------------------*/
-    
-        $('#external-events div.external-event').each(function() {
-        
-            // create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
-            // it doesn't need to have a start or end
-            var eventObject = {
-                title: $.trim($(this).text()) // use the element's text as the event title
-            };
-            
-            // store the Event Object in the DOM element so we can get to it later
-            $(this).data('eventObject', eventObject);
-            
-            // make the event draggable using jQuery UI
-            $(this).draggable({
-                zIndex: 999,
-                revert: true,      // will cause the event to go back to its
-                revertDuration: 0  //  original position after the drag
-            });
-            
-        });
-    
-    
+ 
         /* initialize the calendar
         -----------------------------------------------------------------*/
-        
-        $('#calendar').fullCalendar({
+        var $calendar = $('#calendar');
+        $calendar.fullCalendar({
             editable: true,
-            events: function(start, end, callback) {
-                console.log(start, end, callback),
+            events: function(start, end, callback) { 
                 $.ajax({
-                    url: DATA_FEED_URL,
-                    dataType: 'json', 
-                    data: {
-                        // our hypothetical feed requires UNIX timestamps
-                        start: Math.round(start.getTime() / 1000),
-                        end: Math.round(end.getTime() / 1000)
-                    },
+                    url: op.url,
+                    dataType: 'json',  
                     success: function(doc) {  
-                        callback(doc.events);
+                        if(callback)callback(doc.events);
+                        setInstantEvents(doc.instant_events);
                     }
                 });
             }, 
@@ -189,10 +163,43 @@
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay'
             },
+            selectable: true, 
+            selectHelper: true,
+            select: function(start, end, allDay) {
+                var title = prompt('Event Title:');
+                if (title) {
+                    var e = {
+                        title: title,
+                        start: start,
+                        end: end,
+                        allDay: allDay
+                    };
+                    $.post(
+                            op.quickAddUrl,
+                            formatDate(e),
+                            function(doc) {  
+                                console.log(doc);
+                            },
+                            'json'
+                    );
+                    $calendar.fullCalendar('renderEvent',e,true  ); // 3rd arg make the event "stick"
+                }
+                $calendar.fullCalendar('unselect');
+            },
+
             eventDataTransform: function(data){return data;},
-            lazyFetching: false,
             editable: true,
             droppable: true, // this allows things to be dropped onto the calendar !!!
+            eventDrop : function(e){ 
+                    $.post(
+                            op.quickUpdateUrl,
+                            formatDate($.extend({}, e)),
+                            function(doc) {  
+                                console.log(doc);
+                            },
+                            'json'
+                    );
+            },
             drop: function(date, allDay) { // this function is called when something is dropped
             
                 // retrieve the dropped element's stored Event Object
@@ -201,33 +208,63 @@
                 // we need to copy it, so that multiple events don't have a reference to the same object
                 var copiedEventObject = $.extend({}, originalEventObject);
                 
-                // assign it the date that was reported
+                // assign it the date that was reported 
                 copiedEventObject.start = date;
-                copiedEventObject.allDay = allDay;
-                
+                copiedEventObject.end = moment(date).add("hours",1);
+                copiedEventObject.allDay = allDay; 
+ 
+                $.post(
+                        op.quickUpdateUrl,
+                        formatDate(copiedEventObject),
+                        function(doc) {  
+                            console.log(doc);
+                        },
+                        'json'
+                );
                 // render the event on the calendar
                 // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-                $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
-                 
+                $calendar.fullCalendar('renderEvent', copiedEventObject, true);
+                
                 $(this).remove(); 
+                console.log(copiedEventObject);
+                
                 
             }
         });
 
 
-
+    
             
         });
+
+    function setInstantEvents(instant_events){
+        var ctn = $('#external-events').html("");
+
+        var event =  "<div class='external-event'></div>";
+        for (var i in instant_events){
+            var $event = $(event).appendTo(ctn); 
+            $event.html(instant_events[i]['title'])
+            // store the Event Object in the DOM element so we can get to it later
+            $event.data('eventObject', instant_events[i]);
+            
+            // make the event draggable using jQuery UI
+            $event.draggable({
+                start: function(event, ui) { 
+                    $(this).css("z-index", 10);  
+            }, 
+                zIndex: 20,
+                revert: true,      // will cause the event to go back to its
+                revertDuration: 0  //  original position after the drag
+            });
+        }
+    }
+
+     function formatDate(e){
+        e.start = moment(e.start).format();
+        e.end = moment(e.end).format();
+        return e;
+     }
     </script>    
 	
 {% endblock javascripts %}
-
-
-
-
-
-
-
-
-
 
