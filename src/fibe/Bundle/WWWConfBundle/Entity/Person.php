@@ -79,11 +79,6 @@ class Person
      */
     protected $created_at;
 	
-	/**
-     * 
-     * @ORM\ManyToMany(targetEntity="ConfEvent")
-     */
-    protected $confEvents;
 
     /**
      * agent
@@ -262,11 +257,7 @@ class Person
 	 
 	 }
 	 
-	public function getConfEvents(){
-	 
-		return $this->confEvents;
-	 
-	 }
+	
 	 
 	public function getAgent(){
 	 
@@ -388,12 +379,7 @@ class Person
 	 
 	 }
 	 
-	public function setConfEvents($confEvents){
 	
-		$this->confEvents = $confEvents;
-		return $this;
-	 
-	 }
 	 
 	public function setAgent($agent){
 

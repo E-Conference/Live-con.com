@@ -44,8 +44,8 @@ class Paper
 	
 	/**
      *  Conference associated to this paper
-     * @OneToOne(targetEntity="wwwConf")
-     * @JoinColumn(name="id_wwwconf", referencedColumnName="id")
+     *@ORM\OneToOne(targetEntity="wwwConf")
+     * @ORM\JoinColumn(name="id_wwwconf", referencedColumnName="id")
      *
      */
     protected $conference;

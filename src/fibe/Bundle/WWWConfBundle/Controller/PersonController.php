@@ -2,33 +2,32 @@
 
 namespace fibe\Bundle\WWWConfBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-
-
 
 use fibe\Bundle\WWWConfBundle\Entity\Person;
 use fibe\Bundle\WWWConfBundle\Form\PersonType;
 
 /**
  * Person controller.
- * @Route("/schedule/person")
+ * @ORM\Entity(repositoryClass="IDCI\Bundle\SimpleScheduleBundle\Repository\PersonRepository")
  */
 class PersonController extends Controller
 {
     /**
      * Lists all Person entities.
+     *
      * @Route("/", name="wwwconf_person_index")
-	* @Template()
+     * @Template()
      */
+     
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-	
+
         $entities = $em->getRepository('fibeWWWConfBundle:Person')->findAll();
 
         return $this->render('fibeWWWConfBundle:Person:index.html.twig', array(
@@ -38,12 +37,9 @@ class PersonController extends Controller
 
     /**
      * Creates a new Person entity.
-     *  
-     * 
      * @Route("/create", name="person_create")
-	* @Template()
+     * @Template()
      */
-     
     public function createAction(Request $request)
     {
         $entity  = new Person();
@@ -67,9 +63,8 @@ class PersonController extends Controller
     /**
      * Displays a form to create a new Person entity.
      * @Route("/new", name="person_new")
-	* @Template()
+     * @Template()
      */
-     
     public function newAction()
     {
         $entity = new Person();
@@ -84,7 +79,7 @@ class PersonController extends Controller
     /**
      * Finds and displays a Person entity.
      * @Route("/{id}/show", name="person_show")
-	* @Template()
+     * @Template()
      */
     public function showAction($id)
     {
@@ -106,7 +101,7 @@ class PersonController extends Controller
     /**
      * Displays a form to edit an existing Person entity.
      * @Route("/{id}/edit", name="person_edit")
-	* @Template()
+     * @Template()
      */
     public function editAction($id)
     {
@@ -131,7 +126,6 @@ class PersonController extends Controller
     /**
      * Edits an existing Person entity.
      * @Route("/{id}/update", name="person_update")
-     *
      */
     public function updateAction(Request $request, $id)
     {

@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use fibe\Bundle\WWWConfBundle\Entity\Equipment;
 
 /**
- * @ORM\Table(name="idci_schedule_location")
+ * @ORM\Table(name="location")
  * @ORM\Entity(repositoryClass="IDCI\Bundle\SimpleScheduleBundle\Repository\LocationRepository")
  */
 class Location

@@ -63,7 +63,7 @@ class EquipmentController extends Controller
     /**
      * Displays a form to create a new Equipment entity.
      * @Route("/new", name="equipment_new")
-	* @Template()
+	 * @Template()
      */
     public function newAction()
     {
@@ -79,7 +79,7 @@ class EquipmentController extends Controller
     /**
      * Finds and displays a Equipment entity.
      * @Route("/{id}/show", name="equipment_show")
-	* @Template()
+	 * @Template()
      */
     public function showAction($id)
     {
@@ -101,7 +101,7 @@ class EquipmentController extends Controller
     /**
      * Displays a form to edit an existing Equipment entity.
      * @Route("/{id}/edit", name="equipment_edit")
-	* @Template()
+	 * @Template()
      */
     public function editAction($id)
     {

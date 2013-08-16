@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
 
 /**
- * @ORM\Table(name="idci_schedule_category")
+ * @ORM\Table(name="category")
  * @ORM\Entity(repositoryClass="IDCI\Bundle\SimpleScheduleBundle\Repository\CategoryRepository")
  * @ORM\HasLifecycleCallbacks
  */

@@ -23,7 +23,7 @@ use IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation;
  * a schedulable element.
  *
  * @ORM\Entity(repositoryClass="IDCI\Bundle\SimpleScheduleBundle\Repository\CalendarEntityRepository")
- * @ORM\Table(name="idci_schedule_entity", indexes={
+ * @ORM\Table(name="event", indexes={
  *    @ORM\Index(name="start_at_idx", columns={"start_at"})
  * })
  * @ORM\HasLifecycleCallbacks

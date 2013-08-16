@@ -11,10 +11,12 @@ class PersonType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('createdAt', 'datetime', array(
-							   'widget' =>'single_text',
-							   'format' =>'dd/MM/yyyy HH:mm', 
-						))
+            ->add('email')
+            ->add('flag_schedule')
+            ->add('flag_schedule_admin')
+            ->add('flag_data')
+            ->add('flag_data_admin')
+            ->add('created_at')
             ->add('agent')
             ->add('name')
             ->add('title')
@@ -29,11 +31,10 @@ class PersonType extends AbstractType
             ->add('primary_topic')
             ->add('project')
             ->add('organization')
-            ->add('group')
+            ->add('_group')
             ->add('member')
             ->add('document')
             ->add('image')
-            ->add('confEvents')
         ;
     }
 

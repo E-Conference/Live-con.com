@@ -31,16 +31,16 @@ class Member
     
     /**
      *  
-     * @OneToOne(targetEntity="person")
-     * @JoinColumn(name="id_person", referencedColumnName="id")
+     *@ORM\OneToOne(targetEntity="person")
+     * @ORM\JoinColumn(name="id_person", referencedColumnName="id")
      *
      */
     protected $id_person;
 
     /**
      *  
-     * @OneToOne(targetEntity="organization")
-     * @JoinColumn(name="id_organization, referencedColumnName="id")
+     *@ORM\OneToOne(targetEntity="organization")
+     * @ORM\JoinColumn(name="id_organization", referencedColumnName="id")
      *
      */
     protected $id_organization;

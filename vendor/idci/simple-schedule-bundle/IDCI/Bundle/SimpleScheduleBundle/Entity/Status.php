@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * Purpose: This property defines the overall status or confirmation for the calendar component.
  *
- * @ORM\Table(name="idci_schedule_status")
+ * @ORM\Table(name="status")
  * @ORM\Entity(repositoryClass="IDCI\Bundle\SimpleScheduleBundle\Repository\StatusRepository")
  */
 class Status

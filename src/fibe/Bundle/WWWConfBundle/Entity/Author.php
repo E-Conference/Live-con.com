@@ -31,16 +31,16 @@ class Author
     
     /**
      *  
-     * @OneToOne(targetEntity="person")
-     * @JoinColumn(name="id_person", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="person")
+     * @ORM\JoinColumn(name="id_person", referencedColumnName="id")
      *
      */
     protected $id_person;
 
     /**
      *  
-     * @OneToOne(targetEntity="paper")
-     * @JoinColumn(name="id_paper, referencedColumnName="id")
+     *@ORM\OneToOne(targetEntity="paper")
+     * @ORM\JoinColumn(name="id_paper", referencedColumnName="id")
      *
      */
     protected $id_paper;

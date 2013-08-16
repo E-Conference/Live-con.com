@@ -31,16 +31,16 @@ class Subject
     
     /**
      *  
-     * @OneToOne(targetEntity="paper")
-     * @JoinColumn(name="id_paper", referencedColumnName="id")
+     *@ORM\OneToOne(targetEntity="paper")
+     * @ORM\JoinColumn(name="id_paper", referencedColumnName="id")
      *
      */
     protected $id_paper;
 
     /**
      *  
-     * @OneToOne(targetEntity="keyword")
-     * @JoinColumn(name="id_keyword, referencedColumnName="id")
+     *@ORM\OneToOne(targetEntity="keyword")
+     * @ORM\JoinColumn(name="id_keyword", referencedColumnName="id")
      *
      */
     protected $id_keyword;

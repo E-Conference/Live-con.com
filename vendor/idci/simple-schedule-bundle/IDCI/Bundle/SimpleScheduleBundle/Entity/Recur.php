@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * Purpose: This value type is used to identify properties that contain a recurrence rule specification.
  *
- * @ORM\Table(name="idci_schedule_recur")
+ * @ORM\Table(name="recur")
  * @ORM\Entity(repositoryClass="IDCI\Bundle\SimpleScheduleBundle\Repository\RecurRepository")
  * @ORM\HasLifecycleCallbacks()
  */

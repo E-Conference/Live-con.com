@@ -25,12 +25,6 @@ class ConfEvent extends Event
      */
     private $wwwConf;
 	
-	/**
-     * 
-     * @ORM\ManyToMany(targetEntity="Person")
-     */
-    protected $persons;
-    
     
     
     /**

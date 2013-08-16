@@ -7,6 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use fibe\Bundle\WWWConfBundle\Entity\Person;
 use fibe\Bundle\WWWConfBundle\Entity\RoleType;
+use IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation;
 
 
 /**
@@ -31,24 +32,24 @@ class Role
     
     /**
      *  
-     * @OneToOne(targetEntity="person")
-     * @JoinColumn(name="id_person", referencedColumnName="id")
+     *@ORM\OneToOne(targetEntity="person")
+     * @ORM\JoinColumn(name="id_person", referencedColumnName="id")
      *
      */
     protected $id_person;
 
     /**
      *  
-     * @OneToOne(targetEntity="relation")
-     * @JoinColumn(name="id_event_relation, referencedColumnName="id")
+     *@ORM\OneToOne(targetEntity="IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation")
+     * @ORM\JoinColumn(name="id_event_relation", referencedColumnName="id")
      *
      */
     protected $id_event_relation;
 
     /**
      *  
-     * @OneToOne(targetEntity="role_type")
-     * @JoinColumn(name="id_role_type, referencedColumnName="id")
+     *@ORM\OneToOne(targetEntity="RoleType")
+     * @ORM\JoinColumn(name="id_role_type", referencedColumnName="id")
      *
      */
     protected $id_role_type;
