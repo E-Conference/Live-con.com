@@ -190,8 +190,21 @@
                         setInstantEvents(doc.instant_events);
                     }
                 });
-            },
+            },  
+            eventClick: function(calEvent, jsEvent, view) {
+ 
+                $('.fc-event').click(function(){
+                    $.ajax({
+                        url: op.updateUrl+"?id="+calEvent.id,  
+                        success: function(doc) {  
+                            $modal.modal("show");
+                            $modalBody.html(doc);
+                        }
+                    });
+                    bootstrapAlert("info","edit request sent <i class='icon-spinner icon-spin icon-large'></i>","Info");
+                }); 
 
+            },
             selectable: true, 
             selectHelper: true,
             select: function(start, end, allDay) {
@@ -276,20 +289,9 @@
                 
             }
         }); 
-        $calendar.fullCalendar('changeView', "agendaWeek" );
+        $calendar.fullCalendar('changeView', "agendaWeek" )
 
-        $calendar.fullCalendar("eventClick",function(calEvent, jsEvent, view) { 
-                $('.fc-event').click(function(){
-                    $.ajax({
-                        url: op.updateUrl+"?id="+calEvent.id,  
-                        success: function(doc) {  
-                            $modal.modal("show");
-                            $modalBody.html(doc);
-                        }
-                    });
-                    bootstrapAlert("info","edit request sent <i class='icon-spinner icon-spin icon-large'></i>","Info");
-                });  
-            }); 
+            
         });
 
     var bootstrapAlertTimeout;
