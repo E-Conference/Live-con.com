@@ -1,0 +1,4 @@
+fibe_www_conf_person:
+    resource: "@fibeWWWConfBundle/Resources/config/routing/person.php"
+    prefix:   /person
+

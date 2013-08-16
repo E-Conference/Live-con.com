@@ -11,14 +11,14 @@
 <form action="{{ path('admin_schedule_category_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
     <p>
-        <button type="submit" class="btn btn-primary">{% trans %}Create{% endtrans %}</button>
+        <button type="submit" class="btn btn-primary"> <span class="glyphicon glyphicon-ok	glyphicon-white"></span></button>
     </p>
 </form>
 
 <ul class="record_actions">
     <li>
         <a class="btn" href="{{ path('admin_schedule_category') }}">
-            {% trans %}Back to the list{% endtrans %}
+            <span class="glyphicon glyphicon-list glyphicon-white"></span>
         </a>
     </li>
 </ul>

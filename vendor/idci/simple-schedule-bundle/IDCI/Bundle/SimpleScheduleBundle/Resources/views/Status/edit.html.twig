@@ -17,14 +17,14 @@
 
 <ul class="record_actions">
     <li>
-        <a class="btn" href="{{ path('admin_schedule_status') }}">
-            {% trans %}Back to the list{% endtrans %}
+        <a class="btn btn-list btn-warning" href="{{ path('admin_schedule_status') }}">
+             <span class="class="glyphicon glyphicon-list glyphicon-white"></span>
         </a>
     </li> 
     <li>
         <form action="{{ path('admin_schedule_status_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
-            <button type="submit" class="btn btn-danger">{% trans %}Delete{% endtrans %}</button>
+            <button type="submit" class="btn btn-danger"> <span class="class="glyphicon glyphicon-remove glyphicon-white"></span></button>
         </form>
     </li>
 </ul>

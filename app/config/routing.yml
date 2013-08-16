@@ -1,6 +1,6 @@
 fibe_www_conf:
     resource: "@fibeWWWConfBundle/Controller/"
-    prefix:   /
+    prefix:   /schedule
 
 fibe_security_www_conf:
     resource: "@fibeSecurityBundle/Controller/"
@@ -9,7 +9,7 @@ fibe_security_www_conf:
 idci_simple_schedule:
     resource: "../../vendor/idci/simple-schedule-bundle/IDCI/Bundle/SimpleScheduleBundle/Controller"
     type:     annotation
-    prefix:   /admin
+    prefix:   /schedule
 
 idci_exporter:
     resource: "../../vendor/idci/exporter-bundle/IDCI/Bundle/ExporterBundle/Controller"
@@ -43,3 +43,4 @@ fos_user_resetting:
 fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: user/profile
+

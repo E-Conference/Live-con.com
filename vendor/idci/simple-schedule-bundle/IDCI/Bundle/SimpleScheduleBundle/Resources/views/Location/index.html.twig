@@ -14,13 +14,14 @@
 
 <ul class="list_actions">
     <li>
-        <a class="btn btn-primary" href="{{ path('admin_schedule_location_new') }}">
-            {% trans %}Create a new entry{% endtrans %}
+        <a class="btn btn-info" href="{{ path('admin_schedule_location_new') }}">
+            <span class="glyphicon glyphicon-plus"></span>
         </a>
     </li>
 </ul>
 
-<table class="table table-bordered table-striped table-condensed records_list">
+</br>
+<table class="table table-hover records_list">
     <thead>
         <tr>
             <th>Id</th>
@@ -40,21 +41,17 @@
             <td>{{ entity.latitude }}</td>
             <td>{{ entity.longitude }}</td>
             <td>
-                <a class="btn btn-block" href="{{ path('admin_schedule_location_show', { 'id': entity.id }) }}">{% trans %}show{% endtrans %}</a>
+                <a class="btn btn-block btn-success btn-small" href="{{ path('admin_schedule_location_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open  glyphicon-white"></span></a>
             </td>
             <td>
-                <a class="btn btn-block btn-primary" href="{{ path('admin_schedule_location_edit', { 'id': entity.id }) }}">{% trans %}edit{% endtrans %}</a>
+                <a class="btn btn-block btn-warning btn-small" href="{{ path('admin_schedule_location_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-edit  glyphicon-white"></span></a>
              </td> 
         </tr>
     {% endfor %}
     </tbody>
 </table>
 
-<ul class="list_actions">
-    <li>
-        <a class="btn btn-primary" href="{{ path('admin_schedule_location_new') }}">
-            {% trans %}Create a new entry{% endtrans %}
-        </a>
-    </li>
-</ul>
+
+
+
 {% endblock body %}

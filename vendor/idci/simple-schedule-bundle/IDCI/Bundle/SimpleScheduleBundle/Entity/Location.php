@@ -11,6 +11,7 @@ namespace IDCI\Bundle\SimpleScheduleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use fibe\Bundle\WWWConfBundle\Entity\Equipment;
 
 /**
  * @ORM\Table(name="location")
@@ -30,6 +31,12 @@ class Location
      */
     protected $name;
 
+	/**
+     * 
+     * @ORM\ManyToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Equipment")
+     */
+    protected $equipments;   
+	
     /**
      * @ORM\Column(type="text", nullable=true)
      */

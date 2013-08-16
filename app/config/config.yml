@@ -68,6 +68,8 @@ twig:
     form:
         resources:
             - 'IDCISimpleScheduleBundle:Form:duration_widget.html.twig'
+            - 'fibeWWWConfBundle:Form:my_form_div.html.twig'
+            
 
 fos_user:
     db_driver:     orm                              # Le type de BDD à utiliser, nous utilisons l'ORM Doctrine depuis le début

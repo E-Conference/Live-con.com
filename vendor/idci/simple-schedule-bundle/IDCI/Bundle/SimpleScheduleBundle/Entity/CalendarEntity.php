@@ -14,6 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation; 
 
+
 /**
  * This entity is based on the "VEVENT", "VTODO", "VJOURNAL" components
  * describe in the RFC2445
@@ -73,6 +74,7 @@ class CalendarEntity
      * @ORM\Column(type="datetime", name="start_at")
      */
     protected $startAt;
+	
 
     /**
      * last-mod
