@@ -53,17 +53,17 @@
                         <ul class="dropdown-menu"> 
                             <li> 
                                 <a style="padding-right:5px;" href="{{ path('fos_user_profile_edit') }}" title="Profile">
-                                 <span class="glyphicon glyphicon-user glyphicon-white ">Profile		
+                                 <i class="icon-user "></i> Profile		
                                 </a>
                             </li>
                             {% if is_granted("ROLE_ADMIN") %} 
                             <li>
                                 <a href="{{ path('wwwconf_user_list') }}" title="Manage manager">
-                                  <span class="glyphicon glyphicon-list glyphicon-white "> Manage user</a>
+                                  <i class="icon-list icon-white "></i> Manage user</a>
                             </li>
                             <li>
                                 <a href="{{ path('fos_user_registration_register') }}" title="Add manager">
-                                     <span class="glyphicon glyphicon-plus glyphicon-white "> Add manager</a>
+                                     <i class="icon-plus icon-white "></i> Add manager</a>
 									
                             </li>
                             {% endif %}  
