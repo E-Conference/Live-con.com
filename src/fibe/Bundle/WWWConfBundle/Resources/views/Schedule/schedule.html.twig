@@ -19,7 +19,15 @@
         </div>
      </div> 
  
-
+<div id="modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Edit event</h3>
+  </div>
+  <div class="modal-body">
+    <p>One fine body…</p>
+  </div> 
+</div>
  
 
 
@@ -41,9 +49,9 @@
   
     #calendar {
         position: relative; 
-        margin-top: 40px;
-        float: left;
+        margin-top: 40px; 
         width: 80%;
+        margin-left: 2%
     }
         
     #sidebar {
@@ -97,6 +105,11 @@
         vertical-align: middle;
     }
 
+    #modal{
+        width: 96%;
+        left: 2%; 
+        margin: 0;
+    }
 
 
 
@@ -117,7 +130,8 @@
     <script type="text/javascript">
         $(document).ready(function() {    
  
-            
+            $modal = $('#modal').hide();
+            $modalBody = $modal.find(".modal-body");
 
            // calcule du premier jour
             var FirstDay = moment('5000-10-10');
@@ -134,10 +148,11 @@
             var DATA_FEED_URL = "{{ path('wwwconf_getevents') }}";
             //alert(DATA_FEED_URL);    
             var op = { 
-                showday: new Date({% if currentConf %}FirstDay.format(){% else %}{% endif %}), 
-                url: DATA_FEED_URL + "?method=list",  
-                quickAddUrl: DATA_FEED_URL + "?method=add", 
+                showday       : new Date({% if currentConf %}FirstDay.format(){% else %}{% endif %}), 
+                url           : DATA_FEED_URL + "?method=list",  
+                quickAddUrl   : DATA_FEED_URL + "?method=add", 
                 quickUpdateUrl: DATA_FEED_URL + "?method=update",
+                updateUrl     : "{{ path('wwwconf_editEvent') }}",
                 quickDeleteUrl: DATA_FEED_URL + "?method=remove", 
             };
 
@@ -155,9 +170,24 @@
                     success: function(doc) {  
                         if(callback)callback(doc.events);
                         setInstantEvents(doc.instant_events);
+                        
+
                     }
                 });
             }, 
+            eventClick: function(calEvent, jsEvent, view) {
+ 
+                $('.fc-event').click(function(){
+                    $modal.modal("show");
+                    $.ajax({
+                        url: op.updateUrl+"?id="+calEvent.id,  
+                        success: function(doc) {  
+                            $modalBody.html(doc);
+                        }
+                    });
+                }); 
+
+            },
             header: {
                 left: 'prev,next today',
                 center: 'title',
