@@ -1,4 +1,19 @@
-œfibe_www_conf:
+fibe_user_data:
+    resource: "@fibeUserDataBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+fibe_mobile_app:
+    resource: "@fibeMobileAppBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+home_page:
+    resource: "@fibeHomePageBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+fibe_www_conf:
     resource: "@fibeWWWConfBundle/Controller/"
     prefix:   /schedule
 
