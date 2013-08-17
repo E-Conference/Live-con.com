@@ -13,7 +13,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity;
-use IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation;
+
 use IDCI\Bundle\SimpleScheduleBundle\Repository\CalendarEntityRepository;
 
 class CalendarEntityRelationType extends AbstractType

@@ -8,7 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event;
 use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;
-use IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation;
+
 use IDCI\Bundle\SimpleScheduleBundle\Form\EventType;
 use IDCI\Bundle\SimpleScheduleBundle\Form\RecurChoiceType;
 

@@ -12,7 +12,6 @@ namespace IDCI\Bundle\SimpleScheduleBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation; 
 
 
 /**
@@ -251,19 +250,17 @@ class CalendarEntity
     protected $classification = self::CLASSIFICATION_PUBLIC;
 
     /**
-     * @ORM\OneToMany(targetEntity="CalendarEntityRelation", mappedBy="relatedTo")
+     * status
+     *
+     * @ORM\ManyToOne(targetEntity="CalendarEntity", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="Set null", nullable=true)
      */
-    protected $calendarEntities;
+    protected $parent; 
 
     /**
-     * related
-     * 
-     * The property is used to represent a relationship or
-     * reference between one calendar component and another.
-     *
-     * @ORM\OneToMany(targetEntity="CalendarEntityRelation", mappedBy="calendarEntity")
+     * @ORM\OneToMany(targetEntity="CalendarEntity", mappedBy="parent")
      */
-    protected $relateds;
+    protected $children;
 
     /**
      * x-prop
@@ -516,7 +513,7 @@ class CalendarEntity
     public function __construct()
     {
         $this->calendarEntities = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->relateds = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->xProperties = new \Doctrine\Common\Collections\ArrayCollection();
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -851,50 +848,40 @@ class CalendarEntity
     public function getClassification()
     {
         return $this->classification;
-    }
+    } 
 
     /**
-     * Add calendarEntities
+     * Set parent
      *
-     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation $calendarEntities
+     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $parent
      * @return CalendarEntity
      */
-    public function addCalendarEntitie(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation $calendarEntities)
+    public function setParent(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $parent = null)
     {
-        $this->calendarEntities[] = $calendarEntities;
+        $this->parent = $parent;
     
         return $this;
     }
 
     /**
-     * Remove calendarEntities
-     *
-     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation $calendarEntities
-     */
-    public function removeCalendarEntitie(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation $calendarEntities)
-    {
-        $this->calendarEntities->removeElement($calendarEntities);
-    }
-
-    /**
-     * Get calendarEntities
+     * Get parent
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getCalendarEntities()
+    public function getParent()
     {
-        return $this->calendarEntities;
+        return $this->parent;
     }
 
     /**
-     * Add relateds
+     * Add Child
      *
-     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation $relateds
+     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $child
      * @return CalendarEntity
      */
-    public function addRelated(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation $relateds)
+    public function addChildren(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $child)
     {
-        $this->relateds[] = $relateds;
+        $this->children[] = $child;
     
         return $this;
     }
@@ -902,11 +889,11 @@ class CalendarEntity
     /**
      * Remove relateds
      *
-     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation $relateds
+     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $child
      */
-    public function removeRelated(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation $relateds)
+    public function removeChildren(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $child)
     {
-        $this->relateds->removeElement($relateds);
+        $this->children->removeElement($child);
     }
 
     /**
@@ -914,9 +901,9 @@ class CalendarEntity
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getRelateds()
+    public function getChildren()
     {
-        return $this->relateds;
+        return $this->children;
     }
 
     /**

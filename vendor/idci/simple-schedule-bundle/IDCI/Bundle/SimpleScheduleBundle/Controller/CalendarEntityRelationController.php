@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation;
+
 use IDCI\Bundle\SimpleScheduleBundle\Form\CalendarEntityRelationType;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

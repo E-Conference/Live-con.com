@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use fibe\Bundle\WWWConfBundle\Entity\Person;
 use fibe\Bundle\WWWConfBundle\Entity\RoleType;
-use IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation;
+
 
 
 /**
@@ -44,7 +44,7 @@ class Role
      * @ORM\JoinColumn(name="id_event_relation", referencedColumnName="id")
      *
      */
-    protected $id_event_relation;
+    // protected $id_event_relation;
 
     /**
      *  

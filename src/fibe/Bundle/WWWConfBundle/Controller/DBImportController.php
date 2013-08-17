@@ -11,7 +11,7 @@ use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event;
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Category; 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Location; 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty; 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation; 
+ 
 
 /**
  * Api controller.
@@ -128,21 +128,6 @@ class DBImportController extends Controller
          
          
         
-        //////////////////////  relations  //////////////////////
-        //echo "relations->\n";
-        $relations = $JSONFile['relations'];
-        for($i=0;$i<count($relations);$i++){
-            $current = $relations[$i];
-            $entity= new CalendarEntityRelation();
-            foreach ($current as $setter => $value) {
-                if($setter=="setCalendarEntity" || $setter=="setRelatedTo"){
-                    if($eventEntities[$value])$value=$eventEntities[$value]; 
-                }
-                //echo "Relation->".$setter."(".$value.");\n";
-                call_user_func_array(array($entity, $setter), array($value)); 
-            } 
-            $em->persist($entity);
-        }   
          
         $em->flush();  
 

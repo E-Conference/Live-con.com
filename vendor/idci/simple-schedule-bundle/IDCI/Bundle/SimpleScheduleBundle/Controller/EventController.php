@@ -17,7 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 //use IDCI\Bundle\SimpleScheduleBundle\Entity\Event;
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event ; 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;
-use IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation;
+
 //use IDCI\Bundle\SimpleScheduleBundle\Form\EventType;
 use fibe\Bundle\WWWConfBundle\Form\ConfEventType as EventType; 
 use IDCI\Bundle\SimpleScheduleBundle\Form\RecurChoiceType;
