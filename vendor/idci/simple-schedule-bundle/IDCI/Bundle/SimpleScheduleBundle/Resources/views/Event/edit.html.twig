@@ -1,4 +1,4 @@
-{% extends '::base.html.twig' %}
+{% extends 'fibeWWWConfBundle::base.html.twig' %}
 
 {% block body %}
 
@@ -14,7 +14,7 @@
 </form>
 
 {% include "IDCISimpleScheduleBundle:Event:xproperties.html.twig" with {"with_form": true} %}
-{% include "IDCISimpleScheduleBundle:Event:relation.html.twig" with {"with_form": true} %}
+
 
 <ul class="record_actions">
     <li>

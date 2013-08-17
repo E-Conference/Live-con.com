@@ -136,8 +136,8 @@
 
 <!--                  xproperties                    -->
 
- <h3>Event Links</h3>	
- 
+    <h3>Event Links</h3>	
+
     <div class="col-lg-4">
         <table class="table table-hover">
             <thead>
@@ -194,72 +194,16 @@
                                     <button type="submit" class="btn btn-info" title="Add Xproperty"><span class="icon-plus  glyphicon-white"></button>
                                 </div>
                             </div>  
-                            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     {{ form_rest(xproperty_form )}}</div> 
+                            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(xproperty_form )}}</div> 
                         </form>
                     </td>
                 </tr>
             </tfoot>
         </table>
-	</div>
+    </div>
 
 
-        <!--                  Relation                    -->
- <h3>Event Relations</h3>	
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>id</th>
-                    <th>Relation</th>
-                    <th>startAt</th>
-                    <th>summary</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for relation in entity.getRelateds() %} 
-                    <tr> 
-                        <td>{{ relation.id }}</td>
-                        <td>{{ relation.relationType }}</td>
-                        <td>{{ relation.relatedTo.startAt | date('Y-m-d') }}</td>
-                        <td>{{ relation.relatedTo.summary }}</td>
-                    </tr> 
-                {% endfor %}
-            </tbody>
-
-            <tfoot>
-                <tr>
-                    <td colspan="4">
-                        <form id="relationForm"  class="form-horizontal">
-                            <div class="control-group">
-                                <label class="control-label" for="idci_simpleschedule_calendarentityrelation_type_relatedTo">
-                                    {{ form_label(relation_form.relatedTo) }}
-                                </label> 
-                                <div class="controls">
-                                    {{ form_widget(relation_form.relatedTo) }}
-                                    {{ form_errors(relation_form.relatedTo) }}
-                                </div>
-                            </div>  
-                            <div class="control-group">
-                                <label class="control-label" for="idci_simpleschedule_calendarentityrelation_type_relationType">
-                                    {{ form_label(relation_form.relationType) }}
-                                </label> 
-                                <div class="controls">
-                                    {{ form_widget(relation_form.relationType) }}
-                                    {{ form_errors(relation_form.relationType) }}
-                                </div>
-                            </div>   
-                            <div class="control-group">
-                                <div class="controls">
-                                    <button type="submit" class="btn btn-info" title="Add Relation"><span class="icon-plus  glyphicon-white"></button>
-                                </div>
-                            </div>  
-                            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     {{ form_rest(relation_form )}}</div> 
-                        </form>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </div> 
+</div> 
 {% endblock body %}
 
 
@@ -414,15 +358,7 @@ $(document).ready(function(){
                    window.location.reload();
         });
       return false;
-    });
-    
-    $('#relationForm').submit(function(event) {
-        event.preventDefault(); 
-        FormPost("{{ path('schedule_relation_add', { 'id': entity.id}) }}",$(this),function(){
-                   window.location.reload();
-        });
-      return false;
-    });
+    }); 
     
     //'<div class="alert alert-info"><button type="button" clajss="close" data-dismiss="alert">×</button>Event has been updated</div>';
     $('#event').submit(function(event) {

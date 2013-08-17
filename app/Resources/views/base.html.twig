@@ -2,51 +2,21 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}{% endblock %} - WWWConf</title>
-        <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
-        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibewwwconf/css/bootstrap.min.css') }}" /> 
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
-        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibewwwconf/css/datetimepicker.css') }}" /> 
-        <link rel="stylesheet" href="{{ asset('bundles/fibewwwconf/css/font-awesome.min.css') }}"> 
+        <title>{% block title %}{% endblock %} - Seamposium</title>
         {% block stylesheets %}
          
         {% endblock %}
         <script type="text/javascript" src="{{ asset('jquery.min.js') }}"></script>
         
-        <script type="text/javascript" src="{{ asset('bundles/fibewwwconf/js/bootstrap.min.js') }}"></script>
-        <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
-            
-        <script src="{{ asset('bundles/fibewwwconf/js/json2.js') }}" type="text/javascript" ></script>
+        <script type="text/javascript" src="{{ asset('bundles/fibewwwconf/js/bootstrap.min.js') }}"></script>   
+         
         {% block javascripts %}
         {% endblock%}
     </head>
     <body>
-        <div class="symfony-content">
-                {% include "fibeWWWConfBundle::adminmenu.html.twig" %}
-                {% for flashMessage in app.session.flashbag.get('info') %}
-                    <div class="alert alert-info">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
-                        {{ flashMessage }}
-                    </div>
-                {% endfor %}
-
-                {% for flashMessage in app.session.flashbag.get('error') %}
-                    <div class="alert alert-error">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
-                        {{ flashMessage }}
-                    </div>
-                {% endfor %}
-
-                {% for flashMessage in app.session.flashbag.get('success') %}
-                    <div class="alert alert-success">
-                        <button type="button" class="close" data-dismiss="alert">×</button>
-                        {{ flashMessage }}
-                    </div>
-                {% endfor %}
-            
+        
             {% block body %} 
             {% endblock %}
-        </div> 
     </body> 
         
 </html>

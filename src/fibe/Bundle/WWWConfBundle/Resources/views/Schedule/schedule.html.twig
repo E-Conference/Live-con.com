@@ -1,4 +1,4 @@
-{% extends '::base.html.twig' %}
+{% extends 'fibeWWWConfBundle::base.html.twig' %}
 
 
 {% block title %}Schedule{% endblock title %}
@@ -11,10 +11,10 @@
       
 
 <div id='calendar'></div> 
-  <div id="sidebar">  
-    <h4>Draggable Events</h4>
-    <div id='external-events'>
-  </div>
+<div id="sidebar">  
+  <h4>Draggable Events</h4>
+  <div id='external-events'>
+</div>
  </div>  
 
 
@@ -48,26 +48,24 @@
 <link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.print.css') }}" rel='stylesheet' media='print' />
     <style type="text/css">
         
-  
-    #calendar {
-        position: relative; 
-        margin-top: 40px; 
-        width: 80%;
-        margin-left: 2%
+    .navbar { 
+      margin-bottom: 0; 
+    }
+    #calendar {  
+        width: 80%; 
+        margin: 0;
+        padding: 1em;
+        float: left
     }
         
-    #sidebar {
-        /*position: fixed;*/
-        position: absolute;
-        right: 0; 
-        top: 0;
-        margin-top: 41px;
+    #sidebar {   
         padding: 1em 0.5em;
         /*height: 100%; */
-        width: 15%;
+        width: 20%;
         padding: 0 10px; 
         background: #eee;
         z-index: 1;
+        float: right;
     }
         
     #sidebar h4 {
@@ -75,11 +73,23 @@
         margin-top: 0;
         padding-top: 1em;
     }
+        
+    #sidebar p {
+        margin: 1.5em 0;
+        font-size: 11px;
+        color: #666;
+    }
+        
+    #sidebar p input {
+        margin: 0;
+        vertical-align: middle;
+    } 
 
     #external-events{
         border: 1px solid #ccc;
         padding: 1em 0.5em;
         margin: 0;
+        margin-bottom: 1em;
         position: relative; 
         z-index: 2; 
         /*overflow:    auto;
@@ -95,29 +105,13 @@
         font-size: .85em;
         cursor: pointer;
     }
-        
-    #sidebar p {
-        margin: 1.5em 0;
-        font-size: 11px;
-        color: #666;
-    }
-        
-    #sidebar p input {
-        margin: 0;
-        vertical-align: middle;
-    } 
-
-    #bootstrap_alert{
-        position: fixed;
-        top: 5em;
-        right: 2em ;
-        min-width: 20em;
-        z-index: 1000; 
-
-    }
     .modal-dialog { 
         width: 90%; 
-    }
+    } 
+  .fc-view { /* prevents dragging outside of widget */
+      overflow: visible;
+  }
+
 
     </style>
 
@@ -140,20 +134,23 @@
             var $modalBody = $modal.find(".modal-body");
             var $calendar = $('#calendar');
             var $sidebar = $('#external-events');
+
            // calcule du premier jour
             var firstDay = moment('5000-10-10');
-            {% for events in currentConf.confEvents %}
-                {% if date(events.startAt) > date("1980-01-02") %}
+            {% for event in currentConf.confEvents %}
+                {% if date(event.startAt) > date("1980-01-02") %}
                     
-                    if(moment('{{events.startAt|date("Y-m-d")}}').isBefore(firstDay)){
-                        firstDay = moment('{{events.startAt|date("Y-m-d")}}');
+                    if(moment('{{event.startAt|date("Y-m-d")}}').isBefore(firstDay)){
+                        firstDay = moment('{{event.startAt|date("Y-m-d")}}');
                     }
 
                 {% endif %}
-            {% endfor %}  
+            {% endfor %}
+            if(firstDay.isSame(moment('5000-10-10'))) firstDay = moment();
+
             
-            var DATA_FEED_URL = "{{ path('schedule_view_event_get') }}";
-            //alert(DATA_FEED_URL);    
+            //path
+            var DATA_FEED_URL = "{{ path('schedule_view_event_get') }}"; 
             var op = { 
                 showday       : new Date({% if currentConf %}firstDay.format(){% else %}{% endif %}), 
                 url           : DATA_FEED_URL + "?method=list",  
@@ -165,8 +162,8 @@
 
 
  
-        /* initialize the calendar
-        -----------------------------------------------------------------*/
+        /*------------------------------------- initialize the calendar ----------------------------------------*/
+        var dragged = null;
         $calendar.fullCalendar({ 
             header: {
                 left: 'prev,next today',
@@ -197,7 +194,7 @@
                         success: function(doc) {  
                             $modal.modal("show");
                             $modalBody.html(doc);
-                            bootstrapAlert("success","edit request succeed","",'<i class="icon-info"></i> icon-info');
+                            bootstrapAlert("stop");
                         }
                     });
                     bootstrapAlert("info","edit request sent","Info","<i class='icon-spinner icon-spin'></i>");
@@ -282,61 +279,75 @@
                 // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
                 $calendar.fullCalendar('renderEvent', copiedEventObject);
                 
-                $(this).remove(); 
-                //console.log(copiedEventObject);
-                
-                
+                $(this).remove();  
+            },
+            eventDragStart: function( event, jsEvent, ui, view ) { 
+              dragged = [ ui.helper[0], event ];
             }
+
         }); 
+        $('*').filter(function(){ return $(this).css('overflow').toLowerCase().indexOf('hidden') > -1 })
+              .css('overflow',"visible");
         $calendar.fullCalendar('changeView', "agendaWeek" );
+        /*------------------------------------- initialize the calendar ----------------------------------------*/
  
 
- function setInstantEvents(instant_events){
-        $sidebar.html("");
+        /*------------------------------------- initialize the sidebar ----------------------------------------*/
+        function setInstantEvents(instant_events){
+          $sidebar.html("");
 
-        var event =  "<div class='external-event'></div>";
-        for (var i in instant_events){
+          var eventHtml =  "<div class='external-event'></div>";
+
+          var gid = 1; // event.id == 0 considered to be undefined (boo) 
+          
+          for (var i in instant_events){
             var current_event = instant_events[i];
-            console.log(current_event); 
 
-            var $event = $(event).appendTo($sidebar)
-                                 .html(current_event['title'])
+            var $event = sidebarDraggable(current_event);
+          }
+          
+          $('#external-events').droppable({
+            drop: function( event, ui ) {
+              if ( dragged && ui.helper && ui.helper[0] === dragged[0] ) { 
+                var event = dragged[1];
+                $calendar.fullCalendar('removeEvents',event.id);
+                console.log(event.id)
+                  var el = $( "<div class='external-event'>" ).appendTo( this ).text( event.title );
+                  el.draggable({
+                  zIndex: 999,
+                  revert: true,      // will cause the event to go back to its
+                  revertDuration: 0  //  original position after the drag
+                });
+                el.data('eventObject', { title: event.title, id :event.id });
+
+              }
+            }
+          }); 
+
+          function sidebarDraggable (event){
+            var $event = $(eventHtml).appendTo($sidebar)
+                                 .html(event['title'])
                                  .css({
-                                    "background-color": current_event.color,
-                                    "border-color": current_event.border_color || current_event.color,
+                                    "background-color": event.color,
+                                    "border-color": event.border_color || event.color,
                                  });  
 
-            // store the Event Object in the DOM element so we can get to it later
-            $event.data('eventObject', current_event);
             
             // make the event draggable using jQuery UI
-            $event.droppable({
-                start: function(event, ui) { 
-                    $(this).css("z-index", 10);  
-            }, 
-                zIndex        : 20,
-                revert        : true,      // will cause the event to go back to its
-                revertDuration: 0  //  original position after the drag
-            });
-        } 
-    }
-        });
+             $event.draggable({
+                      zIndex: 999,
+                      revert: true,      // will cause the event to go back to its
+                      revertDuration: 0  //  original position after the drag
+                    })
+                    .data('eventObject', event);
+            // store the Event Object in the DOM element so we can get to it later
+            return $event
+          }
 
-    var bootstrapAlertTimeout;
-    function bootstrapAlert(type,msg,title,icon){
-        var $body = $("body");
-        var $bootstrapAlert = $('#bootstrap_alert').length < 1 ? $('<div id="bootstrap_alert"></div>').prependTo($body) : $('#bootstrap_alert');
+        }
+      });
+      /*------------------------------------- end initialize the sidebar ----------------------------------------*/
 
-        $bootstrapAlert.attr("class","")
-                       .addClass("alert alert-"+type) 
-                       .html('<button type="button" class="close" data-dismiss="alert">&times;</button> <strong> '+title+' </strong>' +msg)
-                       .prepend(icon ? $(icon).addClass("icon-2x").css("margin-right","0.5em") : "");
-        if(!$bootstrapAlert.is(":visible"))$bootstrapAlert.hide().fadeIn();
-        clearInterval(bootstrapAlertTimeout);
-        bootstrapAlertTimeout=setInterval(function(){
-                 $bootstrapAlert.fadeOut(1500);
-            },5000);
-    }
 
 
     

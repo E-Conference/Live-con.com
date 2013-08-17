@@ -48,6 +48,7 @@ abstract class CalendarEntityType extends AbstractType
                 'required' => false
             ))*/
             ->add('url')
+            ->add('parent')
             ->add('description')
             ->add('status', 'entity', array(
                 'required'      => false,

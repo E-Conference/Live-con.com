@@ -14,7 +14,6 @@ use IDCI\Bundle\SimpleScheduleBundle\Form\RecurChoiceType;
 
 use fibe\Bundle\WWWConfBundle\Form\XPropertyType; 
 
-use IDCI\Bundle\SimpleScheduleBundle\Form\CalendarEntityRelationType;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -58,6 +57,8 @@ class ScheduleController extends Controller
         $conf = $this->getDoctrine()
                      ->getRepository('fibeWWWConfBundle:WwwConf')
                      ->find(1); 
+        $logger = $this->get('logger');
+$logger->info('Nous avons récupéré le logger');
         return array('currentConf' => $conf);     
     
 }    
@@ -230,16 +231,12 @@ class ScheduleController extends Controller
         $xproperty->setCalendarEntity($entity);
         $xpropertyForm = $this->createForm(new XPropertyType(), $xproperty);
 
-        $relation = new CalendarEntityRelation();
-        $relation->setCalendarEntity($entity);
-        $relationForm = $this->createForm(new CalendarEntityRelationType($entity), $relation);
-
+        
         return array(
             'entity'            => $entity,
             'formEvent'         => $form->createView(),
             'delete_form'       => $deleteForm->createView(),
             'xproperty_form'    => $xpropertyForm->createView(),
-            'relation_form'     => $relationForm->createView(),
             'SparqlUrl'         => $conf->getConfUri()
         );
       

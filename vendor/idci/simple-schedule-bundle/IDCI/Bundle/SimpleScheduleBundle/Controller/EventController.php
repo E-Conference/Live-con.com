@@ -22,8 +22,7 @@ use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;
 use fibe\Bundle\WWWConfBundle\Form\ConfEventType as EventType; 
 use IDCI\Bundle\SimpleScheduleBundle\Form\RecurChoiceType;
 //use IDCI\Bundle\SimpleScheduleBundle\Form\XPropertyType;
-use fibe\Bundle\WWWConfBundle\Form\XPropertyType; 
-use IDCI\Bundle\SimpleScheduleBundle\Form\CalendarEntityRelationType;
+use fibe\Bundle\WWWConfBundle\Form\XPropertyType;  
 
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
@@ -176,19 +175,14 @@ class EventController extends Controller
         $xproperty = new XProperty();
         $xproperty->setCalendarEntity($entity);
         $xpropertyForm = $this->createForm(new XPropertyType(), $xproperty);
-
-        $relation = new CalendarEntityRelation();
-        $relation->setCalendarEntity($entity);
-        $relationForm = $this->createForm(new CalendarEntityRelationType($entity), $relation);
-		
+ 
 		$WwwConf="";
 
         return array(
             'entity'            => $entity,
             'form'              => $form->createView(),
             'delete_form'       => $deleteForm->createView(),
-            'xproperty_form'    => $xpropertyForm->createView(),
-            'relation_form'     => $relationForm->createView(),
+            'xproperty_form'    => $xpropertyForm->createView(), 
             'SparqlUrl'         => ($WwwConf?$WwwConf->getConfUri():null)
         );
     }

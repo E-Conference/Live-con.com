@@ -384,6 +384,7 @@
                             var relationId = getRelationIdFromCalendarEntityId(currentEventId,relatedToEventId);
                             if(!relations[relationId]){
                               var relationType = this.nodeName.indexOf("swc:isSubEventOf")!== -1?"PARENT":"CHILD";
+                              events[currentEventId]['setParent'] = events[relatedToEventId];
                               var relation= {}; 
                               relation['setCalendarEntity']=parseInt(relatedToEventId); 
                               relation['setRelationType']=relationType;
@@ -609,8 +610,7 @@
                 var dataArray={}; 
                 dataArray['categories']=categories;
                 dataArray['events']=events;
-                dataArray['xproperties']=xproperties;
-                dataArray['relations']=relations;  
+                dataArray['xproperties']=xproperties; 
                 dataArray['locations']=locations;  
                     
                 if(events.length<1 && xproperties.length<1 && relations.length<1 && locations.length<1)
