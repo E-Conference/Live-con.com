@@ -10,22 +10,27 @@
   
       
 
-    <div id='calendar'></div> 
-     <div id="sidebar">  
-        <h4>Draggable Events</h4>
-        <div id='external-events'>
-        </div>
-     </div> 
- 
-<div id="modal" class="modal hide fade">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>Edit event</h3>
+<div id='calendar'></div> 
+  <div id="sidebar">  
+    <h4>Draggable Events</h4>
+    <div id='external-events'>
   </div>
-  <div class="modal-body">
-    <p>One fine body…</p>
-  </div> 
-</div>
+ </div>  
+
+
+<div id="modal"  class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Edit event</h4>
+      </div>
+      <div class="modal-body">
+        <p>One fine body&hellip;</p>
+      </div> 
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
  
 
 
@@ -100,13 +105,7 @@
     #sidebar p input {
         margin: 0;
         vertical-align: middle;
-    }
-
-    #modal{
-        width: 96%;
-        left: 2%; 
-        margin: 0;
-    }
+    } 
 
     #bootstrap_alert{
         position: fixed;
@@ -116,7 +115,9 @@
         z-index: 1000; 
 
     }
-
+    .modal-dialog { 
+        width: 90%; 
+    }
 
     </style>
 
@@ -196,9 +197,10 @@
                         success: function(doc) {  
                             $modal.modal("show");
                             $modalBody.html(doc);
+                            bootstrapAlert("success","edit request succeed","",'<i class="icon-info"></i> icon-info');
                         }
                     });
-                    bootstrapAlert("info","edit request sent <i class='icon-spinner icon-spin icon-large'></i>","Info");
+                    bootstrapAlert("info","edit request sent","Info","<i class='icon-spinner icon-spin'></i>");
                 }); 
 
             },
@@ -217,13 +219,13 @@
                             op.quickAddUrl,
                             formatDate(e),
                             function(response) {  
-                                bootstrapAlert("success","event has been well added","Success");
+                                bootstrapAlert("success","event has been well added","",'<i class="icon-info"></i> icon-info');
                                 e.id=response.id;
                                 $calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                             },
                             'json'
                     );
-                    bootstrapAlert("info","add request sent <i class='icon-spinner icon-spin icon-large'></i>","Info");
+                    bootstrapAlert("info","add request sent","Info","<i class='icon-spinner icon-spin'></i>");
                 }
                 $calendar.fullCalendar('unselect');
             },
@@ -233,11 +235,11 @@
                             op.quickUpdateUrl,
                             formatDate($.extend({}, event)),
                             function(doc) {  
-                                bootstrapAlert("success","event has been well updated","Success"); 
+                                bootstrapAlert("success","event has been well updated","",'<i class="icon-info"></i> icon-info'); 
                             },
                             'json'
                     );
-                    bootstrapAlert("info","update request sent <i class='icon-spinner icon-spin icon-large'></i>","Info");
+                    bootstrapAlert("info","update request sent","Info","<i class='icon-spinner icon-spin'></i>");
 
             },
             eventDataTransform: function(data){return data;},
@@ -248,11 +250,11 @@
                             op.quickUpdateUrl,
                             formatDate($.extend({}, e)),
                             function(doc) {  
-                                bootstrapAlert("success","event has been well updated","Success"); 
+                                bootstrapAlert("success","event has been well updated","",'<i class="icon-info"></i> icon-info'); 
                             },
                             'json'
                     );
-                    bootstrapAlert("info","update request sent <i class='icon-spinner icon-spin icon-large'></i>","Info");
+                    bootstrapAlert("info","update request sent","Info","<i class='icon-spinner icon-spin'></i>");
             },
             drop: function(date, allDay) { // this function is called when something is dropped
             
@@ -271,11 +273,11 @@
                         op.quickUpdateUrl,
                         formatDate(copiedEventObject),
                         function(doc) {   
-                                bootstrapAlert("success","event has been well updated","Success"); 
+                                bootstrapAlert("success","event has been well updated","",'<i class="icon-info"></i> icon-info'); 
                         },
                         'json'
                 );
-                bootstrapAlert("info","update request sent <i class='icon-spinner icon-spin icon-large'></i>","Info");
+                bootstrapAlert("info","update request sent ","Info","<i class='icon-spinner icon-spin'></i>");
                 // render the event on the calendar
                 // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
                 $calendar.fullCalendar('renderEvent', copiedEventObject);
@@ -321,12 +323,14 @@
         });
 
     var bootstrapAlertTimeout;
-    function bootstrapAlert(c,msg,title){
+    function bootstrapAlert(type,msg,title,icon){
         var $body = $("body");
         var $bootstrapAlert = $('#bootstrap_alert').length < 1 ? $('<div id="bootstrap_alert"></div>').prependTo($body) : $('#bootstrap_alert');
+
         $bootstrapAlert.attr("class","")
-                       .addClass("alert alert-"+c) 
-                       .html('<button type="button" class="close" data-dismiss="alert">&times;</button> <strong> '+title+' </strong>' +msg);
+                       .addClass("alert alert-"+type) 
+                       .html('<button type="button" class="close" data-dismiss="alert">&times;</button> <strong> '+title+' </strong>' +msg)
+                       .prepend(icon ? $(icon).addClass("icon-2x").css("margin-right","0.5em") : "");
         if(!$bootstrapAlert.is(":visible"))$bootstrapAlert.hide().fadeIn();
         clearInterval(bootstrapAlertTimeout);
         bootstrapAlertTimeout=setInterval(function(){

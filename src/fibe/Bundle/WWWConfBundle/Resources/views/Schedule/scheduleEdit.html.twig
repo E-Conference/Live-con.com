@@ -1,12 +1,6 @@
 
 
-{% block body %}
-<div class="span11">
-    <header class="subhead" id="overview">
-        <div class="page-header">
-            <h2>{% trans %}Edit an event{% endtrans %}</h2>
-        </div>
-    </header> 
+{% block body %} 
 <div class="row-fluid well">  
     <form id="event" class="col-lg-4" class="form-horizontal" >  
         <p>  
@@ -142,15 +136,10 @@
 
 <!--                  xproperties                    -->
 
-<<<<<<< HEAD
-    <div class="span5 ">
-        <table class="table">
-=======
  <h3>Event Links</h3>	
  
     <div class="col-lg-4">
         <table class="table table-hover">
->>>>>>> ade339d0913748508d6ec8bdb84eaf5c80a7a698
             <thead>
                 <tr>
                     <th>Link Type</th>
@@ -270,14 +259,12 @@
                 </tr>
             </tfoot>
         </table>
-    </div>
-</div>
+    </div> 
 {% endblock body %}
 
 
 
 
-<<<<<<< HEAD
  {% block stylesheets %}
  <style type="text/css"> 
     .control-group .controls {
@@ -288,9 +275,6 @@
     }
  </style>
 {% endblock stylesheets %}
-=======
-
->>>>>>> ade339d0913748508d6ec8bdb84eaf5c80a7a698
 
 {%  block javascripts %} 
 
@@ -434,7 +418,7 @@ $(document).ready(function(){
     
     $('#relationForm').submit(function(event) {
         event.preventDefault(); 
-        FormPost("{{ path('schedule_relation_add', { 'calendar_entity_id': entity.id}) }}",$(this),function(){
+        FormPost("{{ path('schedule_relation_add', { 'id': entity.id}) }}",$(this),function(){
                    window.location.reload();
         });
       return false;

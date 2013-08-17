@@ -29,12 +29,12 @@ class CalendarEntityRelationController extends Controller
     /**
      * Add a CalendarEntityRelation
      *
-     * @Route("/{calendar_entity_id}/add", name="schedule_relation_add")
+     * @Route("/{id}/add", name="schedule_relation_add")
      */
-    public function addCalendarEntityRelationAction(Request $request, $calendar_entity_id)
+    public function addCalendarEntityRelationAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $calendarEntity = $em->getRepository('IDCISimpleScheduleBundle:CalendarEntity')->find($calendar_entity_id);
+        $calendarEntity = $em->getRepository('IDCISimpleScheduleBundle:CalendarEntity')->find($id);
 
         if (!$calendarEntity) {
             throw $this->createNotFoundException('Unable to find Calendar entity.');
