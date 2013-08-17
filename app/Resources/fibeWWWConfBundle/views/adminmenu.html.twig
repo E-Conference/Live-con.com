@@ -13,7 +13,7 @@
               
                     <ul class="nav"> 
                     <li>
-                        <a href="{{ path('wwwconf_schedule') }}" title="manage schedule">Schedule</a>
+                        <a href="{{ path('wwwconf_schedule') }}" title="manage schedule"><span class="icon-calendar glyphicon-white"></span> Schedule</a>
                     </li> 
            
                     
@@ -40,11 +40,7 @@
                     </li>
                 </ul><!-- end class nav-->
 			
-                <ul class="nav pull-right">
-                  <li>
-                        <a href="{{ path('logout') }}" title="logout" class='btn btn-danger navbar-btn' id='logout'><span class="glyphicon glyphicon-off glyphicon-white "></span></a>
-                    </li>
-					
+                <ul class="nav pull-right"> 
                     <li class="dropdown">
                         <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="icon-user icon-white"></i> {{ app.user.username }}
@@ -53,17 +49,17 @@
                         <ul class="dropdown-menu"> 
                             <li> 
                                 <a style="padding-right:5px;" href="{{ path('fos_user_profile_edit') }}" title="Profile">
-                                 <span class="glyphicon glyphicon-user glyphicon-white ">Profile		
+                                 <span class="icon-user glyphicon-white ">Profile		
                                 </a>
                             </li>
                             {% if is_granted("ROLE_ADMIN") %} 
                             <li>
                                 <a href="{{ path('wwwconf_user_list') }}" title="Manage manager">
-                                  <span class="glyphicon glyphicon-list glyphicon-white "> Manage user</a>
+                                  <span class="icon-list glyphicon-white "> Manage user</a>
                             </li>
                             <li>
                                 <a href="{{ path('fos_user_registration_register') }}" title="Add manager">
-                                     <span class="glyphicon glyphicon-plus glyphicon-white "> Add manager</a>
+                                     <span class="icon-plus glyphicon-white "> Add manager</a>
 									
                             </li>
                             {% endif %}  

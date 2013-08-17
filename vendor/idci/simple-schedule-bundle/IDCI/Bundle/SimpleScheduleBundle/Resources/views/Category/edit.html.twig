@@ -12,19 +12,19 @@
     
     {{ form_widget(edit_form) }}
     <p>
-        <button type="submit" class="btn btn-inverse"><span class="glyphicon glyphicon-ok  glyphicon-white"></span></button>
+        <button type="submit" class="btn btn-inverse"><span class="icon-ok  glyphicon-white"></span></button>
     </p>
 </form>
 <ul class="record_actions">
     <li>
         <a class="btn btn-warning" href="{{ path('admin_schedule_category') }}">
-            <span class="glyphicon glyphicon-list  glyphicon-white"></span>
+            <span class="icon-list  glyphicon-white"></span>
         </a>
     </li>
     <li>
         <form action="{{ path('admin_schedule_category_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
-            <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-remove  glyphicon-white"></span></button>
+            <button type="submit" class="btn btn-danger"><span class="icon-remove  glyphicon-white"></span></button>
         </form>
     </li>
 </ul>

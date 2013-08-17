@@ -10,13 +10,13 @@
 
 <form action="{{ path('admin_schedule_event_create') }}" method="post" {{ form_enctype(form) }}>
     {% include "IDCISimpleScheduleBundle:Event:form.html.twig" %}
-    <button type="submit" class="btn btn-info"><span class="glyphicon glyphicon-plus  glyphicon-white"></span></button>
+    <button type="submit" class="btn btn-info"><span class="icon-plus  glyphicon-white"></span></button>
 </form>
 
 <ul class="record_actions">
     <li>
         <a class="btn btn-warning" href="{{ path('admin_schedule_event') }}">
-           <span class="glyphicon glyphicon-list  glyphicon-white"></span>
+           <span class="icon-list  glyphicon-white"></span>
         </a>
     </li>
 </ul>

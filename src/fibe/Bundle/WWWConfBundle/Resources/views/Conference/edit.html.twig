@@ -28,7 +28,7 @@
                 <h5 class="text-info">Please, provide a OWL/RDF file</h5>
                 <h5 class="muted"><i>(such as : http://data.semanticweb.org/conference/eswc/2013/complete)</i></h5>
             </label>
-            <input id="EventImport" name="EventImport" type="text"/>
+            <input id="EventImport" class="form-control" name="EventImport" type="text"/>
             <button type="submit" id="EventImport" class="btn">
               Process import <i class="icon-arrow-right"></i> 
             </button>
@@ -152,8 +152,8 @@
                         confOwlUriInput.parent().addClass('control-group success');
                         $.ajax({ //DBimport
                             type: "POST",
-                            cache: false, 
-                            url: "{{ app.request.getBaseURL() }}/admin/link/DBimport/1" ,
+                            cache: false,  
+                            url: "{{ path('wwwconf_admin_DBimport') }}",
                             data: "dataArray=" + JSON.stringify(ConfRdfFile, null),
                             success:function(a,b,c)
                             {

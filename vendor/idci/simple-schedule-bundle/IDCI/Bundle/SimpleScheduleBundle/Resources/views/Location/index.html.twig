@@ -15,7 +15,7 @@
 <ul class="list_actions">
     <li>
         <a class="btn btn-info" href="{{ path('admin_schedule_location_new') }}">
-            <span class="glyphicon glyphicon-plus"></span>
+            <span class="icon-plus"></span>
         </a>
     </li>
 </ul>
@@ -41,10 +41,10 @@
             <td>{{ entity.latitude }}</td>
             <td>{{ entity.longitude }}</td>
             <td>
-                <a class="btn btn-block btn-success btn-small" href="{{ path('admin_schedule_location_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open  glyphicon-white"></span></a>
+                <a class="btn btn-block btn-success btn-small" href="{{ path('admin_schedule_location_show', { 'id': entity.id }) }}"><span class="icon-eye-open  glyphicon-white"></span></a>
             </td>
             <td>
-                <a class="btn btn-block btn-warning btn-small" href="{{ path('admin_schedule_location_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-edit  glyphicon-white"></span></a>
+                <a class="btn btn-block btn-warning btn-small" href="{{ path('admin_schedule_location_edit', { 'id': entity.id }) }}"><span class="icon-edit  glyphicon-white"></span></a>
              </td> 
         </tr>
     {% endfor %}

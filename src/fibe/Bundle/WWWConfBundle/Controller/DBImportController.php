@@ -22,11 +22,11 @@ class DBImportController extends Controller
 {
 
 /**
- * @Route("/{wwwConfId}", name="wwwconf_admin_DBimport") 
+ * @Route("/", name="wwwconf_admin_DBimport") 
  */
   
       
-    public function importAction(Request $request,$wwwConfId)
+    public function importAction(Request $request)
     {  
         $JSONFile = json_decode($request->request->get('dataArray'),true); 
         $em = $this->getDoctrine()->getManager(); 
@@ -34,6 +34,7 @@ class DBImportController extends Controller
         $eventEntities= array();
         $locationEntities= array();
         $categoryEntities= array();
+        $wwwConfId = 1;
         
         
         //////////////////////  locations  //////////////////////

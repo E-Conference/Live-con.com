@@ -14,7 +14,7 @@
 
 
         <a class="btn btn-info" href="{{ path('admin_schedule_status_new') }}">
-             <span class="glyphicon glyphicon-plus glyphicon-white"></span>
+             <span class="icon-plus glyphicon-white"></span>
         </a>
 
 
@@ -34,10 +34,10 @@
             <td>{{ entity.value }}</td>
             <td>{{ entity.discr }}</td>
             <td>
-                <a class="btn btn-success btn-block" href="{{ path('admin_schedule_status_show', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-eye-open glyphicon-white"></span></a>
+                <a class="btn btn-success btn-block" href="{{ path('admin_schedule_status_show', { 'id': entity.id }) }}"><span class="icon-eye-open glyphicon-white"></span></a>
             </td>
             <td>
-                <a class="btn btn-block btn-warning" href="{{ path('admin_schedule_status_edit', { 'id': entity.id }) }}"><span class="glyphicon glyphicon-edit glyphicon-white"></span></a>
+                <a class="btn btn-block btn-warning" href="{{ path('admin_schedule_status_edit', { 'id': entity.id }) }}"><span class="icon-edit glyphicon-white"></span></a>
             </td>
         </tr>
     {% endfor %}

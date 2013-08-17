@@ -23,19 +23,19 @@
         <ul class="record_actions">
     <li>
         <a class="btn btn-warning" href="{{ path('equipment') }}">
-          <span class="glyphicon glyphicon-list glyphicon-white"></span>  
+          <span class="icon-list glyphicon-white"></span>  
         </a>
     </li>
     <li>
         <a class="btn btn-warning" href="{{ path('equipment_edit', { 'id': entity.id }) }}">  <a  class="btn btn-info" href="{{ path('equipment_new') }}">
-                 <span class="glyphicon glyphicon-edit glyphicon-white"></span>       
+                 <span class="icon-edit glyphicon-white"></span>       
         </a>
     </li>
     <li>
         <form action="{{ path('equipment_delete', { 'id': entity.id }) }}" method="post">
             <input type="hidden" name="_method" value="DELETE" />
             {{ form_widget(delete_form) }}
-            <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-remove glyphicon-white"></span></button>
+            <button type="submit" class="btn btn-danger"><span class="icon-remove glyphicon-white"></span></button>
         </form>
     </li>
 </ul>

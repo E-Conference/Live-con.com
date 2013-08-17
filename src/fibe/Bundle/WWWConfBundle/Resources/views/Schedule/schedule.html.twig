@@ -38,8 +38,7 @@
  
     <!--
     <link rel='stylesheet' type='text/css' href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/start/jquery-ui.css' />
-    -->
-<link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/css/bootstrap-responsive.css') }}" />
+    --> 
 
 <link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.css') }}" rel='stylesheet' />
 <link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.print.css') }}" rel='stylesheet' media='print' />
@@ -137,9 +136,10 @@
         $(document).ready(function() {    
  
             //event edit popup
-            $modal = $('#modal').hide();
-            $modalBody = $modal.find(".modal-body");
-
+            var $modal = $('#modal').hide();
+            var $modalBody = $modal.find(".modal-body");
+            var $calendar = $('#calendar');
+            var $sidebar = $('#external-events');
            // calcule du premier jour
             var firstDay = moment('5000-10-10');
             {% for events in currentConf.confEvents %}
@@ -167,7 +167,6 @@
  
         /* initialize the calendar
         -----------------------------------------------------------------*/
-        var $calendar = $('#calendar');
         $calendar.fullCalendar({ 
             header: {
                 left: 'prev,next today',
@@ -288,35 +287,18 @@
                 
             }
         }); 
-        $calendar.fullCalendar('changeView', "agendaWeek" )
+        $calendar.fullCalendar('changeView', "agendaWeek" );
+ 
 
-            
-        });
-
-    var bootstrapAlertTimeout;
-    function bootstrapAlert(c,msg,title){
-        var $body = $("body");
-        var $bootstrapAlert = $('#bootstrap_alert').length < 1 ? $('<div id="bootstrap_alert"></div>').prependTo($body) : $('#bootstrap_alert');
-        $bootstrapAlert.attr("class","")
-                       .addClass("alert alert-"+c) 
-                       .html('<button type="button" class="close" data-dismiss="alert">&times;</button> <strong> '+title+' </strong>' +msg);
-        if(!$bootstrapAlert.is(":visible"))$bootstrapAlert.hide().fadeIn();
-        clearInterval(bootstrapAlertTimeout);
-        bootstrapAlertTimeout=setInterval(function(){
-                 $bootstrapAlert.fadeOut(1500);
-            },5000);
-    }
-
-
-    function setInstantEvents(instant_events){
-        var ctn = $('#external-events').html("");
+ function setInstantEvents(instant_events){
+        $sidebar.html("");
 
         var event =  "<div class='external-event'></div>";
         for (var i in instant_events){
             var current_event = instant_events[i];
             console.log(current_event); 
 
-            var $event = $(event).appendTo(ctn)
+            var $event = $(event).appendTo($sidebar)
                                  .html(current_event['title'])
                                  .css({
                                     "background-color": current_event.color,
@@ -335,8 +317,26 @@
                 revert        : true,      // will cause the event to go back to its
                 revertDuration: 0  //  original position after the drag
             });
-        }
+        } 
     }
+        });
+
+    var bootstrapAlertTimeout;
+    function bootstrapAlert(c,msg,title){
+        var $body = $("body");
+        var $bootstrapAlert = $('#bootstrap_alert').length < 1 ? $('<div id="bootstrap_alert"></div>').prependTo($body) : $('#bootstrap_alert');
+        $bootstrapAlert.attr("class","")
+                       .addClass("alert alert-"+c) 
+                       .html('<button type="button" class="close" data-dismiss="alert">&times;</button> <strong> '+title+' </strong>' +msg);
+        if(!$bootstrapAlert.is(":visible"))$bootstrapAlert.hide().fadeIn();
+        clearInterval(bootstrapAlertTimeout);
+        bootstrapAlertTimeout=setInterval(function(){
+                 $bootstrapAlert.fadeOut(1500);
+            },5000);
+    }
+
+
+    
 
      function formatDate(e){
         e.start = moment(e.start).format();
