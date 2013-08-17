@@ -41,9 +41,7 @@
                 } 
                 $bootstrapAlert.attr("class","")
                                .addClass("alert alert-"+type) 
-                               .html('<button type="button" class="close" data-dismiss="alert">&times;</button>')
-                               .append(' <strong> '+title+' </strong>')
-                               .text(msg)
+                               .html('<button type="button" class="close" data-dismiss="alert">&times;</button><strong> '+title+' </strong>'+msg)  
                                .prepend(icon ? $(icon).addClass("icon-2x").css("margin-right","0.5em") : "");
                 if(!$bootstrapAlert.is(":visible"))$bootstrapAlert.hide().fadeIn();
                 clearInterval(bootstrapAlertTimeout);
@@ -64,13 +62,10 @@
                 </script> 
             {% endfor %}
 
-            {% for flashMessage in app.session.flashbag.get('success') %}
-                <div class="alert alert-success">
+            {% for flashMessage in app.session.flashbag.get('success') %} 
                 <script type="text/javascript" >
                 bootstrapAlert("success","{{ flashMessage }}","Success",'<i class="icon-info"></i> '); 
-                </script> 
-                    {{ flashMessage }}
-                </div>
+                </script>  
             {% endfor %}
 
             {% for flashMessage in app.session.flashbag.get('error') %}
