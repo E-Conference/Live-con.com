@@ -13,7 +13,7 @@
               
                     <ul class="nav"> 
                     <li>
-                        <a href="{{ path('wwwconf_schedule') }}" title="manage schedule">Schedule</a>
+                        <a href="{{ path('wwwconf_schedule') }}" title="manage schedule"><span class="icon-calendar glyphicon-white"></span> Schedule</a>
                     </li> 
            
                     
@@ -49,7 +49,7 @@
                         <ul class="dropdown-menu"> 
                             <li> 
                                 <a style="padding-right:5px;" href="{{ path('fos_user_profile_edit') }}" title="Profile">
-                                 <span class="icon-user glyphicon-white ">Profile		
+                                 <i class="icon-user "></i> Profile		
                                 </a>
                             </li>
                             {% if is_granted("ROLE_ADMIN") %} 
