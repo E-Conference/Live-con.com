@@ -1,0 +1,26 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Index{% endblock title %}
+{% block body %}
+
+
+<div class="hero-unit">
+  <h1>user data manager</h1>
+  <p>Manage authors account</p>
+  <div class="row-fluid">
+      <div class="col-lg-4">
+           <div class="btn-group"> 
+              <a href="{{ path('schedule_view') }}" role="button" class="btn btn-success btn-large">
+                <span class="icon-calendar"></span>See accounts
+              </a>
+          </div>
+      </div>
+  </div>
+</div>
+      
+
+{% endblock body %}
+
+
+
+
