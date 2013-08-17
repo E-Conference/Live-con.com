@@ -29,13 +29,27 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Schedule Controller 
  *
- * @Route("/admin/schedule")
+ * @Route("/")
  */
 class ScheduleController extends Controller
 {
 
 /**
- *  @Route("/", name="wwwconf_schedule")
+ *  @Route("/", name="schedule_index")
+ *  @Template()
+ */
+    public function indexAction()
+    {
+
+        $conf = $this->getDoctrine()
+                     ->getRepository('fibeWWWConfBundle:WwwConf')
+                     ->find(1); 
+        return array('currentConf' => $conf);     
+    
+}    
+
+/**
+ *  @Route("/view", name="schedule_view")
  *  @Template()
  */
     public function scheduleAction()
@@ -50,7 +64,7 @@ class ScheduleController extends Controller
  
 /**
  *   return all events contained in the given date week
- * @Route("/getEvents", name="wwwconf_getevents")
+ * @Route("/getEvents", name="schedule_view_event_get")
  */
     public function getEventsAction(Request $request)
     {
@@ -188,7 +202,7 @@ class ScheduleController extends Controller
     
 
     /**
-     * @Route("/editEvents", name="wwwconf_editEvent")
+     * @Route("/editEvents", name="schedule_view_event_edit")
      * @Template()
      */
      
@@ -233,7 +247,7 @@ class ScheduleController extends Controller
     
      
     /**
-     * @Route("/{id}/updateEvents", name="wwwconf_updateEvent") 
+     * @Route("/{id}/updateEvents", name="schedule_view_event_update") 
      */
      
     public function scheduleUpdateAction(Request $request,$id)
@@ -275,7 +289,8 @@ class ScheduleController extends Controller
     }
     
     /**
-     * @Route("/{id}/xpropAdd", name="wwwconf_xproperty_add") 
+     * Override dimplescehdule controller to provide json response
+     * @Route("/{id}/xpropAdd", name="schedule_xproperty_add") 
      */
      
     public function xpropAddAction(Request $request,$id)

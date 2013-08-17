@@ -3,7 +3,7 @@
 {% block body -%}
     <h1>Equipment creation</h1>
 
-    <form action="{{ path('equipment_create') }}" method="post" {{ form_enctype(form) }}>
+    <form action="{{ path('schedule_equipment_create') }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
         <p>
             <button type="submit" class="btn btn-default"><span class="icon-ok"></span></button>
@@ -13,7 +13,7 @@
         <ul class="record_actions">
    
         <a href="{{ path('equipment') }}">
-             <a  class="btn btn-warning" href="{{ path('equipment_new') }}">
+             <a  class="btn btn-warning" href="{{ path('schedule_equipment_new') }}">
                  <span class="icon-list glyphicon-white"></span>
             </a>
         </a>

@@ -1,8 +1,8 @@
-{% extends "IDCISimpleScheduleBundle::adminbase.html.twig" %}
+{% extends '::base.html.twig' %}
 
 {% block body %}
 
-{{ parent() }}
+
 
 <div class="page-header">
   <h1>Event</h1>
@@ -94,17 +94,17 @@
 
 <ul class="record_actions">
     <li>
-        <a class="btn btn-warning" href="{{ path('admin_schedule_event') }}">
+        <a class="btn btn-warning" href="{{ path('schedule_event') }}">
            <span class="icon-list  glyphicon-white"></span>
         </a>
     </li>
     <li>
-        <a class="btn btn-warning" href="{{ path('admin_schedule_event_edit', { 'id': entity.id }) }}">
+        <a class="btn btn-warning" href="{{ path('schedule_event_edit', { 'id': entity.id }) }}">
            <span class="icon-edit  glyphicon-white"></span>
         </a>
     </li>
     <li>
-        <form action="{{ path('admin_schedule_event_delete', { 'id': entity.id }) }}" method="post">
+        <form action="{{ path('schedule_event_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
             <button type="submit" class="btn btn-danger"><span class="icon-remove  glyphicon-white"></span></button>
         </form>

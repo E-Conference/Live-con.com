@@ -25,14 +25,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * Category controller.
  *
- * @Route("/schedule/category")
+ * @Route("/category")
  */
 class CategoryController extends Controller
 {
     /**
      * Lists all Category entities.
      *
-     * @Route("/", name="admin_schedule_category")
+     * @Route("/", name="schedule_category")
      * @Template()
      */
     public function indexAction(Request $request)
@@ -58,7 +58,7 @@ class CategoryController extends Controller
     /**
      * Finds and displays a Category entity.
      *
-     * @Route("/{id}/show", name="admin_schedule_category_show")
+     * @Route("/{id}/show", name="schedule_category_show")
      * @Template()
      */
     public function showAction($id)
@@ -81,7 +81,7 @@ class CategoryController extends Controller
     /**
      * Displays a form to create a new Category entity.
      *
-     * @Route("/new", name="admin_schedule_category_new")
+     * @Route("/new", name="schedule_category_new")
      * @Template()
      */
     public function newAction()
@@ -98,7 +98,7 @@ class CategoryController extends Controller
     /**
      * Creates a new Category entity.
      *
-     * @Route("/create", name="admin_schedule_category_create")
+     * @Route("/create", name="schedule_category_create")
      * @Method("POST")
      * @Template("IDCISimpleScheduleBundle:Category:new.html.twig")
      */
@@ -121,7 +121,7 @@ class CategoryController extends Controller
                 ))
             );
 
-            return $this->redirect($this->generateUrl('admin_schedule_category_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('schedule_category_show', array('id' => $entity->getId())));
         }
 
         return array(
@@ -133,7 +133,7 @@ class CategoryController extends Controller
     /**
      * Displays a form to edit an existing Category entity.
      *
-     * @Route("/{id}/edit", name="admin_schedule_category_edit")
+     * @Route("/{id}/edit", name="schedule_category_edit")
      * @Template()
      */
     public function editAction($id)
@@ -157,7 +157,7 @@ class CategoryController extends Controller
     /**
      * Edits an existing Category entity.
      *
-     * @Route("/{id}/update", name="admin_schedule_category_update")
+     * @Route("/{id}/update", name="schedule_category_update")
      * @Method("POST")
      * @Template("IDCISimpleScheduleBundle:Category:edit.html.twig")
      */
@@ -186,7 +186,7 @@ class CategoryController extends Controller
                 ))
             );
 
-            return $this->redirect($this->generateUrl('admin_schedule_category_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('schedule_category_edit', array('id' => $id)));
         }
 
         return array(
@@ -199,7 +199,7 @@ class CategoryController extends Controller
     /**
      * Deletes a Category entity.
      *
-     * @Route("/{id}/delete", name="admin_schedule_category_delete")
+     * @Route("/{id}/delete", name="schedule_category_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request, $id)
@@ -227,7 +227,7 @@ class CategoryController extends Controller
             );
         }
 
-        return $this->redirect($this->generateUrl('admin_schedule_category'));
+        return $this->redirect($this->generateUrl('schedule_category'));
     }
     
     /**

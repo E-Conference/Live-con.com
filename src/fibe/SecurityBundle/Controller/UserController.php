@@ -21,7 +21,7 @@ class UserController extends Controller
     /**
      * Lists all User entities.
      *
-     * @Route("/list", name="wwwconf_user_list")
+     * @Route("/list", name="schedule_user_list")
      * @Method("GET")
      * @Template()
      */
@@ -57,7 +57,7 @@ class UserController extends Controller
     /**
      * update User entity.
      *
-     * @Route("/toggle/{id}", name="wwwconf_user_toggle_role") 
+     * @Route("/toggle/{id}", name="schedule_user_toggle_role") 
      * @Template()
      */
     public function updateAction(Request $request, $id)
@@ -89,7 +89,7 @@ class UserController extends Controller
               'The user has been successfully promoted to admin.'
           );
         }
-        return $this->redirect($this->generateUrl('wwwconf_user_list')); 
+        return $this->redirect($this->generateUrl('schedule_user_list')); 
     }
 
 
@@ -127,7 +127,7 @@ class UserController extends Controller
           ); 
         }
 
-        return $this->redirect($this->generateUrl('wwwconf_user_list'));
+        return $this->redirect($this->generateUrl('schedule_user_list'));
     }
 
     /**

@@ -1,9 +1,8 @@
-{% extends "fibeWWWConfBundle::base.html.twig" %}
+{% extends '::base.html.twig' %}
 
 {% block title %}Index{% endblock title %}
 {% block body %}
 
-{{ parent() }}
 <header class="subhead container" id="overview">
     <div class="page-header">
         <h1 id="confName" title="double click to change name">{{ wwwConf.confName }}
@@ -153,7 +152,7 @@
                         $.ajax({ //DBimport
                             type: "POST",
                             cache: false,  
-                            url: "{{ path('wwwconf_admin_DBimport') }}",
+                            url: "{{ path('schedule_admin_DBimport') }}",
                             data: "dataArray=" + JSON.stringify(ConfRdfFile, null),
                             success:function(a,b,c)
                             {
@@ -203,7 +202,7 @@
                 if(isConfUriInputOK && isConfOwlUriInputOK && isconfNameInputOK ) { 
                     $.ajax({ //form post
                             type: "POST",
-                            url:"{{ path('wwwconf_conference_edit') }}",
+                            url:"{{ path('schedule_conference_edit') }}",
                             async: false,
                             cache: false,
                             data: $('#SWCLinkForm').serialize(),

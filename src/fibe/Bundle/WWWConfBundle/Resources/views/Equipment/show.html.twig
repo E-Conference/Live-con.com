@@ -27,12 +27,12 @@
         </a>
     </li>
     <li>
-        <a class="btn btn-warning" href="{{ path('equipment_edit', { 'id': entity.id }) }}">  <a  class="btn btn-info" href="{{ path('equipment_new') }}">
+        <a class="btn btn-warning" href="{{ path('schedule_equipment_edit', { 'id': entity.id }) }}">  <a  class="btn btn-info" href="{{ path('schedule_equipment_new') }}">
                  <span class="icon-edit glyphicon-white"></span>       
         </a>
     </li>
     <li>
-        <form action="{{ path('equipment_delete', { 'id': entity.id }) }}" method="post">
+        <form action="{{ path('schedule_equipment_delete', { 'id': entity.id }) }}" method="post">
             <input type="hidden" name="_method" value="DELETE" />
             {{ form_widget(delete_form) }}
             <button type="submit" class="btn btn-danger"><span class="icon-remove glyphicon-white"></span></button>

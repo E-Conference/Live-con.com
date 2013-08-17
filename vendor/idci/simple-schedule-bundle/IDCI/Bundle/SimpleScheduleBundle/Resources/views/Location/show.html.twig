@@ -1,8 +1,8 @@
-{% extends "IDCISimpleScheduleBundle::adminbase.html.twig" %}
+{% extends '::base.html.twig' %}
 
 {% block body %}
 
-{{ parent() }}
+
 
 <div class="page-header">
   <h1>Location</h1>
@@ -35,12 +35,12 @@
 
 <ul class="record_actions">
     <li>
-        <a class="btn btn-success" href="{{ path('admin_schedule_location') }}">
+        <a class="btn btn-success" href="{{ path('schedule_location') }}">
            <span class="icon-list glyphicon-white"></span>
         </a>
     </li>
     <li>
-        <a class="btn btn-warning" href="{{ path('admin_schedule_location_edit', { 'id': entity.id }) }}">
+        <a class="btn btn-warning" href="{{ path('schedule_location_edit', { 'id': entity.id }) }}">
            <span class="icon-edit glyphicon-white"></span>
         </a>
     </li> 

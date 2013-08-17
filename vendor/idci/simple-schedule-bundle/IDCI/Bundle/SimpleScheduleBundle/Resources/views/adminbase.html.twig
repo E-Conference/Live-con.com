@@ -1,7 +1,7 @@
 {% extends "::base.html.twig" %}
 
 {% block stylesheets %}
-{{ parent() }}
+
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibewwwconf/css/bootstrap.min.css') }}" />  
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/idcisimpleschedule/css/style.css') }}" />
     <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
@@ -32,11 +32,11 @@
         </div>
     {% endfor %}
 
-    {{ parent() }}
+    
 
 {% endblock %}
 
 {% block javascripts %}
-{{ parent() }}
+
     <script type="text/javascript" src="{{ asset('bundles/fibewwwconf/js/bootstrap.min.js') }}"></script>
 {% endblock %}

@@ -14,14 +14,14 @@ use fibe\Bundle\WWWConfBundle\Form\EquipmentType;
 
 /**
  * Equipment controller.
- * @Route("/schedule/equipment")
+ * @Route("/equipment")
  */
 class EquipmentController extends Controller
 {
     /**
      * Lists all Equipment entities.
     *
-    * @Route("/", name="equipment_index")
+    * @Route("/", name="schedule_equipment_index")
     * @Template()
     */
     public function indexAction()
@@ -37,7 +37,7 @@ class EquipmentController extends Controller
 
     /**
      * Creates a new Equipment entity.
-     *  @Route("/create", name="equipment_create")
+     *  @Route("/create", name="schedule_equipment_create")
 	* @Template()
      */
     public function createAction(Request $request)
@@ -51,7 +51,7 @@ class EquipmentController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('equipment_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('schedule_equipment_show', array('id' => $entity->getId())));
         }
 
         return $this->render('fibeWWWConfBundle:Equipment:new.html.twig', array(
@@ -62,7 +62,7 @@ class EquipmentController extends Controller
 
     /**
      * Displays a form to create a new Equipment entity.
-     * @Route("/new", name="equipment_new")
+     * @Route("/new", name="schedule_equipment_new")
 	 * @Template()
      */
     public function newAction()
@@ -78,7 +78,7 @@ class EquipmentController extends Controller
 
     /**
      * Finds and displays a Equipment entity.
-     * @Route("/{id}/show", name="equipment_show")
+     * @Route("/{id}/show", name="schedule_equipment_show")
 	 * @Template()
      */
     public function showAction($id)
@@ -100,7 +100,7 @@ class EquipmentController extends Controller
 
     /**
      * Displays a form to edit an existing Equipment entity.
-     * @Route("/{id}/edit", name="equipment_edit")
+     * @Route("/{id}/edit", name="schedule_equipment_edit")
 	 * @Template()
      */
     public function editAction($id)
@@ -125,7 +125,7 @@ class EquipmentController extends Controller
 
     /**
      * Edits an existing Equipment entity.
-     * @Route("/{id}/update", name="equipment_update")
+     * @Route("/{id}/update", name="schedule_equipment_update")
      * 
      */
     public function updateAction(Request $request, $id)
@@ -146,7 +146,7 @@ class EquipmentController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('equipment_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('schedule_equipment_edit', array('id' => $id)));
         }
 
         return $this->render('fibeWWWConfBundle:Equipment:edit.html.twig', array(
@@ -158,7 +158,7 @@ class EquipmentController extends Controller
 
     /**
      * Deletes a Equipment entity.
-     * @Route("/{id}/delete", name="equipment_delete")
+     * @Route("/{id}/delete", name="schedule_equipment_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request, $id)

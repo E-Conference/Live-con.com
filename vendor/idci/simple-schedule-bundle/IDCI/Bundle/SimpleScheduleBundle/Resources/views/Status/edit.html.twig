@@ -1,14 +1,14 @@
-{% extends "IDCISimpleScheduleBundle::adminbase.html.twig" %}
+{% extends '::base.html.twig' %}
 
 {% block body %}
 
-{{ parent() }}
+
 
 <div class="page-header">
   <h1>{% trans %}Edit{% endtrans %}</h1>
 </div>
 
-<form action="{{ path('admin_schedule_status_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+<form action="{{ path('schedule_status_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     {{ form_widget(edit_form) }}
     <p>
         <button type="submit" class="btn btn-primary">{% trans %}Edit{% endtrans %}</button>
@@ -17,12 +17,12 @@
 
 <ul class="record_actions">
     <li>
-        <a class="btn btn-list btn-warning" href="{{ path('admin_schedule_status') }}">
+        <a class="btn btn-list btn-warning" href="{{ path('schedule_status') }}">
              <span class="icon-list glyphicon-white"></span>
         </a>
     </li> 
     <li>
-        <form action="{{ path('admin_schedule_status_delete', { 'id': entity.id }) }}" method="post">
+        <form action="{{ path('schedule_status_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
             <button type="submit" class="btn btn-danger"> <span class="icon-remove glyphicon-white"></span></button>
         </form>

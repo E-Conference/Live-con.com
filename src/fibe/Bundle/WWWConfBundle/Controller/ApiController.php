@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ApiController extends Controller
 {
 /**
- * @Route("", name="wwwconf_api_event") 
+ * @Route("", name="schedule_api_event") 
  */
     public function apiAction(Request $request)
     { 

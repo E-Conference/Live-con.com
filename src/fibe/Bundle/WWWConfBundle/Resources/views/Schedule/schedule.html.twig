@@ -1,4 +1,4 @@
-{% extends "fibeWWWConfBundle::base.html.twig" %}
+{% extends '::base.html.twig' %}
 
 
 {% block title %}Schedule{% endblock title %}
@@ -6,8 +6,7 @@
 
 
 
-{% block body %}
-{{ parent() }} 
+{% block body %} 
   
       
 
@@ -152,14 +151,14 @@
                 {% endif %}
             {% endfor %}  
             
-            var DATA_FEED_URL = "{{ path('wwwconf_getevents') }}";
+            var DATA_FEED_URL = "{{ path('schedule_view_event_get') }}";
             //alert(DATA_FEED_URL);    
             var op = { 
                 showday       : new Date({% if currentConf %}firstDay.format(){% else %}{% endif %}), 
                 url           : DATA_FEED_URL + "?method=list",  
                 quickAddUrl   : DATA_FEED_URL + "?method=add", 
                 quickUpdateUrl: DATA_FEED_URL + "?method=update",
-                updateUrl     : "{{ path('wwwconf_editEvent') }}",
+                updateUrl     : "{{ path('schedule_view_event_edit') }}",
                 quickDeleteUrl: DATA_FEED_URL + "?method=remove", 
             };
 
@@ -309,7 +308,7 @@
             $event.data('eventObject', current_event);
             
             // make the event draggable using jQuery UI
-            $event.draggable({
+            $event.droppable({
                 start: function(event, ui) { 
                     $(this).css("z-index", 10);  
             }, 

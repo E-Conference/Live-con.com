@@ -1,9 +1,8 @@
-{% extends "fibeWWWConfBundle::base.html.twig" %}
+{% extends '::base.html.twig' %}
 
 {% block title %}Index{% endblock title %}
 {% block body %}
-
-{{ parent() }} 
+ 
 
 {% trans_default_domain 'FOSUserBundle' %}
 <div class="container">
@@ -32,7 +31,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="{{ path('wwwconf_user_toggle_role', { 'id': entity.id }) }}"> 
+                                <a href="{{ path('schedule_user_toggle_role', { 'id': entity.id }) }}"> 
                                         {% if  'ROLE_ADMIN' in entity.roles %}
                                               demote to manager 
                                         {% else %}
@@ -66,7 +65,7 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="{{ path('wwwconf_user_toggle_role', { 'id': entity.id }) }}"> 
+                                <a href="{{ path('schedule_user_toggle_role', { 'id': entity.id }) }}"> 
                                         {% if  'ROLE_ADMIN' in entity.roles %}
                                               demote to manager 
                                         {% else %}

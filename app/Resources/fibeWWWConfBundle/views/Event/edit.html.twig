@@ -1,4 +1,4 @@
-{% extends "IDCISimpleScheduleBundle::adminbase.html.twig" %}
+{% extends '::base.html.twig' %}
 
 {% block body %}
 
@@ -8,7 +8,7 @@
   <h1>{% trans %}Edit{% endtrans %}</h1>
 </div>
 
-<form action="{{ path('admin_schedule_event_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(form) }}>
+<form action="{{ path('schedule_event_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(form) }}>
     {% include "IDCISimpleScheduleBundle:Event:form.html.twig" %}
     <button type="submit" class="btn btn-primary">{% trans %}Edit{% endtrans %}</button>
 </form>
@@ -18,12 +18,12 @@
 
 <ul class="record_actions">
     <li>
-        <a class="btn" href="{{ path('admin_schedule_event') }}">
+        <a class="btn" href="{{ path('schedule_event') }}">
             {% trans %}Back to the list{% endtrans %}
         </a>
     </li>
     <li>
-        <form action="{{ path('admin_schedule_event_delete', { 'id': entity.id }) }}" method="post">
+        <form action="{{ path('schedule_event_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
             <button type="submit" class="btn btn-danger">{% trans %}Delete{% endtrans %}</button>
         </form>
@@ -65,7 +65,7 @@
 </script>    
 
  
-<script type="text/javascript" src="http://rdfquery.googlecode.com/files/jquery.rdfquery.core.min-1.0.js"></script>
+<!-- <script type="text/javascript" src="http://rdfquery.googlecode.com/files/jquery.rdfquery.core.min-1.0.js"></script> -->
 <script type="text/javascript" src="http://www.jibbering.com/rdf-parser/parser.js"></script>
 <script src="{{ asset('bundles/fibewwwconf/js/autocompletion.js') }}" type="text/javascript" ></script>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>

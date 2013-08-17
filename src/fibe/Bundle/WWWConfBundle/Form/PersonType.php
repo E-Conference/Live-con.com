@@ -12,10 +12,6 @@ class PersonType extends AbstractType
     {
         $builder
             ->add('email')
-            ->add('flag_schedule')
-            ->add('flag_schedule_admin')
-            ->add('flag_data')
-            ->add('flag_data_admin')
             ->add('created_at')
             ->add('agent')
             ->add('name')

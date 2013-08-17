@@ -21,7 +21,7 @@ class PersonController extends Controller
     /**
      * Lists all Person entities.
      *
-     * @Route("/", name="wwwconf_person_index")
+     * @Route("/", name="person_index")
      * @Template()
      */
      

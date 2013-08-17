@@ -25,7 +25,7 @@ class User extends BaseUser
      * wwwConf
      *
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="confManagers", cascade={"persist"})
-     * @ORM\JoinColumn(name="wwwConf_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="schedule_id", referencedColumnName="id")
      */
     protected $wwwConf;
     

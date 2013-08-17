@@ -1,8 +1,8 @@
-{% extends "IDCISimpleScheduleBundle::adminbase.html.twig" %}
+{% extends '::base.html.twig' %}
 
 {% block body %}
 
-{{ parent() }}
+
 
 <div class="page-header">
     <h1>{% trans %}Categories{% endtrans %}</h1>
@@ -13,7 +13,7 @@
 </p>
 
 
-        <a class="btn btn-info" href="{{ path('admin_schedule_category_new') }}">
+        <a class="btn btn-info" href="{{ path('schedule_category_new') }}">
           <span class="icon-plus  glyphicon-white"></span>
         </a>
 
@@ -31,7 +31,7 @@
     <tbody>
     {% for entity in pager.currentPageResults %}
         <tr>
-            <td><a href="{{ path('admin_schedule_category_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td><a href="{{ path('schedule_category_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
             <td>
                 <div style="width:28px;height:28px;border:1px solid #222;background:{{ entity.color }}" title="{{ entity.color }}">
                 </div>
@@ -39,10 +39,10 @@
             <td>{{ entity.name }}</td>
             <td>{{ entity.slug }}</td>
             <td>
-                <a class="btn btn-block btn-default" href="{{ path('admin_schedule_category_show', { 'id': entity.id }) }}" title="Show category"><span class="icon-eye-open  glyphicon-white"></span></a>
+                <a class="btn btn-block btn-default" href="{{ path('schedule_category_show', { 'id': entity.id }) }}" title="Show category"><span class="icon-eye-open  glyphicon-white"></span></a>
             </td>
             <td>
-                <a class="btn btn-block btn-warning" href="{{ path('admin_schedule_category_edit', { 'id': entity.id }) }}"><span class="icon-edit  glyphicon-white"></span></a>
+                <a class="btn btn-block btn-warning" href="{{ path('schedule_category_edit', { 'id': entity.id }) }}"><span class="icon-edit  glyphicon-white"></span></a>
             </td>
         </tr>
     {% endfor %}

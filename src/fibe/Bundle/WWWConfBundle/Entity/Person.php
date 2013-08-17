@@ -34,40 +34,6 @@ class Person
      */
     protected $email;
 
-    /**
-     * flag_schedule 
-     *	Donne l'autorisation a la personne d'accede a l'application schedule
-     *
-     * @ORM\Column(type="boolean", name="flag_schedule")
-     */
-    protected $flag_schedule;
-
-     /**
-     * flag_schedule_admin 
-     *
-     *Donne l'autorisation a la personne d'accede a l'application schedule en tant qu'admin
-     * @ORM\Column(type="boolean", name="flag_schedule_admin")
-     */
-    protected $flag_schedule_admin;
-
-
-     /**
-     * flag_data
-     *	Donne l'autorisation a la personne d'accede a l'application data paper 
-     *
-     * @ORM\Column(type="boolean", name="flag_data")
-     */
-    protected $flag_data;
-
-
-     /**
-     * flag_data_admin 
-     *
-     * Donne l'autorisation a la personne d'accede a l'application data paper en tant qu'admin(autorisation de creation de compte)
-     * @ORM\Column(type="boolean", name="flag_data_admin")
-     */
-    protected $flag_data_admin;
-    
 	
     /**
      * created
@@ -245,12 +211,18 @@ class Person
 	*@ORM\Column(type="string", length=32, name="image")
      */
      protected $image;
-	 
-	public function getId(){
-	 
-		return $this->id;
-	 
-	 }
+     
+    public function getId(){
+     
+        return $this->id;
+     
+     }
+     
+    public function getEmail(){
+     
+        return $this->email;
+     
+     }
 	 
 	public function getCreatedAt(){
 	 
@@ -345,7 +317,7 @@ class Person
 	 
 	 }
 	 
-	public function getGroup(){
+	public function get_group(){
 	 
 		return $this->_group;
 	 
@@ -368,6 +340,15 @@ class Person
 		return $this->image;
 	 
 	 }
+
+
+     public function setEmail($email){
+     
+        $this->email = $email;
+        return $this;
+     
+     }
+     
 	 
 	 /**
 	 * @param \DateTime $createdAt
@@ -482,7 +463,7 @@ class Person
 	 
 	 }
 	 
-	public function setGroup($group){
+	public function set_group($group){
 	 
 		$this->_group = $group;
 		return $this;

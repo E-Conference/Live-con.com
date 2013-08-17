@@ -23,14 +23,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * Event controller.
  *
- * @Route("/schedule/xproperty")
+ * @Route("/xproperty")
  */
 class XPropertyController extends Controller
 {
     /**
      * Add a XProperty
      *
-     * @Route("/{calendar_entity_id}/add", name="admin_schedule_xproperty_add")
+     * @Route("/{calendar_entity_id}/add", name="schedule_xproperty_add")
      */
     public function addXPropertyAction(Request $request, $calendar_entity_id)
     {
@@ -53,7 +53,7 @@ class XPropertyController extends Controller
         }
 
         return $this->redirect($this->generateUrl(
-            'admin_schedule_event_edit',
+            'schedule_event_edit',
             array('id' => $calendarEntity->getId())
         ));
     }

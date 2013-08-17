@@ -1,11 +1,12 @@
 sudo chmod -R 777 app/cache
-sudo rm -R app/cache/* app/logs/
+sudo rm -R app/cache/* app/logs/*
 mkdir app/cache/dev
+mkdir app/logs
 sudo php app/console cache:clear
 sudo chmod -R 777 app/cache
 sudo chmod -R 777 app/logs 
 app/console doctrine:cache:clear-metadata 
 app/console doctrine:cache:clear-query 
 app/console doctrine:cache:clear-result 
-sudo chmod -R 777 app/cache/*
-sudo chmod -R 777 app/logs/*
+sudo chmod -R 777 app/cache
+sudo chmod -R 777 app/logs

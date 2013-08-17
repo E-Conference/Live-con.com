@@ -26,14 +26,14 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 /**
  * Location controller.
  *
- * @Route("/schedule/location")
+ * @Route("/location")
  */
 class LocationController extends Controller
 {
     /**
      * Lists all Location entities.
      *
-     * @Route("/", name="admin_schedule_location")
+     * @Route("/", name="schedule_location")
      * @Template()
      */
     public function indexAction(Request $request)
@@ -63,7 +63,7 @@ class LocationController extends Controller
     /**
      * Finds and displays a Location entity.
      *
-     * @Route("/{id}/show", name="admin_schedule_location_show")
+     * @Route("/{id}/show", name="schedule_location_show")
      * @Template()
      */
     public function showAction($id)
@@ -85,7 +85,7 @@ class LocationController extends Controller
     /**
      * Displays a form to create a new Location entity.
      *
-     * @Route("/new", name="admin_schedule_location_new")
+     * @Route("/new", name="schedule_location_new")
      * @Template()
      */
     public function newAction()
@@ -102,7 +102,7 @@ class LocationController extends Controller
     /**
      * Creates a new Location entity.
      *
-     * @Route("/create", name="admin_schedule_location_create")
+     * @Route("/create", name="schedule_location_create")
      * @Method("POST")
      * @Template("IDCISimpleScheduleBundle:Location:new.html.twig")
      */
@@ -129,7 +129,7 @@ class LocationController extends Controller
                 ))
             );
 
-            return $this->redirect($this->generateUrl('admin_schedule_location_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('schedule_location_show', array('id' => $entity->getId())));
         }
 
         return array(
@@ -141,7 +141,7 @@ class LocationController extends Controller
     /**
      * Displays a form to edit an existing Location entity.
      *
-     * @Route("/{id}/edit", name="admin_schedule_location_edit")
+     * @Route("/{id}/edit", name="schedule_location_edit")
      * @Template()
      */
     public function editAction($id)
@@ -170,7 +170,7 @@ class LocationController extends Controller
     /**
      * Edits an existing Location entity.
      *
-     * @Route("/{id}/update", name="admin_schedule_location_update")
+     * @Route("/{id}/update", name="schedule_location_update")
      * @Method("POST")
      * @Template("IDCISimpleScheduleBundle:Location:edit.html.twig")
      */
@@ -202,7 +202,7 @@ class LocationController extends Controller
             ))
         );
 
-        return $this->redirect($this->generateUrl('admin_schedule_location_edit', array('id' => $id)));
+        return $this->redirect($this->generateUrl('schedule_location_edit', array('id' => $id)));
         
         }
 
@@ -215,7 +215,7 @@ class LocationController extends Controller
     /**
      * Deletes a Location entity.
      *
-     * @Route("/{id}/delete", name="admin_schedule_location_delete")
+     * @Route("/{id}/delete", name="schedule_location_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request, $id)
@@ -243,7 +243,7 @@ class LocationController extends Controller
             );
         }
 
-        return $this->redirect($this->generateUrl('admin_schedule_location'));
+        return $this->redirect($this->generateUrl('schedule_location'));
     }
     
     /**

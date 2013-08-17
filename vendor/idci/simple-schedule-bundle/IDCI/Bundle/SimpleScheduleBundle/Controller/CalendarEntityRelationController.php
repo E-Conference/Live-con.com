@@ -22,14 +22,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * Event controller.
  *
- * @Route("/schedule/relation")
+ * @Route("/relation")
  */
 class CalendarEntityRelationController extends Controller
 {
     /**
      * Add a CalendarEntityRelation
      *
-     * @Route("/{calendar_entity_id}/add", name="admin_schedule_relation_add")
+     * @Route("/{calendar_entity_id}/add", name="schedule_relation_add")
      */
     public function addCalendarEntityRelationAction(Request $request, $calendar_entity_id)
     {
@@ -76,7 +76,7 @@ class CalendarEntityRelationController extends Controller
         }
 
         return $this->redirect($this->generateUrl(
-            'admin_schedule_event_edit',
+            'schedule_event_edit',
             array('id' => $calendarEntity->getId())
         ));
     }

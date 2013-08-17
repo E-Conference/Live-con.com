@@ -278,10 +278,10 @@ class CalendarEntityRepository extends EntityRepository
             ;
         }
         
-        if(isset($params['wwwconf_id'])) {
+        if(isset($params['schedule_id'])) {
             $qb
-                ->andWhere('cer.wwwConf = :wwwconf_id')
-                ->setParameter('wwwconf_id', $params['wwwconf_id'])
+                ->andWhere('cer.wwwConf = :schedule_id')
+                ->setParameter('schedule_id', $params['schedule_id'])
             ;
         }
 

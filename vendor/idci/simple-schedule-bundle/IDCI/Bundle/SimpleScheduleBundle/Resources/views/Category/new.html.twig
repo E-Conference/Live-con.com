@@ -1,14 +1,14 @@
-{% extends "IDCISimpleScheduleBundle::adminbase.html.twig" %}
+{% extends '::base.html.twig' %}
 
 {% block body %}
 
-{{ parent() }}
+
 
 <div class="page-header">
   <h1>{% trans %}Category creation{% endtrans %}</h1>
 </div>
 
-<form action="{{ path('admin_schedule_category_create') }}" method="post" {{ form_enctype(form) }}>
+<form action="{{ path('schedule_category_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
     <p>
         <button type="submit" class="btn btn-primary"> <span class="icon-ok	glyphicon-white"></span></button>
@@ -17,7 +17,7 @@
 
 <ul class="record_actions">
     <li>
-        <a class="btn" href="{{ path('admin_schedule_category') }}">
+        <a class="btn" href="{{ path('schedule_category') }}">
             <span class="icon-list glyphicon-white"></span>
         </a>
     </li>

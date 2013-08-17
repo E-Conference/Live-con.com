@@ -22,7 +22,7 @@ class DBImportController extends Controller
 {
 
 /**
- * @Route("/", name="wwwconf_admin_DBimport") 
+ * @Route("/", name="schedule_admin_DBimport") 
  */
   
       

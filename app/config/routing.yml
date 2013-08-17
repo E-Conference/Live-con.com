@@ -1,4 +1,4 @@
-fibe_www_conf:
+œfibe_www_conf:
     resource: "@fibeWWWConfBundle/Controller/"
     prefix:   /schedule
 

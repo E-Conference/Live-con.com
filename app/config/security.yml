@@ -40,7 +40,7 @@ security:
             form_login:
                 login_path: login
                 check_path: login_check
-                default_target_path: wwwconf_link_index
+                default_target_path: schedule_index
             logout:
                 path:   logout
                 target: /login

@@ -1,9 +1,8 @@
-{% extends "fibeWWWConfBundle::base.html.twig" %}
+{% extends '::base.html.twig' %}
 
 {% block title %}Index{% endblock title %}
 {% block body %}
-
-{{ parent() }} 
+ 
 
 <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
     {% if app.session is not empty %}

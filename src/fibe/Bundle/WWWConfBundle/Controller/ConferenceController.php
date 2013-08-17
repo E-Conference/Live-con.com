@@ -24,7 +24,7 @@ use IDCI\Bundle\SimpleScheduleBundle\Entity\Event;
 class ConferenceController extends Controller
 {
 /**
- * @Route("/edit", name="wwwconf_conference_edit")
+ * @Route("/edit", name="schedule_conference_edit")
  * @Template()
  */
     public function editAction(Request $request)
