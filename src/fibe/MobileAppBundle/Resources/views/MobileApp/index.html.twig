@@ -1,10 +1,10 @@
-{% extends '::base.html.twig' %}
+{% extends 'fibeMobileAppBundle::base.html.twig' %}
 
 {% block title %}Index{% endblock title %}
 {% block body %}
 
 
-
+{% include "fibeMobileAppBundle::navbar.html.twig" %}
 <div class="container">
     <div class="row">
       <div class="jumbotron">
@@ -15,6 +15,14 @@
                      <div class="btn-group"> 
                         <a href="{{ path('schedule_view') }}" role="button" class="btn btn-success btn-large">
                           <span class="icon-calendar"></span>See your instance
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                     <div class="btn-group"> 
+                        <a href="{{ path('schedule_view') }}" role="button" class="btn btn-success btn-large">
+                          <span class="icon-calendar"></span>Publish your instance
                         </a>
                     </div>
                 </div>

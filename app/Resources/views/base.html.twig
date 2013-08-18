@@ -3,21 +3,24 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}{% endblock %} - Seamposium</title>
-        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibewwwconf/css/bootstrap.min.css') }}" /> 
+        <link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/css/bootstrap.min.css') }}" /> 
+         <link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}" /> 
         {% block stylesheets %}
          
         {% endblock %}
-        <script type="text/javascript" src="{{ asset('jquery.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
         
-        <script type="text/javascript" src="{{ asset('bundles/fibewwwconf/js/bootstrap.min.js') }}"></script>   
+        <script type="text/javascript" src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>   
          
         {% block javascripts %}
         {% endblock%}
     </head>
     <body>
-        
+        <div class="symfony-content">
             {% block body %} 
             {% endblock %}
+        </div>
+        {% include "::footer.html.twig" %}
     </body> 
         
 </html>
