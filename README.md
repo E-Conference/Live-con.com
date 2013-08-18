@@ -44,6 +44,8 @@ parameters:
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
     
+    routing_file:      routing_dev.yml
+    
     bootstrap_source:  http://twitter.github.com/bootstrap/assets/bootstrap.zip
     max_per_page:      20
 </code>	
