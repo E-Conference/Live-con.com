@@ -21,7 +21,6 @@ In your git xterm enter those commands :
 
 	cd <path to the www folder of your Apache Server>
 	git clone https://github.com/fio-ben-TER2013/WWWConference.git
-
 	
 	
 Next, create a parameters.yml file with this text :
@@ -70,9 +69,15 @@ Create your user using the Git xterm :
     	php app/console fos:user:promote admin ROLE_ADMIN
     
 ----------------
+Import dataconf
+
+    	git clone https://github.com/E-Conference/DataConf.git src/fibe/MobileAppBundle/Resources/public/DataConf
+    
+----------------
 Finally populate database with basic conference informations :
 
     	php app/console wwwconf:database:init
+	
     
 ----------------		
 In one copy-paste :
