@@ -1,3 +1,8 @@
+fibe_home_page:
+    resource: "@fibeHomePageBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 fibe_user_data:
     resource: "@fibeUserDataBundle/Controller/"
     type:     annotation

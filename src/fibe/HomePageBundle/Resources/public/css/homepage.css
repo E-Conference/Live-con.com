@@ -1,0 +1,63 @@
+
+
+.symfony-content{
+
+	background: #47a447; /* Old browsers */
+	background: -moz-linear-gradient(top, #47a447 2%, #39b3d7 45%, #ed9c28 85%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(2%,#47a447), color-stop(45%,#39b3d7), color-stop(85%,#ed9c28)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #47a447 2%,#39b3d7 45%,#ed9c28 85%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #47a447 2%,#39b3d7 45%,#ed9c28 85%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #47a447 2%,#39b3d7 45%,#ed9c28 85%); /* IE10+ */
+	background: linear-gradient(to bottom, #47a447 2%,#39b3d7 45%,#ed9c28 85%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#47a447', endColorstr='#ed9c28',GradientType=0 ); /* IE6-9 */
+}
+
+
+
+.row{
+	border: solid 2px #333333;
+	background-color: #eeeeee;
+	-webkit-border-radius: 18px;
+	-moz-border-radius: 18px;
+	border-radius: 18px;
+}
+
+
+.parallelogramRight{
+     width:200px; 
+     min-height:300px; 
+     border:1px solid #000; 
+     margin-left: -160px;
+	 margin-right: 120px;
+     background:#ed9c28;
+     transform: skew(-20deg); 
+     margin-bottom: 20px;
+     -webkit-transform: skew(0deg,7deg);
+-webkit-box-shadow: -3px 4px 6px rgba(50, 50, 50, 0.66);
+-moz-box-shadow:    -3px 4px 6px rgba(50, 50, 50, 0.66);
+box-shadow:         -3px 4px 6px rgba(50, 50, 50, 0.66);
+}
+
+.parallelogramLeft{
+     width:200px; 
+     min-height:300px; 
+     border:1px solid #000; 
+     background:#ed9c28;
+     transform: skew(-20deg); 
+ 	margin-bottom: 20px;
+	 margin-left: 50px;
+     -webkit-transform: skew(0deg,-7deg);
+     -webkit-box-shadow: 8px 7px 6px rgba(50, 50, 50, 0.66);
+-moz-box-shadow:    8px 7px 6px rgba(50, 50, 50, 0.66);
+box-shadow:         8px 7px 6px rgba(50, 50, 50, 0.66);
+}
+
+#carousel{
+	height: 200px;
+	overflow:hidden;
+}
+
+.btn-menu{
+	width: 180px;
+}
+
