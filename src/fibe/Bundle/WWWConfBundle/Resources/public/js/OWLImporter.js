@@ -447,7 +447,7 @@
             }
             
             // GET THE INDEX OF AN EVENT GIVEN ITS URI
-            function getEventIdFromURI(uri,show){ 
+            function getEventIdFromURI(uri,show){
             
                 for (var i=0;i<xproperties.length;i++){
                     //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
@@ -460,12 +460,12 @@
             }
             
             // GET THE INDEX OF AN EVENT GIVEN ITS CHILD INDEX
-            function getParentIndex(eventIndex){ 
-                for(var i=0;i<relations.length;i++){  
-                     if(relations[i]['setRelatedTo'] == eventIndex  && relations[i]['setRelationType'].indexOf("PARENT")!=-1 ){ 
+            function getParentIndex(eventIndex){
+                for(var i=0;i<relations.length;i++){
+                     if(relations[i]['setRelatedTo'] == eventIndex  && relations[i]['setRelationType'].indexOf("PARENT")!=-1 ){
                         return relations[i]['setCalendarEntity'];
                      }
-                } 
+                }
                 console.log("event "+ eventIndex +" has no parent");
                 console.log(events[eventIndex]);
                 return undefined;
@@ -565,7 +565,7 @@
                   return {start:start,end:end};
                    
                 
-                } 
+                }
                 
                 return getChildrenDate(childIndexArr);
             }

@@ -58,6 +58,16 @@
             
             <div class="form-group">
                 <label class="control-label" >
+                    {{ form_label(formEvent.parent) }}
+                </label> 
+                <div class="controls">
+                    {{ form_widget(formEvent.parent) }}
+                    {{ form_errors(formEvent.parent) }}
+                </div>
+            </div>  
+            
+            <div class="form-group">
+                <label class="control-label" >
                     {{ form_label(formEvent.status) }}
                 </label> 
                 <div class="controls">

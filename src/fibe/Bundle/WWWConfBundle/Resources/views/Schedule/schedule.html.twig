@@ -32,6 +32,32 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
  
+<div id="modal-new-event"  class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <form>
+        <div class="modal-body">
+          <div class="input-group input-group-lg"> 
+            <input name="name" id="name" type="text" class="form-control input-lg" value="New event" placeholder="New event">
+          </div>
+          <div class="input-group input-group-lg">
+            <span class="input-group-addon">Parent</span>
+            <select name="parent_id" id="parent_id" class="form-control input-lg" placeholder="Username"></select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a  class="btn btn-default" data-dismiss="modal">Close</a>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+ 
 
 
 {% endblock %}
@@ -105,9 +131,9 @@
         font-size    : .85em;
         cursor       : pointer;
     }
-    .modal-dialog { 
+    #modal .modal-dialog { 
         width: 90%; 
-    } 
+    }  
   .fc-view { /* prevents dragging outside of widget */
       overflow: visible;
   }
@@ -131,7 +157,9 @@
  
             //event edit popup
             var $modal = $('#modal').hide();
+            var $modalNewEvent = $('#modal-new-event').hide();
             var $modalBody = $modal.find(".modal-body");
+            var $modalNewEventBody = $modalNewEvent.find(".modal-body");
             var $calendar = $('#calendar');
             var $sidebar = $('#external-events');
 
@@ -182,6 +210,7 @@
                     dataType: 'json',  
                     success: function(doc) {  
                         if(callback)callback(doc.events);
+
                         setInstantEvents(doc.instant_events);
                     }
                 });
@@ -204,26 +233,39 @@
             selectable: true, 
             selectHelper: true,
             select: function(start, end, allDay) {
-                var title = prompt('Event Title:');
-                if (title) {
-                    var e = {
-                        title: title,
-                        start: start,
-                        end: end,
-                        allDay: allDay
-                    };
-                    $.post(
-                            op.quickAddUrl,
-                            formatDate(e),
-                            function(response) {  
-                                bootstrapAlert("success","event has been well added","",'<i class="icon-info"></i> icon-info');
-                                e.id=response.id;
-                                $calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
-                            },
-                            'json'
-                    );
-                    bootstrapAlert("info","add request sent","Info","<i class='icon-spinner icon-spin'></i>");
-                }
+                $modalNewEvent.modal("show");
+                var selectHtml='';
+                $.each($calendar.fullCalendar('clientEvents'),function(){
+                  selectHtml += '<option value="'+this.id+'">'+this.title+'</option> ' 
+                });
+                $modalNewEvent.find("select").html(selectHtml);
+                $modalNewEvent.find(".modal-title").html("New "+(allDay ? "<b>all day</b>" : "")+" event from <br/>"+start+" to <br/>"+end);
+                $modalNewEvent.find("form").submit(function(e){ 
+                  var title = $(this).find("#name").val();
+                  var parent_id = $(this).find("#parent_id").val(); 
+                  if (title && parent) {
+                      var e = {
+                          title: title,
+                          parent_id: parent_id,
+                          start: start,
+                          end: end,
+                          allDay: allDay
+                      };
+                      $.post(
+                              op.quickAddUrl,
+                              formatDate(e),
+                              function(response) {  
+                                  bootstrapAlert("success","event has been well added","",'<i class="icon-info"></i> icon-info');
+                                  e.id=response.id;
+                                  $calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
+                              },
+                              'json'
+                      );
+                      bootstrapAlert("info","add request sent","Info","<i class='icon-spinner icon-spin'></i>");
+                  }
+                  $modalNewEvent.modal("hide");
+                  return false;
+                })
                 $calendar.fullCalendar('unselect');
             },
             eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
@@ -307,14 +349,11 @@
           $sidebar.droppable({
             over: function( event, ui ) {  
                 if($(ui.draggable).hasClass("fc-event-draggable")) {
-                var event = dragged[1];
+                    var event = dragged[1];
                     $(this).css("border-color","green"); 
-                    $sidebarTmp.show()
-                                .html(event['title']) 
-                                 .css({
-                                    "background-color": event.color,
-                                    "border-color": event.border_color || event.color,
-                                 });  
+                    $sidebarTmp = sidebarEventHtml(event)
+                    $sidebarTmp.show() ;
+ 
                 }
             },
             out: function( event, ui ) { 
@@ -346,15 +385,16 @@
             }
           }); 
 
-          function sidebarDraggable (event){
+          function sidebarEventHtml (event){
             var $event = $(eventHtml).appendTo($sidebar)
-                                 .html(event['title'])
-                                 .css({
-                                    "background-color": event.color,
-                                    "border-color": event.border_color || event.color,
-                                 });  
-
-            
+                                     .html(event.title);
+            return $event.css({
+                      "background-color": event.color,
+                      "border-color": event.border_color || event.color,
+                   });  
+          }
+          function sidebarDraggable (event){ 
+            $event = sidebarEventHtml (event);
             // make the event draggable using jQuery UI
             $event.draggable({
                       zIndex: 999,

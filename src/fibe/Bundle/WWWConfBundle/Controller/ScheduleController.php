@@ -173,7 +173,10 @@ $logger->info('Nous avons récupéré le logger');
                 else {
                   $event->setEndAt(new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()))); 
                 }
-                $event->setSummary($postData['title']);
+                $event->setSummary($postData['title']); 
+                $event->setParent(  $this->getDoctrine()
+                                         ->getRepository('fibeWWWConfBundle:ConfEvent')
+                                         ->find($postData['parent_id']));
                 $event->setWwwConf($conf);
                 
                 $em->persist($event);

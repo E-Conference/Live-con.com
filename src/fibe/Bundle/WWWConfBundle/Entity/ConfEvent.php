@@ -21,7 +21,7 @@ class ConfEvent extends Event
      * wwwConf
      *
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="confEvents", cascade={"persist"})
-     * @ORM\JoinColumn(name="schedule_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
      */
     private $wwwConf;
 	
