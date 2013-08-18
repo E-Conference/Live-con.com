@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class HomePageController extends Controller
 {
     /**
-     * @Route("/") name="homepage_index"
+     * @Route("/", name="homepage_index")
      * @Template()
      */
     public function indexAction()
