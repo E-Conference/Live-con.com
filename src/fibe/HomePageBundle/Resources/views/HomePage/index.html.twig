@@ -1,38 +1,42 @@
-{% extends '::base.html.twig' %}
+{% extends 'fibeHomePageBundle::base.html.twig' %}
 
-{% block title %}Index{% endblock title %}
+{% block title %}Dashboard - Seamposium{% endblock title %}
 {% block body %}
 
+{% include "fibeHomePageBundle::navbar.html.twig" %}
+<div class="container">
+    <div class="row">
+      <div class="jumbotron">
+            <h1>Welcome to your dashboard</h1>
+            <p>Boost our conference</p>
+            <div class="row-fluid">
+                <div class="col-lg-4">
+                     <div class="btn-group"> 
+                        <a href="{{ path('schedule_view') }}" role="button" class="btn btn-info btn-large">
+                          <span class="icon-calendar"></span>manage your schedule
+                        </a>
+                    </div>
+                </div>
 
-<div class="hero-unit">
-  <h1>Seamposium</h1>
-  <p>Welcome to the dashboard of Seamposium</p>
-  <div class="row-fluid">
+                <div class="col-lg-4">
+                     <div class="btn-group"> 
+                        <a href="{{ path('mobileApp_index') }}" role="button" class="btn btn-warning btn-large">
+                          <span class="icon-calendar"></span>Manage your mobile application
+                        </a>
+                    </div>
+                </div>
 
-      <div class="col-lg-4">
-           <div class="btn-group"> 
-              <a href="{{ path('schedule_view') }}" role="button" class="btn btn-success btn-large">
-                <span class="icon-calendar"></span> Manage schedule 
-              </a>
-          </div>
+                  <div class="col-lg-4">
+                     <div class="btn-group"> 
+                        <a href="{{ path('userData_index') }}" role="button" class="btn btn-success btn-large">
+                          <span class="icon-calendar"></span>Manage users data
+                        </a>
+                    </div>
+                </div>
+            </div>
       </div>
-        <div class="col-lg-4">
-           <div class="btn-group"> 
-              <a href="{{ path('userData_index') }}" role="button" class="btn btn-info btn-large">
-                <span class="icon-calendar"></span> Manage user data 
-              </a>
-          </div>
-      </div>
-        <div class="col-lg-4">
-           <div class="btn-group"> 
-              <a href="{{ path('mobileApp_index') }}" role="button" class="btn btn-warning btn-large">
-                <span class="icon-calendar"></span> Manage mobile app 
-              </a>
-          </div>
-      </div>
-  </div>
-</div>
-      
+    </div>
+</div>    
 
 {% endblock body %}
 
