@@ -34,7 +34,8 @@ class DBImportController extends Controller
         $eventEntities= array();
         $locationEntities= array();
         $categoryEntities= array();
-        $wwwConfId = 1;
+        $wwwConf =  $em->getRepository('fibeWWWConfBundle:WwwConf')->find(1);
+
         
         
         //////////////////////  locations  //////////////////////
@@ -68,7 +69,7 @@ class DBImportController extends Controller
                 call_user_func_array(array($entity, $setter), array($value)); 
             }
             $entity->setColor($colorArray[$i]);
-            $em->persist($entity); 
+            $em->persist($entity);
             array_push($categoryEntities,$entity); 
         }  
             
@@ -79,33 +80,48 @@ class DBImportController extends Controller
             $entity= new Event();
             $current = $entities[$i];
             foreach ($current as $setter => $value) {
+
                 if($setter=="setStartAt" || $setter=="setEndAt"){
                     $date= explode(' ', $value); 
                     $value=new \DateTime($date[0], new \DateTimeZone(date_default_timezone_get()));
-                    //echo $setter." : ".$value->format(DATE_ATOM)."\n"; 
                     
                 }
                 
                 if($setter=="setLocation"){
-                
-                    //echo "XProperty->->".$eventEntities[strval($value)]."->".$value.");\n";
+                 
                     $value=$locationEntities[$value]; 
                 } 
                 
                 if($setter=="addCategorie"){
-                
-                    //echo "XProperty->->".$eventEntities[strval($value)]."->".$value.");\n";
                     $value=$categoryEntities[$value];  
+                    continue;
+                    
                 }
                 
-                call_user_func_array(array($entity, $setter), array($value)); 
+                if($setter=="setParent"){  
+                    // $current["addChild"] = $entities[$value];
+                } else{
+                    call_user_func_array(array($entity, $setter), array($value)); 
+                }
             }
-            $entity->setWwwConf(  $this->getDoctrine()
-                                       ->getRepository('fibeWWWConfBundle:WwwConf')
-                                       ->find($wwwConfId) );
+            $entity->setWwwConf(  $wwwConf );
             $em->persist($entity); 
             array_push($eventEntities,$entity); 
         }
+
+        for($i=0;$i<count($entities);$i++){
+            $entity= $eventEntities[$i];
+            $current = $entities[$i];
+            foreach ($current as $setter => $value) {
+                if($setter=="setParent"){ 
+                    $value=$eventEntities[$value]; 
+                    call_user_func_array(array($entity, $setter), array($value));  
+                }  
+            }
+            $entity->setWwwConf(  $wwwConf  );
+            $em->persist($entity);
+        }
+
         //echo implode(",\t",$eventEntities)  ;
         //////////////////////  x prop  //////////////////////
         //echo "xproperties->\n";

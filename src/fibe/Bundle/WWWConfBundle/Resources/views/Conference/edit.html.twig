@@ -20,17 +20,22 @@
         </form>
   </div>
 </header> 
-    <div class="container">   
+    <div class="container col-lg-6" >
         <form id="EventImportForm"  class="input-append">
             <label for="EventImport">
                 <h3 class="text-success">Import Events from file  </h3>
                 <h5 class="text-info">Please, provide a OWL/RDF file</h5>
                 <h5 class="muted"><i>(such as : http://data.semanticweb.org/conference/eswc/2013/complete)</i></h5>
             </label>
-            <input id="EventImport" class="form-control" name="EventImport" type="text"/>
-            <button type="submit" id="EventImport" class="btn">
-              Process import <i class="icon-arrow-right"></i> 
-            </button>
+            
+            <div class="input-group">
+                <input id="EventImport" class="form-control" name="EventImport" type="text"/>
+                <span class="input-group-btn">
+                    <button type="submit" id="EventImport" class="btn btn-default">
+                        Process import <i class="icon-arrow-right"></i> 
+                    </button>
+                </span>
+            </div><!-- /input-group --> 
         </form>
     </div> 
 
@@ -144,8 +149,8 @@
                 {
                     run(confOwlUriInput.val(),function(dataArray,confname)
                     {
-						owlLessMode=false;
-					    isConfOwlUriInputOK = true;
+    					owlLessMode=false;
+    				    isConfOwlUriInputOK = true;
                         ConfRdfFile = dataArray ; 
                         confName=confname;
                         confOwlUriInput.parent().addClass('control-group success');
@@ -157,20 +162,20 @@
                             success:function(a,b,c)
                             {
                                 if(ConfRdfFile!=undefined)
-                                    alert('"'+confName+'" has been well added :\n\t'+ConfRdfFile.events.length+' events\n\t'+ConfRdfFile.locations.length+' locations\n');
-                                window.location.reload();
+                                    bootstrapAlert("success",' : \n\t'+ConfRdfFile.events.length+' events and '+ConfRdfFile.locations.length+' locations\n',confName+'" has been well added','<i class="icon-info"></i> '); 
                                 
                             },
                             error:function(a,b,c)
                             { 
-                                alert("The conf file has been found, but import failed");
+                                bootstrapAlert("error",ConfRdfFile.events.length+' events found but import failed',"Error : ",'<i class="icon-warning"></i> '); 
                                 confOwlUriInput.parent().addClass('control-group error');
                             },
                         });
                         
-                    },function()
+                    },function(msg)
                     {
                         confOwlUriInput.parent().addClass('control-group error');
+                        bootstrapAlert("error", msg || "","Import failed","<i class='icon-warning'></i>");
                     });
                 }
                 
