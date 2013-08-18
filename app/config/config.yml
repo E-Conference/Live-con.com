@@ -80,6 +80,9 @@ fos_user:
     from_email:
         address:        noreply@wwwconf.com
         sender_name:    WWWConf schedule manager
+    registration:
+        form:
+            type: fibe_user_registration
 #    registration:
 #        confirmation:
 #            enabled:    true # change to true for required email confirmation

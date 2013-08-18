@@ -49,17 +49,15 @@
                     {{ form_errors(form.plainPassword.second) }}
                 </div>
             </div> 
-            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
-                {{ form_rest(form) }}
-            </div>
             <div class="control-group">
                 <label class="control-label" >
-                    Super admin ? <br/><small><i>( can manage users )</i></small>
+                    {{ form_label(form.roles) }}
                 </label> 
                 <div class="controls">
-                    <input id="fos_user_registration_form_is_admin" name="fibe_security_bundle[is_admin]" type="checkbox" />
+                    {{ form_widget(form.roles) }}
+                    {{ form_errors(form.roles) }}
                 </div>
-            </div> 
+            </div>
             <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
                 {{ form_rest(form  )}}
             </div> 
