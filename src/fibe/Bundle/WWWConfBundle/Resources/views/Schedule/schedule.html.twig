@@ -348,7 +348,7 @@
           } 
           $sidebar.droppable({
             over: function( event, ui ) {  
-                if($(ui.draggable).hasClass("fc-event-draggable")) {
+                if( event && $(ui.draggable).hasClass("fc-event-draggable")) {
                     var event = dragged[1];
                     $(this).css("border-color","green"); 
                     $sidebarTmp = sidebarEventHtml(event)
