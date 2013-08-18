@@ -326,9 +326,7 @@
             eventDragStart: function( event, jsEvent, ui, view ) { 
               dragged = [ ui.helper[0], event ];
             }
-
         }); 
-
         $calendar.fullCalendar('changeView', "agendaWeek" );
         /*------------------------------------- initialize the calendar ----------------------------------------*/
  
@@ -363,7 +361,7 @@
                 } 
             },
             drop: function( event, ui ) {
-              if ( dragged && ui.helper && ui.helper[0] === dragged[0] ) { 
+              if ( dragged && ui.helper && ui.helper[0] === dragged[0]){
                     $sidebarTmp.hide();
                     $(this).css("border","solid 1px #ccc"); 
                 var event = dragged[1];
