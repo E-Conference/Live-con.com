@@ -1,15 +1,61 @@
+fibe_user_data:
+    resource: "@fibeUserDataBundle/Controller/"
+    type:     annotation
+    prefix:   /
 
-_wdt:
-    resource: "@WebProfilerBundle/Resources/config/routing/wdt.xml"
-    prefix:   /_wdt
+fibe_mobile_app:
+    resource: "@fibeMobileAppBundle/Controller/"
+    type:     annotation
+    prefix:   /
 
-_profiler:
-    resource: "@WebProfilerBundle/Resources/config/routing/profiler.xml"
-    prefix:   /_profiler
+home_page:
+    resource: "@fibeHomePageBundle/Controller/"
+    type:     annotation
+    prefix:   /
 
-_configurator:
-    resource: "@SensioDistributionBundle/Resources/config/routing/webconfigurator.xml"
-    prefix:   /_configurator
+fibe_www_conf:
+    resource: "@fibeWWWConfBundle/Controller/"
+    prefix:   /schedule
 
-_main:
-    resource: routing.yml
+fibe_security_www_conf:
+    resource: "@fibeSecurityBundle/Controller/"
+    type:     annotation 
+
+idci_simple_schedule:
+    resource: "../../vendor/idci/simple-schedule-bundle/IDCI/Bundle/SimpleScheduleBundle/Controller"
+    type:     annotation
+    prefix:   /schedule
+
+idci_exporter:
+    resource: "../../vendor/idci/exporter-bundle/IDCI/Bundle/ExporterBundle/Controller"
+    type:     annotation
+
+login:
+    pattern:   /login
+    defaults:  { _controller: fibeSecurityBundle:Security:login }
+
+login_check:
+    pattern:   /login_check
+
+logout:
+    pattern:   /logout
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: user/register
+
+fos_user_profile:
+    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
+    prefix: user/
+
+fos_user_resetting:
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
+    prefix: /resetting
+
+fos_user_change_password:
+    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
+    prefix: user/profile
+
