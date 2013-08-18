@@ -6,11 +6,11 @@
 
     <!--
     <parameters>
-        <parameter key="fibe_home_page.example.class">fibe\HomePageBundle\Example</parameter>
+        <parameter key="dashboard.example.class">fibe\DashboardBundle\Example</parameter>
     </parameters>
 
     <services>
-        <service id="fibe_home_page.example" class="%fibe_home_page.example.class%">
+        <service id="dashboard.example" class="%dashboard.example.class%">
             <argument type="service" id="service_id" />
             <argument>plain_value</argument>
             <argument>%parameter_name%</argument>

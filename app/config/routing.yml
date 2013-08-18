@@ -8,8 +8,8 @@ fibe_mobile_app:
     type:     annotation
     prefix:   /
 
-home_page:
-    resource: "@fibeHomePageBundle/Controller/"
+fibe_dashboard:
+    resource: "@fibeDashboardBundle/Controller/"
     type:     annotation
     prefix:   /
 

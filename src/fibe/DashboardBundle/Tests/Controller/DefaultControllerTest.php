@@ -1,6 +1,6 @@
 <?php
 
-namespace fibe\HomePageBundle\Tests\Controller;
+namespace fibe\DashboardBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
