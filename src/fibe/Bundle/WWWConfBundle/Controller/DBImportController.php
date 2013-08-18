@@ -94,7 +94,6 @@ class DBImportController extends Controller
                 
                 if($setter=="addCategorie"){
                     $value=$categoryEntities[$value];  
-                    continue;
                     
                 }
                 
