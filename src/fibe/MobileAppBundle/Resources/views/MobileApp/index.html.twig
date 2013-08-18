@@ -4,20 +4,41 @@
 {% block body %}
 
 
-<div class="hero-unit">
-  <h1>Mobile application manager</h1>
-  <p>Manage your mobile application</p>
-  <div class="row-fluid">
-      <div class="col-lg-4">
-           <div class="btn-group"> 
-              <a href="{{ path('schedule_view') }}" role="button" class="btn btn-success btn-large">
-                <span class="icon-calendar"></span>See your instance
-              </a>
-          </div>
+
+<div class="container">
+    <div class="row">
+      <div class="jumbotron">
+            <h1>Mobile application manager</h1>
+            <p>Manage your mobile application</p>
+            <div class="row-fluid">
+                <div class="col-lg-4">
+                     <div class="btn-group"> 
+                        <a href="{{ path('schedule_view') }}" role="button" class="btn btn-success btn-large">
+                          <span class="icon-calendar"></span>See your instance
+                        </a>
+                    </div>
+                </div>
+            </div>
       </div>
-  </div>
-</div>
-      
+
+      <div class="nav nav-tabs nav-justified">
+        <ul class="nav nav-tabs nav-justified">
+          <li><a href="#">menu 1</a></li>
+          <li><a href="#">menu 2</a></li>
+          <li><a href="#">menu 3</a></li>
+          <li><a href="#">menu 4</a></li>
+        </ul>
+      </div>
+
+      <iframe height="600px" width="400px" style="float:right; margin-top: 50px;" src="{{ asset('bundles/fibemobileapp/DataConf/index.html') }}">
+        <script>
+
+        </script>
+      </iframe>
+
+       <!-- <iframe height="600px" width="400px" style="float:right; margin-top: 50px;" src="http://localhost/WWWConf/src/fibe/MobileAppBundle/Resources/DataConf/index.html"> </iframe>-->
+    </div>
+</div>    
 
 {% endblock body %}
 
