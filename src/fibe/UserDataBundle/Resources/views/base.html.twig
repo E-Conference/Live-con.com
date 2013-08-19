@@ -2,14 +2,16 @@
 
 {% block title %}Index{% endblock title %}
  {% block stylesheets %}
-  <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibeuserdata/css/userData.css') }}" /> 
+ 	 {{ parent()}}
+  	<link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibeuserdata/css/userData.css') }}" /> 
  {% endblock %}
 {% block javascripts %}
+	 {{ parent()}}
 {% endblock%}
 
 
 {% block body %}
-
+	 {{ parent()}}
 
 {% endblock body %}
 

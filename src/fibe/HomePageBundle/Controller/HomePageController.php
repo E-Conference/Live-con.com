@@ -1,20 +1,15 @@
 <?php
 
-namespace fibe\DashboardBundle\Controller;
+namespace fibe\HomePageBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-/**
- * Dashboard Controller 
- *
- * @Route("/Dashboard")
- */
-class DashboardController extends Controller
+class HomePageController extends Controller
 {
     /**
-     * @Route("/" , name="dashboard_index")
+     * @Route("/", name="homePage_index")
      * @Template()
      */
     public function indexAction()

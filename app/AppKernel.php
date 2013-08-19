@@ -28,6 +28,7 @@ class AppKernel extends Kernel
             new fibe\MobileAppBundle\fibeMobileAppBundle(),
             new fibe\UserDataBundle\fibeUserDataBundle(),
             new fibe\DashboardBundle\fibeDashboardBundle(),
+            new fibe\HomePageBundle\fibeHomePageBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

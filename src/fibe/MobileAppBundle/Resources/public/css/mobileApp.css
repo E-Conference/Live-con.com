@@ -8,8 +8,10 @@
 
 
 .row{
-	border-left: solid 2px #333333;
-	border-right: solid 2px #333333;
+	min-height : 1000px;
+	border: solid 2px #333333;
 	background-color: #eeeeee;
-
+	-webkit-border-radius: 18px;
+	-moz-border-radius: 18px;
+	border-radius: 18px;
 }
