@@ -11,16 +11,15 @@
 
 <form action="{{ path('schedule_category_create') }}" method="post" {{ form_enctype(form) }}>
     {{ form_widget(form) }}
-    <p>
-        <button type="submit" class="btn btn-primary"> <span class="icon-ok	glyphicon-white"></span></button>
-    </p>
+    <div class="row-fluid">
+            <div class="col-lg-9"></div>
+            <div class="col-lg-2">
+                  <button type="submit" class="btn btn-default"><i class="icon-ok"></i></button>
+                  <a class="btn btn-warning" href="{{ path('admin_schedule_category') }}">
+                    <i class="icon-th-list"></i>
+                </a>
+            </div>
+        </div>
 </form>
 
-<ul class="record_actions">
-    <li>
-        <a class="btn" href="{{ path('schedule_category') }}">
-            <span class="icon-list glyphicon-white"></span>
-        </a>
-    </li>
-</ul>
 {% endblock body %}

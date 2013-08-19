@@ -20,6 +20,24 @@ use Doctrine\ORM\EntityRepository;
  */
 class PersonRepository extends EntityRepository
 {
+    
+    public function getAuthor($paper)
+    {
+        
+
+         $query = $this->getEntityManager()->createQuery(
+            'SELECT p
+             FROM fibeWWWConfBundle:Person p, fibeWWWConfBundle:Author a
+             WHERE a.id_paper = :id_paper
+             AND   p.id = a.id_person'
+            )->setParameter('id_paper', $paper->getId());
+
+            $authors = $query->getResult();
+          
+        return $authors; 
+    }
+
+
     /**
      * getOrderedQueryBuilder
      *

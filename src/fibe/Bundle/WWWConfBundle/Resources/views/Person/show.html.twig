@@ -3,7 +3,7 @@
 {% block body -%}
     <h1>Person</h1>
 
-    <table class="record_properties">
+    <table class="table table-hover record_properties">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -14,24 +14,20 @@
                 <td>{{ entity.email }}</td>
             </tr>
             <tr>
-                <th>Flag_schedule</th>
+                <th>Schedule access</th>
                 <td>{{ entity.flagschedule }}</td>
             </tr>
             <tr>
-                <th>Flag_schedule_admin</th>
+                <th>Schedule Admin</th>
                 <td>{{ entity.flagscheduleadmin }}</td>
             </tr>
             <tr>
-                <th>Flag_data</th>
+                <th>Guest Data access</th>
                 <td>{{ entity.flagdata }}</td>
             </tr>
             <tr>
-                <th>Flag_data_admin</th>
+                <th>Guest Data Admin</th>
                 <td>{{ entity.flagdataadmin }}</td>
-            </tr>
-            <tr>
-                <th>Created_at</th>
-                <td>{{ entity.createdat|date('Y-m-d H:i:s') }}</td>
             </tr>
             <tr>
                 <th>Agent</th>
@@ -90,7 +86,7 @@
                 <td>{{ entity.organization }}</td>
             </tr>
             <tr>
-                <th>_group</th>
+                <th>Group</th>
                 <td>{{ entity.group }}</td>
             </tr>
             <tr>
@@ -108,23 +104,16 @@
         </tbody>
     </table>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('person_index') }}">
-            Back to the list
+         <a class="btn btn-warning" href="{{ path('person') }}">
+            <i class="icon-th-list"></i>
         </a>
-    </li>
-    <li>
-        <a href="{{ path('person_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>
+         <a  class="btn btn-warning" href="{{ path('person_edit', { 'id': entity.id }) }}">
+            <i class="icon-edit"></i>
+         </a>
         <form action="{{ path('person_delete', { 'id': entity.id }) }}" method="post">
             <input type="hidden" name="_method" value="DELETE" />
             {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
+            <button type="submit" class="btn btn-danger"> <i class="icon-remove"></i></button>
         </form>
-    </li>
-</ul>
+ 
 {% endblock %}

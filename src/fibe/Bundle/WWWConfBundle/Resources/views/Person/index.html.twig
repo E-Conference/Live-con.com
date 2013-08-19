@@ -4,10 +4,18 @@
 {% block body %}
 
 
-
-    <h1>Person list</h1>
-
-    <table class="records_list">
+<div class="row">
+  <div class="col-lg-4"><h1>Person list</h1></div>
+  <div class="col-lg-4">
+    <a class="btn btn-info" href="{{ path('person_new') }}">
+             <i class="icon-plus"></i>
+    </a> 
+  </div>
+</div>
+    <a type="btn btn-info" href="{{ path('person_new') }}">
+        <i class="icon-plus"></i>
+    </a>
+    <table class="table table-hover records_list">
         <thead>
             <tr>
                 <th>Id</th>
@@ -81,11 +89,4 @@
         </tbody>
     </table>
 
-        <ul>
-        <li>
-            <a href="{{ path('person_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
     {% endblock %}

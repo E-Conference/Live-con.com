@@ -46,55 +46,62 @@ class Equipment
      */
     protected $icon;
 
+  
+
+
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
         return $this->id;
     }
-	
-	 /**
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     * @return Equipment
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+    
+        return $this;
+    }
+
+    /**
      * Get label
      *
-     * @return integer
+     * @return string 
      */
     public function getLabel()
     {
         return $this->label;
     }
- 
-	 /**
-     * Get label
-     *
-     * @param string $label
-     */
-    public function setLabel($label)
-    {
-        $this->label = $label;
-    }
-	
+
     /**
      * Set icon
      *
-     * @param string $image
+     * @param string $icon
+     * @return Equipment
      */
     public function setIcon($icon)
     {
         $this->icon = $icon;
+    
+        return $this;
     }
 
- 
     /**
      * Get icon
      *
-     * @return string
+     * @return string 
      */
     public function getIcon()
     {
         return $this->icon;
     }
-
 }
