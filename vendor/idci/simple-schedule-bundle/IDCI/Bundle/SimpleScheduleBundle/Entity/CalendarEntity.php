@@ -848,64 +848,7 @@ class CalendarEntity
     public function getClassification()
     {
         return $this->classification;
-    } 
-
-    /**
-     * Set parent
-     *
-     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $parent
-     * @return CalendarEntity
-     */
-    public function setParent(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $parent = null)
-    {
-        $this->parent = $parent;
-    
-        return $this;
-    }
-
-    /**
-     * Get parent
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * Add Child
-     *
-     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $child
-     * @return CalendarEntity
-     */
-    public function addChildren(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $child)
-    {
-        $this->children[] = $child;
-    
-        return $this;
-    }
-
-    /**
-     * Remove relateds
-     *
-     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $child
-     */
-    public function removeChildren(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $child)
-    {
-        $this->children->removeElement($child);
-    }
-
-    /**
-     * Get relateds
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getChildren()
-    {
-        return $this->children;
-    }
-
+    }  
     /**
      * Add xProperties
      *
@@ -1062,5 +1005,61 @@ class CalendarEntity
     public function getExcludedRule()
     {
         return $this->excludedRule;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $parent
+     * @return CalendarEntity
+     */
+    public function setParent(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $parent = null)
+    {
+        $this->parent = $parent;
+    
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity 
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Add children
+     *
+     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $children
+     * @return CalendarEntity
+     */
+    public function addChildren(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $children)
+    {
+        $this->children[] = $children;
+    
+        return $this;
+    }
+
+    /**
+     * Remove children
+     *
+     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $children
+     */
+    public function removeChildren(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $children)
+    {
+        $this->children->removeElement($children);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChildren()
+    {
+        return $this->children;
     }
 }

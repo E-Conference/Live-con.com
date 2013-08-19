@@ -4,6 +4,8 @@
     "created_at": "{{ entity.createdAt | date('Y-m-d H:i') }}",
     "end_at": "{{ entity.endAt | date('Y-m-d H:i') }}",
     "start_at": "{{ entity.startAt | date('Y-m-d H:i') }}",
+    "parent_id": "{{ entity.parent.id }}",
+    "parent_name": "{{ entity.parent.name }}",
     "is_transparent": "{{ entity.isTransparent }}",
     "resources": "{{ entity.resources }}",
     "duration": "{{ entity.duration }}",

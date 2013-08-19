@@ -1,8 +1,8 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block title %}Index{% endblock title %}
+{% block title %}edit conference{{ parent() }}{% endblock title %}
 {% block body %}
-
+{{ parent() }}
 <header class="subhead container" id="overview">
     <div class="page-header">
         <h1 id="confName" title="double click to change name">{{ wwwConf.confName }}
@@ -11,26 +11,38 @@
         
             
         <form id="confNameForm"  class="input-append" method="POST" action="">
-             {{ form_widget(form.confName) }} 
-             {{ form_errors(form.confName) }} 
-            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(form) }}</div> 
-            <button  id="SPRQLEPURLBtn"  class="btn">
-              <i class="icon-edit"></i> 
-            </button>
+
+            <div class="col-lg-6">
+                <div class="input-group">
+                 {{ form_widget(form.confName) }} 
+                 {{ form_errors(form.confName) }} 
+                  <span class="input-group-btn">
+                    <button type="submit" id="EventImport" class="btn btn-default">
+                        Process import <i class="icon-arrow-right"></i> 
+                    </button>
+                  </span>
+                </div><!-- /input-group -->
+            </div><!-- /.col-lg-6 --> 
+            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(form) }}</div>  
         </form>
   </div>
 </header> 
-    <div class="container">   
+    <div class="container col-lg-6" >
         <form id="EventImportForm"  class="input-append">
             <label for="EventImport">
                 <h3 class="text-success">Import Events from file  </h3>
                 <h5 class="text-info">Please, provide a OWL/RDF file</h5>
                 <h5 class="muted"><i>(such as : http://data.semanticweb.org/conference/eswc/2013/complete)</i></h5>
             </label>
-            <input id="EventImport" class="form-control" name="EventImport" type="text"/>
-            <button type="submit" id="EventImport" class="btn">
-              Process import <i class="icon-arrow-right"></i> 
-            </button>
+            
+            <div class="input-group">
+                <input id="EventImport" class="form-control" name="EventImport" type="text"/>
+                <span class="input-group-btn">
+                    <button type="submit" id="EventImport" class="btn btn-default">
+                        Process import <i class="icon-arrow-right"></i> 
+                    </button>
+                </span>
+            </div><!-- /input-group --> 
         </form>
     </div> 
 
@@ -38,6 +50,7 @@
 {% endblock body %}
 
 {%  block stylesheets %}
+{{ parent() }}
     <style type="text/css">
         #confNameForm > *{
             margin-top:1.5em;
@@ -58,7 +71,7 @@
 {% endblock %}
 
 {%  block javascripts %} 
-
+{{ parent() }}
         <script src="{{ asset('bundles/fibewwwconf/js/OWLImporter.js') }}" type="text/javascript" ></script>
         <script src="{{ asset('bundles/fibewwwconf/js/moment.min.js') }}" type="text/javascript" ></script>
         <script type="text/javascript" >
@@ -144,8 +157,8 @@
                 {
                     run(confOwlUriInput.val(),function(dataArray,confname)
                     {
-						owlLessMode=false;
-					    isConfOwlUriInputOK = true;
+    					owlLessMode=false;
+    				    isConfOwlUriInputOK = true;
                         ConfRdfFile = dataArray ; 
                         confName=confname;
                         confOwlUriInput.parent().addClass('control-group success');
@@ -157,20 +170,20 @@
                             success:function(a,b,c)
                             {
                                 if(ConfRdfFile!=undefined)
-                                    alert('"'+confName+'" has been well added :\n\t'+ConfRdfFile.events.length+' events\n\t'+ConfRdfFile.locations.length+' locations\n');
-                                window.location.reload();
+                                    bootstrapAlert("success",' : \n\t'+ConfRdfFile.events.length+' events and '+ConfRdfFile.locations.length+' locations\n',confName+'" has been well added','<i class="icon-info"></i> '); 
                                 
                             },
                             error:function(a,b,c)
                             { 
-                                alert("The conf file has been found, but import failed");
+                                bootstrapAlert("error",ConfRdfFile.events.length+' events found but import failed',"Error : ",'<i class="icon-warning"></i> '); 
                                 confOwlUriInput.parent().addClass('control-group error');
                             },
                         });
                         
-                    },function()
+                    },function(msg)
                     {
                         confOwlUriInput.parent().addClass('control-group error');
+                        bootstrapAlert("error", msg || "","Import failed","<i class='icon-warning'></i>");
                     });
                 }
                 

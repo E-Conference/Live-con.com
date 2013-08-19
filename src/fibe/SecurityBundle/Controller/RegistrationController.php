@@ -51,9 +51,9 @@ class RegistrationController extends ContainerAware
             if ($form->isValid()) {
                 $event = new FormEvent($form, $request);
                 $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event); 
-                if($_POST['fibe_security_bundle']["is_admin"] === "on"){
-                    $user->addRole('ROLE_ADMIN');
-                }
+                // if($_POST['fos_user_registration_form']["is_admin"] === "on"){
+                //     $user->addRole('ROLE_ADMIN');
+                // }
  
                 $conf=$this->container->get('doctrine')
                                       ->getRepository('fibeWWWConfBundle:WwwConf')

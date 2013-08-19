@@ -11,10 +11,10 @@
           cache:false,
           success:function(completeConfRdf){
              
-            
-            if(completeConfRdf==undefined)
+            console.log(completeConfRdf);
+            if(completeConfRdf==undefined )
             {
-                if(fallback!=undefined)fallback(); 
+                if(fallback!=undefined)fallback(""); 
                 return;
             }
             
@@ -190,7 +190,6 @@
                                     {
                                         //to finally store it in the setXKey !
                                         xproperty.setXKey=format($(node).text());
-                                        console.log(xproperty.setXKey);
                                     }
                                 });
                                 xproperties.push(xproperty);
@@ -351,6 +350,7 @@
                         
                     }
                 }  //OWL fix
+
                 var catId = getCategoryIdFromName(catName);
                 if(catId==undefined){ 
                   var category= {}; 
@@ -384,7 +384,7 @@
                             var relationId = getRelationIdFromCalendarEntityId(currentEventId,relatedToEventId);
                             if(!relations[relationId]){
                               var relationType = this.nodeName.indexOf("swc:isSubEventOf")!== -1?"PARENT":"CHILD";
-                              events[currentEventId]['setParent'] = events[relatedToEventId];
+                              events[currentEventId]['setParent'] = parseInt(relatedToEventId);
                               var relation= {}; 
                               relation['setCalendarEntity']=parseInt(relatedToEventId); 
                               relation['setRelationType']=relationType;
@@ -615,11 +615,12 @@
                     
                 if(events.length<1 && xproperties.length<1 && relations.length<1 && locations.length<1)
                 {
-                    alert('nothing imported');
+                    if(fallback!=undefined)fallback("bad format"); 
                     return;
                 }
                 console.log('---------finished---------' );
                 console.log(dataArray);
+                console.log(relations);
                 if(callback!=undefined)callback(dataArray,confName); 
            }
            
@@ -649,7 +650,7 @@
            
        },
        error:function(){
-                if(fallback)fallback();
+                if(fallback)fallback("wrong path");
        }
    });
 }

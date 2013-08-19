@@ -2,6 +2,8 @@
     "id": "{{ entity.id }}",
     "name": "{{ entity.summary }}",
     "created_at": "{{ entity.createdAt | date('Y-m-d H:i') }}",
+    "parent_id": "{{ entity.parent.id }}",
+    "parent_name": "{{ entity.parent.name }}",
     "end_at": "{{ entity.endAt | date('Y-m-d H:i') }}",
     "start_at": "{{ entity.startAt | date('Y-m-d H:i') }}",
     "is_transparent": "{{ entity.isTransparent }}",
