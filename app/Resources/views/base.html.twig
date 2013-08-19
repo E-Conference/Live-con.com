@@ -15,11 +15,12 @@
         {% endblock%}
     </head>
     <body>
-        
+        <div class="symfony-content">
             {% block body %} 
             {% endblock %}
+        </div>
     </body> 
-        
+    {% include "::footer.html.twig" %}
 </html>
 
 
