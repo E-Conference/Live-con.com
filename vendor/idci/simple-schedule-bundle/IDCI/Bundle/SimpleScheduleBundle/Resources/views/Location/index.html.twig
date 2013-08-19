@@ -16,7 +16,7 @@
 <ul class="list_actions">
     <li>
         <a class="btn btn-info" href="{{ path('schedule_location_new') }}">
-            <span class="icon-plus"></span>
+            <i class="icon-plus"></i>
         </a>
     </li>
 </ul>
@@ -42,10 +42,10 @@
             <td>{{ entity.latitude }}</td>
             <td>{{ entity.longitude }}</td>
             <td>
-                <a class="btn btn-block btn-success btn-small" href="{{ path('schedule_location_show', { 'id': entity.id }) }}"><span class="icon-eye-open  glyphicon-white"></span></a>
+                <a class="btn btn-block btn-success btn-small" href="{{ path('schedule_location_show', { 'id': entity.id }) }}"><i class="icon-eye-open"></i></a>
             </td>
             <td>
-                <a class="btn btn-block btn-warning btn-small" href="{{ path('schedule_location_edit', { 'id': entity.id }) }}"><span class="icon-edit  glyphicon-white"></span></a>
+                <a class="btn btn-block btn-warning btn-small" href="{{ path('schedule_location_edit', { 'id': entity.id }) }}"><i class="icon-edit"></i></a>
              </td> 
         </tr>
     {% endfor %}

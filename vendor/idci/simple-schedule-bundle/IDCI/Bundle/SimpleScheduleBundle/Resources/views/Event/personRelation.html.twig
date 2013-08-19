@@ -1,20 +1,18 @@
 <table class="table">
     <thead>
         <tr>
-            <th>id</th>
-            <th>Relation</th>
-            <th>startAt</th>
-            <th>summary</th>
+            <th>Relation Id</th>
+            <th>Paper Title</th>
+            <th>Paper Author</th>
         </tr>
     </thead>
 
     <tbody>
-        {% for relation in entity.getRelateds() %} 
+        {% for role in entity.getRole() %} 
             <tr> 
-                <td>{{ relation.id }}</td>
-                <th>{{ relation.relationType }}</th>
-                <td>{{ relation.relatedTo.startAt | date('Y-m-d') }}</td>
-                <td>{{ relation.relatedTo.summary }}</td>
+                <td>{{ role.getType().libelle }}</td>
+                <td>{{ role.getPerson().name }}</td>
+                <td>{{ role.getPerson().email }}</td>
             </tr> 
         {% endfor %}
     </tbody>
@@ -23,7 +21,7 @@
     <tfoot>
         <tr>
             <td colspan="4">
-                <form action="{{ path('schedule_relation_add', { 'id': entity.id}) }}" method="post">
+                <form action="{{ path('admin_schedule_relation_add', { 'calendar_entity_id': entity.id}) }}" method="post">
                     {{ form_widget(relation_form) }}
                     <button type="submit" class="btn btn-info"><i class="icon-plus"></i></button>
                 </form>

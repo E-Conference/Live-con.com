@@ -34,16 +34,12 @@
     </tbody>
 </table>
 
-<ul class="record_actions">
-    <li>
         <a class="btn btn-success" href="{{ path('schedule_location') }}">
-           <span class="icon-list glyphicon-white"></span>
+           <i class="icon-list"></i>
         </a>
-    </li>
-    <li>
+   
         <a class="btn btn-warning" href="{{ path('schedule_location_edit', { 'id': entity.id }) }}">
-           <span class="icon-edit glyphicon-white"></span>
+           <i class="icon-edit"></i>
         </a>
-    </li> 
-</ul>
+ 
 {% endblock body %}

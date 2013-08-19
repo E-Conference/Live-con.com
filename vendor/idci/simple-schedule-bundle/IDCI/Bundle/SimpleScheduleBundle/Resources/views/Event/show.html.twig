@@ -90,25 +90,23 @@
     </tbody>
 </table>
 
-{% include "IDCISimpleScheduleBundle:Event:xproperties.html.twig" %}
-{% include "IDCISimpleScheduleBundle:Event:relation.html.twig" %}
+<h2>Event Relation</h2>
+<h3>Paper</h3></br>
+{% include "IDCISimpleScheduleBundle:Event:paperRelation.html.twig" %}
+<h3>Person</h3></br>
+{% include "IDCISimpleScheduleBundle:Event:personRelation.html.twig" %}
 
-<ul class="record_actions">
-    <li>
+
         <a class="btn btn-warning" href="{{ path('schedule_event') }}">
-           <span class="icon-list  glyphicon-white"></span>
+           <i class="icon-list"></i>
         </a>
-    </li>
-    <li>
-        <a class="btn btn-warning" href="{{ path('schedule_event_edit', { 'id': entity.id }) }}">
-           <span class="icon-edit  glyphicon-white"></span>
+   
+        <a class="btn btn-info" href="{{ path('schedule_event_edit', { 'id': entity.id }) }}">
+           <i class="icon-edit"></i>
         </a>
-    </li>
-    <li>
+   
         <form action="{{ path('schedule_event_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
-            <button type="submit" class="btn btn-danger"><span class="icon-remove  glyphicon-white"></span></button>
+            <button type="submit" class="btn btn-danger"><i class="icon-remove"></i></button>
         </form>
-    </li>
-</ul>
 {% endblock body %}

@@ -27,31 +27,111 @@ class Role
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    private $id;
 	
     
     /**
      *  
-     *@ORM\OneToOne(targetEntity="person")
-     * @ORM\JoinColumn(name="id_person", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="role")
+     * 
      *
      */
-    protected $id_person;
+    private $person;
+
+     /**
+     * Event
+     * Persons related to an event 
+     * @ORM\ManyToOne(targetEntity="ConfEvent", inversedBy="person")
+     * 
+     */
+    private $event;
 
     /**
      *  
-     *@ORM\OneToOne(targetEntity="IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntityRelation")
-     * @ORM\JoinColumn(name="id_event_relation", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="RoleType", inversedBy="role")
      *
      */
-    // protected $id_event_relation;
+
+    private $type;
+
+
 
     /**
-     *  
-     *@ORM\OneToOne(targetEntity="RoleType")
-     * @ORM\JoinColumn(name="id_role_type", referencedColumnName="id")
+     * Get id
      *
+     * @return integer 
      */
-    protected $id_role_type;
+    public function getId()
+    {
+        return $this->id;
+    }
 
+    /**
+     * Set person
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Person $person
+     * @return Role
+     */
+    public function setPerson(\fibe\Bundle\WWWConfBundle\Entity\Person $person = null)
+    {
+        $this->person = $person;
+    
+        return $this;
+    }
+
+    /**
+     * Get person
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\Person 
+     */
+    public function getPerson()
+    {
+        return $this->person;
+    }
+
+    /**
+     * Set event
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $event
+     * @return Role
+     */
+    public function setEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $event = null)
+    {
+        $this->event = $event;
+    
+        return $this;
+    }
+
+    /**
+     * Get event
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\ConfEvent 
+     */
+    public function getEvent()
+    {
+        return $this->event;
+    }
+
+    /**
+     * Set type
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\RoleType $type
+     * @return Role
+     */
+    public function setType(\fibe\Bundle\WWWConfBundle\Entity\RoleType $type = null)
+    {
+        $this->type = $type;
+    
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\RoleType 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 }
