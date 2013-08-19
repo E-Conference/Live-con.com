@@ -15,7 +15,7 @@
 
 
         <a class="btn btn-info" href="{{ path('schedule_category_new') }}">
-          <span class="icon-plus  glyphicon-white"></span>
+          <i class="icon-plus"></i>
         </a>
 
 
@@ -40,10 +40,10 @@
             <td>{{ entity.name }}</td>
             <td>{{ entity.slug }}</td>
             <td>
-                <a class="btn btn-block btn-default" href="{{ path('schedule_category_show', { 'id': entity.id }) }}" title="Show category"><span class="icon-eye-open  glyphicon-white"></span></a>
+                <a class="btn btn-block btn-default" href="{{ path('schedule_category_show', { 'id': entity.id }) }}" title="Show category"><i class="icon-eye-open"></i></a>
             </td>
             <td>
-                <a class="btn btn-block btn-warning" href="{{ path('schedule_category_edit', { 'id': entity.id }) }}"><span class="icon-edit  glyphicon-white"></span></a>
+                <a class="btn btn-block btn-warning" href="{{ path('schedule_category_edit', { 'id': entity.id }) }}"><i class="icon-edit"></i></a>
             </td>
         </tr>
     {% endfor %}

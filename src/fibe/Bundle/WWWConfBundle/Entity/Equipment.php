@@ -48,6 +48,7 @@ class Equipment
 
   
 
+
     /**
      * Get id
      *

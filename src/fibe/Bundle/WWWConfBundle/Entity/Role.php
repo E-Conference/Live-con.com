@@ -54,6 +54,8 @@ class Role
 
     private $type;
 
+
+
     /**
      * Get id
      *
@@ -108,29 +110,6 @@ class Role
     public function getEvent()
     {
         return $this->event;
-    }
-
-    /**
-     * Set id_role_type
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\RoleType $idRoleType
-     * @return Role
-     */
-    public function setIdRoleType(\fibe\Bundle\WWWConfBundle\Entity\RoleType $idRoleType = null)
-    {
-        $this->id_role_type = $idRoleType;
-    
-        return $this;
-    }
-
-    /**
-     * Get id_role_type
-     *
-     * @return \fibe\Bundle\WWWConfBundle\Entity\RoleType 
-     */
-    public function getIdRoleType()
-    {
-        return $this->id_role_type;
     }
 
     /**

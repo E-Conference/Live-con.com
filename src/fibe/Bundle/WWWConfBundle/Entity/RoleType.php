@@ -43,6 +43,14 @@ class RoleType
     
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->role = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -74,14 +82,7 @@ class RoleType
     {
         return $this->libelle;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->role = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
+
     /**
      * Add role
      *

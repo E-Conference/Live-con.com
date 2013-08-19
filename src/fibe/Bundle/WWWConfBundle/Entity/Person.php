@@ -39,6 +39,14 @@ class Person
      * @ORM\OneToMany(targetEntity="Author", mappedBy="person")
      */
     private $paper;
+
+    /**
+     * Organizations
+     * Organizations where the person is member
+     *
+     * @ORM\ManyToMany(targetEntity="Organization", mappedBy="members", cascade={"persist"})
+     */
+    private $organizations;
     
 
     /**
@@ -229,6 +237,7 @@ class Person
     protected $image;
 	 
 	
+
     /**
      * Constructor
      */
@@ -236,6 +245,7 @@ class Person
     {
         $this->role = new \Doctrine\Common\Collections\ArrayCollection();
         $this->paper = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->organizations = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -269,98 +279,6 @@ class Person
     public function getEmail()
     {
         return $this->email;
-    }
-
-    /**
-     * Set flag_schedule
-     *
-     * @param boolean $flagSchedule
-     * @return Person
-     */
-    public function setFlagSchedule($flagSchedule)
-    {
-        $this->flag_schedule = $flagSchedule;
-    
-        return $this;
-    }
-
-    /**
-     * Get flag_schedule
-     *
-     * @return boolean 
-     */
-    public function getFlagSchedule()
-    {
-        return $this->flag_schedule;
-    }
-
-    /**
-     * Set flag_schedule_admin
-     *
-     * @param boolean $flagScheduleAdmin
-     * @return Person
-     */
-    public function setFlagScheduleAdmin($flagScheduleAdmin)
-    {
-        $this->flag_schedule_admin = $flagScheduleAdmin;
-    
-        return $this;
-    }
-
-    /**
-     * Get flag_schedule_admin
-     *
-     * @return boolean 
-     */
-    public function getFlagScheduleAdmin()
-    {
-        return $this->flag_schedule_admin;
-    }
-
-    /**
-     * Set flag_data
-     *
-     * @param boolean $flagData
-     * @return Person
-     */
-    public function setFlagData($flagData)
-    {
-        $this->flag_data = $flagData;
-    
-        return $this;
-    }
-
-    /**
-     * Get flag_data
-     *
-     * @return boolean 
-     */
-    public function getFlagData()
-    {
-        return $this->flag_data;
-    }
-
-    /**
-     * Set flag_data_admin
-     *
-     * @param boolean $flagDataAdmin
-     * @return Person
-     */
-    public function setFlagDataAdmin($flagDataAdmin)
-    {
-        $this->flag_data_admin = $flagDataAdmin;
-    
-        return $this;
-    }
-
-    /**
-     * Get flag_data_admin
-     *
-     * @return boolean 
-     */
-    public function getFlagDataAdmin()
-    {
-        return $this->flag_data_admin;
     }
 
     /**
@@ -866,4 +784,36 @@ class Person
         return $this->paper;
     }
 
+    /**
+     * Add organizations
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Organization $organizations
+     * @return Person
+     */
+    public function addOrganization(\fibe\Bundle\WWWConfBundle\Entity\Organization $organizations)
+    {
+        $this->organizations[] = $organizations;
+    
+        return $this;
+    }
+
+    /**
+     * Remove organizations
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Organization $organizations
+     */
+    public function removeOrganization(\fibe\Bundle\WWWConfBundle\Entity\Organization $organizations)
+    {
+        $this->organizations->removeElement($organizations);
+    }
+
+    /**
+     * Get organizations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOrganizations()
+    {
+        return $this->organizations;
+    }
 }

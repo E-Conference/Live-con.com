@@ -32,9 +32,23 @@ class Keyword
      */
     protected $libelle;
 
+    /**
+     * Papers related to thise keyword
+     *
+     * @ORM\ManyToMany(targetEntity="Paper", mappedBy="keywords", cascade={"persist"})
+     */
+    private $papers;
+        
+
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->papers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
     
-
-
     /**
      * Get id
      *
@@ -66,5 +80,38 @@ class Keyword
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    /**
+     * Add papers
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Paper $papers
+     * @return Keyword
+     */
+    public function addPaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $papers)
+    {
+        $this->papers[] = $papers;
+    
+        return $this;
+    }
+
+    /**
+     * Remove papers
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Paper $papers
+     */
+    public function removePaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $papers)
+    {
+        $this->papers->removeElement($papers);
+    }
+
+    /**
+     * Get papers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPapers()
+    {
+        return $this->papers;
     }
 }

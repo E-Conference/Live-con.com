@@ -43,7 +43,7 @@ class Author
     private $paper;
 
 
-    
+  
 
     /**
      * Get id

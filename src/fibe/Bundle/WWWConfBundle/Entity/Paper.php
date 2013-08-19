@@ -35,6 +35,14 @@ class Paper
      * @ORM\OneToMany(targetEntity="Author", mappedBy="paper")
      */
     private $author;
+
+     /**
+     * @ORM\ManyToMany(targetEntity="Keyword", inversedBy="papers", cascade={"persist"})
+     * @ORM\JoinTable(name="subject",
+     *     joinColumns={@ORM\JoinColumn(name="paper_id", referencedColumnName="id", onDelete="Cascade")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="keyword_id", referencedColumnName="id", onDelete="Cascade")})
+     */
+    private $keywords;
 	
     /**
      * type
@@ -111,13 +119,13 @@ class Paper
     protected $url_pdf;
 
 
-   
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->author = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->keywords = new \Doctrine\Common\Collections\ArrayCollection();
         $this->confEvents = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
@@ -323,6 +331,39 @@ class Paper
     public function getAuthor()
     {
         return $this->author;
+    }
+
+    /**
+     * Add keywords
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Keyword $keywords
+     * @return Paper
+     */
+    public function addKeyword(\fibe\Bundle\WWWConfBundle\Entity\Keyword $keywords)
+    {
+        $this->keywords[] = $keywords;
+    
+        return $this;
+    }
+
+    /**
+     * Remove keywords
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Keyword $keywords
+     */
+    public function removeKeyword(\fibe\Bundle\WWWConfBundle\Entity\Keyword $keywords)
+    {
+        $this->keywords->removeElement($keywords);
+    }
+
+    /**
+     * Get keywords
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getKeywords()
+    {
+        return $this->keywords;
     }
 
     /**
