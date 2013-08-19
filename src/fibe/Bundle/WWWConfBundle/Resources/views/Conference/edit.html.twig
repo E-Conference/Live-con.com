@@ -169,14 +169,14 @@
                             success:function(a,b,c)
                             {
                                 if(ConfRdfFile!=undefined){
-                                    bootstrapAlert("success",' : \n\t'+ConfRdfFile.events.length+' events and '+ConfRdfFile.locations.length+' locations\n',confName+'" has been well added','<i class="icon-info"></i> ');
+                                    bootstrapAlert("success",' : \n\t'+ConfRdfFile.events.length+' events and '+ConfRdfFile.locations.length+' locations\n',confName+'" has been well added');
                                     confOwlUriInput.parent().addClass('has-success');
                                 }
                                 
                             },
                             error:function(a,b,c)
                             { 
-                                bootstrapAlert("error",ConfRdfFile.events.length+' events found but import failed',"Error : ",'<i class="icon-warning"></i> '); 
+                                bootstrapAlert("error",ConfRdfFile.events.length+' events found but import failed'); 
                                 confOwlUriInput.parent().addClass('has-warning');
                             },
                         });
@@ -184,7 +184,7 @@
                     },function(msg)
                     {
                         confOwlUriInput.parent().addClass('has-warning');
-                        bootstrapAlert("error", msg || "","Import failed","<i class='icon-warning'></i>");
+                        bootstrapAlert("error", msg || "");
                     });
                 }
                 

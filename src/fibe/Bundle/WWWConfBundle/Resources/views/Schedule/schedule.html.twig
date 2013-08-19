@@ -219,12 +219,13 @@
                 op.getOrderedUrl,
                 {},
                 function(events) {  
-                    bootstrapAlert("info","event has been well fetched","",'<i class="icon-info"></i> icon-info');
+                    bootstrapAlert("success","event has been well fetched" );
                     renderEvent(events);
                     //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                 },
                 'json'
               ); 
+              bootstrapAlert("info","event request sent","","<i class='icon-spinner icon-spin'></i>");
             },  
             eventClick: function(calEvent, jsEvent, view) {
  
@@ -266,13 +267,13 @@
                               op.quickAddUrl,
                               formatDate(e),
                               function(response) {  
-                                  bootstrapAlert("success","event has been well added","",'<i class="icon-info"></i> icon-info');
+                                  bootstrapAlert("success","event has been well added");
                                   e.id=response.id;
-                                  $calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
+                                  $calendar.fullCalendar('renderEvent',e); // 3rd arg make the event "stick" 
                               },
                               'json'
                       );
-                      bootstrapAlert("info","add request sent","Info","<i class='icon-spinner icon-spin'></i>");
+                      bootstrapAlert("info","add request sent","Info : ","<i class='icon-spinner icon-spin'></i>");
                   }
                   $modalNewEvent.modal("hide");
                   return false;
@@ -285,11 +286,11 @@
                             op.quickUpdateUrl,
                             formatDate($.extend({}, event)),
                             function(doc) {  
-                                bootstrapAlert("success","event has been well updated","",'<i class="icon-info"></i> icon-info'); 
+                                bootstrapAlert("success","event has been well updated"); 
                             },
                             'json'
                     );
-                    bootstrapAlert("info","update request sent","Info","<i class='icon-spinner icon-spin'></i>");
+                    bootstrapAlert("info","update request sent","Info : ","<i class='icon-spinner icon-spin'></i>");
 
             },
             eventDataTransform: function(data){return data;},
@@ -300,11 +301,11 @@
                             op.quickUpdateUrl,
                             formatDate($.extend({}, e)),
                             function(doc) {  
-                                bootstrapAlert("success","event has been well updated","",'<i class="icon-info"></i> icon-info'); 
+                                bootstrapAlert("success","event has been well updated"); 
                             },
                             'json'
                     );
-                    bootstrapAlert("info","update request sent","Info","<i class='icon-spinner icon-spin'></i>");
+                    bootstrapAlert("info","update request sent","Info : ","<i class='icon-spinner icon-spin'></i>");
             },
             drop: function(date, allDay) { // this function is called when something is dropped
             
@@ -323,11 +324,11 @@
                         op.quickUpdateUrl,
                         formatDate(copiedEventObject),
                         function(doc) {   
-                                bootstrapAlert("success","event has been well updated","",'<i class="icon-info"></i> icon-info'); 
+                                bootstrapAlert("success","event has been well updated"); 
                         },
                         'json'
                 );
-                bootstrapAlert("info","update request sent ","Info","<i class='icon-spinner icon-spin'></i>");
+                bootstrapAlert("info","update request sent ","Info : ","<i class='icon-spinner icon-spin'></i>");
                 // render the event on the calendar
                 // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
                 $calendar.fullCalendar('renderEvent', copiedEventObject);
@@ -346,7 +347,7 @@
         function setInstantEvents(instant_events){
           $sidebar.html("");  
           var eventHtml =  "<div class='external-event'></div>";
-          var $sidebarTmp = $(eventHtml).appendTo($sidebar).hide();
+          var $sidebarTmp = $(eventHtml).prependTo($sidebar).hide();
 
           var gid = 1; // event.id == 0 considered to be undefined (boo) 
           
@@ -359,7 +360,7 @@
                 if( event && $(ui.draggable).hasClass("fc-event-draggable")) {
                     var event = dragged[1];
                     $(this).css("border-color","green"); 
-                    $sidebarTmp = sidebarEventHtml($event,event)
+                    sidebarEventHtml($sidebarTmp,event)
                     $sidebarTmp.show() ;
                 }
             },
@@ -370,22 +371,22 @@
                 } 
             },
             drop: function( event, ui ) {
-              if ( dragged && ui.helper && ui.helper[0] === dragged[0]){alert("")
+              if ( dragged && ui.helper && ui.helper[0] === dragged[0]){
                 $sidebarTmp.hide();
                 $(this).css("border","solid 1px #ccc"); 
                 var event = dragged[1];
-                var $event = dragged[1];
+                var $event = $(eventHtml);
                 event.end = moment(event.start);
                 $calendar.fullCalendar('removeEvents',event.id);
 
                 // var $event = sidebarDraggable(event);
-                var $event = sidebarDraggable($event,event)
+                var $event = sidebarDraggable($event,event);
 
                 $.post(
                     op.quickUpdateUrl,
                     formatDate(event),
                     function(doc) {   
-                        bootstrapAlert("success","event has been well updated","",'<i class="icon-info"></i> icon-info'); 
+                        bootstrapAlert("success","event has been well updated" ); 
                     },
                     'json'
                 );
@@ -395,15 +396,15 @@
           }); 
 
           function sidebarEventHtml ($event,event){
-            $event.appendTo($sidebar)
-                  .html(event.title);
+            $event.html(event.title);
             $event.css({
                       "background-color": event.color,
                       "border-color": event.border_color || event.color,
                    });  
           }
 
-          function sidebarDraggable($event,event){ 
+          function sidebarDraggable($event,event){
+            $event.appendTo($sidebar);
             sidebarEventHtml ($event,event);
             $event.draggable({
                       zIndex: 999,
@@ -452,13 +453,13 @@
                                       op.getOrderedUrl,
                                       data,
                                       function(events) {  
-                                          bootstrapAlert("success","event has been well fetched","",'<i class="icon-info"></i> icon-info');
+                                          bootstrapAlert("success","event has been well fetched" );
                                           renderEvent(events);
                                           //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                                       },
                                       'json'
                                     );
-                                    bootstrapAlert("info","get filtered request sent","Info","<i class='icon-spinner icon-spin'></i>"); 
+                                    bootstrapAlert("info","get filtered request sent","Info : ","<i class='icon-spinner icon-spin'></i>"); 
                                   });
       var $locationSelect = $('<select name="filter_location_select" id="filter_location_select" class="form-control" ><option value="*">See all</option></select>')
                                   .appendTo($locationCtn)
@@ -468,13 +469,13 @@
                                       op.getOrderedUrl,
                                       data,
                                       function(events) {  
-                                          bootstrapAlert("success","event has been well fetched","",'<i class="icon-info"></i> icon-info');
+                                          bootstrapAlert("success","event has been well fetched" );
                                           renderEvent(events);
                                           //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                                       },
                                       'json'
                                     );
-                                    bootstrapAlert("info","get filtered request sent","Info","<i class='icon-spinner icon-spin'></i>"); 
+                                    bootstrapAlert("info","get filtered request sent","Info : ","<i class='icon-spinner icon-spin'></i>"); 
                                   });
 
 
@@ -487,22 +488,29 @@
 
       /*------------------------------------- end initialize filters ----------------------------------------*/
 
+      // empty fullcalendar events and populate it with new
       function renderEvent(events){
         $calendar.fullCalendar( 'removeEvents');
         //TODO ALLDAY
         var instant_events = [];
-        for (var i in events){
+        for (var i in events){  
           events[i]["title"] = events[i].name;
           events[i]["parent_id"] = events[i].parent_id;
           events[i]["start"] = events[i].start_at;
-          events[i]["end"] = events[i].end_at; 
+          events[i]["end"] = events[i].end_at;
+          events[i]["start"] = events[i].start_at;
+          events[i]["end"] = events[i].end_at;
+          console.log(events[i].categories);
+          if(events[i].categories.length > 0 && events[i].categories[0].color)
+            events[i]["background-color"] = events[i].categories[0].color
+           
           var diff =moment(events[i]["start"]).diff(events[i]["end"]);
           var instant = (diff  == 0 ) || (diff  == 1 );
           var allDay = !instant && ((diff % 86400000 == 0 ) || (diff % 86400000 == 1 ));
           events[i]["allDay"] = allDay;  
           if(instant)instant_events.push(events[i]);
           else
-            $calendar.fullCalendar( 'renderEvent',events[i],true);
+            $calendar.fullCalendar( 'renderEvent',events[i]);
         }
         setInstantEvents(instant_events);
       }
