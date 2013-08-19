@@ -26,23 +26,78 @@ class Author
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    private $id;
 	
     
     /**
      *  
-     * @ORM\OneToOne(targetEntity="person")
-     * @ORM\JoinColumn(name="id_person", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="paper")
      *
      */
-    protected $id_person;
+    private $person;
 
     /**
      *  
-     *@ORM\OneToOne(targetEntity="paper")
-     * @ORM\JoinColumn(name="id_paper", referencedColumnName="id")
-     *
+     * @ORM\ManyToOne(targetEntity="Paper", inversedBy="author")
      */
-    protected $id_paper;
+    private $paper;
 
+
+    
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set person
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Person $person
+     * @return Author
+     */
+    public function setPerson(\fibe\Bundle\WWWConfBundle\Entity\Person $person = null)
+    {
+        $this->person = $person;
+    
+        return $this;
+    }
+
+    /**
+     * Get person
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\Person 
+     */
+    public function getPerson()
+    {
+        return $this->person;
+    }
+
+    /**
+     * Set paper
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Paper $paper
+     * @return Author
+     */
+    public function setPaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $paper = null)
+    {
+        $this->paper = $paper;
+    
+        return $this;
+    }
+
+    /**
+     * Get paper
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\Paper 
+     */
+    public function getPaper()
+    {
+        return $this->paper;
+    }
 }

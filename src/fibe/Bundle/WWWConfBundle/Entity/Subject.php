@@ -45,4 +45,62 @@ class Subject
      */
     protected $id_keyword;
 
+
+    
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set id_paper
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\paper $idPaper
+     * @return Subject
+     */
+    public function setIdPaper(\fibe\Bundle\WWWConfBundle\Entity\paper $idPaper = null)
+    {
+        $this->id_paper = $idPaper;
+    
+        return $this;
+    }
+
+    /**
+     * Get id_paper
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\paper 
+     */
+    public function getIdPaper()
+    {
+        return $this->id_paper;
+    }
+
+    /**
+     * Set id_keyword
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\keyword $idKeyword
+     * @return Subject
+     */
+    public function setIdKeyword(\fibe\Bundle\WWWConfBundle\Entity\keyword $idKeyword = null)
+    {
+        $this->id_keyword = $idKeyword;
+    
+        return $this;
+    }
+
+    /**
+     * Get id_keyword
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\keyword 
+     */
+    public function getIdKeyword()
+    {
+        return $this->id_keyword;
+    }
 }

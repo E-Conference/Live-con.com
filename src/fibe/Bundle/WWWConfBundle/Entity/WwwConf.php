@@ -157,4 +157,35 @@ class WwwConf
         return $this->confEvents;
     }
     
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->confEvents = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->confManagers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add confEvents
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $confEvents
+     * @return WwwConf
+     */
+    public function addConfEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $confEvents)
+    {
+        $this->confEvents[] = $confEvents;
+    
+        return $this;
+    }
+
+    /**
+     * Remove confEvents
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $confEvents
+     */
+    public function removeConfEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $confEvents)
+    {
+        $this->confEvents->removeElement($confEvents);
+    }
 }

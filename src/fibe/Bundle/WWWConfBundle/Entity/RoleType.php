@@ -33,5 +33,85 @@ class RoleType
      */
     protected $libelle;
 
+    /**
+     * role
+     * Role how have this type
+     *  
+     * @ORM\OneToMany(targetEntity="Role", mappedBy="type")
+     */
+    private $role;
     
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set libelle
+     *
+     * @param string $libelle
+     * @return RoleType
+     */
+    public function setLibelle($libelle)
+    {
+        $this->libelle = $libelle;
+    
+        return $this;
+    }
+
+    /**
+     * Get libelle
+     *
+     * @return string 
+     */
+    public function getLibelle()
+    {
+        return $this->libelle;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->role = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add role
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $role
+     * @return RoleType
+     */
+    public function addRole(\fibe\Bundle\WWWConfBundle\Entity\Role $role)
+    {
+        $this->role[] = $role;
+    
+        return $this;
+    }
+
+    /**
+     * Remove role
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $role
+     */
+    public function removeRole(\fibe\Bundle\WWWConfBundle\Entity\Role $role)
+    {
+        $this->role->removeElement($role);
+    }
+
+    /**
+     * Get role
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
 }

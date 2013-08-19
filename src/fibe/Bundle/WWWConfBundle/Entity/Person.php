@@ -25,8 +25,23 @@ class Person
      */
     protected $id;
 
+    /**
+     *  
+     * @ORM\OneToMany(targetEntity="Role", mappedBy="person")
+     * 
+     */
+    private $role;
 
-     /**
+    /**
+     * autho
+     * Paper make by this person
+     *  
+     * @ORM\OneToMany(targetEntity="Author", mappedBy="person")
+     */
+    private $paper;
+    
+
+    /**
      * email
      *
      *
@@ -88,9 +103,9 @@ class Person
      * depiction
      *
      * depiction - A depiction of some thing. 
-	* Status:	testing
-	* Domain:	having this property implies being a Thing
-	* Range:	every value of this property is a Image
+	 * Status:	testing
+	 * Domain:	having this property implies being a Thing
+	 * Range:	every value of this property is a Image
      *
      * @ORM\Column(type="string", length=255, nullable=true, name="depiction")
      */
@@ -210,284 +225,645 @@ class Person
 	* Digital images (such as JPEG, PNG, GIF bitmaps, SVG diagrams etc.) are examples of Image.
 	*@ORM\Column(type="string", length=32, name="image")
      */
-     protected $image;
-     
-    public function getId(){
-     
+
+    protected $image;
+	 
+	
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->role = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->paper = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
         return $this->id;
-     
-     }
-     
-    public function getEmail(){
-     
-        return $this->email;
-     
-     }
-	 
-	public function getCreatedAt(){
-	 
-		return $this->created_at;
-	 
-	 }
-	 
-	
-	 
-	public function getAgent(){
-	 
-		return $this->agent;
-	 
-	 }
-	 
-	public function getName(){
-	 
-		return $this->name;
-	 
-	 }
-	 
-	 
-	public function getTitle(){
-	 
-		return $this->title;
-	 
-	 }
-	 
-	public function getImg(){
-	 
-		return $this->img;
-	 
-	 }
-	 
-	public function getDepiction(){
-	 
-		return $this->depiction;
-	 
-	 }
-	 
-	public function getFamilyName(){
-	 
-		return $this->familyName;
-	 
-	 }
-	 
-	public function getGivenName(){
-	 
-		return $this->givenName;
-	 
-	 }
-	 
-	public function getBasedNear(){
-	 
-		return $this->based_near;
-	 
-	 }
-	 
-	public function getKnows(){
-	 
-		return $this->knows;
-	 
-	 }
-	 
-	public function getAge(){
-	 
-		return $this->age;
-	 
-	 }
-	 
-	public function getMade(){
-	 
-		return $this->made;
-	 
-	 }
-	 
-	public function getPrimaryTopic(){
-	 
-		return $this->primary_topic;
-	 
-	 }
-	 
-	public function getProject(){
-	 
-		return $this->project;
-	 
-	 }
-	 
-	public function getOrganization(){
-	 
-		return $this->organization;
-	 
-	 }
-	 
-	public function get_group(){
-	 
-		return $this->_group;
-	 
-	 }
-	 
-	public function getMember(){
-	 
-		return $this->member;
-	 
-	 }
-	 
-	public function getDocument(){
-	 
-		return $this->document;
-	 
-	 }
-	 
-	public function getImage(){
-	 
-		return $this->image;
-	 
-	 }
+    }
 
-
-     public function setEmail($email){
-     
+    /**
+     * Set email
+     *
+     * @param string $email
+     * @return Person
+     */
+    public function setEmail($email)
+    {
         $this->email = $email;
+    
         return $this;
-     
-     }
-     
-	 
-	 /**
-	 * @param \DateTime $createdAt
-     * @return CalendarEntity
-	 */
-	 public function setCreatedAt($created_at){
-	 
-		$this->created_at = $created_at;
-		return $this;
-	 
-	 }
-	 
-	
-	 
-	public function setAgent($agent){
+    }
 
-		$this->agent = $agent;
-		return $this;
-	 
-	 }
-	 
-	public function setName($name){
-	 
-		$this->name = $name;
-		return $this;
-	 
-	 }
-	 
-	 
-	public function setTitle($title){
-	 
-		$this->title = $title;
-		return $this;
-	 
-	 }
-	 
-	public function setImg($img){
-	 
-		$this->img = $img;
-		return $this;
-	 
-	 }
-	 
-	public function setDepiction($depiction){
-	 
-		$this->depiction = $depiction;
-		return $this;
-	 
-	 }
-	 
-	public function setFamilyName($familyName){
-	 
-		$this->familyName = $familyName;
-		return $this;
-	 
-	 }
-	 
-	public function setGivenName($givenName){
-	 
-		$this->givenName = $givenName;
-		return $this;
-	 
-	 }
-	 
-	public function setBasedNear($based_near){
-	 
-		$this->based_near = $based_near;
-		return $this;
-	 
-	 }
-	 
-	public function setKnows($knows){
-	 
-		$this->knows = $knows;
-		return $this;
-	 
-	 }
-	 
-	public function setAge($age){
-	 
-		$this->age = $age;
-		return $this;
-	 
-	 }
-	 
-	public function setMade($made){
-	 
-		$this->made = $made;
-		return $this;
-	 
-	 }
-	 
-	public function setPrimaryTopic($primary_topic){
-	 
-		$this->primary_topic = $primary_topic;
-		return $this;
-	 
-	 
-	 }
-	 
-	public function setProject($project){
-	 
-		$this->project = $project;
-		return $this;
-	 
-	 }
-	 
-	public function setOrganization($organization){
-	 
-		$this->organization = $organization;
-		return $this;
-	 
-	 }
-	 
-	public function set_group($group){
-	 
-		$this->_group = $group;
-		return $this;
-	 
-	 }
-	 
-	public function setMember($member){
-	 
-		$this->member = $member;
-		return $this;
-	 
-	 }
-	 
-	public function setDocument($document){
-	 
-		$this->document = $document;
-		return $this;
-	 
-	 }
-	 
-	public function setImage($image){
-	 
-		$this->image = $image;
-		return $this;
-	 
-	 }
+    /**
+     * Get email
+     *
+     * @return string 
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set flag_schedule
+     *
+     * @param boolean $flagSchedule
+     * @return Person
+     */
+    public function setFlagSchedule($flagSchedule)
+    {
+        $this->flag_schedule = $flagSchedule;
+    
+        return $this;
+    }
+
+    /**
+     * Get flag_schedule
+     *
+     * @return boolean 
+     */
+    public function getFlagSchedule()
+    {
+        return $this->flag_schedule;
+    }
+
+    /**
+     * Set flag_schedule_admin
+     *
+     * @param boolean $flagScheduleAdmin
+     * @return Person
+     */
+    public function setFlagScheduleAdmin($flagScheduleAdmin)
+    {
+        $this->flag_schedule_admin = $flagScheduleAdmin;
+    
+        return $this;
+    }
+
+    /**
+     * Get flag_schedule_admin
+     *
+     * @return boolean 
+     */
+    public function getFlagScheduleAdmin()
+    {
+        return $this->flag_schedule_admin;
+    }
+
+    /**
+     * Set flag_data
+     *
+     * @param boolean $flagData
+     * @return Person
+     */
+    public function setFlagData($flagData)
+    {
+        $this->flag_data = $flagData;
+    
+        return $this;
+    }
+
+    /**
+     * Get flag_data
+     *
+     * @return boolean 
+     */
+    public function getFlagData()
+    {
+        return $this->flag_data;
+    }
+
+    /**
+     * Set flag_data_admin
+     *
+     * @param boolean $flagDataAdmin
+     * @return Person
+     */
+    public function setFlagDataAdmin($flagDataAdmin)
+    {
+        $this->flag_data_admin = $flagDataAdmin;
+    
+        return $this;
+    }
+
+    /**
+     * Get flag_data_admin
+     *
+     * @return boolean 
+     */
+    public function getFlagDataAdmin()
+    {
+        return $this->flag_data_admin;
+    }
+
+    /**
+     * Set created_at
+     *
+     * @param \DateTime $createdAt
+     * @return Person
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * Set agent
+     *
+     * @param string $agent
+     * @return Person
+     */
+    public function setAgent($agent)
+    {
+        $this->agent = $agent;
+    
+        return $this;
+    }
+
+    /**
+     * Get agent
+     *
+     * @return string 
+     */
+    public function getAgent()
+    {
+        return $this->agent;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Person
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Person
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set img
+     *
+     * @param string $img
+     * @return Person
+     */
+    public function setImg($img)
+    {
+        $this->img = $img;
+    
+        return $this;
+    }
+
+    /**
+     * Get img
+     *
+     * @return string 
+     */
+    public function getImg()
+    {
+        return $this->img;
+    }
+
+    /**
+     * Set depiction
+     *
+     * @param string $depiction
+     * @return Person
+     */
+    public function setDepiction($depiction)
+    {
+        $this->depiction = $depiction;
+    
+        return $this;
+    }
+
+    /**
+     * Get depiction
+     *
+     * @return string 
+     */
+    public function getDepiction()
+    {
+        return $this->depiction;
+    }
+
+    /**
+     * Set familyName
+     *
+     * @param string $familyName
+     * @return Person
+     */
+    public function setFamilyName($familyName)
+    {
+        $this->familyName = $familyName;
+    
+        return $this;
+    }
+
+    /**
+     * Get familyName
+     *
+     * @return string 
+     */
+    public function getFamilyName()
+    {
+        return $this->familyName;
+    }
+
+    /**
+     * Set givenName
+     *
+     * @param string $givenName
+     * @return Person
+     */
+    public function setGivenName($givenName)
+    {
+        $this->givenName = $givenName;
+    
+        return $this;
+    }
+
+    /**
+     * Get givenName
+     *
+     * @return string 
+     */
+    public function getGivenName()
+    {
+        return $this->givenName;
+    }
+
+    /**
+     * Set based_near
+     *
+     * @param string $basedNear
+     * @return Person
+     */
+    public function setBasedNear($basedNear)
+    {
+        $this->based_near = $basedNear;
+    
+        return $this;
+    }
+
+    /**
+     * Get based_near
+     *
+     * @return string 
+     */
+    public function getBasedNear()
+    {
+        return $this->based_near;
+    }
+
+    /**
+     * Set knows
+     *
+     * @param string $knows
+     * @return Person
+     */
+    public function setKnows($knows)
+    {
+        $this->knows = $knows;
+    
+        return $this;
+    }
+
+    /**
+     * Get knows
+     *
+     * @return string 
+     */
+    public function getKnows()
+    {
+        return $this->knows;
+    }
+
+    /**
+     * Set age
+     *
+     * @param string $age
+     * @return Person
+     */
+    public function setAge($age)
+    {
+        $this->age = $age;
+    
+        return $this;
+    }
+
+    /**
+     * Get age
+     *
+     * @return string 
+     */
+    public function getAge()
+    {
+        return $this->age;
+    }
+
+    /**
+     * Set made
+     *
+     * @param string $made
+     * @return Person
+     */
+    public function setMade($made)
+    {
+        $this->made = $made;
+    
+        return $this;
+    }
+
+    /**
+     * Get made
+     *
+     * @return string 
+     */
+    public function getMade()
+    {
+        return $this->made;
+    }
+
+    /**
+     * Set primary_topic
+     *
+     * @param string $primaryTopic
+     * @return Person
+     */
+    public function setPrimaryTopic($primaryTopic)
+    {
+        $this->primary_topic = $primaryTopic;
+    
+        return $this;
+    }
+
+    /**
+     * Get primary_topic
+     *
+     * @return string 
+     */
+    public function getPrimaryTopic()
+    {
+        return $this->primary_topic;
+    }
+
+    /**
+     * Set project
+     *
+     * @param string $project
+     * @return Person
+     */
+    public function setProject($project)
+    {
+        $this->project = $project;
+    
+        return $this;
+    }
+
+    /**
+     * Get project
+     *
+     * @return string 
+     */
+    public function getProject()
+    {
+        return $this->project;
+    }
+
+    /**
+     * Set organization
+     *
+     * @param string $organization
+     * @return Person
+     */
+    public function setOrganization($organization)
+    {
+        $this->organization = $organization;
+    
+        return $this;
+    }
+
+    /**
+     * Get organization
+     *
+     * @return string 
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
+    }
+
+    /**
+     * Set _group
+     *
+     * @param string $group
+     * @return Person
+     */
+    public function setGroup($group)
+    {
+        $this->_group = $group;
+    
+        return $this;
+    }
+
+    /**
+     * Get _group
+     *
+     * @return string 
+     */
+    public function getGroup()
+    {
+        return $this->_group;
+    }
+
+    /**
+     * Set member
+     *
+     * @param string $member
+     * @return Person
+     */
+    public function setMember($member)
+    {
+        $this->member = $member;
+    
+        return $this;
+    }
+
+    /**
+     * Get member
+     *
+     * @return string 
+     */
+    public function getMember()
+    {
+        return $this->member;
+    }
+
+    /**
+     * Set document
+     *
+     * @param string $document
+     * @return Person
+     */
+    public function setDocument($document)
+    {
+        $this->document = $document;
+    
+        return $this;
+    }
+
+    /**
+     * Get document
+     *
+     * @return string 
+     */
+    public function getDocument()
+    {
+        return $this->document;
+    }
+
+    /**
+     * Set image
+     *
+     * @param string $image
+     * @return Person
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+    
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string 
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * Add role
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $role
+     * @return Person
+     */
+    public function addRole(\fibe\Bundle\WWWConfBundle\Entity\Role $role)
+    {
+        $this->role[] = $role;
+    
+        return $this;
+    }
+
+    /**
+     * Remove role
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $role
+     */
+    public function removeRole(\fibe\Bundle\WWWConfBundle\Entity\Role $role)
+    {
+        $this->role->removeElement($role);
+    }
+
+    /**
+     * Get role
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * Add paper
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Author $paper
+     * @return Person
+     */
+    public function addPaper(\fibe\Bundle\WWWConfBundle\Entity\Author $paper)
+    {
+        $this->paper[] = $paper;
+    
+        return $this;
+    }
+
+    /**
+     * Remove paper
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Author $paper
+     */
+    public function removePaper(\fibe\Bundle\WWWConfBundle\Entity\Author $paper)
+    {
+        $this->paper->removeElement($paper);
+    }
+
+    /**
+     * Get paper
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPaper()
+    {
+        return $this->paper;
+    }
+
 }

@@ -45,4 +45,62 @@ class Member
      */
     protected $id_organization;
 
+
+   
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set id_person
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\person $idPerson
+     * @return Member
+     */
+    public function setIdPerson(\fibe\Bundle\WWWConfBundle\Entity\person $idPerson = null)
+    {
+        $this->id_person = $idPerson;
+    
+        return $this;
+    }
+
+    /**
+     * Get id_person
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\person 
+     */
+    public function getIdPerson()
+    {
+        return $this->id_person;
+    }
+
+    /**
+     * Set id_organization
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\organization $idOrganization
+     * @return Member
+     */
+    public function setIdOrganization(\fibe\Bundle\WWWConfBundle\Entity\organization $idOrganization = null)
+    {
+        $this->id_organization = $idOrganization;
+    
+        return $this;
+    }
+
+    /**
+     * Get id_organization
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\organization 
+     */
+    public function getIdOrganization()
+    {
+        return $this->id_organization;
+    }
 }
