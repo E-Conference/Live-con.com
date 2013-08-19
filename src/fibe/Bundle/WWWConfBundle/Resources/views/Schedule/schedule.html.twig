@@ -350,17 +350,16 @@
 
           var gid = 1; // event.id == 0 considered to be undefined (boo) 
           
-          for (var i in instant_events){
-            var current_event = instant_events[i];
-
-            var $event = sidebarDraggable(current_event);
+          for (var i in instant_events){ 
+            var $event = $(eventHtml);
+            $event = sidebarDraggable($event,instant_events[i]);
           } 
           $sidebar.droppable({
             over: function( event, ui ) {  
                 if( event && $(ui.draggable).hasClass("fc-event-draggable")) {
                     var event = dragged[1];
                     $(this).css("border-color","green"); 
-                    $sidebarTmp = sidebarEventHtml(event)
+                    $sidebarTmp = sidebarEventHtml($event,event)
                     $sidebarTmp.show() ;
                 }
             },
@@ -371,14 +370,16 @@
                 } 
             },
             drop: function( event, ui ) {
-              if ( dragged && ui.helper && ui.helper[0] === dragged[0]){
-                    $sidebarTmp.hide();
-                    $(this).css("border","solid 1px #ccc"); 
+              if ( dragged && ui.helper && ui.helper[0] === dragged[0]){alert("")
+                $sidebarTmp.hide();
+                $(this).css("border","solid 1px #ccc"); 
                 var event = dragged[1];
+                var $event = dragged[1];
                 event.end = moment(event.start);
                 $calendar.fullCalendar('removeEvents',event.id);
 
-                var $event = sidebarDraggable(event);
+                // var $event = sidebarDraggable(event);
+                var $event = sidebarDraggable($event,event)
 
                 $.post(
                     op.quickUpdateUrl,
@@ -393,18 +394,17 @@
             }
           }); 
 
-          function sidebarEventHtml (event){
-            var $event = $(eventHtml).appendTo($sidebar)
-                                     .html(event.title);
-            return $event.css({
+          function sidebarEventHtml ($event,event){
+            $event.appendTo($sidebar)
+                  .html(event.title);
+            $event.css({
                       "background-color": event.color,
                       "border-color": event.border_color || event.color,
                    });  
           }
 
-          function sidebarDraggable(event){ 
-            $event = sidebarEventHtml (event);
-            // make the event draggable using jQuery UI
+          function sidebarDraggable($event,event){ 
+            sidebarEventHtml ($event,event);
             $event.draggable({
                       zIndex: 999,
                       revert: true,      // will cause the event to go back to its
@@ -485,7 +485,8 @@
         $locationSelect.append('<option value="'+locations[i].id+'">'+locations[i].name+'</option>');
       }
 
-      /*------------------------------------- end initialize filters ----------------------------------------*/ 
+      /*------------------------------------- end initialize filters ----------------------------------------*/
+
       function renderEvent(events){
         $calendar.fullCalendar( 'removeEvents');
         //TODO ALLDAY

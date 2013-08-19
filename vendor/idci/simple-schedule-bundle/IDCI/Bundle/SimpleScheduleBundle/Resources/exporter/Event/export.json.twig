@@ -4,8 +4,12 @@
     "created_at": "{{ entity.createdAt | date('Y-m-d H:i') }}",
     "end_at": "{{ entity.endAt | date('Y-m-d H:i') }}",
     "start_at": "{{ entity.startAt | date('Y-m-d H:i') }}",
-    "parent_id": "{{ entity.parent.id }}",
-    "parent_name": "{{ entity.parent.name }}",
+
+    "parent":
+    {
+        "id": "{{ entity.parent.id }}",
+        "name": "{{ entity.location.name }}",
+    },
     "is_transparent": "{{ entity.isTransparent }}",
     "resources": "{{ entity.resources }}",
     "duration": "{{ entity.duration }}",
@@ -32,6 +36,16 @@
         "description": "{% autoescape 'js' %}{{ entity.location.description }}{% endautoescape %}"
     },
     {% spaceless %}
+    "children":
+    [
+    {% for child in entity.children %}
+        {% if loop.first %}
+        { "id": "{{ child.id }}", "name": "{{ child.name }}"}
+        {% else %}
+        ,{ "id": "{{ child.id }}", "name": "{{ child.name }}"}
+        {% endif %}
+    {% endfor %}
+    ],
     "categories":
     [
     {% for category in entity.categories %}
