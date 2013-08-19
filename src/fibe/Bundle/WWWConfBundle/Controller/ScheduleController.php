@@ -2,6 +2,7 @@
 namespace fibe\Bundle\WWWConfBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 //On insere l'entity Event  de simple schedule
@@ -54,14 +55,96 @@ class ScheduleController extends Controller
     public function scheduleAction()
     {
 
-        $conf = $this->getDoctrine()
-                     ->getRepository('fibeWWWConfBundle:WwwConf')
-                     ->find(1); 
-        $logger = $this->get('logger');
-$logger->info('Nous avons récupéré le logger');
-        return array('currentConf' => $conf);     
+        $em = $this->getDoctrine();
+        $conf = $em->getRepository('fibeWWWConfBundle:WwwConf')
+                 ->find(1);
+        $categories = $em->getRepository('IDCISimpleScheduleBundle:Category')->getOrdered();
+        $locations = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findAll();
+
+        return array(
+                'currentConf' => $conf,
+                'categories'  => $categories,
+                'locations'   => $locations
+            );     
     
-}    
+}
+ 
+/**
+ *   return all events contained in the given date week
+ * @Route("/getEventsFiltered", name="schedule_view_event_get_ordered")
+ */
+    public function getEventsFilteredAction(Request $request)
+    {
+    
+        $em = $this->getDoctrine()->getManager();
+    
+        $getData = $request->query; 
+        $postData = $request->request->all();
+        $currentManager=$this->get('security.context')->getToken()->getUser();
+        $eventsEntities ;
+
+        $getData = $request->query;
+        $repo = $getData->get('repo', ''); 
+        $id = $getData->get('id', ''); 
+        
+        $JSONArray = array();
+        switch ($repo) {
+            case 'Category':
+                $category = $em->getRepository('IDCISimpleScheduleBundle:Category')->find($id); 
+                $eventsEntities = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findByCategory($category); 
+            case 'Location':
+                $location = $em->getRepository('IDCISimpleScheduleBundle:Category')->find($id); 
+                $eventsEntities = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findByLocation($location);
+            default:
+                throw new NotFoundHttpException(
+                    sprintf('Unable to find the filter %s'));
+
+                break;
+        } 
+        $JSONArray['error'] = null;
+        $JSONArray['issort'] = true;
+
+        $JSONArray['events'] = array();
+        $JSONArray['instant_events'] = array();
+        for ($i = 0; $i < count($eventsEntities); $i++) {
+
+            $start =  $eventsEntities[$i]->getStartAt() ; 
+            $end =  $eventsEntities[$i]->getEndAt() ; 
+            $duration =   $end->diff($start) ; 
+
+            $duration = ($duration->y * 365 * 24 * 60 * 60) + 
+                        ($duration->m * 30 * 24 * 60 * 60) + 
+                        ($duration->d * 24 * 60 * 60) + 
+                        ($duration->h * 60 * 60) + 
+                        ($duration->i * 60) + 
+                        $duration->s; 
+            //echo $eventsEntities[$i]->getSummary().", ".$duration % 86400 ." .... ";
+            $category = $eventsEntities[$i]->getCategories();
+            $category = $category[0];
+            $event = array(
+                "id" => $eventsEntities[$i]->getId(),
+                "duration" => $duration,
+                "title" => $eventsEntities[$i]->getSummary(),
+                "allDay" => (($duration+86400) % 86400 == 86399 || ($duration+86400) % 86400 == 0 ) && ($duration !== 1 || $duration !== 0)  ? 1 : 0,     // all day event
+                "start" => $start->format('m/d/Y H:i'),
+                "end" => $end->format('m/d/Y H:i'),
+                "color" => $category?$category->getColor():null,                 // color
+            );       
+            if($duration !== 1 && $duration !== 0)
+            {
+                $JSONArray['events'][] = $event;
+            }else
+            {
+                $JSONArray['instant_events'][] = $event;
+            }
+        }
+  
+        
+        $response = new Response(json_encode($JSONArray));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+    
  
 /**
  *   return all events contained in the given date week
@@ -70,53 +153,17 @@ $logger->info('Nous avons récupéré le logger');
     public function getEventsAction(Request $request)
     {
     
-	    $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
     
-	    $getData = $request->query;
-	    $methodParam = $getData->get('method', '');
-	    $postData = $request->request->all();
+        $getData = $request->query;
+        $methodParam = $getData->get('method', '');
+        $postData = $request->request->all();
         $currentManager=$this->get('security.context')->getToken()->getUser();
-	    
+        
         $JSONArray = array();
-	    
-	    if( $methodParam=="list")
-	    {
-            // $type= $postData['viewtype']; 
-            // $jsdate = $postData['showdate'];
-            // if(preg_match('@(\d+)/(\d+)/(\d+)\s+(\d+):(\d+)@', $jsdate, $matches)==1){
-            // $jsdate = mktime($matches[4], $matches[5], 0, $matches[1], $matches[2], $matches[3]);
-            // //echo $matches[4] ."-". $matches[5] ."-". 0  ."-". $matches[1] ."-". $matches[2] ."-". $matches[3];
-            // }else if(preg_match('@(\d+)/(\d+)/(\d+)@', $jsdate, $matches)==1){
-            // $jsdate = mktime(0, 0, 0, $matches[1], $matches[2], $matches[3]);
-            // //echo 0 ."-". 0 ."-". 0 ."-". $matches[1] ."-". $matches[2] ."-". $matches[3];
-            // }
-
-            // //echo $jsdate . "+" . $type;
-            // switch($type){
-            // case "month":
-            //   $st = mktime(0, 0, 0, date("m", $jsdate), 1, date("Y", $jsdate));
-            //   $et = mktime(0, 0, -1, date("m", $jsdate)+1, 1, date("Y", $jsdate));
-            //   break;
-            // case "week":
-            //   //suppose first day of a week is monday 
-            //   $monday  =  date("d", $jsdate) - date('N', $jsdate) + 1;
-            //   //echo date('N', $jsdate);
-            //   $st = mktime(0,0,0,date("m", $jsdate), $monday, date("Y", $jsdate));
-            //   $et = mktime(0,0,-1,date("m", $jsdate), $monday+7, date("Y", $jsdate));
-            //   break;
-            // case "day":
-            //   $st = mktime(0, 0, 0, date("m", $jsdate), date("d", $jsdate), date("Y", $jsdate));
-            //   $et = mktime(0, 0, -1, date("m", $jsdate), date("d", $jsdate)+1, date("Y", $jsdate));
-            //   break;
-            // }
-            //echo $st . "--" . $et;
-            
-
-            // $week_start = date($getData->get('start', ''));
-            // $week_end = date($getData->get('end', '')); 
-  
-            // $JSONArray['start'] = $week_start;
-            // $JSONArray['end'] = $week_end;
+        
+        if( $methodParam=="list")
+        { 
             $JSONArray['error'] = null;
             $JSONArray['issort'] = true;
 
@@ -198,7 +245,7 @@ $logger->info('Nous avons récupéré le logger');
             $JSONArray['IsSuccess'] = true;
             $JSONArray['Msg'] = "Successfully";
         }
-	    
+        
         $response = new Response(json_encode($JSONArray));
         $response->headers->set('Content-Type', 'application/json');
         return $response;

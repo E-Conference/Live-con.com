@@ -1,7 +1,6 @@
 
 
-{% block body %} 
-  {{ parent() }}
+{% block body %}  
 <div class="row-fluid well">  
     <form id="event" class="col-lg-4" class="form-horizontal" >  
         <p>  
@@ -220,8 +219,7 @@
 
 
 
- {% block stylesheets %}
-  {{ parent() }}
+ {% block stylesheets %} 
  <style type="text/css"> 
     .control-group .controls {
         margin-left: 200px;
@@ -232,8 +230,7 @@
  </style>
 {% endblock stylesheets %}
 
-{%  block javascripts %} 
-  {{ parent() }}
+{%  block javascripts %}  
 
 
 <script src="{{ asset('bundles/fibewwwconf/js/bootstrap-datetimepicker.min.js') }}" type="text/javascript" ></script>
