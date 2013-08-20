@@ -59,7 +59,7 @@ class ScheduleController extends Controller
         $conf = $em->getRepository('fibeWWWConfBundle:WwwConf')
                  ->find(1);
         $categories = $em->getRepository('IDCISimpleScheduleBundle:Category')->getOrdered();
-        $locations = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findAll();
+        $locations = $em->getRepository('IDCISimpleScheduleBundle:Location')->getOrdered();
 
         return array(
                 'currentConf' => $conf,
