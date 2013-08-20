@@ -24,6 +24,8 @@
     var bootstrapAlertTimeout;
     function bootstrapAlert(type,msg,title,icon){
         var $body = $("body");
+
+        //get unique #bootstrap_alert
         var $bootstrapAlert = $('#bootstrap_alert').length < 1 ? $('<div id="bootstrap_alert"></div>').prependTo($body) : $('#bootstrap_alert');
         
         if(type== "stop"){
@@ -44,13 +46,20 @@
                 icon:"<i class='icon-meh'></i>"
             }
         }
+        //without type
+        if(!config[type]){
+            msg=type;
+            type="info";
+        }
+        //default values
         if(!icon && icon!=""){ 
             icon = config[type].icon
         } 
 
         if(!title && title!="" ){
             title = config[type].title;
-        } 
+        }
+
         $bootstrapAlert.attr("class","")
                        .addClass("alert alert-"+type) 
                        .html('<button type="button" class="close" data-dismiss="alert">&times;</button><strong> '+title+' </strong>'+msg)  
