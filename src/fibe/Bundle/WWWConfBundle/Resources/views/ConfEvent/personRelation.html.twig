@@ -1,0 +1,19 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Role</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for role in entity.getRole() %} 
+            <tr> 
+                <td>{{ role.getType().libelle }}</td>
+                <td>{{ role.getPerson().name }}</td>
+                <td>{{ role.getPerson().email }}</td>
+            </tr> 
+        {% endfor %}
+    </tbody>
+</table>

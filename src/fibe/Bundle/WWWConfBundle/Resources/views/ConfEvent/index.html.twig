@@ -3,17 +3,9 @@
 {% block body %}
 
 {{ parent() }}
+    <h1>ConfEvent list</h1>
 
-
-<div class="page-header">
-    <h1>{% trans %}Events{% endtrans %}</h1>
-</div>
-
-  <a type="btn btn-info" href="{{ path('schedule_confevent_new') }}">
-        <i class="icon-plus"></i>
-  </a>
-		
-<table class="table table-hover records_list">
+    <table class="table table-hover records_list">
     <thead>
         <tr>
             <th>Id</th>
@@ -56,9 +48,13 @@
     {% endfor %}
     </tbody>
 </table>
-   
-<div class="row">
-  <div class="col-md-3 col-md-offset-3"></div>
-  <div class="col-md-3 col-md-offset-3"> {{ pagerfanta(pager, 'twitter_bootstrap') }}</div>
-</div>
-{% endblock body %}
+
+
+        <ul>
+        <li>
+            <a href="{{ path('schedule_confevent_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

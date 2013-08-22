@@ -13,11 +13,15 @@ class ConfEventType extends EventType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $builder
+       $builder
             ->add('wwwConf', null, array(
                                     'required'  => true,
                                     'label'     => 'Belongs to conf'
             ))
+            ->add('papers', 'entity', array('class'    => 'fibeWWWConfBundle:Paper',
+                                              'property' => 'title'))
+            ->add('role', 'entity', array('class' => 'fibeWWWConfBundle:Role',
+                                              'property' => 'person'))
         ;
     }
 

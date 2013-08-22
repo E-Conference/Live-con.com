@@ -1,15 +1,13 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
 {% block title %}Index{% endblock title %}
-{% block body %}
 
+{% block body %}
+{{ parent() }}
 
 <div class="row">
   <div class="col-lg-4"><h1>Person list</h1></div>
   <div class="col-lg-4">
-    <a class="btn btn-info" href="{{ path('person_new') }}">
-             <i class="icon-plus"></i>
-    </a> 
   </div>
 </div>
     <a type="btn btn-info" href="{{ path('person_new') }}">
@@ -19,30 +17,13 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Name</th>
                 <th>Email</th>
                 <th>Flag_schedule</th>
                 <th>Flag_schedule_admin</th>
                 <th>Flag_data</th>
                 <th>Flag_data_admin</th>
-                <th>Created_at</th>
-                <th>Agent</th>
-                <th>Name</th>
-                <th>Title</th>
-                <th>Img</th>
-                <th>Depiction</th>
-                <th>Familyname</th>
-                <th>Givenname</th>
-                <th>Based_near</th>
-                <th>Knows</th>
-                <th>Age</th>
-                <th>Made</th>
-                <th>Primary_topic</th>
-                <th>Project</th>
                 <th>Organization</th>
-                <th>_group</th>
-                <th>Member</th>
-                <th>Document</th>
-                <th>Image</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -50,39 +31,21 @@
         {% for entity in entities %}
             <tr>
                 <td><a href="{{ path('person_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.name }}</td>
                 <td>{{ entity.email }}</td>
                 <td>{{ entity.flagschedule }}</td>
                 <td>{{ entity.flagscheduleadmin }}</td>
                 <td>{{ entity.flagdata }}</td>
                 <td>{{ entity.flagdataadmin }}</td>
-                <td>{% if entity.createdat %}{{ entity.createdat|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ entity.agent }}</td>
-                <td>{{ entity.name }}</td>
-                <td>{{ entity.title }}</td>
-                <td>{{ entity.img }}</td>
-                <td>{{ entity.depiction }}</td>
-                <td>{{ entity.familyName }}</td>
-                <td>{{ entity.givenName }}</td>
-                <td>{{ entity.basednear }}</td>
-                <td>{{ entity.knows }}</td>
-                <td>{{ entity.age }}</td>
-                <td>{{ entity.made }}</td>
-                <td>{{ entity.primarytopic }}</td>
-                <td>{{ entity.project }}</td>
                 <td>{{ entity.organization }}</td>
-                <td>{{ entity.group }}</td>
-                <td>{{ entity.member }}</td>
-                <td>{{ entity.document }}</td>
-                <td>{{ entity.image }}</td>
                 <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('person_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('person_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
+                    <a class="btn btn-default" href="{{ path('person_show', { 'id': entity.id }) }}">
+                        <i class="icon-eye-open"></i>
+                    </a>
+                   
+                    <a class="btn btn-warning" href="{{ path('person_edit', { 'id': entity.id }) }}">
+                         <i class="icon-edit"></i>
+                    </a>
                 </td>
             </tr>
         {% endfor %}
