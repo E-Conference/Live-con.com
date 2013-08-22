@@ -17,8 +17,8 @@
                  {{ form_widget(form.confName) }} 
                  {{ form_errors(form.confName) }} 
                   <span class="input-group-btn">
-                    <button type="submit" id="EventImport" class="btn btn-default">
-                        Process import <i class="icon-arrow-right"></i> 
+                    <button type="submit" class="btn btn-default">
+                        Set conference name <i class="icon-arrow-right"></i> 
                     </button>
                   </span>
                 </div><!-- /input-group -->
@@ -38,7 +38,7 @@
             <div class="input-group">
                 <input id="EventImport" class="form-control" name="EventImport" type="text"/>
                 <span class="input-group-btn">
-                    <button type="submit" id="EventImport" class="btn btn-default">
+                    <button type="submit"class="btn btn-default">
                         Process import <i class="icon-arrow-right"></i> 
                     </button>
                 </span>
@@ -123,27 +123,27 @@
             // confOwlUriInput.before(confOwlUriHelper) 
             // $('#SWCLinkForm label').remove();
             confOwlUriInput.change(function(){
-                    $(this).parent().removeClass('control-group error');
+                    $(this).parent().removeClass('has-warning');
             });
             $('#EventImportForm').submit(function(event) {
                 event.preventDefault(); 
                 if(confOwlUriInput.val() == "" ){
                     isConfOwlUriInputOK = false;
-                    confOwlUriInput.parent().addClass('control-group error');
+                    confOwlUriInput.parent().addClass('has-warning');
                 }else{
                     isConfOwlUriInputOK = true;
                 }
 
     //                 isConfOwlUriInputOK = true;
-    //                 confOwlUriInput.parent().addClass('control-group error');
+    //                 confOwlUriInput.parent().addClass('has-warning');
     //                 owlLessMode=true;
     //                 if(confNameInput.val() != "" ){
     //                     isconfNameInputOK = true;
-    //                     confNameInput.parent().addClass('control-group success'); 
+    //                     confNameInput.parent().addClass('has-success'); 
     //                     send();
     //                 }else{
     //                     isconfNameInputOK = false;
-    //                     confNameInput.parent().addClass('control-group error');
+    //                     confNameInput.parent().addClass('has-warning');
                     
     //                 }
     //             }else
@@ -161,7 +161,6 @@
     				    isConfOwlUriInputOK = true;
                         ConfRdfFile = dataArray ; 
                         confName=confname;
-                        confOwlUriInput.parent().addClass('control-group success');
                         $.ajax({ //DBimport
                             type: "POST",
                             cache: false,  
@@ -169,21 +168,23 @@
                             data: "dataArray=" + JSON.stringify(ConfRdfFile, null),
                             success:function(a,b,c)
                             {
-                                if(ConfRdfFile!=undefined)
-                                    bootstrapAlert("success",' : \n\t'+ConfRdfFile.events.length+' events and '+ConfRdfFile.locations.length+' locations\n',confName+'" has been well added','<i class="icon-info"></i> '); 
+                                if(ConfRdfFile!=undefined){
+                                    bootstrapAlert("success",' : \n\t'+ConfRdfFile.events.length+' events and '+ConfRdfFile.locations.length+' locations\n',confName+'" has been well added');
+                                    confOwlUriInput.parent().addClass('has-success');
+                                }
                                 
                             },
                             error:function(a,b,c)
                             { 
-                                bootstrapAlert("error",ConfRdfFile.events.length+' events found but import failed',"Error : ",'<i class="icon-warning"></i> '); 
-                                confOwlUriInput.parent().addClass('control-group error');
+                                bootstrapAlert("error",ConfRdfFile.events.length+' events found but import failed'); 
+                                confOwlUriInput.parent().addClass('has-warning');
                             },
                         });
                         
                     },function(msg)
                     {
-                        confOwlUriInput.parent().addClass('control-group error');
-                        bootstrapAlert("error", msg || "","Import failed","<i class='icon-warning'></i>");
+                        confOwlUriInput.parent().addClass('has-warning');
+                        bootstrapAlert("error", msg || "");
                     });
                 }
                 
@@ -196,13 +197,13 @@
                         url:confUriInput.val()+'?query=SELECT+DISTINCT+*+WHERE+%7B+%3Fs+%3Fp+%3Fo+%7D%0D%0ALIMIT+1', 
                         success:function()
                         { 
-                            confUriInput.parent().addClass('control-group success');
+                            confUriInput.parent().addClass('has-success');
                             isConfUriInputOK = true;
                             send();
                         },
                         error:function() 
                         { 
-                            confUriInput.parent().addClass('control-group error');
+                            confUriInput.parent().addClass('has-warning');
                         } 
                     }); 
                 }
@@ -222,7 +223,7 @@
                             success:function(wwwConfId,b,c) 
                             { 
 								if(owlLessMode==false){
-								    confOwlUriInput.parent().addClass('control-group success');
+								    confOwlUriInput.parent().addClass('has-success');
 								    $.ajax({ //DBimport
 								        type: "POST",
 								        cache: false, 
@@ -238,7 +239,7 @@
 								        error:function(a,b,c)
 								        { 
 								            alert("The conf file has been found, but import failed");
-								            confOwlUriInput.parent().addClass('control-group error');
+								            confOwlUriInput.parent().addClass('has-warning');
 								        },
 								    });
 								}else
@@ -248,7 +249,7 @@
                             }
                             ,error:function(a,b,c)
                             {
-                                confOwlUriInput.parent().addClass('control-group error');
+                                confOwlUriInput.parent().addClass('has-warning');
                             },
                         });
                 }

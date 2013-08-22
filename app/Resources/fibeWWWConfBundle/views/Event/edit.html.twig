@@ -1,0 +1,163 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+{{ parent() }}
+<div class="container">
+<div class="page-header">
+  <h1>{% trans %}Edit{% endtrans %}</h1>
+</div>
+
+<form action="{{ path('schedule_event_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(form) }}>
+    {% include "IDCISimpleScheduleBundle:Event:form.html.twig" %}
+    <button type="submit" class="btn btn-primary">{% trans %}Edit{% endtrans %}</button>
+</form>
+
+{% include "IDCISimpleScheduleBundle:Event:xproperties.html.twig" with {"with_form": true} %}
+
+
+<ul class="record_actions">
+    <li>
+        <a class="btn" href="{{ path('schedule_event') }}">
+            {% trans %}Back to the list{% endtrans %}
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('schedule_event_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+            <button type="submit" class="btn btn-danger">{% trans %}Delete{% endtrans %}</button>
+        </form>
+    </li>
+</ul>
+</div>
+{% endblock body %}
+
+{% block stylesheets %}
+{{ parent() }}
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="{{ asset('bundles/fibewwwconf/css/datetimepicker.css') }}" type="text/javascript" >
+		 
+    
+ <style type="text/css">
+    body #event .control-group .input-append {
+        margin-left: 20px;
+    }
+    .datetimepicker { 
+        margin-top: 0px; 
+    }
+ </style>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+ 
+ 
+<script src="{{ asset('bundles/fibewwwconf/js/bootstrap-datetimepicker.min.js') }}" type="text/javascript" ></script>  
+<script src="{{ asset('bundles/fibewwwconf/js/datepickerTools.js') }}" type="text/javascript" ></script>
+<script type="text/javascript" >
+    $(document).ready(function(){ 
+        $('.datetimepicker').datetimepicker({
+            format: 'dd/mm/yyyy hh:ii',
+            autoclose: true,
+        });
+    });
+
+</script>    
+
+ 
+<!-- <script type="text/javascript" src="http://rdfquery.googlecode.com/files/jquery.rdfquery.core.min-1.0.js"></script> -->
+<script src="{{ asset('bundles/fibewwwconf/js/autocompletion.js') }}" type="text/javascript" ></script>
+<script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+<script src="{{ asset('bundles/fibewwwconf/js/SWDF.js') }}" type="text/javascript" ></script>
+<script type="text/javascript" >
+function FormPost(uri,form,callback){
+    $.ajax({
+        type: "POST",
+        url:uri,
+        async: false,
+        data: form.serialize(),
+        success:function(a,b,c) {
+                     console.log(a,b,c);
+                     if(callback)callback();
+        }
+    });
+} 
+function autoCompletePublication(){ 
+    var swdf=new SWDF("{{ SparqlUrl }}");
+    swdf.buildQry();
+      
+	swdf.callback= function(arrayResult){autoComplete($('#idci_bundle_simpleschedulebundle_xpropertytype_xkey'),arrayResult)};
+	/*swdf.callback= function(arrayResult){
+	    var tmpArr = [];
+	    $.each(arrayResult,function(){
+	       tmpArr.push(this.value); 
+	    });
+	    $('#idci_bundle_simpleschedulebundle_xpropertytype_xkey').typeahead(
+        {
+            source:  tmpArr,
+            updater : function(item){
+                $("#idci_bundle_simpleschedulebundle_xpropertytype_xvalue").val(item.uri).addClass("inputSuccess");
+                $('#form_xvalue').val(item.uri);
+                $('#form_xkey').val(item.uri);
+                $("#uriLink div").removeClass("warning").addClass("success");
+                $("#submitLinkButton").removeAttr("disabled").removeClass("disabled") ;
+            }
+
+        });
+    };*/
+    swdf.doQry();
+    console.log(swdf);
+	console.log(swdf.arrayResult);
+}
+
+function autoCompleteEvent(){
+    
+    var swdf=new SWDF("{{ SparqlUrl }}");
+	swdf.$select = 	     ' ?uriEvent ?eventLabel   '; 
+	
+	swdf.$whereClause =  '?uriEvent rdfs:label ?eventLabel.'+
+                         '{?uriEvent rdf:type swc:TrackEvent.}' +
+                         'UNION' +
+                         '{?uriEvent rdf:type swc:TalkEvent.}' +
+                         'UNION' +
+                         '{?uriEvent rdf:type swc:ConferenceEvent.}' +
+                         'UNION ' +
+                         '{?uriEvent rdf:type swc:TutorialEvent.}' +
+                         'UNION' +
+                         '{?uriEvent rdf:type swc:WorkshopEvent.}' +
+                         ' UNION ' +
+                         '{?uriEvent rdf:type swc:SessionEvent.}' +
+                         'UNION' +
+                         '{?uriEvent rdf:type swc:SocialEvent.}' +
+                         'UNION' +
+                         '{?uriEvent rdf:type swc:PanelEvent.}';
+    swdf.buildQry();
+	swdf.parseMtd=swdf.toArray2;
+	swdf.callback= function(arrayResult){autoComplete($('#idci_bundle_simpleschedulebundle_xpropertytype_xkey'),arrayResult)};
+    swdf.doQry();
+	console.log(swdf.arrayResult); 
+}
+
+$(document).ready(function(){ 
+    
+    //autocomplete  {{ SparqlUrl }}
+    $('#idci_bundle_simpleschedulebundle_xpropertytype_xnamespace').change(function(){
+        var xNamespace = $(this).val();
+        if( xNamespace == "publication_uri") autoCompletePublication();
+        else if( xNamespace == "event_uri") autoCompleteEvent();
+    });
+    autoCompletePublication();
+    
+        });
+    
+    </script>    
+	
+{% endblock javascripts %}
+
+
+
+
+
+
+
+

@@ -33,16 +33,46 @@
     var bootstrapAlertTimeout;
     function bootstrapAlert(type,msg,title,icon){
         var $body = $("body");
+
+        //get unique #bootstrap_alert
         var $bootstrapAlert = $('#bootstrap_alert').length < 1 ? $('<div id="bootstrap_alert"></div>').prependTo($body) : $('#bootstrap_alert');
         
         if(type== "stop"){
           clearInterval(bootstrapAlertTimeout);
           $bootstrapAlert.fadeOut(1500);
         } 
+        var config = {
+            success:{
+                title:"Success : ",
+                icon:"<i class='icon-ok'></i>"
+            },
+            info:{
+                title:"Info : ",
+                icon:"<i class='icon-info'></i>"
+            },
+            error:{
+                title:"Error : ",
+                icon:"<i class='icon-meh'></i>"
+            }
+        }
+        //without type
+        if(!config[type]){
+            msg=type;
+            type="info";
+        }
+        //default values
+        if(!icon && icon!=""){ 
+            icon = config[type].icon
+        } 
+
+        if(!title && title!="" ){
+            title = config[type].title;
+        }
+
         $bootstrapAlert.attr("class","")
                        .addClass("alert alert-"+type) 
                        .html('<button type="button" class="close" data-dismiss="alert">&times;</button><strong> '+title+' </strong>'+msg)  
-                       .prepend(icon ? $(icon).addClass("icon-2x").css("margin-right","0.5em") : "");
+                       .prepend($(icon).addClass("icon-2x").css("margin-right","0.5em"));
         if(!$bootstrapAlert.is(":visible"))$bootstrapAlert.hide().fadeIn();
         clearInterval(bootstrapAlertTimeout);
         bootstrapAlertTimeout=setInterval(function(){
@@ -58,19 +88,19 @@
             {% include "fibeWWWConfBundle::adminmenu.html.twig" %}
             {% for flashMessage in app.session.flashbag.get('info') %}
                 <script type="text/javascript" >
-                    bootstrapAlert("info","{{ flashMessage }}","Info");
+                    bootstrapAlert("info","{{ flashMessage }}","Info : ",'<i class="icon-info"></i> ');
                 </script> 
             {% endfor %}
 
             {% for flashMessage in app.session.flashbag.get('success') %} 
                 <script type="text/javascript" >
-                bootstrapAlert("success","{{ flashMessage }}","Success",'<i class="icon-info"></i> '); 
+                bootstrapAlert("success","{{ flashMessage }}","Success : ",'<i class="icon-ok-sign"></i> '); 
                 </script>  
             {% endfor %}
 
             {% for flashMessage in app.session.flashbag.get('error') %}
                 <script type="text/javascript" >
-                bootstrapAlert("error","{{ flashMessage }}","Error",'<i class="icon-warning-sign"></i> '); 
+                bootstrapAlert("error","{{ flashMessage }}","Error : ",'<i class="icon-meh"></i> '); 
                 </script> 
             {% endfor %}
              

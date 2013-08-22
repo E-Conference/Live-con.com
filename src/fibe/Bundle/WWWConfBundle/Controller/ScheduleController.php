@@ -68,83 +68,7 @@ class ScheduleController extends Controller
             );     
     
 }
- 
-/**
- *   return all events contained in the given date week
- * @Route("/getEventsFiltered", name="schedule_view_event_get_ordered")
- */
-    public function getEventsFilteredAction(Request $request)
-    {
-    
-        $em = $this->getDoctrine()->getManager();
-    
-        $getData = $request->query; 
-        $postData = $request->request->all();
-        $currentManager=$this->get('security.context')->getToken()->getUser();
-        $eventsEntities ;
-
-        $getData = $request->query;
-        $repo = $getData->get('repo', ''); 
-        $id = $getData->get('id', ''); 
-        
-        $JSONArray = array();
-        switch ($repo) {
-            case 'Category':
-                $category = $em->getRepository('IDCISimpleScheduleBundle:Category')->find($id); 
-                $eventsEntities = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findByCategory($category); 
-            case 'Location':
-                $location = $em->getRepository('IDCISimpleScheduleBundle:Category')->find($id); 
-                $eventsEntities = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findByLocation($location);
-            default:
-                throw new NotFoundHttpException(
-                    sprintf('Unable to find the filter %s'));
-
-                break;
-        } 
-        $JSONArray['error'] = null;
-        $JSONArray['issort'] = true;
-
-        $JSONArray['events'] = array();
-        $JSONArray['instant_events'] = array();
-        for ($i = 0; $i < count($eventsEntities); $i++) {
-
-            $start =  $eventsEntities[$i]->getStartAt() ; 
-            $end =  $eventsEntities[$i]->getEndAt() ; 
-            $duration =   $end->diff($start) ; 
-
-            $duration = ($duration->y * 365 * 24 * 60 * 60) + 
-                        ($duration->m * 30 * 24 * 60 * 60) + 
-                        ($duration->d * 24 * 60 * 60) + 
-                        ($duration->h * 60 * 60) + 
-                        ($duration->i * 60) + 
-                        $duration->s; 
-            //echo $eventsEntities[$i]->getSummary().", ".$duration % 86400 ." .... ";
-            $category = $eventsEntities[$i]->getCategories();
-            $category = $category[0];
-            $event = array(
-                "id" => $eventsEntities[$i]->getId(),
-                "duration" => $duration,
-                "title" => $eventsEntities[$i]->getSummary(),
-                "allDay" => (($duration+86400) % 86400 == 86399 || ($duration+86400) % 86400 == 0 ) && ($duration !== 1 || $duration !== 0)  ? 1 : 0,     // all day event
-                "start" => $start->format('m/d/Y H:i'),
-                "end" => $end->format('m/d/Y H:i'),
-                "color" => $category?$category->getColor():null,                 // color
-            );       
-            if($duration !== 1 && $duration !== 0)
-            {
-                $JSONArray['events'][] = $event;
-            }else
-            {
-                $JSONArray['instant_events'][] = $event;
-            }
-        }
   
-        
-        $response = new Response(json_encode($JSONArray));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-    }
-    
  
 /**
  *   return all events contained in the given date week
@@ -161,50 +85,7 @@ class ScheduleController extends Controller
         $currentManager=$this->get('security.context')->getToken()->getUser();
         
         $JSONArray = array();
-        
-        if( $methodParam=="list")
-        { 
-            $JSONArray['error'] = null;
-            $JSONArray['issort'] = true;
-
-            $eventsEntities = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findAll();
-
-            $JSONArray['events'] = array();
-            $JSONArray['instant_events'] = array();
-            for ($i = 0; $i < count($eventsEntities); $i++) {
-
-                $start =  $eventsEntities[$i]->getStartAt() ; 
-                $end =  $eventsEntities[$i]->getEndAt() ; 
-                $duration =   $end->diff($start) ; 
-
-                $duration = ($duration->y * 365 * 24 * 60 * 60) + 
-                            ($duration->m * 30 * 24 * 60 * 60) + 
-                            ($duration->d * 24 * 60 * 60) + 
-                            ($duration->h * 60 * 60) + 
-                            ($duration->i * 60) + 
-                            $duration->s; 
-                //echo $eventsEntities[$i]->getSummary().", ".$duration % 86400 ." .... ";
-                $category = $eventsEntities[$i]->getCategories();
-                $category = $category[0];
-                $event = array(
-                    "id" => $eventsEntities[$i]->getId(),
-                    "duration" => $duration,
-                    "title" => $eventsEntities[$i]->getSummary(),
-                    "allDay" => (($duration+86400) % 86400 == 86399 || ($duration+86400) % 86400 == 0 ) && ($duration !== 1 || $duration !== 0)  ? 1 : 0,     // all day event
-                    "start" => $start->format('m/d/Y H:i'),
-                    "end" => $end->format('m/d/Y H:i'),
-                    "color" => $category?$category->getColor():null,                 // color
-                );       
-                if($duration !== 1 && $duration !== 0)
-                {
-                    $JSONArray['events'][] = $event;
-                }else
-                {
-                    $JSONArray['instant_events'][] = $event;
-                }
-            }
-
-        }else if( $methodParam=="add" )
+        if( $methodParam=="add" )
         {
             $conf = $this->getDoctrine()
                          ->getRepository('fibeWWWConfBundle:WwwConf')
@@ -221,9 +102,8 @@ class ScheduleController extends Controller
                   $event->setEndAt(new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()))); 
                 }
                 $event->setSummary($postData['title']); 
-                $event->setParent(  $this->getDoctrine()
-                                         ->getRepository('fibeWWWConfBundle:ConfEvent')
-                                         ->find($postData['parent_id']));
+                $event->setParent( $em->getRepository('IDCISimpleScheduleBundle:Event')->find($postData['parent']['id']) );
+
                 $event->setWwwConf($conf);
                 
                 $em->persist($event);
@@ -238,8 +118,10 @@ class ScheduleController extends Controller
             $event = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($postData['id']);
             $startAt = new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get()));
             $endAt =new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()));
+            
             $event->setStartAt( $startAt );
             $event->setEndAt( $endAt );
+            $event->setParent( $em->getRepository('IDCISimpleScheduleBundle:Event')->find($postData['parent']['id']) );
             $em->persist($event);
             $em->flush();
             $JSONArray['IsSuccess'] = true;
