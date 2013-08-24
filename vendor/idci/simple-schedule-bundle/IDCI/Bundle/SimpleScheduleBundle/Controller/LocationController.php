@@ -16,6 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Location;
 use IDCI\Bundle\SimpleScheduleBundle\Form\LocationType;
+use fibe\Bundle\WWWConfBundle\Entity\Equipment;
 
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
@@ -41,10 +42,7 @@ class LocationController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('IDCISimpleScheduleBundle:Location')->findAll();
-        
-
-        
-        
+    
         $adapter = new ArrayAdapter($entities);
         $pager = new PagerFanta($adapter);
         $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
@@ -148,10 +146,6 @@ class LocationController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IDCISimpleScheduleBundle:Location')->find($id);
-
-            
- 
-        
         
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Location entity.');
@@ -160,10 +154,13 @@ class LocationController extends Controller
         $editForm = $this->createForm(new LocationType(), $entity); 
         $deleteForm = $this->createDeleteForm($id);
 
+        $equipments = $em->getRepository('fibeWWWConfBundle:Equipment')->getEquipmentForLocationSelect($entity);
+
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(), 
-            'delete_form'       => $deleteForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+            'equipments'  => $equipments
         );
     }
 
@@ -179,10 +176,6 @@ class LocationController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IDCISimpleScheduleBundle:Location')->find($id);
 
-            
- 
-        
-        
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Location entity.');
         }
@@ -210,6 +203,67 @@ class LocationController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(), 
         );
+    }
+
+    /**
+     * Deletes a Location entity.
+     *
+     * @Route("/addEquipment", name="schedule_location_addEquipment")
+     * @Method("POST")
+     */
+    public function addEquipmentAction(Request $request)
+    {
+        $id_location = $request->request->get('id_location');
+        $id_equipment = $request->request->get('id_equipment');
+
+        $em = $this->getDoctrine()->getManager();
+        $location = $em->getRepository('IDCISimpleScheduleBundle:Location')->find($id_location);
+        $equipment  = $em->getRepository('fibeWWWConfBundle:Equipment')->find($id_equipment);
+
+        $equipments = $em->getRepository('fibeWWWConfBundle:Equipment')->getEquipmentForLocationSelect($location);
+
+        $location->addEquipment($equipment);
+
+        $em->persist($location);
+        $em->flush();
+
+          return $this->render('IDCISimpleScheduleBundle:Location:equipmentsRelation.html.twig', array(
+            'entity'  => $location,
+            'equipments' => $equipments,
+        ));
+
+    }
+
+
+    /**
+     * Deletes a Location entity.
+     *
+     * @Route("/deleteEquipment", name="schedule_location_deleteEquipment")
+     * @Method("POST")
+     */
+    public function deleteEquipmentAction(Request $request)
+    {
+        $id_location = $request->request->get('id_location');
+        $id_equipment = $request->request->get('id_equipment');
+
+        $em = $this->getDoctrine()->getManager();
+        $location = $em->getRepository('IDCISimpleScheduleBundle:Location')->find($id_location);
+        $equipment  = $em->getRepository('fibeWWWConfBundle:Equipment')->find($id_equipment);
+
+        $location->removeEquipment($equipment);
+
+
+        $em->persist($location);
+        $em->flush();
+
+        $equipments = $em->getRepository('fibeWWWConfBundle:Equipment')->getEquipmentForLocationSelect($location);
+
+
+          return $this->render('IDCISimpleScheduleBundle:Location:equipmentsRelation.html.twig', array(
+            'entity'  => $location,
+            'equipments' => $equipments,
+        ));
+
     }
 
     /**

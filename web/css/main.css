@@ -26,3 +26,9 @@ option
 {
 	lineheight: 40% !important ;
 }
+
+.equipment_button >.delete_equipment
+{
+	margin-bottom: 50%;
+
+}

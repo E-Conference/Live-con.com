@@ -1,0 +1,56 @@
+<h3>Equipments</h3>
+
+ {% for equipment in entity.getEquipments() %}
+   <button class="btn btn-default equipment_button" title="{{equipment.label}}">
+        <i id='{{equipment.id}}' class='icon-remove delete_equipment'></i>
+        <i class='icon-{{ equipment.icon }} icon-2x'></i>
+   </button>
+ {% endfor %}
+     
+
+ <!-- Select box equipment -->             
+<select id="equipment_list" class="form-control">
+        {% for equipment in equipments %}
+            <option value="{{ equipment.id }}">{{ equipment.label }}</option>
+        {% endfor %}
+</select>        
+<button class="btn btn-small btn-info" id="add_equipment">
+    <i class="icon-plus"></i>
+</button>
+   
+
+
+{% block javascripts %}
+<script type="text/javascript">
+
+
+ $("#add_equipment").click(function(){
+
+       var id_equipment = $('#equipment_list').val();
+       console.log(id_equipment);
+      //start send the post request
+       $.post("{{path('schedule_location_addEquipment')}}",               
+               {id_equipment : id_equipment, id_location: "{{ entity.id }}"} , 
+            function(response){
+                   $('#equipment_manage').html(response);
+                 
+            }, "html");    
+       });
+
+
+ $(".delete_equipment").click(function(){
+
+      var id_equipment = $(this).attr('id');
+     
+      //start send the post request
+       $.post("{{path('schedule_location_deleteEquipment')}}",               
+               {id_equipment : id_equipment, id_location: "{{ entity.id }}"} , 
+            function(response){
+                   $('#equipment_manage').html(response);
+                   $('this').parent().remove();
+                
+            }, "html");    
+       });
+
+</script>
+{% endblock javascripts %}
