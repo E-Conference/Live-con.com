@@ -1,6 +1,6 @@
 imports:
     - { resource: parameters.yml }
-    - { resource: security.yml } 
+    - { resource: security.yml }
 #    - { resource: @IDCISimpleScheduleBundle/Resources/config/config.yml}
     - { resource: @fibeWWWConfBundle/Resources/config/config.yml}
 framework:
@@ -50,6 +50,7 @@ doctrine:
         user:     %database_user%
         password: %database_password%
         charset:  UTF8
+        memory: true
         # if using pdo_sqlite as your database driver, add the path in parameters.yml
         # e.g. database_path: %kernel.root_dir%/data/data.db3
         # path:     %database_path%

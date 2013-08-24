@@ -372,9 +372,12 @@
             },
             eventDragStart: function( event, jsEvent, ui, view ) { 
               dragged = [ ui.helper[0], event ];
+              dragChildren(event, jsEvent, ui, view);
+              
             },
             eventRender : function( event, element, view ) {
               setTooltip(element,event);
+
             }
         }); 
         $calendar.fullCalendar('changeView', "agendaWeek" );
@@ -577,6 +580,94 @@
               }
             }
           }); 
+        }
+
+        var parentProp;
+        function dragChildren(event, jsEvent, ui, view){
+          var parentElement = $(ui.helper[0]);
+          parentProp =  getProp(parentElement); 
+          // console.log(parentProp)
+          // console.log("parentElement",parentElement.text(),parentElement)
+          var children = getChildren(parentElement,event, jsEvent, ui, view);
+
+          parentElement.off("mousemove").mousemove( function(ev){ 
+            var newParentProp = getProp(parentElement);
+            var diff = { 
+              x : (parentProp.x - newParentProp.x) , 
+              y : (parentProp.y - newParentProp.y)
+            }; 
+            if(diff.x != 0  || diff.y != 0 ){
+              parentProp =  newParentProp;  
+
+              $.each(children,function(i,child){
+                 console.log(child)
+                var childProp = getProp(child.element); 
+               console.log("avant",diff)
+               console.log("avant",childProp)
+                $(child.element).css("left",childProp.x-diff.x+"px")
+                           .css("top",childProp.y-diff.y+"px");  
+              });
+            }
+          });
+        }
+        /**
+         * called on fullcalendar eventDragStart
+         * return children = [{event:event,element:element}, ... ]
+         * events   : db modele events
+         * elements : jquery draggable div array;
+         */
+        function getChildren(parentElement,parent, jsEvent, ui, view){
+          var children = [];
+          // console.log(parent)
+          $.each(parent.children,function(i,child){
+            var childEvent = $calendar.fullCalendar( 'clientEvents', child.id )[0];
+            var childTitle = childEvent.title
+            var obj = {event:childEvent};
+
+            $.each(parentElement.siblings(".fc-event-draggable"),function(i,childDiv){
+              var childProp =  getProp(childDiv);  
+              //check with position
+              if(parentProp.x <= childProp.x &&
+                 (parentProp.x + parentProp.w) >= childProp.x &&
+                 parentProp.y <= childProp.y &&
+                 (parentProp.y + parentProp.h) >= childProp.y
+                ){ 
+                //check with position
+                var currentChildTitle = $(childDiv).text().split(":").slice(2,9999).join(":").substr(2,999999999).slice(0, - 1);
+                console.log(currentChildTitle,childTitle)
+                if(currentChildTitle == childTitle) {
+ 
+                  obj['element'] = $(childDiv);
+                  children.push(obj);
+                }
+
+              } 
+            });
+          })
+
+
+ 
+          
+          console.log(children)
+          return children;
+        }
+
+        function getEventById(id){
+
+        }
+
+        jQuery.fn.cssNumber = function(prop){
+          var v = parseInt(this.css(prop),10);
+          return isNaN(v) ? 0 : v;
+        };
+
+        function getProp(elem){
+          return {
+              y: $(elem).cssNumber("top"),
+              x: $(elem).cssNumber("left"),
+              w: $(elem).cssNumber("width"),
+              h: $(elem).cssNumber("height"),
+            }
         }
 
         /*-----------------------------------------------------------------------------------------------------*/
