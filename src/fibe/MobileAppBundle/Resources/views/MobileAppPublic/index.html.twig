@@ -19,7 +19,7 @@
 
       //Require.js configurations
       require.config({
-          baseUrl: '../../../../bundles/fibemobileapp/dataconf2/js',
+          baseUrl: "{{ asset('bundles/fibemobileapp/dataconf2/js') }}",
         shim: {
           backbone: {
             deps: [
@@ -91,7 +91,7 @@
       //Configurations
       require(['config', 'tpl'], function(configuration, tpl){
           configuration.datasources.eventDatasource.uri = "http://dataconf.liris.cnrs.fr/simpleschedule/web/app.php/api/schedule_event.jsonp?wwwconf_id=3";
-          tpl.uri = '../../bundles/fibemobileapp/dataconf2/templates/';
+          tpl.uri = "{{ asset('bundles/fibemobileapp/dataconf2/templates/') }}";
       });
       
       //Entry point
