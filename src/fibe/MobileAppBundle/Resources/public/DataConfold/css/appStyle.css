@@ -1,0 +1,125 @@
+
+H2, H3 {
+	color : #bf1278;
+}
+
+H1 , H2 {
+	font-size : 14pt !important;
+}
+
+.inline{
+	font-size : 12pt !important;
+	color: black;
+}
+
+ H3, H4{
+	font-size : 13pt !important;
+}
+
+H4,H5{
+	margin-top:2pt;
+	margin-bottom:2pt;
+}
+a, span {
+	font-size : 10pt !important;
+}
+
+p{
+	font-size : 12pt !important;
+	color: black;
+}
+
+
+#logoContainer{
+	float:left;
+	height : 42px;
+	width: 50px;
+}
+
+#logoContainer a {
+  height : 100%;
+  width : 100%;
+}
+
+#logoContainer img {
+  height : 100%;
+  width : 100%;
+ 
+}
+
+#textHeader H1{
+  text-align: center;
+}
+ .ui-btn-inner{
+	padding-top : .35em!important;
+	padding-bottom : .3em!important;
+	
+}
+
+//Special buttons
+a .swtich{
+	background : #9fc3db!important;
+}
+
+ .ui-btn-inner:hover{
+	color :#bf1278!important;
+ }
+
+.ui-btn-text{
+	padding-top : 0em!important;
+	padding-bottom : 0em!important;
+}
+
+.ui-li{
+	padding-top : 0em!important;
+	padding-bottom : 0em!important;
+
+}
+.ui-listview-filter{
+	margin-top: 0px;
+
+}
+
+
+
+#navBar .ui-btn-inner:hover{
+	
+	background : #333!important;
+	color :#bf1278!important;
+}
+
+
+
+/* Schedule */
+
+#getConferenceSchedule .ui-btn-inner{
+	padding-top : 0!important;
+	padding-bottom : 0!important;
+
+}
+
+#getConferenceSchedule H2 {
+	padding-left:0.5em;
+	line-height:1.5em; 
+} 
+#getConferenceSchedule H2 span{ 
+	font-size : 10pt !important;
+} 
+#getConferenceSchedule p.ui-li-desc{
+	font-size : 11pt !important;
+	margin-top : 0em!important;
+	margin-bottom : 0em!important;
+}
+
+#getConferenceSchedule H3.ui-li-heading{
+	white-space : normal;
+	overflow : visible;
+	text-overflow : visible;
+	font-size : 11pt !important;
+	margin-top : 0em!important;
+	margin-bottom : 0em!important;
+}
+
+
+
+

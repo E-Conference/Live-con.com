@@ -153,4 +153,5 @@ class ConfEvent extends Event
         return $this->role;
     }
 
-}
+
+  }
