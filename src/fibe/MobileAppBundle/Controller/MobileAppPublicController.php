@@ -9,15 +9,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 /**
  * Mobile app controller.
  *
- * @Route("/MobileApplication")
+ * @Route("/MobileApplicationPublic")
  */
-class MobileAppController extends Controller
+class MobileAppPublicController extends Controller
 {
     /**
-     * @Route("/",name="mobileApp_index")
+     * @Route("/{id}",name="mobileAppPublic_index")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction($id)
     {
         return array();
     }
