@@ -1,33 +1,29 @@
 <?php
-  
+
 namespace fibe\Bundle\WWWConfBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
- 
 
-class WwwConfType extends AbstractType
+class RoleTypeType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('confName', null, array('required' => false,
-                                          'attr'  => array(
-                                                    'placeholder'   => 'Conference name'))) 
-            
+            ->add('libelle')
         ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'fibe\Bundle\WWWConfBundle\Entity\WwwConf'
+            'data_class' => 'fibe\Bundle\WWWConfBundle\Entity\RoleType'
         ));
     }
 
     public function getName()
     {
-        return 'fibe_bundle_wwwconfbundle_wwwconftype';
+        return 'fibe_bundle_wwwconfbundle_roletypetype';
     }
 }

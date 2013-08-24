@@ -15,20 +15,20 @@
             <div class="col-lg-9"></div>
             <div class="col-lg-2">
                   <button type="submit" class="btn btn-default"><i class="icon-ok"></i></button>
-                  <a class="btn btn-warning" href="{{ path('admin_schedule_event') }}">
+                  <a class="btn btn-warning" href="{{ path('schedule_event') }}">
                     <i class="icon-th-list"></i>
                 </a>
             </div>
         </div>
 </form>
- <form action="{{ path('admin_schedule_event_delete', { 'id': entity.id }) }}" method="post">
+ <form action="{{ path('schedule_event_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
             <button type="submit" class="btn btn-danger"><i class="icon-remove"></i></button>
         </form>
-{% include "IDCISimpleScheduleBundle:Event:xproperties.html.twig" with {"with_form": true} %}
 
 
-{% include "IDCISimpleScheduleBundle:Event:paperRelationEditForm.html.twig" with {"with_form": true} %}
+
+
        
    
 {% endblock body %}

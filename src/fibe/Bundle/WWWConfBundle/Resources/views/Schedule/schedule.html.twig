@@ -224,11 +224,11 @@
             var DATA_FEED_URL = "{{ path('schedule_view_event_get') }}";
 
             var op = {  
+                getOrderedUrl     : "{{ path('exporter_api', { 'entity_reference': 'schedule_event','_format': 'json' }) }}",
+                updateUrl     : "{{ path('schedule_view_event_edit') }}", //event modal form
                 quickAddUrl   : DATA_FEED_URL + "?method=add", 
                 quickUpdateUrl: DATA_FEED_URL + "?method=update",
-                updateUrl     : "{{ path('schedule_view_event_edit') }}",
-                quickDeleteUrl: DATA_FEED_URL + "?method=remove", 
-                getOrderedUrl     : "{{ path('exporter_api', { 'entity_reference': 'schedule_event','_format': 'json' }) }}",
+                quickDeleteUrl: DATA_FEED_URL + "?method=remove",  
 
             };
 

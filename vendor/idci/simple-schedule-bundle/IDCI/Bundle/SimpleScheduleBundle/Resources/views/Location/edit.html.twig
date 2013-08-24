@@ -16,14 +16,14 @@
             <div class="col-lg-9"></div>
             <div class="col-lg-2">
                   <button type="submit" class="btn btn-default"><i class="icon-ok"></i></button>
-                  <a class="btn btn-warning" href="{{ path('admin_schedule_location') }}">
+                  <a class="btn btn-warning" href="{{ path('schedule_location') }}">
                     <i class="icon-th-list"></i>
                 </a>
             </div>
         </div>
 </form>
 
-<form action="{{ path('admin_schedule_location_delete', { 'id': entity.id }) }}" method="post">
+<form action="{{ path('schedule_location_delete', { 'id': entity.id }) }}" method="post">
      {{ form_widget(delete_form) }}
      <button type="submit" class="btn btn-danger"><i class="icon-remove"></i></button>
 </form>

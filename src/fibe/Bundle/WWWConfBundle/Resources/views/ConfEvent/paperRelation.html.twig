@@ -1,0 +1,41 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Relation Id</th>
+            <th>Paper Title</th>
+            <th>Paper Author</th>
+            <th>Abstract</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for paper in entity.getPapers() %} 
+            <tr> 
+                <td>{{ paper.id }}</td>
+                <td>{{ paper.title }}</td>
+                <td>
+                    {% for author in paper.getAuthor() %} 
+                        {{author.getPerson().name}}
+                    {% endfor %}
+                </td>
+                <td>
+                 <a  class="btn btn-default abstract_paper" data-toggle="popover" title="{{ paper.title }} Abstract" data-content="{{ paper.abstract }}"><i class="icon-file-text"></i>
+                 </a>
+                </td>
+                 
+            </tr> 
+        {% endfor %}
+    </tbody>
+
+   
+</table>
+
+{% block javascripts %}
+<script type="text/javascript">
+$(document).ready(function() {
+     $('.abstract_paper').popover({ 'trigger': 'click', 'placement':'bottom'});
+   
+  
+});
+</script>
+{% endblock javascripts %}

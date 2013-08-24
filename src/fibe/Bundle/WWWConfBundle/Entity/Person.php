@@ -816,4 +816,9 @@ class Person
     {
         return $this->organizations;
     }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }
