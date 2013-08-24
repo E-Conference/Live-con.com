@@ -375,6 +375,10 @@
               dragChildren(event, jsEvent, ui, view);
               
             },
+            eventDragStop: function( event, jsEvent, ui, view ) {  
+              endDragChildren(event, jsEvent, ui, view);
+              
+            },
             eventRender : function( event, element, view ) {
               setTooltip(element,event);
 
@@ -563,8 +567,8 @@
                 var upComingEvent = dragged[1];
                 $modalSetParent.modal('show').find(".sub-event").html(upComingEvent.title);
                 $modalSetParent.modal('show').find(".super-event").html(event.title);
-                console.log("upComingEvent",upComingEvent);
-                console.log("event",event);
+                // console.log("upComingEvent",upComingEvent);
+                // console.log("event",event);
                 $modalSetParent.find('button.yes').click(function(){
                   upComingEvent.parent = { "id": event.id, "name": event.title }; 
                   $.post(
@@ -582,14 +586,16 @@
           }); 
         }
 
-        var parentProp;
+        var parentProp,parentStart;
         function dragChildren(event, jsEvent, ui, view){
           var parentElement = $(ui.helper[0]);
           parentProp =  getProp(parentElement); 
+          parentStart = moment(event.start);
           // console.log(parentProp)
           // console.log("parentElement",parentElement.text(),parentElement)
           var children = getChildren(parentElement,event, jsEvent, ui, view);
 
+          //update helper
           parentElement.off("mousemove").mousemove( function(ev){ 
             var newParentProp = getProp(parentElement);
             var diff = { 
@@ -600,16 +606,52 @@
               parentProp =  newParentProp;  
 
               $.each(children,function(i,child){
-                 console.log(child)
-                var childProp = getProp(child.element); 
-               console.log("avant",diff)
-               console.log("avant",childProp)
+                // console.log(child)
+                var childProp = getProp(child.element);
                 $(child.element).css("left",childProp.x-diff.x+"px")
-                           .css("top",childProp.y-diff.y+"px");  
+                                .css("top",childProp.y-diff.y+"px");
               });
             }
-          });
+          }); 
         }
+        function endDragChildren(event, jsEvent, ui, view){  
+          //get diff
+            console.log("endDragChildren")
+            // console.log(parentStart)
+            // console.log(moment(event.start))
+          var diff = moment(parentStart).diff(moment(event.start));
+            console.log(diff)
+          // console.log(moment(diff).format())
+          //apply to children
+          $.each(event.children,function(i,child){
+            var childEvent = $calendar.fullCalendar( 'clientEvents', child.id )[0]; 
+            
+            console.log("new child") 
+            // assign it the date that was reported  
+              childEvent.start  = moment(childEvent.start).subtract(diff);
+              childEvent.end  = moment(childEvent.end).subtract(diff); 
+            formatDate(childEvent)
+            console.log(childEvent.start)
+
+            $.post(
+              op.quickUpdateUrl,
+              $.extend( {} , childEvent ),
+              function(doc) {   
+                      bootstrapAlert("success","event has been well updated"); 
+              },
+              'json'
+            );
+            bootstrapAlert("info","update request sent ","Info : ","<i class='icon-spinner icon-spin'></i>");
+            // render the event on the calendar
+            // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+            $calendar.fullCalendar('removeEvents', childEvent.id); 
+            $calendar.fullCalendar('renderEvent', childEvent); 
+          });
+          //render
+
+ 
+        }
+
         /**
          * called on fullcalendar eventDragStart
          * return children = [{event:event,element:element}, ... ]
@@ -622,7 +664,6 @@
           $.each(parent.children,function(i,child){
             var childEvent = $calendar.fullCalendar( 'clientEvents', child.id )[0];
             var childTitle = childEvent.title
-            var obj = {event:childEvent};
 
             $.each(parentElement.siblings(".fc-event-draggable"),function(i,childDiv){
               var childProp =  getProp(childDiv);  
@@ -634,11 +675,9 @@
                 ){ 
                 //check with position
                 var currentChildTitle = $(childDiv).text().split(":").slice(2,9999).join(":").substr(2,999999999).slice(0, - 1);
-                console.log(currentChildTitle,childTitle)
-                if(currentChildTitle == childTitle) {
- 
-                  obj['element'] = $(childDiv);
-                  children.push(obj);
+                // console.log(currentChildTitle,childTitle)
+                if(currentChildTitle == childTitle) { 
+                  children.push({event:childEvent,element:$(childDiv)});
                 }
 
               } 
@@ -648,7 +687,7 @@
 
  
           
-          console.log(children)
+          // console.log(children)
           return children;
         }
 

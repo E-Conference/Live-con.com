@@ -293,7 +293,7 @@ $(document).ready(function(){
     //form handler
     $("#deleteEventBtn").click(function() { 
         FormPost("{{ path('schedule_event_delete', { 'id': entity.id }) }}",$("#deleteEventForm"),function(){
-                  CloseModelWindow(null,true);
+                  // CloseModelWindow(null,true);
         });
       return false;
     });
