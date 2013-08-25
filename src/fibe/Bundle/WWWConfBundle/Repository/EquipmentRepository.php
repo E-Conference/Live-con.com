@@ -33,6 +33,28 @@ class EquipmentRepository extends EntityRepository
         return $qb;
     }
 
+    public function getEquipmentForLocationSelect($location=null)
+    {
+        if($location){
+
+            $equipments = $location->getEquipments();
+            $ids = array(0);
+            foreach ($equipments as $equipment) {
+              array_push($ids,$equipment->getId());
+            }
+        }
+
+        $qb = $this->createQueryBuilder('e');
+        $qb ->select('e')
+            ->where('e.id NOT IN (:ids)')
+            ->setParameter('ids', $ids)
+            ;
+            $query = $qb->getQuery();
+            $equipments = $query->execute();
+        return $equipments;
+
+    }
+
     /**
      * getOrderedQuery
      *

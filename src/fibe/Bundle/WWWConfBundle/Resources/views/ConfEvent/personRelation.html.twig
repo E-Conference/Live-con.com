@@ -4,6 +4,7 @@
             <th>Role</th>
             <th>Name</th>
             <th>Email</th>
+            <th>Actions</th>
         </tr>
     </thead>
 
@@ -13,7 +14,33 @@
                 <td>{{ role.getType().libelle }}</td>
                 <td>{{ role.getPerson().name }}</td>
                 <td>{{ role.getPerson().email }}</td>
+                <td> <a id="{{role.id}}" class="btn btn-danger delete_role" data-toggle="tooltip" title="Remove this Person from the list"><i class="icon-minus"></i>
+                 </a>
+                </td>
             </tr> 
         {% endfor %}
     </tbody>
 </table>
+
+{% block javascripts %}
+<script type="text/javascript">
+
+$(".delete_role").click(function(){
+
+      var id_role = $(this).attr('id');
+     
+      //start send the post request
+       $.post("{{path('schedule_confevent_deletePerson')}}",               
+               {id_role : id_role, id_entity: "{{ entity.id }}"} , 
+            function(response){
+                   $('#person_related_list').html(response);
+            }, "html");    
+       });
+
+$(document).ready(function() {
+     $('.abstract_paper').popover({ 'trigger': 'click', 'placement':'bottom'});
+   
+  
+});
+</script>
+{% endblock javascripts %}

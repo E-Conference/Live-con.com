@@ -222,4 +222,38 @@ class Location
     {
         return $this->locationAwareCalendarEntities;
     }
+
+    /**
+     * Add Equipment
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Equipment $equipments
+     * @return ConfEvent
+     */
+    public function addEquipment(\fibe\Bundle\WWWConfBundle\Entity\Equipment $equipments)
+    {
+        $this->equipments[] = $equipments;
+    
+        return $this;
+    }
+
+    /**
+     * Remove Equipment
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Equipment $equipments
+     */
+    public function removeEquipment(\fibe\Bundle\WWWConfBundle\Entity\Equipment $equipments)
+    {
+        $this->equipments->removeElement($equipments);
+    }
+
+    /**
+     * Get Equipments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEquipments()
+    {
+        return $this->equipments;
+    }
+
 }

@@ -67,9 +67,10 @@
 
    
    //listen for the form beeing submitted
-   $("#fibe_bundle_wwwconfbundle_confeventtype_papers").change(function(){
+   $("select[id='fibe_bundle_wwwconfbundle_confeventtype_papers']").change(function(){
       //get the url for the form
       var id_paper= $(this).val();
+  
       //start send the post request
        $.post('{{path("schedule_confevent_addPaper") }}',               
                 {id_entity : '{{entity.id}}', id_paper: id_paper}, 
