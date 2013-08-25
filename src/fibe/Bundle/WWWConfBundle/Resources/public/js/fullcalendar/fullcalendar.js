@@ -3981,7 +3981,7 @@ function AgendaEventRenderer() {
 				"'" +
 			">" +
 			"<div class='fc-event-inner'>" +
-			"<div class='fc-event-id hide'>" +
+			"<div class='fc-event-id'>" +
 				event.id +
 			"</div>" +
 			"<div class='fc-event-time'>" +
@@ -5227,7 +5227,7 @@ function DayEventRenderer() {
 				"'" +
 			">" +
 			"<div class='fc-event-inner'>" +
-			"<div class='fc-event-id hide'>" +
+			"<div class='fc-event-id'>" +
 				event.id +
 			"</div>";
 		if (!event.allDay && segment.isStart) {
