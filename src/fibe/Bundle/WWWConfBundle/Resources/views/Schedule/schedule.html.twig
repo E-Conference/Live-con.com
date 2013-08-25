@@ -378,10 +378,11 @@
               
             },
             eventDragStop: function( event, jsEvent, ui, view ) {  
-              dragged = [ ui.helper[0], event ]; 
-              //save children to db
-              endDragChildren(event, jsEvent, ui, view);
-              
+              setTimeout(function(){ //bug... event isn't yet updated 
+                dragged = [ ui.helper[0], event ]; 
+                //save children to db
+                endDragChildren(event, jsEvent, ui, view);
+              },0);//bug... event isn't yet updated 
             },
             eventRender : function( event, element, view ) {
               setTooltip(element,event);
@@ -544,11 +545,11 @@
       }
       for(var i =0; i < locations.length;i++){
         $locationSelect.append('<option value="'+locations[i].id+'">'+locations[i].name+'</option>');
+      }
 
         /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------------- end initialize filters ----------------------------------------*/ 
         /*-----------------------------------------------------------------------------------------------------*/
-      }
 
         /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------------- parent/child  ----------------------------------------*/
@@ -578,12 +579,9 @@
                 $modalSetParent.modal('show').find(".super-event").html(event.title);
 
                 $modalSetParent.find('button.yes').click(function(){
-                  //remove old parent
-                  removeChild(draggedEvent.parent,draggedEvent)
-                  //affect parent
-                  draggedEvent.parent = { "id": event.id, "name": event.title };
-                  //add child to parent
-                  event.children.push( { "id": draggedEvent.id, "name": draggedEvent.title }); 
+
+                  //set parent and children relation
+                  setParent(draggedEvent,event);
                   $.post(
                       op.quickUpdateUrl,
                       formatDate($.extend( {} , draggedEvent )),
@@ -604,10 +602,11 @@
           var parentElement = $(ui.helper[0]);
           draggedProp =  getProp(parentElement); 
           draggedStart = moment(event.start);
+          console.log(event.start)
           // console.log(draggedProp)
           // console.log("parentElement",parentElement.text(),parentElement)
           children = getChildren(parentElement,event, jsEvent, ui, view);
-
+          console.log(children);
           //update helper
           parentElement.mousemove( function(ev){ 
             var newdraggedProp = getProp(parentElement);
@@ -628,21 +627,18 @@
           }); 
         }
         function endDragChildren(event, jsEvent, ui, view){  
+      
           console.log("endDragChildren")
-
-
           //get diff
           var diff = moment(draggedStart).diff(moment(event.start));
-
+          console.log(event.start)
+          console.log(diff)
 
           //apply to children
-          console.log("#children : ",children);
-
           $.each(children,function(i,child){
+            console.log("#draggin child : ",child ); 
             var childEvent = child.event;
-            
-            console.log("new child") 
-            // assign it the date that was reported  
+             
             childEvent.start  = moment(childEvent.start).subtract(diff);
             childEvent.end  = moment(childEvent.end).subtract(diff); 
             formatDate(childEvent) 
@@ -660,63 +656,94 @@
             $calendar.fullCalendar('removeEvents', childEvent.id); 
             $calendar.fullCalendar('renderEvent', childEvent); 
           });
-        }
 
+        }
+ 
         /** 
          * return children = [{event:event,element:$element}, ... ]
          * events   : db modele events
          * elements : jquery draggable div array;
          */
-        function getChildren(parentElement,parent ){
+        function getChildren(parentElement,parent){
           var children = [];
           // console.log(parent)
-          $.each(parent.children,function(i,child){
-            var childEvent = $calendar.fullCalendar( 'clientEvents', child.id )[0];
-            if(!childEvent){
-              //event is in the sidebar
-              alert("child"+child.id +" "+ child.title+" in the sidebar");
-              return;
-            }
-            var childTitle = childEvent.title
-
-            $.each(parentElement.siblings(".fc-event-draggable"),function(i,childDiv){
-              var childProp =  getProp(childDiv);  
-              //check with position
-              if(draggedProp.x <= childProp.x &&
-                 (draggedProp.x + draggedProp.w) >= childProp.x &&
-                 draggedProp.y <= childProp.y &&
-                 (draggedProp.y + draggedProp.h) >= childProp.y
-                ){ 
-                //check with name
-                var currentChildTitle = $(childDiv).text().split(":").slice(2,9999).join(":").substr(2,999999999).slice(0, - 1);
-                // console.log(currentChildTitle,childTitle)
-                if(currentChildTitle == childTitle) { 
-                  children.push({event:childEvent,element:$(childDiv)});
-                }else{
-                console.log("bad title for event to be child");
-                console.log(currentChildTitle);
-              }
-
-              } else{
-                console.log("bad coords for event to be a child");
-                console.log(childDiv);
-              }
-            });
+          $.each(parent.children,function(i,child){ 
+            children.push(getElementAndEvent(child.id));  
           }) 
-          // console.log(children)
           return children;
+        }
+        function getElementAndEvent(id){
+          var event = $calendar.fullCalendar( 'clientEvents', id )[0];
+            if(!event){
+              alert("elem "+id +" is in the sidebar");
+              return;
+            } 
+            var elem = getDivById(event.id); 
+            return {event:event,element:$(elem)}
         } 
 
-        function removeChild(parent,child){
+        function getParent(event,element){
+          if(!event.parent)return;
+
+          var parentEvent = $calendar.fullCalendar( 'clientEvents', event.parent.id )[0];
+            if(!parentEvent){
+              //event is in the sidebar
+              alert("parent "+event.parent.id +" "+ event.parent.title+" is in the sidebar");
+              return;
+            } 
+            var div = getDivById(childEvent.id);
+            return {event:childEvent,element:$(div)}; 
+        }
+        /**
+        * get div with hidden div containing event id
+        * div class='fc-event-id hide'>event.id</div>
+        */
+
+        function getDivById(id){
+            var div;
+            $.each($calendar.find(".fc-event-draggable"),function(i,childDiv){
+              if(div)return false; //break each
+              //check with id
+              $.each($(childDiv).find(".fc-event-id"),function(){
+                if(div)return false; //break each
+                var childId = $(this).text();
+                if(childId ==  id){
+                  div =  $(childDiv);
+                }else{
+                  console.log("bad id for event to be a child");
+                  console.log(id +" != "+childId); 
+                }
+              }); 
+            });
+            return div;
+        }
+
+        // remove relation with old parent if exists
+        // and update relation with new parent
+        function setParent(event,parent){
+          //get full event info
           if(!parent.start){
             parent =  $calendar.fullCalendar( 'clientEvents', parent.id )[0];
           }  
-          for(var i in parent.children){
-            if(parent.children[i].id == child.id){
-              parent.children.splice(i,1);
-              return;
+          if(!event.start){
+            event =  $calendar.fullCalendar( 'clientEvents', event.id )[0];
+          } 
+          //remove old parent
+          if(event.parent){
+            var oldParent = $calendar.fullCalendar( 'clientEvents',event.parent.id)[0];
+            console.log("oldParent",oldParent)
+            for(var i in oldParent.children ){
+              if(oldParent.children[i].id == event.id){
+                oldParent.children.splice(i,1);
+              }
             }
           }
+          //affect parent to child
+          event.parent = { "id": parent.id, "name": parent.title };
+          //add child to parent
+          parent.children.push( { "id": event.id, "name": event.title }); 
+
+          
         }
 
         jQuery.fn.cssNumber = function(prop){
@@ -734,7 +761,7 @@
         }
 
         /*-----------------------------------------------------------------------------------------------------*/
-      /*------------------------------------- parent/child ----------------------------------------*/
+      /*------------------------------------- end parent/child ----------------------------------------*/
         /*-----------------------------------------------------------------------------------------------------*/
 
       // empty fullcalendar events and populate it with new
