@@ -119,8 +119,6 @@ class ConfEventController extends Controller
 
         $role = new Role();
         $roleForm = $this->createForm(new RoleType(), $role);
-        var_dump($roleForm);
-        
         $editForm = $this->createForm(new ConfEventType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -194,6 +192,33 @@ class ConfEventController extends Controller
     }
 
      /**
+     * Delete paper to a confEvent
+     *  @Route("/deletePaper", name="schedule_confevent_deletePaper")
+     *  @Method("POST")
+     *  
+     */
+    public function deletePaperAction(Request $request)
+    {
+        $id_paper = $request->request->get('id_paper');
+        $id_entity = $request->request->get('id_entity');
+           
+         $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id_entity);
+        $paper =  $em->getRepository('fibeWWWConfBundle:Paper')->find($id_paper);
+
+        //Add paper to the confEvent
+        $entity->removePaper($paper);
+        //Sauvegarde des données
+        $em->persist($entity);
+        $em->flush();
+
+        return $this->render('fibeWWWConfBundle:ConfEvent:paperRelation.html.twig', array(
+            'entity'  => $entity,
+        ));
+    }
+
+     /**
      * Add person to the confEvent
      * 
      *  @Route( "/addPerson",name="schedule_confevent_addPerson")
@@ -202,8 +227,8 @@ class ConfEventController extends Controller
      */
     public function addPersonAction(Request $request)
     {      
-        $id_type = $request->request->get('id_person');
-        $id_person = $request->request->get('id_type');
+        $id_person = $request->request->get('id_person');
+        $id_type = $request->request->get('id_type');
         $id_event = $request->request->get('id');
      
         $em = $this->getDoctrine()->getManager();
@@ -211,7 +236,7 @@ class ConfEventController extends Controller
         $type = $em->getRepository('fibeWWWConfBundle:RoleType')->find($id_type);
         $person =  $em->getRepository('fibeWWWConfBundle:Person')->find($id_person);
         $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id_event);
-
+      
         $role = new Role();
         $role->setPerson($person);
         $role->setType($type);
@@ -220,6 +245,33 @@ class ConfEventController extends Controller
         
         //Add paper to the confEvent
         $entity->addRole($role);
+        //Sauvegarde des données
+        $em->persist($entity);
+        $em->flush();
+
+        return $this->render('fibeWWWConfBundle:ConfEvent:personRelation.html.twig', array(
+            'entity'  => $entity,
+        ));
+    }
+
+    /**
+     * Delete person  to a confEvent
+     *  @Route("/deletePerson", name="schedule_confevent_deletePerson")
+     *  @Method("POST")
+     *  
+     */
+    public function deletePersonAction(Request $request)
+    {
+        $id_role = $request->request->get('id_role');
+        $id_entity = $request->request->get('id_entity');
+           
+         $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id_entity);
+        $role =  $em->getRepository('fibeWWWConfBundle:Role')->find($id_role);
+
+        //Add paper to the confEvent
+        $entity->removeRole($role);
         //Sauvegarde des données
         $em->persist($entity);
         $em->flush();
