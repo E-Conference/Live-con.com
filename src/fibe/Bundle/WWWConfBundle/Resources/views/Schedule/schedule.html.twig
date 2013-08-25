@@ -608,7 +608,7 @@
           // console.log(event.start)
           // console.log(draggedProp)
           // console.log("parentElement",parentElement.text(),parentElement)
-          children = getChildren(parentElement,event, jsEvent, ui, view);
+          children = getChildren(parentElement,event, true); //third event for recursiveness
           console.log(children);
           //update helper
           parentElement.mousemove( function(ev){ 
@@ -693,14 +693,19 @@
          * events   : db modele events
          * elements : jquery draggable div array;
          */
-        function getChildren(parentElement,parent){
+        function getChildren(parentElement,parent,recursive){
           var children = [];
-           console.log("getChildren",parent)
-          $.each(parent.children,function(i,child){
-            if( !parent.children.hasOwnProperty( i ) ) return; 
-            var c = getElementAndEvent(child.id);
-            if(c)children.push(c);  
-          }) 
+          console.log("getChildren",parent)
+            $.each(parent.children,function(i,child){
+              if( !parent.children.hasOwnProperty( i ) ) return; 
+
+              var c = getElementAndEvent(child.id);
+              if(recursive){
+                children = children.concat(getChildren(c.element,c.event,recursive))
+              }
+              if(c)children.push(c);  
+
+            }) 
           return children;
         }
 
