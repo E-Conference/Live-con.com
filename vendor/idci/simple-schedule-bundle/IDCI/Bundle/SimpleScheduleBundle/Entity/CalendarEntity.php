@@ -252,13 +252,13 @@ class CalendarEntity
     /**
      * status
      *
-     * @ORM\ManyToOne(targetEntity="CalendarEntity", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="CalendarEntity", inversedBy="children", cascade={"persist"})
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="Set null", nullable=true)
      */
     protected $parent; 
 
     /**
-     * @ORM\OneToMany(targetEntity="CalendarEntity", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="CalendarEntity", mappedBy="parent", cascade={"persist"})
      */
     protected $children;
 

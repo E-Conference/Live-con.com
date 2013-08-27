@@ -232,247 +232,11 @@
 
             };
 
-
- 
         /*-----------------------------------------------------------------------------------------------------*/
-        /*------------------------------------- initialize the calendar ----------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------*/
-        var dragged = null;
-        $calendar.fullCalendar({ 
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-            }, 
-            editable: true,
-            //fist day
-            year: firstDay.year(), 
-            month: firstDay.month(),
-            date: firstDay.date(),
-            //get events
-            events: function(start, end, callback) { 
-              $.get(
-                op.getOrderedUrl,
-                {},
-                function(events) {  
-                    bootstrapAlert("success","event has been well fetched" );
-                    renderEvent(events);
-                    //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
-                },
-                'json'
-              ); 
-              bootstrapAlert("info","event request sent","","<i class='icon-spinner icon-spin'></i>");
-            },  
-            eventClick: function(calEvent, jsEvent, view) {
- 
-                $('.fc-event').click(function(){
-                    $.ajax({
-                        url: op.updateUrl+"?id="+calEvent.id,  
-                        success: function(doc) {  
-                            $modal.modal("show");
-                            $modalBody.html(doc);
-                            bootstrapAlert("stop");
-                        }
-                    });
-                    bootstrapAlert("info","edit request sent","Info","<i class='icon-spinner icon-spin'></i>");
-                }); 
-
-            },
-            selectable: true, 
-            selectHelper: true,
-            select: function(start, end, allDay) {
-                $modalNewEvent.modal("show");
-                var selectHtml='';
-                $.each($calendar.fullCalendar('clientEvents'),function(){
-                  selectHtml += '<option value="'+this.id+'">'+this.title+'</option> ' 
-                });
-                $modalNewEvent.find("select").html(selectHtml);
-                $modalNewEvent.find("form").submit(function(e){ 
-                  var title = $(this).find("#name").val();
-                  var parent_id = $(this).find("#parent_id").val(); 
-                  if (title && parent) {
-                      var e = {
-                          title: title,
-                          parent: {id:parent_id},
-                          start: start,
-                          end: end,
-                          allDay: allDay
-                      };
-                      $.post(
-                              op.quickAddUrl,
-                              formatDate($.extend( {} , e )),
-                              function(response) {  
-                                  bootstrapAlert("success","event has been well added");
-                                  e.id=response.id;
-                                  $calendar.fullCalendar('renderEvent',e); // 3rd arg make the event "stick" 
-                              },
-                              'json'
-                      );
-                      bootstrapAlert("info","add request sent","Info : ","<i class='icon-spinner icon-spin'></i>");
-                  }
-                  $modalNewEvent.modal("hide");
-                  return false;
-                })
-                $calendar.fullCalendar('unselect');
-            },
-            eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
-                    console.log(event);
-                    $.post(
-                            op.quickUpdateUrl,
-                            formatDate( $.extend( {} , event ) ),
-                            function(doc) {  
-                                bootstrapAlert("success","event has been well updated"); 
-                            },
-                            'json'
-                    );
-                    bootstrapAlert("info","update request sent","Info : ","<i class='icon-spinner icon-spin'></i>");
-
-            },
-            eventDataTransform: function(data){return data;},
-            editable: true,
-            droppable: true, // this allows things to be dropped onto the calendar !!!
-            eventDrop : function(e){ 
-                    $.post(
-                            op.quickUpdateUrl,
-                            formatDate( $.extend( {} , e )),
-                            function(doc) {  
-                                bootstrapAlert("success","event has been well updated"); 
-                            },
-                            'json'
-                    );
-                    bootstrapAlert("info","update request sent","Info : ","<i class='icon-spinner icon-spin'></i>");
-            },
-            drop: function(date, allDay) { // this function is called when something is dropped
-            
-                // retrieve the dropped element's stored Event Object
-                var originalEventObject = $(this).data('eventObject');
-                
-                // we need to copy it, so that multiple events don't have a reference to the same object
-                var copiedEventObject = $.extend({}, originalEventObject);
-                
-                // assign it the date that was reported 
-                copiedEventObject.start  = date;
-                copiedEventObject.end    = moment(date).add("hours",1);
-                copiedEventObject.allDay = allDay; 
- 
-                $.post(
-                        op.quickUpdateUrl,
-                        formatDate($.extend( {} , copiedEventObject )),
-                        function(doc) {   
-                                bootstrapAlert("success","event has been well updated"); 
-                        },
-                        'json'
-                );
-                bootstrapAlert("info","update request sent ","Info : ","<i class='icon-spinner icon-spin'></i>");
-                // render the event on the calendar
-                // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-                $calendar.fullCalendar('renderEvent', copiedEventObject);
-                
-                $(this).remove();  
-            },
-            eventDragStart: function( event, jsEvent, ui, view ) { 
-              dragged = [ ui.helper[0], event ];
-            },
-            eventRender : function( event, element, view ) {
-              setTooltip(element,event);
-            }
-        }); 
-        $calendar.fullCalendar('changeView', "agendaWeek" );
-        /*-----------------------------------------------------------------------------------------------------*/
-        /*------------------------------------- initialize the calendar ----------------------------------------*/
+        /*------------------------------------- initialize filters --------------------------------------------*/
         /*-----------------------------------------------------------------------------------------------------*/
  
-
-        /*-----------------------------------------------------------------------------------------------------*/
-        /*------------------------------------- initialize the sidebar ----------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------*/
-        function setInstantEvents(instant_events){
-          $sidebar.html("");  
-          var eventHtml =  "<div class='external-event'></div>";
-          var $sidebarTmp = $(eventHtml).prependTo($sidebar).hide();
-
-          var gid = 1; // event.id == 0 considered to be undefined (boo) 
-          
-          //set sidebar bubble draggable
-          for (var i in instant_events){ 
-            var $event = $(eventHtml);
-            $event = sidebarDraggable($event,instant_events[i]);
-          }
-
-          //set sidebar droppable
-          $sidebar.droppable({
-            over: function( event, ui ) {  
-                if( event && $(ui.draggable).hasClass("fc-event-draggable")) {
-                    var event = dragged[1];
-                    $(this).css("border-color","green"); 
-                    sidebarEventHtml($sidebarTmp,event)
-                    $sidebarTmp.show() ;
-                }
-            },
-            out: function( event, ui ) { 
-                if($(ui.draggable).hasClass("fc-event-draggable")) {
-                    $(this).css("border","solid 1px #ccc"); 
-                    $sidebarTmp.hide();
-                } 
-            },
-            drop: function( event, ui ) {
-              if ( dragged && ui.helper && ui.helper[0] === dragged[0]){
-                $sidebarTmp.hide();
-                $(this).css("border","solid 1px #ccc"); 
-                var event = dragged[1];
-                var $event = $(eventHtml);
-                event.end = moment(event.start);
-                $calendar.fullCalendar('removeEvents',event.id);
-
-                // var $event = sidebarDraggable(event);
-                var $event = sidebarDraggable($event,event);
-
-                $.post(
-                    op.quickUpdateUrl,
-                    formatDate(event),
-                    function(doc) {   
-                        bootstrapAlert("success","event has been well updated" ); 
-                    },
-                    'json'
-                );
-                bootstrapAlert("info","update request sent ","Info","<i class='icon-spinner icon-spin'></i>");
-              }
-            }
-          }); 
-
-          function sidebarEventHtml ($event,event){
-            $event.html(event.title);
-            $event.css({
-                      "background-color": event.color,
-                      "border-color": event.border_color || event.color,
-                   });  
-          }
-
-          function sidebarDraggable($event,event){
-            $event.appendTo($sidebar);
-            sidebarEventHtml ($event,event);
-            $event.draggable({
-                      zIndex: 999,
-                      revert: true,      // will cause the event to go back to its
-                      revertDuration: 0  //  original position after the drag
-                    })
-                    .data('eventObject', event);
-            // store the Event Object in the DOM element so we can get to it later
-            return $event;
-          }
-
-        }
-
-
-
-        /*-----------------------------------------------------------------------------------------------------*/
-      /*------------------------------------- end initialize the sidebar ----------------------------------------*/ 
-        /*-----------------------------------------------------------------------------------------------------*/
-
-        /*-----------------------------------------------------------------------------------------------------*/
-      /*------------------------------------- initialize filters ----------------------------------------*/ 
-        /*-----------------------------------------------------------------------------------------------------*/
-
+ 
       var categories = [] ;
       {% for category in categories %} 
         categories.push({
@@ -533,15 +297,259 @@
       }
       for(var i =0; i < locations.length;i++){
         $locationSelect.append('<option value="'+locations[i].id+'">'+locations[i].name+'</option>');
-
-        /*-----------------------------------------------------------------------------------------------------*/
-      /*------------------------------------- end initialize filters ----------------------------------------*/ 
-        /*-----------------------------------------------------------------------------------------------------*/
       }
 
         /*-----------------------------------------------------------------------------------------------------*/
-      /*------------------------------------- parent/child  ----------------------------------------*/
+        /*------------------------------------- end initialize filters ----------------------------------------*/ 
         /*-----------------------------------------------------------------------------------------------------*/
+ 
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*------------------------------------- initialize the calendar ---------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
+        var dragged = null;
+        $calendar.fullCalendar({ 
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            }, 
+            editable: true,
+            //fist day
+            year: firstDay.year(), 
+            month: firstDay.month(),
+            date: firstDay.date(),
+            //get events
+            events: function(start, end, callback) { 
+              $.get(
+                op.getOrderedUrl,
+                {},
+                function(events) {  
+                    bootstrapAlert("success","event has been well fetched" );
+                    renderEvent(events);
+                    //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
+                },
+                'json'
+              ); 
+              bootstrapAlert("info","event request sent","","<i class='icon-spinner icon-spin'></i>");
+            },  
+            eventClick: function(calEvent, jsEvent, view) { 
+  
+                    $.ajax({
+                        url: op.updateUrl+"?id="+calEvent.id,  
+                        success: function(doc) {  
+                            $modal.modal("show");
+                            $modalBody.html(doc);
+                            bootstrapAlert("stop");
+                        }
+                    });
+                    bootstrapAlert("info","edit request sent","Info : ","<i class='icon-spinner icon-spin'></i>"); 
+
+            },
+            selectable: true, 
+            selectHelper: true,
+            select: function(start, end, allDay) { //new event
+                $modalNewEvent.modal("show");
+                var selectHtml='';
+                $.each($calendar.fullCalendar('clientEvents'),function(){
+                  selectHtml += '<option value="'+this.id+'">'+this.title+'</option> ' 
+                });
+                $modalNewEvent.find("select").html(selectHtml);
+                $modalNewEvent.find("form").submit(function(e){ 
+                  var title = $(this).find("#name").val();
+                  var parent_id = $(this).find("#parent_id").val(); 
+                  if (title && parent) {
+                      var e = {
+                          title: title,
+                          parent: {id:parent_id},
+                          children: [],
+                          start: start,
+                          end: end,
+                          allDay: allDay
+                      };
+                      $.post(
+                              op.quickAddUrl,
+                              formatDate($.extend( {} , e )),
+                              function(response) {  
+                                  bootstrapAlert("success","event has been well added");
+                                  e.id=response.id;
+                                  $calendar.fullCalendar('renderEvent',e); // 3rd arg make the event "stick" 
+                              },
+                              'json'
+                      );
+                      bootstrapAlert("info","add request sent","Info : ","<i class='icon-spinner icon-spin'></i>");
+                  }
+                  $modalNewEvent.modal("hide");
+                  return false;
+                })
+                $calendar.fullCalendar('unselect');
+            },
+            eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
+
+                    updateEventInDB(event);
+            },
+            eventDataTransform: function(data){return data;},
+            editable: true,
+            droppable: true, // this allows things to be dropped onto the calendar !!!
+            eventDrop : function(event){ 
+                    updateEventInDB(event);
+            },
+            drop: function(date, allDay) { // this function is called when something is dropped
+            
+                // retrieve the dropped element's stored Event Object
+                var originalEventObject = $(this).data('eventObject');
+                
+                // we need to copy it, so that multiple events don't have a reference to the same object
+                var copiedEventObject = $.extend({}, originalEventObject);
+                
+                // assign it the date that was reported 
+                copiedEventObject.start  = date;
+                copiedEventObject.allDay = allDay; 
+                formatDate(copiedEventObject);
+
+                endDragChildrenFromSidebar(copiedEventObject);
+                
+                updateEventInDB(copiedEventObject );
+                // render the event on the calendar
+                // the third `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+                $calendar.fullCalendar('renderEvent', copiedEventObject);
+                
+                $(this).remove();  
+            },
+            eventDragStart: function( event, jsEvent, ui, view ) { 
+              dragged = [ ui.helper[0], event ];
+              setTimeout(function(){ //bug... event isn't yet updated 
+              dragChildren(event, jsEvent, ui, view);
+              },1);//bug... event isn't yet updated 
+              
+            },
+            eventDragStop: function( event, jsEvent, ui, view ) {  
+                dragged = [ ui.helper[0], event ]; 
+                //save children to db
+              setTimeout(function(){ //bug... event isn't yet updated 
+                endDragChildren(event );
+              },1);//bug... event isn't yet updated 
+            },
+            eventRender : function( event, element, view ) {
+              setTooltip(element,event);
+
+            }
+        }); 
+        $calendar.fullCalendar('changeView', "agendaWeek" );
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*------------------------------------- end initialize the calendar -----------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
+ 
+
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*------------------------------------- initialize the sidebar ----------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
+        function setInstantEvents(instant_events){
+          $sidebar.html("");  
+          var eventHtml =  "<div class='external-event fc-event-draggable'></div>";
+          var $sidebarTmp = $(eventHtml).prependTo($sidebar).hide();
+          
+          //set sidebar bubble draggable
+          for (var i in instant_events){ 
+            var $event = $(eventHtml);
+            $event = sidebarDraggable($event,instant_events[i]);
+          }
+
+          //set sidebar droppable
+          $sidebar.droppable({
+            over: function( event, ui ) {  
+                if( event && $(ui.draggable).hasClass("fc-event-draggable")) {
+                    var event = dragged[1];
+                    $(this).css("border-color","green"); 
+                    sidebarEventHtml($sidebarTmp,event)
+                    $sidebarTmp.show() ;
+                }
+            },
+            out: function( event, ui ) { 
+                if($(ui.draggable).hasClass("fc-event-draggable")) {
+                    $(this).css("border","solid 1px #ccc"); 
+                    $sidebarTmp.hide();
+                } 
+            },
+            drop: function( event, ui ) {
+              if ( dragged && ui.helper && ui.helper[0] === dragged[0]){
+                //update ui
+                $sidebarTmp.hide();
+                $(this).css("border","solid 1px #ccc"); 
+
+                console.log("endDragOn sideBar") ;
+
+                var event = dragged[1]; 
+                //delete parent relation
+
+                deleteParent(event);
+
+                setSidebarEvent(event);
+
+                //affect children
+                var element = $(ui.helper[0]);
+                var children = getChildren(element,event, true); //third event for recursiveness
+                $.each(children,function(i,child){
+                  setSidebarEvent(child.event); 
+                });
+              }
+            }
+          });
+
+          function sidebarDraggable($event,event){
+            $event.appendTo($sidebar);
+            sidebarEventHtml ($event,event);
+            $event.prepend("<span class='fc-event-id ' style='color:grey;'>"+event.id+"</span>");
+            //set child drag
+
+
+            
+            $event.draggable({
+                      zIndex: 999,
+                      revert: true,      // will cause the event to go back to its
+                      revertDuration: 0,  //  original position after the drag
+                      start : function (ev,ui){
+                            dragged = [ ui.helper[0], event ];
+                          setTimeout(function(){ //bug... event isn't yet updated  
+                            dragChildren(event);
+                          },1);//bug... event isn't yet updated   
+                      }
+                    })
+                    .data('eventObject', event);
+            // store the Event Object in the DOM element so we can get to it later
+            return $event;
+          }
+
+          
+          function setSidebarEvent(event){
+            //set as instant event 
+            event.end = moment(event.start); 
+            formatDate(event) 
+            // remove event from calendar 
+            $calendar.fullCalendar('removeEvents',event.id);
+            var $event = $(eventHtml);
+            var $event = sidebarDraggable($event,event);
+            updateEventInDB(event);  
+          }
+
+          function sidebarEventHtml ($event,event){
+            $event.html(event.title);
+            $event.css({
+                      "background-color": event.color,
+                      "border-color": event.border_color || event.color,
+                   });  
+          }
+        }
+
+
+
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*------------------------------------- end initialize the sidebar ------------------------------------*/ 
+        /*-----------------------------------------------------------------------------------------------------*/
+
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*------------------------------------- parent/child  -------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
+
 
         function setTooltip(element,event){
           var oldBorderColor = element.css("border-color");
@@ -557,30 +565,281 @@
               if ( dragged && ui.helper && ui.helper[0] === dragged[0]){
                 $(this).css("border-color",oldBorderColor);  
 
-                var upComingEvent = dragged[1];
-                $modalSetParent.modal('show').find(".sub-event").html(upComingEvent.title);
+                var draggedEvent = dragged[1];
+                if(draggedEvent.parent.id == event.id){
+                  // already sub-event
+                  return;
+                }
+
+
+                $modalSetParent.modal('show').find(".sub-event").html(draggedEvent.title);
                 $modalSetParent.modal('show').find(".super-event").html(event.title);
-                console.log("upComingEvent",upComingEvent);
-                console.log("event",event);
-                $modalSetParent.find('button.yes').click(function(){
-                  upComingEvent.parent = { "id": event.id, "name": event.title }; 
-                  $.post(
-                      op.quickUpdateUrl,
-                      formatDate($.extend( {} , upComingEvent )),
-                      function(doc) {   
-                          bootstrapAlert("success","event has been well updated" ); 
-                      },
-                      'json'
-                  );
-                  bootstrapAlert("info","update request sent ","Info","<i class='icon-spinner icon-spin'></i>"); 
+
+                $modalSetParent.find('button.yes').off("click").click(function(){
+
+                  //set parent and children relation
+                  setParent(draggedEvent,event);
+                  updateEventInDB(draggedEvent); 
                 });  
               }
             }
           }); 
         }
 
+        var draggedProp,draggedStart,children;
+
+        function dragChildren(event){
+          var parentElement = dragged[0];
+          draggedProp =  getProp(parentElement); 
+          draggedStart = moment(event.start);
+          // console.log(event.start)
+          // console.log(draggedProp)
+          // console.log("parentElement",parentElement.text(),parentElement)
+          children = getChildren(parentElement,event, true); //third event for recursiveness
+          console.log("###children",children)
+          $.each(children,function(i,child){ 
+            $(child.element).fadeTo(200, 0.5);
+          });
+          // console.log("lol ",children);
+
+          //update helper
+          $(parentElement).off("mousemove").mousemove( function(ev){ 
+            var newdraggedProp = getProp(parentElement);
+            var diff = { 
+              x : (draggedProp.x - newdraggedProp.x) , 
+              y : (draggedProp.y - newdraggedProp.y)
+            }; 
+            if(diff.x != 0  || diff.y != 0 ){
+              draggedProp =  newdraggedProp;  
+
+              $.each(children,function(i,child){
+                 // console.log(child)
+                var childProp = getProp(child.element);
+                // console.log("lol ",childProp);
+                $(child.element).css("left",childProp.x-diff.x+"px")
+                                .css("top",childProp.y-diff.y+"px");
+              });
+            }
+          }); 
+        }
+
+
+        function endDragChildren(event){
+      
+          console.log("endDragChildren")
+          //get diff
+          var diff = moment(draggedStart).diff(moment(event.start)); 
+          //apply to children
+          $.each(children,function(i,child){
+ 
+            // console.log("#draggin child : ",child );
+            var childEvent = child.event;
+             
+            childEvent.start  = moment(childEvent.start).subtract(diff);
+            childEvent.end  = moment(childEvent.end).subtract(diff); 
+            formatDate(childEvent) 
+
+            updateEventInDB(childEvent); 
+            // render the event on the calendar
+            $calendar.fullCalendar('removeEvents', childEvent.id); 
+            $calendar.fullCalendar('renderEvent', childEvent); 
+          });
+
+          //check if the event has been dropped out of the parent
+          var parent = getElementAndEvent(event.parent.id)
+          if(parent){  
+            if(!moment(parent.event.start).isAfter(event.start) &&
+               !moment(parent.event.end).isBefore(event.end)){
+
+              //still inside
+            }else{
+              //event dropped out of parent
+              console.log(" #### moved out"); 
+              deleteParent(event); 
+              updateEventInDB(event); 
+            } 
+          }
+        }
+
+        function endDragChildrenFromSidebar(event){
+          
+          var lastMoment = moment(event.start);
+
+          var elem = getDivById(event.id);  
+          console.log("####lol")
+          console.log(event) 
+          console.log(elem) 
+          var children = getChildren(elem,event, true); //third event for recursiveness
+          console.log(event)
+
+          $.each(children,function(i,child){
+ 
+            // console.log("#draggin child : ",child ); 
+            var childEvent = child.event;
+            childEvent.start  = moment(lastMoment).format();
+            lastMoment = lastMoment.add("hours",1);
+            childEvent.end  = moment(lastMoment).format(); 
+
+            deleteParent(event);
+            formatDate(childEvent)
+
+            updateEventInDB(childEvent);
+            child.element.remove();
+            // alert("cant hide child in sidebar "+ childEvent.name)
+            // render the event on the calendar
+            $calendar.fullCalendar('renderEvent', childEvent); 
+          });
+          event.end = moment(lastMoment).add("hours",1).format() ;
+          console.log("event.end",event.end)
+        }
+
+        /** 
+         * @param parentElement :  $.eventDiv
+         * @param parent        :  db model event
+         * @param concat        : ( boolean ) if true : dont preserve the tree nature of the relation (just concat them)
+         * return children      : [{event:event,element:$element}, ... ]
+         * events               : db modele events
+         * elements             : jquery draggable div array;
+         */
+        function getChildren(parentElement,parent,concat){
+          var children = [];
+          // console.log("getChildren",parent)
+          $.each(parent.children,function(i,child){
+            if( !parent.children.hasOwnProperty( i ) ) return; 
+            var c = getElementAndEvent(child.id);
+            if( !c) return;  
+            var subChildren = getChildren(c.element,c.event,concat);
+
+            if(concat)
+              children = children.concat(subChildren);
+            else{
+              c['subChildren'] = subChildren;
+            }
+
+
+            children.push(c);  
+
+          }) 
+          return children;
+        }
+
+        /** 
+         * return children = [{event:event,element:$element}, ... ]
+         * events   : db model events
+         * elements : jquery draggable div array;
+         */
+        function getElementAndEvent(id){ 
+          if(id=="")return; 
+            var event = $calendar.fullCalendar( 'clientEvents', id )[0]; 
+
+              //look in sidebar event if not found
+            if(!event){
+              $(".external-event").each(function(i,sidebarEvent){
+                if( event)return;
+                var ev = $.extend({},$(sidebarEvent).data('eventObject'));
+                console.log("##",ev )
+                if(ev && ev.id == id ){
+                console.log("##FOUND IN SIDEBAR##",ev.id,ev)
+                  event = ev; 
+                }
+              }) 
+            } 
+            console.log("##",event ) 
+            var elem = getDivById(event.id); 
+            console.log("##",elem ) 
+            return {event:event,element:$(elem)}
+        }  
+        /**
+        * get div with hidden div containing event id
+        * <div class='fc-event-id hide'>event.id</div>
+        */
+
+        function getDivById(id){
+            var div;
+            $.each($(".fc-event-draggable"),function(i,childDiv){
+              if(div)return false; //break each
+              //check with id
+              $.each($(childDiv).find(".fc-event-id"),function(){
+                if(div)return false; //break each
+                var childId = $(this).text();
+                if(childId ==  id){
+                  div =  $(childDiv);
+                }else{
+                  // console.log("bad id for event to be a child");
+                  // console.log(id +" != "+childId); 
+                }
+              }); 
+            });
+            return div;
+        }
+
+        // remove relation with old parent if exists
+        // and update relation with new parent
+        function setParent(event,parent){
+          //get full event info
+          if(!parent.start){
+            parent = getElementAndEvent(parent.id).event; 
+          }  
+          if(!event.start){
+            parent = getElementAndEvent(event.id).event;  
+          } 
+            deleteParent(event);
+
+          //affect parent to child
+          event.parent = { "id": parent.id};
+          //add child to parent
+          parent.children.push( { "id": event.id});  
+        }
+
+        function isParent(event){
+            //check if it's going to do a loop in the tree
+
+            var elem = getDivById(event.id);  
+            var children = getChildren(elem,event, true);
+            for(var i in children){
+
+              if(child.event.id == parent.id)
+                return true;
+            } 
+            return false;
+        }
+
+        function deleteParent(event){ 
+          console.log('##########')
+          console.log(event);
+          console.log(event.parent);
+          console.log(event.parent.id); 
+          if(!event || !event.parent || !event.parent.id )return;
+              
+          parent = getElementAndEvent(event.parent.id)  ;
+          parent = parent.event;
+          event.parent.id = "";
+          event.parent.title = "";
+          event.parent.name = "";
+          for( var i in parent.children){
+            if(parent.children[i].id == event.id && event.id != ""){ 
+              delete parent.children[i];
+              return;
+            }
+          } 
+        }
+
+        jQuery.fn.cssNumber = function(prop){
+          var v = parseInt(this.css(prop),10);
+          return isNaN(v) ? 0 : v;
+        };
+
+        function getProp(elem){
+          return {
+              y: $(elem).cssNumber("top"),
+              x: $(elem).cssNumber("left"),
+              w: $(elem).cssNumber("width"),
+              h: $(elem).cssNumber("height"),
+            }
+        }
+
         /*-----------------------------------------------------------------------------------------------------*/
-      /*------------------------------------- parent/child ----------------------------------------*/
+        /*------------------------------------- end parent/child ----------------------------------------------*/
         /*-----------------------------------------------------------------------------------------------------*/
 
       // empty fullcalendar events and populate it with new
@@ -607,11 +866,22 @@
         }
         setInstantEvents(instant_events);
       }
-    });
 
-    
+      function updateEventInDB(event){ 
+              $.post(
+                op.quickUpdateUrl,
+                formatDate($.extend( {} , event )),
+                function(doc) {   
+                        bootstrapAlert("success","event has been well updated"); 
+                },
+                'json'
+              );
+              bootstrapAlert("info","update request sent ","Info : ","<i class='icon-spinner icon-spin'></i>");
+      }
+    });
     
      function formatDate(e){
+      console.log
         e.start = moment(e.start).format();
         e.end = moment(e.end).format();
         return e;

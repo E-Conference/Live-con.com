@@ -8,7 +8,7 @@
     "parent":
     {
         "id": "{{ entity.parent.id }}",
-        "name": "{{ entity.location.name }}"
+        "name": "{{ entity.parent.summary }}"
     },
     "is_transparent": "{{ entity.isTransparent }}",
     "resources": "{{ entity.resources }}",
@@ -40,9 +40,9 @@
     [
     {% for child in entity.children %}
         {% if loop.first %}
-        { "id": "{{ child.id }}", "name": "{{ child.name }}"}
+        { "id": "{{ child.id }}", "name": "{{ child.summary }}"}
         {% else %}
-        ,{ "id": "{{ child.id }}", "name": "{{ child.name }}"}
+        ,{ "id": "{{ child.id }}", "name": "{{ child.summary }}"}
         {% endif %}
     {% endfor %}
     ],
