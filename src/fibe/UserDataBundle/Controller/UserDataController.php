@@ -6,6 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use fibe\Bundle\WWWConfBundle\Entity\Paper;
+use fibe\Bundle\WWWConfBundle\Form\PaperType;
+
 /**
  * user data controller.
  *
@@ -21,4 +24,6 @@ class UserDataController extends Controller
     {
         return array();
     }
+
+   
 }
