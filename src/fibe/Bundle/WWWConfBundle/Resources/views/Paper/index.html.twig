@@ -1,7 +1,19 @@
-{% extends '::base.html.twig' %}
+{% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body -%}
-    <h1>Paper list</h1>
+{% block body %}
+{{ parent() }}
+<div class="row">
+        <div class="col-lg-2">
+            <h1>{% trans %}Papers{% endtrans %}</h1>
+        </div>
+        <div class="col-lg-4">
+            <a class="btn btn-info" href="{{ path('schedule_location_new') }}">
+                 <i class="icon-plus"></i>
+            </a>
+        </div>
+    </div>
+
+   
 
     <table class="records_list">
         <thead>

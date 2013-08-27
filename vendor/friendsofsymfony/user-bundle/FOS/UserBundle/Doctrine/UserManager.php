@@ -32,6 +32,7 @@ class UserManager extends BaseUserManager
      * @param ObjectManager           $om
      * @param string                  $class
      */
+    
     public function __construct(EncoderFactoryInterface $encoderFactory, CanonicalizerInterface $usernameCanonicalizer, CanonicalizerInterface $emailCanonicalizer, ObjectManager $om, $class)
     {
         parent::__construct($encoderFactory, $usernameCanonicalizer, $emailCanonicalizer);

@@ -17,7 +17,6 @@ use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
  */
 class Person
 {
-
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -57,7 +56,7 @@ class Person
      */
     protected $email;
 
-	
+
     /**
      * created
      *

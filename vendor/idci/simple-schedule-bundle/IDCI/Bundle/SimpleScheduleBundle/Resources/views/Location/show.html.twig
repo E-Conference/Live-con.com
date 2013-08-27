@@ -31,6 +31,13 @@
             <th>Longitude</th>
             <td>{{ entity.longitude }}</td>
         </tr>
+         <tr>
+            <th>Equipments</th>
+            <td> {% for equipment in entity.getEquipments() %}
+                    <i class="icon-{{ equipment.icon }}"></i>
+                {% endfor %}
+            <td>
+        </tr>
     </tbody>
 </table>
 

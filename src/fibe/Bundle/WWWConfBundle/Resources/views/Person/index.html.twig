@@ -4,25 +4,29 @@
 
 {% block body %}
 {{ parent() }}
-
-<div class="row">
-  <div class="col-lg-4"><h1>Person list</h1></div>
-  <div class="col-lg-4">
-  </div>
+<div class="page-header">
+     <div class="row">
+        <div class="col-lg-2">
+            <h1>{% trans %}Persons{% endtrans %}</h1>
+        </div>
+        <div class="col-lg-4">
+            <a class="btn btn-info" href="{{ path('person_new') }}">
+                 <i class="icon-plus"></i>
+            </a>
+        </div>
+    </div>
 </div>
-    <a type="btn btn-info" href="{{ path('person_new') }}">
-        <i class="icon-plus"></i>
-    </a>
+    
     <table class="table table-hover records_list">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Flag_schedule</th>
-                <th>Flag_schedule_admin</th>
-                <th>Flag_data</th>
-                <th>Flag_data_admin</th>
+                <th>Schedule Acces</th>
+                <th>Schedule Admin</th>
+                <th>Acces Data Paper</th>
+                <th>Data Paper Admin</th>
                 <th>Organization</th>
                 <th>Actions</th>
             </tr>
@@ -34,9 +38,9 @@
                 <td>{{ entity.name }}</td>
                 <td>{{ entity.email }}</td>
                 <td>{{ entity.flagschedule }}</td>
-                <td>{{ entity.flagscheduleadmin }}</td>
+                <td>{% if entity.flagscheduleadmin %}<i class="icon-user"></i>{% endif %}</td>
                 <td>{{ entity.flagdata }}</td>
-                <td>{{ entity.flagdataadmin }}</td>
+                <td>{% if entity.flagdataadmin %}<i class="icon-user"></i>{% endif %}</td>
                 <td>{{ entity.organization }}</td>
                 <td>
                     <a class="btn btn-default" href="{{ path('person_show', { 'id': entity.id }) }}">
