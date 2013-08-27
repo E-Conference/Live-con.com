@@ -169,7 +169,8 @@
     }  
     #modal-set-parent .modal-body { 
       /*text-align: center; */
-    }  
+    }
+    #calendar table { table-layout: fixed; }
     .event-name { 
       margin:2em;
       font-weight: bolder;
@@ -390,10 +391,14 @@
             eventDataTransform: function(data){return data;},
             editable: true,
             droppable: true, // this allows things to be dropped onto the calendar !!!
-            eventDrop : function(event){ 
+            eventDrop : function(event){ //drop from calendar ")
                     updateEventInDB(event);
-            },
-            drop: function(date, allDay) { // this function is called when something is dropped
+            }, 
+            eventAfterAllRender: function( view ) {
+              // alert("eventAfterRender")
+              reposition(view);
+            }, 
+            drop: function(date, allDay) { //drop from sidebar
             
                 // retrieve the dropped element's stored Event Object
                 var originalEventObject = $(this).data('eventObject');
@@ -407,6 +412,7 @@
                 formatDate(copiedEventObject);
 
                 endDragChildrenFromSidebar(copiedEventObject);
+                deleteParent(copiedEventObject);
                 
                 updateEventInDB(copiedEventObject );
                 // render the event on the calendar
@@ -470,7 +476,7 @@
                     $sidebarTmp.hide();
                 } 
             },
-            drop: function( event, ui ) {
+            drop: function( event, ui ) { 
               if ( dragged && ui.helper && ui.helper[0] === dragged[0]){
                 //update ui
                 $sidebarTmp.hide();
@@ -550,13 +556,14 @@
         /*------------------------------------- parent/child  -------------------------------------------------*/
         /*-----------------------------------------------------------------------------------------------------*/
 
-
+        //drag event from calendar
+        //highlight 
         function setTooltip(element,event){
           var oldBorderColor = element.css("border-color");
           var overBorderColor = "green";
           element.droppable({
             over: function( ev, ui ) {
-                $(this).css("border-color",overBorderColor);  
+                $(this).css("border-color",overBorderColor);
             },
             out: function( ev, ui ) { 
                 $(this).css("border-color",oldBorderColor);  
@@ -571,6 +578,13 @@
                   return;
                 }
 
+                //check if it's going to do a loop in the tree
+                if(isChild(draggedEvent,event)){
+                  bootstrapAlert("stop");
+                  bootstrapAlert("error","cannot set event <b>"+event.title+"</b> as child of <b>"+parent.title+"</b> because this is going to do a loop in the event tree","Circular reference : "); 
+            
+                  return;
+                }
 
                 $modalSetParent.modal('show').find(".sub-event").html(draggedEvent.title);
                 $modalSetParent.modal('show').find(".super-event").html(event.title);
@@ -622,7 +636,57 @@
             }
           }); 
         }
+        // set blockwidth
 
+        /***************    position    ******************/
+        /***************    position    ******************/
+        /***************    position    ******************/
+        /***************    position    ******************/
+        /***************    position    ******************/
+        /***************    position    ******************/
+        /***************    position    ******************/ 
+
+        function reposition(view){ 
+          var colWidth = view.getColWidth();
+          console.log("#reposition#");
+          var positionnedEvent = [];
+
+          var events = $calendar.fullCalendar('clientEvents'); //loop only on calendar events
+
+          for (var i in events){
+            var event = events[i]; 
+            if($.inArray(event.id, positionnedEvent)>-1)continue;
+
+            event = getElementAndEvent(event.id); 
+
+            // get toppest parent 
+            while(hasParent(event)){
+              event = getElementAndEvent(event.event.parent.id);  
+            }
+            //toppest parent
+            event = getElementAndEvent(event.event.id);
+            console.log("toppest parent",event.event.id);
+
+            //TODO
+            //TODO
+            //TODO redim width
+            //TODO 
+            //TODO positionnedEvent.push(child.id);
+            //TODO
+            //TODO
+            //TODO
+            positionnedEvent.push(event.event.id);
+          }
+ 
+        }
+
+        /***************    position    ******************/
+        /***************    position    ******************/
+        /***************    position    ******************/
+        /***************    position    ******************/
+        /***************    position    ******************/
+        /***************    position    ******************/
+        /***************    position    ******************/
 
         function endDragChildren(event){
       
@@ -719,39 +783,9 @@
             event.element.remove();  
              $calendar.fullCalendar('renderEvent', event.event); 
  
-          }
-
-
-
-
-          // var children = getChildren(elem,event, true); //third event for recursiveness
-          // console.log(event)
-
-          // $.each(children,function(i,child){
- 
-          //   // console.log("#draggin child : ",child ); 
-          //   var childEvent = child.event;
-          //   childEvent.start  = moment(lastMoment).format();
-          //   lastMoment = lastMoment.add("hours",1);
-          //   childEvent.end  = moment(lastMoment).format(); 
-
-          //   deleteParent(event);
-          //   formatDate(childEvent)
-
-          //   updateEventInDB(childEvent);
-          //   child.element.remove();
-          //   // alert("cant hide child in sidebar "+ childEvent.name)
-          //   // render the event on the calendar
-          //   $calendar.fullCalendar('renderEvent', childEvent); 
-          // });
-          // event.end = moment(lastMoment).add("hours",1).format() ;
-          // console.log("event.end",event.end)
-
-
-
-
-
+          } 
         }
+
 
         /** 
          * @param parentElement :  $.eventDiv
@@ -837,6 +871,12 @@
         // remove relation with old parent if exists
         // and update relation with new parent
         function setParent(event,parent){
+
+
+          var elem = getDivById(event.id);  
+          var children = getChildren(elem,event, true);
+
+
           //get full event info
           if(!parent.start){
             parent = getElementAndEvent(parent.id).event; 
@@ -844,29 +884,37 @@
           if(!event.start){
             parent = getElementAndEvent(event.id).event;  
           } 
-            deleteParent(event);
+          deleteParent(event);
 
+          if(isChild(parent,event)){
+            bootstrapAlert("error","cannot set event <b>"+event.title+"</b> as child of <b>"+parent.title+"</b> because this is going to do a loop in the event tree","Circular reference : "); 
+            return;
+          }
+
+          //check if this is going to do a loop in the tree 
           //affect parent to child
           event.parent = { "id": parent.id};
           //add child to parent
           parent.children.push( { "id": event.id});  
         }
 
-        function isParent(event){
+        function isChild(parent,event){
+            if(event.event)var event = event.event;
             //check if it's going to do a loop in the tree
 
-            var elem = getDivById(event.id);  
-            var children = getChildren(elem,event, true);
+            var elem = getDivById(parent.id);
+            var children = getChildren(elem,parent, true); 
+            console.log("OLOLOLOL",children);
             for(var i in children){
-
-              if(child.event.id == parent.id)
-                return true;
-            } 
+                if(children[i].event.id == event.id){ 
+                  return true;  
+                }
+            }
             return false;
         }
 
         function deleteParent(event){   
-          if(!event || !event.parent || !event.parent.id || event.parent.id=="")return;
+          if(!event || !hasParent(event))return;
               
           parent = getElementAndEvent(event.parent.id)  ;
           parent = parent.event;
@@ -879,6 +927,13 @@
               return;
             }
           } 
+        }
+
+        function hasParent(event){
+          if(event.event)var event = event.event;
+          if(!event.parent || !event.parent.id || event.parent.id=="")return false;
+          return true;
+
         }
 
         jQuery.fn.cssNumber = function(prop){
@@ -894,6 +949,8 @@
               h: $(elem).cssNumber("height"),
             }
         }
+
+
 
         /*-----------------------------------------------------------------------------------------------------*/
         /*------------------------------------- end parent/child ----------------------------------------------*/
