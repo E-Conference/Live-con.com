@@ -662,35 +662,95 @@
         }
 
         function endDragChildrenFromSidebar(event){
-          
-          var lastMoment = moment(event.start);
+           
+          var elem = getDivById(event.id);    
 
-          var elem = getDivById(event.id);  
-          console.log("####lol")
-          console.log(event) 
-          console.log(elem) 
-          var children = getChildren(elem,event, true); //third event for recursiveness
-          console.log(event)
+          var lastMoment = moment(event.start);   
+          var children = getChildren(elem,event, false); //third event for recursiveness
+          console.log("####children");
+          console.log(children);
 
-          $.each(children,function(i,child){
+
+
+
+            event.start  = moment(lastMoment).format(); 
+            lastMoment = lastMoment.add("minutes",30);
+            formatDate(event)
+
+            updateEventInDB(event);
  
-            // console.log("#draggin child : ",child ); 
-            var childEvent = child.event;
-            childEvent.start  = moment(lastMoment).format();
-            lastMoment = lastMoment.add("hours",1);
-            childEvent.end  = moment(lastMoment).format(); 
+ 
 
-            deleteParent(event);
-            formatDate(childEvent)
 
-            updateEventInDB(childEvent);
-            child.element.remove();
-            // alert("cant hide child in sidebar "+ childEvent.name)
-            // render the event on the calendar
-            $calendar.fullCalendar('renderEvent', childEvent); 
-          });
-          event.end = moment(lastMoment).add("hours",1).format() ;
+            if( children) 
+            for(var i in children){
+              setChildDate(children[i]); 
+            } 
+ 
+
+          event.end = moment(lastMoment).add("minutes",30).format() ;
+          deleteParent(event);
           console.log("event.end",event.end)
+
+
+          function setChildDate(event){
+            console.log("#!#setChildDate",event)
+
+
+            event.event.start  = moment(lastMoment).format();
+            lastMoment = lastMoment.add("minutes",30);
+
+
+            if( event.subChildren){
+              for(var i in event.subChildren){
+                setChildDate(event.subChildren[i]); 
+              }
+            }
+
+
+            lastMoment = lastMoment.add("minutes",30);
+
+            event.event.end  = moment(lastMoment).format();  
+            formatDate(event.event)
+
+            updateEventInDB(event.event);
+
+
+            event.element.remove();  
+             $calendar.fullCalendar('renderEvent', event.event); 
+ 
+          }
+
+
+
+
+          // var children = getChildren(elem,event, true); //third event for recursiveness
+          // console.log(event)
+
+          // $.each(children,function(i,child){
+ 
+          //   // console.log("#draggin child : ",child ); 
+          //   var childEvent = child.event;
+          //   childEvent.start  = moment(lastMoment).format();
+          //   lastMoment = lastMoment.add("hours",1);
+          //   childEvent.end  = moment(lastMoment).format(); 
+
+          //   deleteParent(event);
+          //   formatDate(childEvent)
+
+          //   updateEventInDB(childEvent);
+          //   child.element.remove();
+          //   // alert("cant hide child in sidebar "+ childEvent.name)
+          //   // render the event on the calendar
+          //   $calendar.fullCalendar('renderEvent', childEvent); 
+          // });
+          // event.end = moment(lastMoment).add("hours",1).format() ;
+          // console.log("event.end",event.end)
+
+
+
+
+
         }
 
         /** 
@@ -713,6 +773,7 @@
             if(concat)
               children = children.concat(subChildren);
             else{
+              if (subChildren.length > 0)
               c['subChildren'] = subChildren;
             }
 
@@ -737,16 +798,16 @@
               $(".external-event").each(function(i,sidebarEvent){
                 if( event)return;
                 var ev = $.extend({},$(sidebarEvent).data('eventObject'));
-                console.log("##",ev )
+                // console.log("##",ev )
                 if(ev && ev.id == id ){
-                console.log("##FOUND IN SIDEBAR##",ev.id,ev)
+                 console.log("##FOUND IN SIDEBAR##",ev.id,ev)
                   event = ev; 
                 }
               }) 
             } 
-            console.log("##",event ) 
+            // console.log("##",event ) 
             var elem = getDivById(event.id); 
-            console.log("##",elem ) 
+            // console.log("##",elem ) 
             return {event:event,element:$(elem)}
         }  
         /**
@@ -804,12 +865,8 @@
             return false;
         }
 
-        function deleteParent(event){ 
-          console.log('##########')
-          console.log(event);
-          console.log(event.parent);
-          console.log(event.parent.id); 
-          if(!event || !event.parent || !event.parent.id )return;
+        function deleteParent(event){   
+          if(!event || !event.parent || !event.parent.id || event.parent.id=="")return;
               
           parent = getElementAndEvent(event.parent.id)  ;
           parent = parent.event;
@@ -880,8 +937,7 @@
       }
     });
     
-     function formatDate(e){
-      console.log
+     function formatDate(e){ 
         e.start = moment(e.start).format();
         e.end = moment(e.end).format();
         return e;
