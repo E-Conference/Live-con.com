@@ -528,7 +528,7 @@
           
           function setSidebarEvent(event){
             //set as instant event 
-            event.end = moment(event.start); 
+            event['end'] = moment(event.start); 
             formatDate(event) 
             // remove event from calendar 
             $calendar.fullCalendar('removeEvents',event.id);
@@ -657,15 +657,17 @@
             var event = events[i]; 
             if($.inArray(event.id, positionnedEvent)>-1)continue;
 
-            event = getElementAndEvent(event.id); 
+            event = getElementAndEvent(event.id).event; 
 
             // get toppest parent 
-            while(hasParent(event)){
-              event = getElementAndEvent(event.event.parent.id);  
+            while(hasParent(event)){ 
+              event = getElementAndEvent(event.parent.id);
+              if(!event) return false; //not all event were not all loaded
+              event = event.event;
             }
             //toppest parent
-            event = getElementAndEvent(event.event.id);
-            console.log("toppest parent",event.event.id);
+            event = getElementAndEvent(event.id).event;
+            console.log("toppest parent",event.id);
 
             //TODO
             //TODO
@@ -675,7 +677,7 @@
             //TODO
             //TODO
             //TODO
-            positionnedEvent.push(event.event.id);
+            positionnedEvent.push(event.id);
           }
  
         }
@@ -700,7 +702,7 @@
             var childEvent = child.event;
              
             childEvent.start  = moment(childEvent.start).subtract(diff);
-            childEvent.end  = moment(childEvent.end).subtract(diff); 
+            childEvent['end']  = moment(childEvent['end']).subtract(diff); 
             formatDate(childEvent) 
 
             updateEventInDB(childEvent); 
@@ -713,7 +715,7 @@
           var parent = getElementAndEvent(event.parent.id)
           if(parent){  
             if(!moment(parent.event.start).isAfter(event.start) &&
-               !moment(parent.event.end).isBefore(event.end)){
+               !moment(parent.event['end']).isBefore(event['end'])){
 
               //still inside
             }else{
@@ -752,9 +754,9 @@
             } 
  
 
-          event.end = moment(lastMoment).add("minutes",30).format() ;
+          event['end'] = moment(lastMoment).add("minutes",30).format() ;
           deleteParent(event);
-          console.log("event.end",event.end)
+          console.log("event['end']",event['end'])
 
 
           function setChildDate(event){
@@ -774,7 +776,7 @@
 
             lastMoment = lastMoment.add("minutes",30);
 
-            event.event.end  = moment(lastMoment).format();  
+            event.event['end']  = moment(lastMoment).format();  
             formatDate(event.event)
 
             updateEventInDB(event.event);
@@ -824,10 +826,10 @@
          * elements : jquery draggable div array;
          */
         function getElementAndEvent(id){ 
-          if(id=="")return; 
+          if(id=="" || !id)return ;
             var event = $calendar.fullCalendar( 'clientEvents', id )[0]; 
 
-              //look in sidebar event if not found
+            //look in sidebar event if not found
             if(!event){
               $(".external-event").each(function(i,sidebarEvent){
                 if( event)return;
@@ -837,8 +839,9 @@
                  console.log("##FOUND IN SIDEBAR##",ev.id,ev)
                   event = ev; 
                 }
-              }) 
-            } 
+              })
+            }
+          if(!event)return;
             // console.log("##",event ) 
             var elem = getDivById(event.id); 
             // console.log("##",elem ) 
@@ -996,7 +999,7 @@
     
      function formatDate(e){ 
         e.start = moment(e.start).format();
-        e.end = moment(e.end).format();
+        e['end'] = moment(e['end'] || moment(e.start).add("minutes",30)).format();
         return e;
      }
 

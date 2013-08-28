@@ -15,7 +15,7 @@ footer {
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 ); /* IE6-9 */
 }
 
-.form-control
+/*.form-control
 {
 	width:40% !important;
 	padding-left :40% !important;
@@ -25,7 +25,7 @@ footer {
 option
 {
 	lineheight: 40% !important ;
-}
+}*/
 
 .equipment_button >.delete_equipment
 {
