@@ -91,18 +91,10 @@ class ScheduleController extends Controller
                          ->getRepository('fibeWWWConfBundle:WwwConf')
                          ->find(1); 
                 
-                $event= new Event();
-                $startAt=new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get()));
-                $event->setStartAt($startAt );  
-                if($postData['allDay']=="true"){
-                  $endAt = new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()));   
-                  $event->setEndAt($endAt->add(new \DateInterval('PT23H59M59S'))); 
-                }
-                else {
-                  $event->setEndAt(new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()))); 
-                }
-                $event->setSummary($postData['title']); 
-                $event->setParent( $em->getRepository('IDCISimpleScheduleBundle:Event')->find($postData['parent']['id']) );
+                $event= new Event(); 
+                $event->setEndAt(new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()))); 
+                $event->setStartAt(new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get())));  
+                $event->setIsAllDay($postData['allDay']=="true") ;
 
                 $event->setWwwConf($conf);
                 
@@ -120,8 +112,8 @@ class ScheduleController extends Controller
             $endAt =new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()));
             
             $event->setStartAt( $startAt );
-            $event->setEndAt( $endAt );
-            $event->setParent( $em->getRepository('IDCISimpleScheduleBundle:Event')->find($postData['parent']['id']) );
+            $event->setEndAt( $endAt ); 
+            $event->setIsAllDay($postData['allDay']=="true") ;
             $em->persist($event);
             $em->flush();
             $JSONArray['IsSuccess'] = true;
@@ -176,6 +168,7 @@ class ScheduleController extends Controller
     
      
     /**
+     * ajax version of event edit controller
      * @Route("/{id}/updateEvents", name="schedule_view_event_update") 
      */
      

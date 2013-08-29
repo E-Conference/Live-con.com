@@ -45,6 +45,16 @@ class ConfEvent extends Event
      */
     private $role;
 
+
+    /**
+     *  
+     * Is an all day event ?
+     *   
+     * @ORM\Column(name="is_allday", type="boolean")
+     * 
+     */
+    private $isAllDay = false;
+
    
    
 
@@ -61,9 +71,29 @@ class ConfEvent extends Event
         $this->xProperties = new \Doctrine\Common\Collections\ArrayCollection();
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
-    
 
+    /**
+     * Set isAllDay
+     * 
+     * @return ConfEvent
+     */
+    public function setIsAllDay($isAllDay)
+    {
+        $this->isAllDay = $isAllDay;
+    
+        return $this;
+    }
+
+    /**
+     * Get isAllDay
+     *
+     * @return boolean
+     */
+    public function getIsAllDay()
+    {
+        return $this->isAllDay;
+    }
+     
     /**
      * Set wwwConf
      *

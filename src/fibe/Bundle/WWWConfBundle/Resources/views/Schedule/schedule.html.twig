@@ -29,7 +29,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Edit event</h4>
+        <h3 class="modal-title">Edit event</h3>
       </div>
       <div class="modal-body">
         <p>One fine body&hellip;</p>
@@ -43,7 +43,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Give a name to the new event</h4>
+        <h3 class="modal-title">Give a name to the new event</h3>
       </div>
       <form>
         <div class="modal-body">
@@ -65,17 +65,21 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title"><i class='icon-sitemap icon-large'></i> Affect parent</h4>
+        <h3 class="modal-title"> 
+          <span class="icon-stack">
+            <i class="icon-sign-blank icon-stack-base"></i>
+            <i class="icon-sitemap icon-light"></i>
+          </span>  
+          Affect parent
+        </h3>
       </div>
-        <div class="modal-body">
-          <div class="modal-body">
-            Set 
-            <p class="sub-event event-name well"></p> 
-            as sub event of 
-            <p class="super-event event-name well"></p>
-            ?
-          </div>
-        </div>
+      <div class="modal-body"> 
+        Set 
+        <p class="sub-event event-name well"></p> 
+        as sub event of 
+        <p class="super-event event-name well"></p>
+        ?
+      </div> 
       
       <div class="modal-footer row-fluid">
         <div class="col-lg-6"><button class="col-md-6 btn btn-default btn-block no" data-dismiss="modal"><i class='icon-remove'></i> no</button></div>
@@ -174,11 +178,10 @@
     .event-name { 
       text-align: center;
       margin:2em;
-      font-weight: bolder;
-      font-size: 18px;
+      font-weight: bolder; 
     }
     .fc-event-id {
-      display: none;
+      /*display: none;*/
     }
   .fc-view { /* prevents dragging outside of widget */
       overflow: visible;
@@ -701,16 +704,19 @@
           var diff = moment(draggedStart).diff(moment(event['start'])); 
 
           //apply to children
-          $.each(children,function(i,child){
+          if(event['allDay']===true){
+            updateChildrenDate(event);
+          }else{
+            $.each(children,function(i,child){
 
-            // console.log("#draggin child : ",child );
-            var childEvent = child.event;
-             
-            childEvent['start']  = moment(childEvent['start']).subtract(diff);
-            childEvent['end']  = moment(childEvent['end'] || childEvent['start']).subtract(diff);
-            render(childEvent); 
-          });
-
+              // console.log("#draggin child : ",child );
+              var childEvent = child.event;
+               
+              childEvent['start']  = moment(childEvent['start']).subtract(diff);
+              childEvent['end']  = moment(childEvent['end'] || childEvent['start']).subtract(diff);
+              render(childEvent); 
+            });
+          }
           if(hasParent(event)){
             var p = getElementAndEvent(event.parent.id);
             var parent= p.event;
@@ -936,22 +942,42 @@
          }
 
         function updateChildrenDate(event){
-            var elem = getDivById(event.id);
+          var elem = getDivById(event.id);
           var children = getChildren(elem,event, false); 
           console.log("OLOLOLOL",children);
-          for(var i in children){
+          var Eduration = moment(event.end).diff(event.start); 
+          for(var i in children)
+          {
             var child = children[i].event;
-            if(isOutOfParent(child)) {
+            var Cduration = moment(child.end).diff(child.start); 
+            //TODO check if not less than 30mn
+            if(isOutOfParent(child)) 
+            { 
+              console.log("#######CHILD OUT OF DRAGGED#########")
+              var childStart = child['start'],
+                  childEnd = child['end'];
+              //child start is before event start
+              if(moment(child['start']).isBefore(event['start']))
+              {
+                // event['start'] = parent['start'];
+                childStart = event['start'];
 
-              // //child start is before event start
-              // if(moment(child['start']).isBefore(event['start'])){
-              //   // event['start'] = parent['start'];
-              //   event['start'] = child['start'];
+                childEnd = moment(childStart).add(Cduration).format();
+              }
+              //child end is after child start
+              if(moment(child['end']).isAfter(event['end']))
+              {
+                // event['start'] = parent['start'];
+                childEnd = event['end']; 
 
-              //   child['end'] = moment(child['start']).add(Eduration).format();
-              // }
-              child['start'] = event['start'];
-              child['end'] = event['end'];
+                childStart = moment(childEnd).subtract(Cduration).format(); 
+              } 
+              if(Cduration>Eduration){
+                childStart = event['start'];
+                childEnd = event['end'];
+              }
+              child['start'] = childStart;
+              child['end'] = childEnd;
               updateChildrenDate(child)
               render(child);
             } 
@@ -1035,17 +1061,18 @@
         for (var i in events){  
           events[i]["title"] = events[i].name;
           events[i]["start"] = events[i].start_at;
-          events[i]["end"] = events[i].end_at;
+          events[i]["end"] = events[i].end_at; 
+          events[i]["allDay"] = events[i].is_allday==="true";
+
           delete events[i]["url"]
           // console.log(events[i].categories);
           if(events[i].categories.length > 0 && events[i].categories[0].color)
             events[i]["background-color"] = events[i].categories[0].color
-           
+          
           var diff =moment(events[i]["start"]).diff(events[i]["end"]);
-          var instant = (diff  == 0 ) || (diff  == 1 );
-          var allDay = !instant && ((diff % 86400000 == 0 ) || (diff % 86400000 == 1 ));
-          events[i]["allDay"] = allDay;  
-          if(instant)instant_events.push(events[i]);
+          var instant = (diff  == 0 ) || (diff  == 1 );  
+          if(instant)
+            instant_events.push(events[i]);
           else
             $calendar.fullCalendar( 'renderEvent',events[i]);
         }
