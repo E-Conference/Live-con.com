@@ -43,17 +43,13 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">New event</h4>
+        <h4 class="modal-title">Give a name to the new event</h4>
       </div>
       <form>
         <div class="modal-body">
           <div class="input-group input-group-lg"> 
             <input name="name" id="name" type="text" class="form-control input-lg" value="New event" placeholder="New event">
-          </div>
-          <div class="input-group input-group-lg">
-            <span class="input-group-addon">Parent</span>
-            <select name="parent_id" id="parent_id" class="form-control input-lg"></select>
-          </div>
+          </div> 
         </div>
         <div class="modal-footer">
           <a  class="btn btn-default" data-dismiss="modal">Close</a>
@@ -74,9 +70,9 @@
         <div class="modal-body">
           <div class="modal-body">
             Set 
-            <p class="sub-event event-name"></p> 
+            <p class="sub-event event-name well"></p> 
             as sub event of 
-            <p class="super-event event-name"></p>
+            <p class="super-event event-name well"></p>
             ?
           </div>
         </div>
@@ -106,7 +102,10 @@
 <link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.css') }}" rel='stylesheet' />
 <link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.print.css') }}" rel='stylesheet' media='print' />
     <style type="text/css">
-        
+
+
+
+
     .navbar { 
       margin-bottom: 0; 
     }
@@ -171,10 +170,15 @@
       /*text-align: center; */
     }
     #calendar table { table-layout: fixed; }
+
     .event-name { 
+      text-align: center;
       margin:2em;
       font-weight: bolder;
       font-size: 18px;
+    }
+    .fc-event-id {
+      display: none;
     }
   .fc-view { /* prevents dragging outside of widget */
       overflow: visible;
@@ -356,12 +360,11 @@
                 });
                 $modalNewEvent.find("select").html(selectHtml);
                 $modalNewEvent.find("form").submit(function(e){ 
-                  var title = $(this).find("#name").val();
-                  var parent_id = $(this).find("#parent_id").val(); 
+                  var title = $(this).find("#name").val(); 
                   if (title && parent) {
                       var e = {
                           title: title,
-                          parent: {id:parent_id},
+                          parent: {id:""},
                           children: [],
                           start: start,
                           end: end,
@@ -385,8 +388,9 @@
                 $calendar.fullCalendar('unselect');
             },
             eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
-
-                    updateEventInDB(event);
+                    updateParentDate(event);
+                    updateChildrenDate(event);
+                    render(event);
             },
             eventDataTransform: function(data){return data;},
             editable: true,
@@ -432,7 +436,7 @@
                 dragged = [ ui.helper[0], event ]; 
                 //save children to db
               setTimeout(function(){ //bug... event isn't yet updated 
-                endDragChildren(event );
+                endDrag(event );
               },1);//bug... event isn't yet updated 
             },
             eventRender : function( event, element, view ) {
@@ -690,14 +694,15 @@
         /***************    position    ******************/
         /***************    position    ******************/
 
-        function endDragChildren(event){
+        function endDrag(event){
       
-          console.log("endDragChildren")
+          console.log("endDrag")
           //get diff
           var diff = moment(draggedStart).diff(moment(event['start'])); 
+
           //apply to children
           $.each(children,function(i,child){
- 
+
             // console.log("#draggin child : ",child );
             var childEvent = child.event;
              
@@ -706,15 +711,24 @@
             render(childEvent); 
           });
 
-          //check if the event has been dropped out of the parent 
-          if(isOutOfParent(event)){
+          if(hasParent(event)){
+            var p = getElementAndEvent(event.parent.id);
+            var parent= p.event;
+            if(!moment(parent['start']).isBefore(event['end']) ||
+               !moment(parent['end']).isAfter(event['start'])){
               //event dropped out of parent
               console.log(" #### moved out ####"); 
               deleteParent(event); 
-              updateEventInDB(event); 
-            } 
-          
+              render(event)
+
+            }else{
+              updateParentDate(event);
+              render(event)
+            }
+          }
+
         }
+
         function isOutOfParent(event){
           if(!hasParent(event))return false;
           var parent = getElementAndEvent(event.parent.id)
@@ -769,7 +783,7 @@
             updateEventInDB(event.event); 
 
             event.element.remove();  
-             $calendar.fullCalendar('renderEvent', event.event); 
+            $calendar.fullCalendar('renderEvent', event.event); 
  
           } 
         }
@@ -887,40 +901,61 @@
 
           //update parentDate
           updateParentDate(event);
+          render(event); 
            
         }
 
-        function updateParentDate(event){ 
-
+        function updateParentDate(event){
           //check if the event has been dropped out of the parent 
           if(isOutOfParent(event)){
               //event is out of parent
               console.log(" #### DEPASSE#### DEPASSE#### DEPASSE#### DEPASSE"); 
               var parent = getElementAndEvent(event.parent.id).event;
-              var Eduration = moment(event['end']).diff(event['start']);
-              var Pduration = moment(parent['end']).diff(parent['start']);
+              var Eduration = moment(event['end']).diff(event['start']); 
+
+              //event start is before parent start
               if(moment(event['start']).isBefore(parent['start'])){
-                event['start'] = parent['start'];
+                // event['start'] = parent['start'];
+                parent['start'] = event['start'];
+
                 event['end'] = moment(event['start']).add(Eduration).format();
               }
+              //event end is after parent end
               if(moment(event['end']).isAfter(parent['end'])){
-                event['end'] = parent['end']; 
-                event['start'] = moment(event['end']).subtract(Eduration).format();
-              }
-              if(Eduration>Pduration){
-                event['start'] = parent['start']; 
-                if(Eduration <= 3600000) {
-                  event['end'] = moment(parent['end']).format();
-                  // setParentDate();
-                }else{
-                  event['end'] = moment(parent['end']).subtract("minutes",30).format();  
-                }
-              }
-              // parent['end'] = moment(parent['end']).add("minutes",30).format();
+                // event['end'] = parent['end']; 
+                parent['end'] = event['end'];
 
-              render(event);  
+                event['start'] = moment(event['end']).subtract(Eduration).format();
+              } 
+              if(hasParent(event)){
+                var p = getElementAndEvent(event.parent.id);
+                updateParentDate(p.event);
+              }
+              render(parent);
           } 
- 
+         }
+
+        function updateChildrenDate(event){
+            var elem = getDivById(event.id);
+          var children = getChildren(elem,event, false); 
+          console.log("OLOLOLOL",children);
+          for(var i in children){
+            var child = children[i].event;
+            if(isOutOfParent(child)) {
+
+              // //child start is before event start
+              // if(moment(child['start']).isBefore(event['start'])){
+              //   // event['start'] = parent['start'];
+              //   event['start'] = child['start'];
+
+              //   child['end'] = moment(child['start']).add(Eduration).format();
+              // }
+              child['start'] = event['start'];
+              child['end'] = event['end'];
+              updateChildrenDate(child)
+              render(child);
+            } 
+          }
         }
 
         function isChild(parent,event){
