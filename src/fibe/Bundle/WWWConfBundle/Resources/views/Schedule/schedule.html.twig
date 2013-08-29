@@ -702,19 +702,14 @@
             var childEvent = child.event;
              
             childEvent['start']  = moment(childEvent['start']).subtract(diff);
-            childEvent['end']  = moment(childEvent['end'] || childEvent['start']).subtract(diff); 
-            formatDate(childEvent) 
-
-            updateEventInDB(childEvent); 
-            // render the event on the calendar
-            $calendar.fullCalendar('removeEvents', childEvent.id); 
-            $calendar.fullCalendar('renderEvent', childEvent); 
+            childEvent['end']  = moment(childEvent['end'] || childEvent['start']).subtract(diff);
+            render(childEvent); 
           });
 
           //check if the event has been dropped out of the parent 
           if(isOutOfParent(event)){
               //event dropped out of parent
-              console.log(" #### moved out"); 
+              console.log(" #### moved out ####"); 
               deleteParent(event); 
               updateEventInDB(event); 
             } 
@@ -879,12 +874,12 @@
             parent = getElementAndEvent(event.id).event;
           } 
           deleteParent(event);
+          //check if this is going to do a loop in the tree 
           if(isChild(parent,event)){
             bootstrapAlert("error","cannot set event <b>"+event.title+"</b> as child of <b>"+parent.title+"</b> because this is going to do a loop in the event tree","Circular reference : "); 
             return;
           }
-
-          //check if this is going to do a loop in the tree 
+ 
           //affect parent to child
           event.parent = { "id": parent.id};
           //add child to parent
@@ -892,24 +887,38 @@
 
           //update parentDate
           updateParentDate(event);
-          
-          updateEventInDB(event);
+           
         }
 
         function updateParentDate(event){ 
 
           //check if the event has been dropped out of the parent 
           if(isOutOfParent(event)){
-              //event dropped out of parent
+              //event is out of parent
               console.log(" #### DEPASSE#### DEPASSE#### DEPASSE#### DEPASSE"); 
               var parent = getElementAndEvent(event.parent.id).event;
-              event['start'] = parent['start'];
-              event['end'] = parent['end']; 
-              var copiedEventObject = $.extend({}, event); 
-              formatDate(event) 
-              updateEventInDB(event);  
-              $calendar.fullCalendar('removeEvents', event.id); 
-              $calendar.fullCalendar('renderEvent', event); 
+              var Eduration = moment(event['end']).diff(event['start']);
+              var Pduration = moment(parent['end']).diff(parent['start']);
+              if(moment(event['start']).isBefore(parent['start'])){
+                event['start'] = parent['start'];
+                event['end'] = moment(event['start']).add(Eduration).format();
+              }
+              if(moment(event['end']).isAfter(parent['end'])){
+                event['end'] = parent['end']; 
+                event['start'] = moment(event['end']).subtract(Eduration).format();
+              }
+              if(Eduration>Pduration){
+                event['start'] = parent['start']; 
+                if(Eduration <= 3600000) {
+                  event['end'] = moment(parent['end']).format();
+                  // setParentDate();
+                }else{
+                  event['end'] = moment(parent['end']).subtract("minutes",30).format();  
+                }
+              }
+              // parent['end'] = moment(parent['end']).add("minutes",30).format();
+
+              render(event);  
           } 
  
         }
@@ -1008,6 +1017,14 @@
         setInstantEvents(instant_events);
       }
 
+      function render(event){
+        formatDate(event) 
+
+        updateEventInDB(event); 
+        // render the event on the calendar
+        $calendar.fullCalendar('removeEvents', event.id); 
+        $calendar.fullCalendar('renderEvent', event); 
+      }
       function updateEventInDB(event){
               $.post(
                 op.quickUpdateUrl,
