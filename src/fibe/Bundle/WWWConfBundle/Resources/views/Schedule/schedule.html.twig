@@ -676,7 +676,7 @@
               }
               while(hasParent(event)){ 
                 event = getElementAndEvent(event.parent.id);
-                if(!event) return false; //not all event were not all loaded
+                if(!event) return false; //not all event were  loaded
                 event = event.event;
               }
               //toppest parent
@@ -684,32 +684,46 @@
               positionnedEvent.push(parseInt(event.id));
             }
 
-            positionBlock(toppestParent);  
+            positionBlock(toppestParent,colWidth);  
    
           },100);
         }
 
-        function positionBlock(events){
+        function positionBlock(events,colWidth,parentPos){
           for (var i in events){
-              var event = events[i];
-              if($.inArray(event.id, positionnedEvent)!==-1){
-                alert("found");
-                continue;
-              }
-              console.log("toppest parent",event);
- 
-
-              //TODO
-              //TODO
-              //TODO redim width
-              //TODO 
-              //TODO positionnedEvent.push(child.id);
-              //TODO
-              //TODO
-              //TODO
-              positionnedEvent.push(parseInt(event.id));
-              
+            var event = events[i];
+            if($.inArray(event.id, positionnedEvent)!==-1){
+              alert("found");
+              continue;
             }
+            console.log("toppest parent",event);
+            positionnedEvent.push(parseInt(event.id));
+            
+ 
+            //TODO
+            //TODO
+            //TODO
+            //TODO
+            //
+            //   width
+            //      prendre la position de l'element = >getProp(element)
+            //      for each events,  
+            //        diviser la width de colWidth par le nb de chevauchement
+            //          et ajouter le decallage à la position 
+            //   
+            //   position 
+            //      positionner en fonction de parentPos.x+2 si existe sinon prendre propre position
+            //      
+            //   positionnedEvent.push(child.id);
+            //   
+            //   appeler positionBlock(events,colWidth,parentPos) pour les enfants
+            //   
+            //TODO  
+            //TODO  
+            //TODO
+            //TODO
+            
+          }
         }
 
         /***************    position    ******************/
