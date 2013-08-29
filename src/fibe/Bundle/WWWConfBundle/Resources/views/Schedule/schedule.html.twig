@@ -274,7 +274,7 @@
                                       op.getOrderedUrl,
                                       data,
                                       function(events) {  
-                                          bootstrapAlert("success","event has been well fetched" );
+                                          bootstrapAlert("success","events have been well fetched" );
                                           renderEvent(events);
                                           //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                                       },
@@ -290,7 +290,7 @@
                                       op.getOrderedUrl,
                                       data,
                                       function(events) {  
-                                          bootstrapAlert("success","event has been well fetched" );
+                                          bootstrapAlert("success","events have been well fetched" );
                                           renderEvent(events);
                                           //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                                       },
@@ -332,7 +332,7 @@
                 op.getOrderedUrl,
                 {},
                 function(events) {  
-                    bootstrapAlert("success","event has been well fetched" );
+                    bootstrapAlert("success","events have been well fetched" );
                     renderEvent(events);
                     //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                 },
@@ -350,7 +350,7 @@
                             bootstrapAlert("stop");
                         }
                     });
-                    bootstrapAlert("info","edit request sent","Info : ","<i class='icon-spinner icon-spin'></i>"); 
+                    bootstrapAlert("info","edit <b>"+event['title']+"</b> request sent","Info : ","<i class='icon-spinner icon-spin'></i>"); 
 
             },
             selectable: true, 
@@ -377,7 +377,7 @@
                               op.quickAddUrl,
                               formatDate($.extend( {} , e )),
                               function(response) {  
-                                  bootstrapAlert("success","event has been well added");
+                                  bootstrapAlert("success","event <b>"+event['title']+"</b> has been well added");
                                   e.id=response.id;
                                   $calendar.fullCalendar('renderEvent',e); // 3rd arg make the event "stick" 
                               },
@@ -415,6 +415,7 @@
                 
                 // assign it the date that was reported 
                 copiedEventObject['start']  = date;
+                copiedEventObject['end']  = moment(date).add("hours",1).format();
                 copiedEventObject.allDay = allDay; 
                 formatDate(copiedEventObject);
 
@@ -424,7 +425,7 @@
                 updateEventInDB(copiedEventObject );
                 // render the event on the calendar
                 // the third `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-                $calendar.fullCalendar('renderEvent', copiedEventObject);
+                render(copiedEventObject);
                 
                 $(this).remove();  
             },
@@ -522,12 +523,13 @@
                       revertDuration: 0,  //  original position after the drag
                       start : function (ev,ui){
                             dragged = [ ui.helper[0], event ];
-                          setTimeout(function(){ //bug... event isn't yet updated  
-                            dragChildren(event);
-                          },1);//bug... event isn't yet updated   
+                            setTimeout(function(){ //bug... event isn't yet updated  
+                              dragChildren(event);
+                            },1);//bug... event isn't yet updated   
                       }
                     })
                     .data('eventObject', event);
+
             // store the Event Object in the DOM element so we can get to it later
             return $event;
           }
@@ -652,41 +654,56 @@
         /***************    position    ******************/
         /***************    position    ******************/
         /***************    position    ******************/ 
+        var repositionTimeout;
+        function reposition(view){
 
-        function reposition(view){ 
-          var colWidth = view.getColWidth();
-          console.log("#reposition#");
-          var positionnedEvent = [];
+          //avoid repeating this function 10 times...
+          clearTimeout(repositionTimeout);
+          repositionTimeout=setTimeout(function(){ 
 
-          var events = $calendar.fullCalendar('clientEvents'); //loop only on calendar events
+            var colWidth = view.getColWidth();
+            console.log("#reposition#");
+            var positionnedEvent = [];
+            var toppestParent = [];
 
-          for (var i in events){
-            var event = events[i]; 
-            if($.inArray(event.id, positionnedEvent)>-1)continue;
+            var events = $calendar.fullCalendar('clientEvents'); //loop only on calendar events
 
-            event = getElementAndEvent(event.id).event; 
+            for (var i in events){
+              var event = events[i]; 
+              if(jQuery.inArray(parseInt(event.id), positionnedEvent)!==-1){
+                alert("found");
+                continue;
+              }
 
-            // get toppest parent 
-            while(hasParent(event)){ 
-              event = getElementAndEvent(event.parent.id);
-              if(!event) return false; //not all event were not all loaded
-              event = event.event;
+              // get toppest parent 
+              while(hasParent(event)){ 
+                event = getElementAndEvent(event.parent.id);
+                if(!event) return false; //not all event were not all loaded
+                event = event.event;
+              }
+              //toppest parent
+              toppestParent.push(event);
             }
-            //toppest parent
-            event = getElementAndEvent(event.id).event;
-            console.log("toppest parent",event.id);
+            for (var i in toppestParent){
+              var event = toppestParent[i];
+              console.log("toppest parent",event);
 
-            //TODO
-            //TODO
-            //TODO redim width
-            //TODO 
-            //TODO positionnedEvent.push(child.id);
-            //TODO
-            //TODO
-            //TODO
-            positionnedEvent.push(event.id);
-          }
- 
+              // var brothers = getBrothers(event)
+
+              //TODO
+              //TODO
+              //TODO redim width
+              //TODO 
+              //TODO positionnedEvent.push(child.id);
+              //TODO
+              //TODO
+              //TODO
+              positionnedEvent.push(parseInt(event.id));
+              
+            }
+
+   
+          },100);
         }
 
         /***************    position    ******************/
@@ -1092,7 +1109,7 @@
                 op.quickUpdateUrl,
                 formatDate($.extend( {} , event )),
                 function(doc) {   
-                        bootstrapAlert("success","event has been well updated"); 
+                        bootstrapAlert("success","event <b>"+event['title']+"</b> has been well updated"); 
                 },
                 'json'
               );
