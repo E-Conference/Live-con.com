@@ -654,7 +654,7 @@
         /***************    position    ******************/
         /***************    position    ******************/
         /***************    position    ******************/ 
-        var repositionTimeout;
+        var repositionTimeout,positionnedEvent= [];
         function reposition(view){
 
           //avoid repeating this function 10 times...
@@ -662,20 +662,18 @@
           repositionTimeout=setTimeout(function(){ 
 
             var colWidth = view.getColWidth();
-            console.log("#reposition#");
-            var positionnedEvent = [];
+            console.log("#reposition#"); 
             var toppestParent = [];
 
             var events = $calendar.fullCalendar('clientEvents'); //loop only on calendar events
 
+              // get toppest parent 
             for (var i in events){
               var event = events[i]; 
-              if(jQuery.inArray(parseInt(event.id), positionnedEvent)!==-1){
+              if($.inArray(event.id, positionnedEvent)!==-1){
                 alert("found");
                 continue;
               }
-
-              // get toppest parent 
               while(hasParent(event)){ 
                 event = getElementAndEvent(event.parent.id);
                 if(!event) return false; //not all event were not all loaded
@@ -683,12 +681,23 @@
               }
               //toppest parent
               toppestParent.push(event);
+              positionnedEvent.push(parseInt(event.id));
             }
-            for (var i in toppestParent){
-              var event = toppestParent[i];
-              console.log("toppest parent",event);
 
-              // var brothers = getBrothers(event)
+            positionBlock(toppestParent);  
+   
+          },100);
+        }
+
+        function positionBlock(events){
+          for (var i in events){
+              var event = events[i];
+              if($.inArray(event.id, positionnedEvent)!==-1){
+                alert("found");
+                continue;
+              }
+              console.log("toppest parent",event);
+ 
 
               //TODO
               //TODO
@@ -701,9 +710,6 @@
               positionnedEvent.push(parseInt(event.id));
               
             }
-
-   
-          },100);
         }
 
         /***************    position    ******************/

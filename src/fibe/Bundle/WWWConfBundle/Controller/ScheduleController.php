@@ -112,7 +112,8 @@ class ScheduleController extends Controller
             $endAt =new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()));
             
             $event->setStartAt( $startAt );
-            $event->setEndAt( $endAt ); 
+            $event->setEndAt( $endAt );
+            $event->setParent( $em->getRepository('IDCISimpleScheduleBundle:Event')->find($postData['parent']['id']) );
             $event->setIsAllDay($postData['allDay']=="true") ;
             $em->persist($event);
             $em->flush();
