@@ -437,7 +437,7 @@
                 dragged = [ ui.helper[0], event ]; 
                 //save children to db
               setTimeout(function(){ //bug... event isn't yet updated 
-                endDrag(event );
+                endDrag(event,ui.helper[0] );
               },1);//bug... event isn't yet updated 
             },
             eventRender : function( event, element, view ) {
@@ -496,9 +496,8 @@
 
                 setSidebarEvent(event);
 
-                //affect children
-                var element = $(ui.helper[0]);
-                var children = getChildren(element,event, true); //third event for recursiveness
+                //affect children 
+                var children = getChildren(event, true); //third event for recursiveness
                 $.each(children,function(i,child){
                   setSidebarEvent(child.event); 
                 });
@@ -558,104 +557,10 @@
         /*------------------------------------- end initialize the sidebar ------------------------------------*/ 
         /*-----------------------------------------------------------------------------------------------------*/
 
-        /*-----------------------------------------------------------------------------------------------------*/
-        /*------------------------------------- parent/child  -------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------*/
-
-        //drag event from calendar
-        //highlight 
-        function setTooltip(element,event){
-          var oldBorderColor = element.css("border-color");
-          var overBorderColor = "green";
-          element.droppable({
-            over: function( ev, ui ) {
-                $(this).css("border-color",overBorderColor);
-            },
-            out: function( ev, ui ) { 
-                $(this).css("border-color",oldBorderColor);  
-            },
-            drop: function( ev, ui ) { 
-              if ( dragged && ui.helper && ui.helper[0] === dragged[0]){
-                $(this).css("border-color",oldBorderColor);  
-
-                var draggedEvent = dragged[1];
-                if(draggedEvent.parent.id == event.id){
-                  // already sub-event
-                  return;
-                }
-
-                //check if it's going to do a loop in the tree
-                if(isChild(draggedEvent,event)){
-                  bootstrapAlert("stop");
-                  bootstrapAlert("error","cannot set event <b>"+event.title+"</b> as child of <b>"+parent.title+"</b> because this is going to do a loop in the event tree","Circular reference : "); 
-            
-                  return;
-                }
-                // console.log("lol" ,draggedEvent)
-                $modalSetParent.modal('show').find(".sub-event").text(draggedEvent.title);
-                $modalSetParent.find(".super-event").text(event.title);
-
-                $modalSetParent.find('button.yes').off("click").click(function(){
-
-                  //set parent and children relation
-                  setParent(draggedEvent,event);
-                  updateEventInDB(draggedEvent); 
-                });  
-              }
-            }
-          }); 
-        }
-
-        var draggedProp,draggedStart,children;
-
-        function dragChildren(event){
-          var parentElement = dragged[0];
-          draggedProp =  getProp(parentElement); 
-          draggedStart = moment(event['start']);
-          // console.log(event['start'])
-          // console.log(draggedProp)
-          // console.log("parentElement",parentElement.text(),parentElement)
-          children = getChildren(parentElement,event, true); //third event for recursiveness
-          console.log("###children",children)
-          $.each(children,function(i,child){ 
-            $(child.element).fadeTo(200, 0.5);
-          });
-          // console.log("lol ",children);
-
-          //update helper
-          $(parentElement).off("mousemove").mousemove( function(ev){ 
-            var newdraggedProp = getProp(parentElement);
-            var diff = { 
-              x : (draggedProp.x - newdraggedProp.x) , 
-              y : (draggedProp.y - newdraggedProp.y)
-            }; 
-            if(diff.x != 0  || diff.y != 0 ){
-              draggedProp =  newdraggedProp;  
-
-              $.each(children,function(i,child){
-                 // console.log(child)
-                var childProp = getProp(child.element);
-                // console.log("lol ",childProp);
-                $(child.element).css("left",childProp.x-diff.x+"px")
-                                .css("top",childProp.y-diff.y+"px");
-              });
-            }
-          }); 
-        }
-        // set blockwidth
 
         /*-----------------------------------------------------------------------------------------------------*/
         /*------------------------------------- position ------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------*/
-        /*------------------------------------- position ------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------*/
-        /*------------------------------------- position ------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------*/
-        /*------------------------------------- position ------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/ 
 
 
 
@@ -680,7 +585,7 @@
               // get toppest parent 
             for (var i in events){
               var event = events[i];
-              
+
 
               while(hasParent(event)){ 
                 event = getElementAndEvent(event.parent.id);
@@ -735,7 +640,7 @@
             // console.log("event",elem)
 
             positionnedEvent.push(event.id);
-            var children = getChildren(elem,event,false,true);
+            var children = getChildren(event,false,true);
             // console.log("getChildren",children)
             elemProp = getProp(elem);
 
@@ -807,16 +712,97 @@
         /*-----------------------------------------------------------------------------------------------------*/
         /*------------------------------------- position ------------------------------------------------------*/
         /*-----------------------------------------------------------------------------------------------------*/
+
+
+
+
         /*-----------------------------------------------------------------------------------------------------*/
-        /*------------------------------------- position ------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------*/
-        /*------------------------------------- position ------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------*/
-        /*------------------------------------- position ------------------------------------------------------*/
+        /*------------------------------------- parent/child  -------------------------------------------------*/
         /*-----------------------------------------------------------------------------------------------------*/
 
+        //drag event from calendar
+        //highlight 
+        function setTooltip(element,event){
+          var oldBorderColor = element.css("border-color");
+          var overBorderColor = "green";
+          element.droppable({
+            over: function( ev, ui ) {
+                $(this).css("border-color",overBorderColor);
+            },
+            out: function( ev, ui ) { 
+                $(this).css("border-color",oldBorderColor);  
+            },
+            drop: function( ev, ui ) { 
+              if ( dragged && ui.helper && ui.helper[0] === dragged[0]){
+                $(this).css("border-color",oldBorderColor);  
+
+                var draggedEvent = dragged[1];
+                if(draggedEvent.parent.id == event.id){
+                  // already sub-event
+                  return;
+                }
+
+                //check if it's going to do a loop in the tree
+                if(isChild(draggedEvent,event)){
+                  bootstrapAlert("stop");
+                  bootstrapAlert("error","cannot set event <b>"+event.title+"</b> as child of <b>"+parent.title+"</b> because this is going to do a loop in the event tree","Circular reference : "); 
+            
+                  return;
+                }
+                // console.log("lol" ,draggedEvent)
+                $modalSetParent.modal('show').find(".sub-event").text(draggedEvent.title);
+                $modalSetParent.find(".super-event").text(event.title);
+
+                $modalSetParent.find('button.yes').off("click").click(function(){
+
+                  //set parent and children relation
+                  setParent(draggedEvent,event);
+                  updateEventInDB(draggedEvent); 
+                });  
+              }
+            }
+          }); 
+        }
+
+        var draggedProp,draggedStart,children;
+
+        function dragChildren(event){
+          // console.log(event['start'])
+          // console.log(draggedProp)
+          // console.log("parentElement",parentElement.text(),parentElement)
+          children = getChildren(event, true,false,true); //third event for recursiveness
+          draggedStart = moment(event['start']);
+          var parentElement = getDivById(event.id)
+          var draggedProp = getProp(parentElement);
+          console.log("###children",children)
+          $.each(children,function(i,child){ 
+            $(child.element).fadeTo(200, 0.5);
+          });
+          // console.log("lol ",children);
+
+          //update helper
+          $(parentElement).off("mousemove").mousemove( function(ev){ 
+            var newdraggedProp = getProp(parentElement);
+            var diff = { 
+              x : (draggedProp.x - newdraggedProp.x) , 
+              y : (draggedProp.y - newdraggedProp.y)
+            }; 
+            if(diff.x != 0  || diff.y != 0 ){
+              draggedProp =  newdraggedProp;  
+
+              $.each(children,function(i,child){
+                 // console.log(child)
+                var childProp = getProp(child.element);
+                // console.log("lol ",childProp);
+                $(child.element).css("left",childProp.x-diff.x+"px")
+                                .css("top",childProp.y-diff.y+"px");
+              });
+            }
+          }); 
+        }
+        // set blockwidth
+
+ 
         function endDrag(event){
       
           console.log("endDrag")
@@ -848,7 +834,7 @@
               render(event)
 
             }else{
-              updateParentDate(event);
+              // updateParentDate(event);
               render(event)
             }
           }
@@ -864,10 +850,7 @@
         var lastMoment
         function endDragChildrenFromSidebar(event){
            
-          var elem = getDivById(event.id);    
-
-          var children = getChildren(elem,event, false); //third event for recursiveness 
-
+          var children = getChildren(event, false);
           lastMoment = moment(event['start']);   
           event['start']  = moment(lastMoment).format(); 
           // lastMoment = lastMoment.add("minutes",30);
@@ -923,14 +906,15 @@
          * events               : db modele events
          * elements             : jquery draggable div array;
          */
-        function getChildren(parentElement,parent,concat,onlyEvent){
+        function getChildren(parent,concat,onlyEvent){
           var children = [];
+          var parentElement = getElementAndEvent(parent);
           // console.log("getChildren",parent)
           $.each(parent.children,function(i,child){
             if( !parent.children.hasOwnProperty( i ) ) return; 
             var cElandEv = getElementAndEvent(child.id);
             if( !cElandEv) return;
-            var subChildren = getChildren(cElandEv.element,cElandEv.event,concat);
+            var subChildren = getChildren(cElandEv.event,concat,onlyEvent);
 
             if(concat)
               children = children.concat(subChildren);
@@ -1001,8 +985,7 @@
         function setParent(event,parent){
 
 
-          var elem = getDivById(event.id);
-          var children = getChildren(elem,event, true);
+          var children = getChildren(event, true);
 
 
           //get full event info
@@ -1061,8 +1044,7 @@
          }
 
         function updateChildrenDate(event){
-          var elem = getDivById(event.id);
-          var children = getChildren(elem,event, false); 
+          var children = getChildren(event, false); 
           // console.log("OLOLOLOL",children);
           var Eduration = moment(event.end).diff(event.start); 
           for(var i in children)
@@ -1106,9 +1088,8 @@
         function isChild(parent,event){
             if(event.event)var event = event.event;
             //check if it's going to do a loop in the tree
-
-            var elem = getDivById(parent.id);
-            var children = getChildren(elem,parent, true); 
+ 
+            var children = getChildren(parent, true); 
             // console.log("OLOLOLOL",children);
             for(var i in children){
                 if(children[i].event.id == event.id){ 
@@ -1121,12 +1102,10 @@
         function hasChild(event){
             if(event.event){
               event = event.event;
-            }else{
-              elem = getDivById(parent.id);
-            }
+            } 
             //check if it's going to do a loop in the tree
 
-            var children = getChildren(elem,event, true);
+            var children = getChildren(event, true);
             if(!children || children.length < 1)
               return false;
             return true
@@ -1178,19 +1157,19 @@
         //TODO ALLDAY
         var instant_events = [];
         for (var i in events){  
-          events[i]["title"] = events[i].name;
+          events[i]["title"] = events[i].name; 
           events[i]["start"] = events[i].start_at;
           events[i]["end"] = events[i].end_at; 
           events[i]["allDay"] = events[i].is_allday==="true";
 
-          delete events[i]["url"]
+          delete events[i]["url"];
           // console.log(events[i].categories);
           if(events[i].categories.length > 0 && events[i].categories[0].color)
             events[i]["background-color"] = events[i].categories[0].color
           
           var diff =moment(events[i]["start"]).diff(events[i]["end"]);
-          var instant = (diff  == 0 ) || (diff  == 1 );  
-          if(instant)
+          events[i]["instant"] = (diff  == 0 ) || (diff  == 1 );  
+          if(events[i]["instant"])
             instant_events.push(events[i]);
           else
             $calendar.fullCalendar( 'renderEvent',events[i]);
