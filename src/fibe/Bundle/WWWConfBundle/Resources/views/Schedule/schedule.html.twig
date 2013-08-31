@@ -156,6 +156,7 @@
         z-index       : 2; 
         /*overflow-y    :    auto;*/
         height        : 100%;  /*sidebar h4 height*/
+        min-height    : 15em;
 
     }
         
@@ -357,12 +358,8 @@
             selectHelper: true,
             select: function(start, end, allDay) { //new event
                 $modalNewEvent.modal("show");
-                var selectHtml='';
-                $.each($calendar.fullCalendar('clientEvents'),function(){
-                  selectHtml += '<option value="'+this.id+'">'+this.title+'</option> ' 
-                });
-                $modalNewEvent.find("select").html(selectHtml);
-                $modalNewEvent.find("form").submit(function(e){ 
+
+                $modalNewEvent.find("form").off("submit").submit(function(e){ 
                   var title = $(this).find("#name").val(); 
                   if (title && parent) {
                       var e = {
@@ -594,9 +591,9 @@
             
                   return;
                 }
-
-                $modalSetParent.modal('show').find(".sub-event").html(draggedEvent.title);
-                $modalSetParent.modal('show').find(".super-event").html(event.title);
+                // console.log("lol" ,draggedEvent)
+                $modalSetParent.modal('show').find(".sub-event").text(draggedEvent.title);
+                $modalSetParent.find(".super-event").text(event.title);
 
                 $modalSetParent.find('button.yes').off("click").click(function(){
 
@@ -647,14 +644,24 @@
         }
         // set blockwidth
 
-        /***************    position    ******************/
-        /***************    position    ******************/
-        /***************    position    ******************/
-        /***************    position    ******************/
-        /***************    position    ******************/
-        /***************    position    ******************/
-        /***************    position    ******************/ 
-        var repositionTimeout,positionnedEvent= [];
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*------------------------------------- position ------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*------------------------------------- position ------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*------------------------------------- position ------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*------------------------------------- position ------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
+
+
+
+        var repositionTimeout,positionnedEvent;
+        var eventMargin = 10;
+        var repositionTimeout = 0;
         function reposition(view){
 
           //avoid repeating this function 10 times...
@@ -662,43 +669,76 @@
           repositionTimeout=setTimeout(function(){ 
 
             var colWidth = view.getColWidth();
-            console.log("#reposition#"); 
+            // console.log("##########################")
+            // console.log("########reposition########"); 
+            console.log("##########################")
             var toppestParent = [];
+            positionnedEvent= [];
 
             var events = $calendar.fullCalendar('clientEvents'); //loop only on calendar events
 
               // get toppest parent 
             for (var i in events){
               var event = events[i]; 
-              if($.inArray(event.id, positionnedEvent)!==-1){
-                alert("found");
-                continue;
-              }
+
               while(hasParent(event)){ 
                 event = getElementAndEvent(event.parent.id);
                 if(!event) return false; //not all event were  loaded
                 event = event.event;
               }
+              // if($.inArray(event.id, positionnedEvent)!==-1){
+              //   // alert("found");
+              //   continue;
+              // }
               //toppest parent
-              toppestParent.push(event);
-              positionnedEvent.push(parseInt(event.id));
+              if($.inArray(event, toppestParent)!==-1){
+                // console.log("event "+event.id+" already toppest") ;
+                continue;
+              }
+              toppestParent.push(event); 
             }
-
+            // console.log("toppestParent",toppestParent)
             positionBlock(toppestParent,colWidth);  
    
-          },100);
+          },repositionTimeout);
         }
 
-        function positionBlock(events,colWidth,parentPos){
+        function positionBlock(events,colWidth,parentPos){ 
+          console.log("######positionBlocks######")
+ 
+          colWidth-=eventMargin; 
+
           for (var i in events){
             var event = events[i];
-            if($.inArray(event.id, positionnedEvent)!==-1){
-              alert("found");
-              continue;
+            var elem = getDivById(event.id);
+            if(!elem)  continue; //event is in another view
+              
+            // console.log("##POSITIONNING##",event,elem); 
+
+            //position left margin
+            var elemProp = getProp(elem);
+            if(parentPos){
+              elem.css("left",parentPos.x+eventMargin/2);
+              elem.css("top",elemProp.y+eventMargin/2);
+              elem.css("height",elemProp.h-eventMargin-4);
             }
-            console.log("toppest parent",event);
-            positionnedEvent.push(parseInt(event.id));
-            
+
+            //get brothers count and self range ( to calculate width and xPos)
+            var bro = getBroCountRange(event,events); 
+
+            // console.log("event "+event.id+" has "+bro.count+" bros. range = "+bro.range);
+            var newColWidth = colWidth/(bro.count+1);
+            elem.width(newColWidth); 
+            elem.css("left",bro.minLeft+(bro.range*newColWidth));
+            // console.log("event",event)
+            // console.log("event",elem)
+
+            positionnedEvent.push(event.id);
+            var children = getChildren(elem,event,false,true);
+            // console.log("getChildren",children)
+            elemProp = getProp(elem);
+
+            positionBlock(children,newColWidth,elemProp)
  
             //TODO
             //TODO
@@ -726,13 +766,55 @@
           }
         }
 
-        /***************    position    ******************/
-        /***************    position    ******************/
-        /***************    position    ******************/
-        /***************    position    ******************/
-        /***************    position    ******************/
-        /***************    position    ******************/
-        /***************    position    ******************/
+        function getBroCountRange(event,events){
+          var broCount=0;
+          var broRange=0;
+          var minLeft=getProp(getDivById( event.id )).x;
+          for(var j in events){
+            var bro = events[j];
+            if(bro.id == event.id) continue;
+            if(!moment(bro['start']).isBefore(event['end']) ||
+               !moment(bro['end']).isAfter(event['start'])){
+              //event is out
+            }else{
+              // console.log("looking for bro id");
+              // console.log(bro.id);
+              // console.log(positionnedEvent);
+              
+              // range is next already placed
+              console.log(bro.id+"   ",positionnedEvent)
+              if($.inArray(bro.id, positionnedEvent)!==-1){
+                var broProp = getProp(getDivById(bro.id));
+                  console.log("minLeft",minLeft)
+                  console.log(getProp(getDivById(bro.id)))
+                if (broProp.x < minLeft ){
+                  minLeft = broProp.x;
+                }
+              // console.log("bro was positionned");
+                broRange++;
+              }
+              // console.log("bro",bro); 
+              broCount++;
+            }
+          }
+          // alert(minLeft)
+          return {range:broRange,count:broCount,minLeft:minLeft};
+        }
+
+
+
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*------------------------------------- position ------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*------------------------------------- position ------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*------------------------------------- position ------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
+        /*------------------------------------- position ------------------------------------------------------*/
+        /*-----------------------------------------------------------------------------------------------------*/
 
         function endDrag(event){
       
@@ -840,24 +922,23 @@
          * events               : db modele events
          * elements             : jquery draggable div array;
          */
-        function getChildren(parentElement,parent,concat){
+        function getChildren(parentElement,parent,concat,onlyEvent){
           var children = [];
           // console.log("getChildren",parent)
           $.each(parent.children,function(i,child){
             if( !parent.children.hasOwnProperty( i ) ) return; 
-            var c = getElementAndEvent(child.id);
-            if( !c) return;  
-            var subChildren = getChildren(c.element,c.event,concat);
+            var cElandEv = getElementAndEvent(child.id);
+            if( !cElandEv) return;
+            var subChildren = getChildren(cElandEv.element,cElandEv.event,concat);
 
             if(concat)
               children = children.concat(subChildren);
             else{
               if (subChildren.length > 0)
-              c['subChildren'] = subChildren;
-            }
+              cElandEv['subChildren'] = subChildren;
+            } 
 
-
-            children.push(c);  
+            children.push(onlyEvent===true ? cElandEv.event : cElandEv );  
 
           }) 
           return children;
@@ -981,7 +1062,7 @@
         function updateChildrenDate(event){
           var elem = getDivById(event.id);
           var children = getChildren(elem,event, false); 
-          console.log("OLOLOLOL",children);
+          // console.log("OLOLOLOL",children);
           var Eduration = moment(event.end).diff(event.start); 
           for(var i in children)
           {
@@ -1027,7 +1108,7 @@
 
             var elem = getDivById(parent.id);
             var children = getChildren(elem,parent, true); 
-            console.log("OLOLOLOL",children);
+            // console.log("OLOLOLOL",children);
             for(var i in children){
                 if(children[i].event.id == event.id){ 
                   return true;  

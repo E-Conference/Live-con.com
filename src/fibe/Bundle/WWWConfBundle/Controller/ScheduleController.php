@@ -94,12 +94,13 @@ class ScheduleController extends Controller
                 $event= new Event(); 
                 $event->setEndAt(new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()))); 
                 $event->setStartAt(new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get())));  
+                $event->setSummary( $postData['title'] );
                 $event->setIsAllDay($postData['allDay']=="true") ;
 
                 $event->setWwwConf($conf);
                 
                 $em->persist($event);
-                $em->flush();  
+                $em->flush();
 
                 $JSONArray['id'] = $event->getId();
                 $JSONArray['IsSuccess'] = true;
@@ -114,6 +115,7 @@ class ScheduleController extends Controller
             $event->setStartAt( $startAt );
             $event->setEndAt( $endAt );
             $event->setParent( $em->getRepository('IDCISimpleScheduleBundle:Event')->find($postData['parent']['id']) );
+            $event->setSummary( $postData['title'] );
             $event->setIsAllDay($postData['allDay']=="true") ;
             $em->persist($event);
             $em->flush();
