@@ -5,9 +5,8 @@
 
 namespace fibe\Bundle\WWWConfBundle\Listener;
 
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\OnFlushEventArgs;
-use Doctrine\ORM\Event\PreFlushEventArgs;
 use Symfony\Component\HttpFoundation\Session\Session;
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event;
 
@@ -22,8 +21,54 @@ class updateChildrenDate
                       
     }
 
-    public function preUpdate(LifecycleEventArgs $args)
+    public function preUpdate(PreUpdateEventArgs $args)
     {
+
+    /**
+     * computeAllDay
+     *
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    // public function computeAllDay()
+    // { 
+        // $entity = $args->getEntity();
+
+        // if ($entity instanceof Event) {
+        //     $date1 = new \DateTime("today");
+        //     $date2 = new \DateTime("tomorrow");
+        //     $DayDiff = $date1->diff($date2);
+            
+        //     $duration = $entity->getEndAt()->diff($entity->getStartAt());
+
+        //     // var_dump ($DayDiff );
+        //     // var_dump ($duration );
+        //     // var_dump (($DayDiff > $duration ) ? "moins grand qu'un jour" : "plus grand qu'un jour"); 
+        //     $entity->setIsAllDay($DayDiff > $duration);
+        //     $em = $args->getEntityManager();
+        //     $uow = $em->getUnitOfWork();
+        //     $meta = $em->getClassMetadata(get_class($entity));
+        //     $uow->recomputeSingleEntityChangeSet($meta, $entity);
+        // }
+
+    // /**
+    //  * onUpdate
+    //  *
+    //  * @ORM\PUpdate()
+    //  */
+    // public function onUpdate()
+    // {
+    //     $date1 = new \DateTime("today");
+    //     $date2 = new \DateTime("tomorrow");
+    //     $DayDiff = $date1->diff($date2);
+         
+    //     $EventDuration = $date1->diff($date2);
+
+    //     var_dump();
+
+
+    // }
+
         // $entity = $args->getEntity();
         // $em = $args->getEntityManager();
         // $uow = $em->getUnitOfWork();
@@ -58,9 +103,26 @@ class updateChildrenDate
         // }
     }
 
-    public function onFlush(OnFlushEventArgs $eventArgs)
+    public function prePersist(LifecycleEventArgs $args)
         {
+        // $entity = $args->getEntity();
 
+        // if ($entity instanceof Event) {
+        //     $date1 = new \DateTime("today");
+        //     $date2 = new \DateTime("tomorrow");
+        //     $DayDiff = $date1->diff($date2);
+            
+        //     $duration = $entity->getEndAt()->diff($entity->getStartAt());
+
+        //     // var_dump ($DayDiff );
+        //     // var_dump ($duration );
+        //     // var_dump (($DayDiff > $duration ) ? "moins grand qu'un jour" : "plus grand qu'un jour"); 
+        //     $entity->setIsAllDay($DayDiff > $duration);
+        //     $em = $args->getEntityManager();
+        //     $uow = $em->getUnitOfWork();
+        //     $meta = $em->getClassMetadata(get_class($entity));
+        //     $uow->recomputeSingleEntityChangeSet($meta, $entity);
+        // }
     //     $em = $eventArgs->getEntityManager();
     //     $uow = $em->getUnitOfWork();
     //     echo("onFlush:");

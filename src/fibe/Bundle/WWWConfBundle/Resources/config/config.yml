@@ -1,10 +1,10 @@
-services:
-    event.listener:
-        class: fibe\Bundle\WWWConfBundle\Listener\updateChildrenDate
-        arguments: ["@session"]
-        tags:
-            - { name: doctrine.event_listener, event: onFlush }
-            - { name: doctrine.event_listener, event: preUpdate }
+# services:
+#     event.listener:
+#         class: fibe\Bundle\WWWConfBundle\Listener\updateChildrenDate
+#         arguments: ["@session"]
+#         tags:
+#             - { name: doctrine.event_listener, event: prePersist }
+#             - { name: doctrine.event_listener, event: preUpdate }
 
 
 idci_exporter:

@@ -661,7 +661,7 @@
 
         var repositionTimeout,positionnedEvent;
         var eventMargin = 10;
-        var repositionTimeout = 0;
+        var repositionTimeout = 10;
         function reposition(view){
 
           //avoid repeating this function 10 times...
@@ -679,7 +679,8 @@
 
               // get toppest parent 
             for (var i in events){
-              var event = events[i]; 
+              var event = events[i];
+              
 
               while(hasParent(event)){ 
                 event = getElementAndEvent(event.parent.id);

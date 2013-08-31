@@ -13,6 +13,7 @@ use fibe\Bundle\WWWConfBundle\Entity\Paper;
 /**
  * ConfEvent
  *
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="IDCI\Bundle\SimpleScheduleBundle\Repository\EventRepository")
  */
@@ -53,10 +54,29 @@ class ConfEvent extends Event
      * @ORM\Column(name="is_allday", type="boolean")
      * 
      */
-    private $isAllDay = false;
+    private $isAllDay ;
 
-   
-   
+    /**
+     * computeIsAllDay
+     *
+     * @ORM\PrePersist() 
+     */
+    public function computeIsAllDay()
+    {
+         
+        $date1 = new \DateTime("today");
+        $date2 = new \DateTime("tomorrow");
+        $DayDiff = $date1->diff($date2);
+        
+        $duration = $this->getEndAt()->diff($this->getStartAt());
+
+        // var_dump ($DayDiff );
+        // var_dump ($duration );
+        var_dump (($DayDiff > $duration ) ? "moins grand qu'un jour" : "plus grand qu'un jour"); 
+        $this->setIsAllDay($DayDiff > $duration ? 0 : 1 );
+
+    }
+
 
  
 
