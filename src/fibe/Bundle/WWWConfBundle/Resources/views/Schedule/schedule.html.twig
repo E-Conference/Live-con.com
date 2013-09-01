@@ -949,10 +949,10 @@
           if(!op)op={};
           var event;
           if(op.noCalendar!==true)
-            var event = $calendar.fullCalendar( 'clientEvents', id )[0]; 
+            event = $calendar.fullCalendar( 'clientEvents', id )[0]; 
 
           //look in sidebar event if not found
-          if(op.noSidebar!==true)
+          if(op.noSidebar!==true){
             if(!event){
               $(".external-event").each(function(i,sidebarEvent){
                 if( event)return;
@@ -964,10 +964,14 @@
                 }
               });
             }
+          }
           if(!event)return;
           if(op.onlyEvent === true)return event;
           // console.log("##",event ) 
           var elem = getDivById(event.id); 
+          // if(!elem)return;
+          // alert(event.id);
+          // alert(elem)
           // console.log("##",elem ) 
           return {event:event,element:$(elem)};
         }  
