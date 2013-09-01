@@ -589,16 +589,18 @@
               // get toppest parent 
             for (var i in events){
               var event = events[i];
-
+              var isSidebar =false;
 
               while(hasParent(event)){ 
-                event = getElementAndEventbyId(event.parent.id,{noSidebar:true});
+                event = getElementAndEventbyId(event.parent.id);
+                console.log(event);
                 if(!event) return false; //not all event were  loaded
+                isSidebar = $(event.element).hasClass("external-event");
                 event = event.event;
               }
 
               //toppest parent
-              if($.inArray(event, toppestParent)!==-1){
+              if(isSidebar || $.inArray(event, toppestParent)!==-1 ){
                 // console.log("event "+event.id+" already toppest") ;
                 continue;
               }
@@ -772,7 +774,7 @@
           // console.log(event['start'])
           // console.log(draggedProp)
           // console.log("parentElement",parentElement.text(),parentElement)
-          children = getChildren(event,{concat:true}); 
+          children = getChildren(event,{concat:true,noSidebar:true}); 
           draggedStart = moment(event['start']);
           var parentElement = getDivById(event.id);
           var draggedProp = getProp(parentElement);
@@ -812,9 +814,9 @@
           var diff = moment(draggedStart).diff(moment(event['start'])); 
 
           //apply to children
-          if(event['allDay']===true){
-            updateChildrenDate(event);
-          }else{
+          // if(event['allDay']===true){
+          //   updateChildrenDate(event);
+          // }else{
             $.each(children,function(i,child){
 
               // console.log("#draggin child : ",child );
@@ -824,9 +826,11 @@
               childEvent['end']  = moment(childEvent['end']).subtract(diff);
               render(childEvent); 
             });
-          }
+          // }
           if(hasParent(event)){
-            var parent = getElementAndEventbyId(event.parent.id,{onlyEvent:true}); 
+            var parent = getElementAndEventbyId(event.parent.id,{onlyEvent:true,noSidebar:true});
+            // in sidebar
+            if(!parent)return;
             if(!moment(parent['start']).isBefore(event['end']) ||
                !moment(parent['end']).isAfter(event['start'])){
               //event dropped out of parent
@@ -952,26 +956,25 @@
             event = $calendar.fullCalendar( 'clientEvents', id )[0]; 
 
           //look in sidebar event if not found
-          if(op.noSidebar!==true){
-            if(!event){
-              $(".external-event").each(function(i,sidebarEvent){
-                if( event)return;
-                var ev = $.extend({},$(sidebarEvent).data('eventObject'));
-                // console.log("##",ev )
-                if(ev && ev.id === id ){
-                 console.log("##FOUND IN SIDEBAR##",ev.id,ev);
-                  event = ev; 
-                }
-              });
-            }
-          }
+          if(op.noSidebar !==true){ 
+            $(".external-event").each(function(i,sidebarEvent){
+              if( event)return;
+              var ev = $(sidebarEvent).data('eventObject') ;
+              // console.log("##",ev )
+              if(ev && ev.id === id ){
+               console.log("##FOUND IN SIDEBAR##",ev.id,ev);
+                event = $.extend({},ev); 
+              }
+            }); 
+          }//end no sidebar
+
           if(!event)return;
           if(op.onlyEvent === true)return event;
           // console.log("##",event ) 
           var elem = getDivById(event.id); 
           // if(!elem)return;
-          // alert(event.id);
-          // alert(elem)
+          alert(event.id);
+          alert(elem)
           // console.log("##",elem ) 
           return {event:event,element:$(elem)};
         }  
