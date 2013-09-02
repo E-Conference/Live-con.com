@@ -199,7 +199,8 @@
   {{ parent() }} 
 <script src="{{ asset('bundles/fibewwwconf/js/moment.min.js') }}" type="text/javascript" ></script>
      
-<script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/jquery-ui-1.10.3.custom.min.js') }}"></script>
+<!-- <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/jquery-ui-1.10.3.custom.min.js') }}"></script> -->
+<script type="text/javascript" src="{{ asset('js/jquery-ui-1.10.3.custom.js') }}"></script>
 <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.js') }}"></script>
 
     
@@ -609,7 +610,7 @@
             return toppestParent;
         }
 
-        function positionBlock(events,colWidth,parentPos){ 
+        function positionBlock(events,colWidth,parentPos,parentStart,parentEnd){ 
           console.log("######positionBlocks######");
  
           colWidth-=eventMargin; 
@@ -625,17 +626,25 @@
             var elemProp = getProp(elem);
             if(parentPos){
               elem.css("left",parentPos.x+eventMargin/2);
-              elem.css("top",elemProp.y+eventMargin/2);
-              elem.css("height",elemProp.h-eventMargin-4);
+              if(moment(parentStart).isSame(event.start)){
+               elem.css("top",elemProp.y+eventMargin/2+3); 
+               elem.css("height",elemProp.h-eventMargin/2-1);
+              }
+              if(moment(parentEnd).isSame(event.end)){
+               // elem.css("top",elemProp.y+eventMargin/2); 
+                elem.css("height",elemProp.h-eventMargin/2-3);
+              }
             }
 
             //get brothers count and self range ( to calculate width and xPos)
             var bro = getBroCountRange(event,events); 
 
-            // console.log("event "+event.id+" has "+bro.count+" bros. range = "+bro.range);
+            console.log("event "+event.id+" has "+bro.count+" bros. range = "+bro.range+" minLeft = "+bro.range);
             var newColWidth = colWidth/(bro.count+1);
-            elem.width(newColWidth); 
-            elem.css("left",bro.minLeft+(bro.range*newColWidth));
+            if(event['allDay']!==true){
+              elem.width(newColWidth); 
+              elem.css("left",bro.minLeft+(bro.range*newColWidth));
+            }
             // console.log("event",event)
             // console.log("event",elem)
 
@@ -644,7 +653,7 @@
              console.log("getChildren",children)
             elemProp = getProp(elem);
 
-            positionBlock(children,newColWidth,elemProp);
+            positionBlock(children,newColWidth,elemProp,event.start,event.end);
  
             //TODO
             //TODO
@@ -682,25 +691,32 @@
             if(!moment(bro['start']).isBefore(event['end']) ||
                !moment(bro['end']).isAfter(event['start'])){
               //event is out
-            }else{
+            }else{ 
               // console.log("looking for bro id");
               // console.log(bro.id);
               // console.log(positionnedEvent);
               
               // range is next already placed
-              console.log(bro.id+"   ",positionnedEvent);
-              if($.inArray(bro.id, positionnedEvent)!==-1){
-                var broProp = getProp(getDivById(bro.id));
-                  console.log("minLeft",minLeft);
-                  console.log(getProp(getDivById(bro.id)));
-                if (broProp.x < minLeft ){
-                  minLeft = broProp.x;
+              // console.log(event,bro) 
+              // alert(event.allday === bro.allday)
+              // 
+              if(event['allDay'] === bro['allDay']){
+
+                console.log(bro.id+"   ",positionnedEvent);
+
+                if($.inArray(bro.id, positionnedEvent)!==-1){
+                  var broProp = getProp(getDivById(bro.id));
+                    console.log("minLeft",minLeft);
+                    console.log(getProp(getDivById(bro.id)));
+                  if (broProp.x < minLeft ){
+                    minLeft = broProp.x;
+                  }
+                // console.log("bro was positionned");
+                  broRange++;
                 }
-              // console.log("bro was positionned");
-                broRange++;
+                // console.log("bro",bro); 
+                broCount++;
               }
-              // console.log("bro",bro); 
-              broCount++;
             }
           }
           // alert(minLeft)
@@ -1023,6 +1039,7 @@
           //update parentDate
           updateParentDate(event);
           render(event); 
+          render(parent); 
            
         }
 
