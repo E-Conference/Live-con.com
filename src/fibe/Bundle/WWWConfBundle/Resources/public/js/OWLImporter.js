@@ -216,6 +216,7 @@
                     }else{
                         
                         events[i]['setStartAt']= defaultDate ;
+                        delete events[i]['setParent'];
                         events[i]['setEndAt']=moment().format('YYYY-MM-DDTHH:mm:ss Z') ;
                     }
                 }

@@ -376,7 +376,8 @@
                               function(response) {  
                                   bootstrapAlert("success","event <b>"+event['title']+"</b> has been well added");
                                   e.id=response.id;
-                                  $calendar.fullCalendar('renderEvent',e); // 3rd arg make the event "stick" 
+                                  render(e);
+                                  // $calendar.fullCalendar('renderEvent',e); // 3rd arg make the event "stick" 
                               },
                               'json'
                       );
@@ -409,9 +410,8 @@
                 var copiedEventObject = $.extend({}, originalEventObject);
                 
                 // assign it the date that was reported 
-                copiedEventObject['start']  = date;
-                copiedEventObject['end']  = moment(date).add("hours",1).format();
-                copiedEventObject.allDay = allDay; 
+                copiedEventObject.allDay = allDay;
+                copiedEventObject['start'] = date;
                 formatDate(copiedEventObject);
 
                 endDragChildrenFromSidebar(copiedEventObject);
@@ -626,11 +626,11 @@
             var elemProp = getProp(elem);
             if(parentPos){
               elem.css("left",parentPos.x+eventMargin/2);
-              if(moment(parentStart).isSame(event.start)){
+              if(moment(parentStart).isSame(moment(event.start))){
                elem.css("top",elemProp.y+eventMargin/2+3); 
                elem.css("height",elemProp.h-eventMargin/2-1);
               }
-              if(moment(parentEnd).isSame(event.end)){
+              if(moment(parentEnd).isSame(moment(event.end))){
                // elem.css("top",elemProp.y+eventMargin/2); 
                 elem.css("height",elemProp.h-eventMargin/2-3);
               }
@@ -654,30 +654,7 @@
             elemProp = getProp(elem);
 
             positionBlock(children,newColWidth,elemProp,event.start,event.end);
- 
-            //TODO
-            //TODO
-            //TODO
-            //TODO
-            //
-            //   width
-            //      prendre la position de l'element = >getProp(element)
-            //      for each events,  
-            //        diviser la width de colWidth par le nb de chevauchement
-            //          et ajouter le decallage à la position 
-            //   
-            //   position 
-            //      positionner en fonction de parentPos.x+2 si existe sinon prendre propre position
-            //      
-            //   positionnedEvent.push(child.id);
-            //   
-            //   appeler positionBlock(events,colWidth,parentPos) pour les enfants
-            //   
-            //TODO  
-            //TODO  
-            //TODO
-            //TODO
-            
+  
           }
         }
 
@@ -868,17 +845,16 @@
           return (moment(parent.event['start']).isAfter(event['start']) ||
                   moment(parent.event['end']).isBefore(event['end']));
         }
-        var lastMoment;
 
+        var lastMoment;
         function endDragChildrenFromSidebar(event){
            
-          var children = getChildren(event,   {concat:true,onlyEvent:true});
+          var children = getChildren(event, {concat:false,onlyEvent:true});
           lastMoment = moment(event['start']);   
           event['start']  = lastMoment.format(); 
-          // lastMoment = lastMoment.add("minutes",30);
-          formatDate(event);
-          updateEventInDB(event); 
-          if( children.length > 0) {
+          lastMoment = lastMoment.add("minutes",30);
+          event['end']  = lastMoment.format(); 
+          if(!event.subChildren ||  children.length > 0) {
             for(var i in children){
               setChildDate(children[i]); 
             } 
@@ -886,16 +862,18 @@
               
               lastMoment = lastMoment.add("hours",1);
             } 
+          lastMoment = lastMoment.add("minutes",30);
+          event['end']  = lastMoment.format(); 
           deleteParent(event);
 
-          console.log("event['end']",event['end']);
-          render(event);
+          console.log("event['end']",event['end']); 
 
 
 
           function setChildDate(event){ 
             event['start']  = lastMoment.format();
             // lastMoment = lastMoment.add("minutes",30);
+            lastMoment = lastMoment.add("minutes",30);
 
             if(event.subChildren && event.subChildren.length > 0){
               for(var i in event.subChildren){
@@ -906,7 +884,7 @@
               lastMoment = lastMoment.add("hours",1);
             }
 
-            // lastMoment = lastMoment.add("minutes",30);
+            lastMoment = lastMoment.add("minutes",30);
 
             event['end']  = moment(lastMoment).format();   
             var elem = getDivById(event.id);
