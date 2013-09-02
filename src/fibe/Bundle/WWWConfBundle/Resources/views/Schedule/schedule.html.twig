@@ -746,6 +746,7 @@
             
                   return;
                 }
+                if(isOutOf(draggedEvent,event))return;
                 // console.log("lol" ,draggedEvent)
                 $modalSetParent.modal('show').find(".sub-event").text(draggedEvent.title);
                 $modalSetParent.find(".super-event").text(event.title);
@@ -844,6 +845,11 @@
           var parent = getElementAndEventbyId(event.parent.id);
           return (moment(parent.event['start']).isAfter(event['start']) ||
                   moment(parent.event['end']).isBefore(event['end']));
+        }
+
+        function isOutOf(event,parent){  
+          return (moment(parent['start']).isAfter(moment(event['end'])) ||
+                  moment(parent['end']).isBefore(moment(event['start'])));
         }
 
         var lastMoment;
