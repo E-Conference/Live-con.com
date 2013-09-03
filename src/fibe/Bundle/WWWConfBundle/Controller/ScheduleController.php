@@ -96,23 +96,16 @@ class ScheduleController extends Controller
                          ->getRepository('fibeWWWConfBundle:WwwConf')
                          ->find(1); 
                 
-                $event= new Event();
-                $startAt=new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get()));
-                $event->setStartAt($startAt );  
-                if($postData['allDay']=="true"){
-                  $endAt = new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()));   
-                  $event->setEndAt($endAt->add(new \DateInterval('PT23H59M59S'))); 
-                }
-                else {
-                  $event->setEndAt(new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()))); 
-                }
-                $event->setSummary($postData['title']); 
-                $event->setParent( $em->getRepository('IDCISimpleScheduleBundle:Event')->find($postData['parent']['id']) );
+                $event= new Event(); 
+                $event->setEndAt(new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()))); 
+                $event->setStartAt(new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get())));  
+                $event->setSummary( $postData['title'] );
+                $event->setIsAllDay($postData['allDay']=="true") ;
 
                 $event->setWwwConf($conf);
                 
                 $em->persist($event);
-                $em->flush();  
+                $em->flush();
 
                 $JSONArray['id'] = $event->getId();
                 $JSONArray['IsSuccess'] = true;
@@ -120,13 +113,15 @@ class ScheduleController extends Controller
         }else if( $methodParam=="update")
         { 
                 
-            $event = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($postData['id']);
+            $event = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['id']);
             $startAt = new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get()));
             $endAt =new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()));
             
             $event->setStartAt( $startAt );
             $event->setEndAt( $endAt );
-            $event->setParent( $em->getRepository('IDCISimpleScheduleBundle:Event')->find($postData['parent']['id']) );
+            $event->setParent( $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['parent']['id']) );
+            $event->setSummary( $postData['title'] );
+            $event->setIsAllDay($postData['allDay']=="true") ;
             $em->persist($event);
             $em->flush();
             $JSONArray['IsSuccess'] = true;
@@ -150,7 +145,7 @@ class ScheduleController extends Controller
         $id = $getData->get('id', ''); 
         
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id);
+        $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id);
           
         $conf = $em->getRepository('fibeWWWConfBundle:WwwConf')
                     ->find(1); 
@@ -175,6 +170,7 @@ class ScheduleController extends Controller
     
      
     /**
+     * ajax version of event edit controller
      * @Route("/{id}/updateEvents", name="schedule_view_event_update") 
      */
      
@@ -185,7 +181,7 @@ class ScheduleController extends Controller
          
           
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id);
+        $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id);
 
         if ($entity) {
 

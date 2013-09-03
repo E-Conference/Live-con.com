@@ -16,11 +16,17 @@ footer {
 }
 
 
+/*.form-control
+{
+	width:40% !important;
+	padding-left :40% !important;
+
+
 
 option
 {
 	lineheight: 40% !important ;
-}
+}*/
 
 .equipment_button >.delete_equipment
 {

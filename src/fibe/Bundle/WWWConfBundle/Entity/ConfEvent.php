@@ -13,6 +13,7 @@ use fibe\Bundle\WWWConfBundle\Entity\Paper;
 /**
  * ConfEvent
  *
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="IDCI\Bundle\SimpleScheduleBundle\Repository\EventRepository")
  */
@@ -52,8 +53,31 @@ class ConfEvent extends Event
      */
     private $role;
 
-   
-   
+
+    /**
+     *  
+     * Is an all day event ?
+     *   
+     * @ORM\Column(name="is_allday", type="boolean")
+     * 
+     */
+    private $isAllDay ;
+
+    /**
+     * computeIsAllDay
+     *
+     * @ORM\PrePersist() 
+     */
+    public function computeIsAllDay()
+    {
+         
+
+         $start = $this->getStartAt();
+         $end = $this->getEndAt(); 
+         $this->setIsAllDay($start->format('d')!=$end->format('d')); 
+
+    }
+
 
  
 
@@ -68,9 +92,29 @@ class ConfEvent extends Event
         $this->xProperties = new \Doctrine\Common\Collections\ArrayCollection();
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
-    
 
+    /**
+     * Set isAllDay
+     * 
+     * @return ConfEvent
+     */
+    public function setIsAllDay($isAllDay)
+    {
+        $this->isAllDay = $isAllDay;
+    
+        return $this;
+    }
+
+    /**
+     * Get isAllDay
+     *
+     * @return boolean
+     */
+    public function getIsAllDay()
+    {
+        return $this->isAllDay;
+    }
+     
     /**
      * Set wwwConf
      *

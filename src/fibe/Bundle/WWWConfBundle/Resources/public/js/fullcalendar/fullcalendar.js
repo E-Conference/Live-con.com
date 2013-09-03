@@ -4068,7 +4068,7 @@ function AgendaEventRenderer() {
 												snapMinutes
 										)
 									);
-									eventElement.draggable('option', 'grid', [colWidth, 1]);
+									// eventElement.draggable('option', 'grid', [colWidth, 1]);
 									allDay = false;
 								}
 							}else{
@@ -4110,7 +4110,7 @@ function AgendaEventRenderer() {
 				eventElement
 					.width(origWidth)
 					.height('')
-					.draggable('option', 'grid', null);
+					// .draggable('option', 'grid', null);
 				allDay = true;
 			}
 		}
@@ -4137,7 +4137,7 @@ function AgendaEventRenderer() {
 
 		eventElement.draggable({
 			scroll: false,
-			grid: [ colWidth, snapHeight ],
+			// grid: [ colWidth, snapHeight ],
 			axis: colCnt==1 ? 'y' : false,
 			opacity: opt('dragOpacity'),
 			revertDuration: opt('dragRevertDuration'),
@@ -4247,7 +4247,7 @@ function AgendaEventRenderer() {
 			if (isInBounds) {
 				if (isAllDay) {
 					timeElement.hide();
-					eventElement.draggable('option', 'grid', null); // disable grid snapping
+					// eventElement.draggable('option', 'grid', null); // disable grid snapping
 					renderDayOverlay(
 						addDays(cloneDate(event.start), dayDelta),
 						addDays(exclEndDay(event), dayDelta)
@@ -4256,7 +4256,7 @@ function AgendaEventRenderer() {
 				else {
 					updateTimeText(minuteDelta);
 					timeElement.css('display', ''); // show() was causing display=inline
-					eventElement.draggable('option', 'grid', [colWidth, snapHeight]); // re-enable grid snapping
+					// eventElement.draggable('option', 'grid', [colWidth, snapHeight]); // re-enable grid snapping
 				}
 			}
 		}
@@ -4286,7 +4286,7 @@ function AgendaEventRenderer() {
 			handles: {
 				s: '.ui-resizable-handle'
 			},
-			grid: snapHeight,
+			// grid: snapHeight,
 			start: function(ev, ui) {
 				snapDelta = prevSnapDelta = 0;
 				hideEvents(event, eventElement);
