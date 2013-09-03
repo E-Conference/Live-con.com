@@ -12,6 +12,7 @@ use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
  *
  * This class define a Person.
  *   @ORM\Table(name="person")
+ *   @ORM\HasLifecycleCallbacks
  *   @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\PersonRepository")
  * 	
  */
@@ -56,18 +57,11 @@ class Person
      */
     protected $email;
 
-
     /**
-     * created
-     *
-     * This property specifies the date and time that the calendar
-     * information was created by the calendar user agent in the calendar
-     * store.
-     *
-     * @ORM\Column(type="datetime", name="created_at")
-     */
-    protected $created_at;
-	
+    *   Hashtag
+    *   @ORM\Column(type="string", name="hashtag")
+    */
+    protected $hashtag;
 
     /**
      * agent
@@ -280,29 +274,7 @@ class Person
         return $this->email;
     }
 
-    /**
-     * Set created_at
-     *
-     * @param \DateTime $createdAt
-     * @return Person
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->created_at = $createdAt;
-    
-        return $this;
-    }
-
-    /**
-     * Get created_at
-     *
-     * @return \DateTime 
-     */
-    public function getCreatedAt()
-    {
-        return $this->created_at;
-    }
-
+   
     /**
      * Set agent
      *
@@ -631,7 +603,7 @@ class Person
      * @param string $group
      * @return Person
      */
-    public function setGroup($group)
+    public function set_group($group)
     {
         $this->_group = $group;
     
@@ -643,7 +615,7 @@ class Person
      *
      * @return string 
      */
-    public function getGroup()
+    public function get_group()
     {
         return $this->_group;
     }

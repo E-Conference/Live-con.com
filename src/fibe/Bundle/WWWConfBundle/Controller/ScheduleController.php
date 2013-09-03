@@ -9,9 +9,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event;
 use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;
+use fibe\Bundle\WWWConfBundle\ConfEvent;
+use fibe\Bundle\WWWConfBundle\Entity\Role;
 
 use IDCI\Bundle\SimpleScheduleBundle\Form\EventType;
 use IDCI\Bundle\SimpleScheduleBundle\Form\RecurChoiceType;
+use fibe\Bundle\WWWConfBundle\Form\ConfEventType;
+use fibe\Bundle\WWWConfBundle\Form\RoleType;
+
 
 use fibe\Bundle\WWWConfBundle\Form\XPropertyType; 
 
@@ -141,7 +146,7 @@ class ScheduleController extends Controller
      
     public function scheduleEditAction(Request $request)
     {
-	    $getData = $request->query;
+        $getData = $request->query;
         $id = $getData->get('id', ''); 
         
         $em = $this->getDoctrine()->getManager();
@@ -154,22 +159,16 @@ class ScheduleController extends Controller
             throw $this->createNotFoundException('Unable to find Event entity.');
         }
 
-        $form = $this->createForm(new EventType(), $entity);
-        $deleteForm =  $this->createFormBuilder(array('id' => $id))
-                            ->add('id', 'hidden')
-                            ->getForm();
+        $role = new Role();
+        $roleForm = $this->createForm(new RoleType(), $role);
+        $editForm = $this->createForm(new ConfEventType(), $entity);
+     
 
-        $xproperty = new XProperty();
-        $xproperty->setCalendarEntity($entity);
-        $xpropertyForm = $this->createForm(new XPropertyType(), $xproperty);
-
-        
-        return array(
-            'entity'            => $entity,
-            'formEvent'         => $form->createView(),
-            'delete_form'       => $deleteForm->createView(),
-            'xproperty_form'    => $xpropertyForm->createView(),
-            'SparqlUrl'         => $conf->getConfUri()
+        return  array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'role_form'    => $roleForm->createView(),
+           
         );
       
     }
@@ -183,7 +182,7 @@ class ScheduleController extends Controller
     {
     
       $JSONArray = array();
-	     
+         
           
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id);

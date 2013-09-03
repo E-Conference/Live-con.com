@@ -36,6 +36,13 @@ class ConfEvent extends Event
      */
     private $papers;
 
+     /**
+     * @ORM\ManyToMany(targetEntity="Theme", inversedBy="confEvents", cascade={"persist"})
+     * @ORM\JoinTable(name="confEvent_themes",
+     *     joinColumns={@ORM\JoinColumn(name="confEvent_id", referencedColumnName="id", onDelete="Cascade")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="theme_id", referencedColumnName="id", onDelete="Cascade")})
+     */
+    private $themes;
 
     /**
      * role

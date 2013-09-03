@@ -1,36 +1,39 @@
-<table class="table">
-    <thead>
-        <tr>
-            <th>Relation Id</th>
-            <th>Paper Title</th>
-            <th>Paper Author</th>
-            <th>Abstract</th>
-        </tr>
-    </thead>
+<div class="row">
+    <div class="col-lg-1"></div>
+  <div class="col-lg-9">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Relation Id</th>
+                <th>Paper Title</th>
+                <th>Paper Author</th>
+                <th>Abstract</th>
+            </tr>
+        </thead>
 
-    <tbody>
-        {% for paper in entity.getPapers() %} 
-            <tr> 
-                <td>{{ paper.id }}</td>
-                <td>{{ paper.title }}</td>
-                <td>
-                    {% for author in paper.getAuthor() %} 
-                        {{author.getPerson().name}}
-                    {% endfor %}
-                </td>
-                <td>
-                 <a  class="btn btn-default abstract_paper" data-toggle="popover" title="{{ paper.title }} Abstract" data-content="{{ paper.abstract }}"><i class="icon-file-text"></i>
-                 </a>
-                 <a id="{{paper.id}}" class="btn btn-danger delete_paper" data-toggle="tooltip" title="Remove this Paper from the list"><i class="icon-minus"></i>
-                 </a>
-                </td>
-                 
-            </tr> 
-        {% endfor %}
-    </tbody>
-
-   
-</table>
+        <tbody>
+            {% for paper in entity.getPapers() %} 
+                <tr> 
+                    <td>{{ paper.id }}</td>
+                    <td>{{ paper.title }}</td>
+                    <td>
+                        {% for author in paper.getAuthor() %} 
+                            {{author.getPerson().name}}
+                        {% endfor %}
+                    </td>
+                    <td>
+                     <a  class="btn btn-default abstract_paper" data-toggle="popover" title="{{ paper.title }} Abstract" data-content="{{ paper.abstract }}"><i class="icon-file-text"></i>
+                     </a>
+                     <a id="{{paper.id}}" class="btn btn-danger delete_paper" data-toggle="tooltip" title="Remove this Paper from the list"><i class="icon-minus"></i>
+                     </a>
+                    </td>
+                     
+                </tr> 
+            {% endfor %}
+        </tbody>   
+    </table>
+  </div>
+</div>
 
 {% block javascripts %}
 <script type="text/javascript">

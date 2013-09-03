@@ -1,27 +1,31 @@
-<table class="table">
-    <thead>
-        <tr>
-            <th>Role</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
+<div class="row">
+    <div class="col-lg-1"></div>
+  <div class="col-lg-9">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Role</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
 
-    <tbody>
-        {% for role in entity.getRole() %} 
-            <tr> 
-                <td>{{ role.getType().libelle }}</td>
-                <td>{{ role.getPerson().name }}</td>
-                <td>{{ role.getPerson().email }}</td>
-                <td> <a id="{{role.id}}" class="btn btn-danger delete_role" data-toggle="tooltip" title="Remove this Person from the list"><i class="icon-minus"></i>
-                 </a>
-                </td>
-            </tr> 
-        {% endfor %}
-    </tbody>
-</table>
-
+        <tbody>
+            {% for role in entity.getRole() %} 
+                <tr> 
+                    <td>{{ role.getType().libelle }}</td>
+                    <td>{{ role.getPerson().name }}</td>
+                    <td>{{ role.getPerson().email }}</td>
+                    <td> <a id="{{role.id}}" class="btn btn-danger delete_role" data-toggle="tooltip" title="Remove this Person from the list"><i class="icon-minus"></i>
+                     </a>
+                    </td>
+                </tr> 
+            {% endfor %}
+        </tbody>
+    </table>
+  </div>
+</div>
 {% block javascripts %}
 <script type="text/javascript">
 

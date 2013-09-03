@@ -1,12 +1,3 @@
-services:
-    event.listener:
-        class: fibe\Bundle\WWWConfBundle\Listener\updateChildrenDate
-        arguments: ["@session"]
-        tags:
-            - { name: doctrine.event_listener, event: onFlush }
-            - { name: doctrine.event_listener, event: preUpdate }
-
-
 idci_exporter:
     api_route: "/api/{entity_reference}.{_format}"
     entities:

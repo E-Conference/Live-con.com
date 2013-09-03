@@ -1,330 +1,77 @@
+  {% block body %}
+  <h1>ConfEvent edit</h1>
 
+    <form action="{{ path('schedule_confevent_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+        <input type="hidden" name="_method" value="PUT" />
+        {{ form_row(edit_form.summary) }}
+        {{ form_row(edit_form.categories) }}
+        {{ form_row(edit_form.startAt) }}
+        {{ form_row(edit_form.url) }}
+        {{ form_row(edit_form.parent) }}
+        {{ form_row(edit_form.description) }}
+        {{ form_row(edit_form.comment) }}
+        {{ form_row(edit_form.organizer) }}
+        {{ form_row(edit_form.contacts) }}
+        {{ form_row(edit_form.location) }}
+        {{ form_row(edit_form.priority) }}
+        {{ form_row(edit_form.resources) }}
+        {{ form_row(edit_form.endAt) }}
+        {{ form_row(edit_form.isTransparent) }}
+        {{ form_row(edit_form.wwwConf) }}
 
-
-{% block body %}  
-<div class="row-fluid well">  
-    <form id="event" class="col-lg-4" class="form-horizontal" >  
-        <p>  
-            <div class="form-group">
-                <label class="control-label" >
-                    {{ form_label(formEvent.summary) }}
-                </label> 
-                <div class="controls">
-                    {{ form_widget(formEvent.summary) }}
-                    {{ form_errors(formEvent.summary) }}
+        <button class="btn btn-default" type="submit"><i class="icon-ok"></i></button>
+  
+        <p>
+            <h1>Papers Relation</h1>
+            <div id="paper_related_list">
+                {% include "fibeWWWConfBundle:ConfEvent:paperRelation.html.twig" %}
             </div>
-            
-            </div>  
-                <label class="control-label" >
-                    {{ form_label(formEvent.parent) }}
-                </label> 
-                <div class="controls">
-                    {{ form_widget(formEvent.parent) }}
-                    {{ form_errors(formEvent.parent) }}
-                </div>
-            </div>  
-            
-            </div>  
-                <label class="control-label" >
-                    {{ form_label(formEvent.status) }}
-                </label> 
-                <div class="controls">
-                    {{ form_widget(formEvent.status) }}
-                    {{ form_errors(formEvent.status) }}
-                </div>
-            </div>  
-            
-            <div class="form-group">
-                <label class="control-label" >
-                    {{ form_label(formEvent.url) }}
-                </label> 
-                <div class="controls">
-                    {{ form_widget(formEvent.url) }}
-                    {{ form_errors(formEvent.url) }}
-                </div>
-            </div>  
-            
-            <div class="form-group">
-                <label class="control-label" >
-                    {{ form_label(formEvent.organizer) }}
-                </label> 
-                <div class="controls">
-                    {{ form_widget(formEvent.organizer) }}
-                    {{ form_errors(formEvent.organizer) }}
-                </div>
-            </div>  
-            
-            <div class="form-group">
-                <label class="control-label"  >
-                    {{ form_label(formEvent.contacts) }}
-                </label> 
-                <div class="controls">
-                    {{ form_widget(formEvent.contacts) }}
-                    {{ form_errors(formEvent.contacts) }}
-                </div>
-            </div>  
-            
-            <div class="form-group">
-                <label class="control-label" >
-                    {{ form_label(formEvent.location) }}
-                </label> 
-                <div class="controls">
-                    {{ form_widget(formEvent.location) }}
-                    {{ form_errors(formEvent.location) }}
-                </div>
-            </div>  
-            
-            <div class="form-group">
-                <label class="control-label"  >
-                    {{ form_label(formEvent.resources) }}
-                </label> 
-                <div class="controls">
-                    {{ form_widget(formEvent.resources) }}
-                    {{ form_errors(formEvent.resources) }}
-                </div>
-            </div>   
-            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     {{ form_rest(formEvent )}}</div> 
+             {{ form_row(edit_form.papers) }}
+             
+            </form>
+              <h1>Persons Relation</h1>
+             <div id="person_related_list"> 
+                {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
+             </div>
+            <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
+                 {{ form_widget(role_form) }}
+                <button id="role_form_submit"class="btn btn-default" type="button">
+                    <i class="icon-ok"></i>
+                </button>
+            </form>
         </p>
-              
-        <div class="form-group">
-            <div class="controls">
-                <button type="submit" class="btn btn-default"><span class="icon-ok glyphicon-white"></button> 
-                <button id="deleteEventBtn" class="btn btn-danger"><span class="icon-remove  glyphicon-white"></button> 
-            </div>
-        </div>
-    </form> 
-    <form id="deleteEventForm" style="visibility:hidden;display:none;height:0px;">
-		 <div class="form-group">
-			{{ form_widget(delete_form) }}
-			<button type="submit" class="btn btn-danger"><span class="icon-remove  glyphicon-white"></button>
-		</div>
-    </form> 
+  
+  {% endblock body %}
+  {% block javascripts %}
+<script type="text/javascript">
 
+   
+   //listen for the form beeing submitted
+   $("select[id='fibe_bundle_wwwconfbundle_confeventtype_papers']").change(function(){
+      //get the url for the form
+      var id_paper= $(this).val();
+  
+      //start send the post request
+       $.post('{{path("schedule_confevent_addPaper") }}',               
+                {id_entity : '{{entity.id}}', id_paper: id_paper}, 
+            function(response){
+                   $('#paper_related_list').html(response);
+                
+            }, "html");    
+       });
 
+     $("#role_form_submit").click(function(){
+      //get the url for the form
+      var id_person = $('#fibe_bundle_wwwconfbundle_roletype_person').val();
+      var id_type = $('#fibe_bundle_wwwconfbundle_roletype_type').val();
+      //start send the post request
+       $.post("{{path('schedule_confevent_addPerson')}}",               
+               {id_person : id_person, id_type:id_type, id: "{{entity.id }}"} , 
+            function(response){
+                   $('#person_related_list').html(response);
+                
+            }, "html");    
+       });
 
-<!--                  xproperties                    -->
-
-    <h3>Event Links</h3>	
-
-    <div class="col-lg-4">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Link Type</th>
-                    <th>Name</th>
-                    <th>Uri</th>
-                </tr>
-            </thead>
-            
-            <tbody>
-                {% for xproperty in entity.xproperties %}
-                    <tr>
-                        <td>{{ xproperty.xNamespace }}</td>
-                        <td>{{ xproperty.xKey }}</td>
-                        <td>{{ xproperty.xValue }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-
-            <tfoot>
-                <tr>
-                    <td colspan="3">
-                        <form id="xpropertyForm" class="form-horizontal">
-                            <div class="control-group">
-                                <label class="control-label" for="idci_bundle_simpleschedulebundle_xpropertytype_xnamespace">
-                                    {{ form_label(xproperty_form.xnamespace) }}
-                                </label>
-                                <div class="controls">
-                                    {{ form_widget(xproperty_form.xnamespace) }}
-                                    {{ form_errors(xproperty_form.xnamespace) }}
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label" for="idci_bundle_simpleschedulebundle_xpropertytype_xkey">
-                                    {{ form_label(xproperty_form.xkey) }}
-                                </label> 
-                                <div class="controls">
-                                    {{ form_widget(xproperty_form.xkey) }}
-                                    {{ form_errors(xproperty_form.xkey) }}
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label" for="idci_bundle_simpleschedulebundle_xpropertytype_xvalue">
-                                    {{ form_label(xproperty_form.xvalue) }}
-                                </label> 
-                                <div class="controls">
-                                    {{ form_widget(xproperty_form.xvalue) }}
-                                    {{ form_errors(xproperty_form.xvalue) }}
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <div class="controls">
-                                    <button type="submit" class="btn btn-info" title="Add Xproperty"><span class="icon-plus  glyphicon-white"></button>
-                                </div>
-                            </div>  
-                            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(xproperty_form )}}</div> 
-                        </form>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-
-
-</div> 
-{% endblock body %}
-
-
-
-
- {% block stylesheets %} 
- <style type="text/css"> 
-    .control-group .controls {
-        margin-left: 200px;
-    } 
-    .add-on{
-        margin-top: 1px;
-    }
- </style>
-{% endblock stylesheets %}
-
-{%  block javascripts %}  
-
-
-<script src="{{ asset('bundles/fibewwwconf/js/bootstrap-datetimepicker.min.js') }}" type="text/javascript" ></script>
-<script type="text/javascript" >
-    $(document).ready(function(){ 
-        $('.datetimepicker').datetimepicker({
-            format: 'dd/mm/yyyy hh:ii',
-            autoclose: true
-        }); 
-    });
-
-</script>    
- 
- 
- 
-
-
-
-
-<script type="text/javascript" src="http://rdfquery.googlecode.com/files/jquery.rdfquery.core.min-1.0.js"></script>
-<!-- <script type="text/javascript" src="http://www.jibbering.com/rdf-parser/parser.js"></script>  -->
-
-<script type="text/javascript" >
- 
- 
-
-function FormPost(uri,form,callback){
-    $.ajax({
-        type: "POST",
-        url:uri,
-        async: false,
-        data: form.serialize(),
-        success:function(a,b,c) {
-                     console.log(a,b,c);
-                     if(callback)callback();
-        }
-    });
-} 
-
-
-// Read a page's GET URL variables and return them as an associative array.
-function getUrlVars()
-{
-    var vars = [], hash;
-    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    for(var i = 0; i < hashes.length; i++)
-    {
-        hash = hashes[i].split('=');
-        vars.push(hash[0]);
-        vars[hash[0]] = hash[1];
-    }
-    return vars;
-}
-
-function autoCompletePublication(){
-    
- //    var swdf=new SWDF("{{ SparqlUrl }}");
- //    swdf.buildQry();
-      
-	// swdf.callback= function(arrayResult){autoComplete($('#idci_bundle_simpleschedulebundle_xpropertytype_xkey'),arrayResult)}; 
- //    swdf.doQry();
- //    console.log(swdf);
-	// console.log(swdf.arrayResult);
-}
-
-function autoCompleteEvent(){
-    
- //    var swdf=new SWDF("{{ SparqlUrl }}");
-	// swdf.$select = 	     ' ?uriEvent ?eventLabel   '; 
-	// swdf.$whereClause =  '?uriEvent rdfs:label ?eventLabel.'+
- //                         '{?uriEvent rdf:type swc:TrackEvent.}' +
- //                         'UNION' +
- //                         '{?uriEvent rdf:type swc:TalkEvent.}' +
- //                         'UNION' +
- //                         '{?uriEvent rdf:type swc:ConferenceEvent.}' +
- //                         'UNION ' +
- //                         '{?uriEvent rdf:type swc:TutorialEvent.}' +
- //                         'UNION' +
- //                         '{?uriEvent rdf:type swc:WorkshopEvent.}' +
- //                         ' UNION ' +
- //                         '{?uriEvent rdf:type swc:SessionEvent.}' +
- //                         'UNION' +
- //                         '{?uriEvent rdf:type swc:SocialEvent.}' +
- //                         'UNION' +
- //                         '{?uriEvent rdf:type swc:PanelEvent.}';
- //    swdf.buildQry();
-	// swdf.parseMtd=swdf.toArray2;
-	// swdf.callback= function(arrayResult){autoComplete($('#idci_bundle_simpleschedulebundle_xpropertytype_xkey'),arrayResult)};
- //    swdf.doQry();
-	// console.log(swdf.arrayResult); 
-}
-
-$(document).ready(function(){ 
-    /*
-    //autocomplete  {{ SparqlUrl }}
-    $('#idci_bundle_simpleschedulebundle_xpropertytype_xnamespace').change(function(){
-        var xNamespace = $(this).val();
-        if( xNamespace == "publication_uri") autoCompletePublication();
-        else if( xNamespace == "event_uri") autoCompleteEvent();
-    });
-    autoCompletePublication();
-    */
-    //form handler
-    $("#deleteEventBtn").click(function() { 
-        FormPost("{{ path('schedule_event_delete', { 'id': entity.id }) }}",$("#deleteEventForm"),function(){
-                  // CloseModelWindow(null,true);
-        });
-      return false;
-    });
-    
-    $('#xpropertyForm').submit(function(event) {
-        event.preventDefault();
-        FormPost("{{ path('schedule_xproperty_add', { 'id': entity.id}) }}",$(this),function(){
-                   // window.location.reload();
-                    alert("event updated");
-        });
-      return false;
-    }); 
-    
-    //'<div class="alert alert-info"><button type="button" clajss="close" data-dismiss="alert">×</button>Event has been updated</div>';
-    $('#event').submit(function(event) {
-        //edit event
-        event.preventDefault();
-        FormPost("{{ path('schedule_view_event_update', { 'id': entity.id }) }}",$(this),function(){
-                alert("event updated");
-        });
-         
-        return false;
-    }); 
-});
-
-
-
-
-</script> 
-    
+</script>
 {% endblock javascripts %}
-
->>>>>>> 0ce8bf54806a598333710e9035f056291dd75241

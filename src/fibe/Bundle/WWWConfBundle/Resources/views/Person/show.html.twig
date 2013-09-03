@@ -105,17 +105,21 @@
             </tr>
         </tbody>
     </table>
-
-         <a class="btn btn-warning" href="{{ path('person') }}">
+    <div class="row">
+      <div class="col-lg-2">
+         <a class="btn btn-warning" href="{{ path('person_index') }}">
             <i class="icon-th-list"></i>
         </a>
-         <a  class="btn btn-warning" href="{{ path('person_edit', { 'id': entity.id }) }}">
+         <a  class="btn btn-success" href="{{ path('person_edit', { 'id': entity.id }) }}">
             <i class="icon-edit"></i>
          </a>
+      </div>
+      <div class="col-lg-1">
         <form action="{{ path('person_delete', { 'id': entity.id }) }}" method="post">
             <input type="hidden" name="_method" value="DELETE" />
             {{ form_widget(delete_form) }}
             <button type="submit" class="btn btn-danger"> <i class="icon-remove"></i></button>
         </form>
- 
+       </div>
+    </div></br>
 {% endblock %}

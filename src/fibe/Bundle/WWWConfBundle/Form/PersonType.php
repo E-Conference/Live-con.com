@@ -12,7 +12,6 @@ class PersonType extends AbstractType
     {
         $builder
             ->add('email')
-            ->add('created_at')
             ->add('agent')
             ->add('name')
             ->add('title')
