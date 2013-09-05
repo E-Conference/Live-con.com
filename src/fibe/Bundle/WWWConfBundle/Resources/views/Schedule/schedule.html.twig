@@ -560,7 +560,7 @@
 
 
         var repositionTimeout,positionned ;
-        var eventMargin = 10;
+        var eventMargin = 3;
         var repositionTimeout = 10;
         function reposition(view){
 
@@ -622,20 +622,20 @@
             getBroCountRange(event,events); 
 
             console.log("event "+event.id+" has "+event.count+" bros. range = "+event.range+" minLeft = "+event.minLeft);
-            var newColWidth = colWidth/(event.count+1);
+            var newColWidth = colWidth/(event.count+1)-(event.count)*eventMargin/2;
             console.log("newColWidth : ",newColWidth,"left : ",event.minLeft+(event.range*newColWidth));
             if(event.allDay !==true){
               elem.width(newColWidth); 
-              elem.css("left",event.minLeft+(event.range*newColWidth));
-              console.log("newColWidth : ",newColWidth,"left : ",event.minLeft+(event.range*newColWidth));
+              elem.css("left",event.minLeft+eventMargin/2+(event.range*(newColWidth+eventMargin)));
+              // console.log("newColWidth : ",newColWidth,"left : ",event.minLeft+((event.range+1)*eventMargin);
             }
             // console.log("event",event)
             // console.log("event",elem)
             
 
             //set opacity to all children
-            // var childrenDiv = getChildren(event,{concat:true,onlyEvent:true,noSidebar:true}); 
-                //z-index 
+            
+            //z-index 
             elem.css('z-index',parentZindex+1)
             
             console.log('OPACITY of'+event.id ); 
@@ -659,7 +659,7 @@
               }
             }) 
             
-            //set opacity to all children 
+            //end set opacity to all children 
             
 
             event.isPositionned = true;
