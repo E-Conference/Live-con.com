@@ -639,8 +639,10 @@
             elem.css('z-index',parentZindex+1)
             
             console.log('OPACITY of'+event.id ); 
-              
+            
+            var oldBorderColor = elem.css("border-color")
             elem.hover(function(){
+              $(this).animate({"border-color":"#3F3F3F"},{queue:false})
               var elemEvent = getEventByDiv($(this));
               var childrenDiv = getChildren(elemEvent,{concat:true,onlyEvent:true,noSidebar:true});  
               for (var j in childrenDiv){
@@ -648,6 +650,7 @@
                 curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false});
               }
             },function(){
+              $(this).animate({"border-color":oldBorderColor},{queue:false})
               var elemEvent = getEventByDiv($(this));
               var childrenDiv = getChildren(elemEvent,{concat:true,onlyEvent:true,noSidebar:true}); 
               for (var j in childrenDiv){
