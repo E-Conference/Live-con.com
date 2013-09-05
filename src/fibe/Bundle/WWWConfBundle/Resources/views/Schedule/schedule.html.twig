@@ -552,6 +552,34 @@
         /*------------------------------------- end initialize the sidebar ------------------------------------*/ 
         /*-----------------------------------------------------------------------------------------------------*/
 
+        function isInstant(ev){
+            var diff =moment(ev["start"]).diff(ev["end"]);
+            return (diff  === 0 ) || (diff  === 1 );   
+        }
+ 
+        function updateEventArray(){ 
+   
+
+
+          var callendarEvents = $calendar.fullCalendar('clientEvents'); //loop only on calendar events
+          var callendarEventsId=[];
+          for (var i in callendarEvents){
+            var callendarEvent = callendarEvents[i];
+            if(Events[callendarEvent.id]){
+              Events[callendarEvent.id] = callendarEvent;
+              // console.log(callendarEvent.id+"_###found in calendar",Events[callendarEvent.id]) ;
+            } 
+          }
+
+          $(".fc-event-draggable:visible").each(function(i){ 
+
+            var id = parseInt($(this).find(".fc-event-id").text()); 
+            Events[id]['elem'] = $(this);
+          });
+          console.log("###updateEventArray###") 
+          console.log(Events) 
+        }
+
 
         /*-----------------------------------------------------------------------------------------------------*/
         /*------------------------------------- position ------------------------------------------------------*/
@@ -568,15 +596,18 @@
           clearTimeout(repositionTimeout);
           repositionTimeout=setTimeout(function(){ 
 
+            //update Event array
+            updateEventArray();
+
             var colWidth = view.getColWidth();
             positionned=[];
             // console.log("##########################")
             // console.log("########reposition########"); 
-            console.log("##########################"); 
+            // console.log("##########################"); 
             
             var toppestParent = getToppestParent();
             if(!toppestParent)return;
-            console.log("toppestParent",toppestParent);
+            // console.log("toppestParent",toppestParent);
             positionBlock(toppestParent,colWidth,2);  
             
             for (var i in positionned){
@@ -590,18 +621,17 @@
         }
 
         function positionBlock(events,colWidth,parentZindex,parentPos,parentStart,parentEnd){ 
-          console.log(" ######positionBlocks######");
+          // console.log(" ######positionBlocks######");
  
           colWidth-=eventMargin; 
 
           for (var i in events){
             var event = events[i];
-            console.log(event.id+"######");
+            // console.log(event.id+"######");
             event['isPositionned'] = false;
             var elem = getDivById(event.id);
             if(!elem)  continue; //event is in another view
-              
-            // console.log("##POSITIONNING##",event,elem); 
+               
 
             //position left margin
             var elemProp = getProp(elem);
@@ -618,19 +648,16 @@
             }
 
             //get brothers count and self range ( to calculate width and xPos)
-            console.log("getBroCountRange")
+            // console.log("getBroCountRange")
             getBroCountRange(event,events); 
 
-            console.log("event "+event.id+" has "+event.count+" bros. range = "+event.range+" minLeft = "+event.minLeft);
-            var newColWidth = colWidth/(event.count+1)-(event.count)*eventMargin/2;
-            console.log("newColWidth : ",newColWidth,"left : ",event.minLeft+(event.range*newColWidth));
+            // console.log("event "+event.id+" has "+event.count+" bros. range = "+event.range+" minLeft = "+event.minLeft);
+            var newColWidth = colWidth/(event.count+1)-(event.count+1)*eventMargin;
+            // console.log("newColWidth : ",newColWidth,"left : ",event.minLeft+(event.range*newColWidth));
             if(event.allDay !==true){
               elem.width(newColWidth); 
-              elem.css("left",event.minLeft+eventMargin/2+(event.range*(newColWidth+eventMargin)));
-              // console.log("newColWidth : ",newColWidth,"left : ",event.minLeft+((event.range+1)*eventMargin);
-            }
-            // console.log("event",event)
-            // console.log("event",elem)
+              elem.css("left",event.minLeft+eventMargin/2+(event.range*(newColWidth+eventMargin))); 
+            } 
             
 
             //set opacity to all children
@@ -638,7 +665,7 @@
             //z-index 
             elem.css('z-index',parentZindex+1)
             
-            console.log('OPACITY of'+event.id ); 
+            // console.log('OPACITY of'+event.id ); 
             
             var oldBorderColor = elem.css("border-color")
             elem.hover(function(){
@@ -665,7 +692,7 @@
             event.isPositionned = true;
             positionned.push(event);
             var children = getChildren(event,{concat:false,onlyEvent:true,noSidebar:true});
-            console.log("getChildren",children)
+            // console.log("getChildren",children)
             elemProp = getProp(elem);
 
             positionBlock(children,newColWidth,parentZindex+1,elemProp,event.start,event.end);
@@ -1042,31 +1069,39 @@
           if(id==="" || !id)return ;
           if(!op)op={};
           var event;
-          if(op.noCalendar!==true)
-            event = $calendar.fullCalendar( 'clientEvents', id )[0]; 
 
-          //look in sidebar event if not found
-          if(op.noSidebar !==true){ 
-            $(".external-event").each(function(i,sidebarEvent){
-              if( event)return;
-              var ev = $(sidebarEvent).data('eventObject') ;
-              // console.log("##",ev )
-              if(ev && ev.id === id ){
-               console.log("##FOUND IN SIDEBAR##",ev.id,ev);
-                event = $.extend({},ev); 
-              }
-            }); 
-          }//end no sidebar
-
-          if(!event)return;
+          if(id==="" || !id)return ;
+          if(!op)op={};
+          var event = Events[id];
+          if(op.noSidebar ===true && isInstant(Events[id]))return;
           if(op.onlyEvent === true)return event;
-          // console.log("##",event ) 
-          var elem = getDivById(event.id); 
-          // if(!elem)return;
-          // alert(event.id);
-          // alert(elem)
-          // console.log("##",elem ) 
-          return {event:event,element:$(elem)};
+          return {event:event,element:event.elem};
+
+          // if(op.noCalendar!==true)
+          //   event = $calendar.fullCalendar( 'clientEvents', id )[0]; 
+
+          // //look in sidebar event if not found
+          // if(op.noSidebar !==true){ 
+          //   $(".external-event").each(function(i,sidebarEvent){
+          //     if( event)return;
+          //     var ev = $(sidebarEvent).data('eventObject') ;
+          //     // console.log("##",ev )
+          //     if(ev && ev.id === id ){
+          //      console.log("##FOUND IN SIDEBAR##",ev.id,ev);
+          //       event = $.extend({},ev); 
+          //     }
+          //   }); 
+          // }//end no sidebar
+
+          // if(!event)return;
+          // if(op.onlyEvent === true)return event;
+          // // console.log("##",event ) 
+          // var elem = getDivById(event.id); 
+          // // if(!elem)return;
+          // // alert(event.id);
+          // // alert(elem)
+          // // console.log("##",elem )  
+          // return {event:event,element:$(elem)};
         }
 
         /**
@@ -1076,22 +1111,8 @@
         */ 
 
         function getDivById(id){
-            var div;
-            $.each($(".fc-event-draggable"),function(i,childDiv){
-              if(div)return false; //break each
-              //check with id
-              $.each($(childDiv).find(".fc-event-id"),function(){
-                if(div)return false; //break each
-                var childId = $(this).text();
-                if(childId ===  id){
-                  div =  $(childDiv);
-                }else{
-                  // console.log("bad id for event to be a child");
-                  // console.log(id +" != "+childId); 
-                }
-              }); 
-            });
-            return div;
+          console.log(id,Events[parseInt(id)])
+          return Events[parseInt(id)]['elem'];
         }
 
         function getEventByDiv(div){
@@ -1263,14 +1284,16 @@
         /*-----------------------------------------------------------------------------------------------------*/
 
       // empty fullcalendar events and populate it with new
+      var Events = {};
       function renderEvent(events){
         $calendar.fullCalendar( 'removeEvents');
         //TODO ALLDAY
-        var instant_events = [];
+        var instant_events   = [];
+        var callendar_events = [];
         for (var i in events){  
-          events[i]["title"] = events[i].name; 
-          events[i]["start"] = events[i].start_at;
-          events[i]["end"] = events[i].end_at; 
+          events[i]["title"]  = events[i].name; 
+          events[i]["start"]  = events[i].start_at;
+          events[i]["end"]    = events[i].end_at; 
           events[i]["allDay"] = events[i].is_allday==="true";
 
           delete events[i]["url"];
@@ -1280,11 +1303,13 @@
           
           var diff =moment(events[i]["start"]).diff(events[i]["end"]);
           events[i]["instant"] = (diff  === 0 ) || (diff  === 1 );  
-          if(events[i]["instant"])
+          Events[events[i]["id"]] = events[i];
+          if(events[i]["instant"]){
             instant_events.push(events[i]);
-          else
-            $calendar.fullCalendar( 'renderEvent',events[i]);
-        }
+          }else{ 
+              $calendar.fullCalendar( 'renderEvent',events[i]);
+          }
+        } 
         setInstantEvents(instant_events);
       }
 
@@ -1297,9 +1322,11 @@
         $calendar.fullCalendar('renderEvent', event); 
       }
       function updateEventInDB(event){
+          var ev = $.extend( {} , event );
+          delete ev.elem;
               $.post(
                 op.quickUpdateUrl,
-                formatDate($.extend( {} , event )),
+                formatDate(ev),
                 function(doc) {   
                         bootstrapAlert("success","event <b>"+event['title']+"</b> has been well updated"); 
                 },
