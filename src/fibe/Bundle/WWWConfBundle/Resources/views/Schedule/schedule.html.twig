@@ -162,8 +162,9 @@
         
     .external-event { /* try to mimick the look of a real event */
         margin-bottom: 1em;
+        border        : 1px solid rgb(58, 135, 173); 
         padding      : 2px 4px;
-        background   : #3366CC;
+        background   : #3a87ad;
         color        : #fff;
         font-size    : .85em;
         cursor       : pointer;
@@ -181,8 +182,11 @@
       margin:2em;
       font-weight: bolder; 
     }
+    .fc-event{
+      font-size: 1em;
+    }
     .fc-event-id {
-      /*display: none;*/
+      display: none;
     }
   .fc-view { /* prevents dragging outside of widget */
       overflow: visible;
@@ -396,6 +400,7 @@
             droppable: true, // this allows things to be dropped onto the calendar !!!
             eventDrop : function(event){ //drop from calendar ")
                     updateEventInDB(event);
+                    // render(event);
             }, 
             eventAfterAllRender: function( view ) { 
               reposition(view);
@@ -506,8 +511,9 @@
             $event.appendTo($sidebar);
             sidebarEventHtml ($event,event);
             $event.prepend("<span class='fc-event-id ' style='color:grey;'>"+event.id+"</span>");
-            //set child drag
-            //
+            //set child drag 
+            delete event['elem'];
+            console.log(event);
             $event.draggable({
                       zIndex: 999,
                       revert: true,      // will cause the event to go back to its
@@ -628,22 +634,21 @@
           for (var i in events){
             var event = events[i];
             // console.log(event.id+"######");
-            event['isPositionned'] = false;
-            var elem = getDivById(event.id);
-            if(!elem)  continue; //event is in another view
+            event['isPositionned'] = false; 
+            if(!event.elem)  continue; //event is in another view
                
 
             //position left margin
-            var elemProp = getProp(elem);
+            var elemProp = getProp(event.elem);
             if(parentPos){
-              elem.css("left",parentPos.x+eventMargin/2);
+              event.elem.css("left",parentPos.x+eventMargin/2);
               if(moment(parentStart).isSame(moment(event.start))){
-               elem.css("top",elemProp.y+eventMargin/2+3); 
-               elem.css("height",elemProp.h-eventMargin/2-1);
+               event.elem.css("top",elemProp.y+eventMargin/2+3); 
+               event.elem.css("height",elemProp.h-eventMargin/2-1);
               }
               if(moment(parentEnd).isSame(moment(event.end))){
-               // elem.css("top",elemProp.y+eventMargin/2); 
-                elem.css("height",elemProp.h-eventMargin/2-3);
+               // event.elem.css("top",elemProp.y+eventMargin/2); 
+                event.elem.css("height",elemProp.h-eventMargin/2-3);
               }
             }
 
@@ -654,34 +659,36 @@
             // console.log("event "+event.id+" has "+event.count+" bros. range = "+event.range+" minLeft = "+event.minLeft);
             var newColWidth = colWidth/(event.count+1)-(event.count+1)*eventMargin;
             // console.log("newColWidth : ",newColWidth,"left : ",event.minLeft+(event.range*newColWidth));
-            if(event.allDay !==true){
-              elem.width(newColWidth); 
-              elem.css("left",event.minLeft+eventMargin/2+(event.range*(newColWidth+eventMargin))); 
+            if(event.allDay !==true && !isInstant(event)){
+              event.elem.width(newColWidth); 
+              event.elem.css("left",event.minLeft+eventMargin/2+(event.range*(newColWidth+eventMargin))); 
             } 
             
 
             //set opacity to all children
             
             //z-index 
-            elem.css('z-index',parentZindex+1)
+            event.elem.css('z-index',parentZindex+1)
             
             // console.log('OPACITY of'+event.id ); 
             
-            var oldBorderColor = elem.css("border-color")
-            elem.hover(function(){
+            var oldBorderColor = event.elem.css("border-color")
+            event.elem.hover(function(){
+              //enter
               $(this).animate({"border-color":"#3F3F3F"},{queue:false})
               var elemEvent = getEventByDiv($(this));
-              var childrenDiv = getChildren(elemEvent,{concat:true,onlyEvent:true,noSidebar:true});  
+              var childrenDiv = getChildren(elemEvent,{concat:true});  
               for (var j in childrenDiv){
-                var curChildDiv = getDivById(childrenDiv[j].id,{noSidebar:true}); 
+                var curChildDiv = getDivById(childrenDiv[j].id); 
                 curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false});
               }
             },function(){
+
               $(this).animate({"border-color":oldBorderColor},{queue:false})
               var elemEvent = getEventByDiv($(this));
-              var childrenDiv = getChildren(elemEvent,{concat:true,onlyEvent:true,noSidebar:true}); 
+              var childrenDiv = getChildren(elemEvent,{concat:true,onlyEvent:true}); 
               for (var j in childrenDiv){
-                var curChildDiv = getDivById(childrenDiv[j].id,{noSidebar:true});
+                var curChildDiv = getDivById(childrenDiv[j].id );
                 curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
               }
             }) 
@@ -691,9 +698,9 @@
 
             event.isPositionned = true;
             positionned.push(event);
-            var children = getChildren(event,{concat:false,onlyEvent:true,noSidebar:true});
-            // console.log("getChildren",children)
-            elemProp = getProp(elem);
+            var children = getChildren(event,{concat:false,onlyEvent:true});
+            // console.log("elem",children)
+            elemProp = getProp(event.elem);
 
             positionBlock(children,newColWidth,parentZindex+1,elemProp,event.start,event.end);
   
@@ -761,7 +768,9 @@
 
           for(var j in events){
             var bro = events[j];
-            if(bro.id === event.id ||(exclude!==undefined &&  bro.id === exclude.id)) continue;
+            if(bro.id === event.id ) continue;
+            if(  exclude!==undefined &&  bro.id === exclude.id ) continue;
+            if(isInstant(bro)) continue;
             if(event.allDay  !== bro.allDay )continue;
 
 
@@ -787,20 +796,18 @@
         }
 
         function getToppestParent(){
-          var toppestParent = [];
-          var events = $calendar.fullCalendar('clientEvents'); //loop only on calendar events
+          var toppestParent = []; 
 
               // get toppest parent 
-            for (var i in events){
-              var event = events[i];
+            for (var i in Events){
+              var event = Events[i];
               var isSidebar =false;
 
               while(hasParent(event)){ 
-                event = getElementAndEventbyId(event.parent.id);
+                event = Events[event.parent.id];  
                 console.log(event);
                 if(!event) return false; //not all event were  loaded
-                isSidebar = $(event.element).hasClass("external-event");
-                event = event.event;
+                isSidebar = $(event.elem).hasClass("external-event");
               }
 
               //toppest parent
@@ -884,19 +891,19 @@
           // console.log(event['start'])
           // console.log(draggedProp)
           // console.log("parentElement",parentElement.text(),parentElement)
-          children = getChildren(event,{concat:true,noSidebar:true}); 
-          draggedStart = moment(event['start']);
-          var parentElement = getDivById(event.id);
-          var draggedProp = getProp(parentElement);
-          console.log("###children",children);
+          children = getChildren(event,{concat:true}); 
+          draggedStart = moment(event['start']); 
+;
+
           $.each(children,function(i,child){ 
-            $(child.element).fadeTo(200, 0.5);
+            $(child.elem).fadeTo(200, 0.5);
           });
           // console.log("lol ",children);
 
           //update helper
-          $(parentElement).off("mousemove").mousemove( function(ev){ 
-            var newdraggedProp = getProp(parentElement);
+          var draggedProp = getProp(event.elem)
+          $(event.elem).off("mousemove").mousemove( function(ev){ 
+            var newdraggedProp = getProp(event.elem);
             var diff = { 
               x : (draggedProp.x - newdraggedProp.x) , 
               y : (draggedProp.y - newdraggedProp.y)
@@ -906,15 +913,15 @@
 
               $.each(children,function(i,child){
                  // console.log(child)
-                var childProp = getProp(child.element);
+                var childProp = getProp(child.elem);
                 // console.log("lol ",childProp);
-                $(child.element).css("left",childProp.x-diff.x+"px")
+                $(child.elem).css("left",childProp.x-diff.x+"px")
                                 .css("top",childProp.y-diff.y+"px");
               });
             }
           }); 
-        }
-        // set blockwidth
+
+        } 
 
  
         function endDrag(event){ //end drag from calendar to calendar
@@ -930,7 +937,7 @@
             $.each(children,function(i,child){
 
               // console.log("#draggin child : ",child );
-              var childEvent = child.event;
+              var childEvent = child ;
                
               childEvent['start']  = moment(childEvent['start']).subtract(diff);
               childEvent['end']  = moment(childEvent['end']).subtract(diff);
@@ -938,7 +945,7 @@
             });
           // }
           if(hasParent(event)){
-            var parent = getElementAndEventbyId(event.parent.id,{onlyEvent:true,noSidebar:true});
+            var parent = getElementAndEventbyId(event.parent.id,{noSidebar:true});
             // in sidebar
             if(!parent)return;
             if(!moment(parent['start']).isBefore(event['end']) ||
@@ -958,7 +965,7 @@
 
         function isOutOfParent(event){
           if(!hasParent(event))return false;
-          var parent = getElementAndEventbyId(event.parent.id,{onlyEvent:true,noSidebar:true});
+          var parent = getElementAndEventbyId(event.parent.id,{noSidebar:true});
           return (moment(parent['start']).isAfter(event['start']) ||
                   moment(parent['end']).isBefore(event['end']));
         }
@@ -1010,9 +1017,8 @@
 
           lastMoment = lastMoment.add("minutes",30);
 
-          event['end']  = moment(lastMoment).format();   
-          var elem = getDivById(event.id);
-          elem.remove();  
+          event['end']  = moment(lastMoment).format();    
+          event.elem.remove();  
 
           render(event);
         } 
@@ -1020,46 +1026,69 @@
 
         /** 
          * @param parent        :  db model event
-         * @param op            : concat(default true) onlyEvent(default false),noSidebar(default false), recursive(default true)
+         * @param op            : concat(default true), noSidebar(default false), recursive(default true)
          *                       concat : ( boolean ) if true : dont preserve the tree nature of the relation (just concat them)
          * return children      : [{event:event,element:$element}, ... ]
          * events               : db modele events
          * elements             : jquery draggable div array;
          */
         function getChildren(parent,op){
+          console.log("getChildren("+parent.id+")",op);
           var children = [];
           if(!op)op={};
+ 
           // console.log("getChildren",parent)
-          $.each(parent.children,function(i,child){
-            if( !parent.children.hasOwnProperty( i ) ) return; 
-            var cElandEv = getElementAndEventbyId(child.id,op);
-            if( !cElandEv) return;
+          $.each(parent.children,function(i,childId){
+            if( !parent.children.hasOwnProperty( i ) ) return;
+
+            var child = getElementAndEventbyId(childId.id,op);
+            if( !child) return;
+            console.log("child",child);
 
             if(op.recursive!==false){
-              var subChildren;
-              if(op.onlyEvent===true){
-                subChildren = getChildren(cElandEv,op);
-              }else {
-                subChildren = getChildren(cElandEv.event,op); 
-              }
+              var subChildren  = getChildren(child,op);  
 
               if (subChildren && subChildren.length > 0){
                 if(op.concat===true)
                   children = children.concat(subChildren);
                 else{
-                  cElandEv['subChildren'] = subChildren;
+                  child['subChildren'] = subChildren;
                 } 
               }
             }
-            children.push(cElandEv );  
+            children.push(child );  
+            console.log(children,".push(",child,");"   );
 
           });
+          console.log(children)
           return children;
+
+          // // console.log("getChildren",parent)
+          // $.each(parent.children,function(i,child){
+          //   if( !parent.children.hasOwnProperty( i ) ) return; 
+          //   var cElandEv = getElementAndEventbyId(child.id,op);
+          //   if( !cElandEv) return;
+
+          //   if(op.recursive!==false){
+          //     var subChildren  = getChildren(cElandEv,op);  
+
+          //     if (subChildren && subChildren.length > 0){
+          //       if(op.concat===true)
+          //         children = children.concat(subChildren);
+          //       else{
+          //         cElandEv['subChildren'] = subChildren;
+          //       } 
+          //     }
+          //   }
+          //   children.push(cElandEv );  
+
+          // });
+          // return children;
         }
 
         /** 
          * @param id : event id
-         * @param op : noCalendar, noSidebar, onlyEvent
+         * @param op : noSidebar
          * 
          * return children = [{event:event,element:$element}, ... ]
          * events   : db model events
@@ -1067,41 +1096,10 @@
          */
         function getElementAndEventbyId(id,op){
           if(id==="" || !id)return ;
-          if(!op)op={};
-          var event;
-
-          if(id==="" || !id)return ;
-          if(!op)op={};
+          if(!op)op={}; 
           var event = Events[id];
-          if(op.noSidebar ===true && isInstant(Events[id]))return;
-          if(op.onlyEvent === true)return event;
-          return {event:event,element:event.elem};
-
-          // if(op.noCalendar!==true)
-          //   event = $calendar.fullCalendar( 'clientEvents', id )[0]; 
-
-          // //look in sidebar event if not found
-          // if(op.noSidebar !==true){ 
-          //   $(".external-event").each(function(i,sidebarEvent){
-          //     if( event)return;
-          //     var ev = $(sidebarEvent).data('eventObject') ;
-          //     // console.log("##",ev )
-          //     if(ev && ev.id === id ){
-          //      console.log("##FOUND IN SIDEBAR##",ev.id,ev);
-          //       event = $.extend({},ev); 
-          //     }
-          //   }); 
-          // }//end no sidebar
-
-          // if(!event)return;
-          // if(op.onlyEvent === true)return event;
-          // // console.log("##",event ) 
-          // var elem = getDivById(event.id); 
-          // // if(!elem)return;
-          // // alert(event.id);
-          // // alert(elem)
-          // // console.log("##",elem )  
-          // return {event:event,element:$(elem)};
+          if(op.noSidebar ===true && isInstant(Events[id]))return; 
+          return event;
         }
 
         /**
@@ -1117,7 +1115,8 @@
 
         function getEventByDiv(div){
           var id = div.find(".fc-event-id").text();
-          return getElementAndEventbyId(id,{onlyEvent:true,noSidebar:true});
+          // console.log()
+          return Events[id];
         }
 
         // remove relation with old parent if exists
@@ -1149,7 +1148,7 @@
           if(isOutOfParent(event)){
               //event is out of parent
               console.log(" #### DEPASSE#### DEPASSE#### DEPASSE#### DEPASSE"); 
-              var parent = getElementAndEventbyId(event.parent.id).event;
+              var parent = getElementAndEventbyId(event.parent.id);
               var Eduration = moment(event['end']).diff(event['start']); 
 
               //event start is before parent start
@@ -1168,7 +1167,7 @@
               } 
               if(hasParent(event)){
                 var p = getElementAndEventbyId(event.parent.id);
-                updateParentDate(p.event);
+                updateParentDate(p);
               }
               render(parent);
           } 
@@ -1217,8 +1216,6 @@
         }
 
         function isChild(parent,event){
-            if(event.event)var event = event.event;
-            //check if it's going to do a loop in the tree
  
             var children = getChildren(parent, {concat:true,onlyEvent:true}); 
             // console.log("OLOLOLOL",children);
@@ -1231,9 +1228,6 @@
         }
 
         function hasChild(event){
-            if(event.event){
-              event = event.event;
-            } 
             //check if it's going to do a loop in the tree
 
             var children = getChildren(event,  {concat:true,onlyEvent:true});
@@ -1245,8 +1239,7 @@
         function deleteParent(event){   
           if(!event || !hasParent(event))return;
               
-          parent = getElementAndEventbyId(event.parent.id)  ;
-          parent = parent.event;
+          parent = getElementAndEventbyId(event.parent.id)  ; 
           event.parent.id = "";
           event.parent.title = "";
           event.parent.name = "";
@@ -1321,12 +1314,19 @@
         $calendar.fullCalendar('removeEvents', event.id); 
         $calendar.fullCalendar('renderEvent', event); 
       }
-      function updateEventInDB(event){
-          var ev = $.extend( {} , event );
-          delete ev.elem;
+      function updateEventInDB(event){ 
+          var toSend = {
+            parent : event['parent'],
+            id  : event['id'],
+            allDay  : event['allDay'],
+            title : event['title'],
+            parent  : event['parent'],
+            end : event['end'],
+            start : event['start']
+          } 
               $.post(
                 op.quickUpdateUrl,
-                formatDate(ev),
+                $.extend( {} , toSend ),
                 function(doc) {   
                         bootstrapAlert("success","event <b>"+event['title']+"</b> has been well updated"); 
                 },
