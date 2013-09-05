@@ -577,7 +577,7 @@
             var toppestParent = getToppestParent();
             if(!toppestParent)return;
             console.log("toppestParent",toppestParent);
-            positionBlock(toppestParent,colWidth);  
+            positionBlock(toppestParent,colWidth,2);  
             
             for (var i in positionned){
               positionned[i]['isPositionned']=false;
@@ -589,7 +589,7 @@
           },repositionTimeout);
         }
 
-        function positionBlock(events,colWidth,parentPos,parentStart,parentEnd){ 
+        function positionBlock(events,colWidth,parentZindex,parentPos,parentStart,parentEnd){ 
           console.log(" ######positionBlocks######");
  
           colWidth-=eventMargin; 
@@ -627,7 +627,7 @@
             if(event.allDay !==true){
               elem.width(newColWidth); 
               elem.css("left",event.minLeft+(event.range*newColWidth));
-            console.log("newColWidth : ",newColWidth,"left : ",event.minLeft+(event.range*newColWidth));
+              console.log("newColWidth : ",newColWidth,"left : ",event.minLeft+(event.range*newColWidth));
             }
             // console.log("event",event)
             // console.log("event",elem)
@@ -637,29 +637,27 @@
             var children = getChildren(event,{concat:false,onlyEvent:true,noSidebar:true});
 
             //set opacity to all children
-            var childrenDiv = getChildren(event,{concat:true,onlyEvent:true,noSidebar:true});
-            var eventDiv = getDivById(event.id); 
+            var childrenDiv = getChildren(event,{concat:true,onlyEvent:true,noSidebar:true}); 
+            //z-index
+            elem.css('z-index',parentZindex+1)
             console.log('childrenDiv of'+event.id,childrenDiv);
-            
-            eventDiv.hover(function(){
-              for (var j in childrenDiv){
-                var curChild = childrenDiv[j];
-                var curChildDiv = getDivById(curChild.id,{noSidebar:true}); 
-              curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false}) 
+
+            elem.hover(function(){
+              for (var j in childrenDiv){ 
+                var curChildDiv = getDivById(childrenDiv[j].id,{noSidebar:true}); 
+                curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false}) 
               }
             },function(){
-              for (var j in childrenDiv){
-                var curChild = childrenDiv[j];
-                var curChildDiv = getDivById(curChild.id,{noSidebar:true}); 
-              curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
+              for (var j in childrenDiv){ 
+                var curChildDiv = getDivById(childrenDiv[j].id,{noSidebar:true}); 
+                curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
               }
             })
-            //set opacity to all children
-            //
+            //set opacity to all children 
             console.log("getChildren",children)
             elemProp = getProp(elem);
 
-            positionBlock(children,newColWidth,elemProp,event.start,event.end);
+            positionBlock(children,newColWidth,parentZindex+1,elemProp,event.start,event.end);
   
           }
         }
