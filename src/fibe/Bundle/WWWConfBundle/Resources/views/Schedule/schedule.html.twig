@@ -267,7 +267,6 @@
       // console.log(categories,locations);
  
       var $categoryCtn = $('#filter-category').html("");
-      var $locationCtn = $('#filter-location').html(""); 
       var $categorySelect = $('<select name="filter_category_select" id="filter_category_select" class="form-control" ><option value="*">See all</option></select>')
                                   .appendTo($categoryCtn)
                                   .change(function(){
@@ -283,7 +282,12 @@
                                       'json'
                                     );
                                     bootstrapAlert("info","Request sent for categorie "+ $(this).find("option[value='"+$(this).val()+"']").text(),"Info : ","<i class='icon-spinner icon-spin'></i>"); 
-                                  });
+                                  }); 
+      for(var i =0; i < categories.length;i++){
+        $categorySelect.append('<option value="'+categories[i].id+'">'+categories[i].name+'</option>');
+      }
+
+      var $locationCtn = $('#filter-location').html(""); 
       var $locationSelect = $('<select name="filter_location_select" id="filter_location_select" class="form-control" ><option value="*">See all</option></select>')
                                   .appendTo($locationCtn)
                                   .change(function(){
@@ -300,11 +304,6 @@
                                     );
                                     bootstrapAlert("info","Request sent for location "+ $(this).find("option[value='"+$(this).val()+"']").text(),"Info : ","<i class='icon-spinner icon-spin'></i>");  
                                   });
-
-
-      for(var i =0; i < categories.length;i++){
-        $categorySelect.append('<option value="'+categories[i].id+'">'+categories[i].name+'</option>');
-      }
       for(var i =0; i < locations.length;i++){
         $locationSelect.append('<option value="'+locations[i].id+'">'+locations[i].name+'</option>');
       }
@@ -414,7 +413,7 @@
                 copiedEventObject['start'] = date;
                 formatDate(copiedEventObject);
 
-                endDragChildrenFromSidebar(copiedEventObject);
+                SetRecurDate(copiedEventObject);
                 deleteParent(copiedEventObject);
                 
                 updateEventInDB(copiedEventObject );
@@ -560,7 +559,7 @@
 
 
 
-        var repositionTimeout,positionnedEvent;
+        var repositionTimeout,positionned ;
         var eventMargin = 10;
         var repositionTimeout = 10;
         function reposition(view){
@@ -570,17 +569,185 @@
           repositionTimeout=setTimeout(function(){ 
 
             var colWidth = view.getColWidth();
+            positionned=[];
             // console.log("##########################")
             // console.log("########reposition########"); 
-            console.log("##########################");
-            positionnedEvent= [];
+            console.log("##########################"); 
             
             var toppestParent = getToppestParent();
             if(!toppestParent)return;
             console.log("toppestParent",toppestParent);
             positionBlock(toppestParent,colWidth);  
-   
+            
+            for (var i in positionned){
+              positionned[i]['isPositionned']=false;
+              delete positionned[i]['range'];
+              delete positionned[i]['count'];
+              delete positionned[i]['minLeft']; 
+            }
+            positionned=[];
           },repositionTimeout);
+        }
+
+        function positionBlock(events,colWidth,parentPos,parentStart,parentEnd){ 
+          console.log(" ######positionBlocks######");
+ 
+          colWidth-=eventMargin; 
+
+          for (var i in events){
+            var event = events[i];
+            console.log(event.id+"######");
+            event['isPositionned'] = false;
+            var elem = getDivById(event.id);
+            if(!elem)  continue; //event is in another view
+              
+            // console.log("##POSITIONNING##",event,elem); 
+
+            //position left margin
+            var elemProp = getProp(elem);
+            if(parentPos){
+              elem.css("left",parentPos.x+eventMargin/2);
+              if(moment(parentStart).isSame(moment(event.start))){
+               elem.css("top",elemProp.y+eventMargin/2+3); 
+               elem.css("height",elemProp.h-eventMargin/2-1);
+              }
+              if(moment(parentEnd).isSame(moment(event.end))){
+               // elem.css("top",elemProp.y+eventMargin/2); 
+                elem.css("height",elemProp.h-eventMargin/2-3);
+              }
+            }
+
+            //get brothers count and self range ( to calculate width and xPos)
+            console.log("getBroCountRange")
+            getBroCountRange(event,events); 
+
+            console.log("event "+event.id+" has "+event.count+" bros. range = "+event.range+" minLeft = "+event.minLeft);
+            var newColWidth = colWidth/(event.count+1);
+            console.log("newColWidth : ",newColWidth,"left : ",event.minLeft+(event.range*newColWidth));
+            if(event.allDay !==true){
+              elem.width(newColWidth); 
+              elem.css("left",event.minLeft+(event.range*newColWidth));
+            console.log("newColWidth : ",newColWidth,"left : ",event.minLeft+(event.range*newColWidth));
+            }
+            // console.log("event",event)
+            // console.log("event",elem)
+            
+            event.isPositionned = true;
+            positionned.push(event);
+            var children = getChildren(event,{concat:false,onlyEvent:true,noSidebar:true});
+
+            //set opacity to all children
+            var childrenDiv = getChildren(event,{concat:true,onlyEvent:true,noSidebar:true});
+            var eventDiv = getDivById(event.id); 
+            console.log('childrenDiv of'+event.id,childrenDiv);
+            
+            eventDiv.hover(function(){
+              for (var j in childrenDiv){
+                var curChild = childrenDiv[j];
+                var curChildDiv = getDivById(curChild.id,{noSidebar:true}); 
+              curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false}) 
+              }
+            },function(){
+              for (var j in childrenDiv){
+                var curChild = childrenDiv[j];
+                var curChildDiv = getDivById(curChild.id,{noSidebar:true}); 
+              curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
+              }
+            })
+            //set opacity to all children
+            //
+            console.log("getChildren",children)
+            elemProp = getProp(elem);
+
+            positionBlock(children,newColWidth,elemProp,event.start,event.end);
+  
+          }
+        }
+
+        function getBroCountRange(event,events){
+          var broCount=0;
+          var broRange=0;
+          var minLeft=getProp(getDivById( event.id )).x;
+          //get bro range
+          //
+          var bros = getBros(event,events);
+          
+          for(var j in bros){
+            var bro = bros[j];  
+            //get bro range
+            if(bro.isPositionned===true){
+              console.log("bro was positionned");
+              broRange++;
+            }
+              var broProp = getProp(getDivById(bro.id));
+              console.log("minLeft",minLeft);
+              console.log(getProp(getDivById(bro.id)));
+              if (broProp.x < minLeft ){
+                minLeft = broProp.x;
+                console.log(minLeft);
+              } 
+          } 
+          broCount = getBros(event,events).length;
+          //get bro count 
+          for(var j in bros){
+            var bro = bros[j]; 
+            var broOfBros = getBros(bro,events,event); 
+            console.log("broOfBros "+bro.id+" :  ",broOfBros);
+            console.log(event.id+"->"+bro.id+" bro of bro count :  ",broOfBros.length);
+            var broCountTmp = broOfBros.length>0 ? 2 : 1 ;
+            console.log(bro,event)
+            // var broOfBro = getBros(bro,events,event.id); 
+            broCount = Math.max(broCount,1,broOfBros.length);
+            console.log(broCount)
+            // alert("bro "+bro.id+" has "+brosOfBros.length +" bros ,\n event id : "+event.id)
+            //get bro range
+            // if(bro.isPositionned===true){
+            //   var broProp = getProp(getDivById(bro.id));
+            //   console.log("minLeft",minLeft);
+            //   console.log(getProp(getDivById(bro.id)));
+            //   if (broProp.x < minLeft ){
+            //     minLeft = broProp.x;
+            //     console.log(minLeft);
+            //   }
+            //   console.log("bro was positionned");
+            //   broRange++;
+            // }
+ 
+          } 
+          event['range'] = broRange;
+          event['count'] = broCount;
+          event['minLeft'] = minLeft; 
+        }
+
+        //get 
+        function getBros(event,events,exclude){
+          var bros=[];
+
+          for(var j in events){
+            var bro = events[j];
+            if(bro.id === event.id ||(exclude!==undefined &&  bro.id === exclude.id)) continue;
+            if(event.allDay  !== bro.allDay )continue;
+
+
+            if(exclude===undefined){
+              if(!moment(bro.start).isBefore(event.end) ||
+                 !moment(bro.end).isAfter(event.start)) continue; 
+            }else{
+              if(isOutOf(bro,exclude))continue;
+                console.log("getBros(event,events");
+                console.log(bro);
+                console.log(exclude);
+
+            } 
+
+            // console.log("looking for bro id");
+            // console.log(bro.id); 
+            
+
+            bros.push(bro); 
+            
+          }
+          return bros;
         }
 
         function getToppestParent(){
@@ -608,96 +775,6 @@
               toppestParent.push(event); 
             }
             return toppestParent;
-        }
-
-        function positionBlock(events,colWidth,parentPos,parentStart,parentEnd){ 
-          console.log("######positionBlocks######");
- 
-          colWidth-=eventMargin; 
-
-          for (var i in events){
-            var event = events[i];
-            var elem = getDivById(event.id);
-            if(!elem)  continue; //event is in another view
-              
-            // console.log("##POSITIONNING##",event,elem); 
-
-            //position left margin
-            var elemProp = getProp(elem);
-            if(parentPos){
-              elem.css("left",parentPos.x+eventMargin/2);
-              if(moment(parentStart).isSame(moment(event.start))){
-               elem.css("top",elemProp.y+eventMargin/2+3); 
-               elem.css("height",elemProp.h-eventMargin/2-1);
-              }
-              if(moment(parentEnd).isSame(moment(event.end))){
-               // elem.css("top",elemProp.y+eventMargin/2); 
-                elem.css("height",elemProp.h-eventMargin/2-3);
-              }
-            }
-
-            //get brothers count and self range ( to calculate width and xPos)
-            var bro = getBroCountRange(event,events); 
-
-            console.log("event "+event.id+" has "+bro.count+" bros. range = "+bro.range+" minLeft = "+bro.range);
-            var newColWidth = colWidth/(bro.count+1);
-            if(event['allDay']!==true){
-              elem.width(newColWidth); 
-              elem.css("left",bro.minLeft+(bro.range*newColWidth));
-            }
-            // console.log("event",event)
-            // console.log("event",elem)
-
-            positionnedEvent.push(event.id);
-            var children = getChildren(event,{concat:false,onlyEvent:true,noSidebar:true});
-             console.log("getChildren",children)
-            elemProp = getProp(elem);
-
-            positionBlock(children,newColWidth,elemProp,event.start,event.end);
-  
-          }
-        }
-
-        function getBroCountRange(event,events){
-          var broCount=0;
-          var broRange=0;
-          var minLeft=getProp(getDivById( event.id )).x;
-          for(var j in events){
-            var bro = events[j];
-            if(bro.id === event.id) continue;
-            if(!moment(bro['start']).isBefore(event['end']) ||
-               !moment(bro['end']).isAfter(event['start'])){
-              //event is out
-            }else{ 
-              // console.log("looking for bro id");
-              // console.log(bro.id);
-              // console.log(positionnedEvent);
-              
-              // range is next already placed
-              // console.log(event,bro) 
-              // alert(event.allday === bro.allday)
-              // 
-              if(event['allDay'] === bro['allDay']){
-
-                console.log(bro.id+"   ",positionnedEvent);
-
-                if($.inArray(bro.id, positionnedEvent)!==-1){
-                  var broProp = getProp(getDivById(bro.id));
-                    console.log("minLeft",minLeft);
-                    console.log(getProp(getDivById(bro.id)));
-                  if (broProp.x < minLeft ){
-                    minLeft = broProp.x;
-                  }
-                // console.log("bro was positionned");
-                  broRange++;
-                }
-                // console.log("bro",bro); 
-                broCount++;
-              }
-            }
-          }
-          // alert(minLeft)
-          return {range:broRange,count:broCount,minLeft:minLeft};
         }
 
 
@@ -746,17 +823,20 @@
             
                   return;
                 }
-                if(isOutOf(draggedEvent,event))return;
-                // console.log("lol" ,draggedEvent)
-                $modalSetParent.modal('show').find(".sub-event").text(draggedEvent.title);
-                $modalSetParent.find(".super-event").text(event.title);
+                setTimeout(function(){
+                  if(isOutOf(draggedEvent,event))return;
+                  // console.log("lol" ,draggedEvent)
+                  $modalSetParent.modal('show').find(".sub-event").text(draggedEvent.title);
+                  $modalSetParent.find(".super-event").text(event.title);
 
-                $modalSetParent.find('button.yes').off("click").click(function(){
+                  $modalSetParent.find('button.yes').off("click").click(function(){
 
-                  //set parent and children relation
-                  setParent(draggedEvent,event);
-                  updateEventInDB(draggedEvent); 
-                });  
+                    //set parent and children relation
+                    setParent(draggedEvent,event);
+                    updateEventInDB(draggedEvent); 
+                  });  
+                },50)
+                
               }
             }
           }); 
@@ -842,9 +922,9 @@
 
         function isOutOfParent(event){
           if(!hasParent(event))return false;
-          var parent = getElementAndEventbyId(event.parent.id);
-          return (moment(parent.event['start']).isAfter(event['start']) ||
-                  moment(parent.event['end']).isBefore(event['end']));
+          var parent = getElementAndEventbyId(event.parent.id,{onlyEvent:true,noSidebar:true});
+          return (moment(parent['start']).isAfter(event['start']) ||
+                  moment(parent['end']).isBefore(event['end']));
         }
 
         function isOutOf(event,parent){  
@@ -853,7 +933,8 @@
         }
 
         var lastMoment;
-        function endDragChildrenFromSidebar(event){
+        // endDragChildrenFromSidebar
+        function SetRecurDate(event){
            
           var children = getChildren(event, {concat:false,onlyEvent:true});
           lastMoment = moment(event['start']);   
@@ -862,7 +943,7 @@
           event['end']  = lastMoment.format(); 
           if(!event.subChildren ||  children.length > 0) {
             for(var i in children){
-              setChildDate(children[i]); 
+              setRecurChildDate(children[i]); 
             } 
           }else{
               
@@ -873,37 +954,37 @@
           deleteParent(event);
 
           console.log("event['end']",event['end']); 
-
-
-
-          function setChildDate(event){ 
-            event['start']  = lastMoment.format();
-            // lastMoment = lastMoment.add("minutes",30);
-            lastMoment = lastMoment.add("minutes",30);
-
-            if(event.subChildren && event.subChildren.length > 0){
-              for(var i in event.subChildren){
-                setChildDate(event.subChildren[i]); 
-              }
-            }else{
-              
-              lastMoment = lastMoment.add("hours",1);
-            }
-
-            lastMoment = lastMoment.add("minutes",30);
-
-            event['end']  = moment(lastMoment).format();   
-            var elem = getDivById(event.id);
-            elem.remove();  
-
-            render(event);
-          } 
         }
+
+
+
+        function setRecurChildDate(event){ 
+          event['start']  = lastMoment.format();
+          // lastMoment = lastMoment.add("minutes",30);
+          lastMoment = lastMoment.add("minutes",30);
+
+          if(event.subChildren && event.subChildren.length > 0){
+            for(var i in event.subChildren){
+              setRecurChildDate(event.subChildren[i]); 
+            }
+          }else{
+            
+            lastMoment = lastMoment.add("hours",1);
+          }
+
+          lastMoment = lastMoment.add("minutes",30);
+
+          event['end']  = moment(lastMoment).format();   
+          var elem = getDivById(event.id);
+          elem.remove();  
+
+          render(event);
+        } 
 
 
         /** 
          * @param parent        :  db model event
-         * @param op            : concat onlyEvent,noSidebar, recursive(default true)
+         * @param op            : concat(default true) onlyEvent(default false),noSidebar(default false), recursive(default true)
          *                       concat : ( boolean ) if true : dont preserve the tree nature of the relation (just concat them)
          * return children      : [{event:event,element:$element}, ... ]
          * events               : db modele events
@@ -977,7 +1058,8 @@
           // alert(elem)
           // console.log("##",elem ) 
           return {event:event,element:$(elem)};
-        }  
+        }
+
         /**
         * @param id : event i
         * get div with hidden div containing event id
@@ -1055,7 +1137,7 @@
               }
               render(parent);
           } 
-         }
+        }
 
         function updateChildrenDate(event){
           var children = getChildren(event, {concat:false,recursive:false,onlyEvent:true}); 
