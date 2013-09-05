@@ -632,28 +632,36 @@
             // console.log("event",event)
             // console.log("event",elem)
             
+
+            //set opacity to all children
+            // var childrenDiv = getChildren(event,{concat:true,onlyEvent:true,noSidebar:true}); 
+                //z-index 
+            elem.css('z-index',parentZindex+1)
+            
+            console.log('OPACITY of'+event.id ); 
+              
+            elem.hover(function(){
+              var elemEvent = getEventByDiv($(this));
+              var childrenDiv = getChildren(elemEvent,{concat:true,onlyEvent:true,noSidebar:true});  
+              for (var j in childrenDiv){
+                var curChildDiv = getDivById(childrenDiv[j].id,{noSidebar:true}); 
+                curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false});
+              }
+            },function(){
+              var elemEvent = getEventByDiv($(this));
+              var childrenDiv = getChildren(elemEvent,{concat:true,onlyEvent:true,noSidebar:true}); 
+              for (var j in childrenDiv){
+                var curChildDiv = getDivById(childrenDiv[j].id,{noSidebar:true});
+                curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
+              }
+            }) 
+            
+            //set opacity to all children 
+            
+
             event.isPositionned = true;
             positionned.push(event);
             var children = getChildren(event,{concat:false,onlyEvent:true,noSidebar:true});
-
-            //set opacity to all children
-            var childrenDiv = getChildren(event,{concat:true,onlyEvent:true,noSidebar:true}); 
-            //z-index
-            elem.css('z-index',parentZindex+1)
-            console.log('childrenDiv of'+event.id,childrenDiv);
-
-            elem.hover(function(){
-              for (var j in childrenDiv){ 
-                var curChildDiv = getDivById(childrenDiv[j].id,{noSidebar:true}); 
-                curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false}) 
-              }
-            },function(){
-              for (var j in childrenDiv){ 
-                var curChildDiv = getDivById(childrenDiv[j].id,{noSidebar:true}); 
-                curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
-              }
-            })
-            //set opacity to all children 
             console.log("getChildren",children)
             elemProp = getProp(elem);
 
@@ -1081,6 +1089,11 @@
               }); 
             });
             return div;
+        }
+
+        function getEventByDiv(div){
+          var id = div.find(".fc-event-id").text();
+          return getElementAndEventbyId(id,{onlyEvent:true,noSidebar:true});
         }
 
         // remove relation with old parent if exists
