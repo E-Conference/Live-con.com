@@ -12,6 +12,11 @@
 
 <div id='calendar'></div> 
 <div id="sidebar">  
+  <div class="checkbox">
+    <label>
+      <input id="reposition" type="checkbox"> Reposition parent/child
+    </label>
+  </div>
   <h4>Filter by category</h4>
   <div id='filter-category'>
   </div>
@@ -379,6 +384,7 @@
                               function(response) {  
                                   bootstrapAlert("success","event <b>"+event['title']+"</b> has been well added");
                                   e.id=response.id;
+                                  Events[e.id] = e;
                                   render(e);
                                   // $calendar.fullCalendar('renderEvent',e); // 3rd arg make the event "stick" 
                               },
@@ -403,7 +409,17 @@
                     // render(event);
             }, 
             eventAfterAllRender: function( view ) { 
+          //avoid repeating this function 10 times...
+          clearTimeout(repositionTimeout);
+          repositionTimeout=setTimeout(function(){  
+            //update Event array
+            
+            updateEventArray();
+            if($('#reposition').is(':checked'))
               reposition(view);
+
+          },repositionTimeout);
+              
             }, 
             drop: function(date, allDay) { //drop from sidebar
             
@@ -513,7 +529,7 @@
             $event.prepend("<span class='fc-event-id ' style='color:grey;'>"+event.id+"</span>");
             //set child drag 
             delete event['elem'];
-            console.log(event);
+            // console.log(event);
             $event.draggable({
                       zIndex: 999,
                       revert: true,      // will cause the event to go back to its
@@ -597,14 +613,8 @@
         var eventMargin = 3;
         var repositionTimeout = 10;
         function reposition(view){
-
-          //avoid repeating this function 10 times...
-          clearTimeout(repositionTimeout);
-          repositionTimeout=setTimeout(function(){ 
-
-            //update Event array
-            updateEventArray();
-
+ 
+            console.log("### end updateEventArray ###")
             var colWidth = view.getColWidth();
             positionned=[];
             // console.log("##########################")
@@ -622,8 +632,7 @@
               delete positionned[i]['count'];
               delete positionned[i]['minLeft']; 
             }
-            positionned=[];
-          },repositionTimeout);
+            positionned=[]; 
         }
 
         function positionBlock(events,colWidth,parentZindex,parentPos,parentStart,parentEnd){ 
@@ -633,8 +642,7 @@
 
           for (var i in events){
             var event = events[i];
-            // console.log(event.id+"######");
-            event['isPositionned'] = false; 
+            // console.log(event.id+"######"); 
             if(!event.elem)  continue; //event is in another view
                
 
@@ -643,7 +651,7 @@
             if(parentPos){
               event.elem.css("left",parentPos.x+eventMargin/2);
               if(moment(parentStart).isSame(moment(event.start))){
-               event.elem.css("top",elemProp.y+eventMargin/2+3); 
+               event.elem.css("top",elemProp.y+eventMargin/2+5); 
                event.elem.css("height",elemProp.h-eventMargin/2-1);
               }
               if(moment(parentEnd).isSame(moment(event.end))){
@@ -659,7 +667,8 @@
             // console.log("event "+event.id+" has "+event.count+" bros. range = "+event.range+" minLeft = "+event.minLeft);
             var newColWidth = colWidth/(event.count+1)-(event.count+1)*eventMargin;
             // console.log("newColWidth : ",newColWidth,"left : ",event.minLeft+(event.range*newColWidth));
-            if(event.allDay !==true && !isInstant(event)){
+            if(event.allDay !==true && !isInstant(event)){ 
+              console.log("POSITION"+event.id, event)
               event.elem.width(newColWidth); 
               event.elem.css("left",event.minLeft+eventMargin/2+(event.range*(newColWidth+eventMargin))); 
             } 
@@ -719,15 +728,15 @@
             var bro = bros[j];  
             //get bro range
             if(bro.isPositionned===true){
-              console.log("bro was positionned");
+              // console.log("bro was positionned");
               broRange++;
             }
               var broProp = getProp(getDivById(bro.id));
-              console.log("minLeft",minLeft);
-              console.log(getProp(getDivById(bro.id)));
+              // console.log("minLeft",minLeft);
+              // console.log(getProp(getDivById(bro.id)));
               if (broProp.x < minLeft ){
                 minLeft = broProp.x;
-                console.log(minLeft);
+                // console.log(minLeft);
               } 
           } 
           broCount = getBros(event,events).length;
@@ -735,13 +744,13 @@
           for(var j in bros){
             var bro = bros[j]; 
             var broOfBros = getBros(bro,events,event); 
-            console.log("broOfBros "+bro.id+" :  ",broOfBros);
-            console.log(event.id+"->"+bro.id+" bro of bro count :  ",broOfBros.length);
+            // console.log("broOfBros "+bro.id+" :  ",broOfBros);
+            // console.log(event.id+"->"+bro.id+" bro of bro count :  ",broOfBros.length);
             var broCountTmp = broOfBros.length>0 ? 2 : 1 ;
-            console.log(bro,event)
+            // console.log(bro,event)
             // var broOfBro = getBros(bro,events,event.id); 
             broCount = Math.max(broCount,1,broOfBros.length);
-            console.log(broCount)
+            // console.log(broCount)
             // alert("bro "+bro.id+" has "+brosOfBros.length +" bros ,\n event id : "+event.id)
             //get bro range
             // if(bro.isPositionned===true){
@@ -779,9 +788,9 @@
                  !moment(bro.end).isAfter(event.start)) continue; 
             }else{
               if(isOutOf(bro,exclude))continue;
-                console.log("getBros(event,events");
-                console.log(bro);
-                console.log(exclude);
+                // console.log("getBros(event,events");
+                // console.log(bro);
+                // console.log(exclude);
 
             } 
 
@@ -805,13 +814,13 @@
 
               while(hasParent(event)){ 
                 event = Events[event.parent.id];  
-                console.log(event);
+                // console.log(event);
                 if(!event) return false; //not all event were  loaded
                 isSidebar = $(event.elem).hasClass("external-event");
               }
 
               //toppest parent
-              if(isSidebar || $.inArray(event, toppestParent)!==-1 ){
+              if(isSidebar || isInstant(event) || $.inArray(event, toppestParent)!==-1 ){
                 // console.log("event "+event.id+" already toppest") ;
                 continue;
               }
@@ -996,7 +1005,7 @@
           event['end']  = lastMoment.format(); 
           deleteParent(event);
 
-          console.log("event['end']",event['end']); 
+          // console.log("event['end']",event['end']); 
         }
 
 
@@ -1033,7 +1042,7 @@
          * elements             : jquery draggable div array;
          */
         function getChildren(parent,op){
-          console.log("getChildren("+parent.id+")",op);
+          // console.log("getChildren("+parent.id+")",op);
           var children = [];
           if(!op)op={};
  
@@ -1043,7 +1052,7 @@
 
             var child = getElementAndEventbyId(childId.id,op);
             if( !child) return;
-            console.log("child",child);
+            // console.log("child",child);
 
             if(op.recursive!==false){
               var subChildren  = getChildren(child,op);  
@@ -1057,10 +1066,10 @@
               }
             }
             children.push(child );  
-            console.log(children,".push(",child,");"   );
+            // console.log(children,".push(",child,");"   );
 
           });
-          console.log(children)
+          // console.log(children)
           return children;
 
           // // console.log("getChildren",parent)
@@ -1109,7 +1118,7 @@
         */ 
 
         function getDivById(id){
-          console.log(id,Events[parseInt(id)])
+          // console.log(id,Events[parseInt(id)])
           return Events[parseInt(id)]['elem'];
         }
 
@@ -1147,7 +1156,7 @@
           //check if the event has been dropped out of the parent 
           if(isOutOfParent(event)){
               //event is out of parent
-              console.log(" #### DEPASSE#### DEPASSE#### DEPASSE#### DEPASSE"); 
+              console.log("isOutOfParent"); 
               var parent = getElementAndEventbyId(event.parent.id);
               var Eduration = moment(event['end']).diff(event['start']); 
 
@@ -1184,7 +1193,7 @@
             //TODO check if not less than 30mn
             if(isOutOfParent(child)) 
             { 
-              console.log("#######CHILD OUT OF DRAGGED#########");
+              // console.log("#######CHILD OUT OF DRAGGED#########");
               var childStart = child['start'],
                   childEnd = child['end'];
               //child start is before event start
