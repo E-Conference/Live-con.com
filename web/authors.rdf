@@ -1,0 +1,1028 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY dcterms "http://purl.org/dc/terms/" >
+    <!ENTITY foaf "http://xmlns.com/foaf/0.1/" >
+    <!ENTITY dbpedia "http://dbpedia.org/property/" >
+    <!ENTITY bibo "http://purl.org/ontology/bibo/" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY dc "http://purl.org/dc/elements/1.1/" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY swrc "http://swrc.ontoware.org/ontology#" >
+    <!ENTITY vcard "http://www.w3.org/2001/vcard-rdf/3.0#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY ical "http://www.w3.org/2002/12/cal/icaltzd#" >
+    <!ENTITY geo "http://www.w3.org/2003/01/geo/wgs84_pos#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY swc "http://data.semanticweb.org/ns/swc/ontology#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.w3.org/2002/07/owl"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+     xmlns:foaf="http://xmlns.com/foaf/0.1/"
+     xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#"
+     xmlns:dcterms="http://purl.org/dc/terms/"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:bibo="http://purl.org/ontology/bibo/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:dbpedia="http://dbpedia.org/property/"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:swrc="http://swrc.ontoware.org/ontology#"
+     xmlns:ical="http://www.w3.org/2002/12/cal/icaltzd#"
+     xmlns:swc="http://data.semanticweb.org/ns/swc/ontology#">
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#completeGraph -->
+
+    <AnnotationProperty rdf:about="&swc;completeGraph"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasAcronym -->
+
+    <AnnotationProperty rdf:about="&swc;hasAcronym"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasLogo -->
+
+    <AnnotationProperty rdf:about="&swc;hasLogo"/>
+    
+
+
+    <!-- http://purl.org/dc/elements/1.1/creator -->
+
+    <AnnotationProperty rdf:about="&dc;creator"/>
+    
+
+
+    <!-- http://purl.org/dc/elements/1.1/subject -->
+
+    <AnnotationProperty rdf:about="&dc;subject"/>
+    
+
+
+    <!-- http://purl.org/dc/elements/1.1/title -->
+
+    <AnnotationProperty rdf:about="&dc;title"/>
+    
+
+
+    <!-- http://purl.org/ontology/bibo/authorList -->
+
+    <AnnotationProperty rdf:about="&bibo;authorList"/>
+    
+
+
+    <!-- http://purl.org/ontology/bibo/editorList -->
+
+    <AnnotationProperty rdf:about="&bibo;editorList"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#abstract -->
+
+    <AnnotationProperty rdf:about="&swrc;abstract"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#affiliation -->
+
+    <AnnotationProperty rdf:about="&swrc;affiliation"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#booktitle -->
+
+    <AnnotationProperty rdf:about="&swrc;booktitle"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#editor -->
+
+    <AnnotationProperty rdf:about="&swrc;editor"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#month -->
+
+    <AnnotationProperty rdf:about="&swrc;month"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#series -->
+
+    <AnnotationProperty rdf:about="&swrc;series"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#year -->
+
+    <AnnotationProperty rdf:about="&swrc;year"/>
+    
+
+
+    <!-- http://www.w3.org/2002/12/cal/icaltzd#description -->
+
+    <AnnotationProperty rdf:about="&ical;description"/>
+    
+
+
+    <!-- http://www.w3.org/2002/12/cal/icaltzd#dtend -->
+
+    <AnnotationProperty rdf:about="&ical;dtend"/>
+    
+
+
+    <!-- http://www.w3.org/2002/12/cal/icaltzd#dtstart -->
+
+    <AnnotationProperty rdf:about="&ical;dtstart"/>
+    
+
+
+    <!-- http://www.w3.org/2002/12/cal/icaltzd#summary -->
+
+    <AnnotationProperty rdf:about="&ical;summary"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/based_near -->
+
+    <AnnotationProperty rdf:about="&foaf;based_near"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/firstName -->
+
+    <AnnotationProperty rdf:about="&foaf;firstName"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/homepage -->
+
+    <AnnotationProperty rdf:about="&foaf;homepage"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/lastName -->
+
+    <AnnotationProperty rdf:about="&foaf;lastName"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/made -->
+
+    <AnnotationProperty rdf:about="&foaf;made"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/maker -->
+
+    <AnnotationProperty rdf:about="&foaf;maker"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/mbox_sha1sum -->
+
+    <AnnotationProperty rdf:about="&foaf;mbox_sha1sum"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/member -->
+
+    <AnnotationProperty rdf:about="&foaf;member"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/name -->
+
+    <AnnotationProperty rdf:about="&foaf;name"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Datatypes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.w3.org/2001/XMLSchema#date -->
+
+    <rdfs:Datatype rdf:about="&xsd;date"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasLocation -->
+
+    <ObjectProperty rdf:about="&swc;hasLocation"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasPart -->
+
+    <ObjectProperty rdf:about="&swc;hasPart"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasRelatedDocument 
+	A changer
+	-->
+
+    <ObjectProperty rdf:about="&swc;hasRelatedDocument">
+        <inverseOf rdf:resource="&swc;relatedToEvent"/>
+        <rdfs:subPropertyOf rdf:resource="&owl;topObjectProperty"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasRole -->
+
+    <ObjectProperty rdf:about="&swc;hasRole">
+        <inverseOf rdf:resource="&swc;isRoleAt"/>
+        <rdfs:subPropertyOf rdf:resource="&owl;topObjectProperty"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#heldBy -->
+
+    <ObjectProperty rdf:about="&swc;heldBy">
+        <inverseOf rdf:resource="&swc;holdsRole"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#holdsRole 
+	
+	A changer
+	-->
+
+    <ObjectProperty rdf:about="&swc;holdsRole">
+        <inverseOf rdf:resource="&swc;heldBy"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isPartOf -->
+
+    <ObjectProperty rdf:about="&swc;isPartOf"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isRoleAt -->
+
+    <ObjectProperty rdf:about="&swc;isRoleAt">
+        <inverseOf rdf:resource="&swc;hasRole"/>
+        <rdfs:subPropertyOf rdf:resource="&owl;topObjectProperty"/>
+    </ObjectProperty>
+
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isSubEventOf 
+	
+	A changer
+	-->
+
+    <TransitiveProperty rdf:about="&swc;isSubEventOf">
+        <inverseOf rdf:resource="&swc;isSuperEventOf"/>
+    </TransitiveProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isSuperEventOf 
+	
+	A changer
+	-->
+
+    <TransitiveProperty rdf:about="&swc;isSuperEventOf">
+        <inverseOf rdf:resource="&swc;isSubEventOf"/>
+        <rdfs:subPropertyOf rdf:resource="&owl;topObjectProperty"/>
+    </TransitiveProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#relatedToEvent 
+	
+	A changer
+	-->
+
+    <ObjectProperty rdf:about="&swc;relatedToEvent">
+        <inverseOf rdf:resource="&swc;hasRelatedDocument"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isSubPropertyOf -->
+
+    <ObjectProperty rdf:about="&swc;isSubPropertyOf"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isSuperPropertyOf -->
+
+    <ObjectProperty rdf:about="&swc;isSuperPropertyOf">
+        <inverseOf rdf:resource="&swc;isSubPropertyOf"/>
+    </ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#AcademicEvent -->
+
+    <Class rdf:about="&swc;AcademicEvent"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#BreakEvent -->
+
+    <Class rdf:about="&swc;BreakEvent">
+        <rdfs:subClassOf rdf:resource="&swc;NonAcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#Chair -->
+
+    <Class rdf:about="&swc;Chair">
+        <rdfs:subClassOf rdf:resource="&swc;Role"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#ConferenceEvent -->
+
+    <Class rdf:about="&swc;ConferenceEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#KeynoteTalk -->
+
+    <Class rdf:about="&swc;KeynoteTalk">
+        <rdfs:subClassOf rdf:resource="&swc;TalkEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#NonAcademicEvent -->
+
+    <Class rdf:about="&swc;NonAcademicEvent"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#PanelEvent -->
+
+    <Class rdf:about="&swc;PanelEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#Poster -->
+
+    <Class rdf:about="&swc;Poster"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#Presenter -->
+
+    <Class rdf:about="&swc;Presenter">
+        <rdfs:subClassOf rdf:resource="&swc;Role"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#ProgrammeCommitteeMember -->
+
+    <Class rdf:about="&swc;ProgrammeCommitteeMember">
+        <rdfs:subClassOf rdf:resource="&swc;Role"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#Role -->
+
+    <Class rdf:about="&swc;Role"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#SessionEvent -->
+
+    <Class rdf:about="&swc;SessionEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#SocialEvent -->
+
+    <Class rdf:about="&swc;SocialEvent">
+        <rdfs:subClassOf rdf:resource="&swc;NonAcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#TalkEvent -->
+
+    <Class rdf:about="&swc;TalkEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#TrackEvent -->
+
+    <Class rdf:about="&swc;TrackEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#TutorialEvent -->
+
+    <Class rdf:about="&swc;TutorialEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#WorkshopEvent -->
+
+    <Class rdf:about="&swc;WorkshopEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#InProceedings -->
+
+    <Class rdf:about="&swrc;InProceedings"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#Proceedings -->
+
+    <Class rdf:about="&swrc;Proceedings"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/Organization -->
+
+    <Class rdf:about="&foaf;Organization"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/Person -->
+
+    <Class rdf:about="&foaf;Person"/>
+    
+
+    <!-- http://www.blendconference.com/speakers/sylvain-zimmer -->
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/speakers/sylvain-zimmer">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Sylvain Zimmer</foaf:name>
+        <rdfs:label>Sylvain Zimmer</rdfs:label>
+		<foaf:firstName>Sylvain</foaf:firstName>
+        <foaf:lastName>Zimmer</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/06/Sylvain-Zimmer-73x72.jpg</foaf:img>
+		<foaf:homepage>http://www.sylvainzimmer.com</foaf:homepage>
+		<foaf:twitter>https://twitter.com/sylvinus</foaf:twitter>
+		<swrc:abstract>En 2004 Sylvain a fondé Jamendo, qui est devenue la plus grande communauté d’artistes en ligne sous licences Creative Commons. Depuis il a enchainé les aventures entrepreneuriales en créant la conférence TEDxParis, l’agence des objets connectés Joshfire, le cycle de conférences techniques dotConferences.eu, et plus récemment la solution d’optimisation des prix pour les e-commerçants Pricing Assistant, qui a remporté le concours de start-ups à LeWeb London.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/renaud-visage">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Renaud Visage</foaf:name>
+        <rdfs:label>Renaud Visage</rdfs:label>
+		<foaf:firstName>Renaud</foaf:firstName>
+        <foaf:lastName>Visage</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/06/renaud-visage-73x72.jpg</foaf:img>
+		<foaf:homepage>http://www.eventbrite.com</foaf:homepage>
+		<foaf:twitter>https://twitter.com/renaudvisage</foaf:twitter>
+		<swrc:abstract>Renaud Visage est le co-fondateur et CTO d'Eventbrite, la plateforme de gestion d'événements en ligne. Après une formation d'ingénieur à Centrale Lyon et Cornell University (USA), Renaud commence sa carrière comme consultant en génie environnemental aux Etats-Unis. Fasciné par l'explosion de l'Internet dans les années 90, il rejoint en tant que Directeur Informatique, Zing Networks, un des pionniers du partage de photo basé à San Francisco. Cette startup financée par Kleiner Perkins Caufield and Byers est ensuite rachetée par Sony. En 2006, il se joint à Kevin et Julia Hartz pour fonder Eventbrite, solution en ligne qui permet à n'importe qui dans le monde de planifier, promouvoir et gérer des événements. L'entreprise a reçu $140M d'investissements et vendra près d'un milliard de dollars de billets en 2013.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/fabien-gandon">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Fabien Gandon</foaf:name>
+        <rdfs:label>Fabien Gandon</rdfs:label>
+		<foaf:firstName>Fabien</foaf:firstName>
+        <foaf:lastName>Gandon</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/06/Fabien-Gandon--73x72.jpg</foaf:img>
+		<foaf:homepage>http://fabien.info</foaf:homepage>
+		<foaf:twitter>https://twitter.com/fabien_gandon</foaf:twitter>
+		<swrc:abstract>Ingénieur en mathématiques appliquées, docteur et habilité à diriger les recherches en informatique, Fabien Gandon est responsable de l’équipe de recherche Wimmics (Inria, I3S, CNRS, Université de Nice Sophia Antipolis) et représentant de l'Institut de recherche en sciences du numérique (INRIA) au World Wide Web Consortium (W3C). Il effectue et dirige des recherches au carrefour du web sémantique, du web social et des systèmes d'information à base de connaissances.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/florian-hamzij">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Florian Hamzij</foaf:name>
+        <rdfs:label>Florian Hamzij</rdfs:label>
+		<foaf:firstName>Florian</foaf:firstName>
+        <foaf:lastName>Hamzij</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/FlorianHAMZIJ-73x72.jpg</foaf:img>
+		<foaf:homepage>http://www.dediservices.com/</foaf:homepage>
+		<foaf:twitter>http://www.twitter.com/fhamzij</foaf:twitter>
+		<swrc:abstract>Passionné d’internet depuis 1996, Florian Hamzij commence son expérience comme internaute, puis se lance dans l'édition de ses  propres sites de contenus pendant ses études. Le master obtenu, il co-fonde l’agence DediServices avec Maxime Palluy – agence spécialisée en création et refonte de site e-commerce. La philosophie est d’être proche des clients en leur apportant une expertise et des services sur-mesure. Au-delà de sa propre activité, il aime partager notre passion au sein de La Cuisine Du Web, BoostInLyon et aussi les Startup Weekends.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/thomas-guenoux">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Thomas Guenoux</foaf:name>
+        <rdfs:label>Thomas Guenoux</rdfs:label>
+		<foaf:firstName>Thomas</foaf:firstName>
+        <foaf:lastName>Guenoux</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Photo-Thomas-Guenoux-1-73x72.jpg</foaf:img>
+		<foaf:homepage>http://www.krds.com</foaf:homepage>
+		<foaf:twitter>https://twitter.com/thomasgx</foaf:twitter>
+		<swrc:abstract>Thomas Guenoux est un entrepreneur spécialisé dans les médias sociaux, maîtrisant aussi bien la création, les technologies web que les processus projet. Pionner du développement des réseaux sociaux en France dès 2006 en lançant Cancoon, il co-fonde en 2007 l'agence KRDS, première agence spécialisée en social media marketing et aujourd'hui leader en Europe et en Asie. Il y occupe aujourd'hui la Direction de la Production, dirigeant un studio primé et une équipe de développeurs web ayant produit près de 1000 projets. Thomas a également fondé CommitStrip en 2012, le blog BD de référence pour les codeurs web.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/lee-schlenker">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Lee Schlenker</foaf:name>
+        <rdfs:label>Lee Schlenker</rdfs:label>
+		<foaf:firstName>Lee</foaf:firstName>
+        <foaf:lastName>Schlenker</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Lee1-73x72.jpg</foaf:img>
+		<foaf:homepage>http://leeschlenker.com</foaf:homepage>
+		<foaf:twitter>http://www.twitter.com/leeschlenker</foaf:twitter>
+		<swrc:abstract>Lee Schlenker est professeur à EMLYON et le directeur du cabinet LHST sarl . Lauréat du prix EDSF pour son utilisation des TIC en enseignement, il a établi des Chairs académiques avec IBM, Cegid et Oracle. Reconnu en tant qu'expert en e-learning par la Commission Européenne, Prof. Schlenker a dirigé des études visant à améliorer la formation au management en Europe, en Asie et en Aftrique du Nord. En industrie, il a dirigé des missions et assurer une cinquantaine de conférences depuis dix ans pour des clients tels qu’Apple, Ernst and Young, IBM, Microsoft, Oracle et SAP dans les secteurs de l’informatique, des télécommunications, du secteur public et du tertiaire.</swrc:abstract>
+    </NamedIndividual>
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/olivier-marx">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Olivier Marx</foaf:name>
+        <rdfs:label>Olivier Marx</rdfs:label>
+		<foaf:firstName>Olivier</foaf:firstName>
+        <foaf:lastName>Marx</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Lee1-73x72.jpg</foaf:img>
+		<foaf:homepage>http://www.altics.fr</foaf:homepage>
+		<foaf:twitter>http://www.twitter.com/oliviermarx</foaf:twitter>
+		<swrc:abstract>Passionné de Digital et d’Economie, Olivier Marx tombe dans le Net dès 1996, suite à un DESS multimédia complété par une maitrise de sciences économiques, De 1998 à 2004, il est consultant internet au sein de Framfab, Agence Web de 3000 collaborateurs dans 16 pays européen. Il fonde Altics en 2004 autour d’une conviction : c’est en simplifiant les parcours d’achat digitaux que l’on accélére les ventes des sites marchands. Spécialiste de l’Eye tracking, Altics a publié plus de 30 livres blancs sur l’eCommerce depuis 2008. Savoyard de naissance et dévoreur de presse, Olivier Marx est membre actif de de La Cuisine Du Web, mentor à BoostInLyon et aux Startup Weekends.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/olivier-marx">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Olivier Marx</foaf:name>
+        <rdfs:label>Olivier Marx</rdfs:label>
+		<foaf:firstName>Olivier</foaf:firstName>
+        <foaf:lastName>Marx</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Capture-d%E2%80%99%C3%A9cran-2013-07-17-%C3%A0-13.24.19-73x72.png</foaf:img>
+		<foaf:homepage>http://www.altics.fr</foaf:homepage>
+		<foaf:twitter>http://www.twitter.com/oliviermarx</foaf:twitter>
+		<swrc:abstract>Passionné de Digital et d’Economie, Olivier Marx tombe dans le Net dès 1996, suite à un DESS multimédia complété par une maitrise de sciences économiques, De 1998 à 2004, il est consultant internet au sein de Framfab, Agence Web de 3000 collaborateurs dans 16 pays européen. Il fonde Altics en 2004 autour d’une conviction : c’est en simplifiant les parcours d’achat digitaux que l’on accélére les ventes des sites marchands. Spécialiste de l’Eye tracking, Altics a publié plus de 30 livres blancs sur l’eCommerce depuis 2008. Savoyard de naissance et dévoreur de presse, Olivier Marx est membre actif de de La Cuisine Du Web, mentor à BoostInLyon et aux Startup Weekends.</swrc:abstract>
+    </NamedIndividual>
+
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/olivier-bernasson">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Olivier Bernasson</foaf:name>
+        <rdfs:label>Olivier Bernasson</rdfs:label>
+		<foaf:firstName>Olivier</foaf:firstName>
+        <foaf:lastName>Bernasson</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Capture-d%E2%80%99%C3%A9cran-2013-07-17-%C3%A0-13.24.19-73x72.png</foaf:img>
+		<foaf:homepage>http://www.pecheur.com/</foaf:homepage>
+		<foaf:twitter>https://twitter.com/obernasson</foaf:twitter>
+		<swrc:abstract>Olivier Bernasson est le président de Pecheur.com. Architecte de formation, il bifurque rapidement vers les métiers de la publicité et de l'édition graphique, puis vers Internet à la fin des années 90. Il cofonde Pecheur.com en 2000 avec Pierre Ourliac. A l'origine portail communautaire gratuit, Pecheur.com s'oriente en 2002 vers une activité de marketplace puis à partir de 2004 vers un modèle purement e-commerce, en intégrant la composante logistique pour devenir distributeur à part entière. Pecheur.com est leader sur le marché de la vente en ligne de matériels pour les loisirs nature et commercialise 130 000 références. Depuis décembre 2010, Pecheur.com est une entreprise du réseau Oxylane (Décathlon). En 2013 Pecheur.com emploie 50 personnes et devrait réaliser un CA compris entre 16 et 18 millions € dont 10% environ à l’international.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/christophe-porteneuve">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Christophe Porteneuve</foaf:name>
+        <rdfs:label>Christophe Porteneuve</rdfs:label>
+		<foaf:firstName>Christophe</foaf:firstName>
+        <foaf:lastName>Porteneuve</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Capture-d%E2%80%99%C3%A9cran-2013-07-16-%C3%A0-16.03.10-73x72.png</foaf:img>
+		<foaf:homepage>http://tddsworld.com</foaf:homepage>
+		<foaf:twitter>https://twitter.com/porteneuve</foaf:twitter>
+		<swrc:abstract>Christophe Porteneuve conçoit des pages web depuis 1995. Co-créateur du premier portail JSP en Europe, en 1999, il passe par J2EE avant de tomber dans Ruby, Rails puis Node. Auteur du best-seller « Bien développer pour le Web 2.0 » chez Eyrolles, il a également écrit la référence  « Prototype and script.aculo.us » chez Pragmatic Programmers, des articles dans divers magazines en ligne, et il est speaker pour plusieurs conférences petites et grosses. Fondateur et directeur technique de Delicious Insights, qui tout en travaillant sur des SaaS B2B à venir conçoit et propose les cycles de formation Git Attitude et JS Attitude.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/paul-sanchez">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Paul Sanchez</foaf:name>
+        <rdfs:label>Paul Sanchez</rdfs:label>
+		<foaf:firstName>Paul</foaf:firstName>
+        <foaf:lastName>Sanchez</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/08/SEO-Blackout-paul-sanches-73x72.jpg</foaf:img>
+		<foaf:homepage>http://www.impactseo.fr</foaf:homepage>
+		<foaf:twitter>https://twitter.com/Seoblackout</foaf:twitter>
+		<swrc:abstract>Paul Sanches aussi connu sous le pseudo "Tiger" ou "Seoblackout", est consultant en référencement. Fondateur de la société Impactseo, il propose des prestations de référencement, de l'audit SEO, du consulting SEO, des prestations de linkbuilding ainsi que des formations pratiques aux techniques de référencement. Il gère aussi l'e-reputation de certaines sociétés ou individus qui n'ont plus d'autres recours que de faire appel à des « nettoyeurs ». Il est par ailleurs éditeur de sites web dans différents domaines allant de la grossesse au poker. Il est le webmaster du blog SEO BlackOut, un blog dédié aux techniques de référencement avancées et de Dont Be Evil un blog dédié à sa passion qu’est le référencement.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/adrien-menard">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Adrien Menard</foaf:name>
+        <rdfs:label>Adrien Menard</rdfs:label>
+		<foaf:firstName>Adrien</foaf:firstName>
+        <foaf:lastName>Menard</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Adrien-M%C3%A9nard-73x72.jpg</foaf:img>
+		<foaf:homepage>http://www.botify.com</foaf:homepage>
+		<foaf:twitter>https://twitter.com/botify</foaf:twitter>
+		<swrc:abstract>À la suite d’une expérience de 5 ans au sein d’Aposition Isobar (groupe Aegis Media), le leader français et européen des agences spécialisées en Search Marketing qui le conduiront jusqu’au poste de Directeur Commercial, Adrien Menard s’associe ensuite avec Thomas Grange et Alexandre Boucherot pour développer Botify et Ulule. Aujourd'hui principalement concentré sur Botify, il occupe le poste de Directeur Général Opérationnel (COO). Adrien est ravi de partager cette aventure aux côtés d’une équipe de passionnés du marketing digital, de la Big Data et d'innover en permanence pour les 80 clients de Botify.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/edouard-de-la-jonquiere">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Edouard de la Jonquière</foaf:name>
+        <rdfs:label>Edouard de la Jonquière</rdfs:label>
+		<foaf:firstName>Edouard</foaf:firstName>
+        <foaf:lastName>de la Jonquière</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Capture-d%E2%80%99%C3%A9cran-2013-07-12-%C3%A0-15.30.24-73x72.png</foaf:img>
+		<foaf:homepage>https://mention.net</foaf:homepage>
+		<foaf:twitter>https://twitter.com/edelajonquiere</foaf:twitter>
+		<swrc:abstract>Ce Toulousain, fan de vieux vinyles et d'Heidegger, a appris après quelques années de conseil que le SaaS était plus fun que le powerpoint. À la suite de plusieurs expériences qui le conduiront notamment chez Veolia puis Capgemini, il prend la direction de Pressking en 2011. L'année suivante il co-fonde Mention, une application de veille media qu'il dirige toujours aujourd'hui.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/edouard-ducray">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Edouard Ducray</foaf:name>
+        <rdfs:label>Edouard Ducray</rdfs:label>
+		<foaf:firstName>Edouard</foaf:firstName>
+        <foaf:lastName>Ducray</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/DSC4734jlm-73x72.jpg</foaf:img>
+		<foaf:homepage>http://www.dlead.fr</foaf:homepage>
+		<foaf:twitter></foaf:twitter>
+		<swrc:abstract>Edouard Ducray crée en 1999, la première régie publicitaire Internet à la performance en France, Comclick. La régie sera ensuite renvendue en 2005 à Hi-Media (leader européen sur le marché de la publicité en ligne). Deux ans auparavant, il crée un site d'e-commerce spécialisé dans la location de DVD et VOD par Internet, locafilm.com. Cette même année, en 2003 il crée Dreamlead Interactive, une agence digitale spécialisée dans les stratégies d'acquisition et de fidélisation à la performance en emailing. Toutes ces expériences ont fait d'Edouard Ducray, un spécialiste du secteur BtoB et du e-marketing. Il est le pionnier du marketing à la performance sur Internet en France depuis 1999.</swrc:abstract>
+    </NamedIndividual>
+	 
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/jerome-masurel">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Jérôme Masurel</foaf:name>
+        <rdfs:label>Jérôme Masurel</rdfs:label>
+		<foaf:firstName>Jérôme</foaf:firstName>
+        <foaf:lastName>Masurel</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/JM-instagram-73x72.jpg</foaf:img>
+		<foaf:homepage>http://www.50partners.fr/</foaf:homepage>
+		<foaf:twitter>https://twitter.com/50partners</foaf:twitter>
+		<swrc:abstract>Jérôme Masurel commence sa carrière dans la capital-risque à New York chez NextStage, puis chez Rotschild and Cie Private Equity à Paris. Il participe au lancement du réseau Agregator qui a donné naissance au site Viadeo. En 2010 il fonde Investir en Direct pour aider les projets en amorçage à trouver des fonds auprès d’un réseau de dirigeants d’entreprises. Investir en Direct accompagne chaque année une quinzaine de levées de fonds entre 500K€ et 1M€.
+En 2012, il crée 50 Partners, une structure d’accompagnement inspiré des incubateurs anglos-saxons. 50 entrepreneurs des nouvelles technologies rejoignent l’aventure et s’engagent à soutenir opérationnellement les projets sélectionnés. seulement 5 ou 6 projets bénéficient chaque année du mentoring, de l’écosystème et de l’accompagnement au financement qu’offre le service ; des bureaux sont également offerts dans la pépinière du « Loft 50 Partners ».</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/mohand-boughanem">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Mohand Boughanem</foaf:name>
+        <rdfs:label>Mohand Boughanem</rdfs:label>
+		<foaf:firstName>Mohand</foaf:firstName>
+        <foaf:lastName>Boughanem</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/09/mohandboughanem-73x72.jpg</foaf:img>
+		<foaf:homepage>http://www.irit.fr/~Mohand.Boughanem/</foaf:homepage>
+		<foaf:twitter></foaf:twitter>
+		<swrc:abstract>Mohand Boughanem est professeur à l’université Paul Sabatier de Toulouse et chercheur à l’IRIT. Ses travaux de recherche s’inscrivent dans le domaine de la recherche d’information (RI) et s’intéressent plus particulièrement à la recherche d’information semi-structurée, la recherche d’information contextuelle(personnalisée, mobile, sociale), la recherche agrégée.
+Il est à l’origine de plusieurs actions qui ont contribué à la structuration de la communauté RI en France, les plus importantes étant la création de l’association ARIA (Association francophone de Recherche d’Information) et puis de la conférence annuelle CORIA, sponsorisée depuis sa création en 2004 par l’ACM-SIGIR.
+Il a publié plus de 100 articles dans des revues et conférences internationales et nationales. Il est régulièrement sollicité pour participer à des comités de programmes dans des conférences ou des journaux de référence de son domaine : ACM-SIGIR (Special Interest Group of Information Retrieval), ECIR (European Colloqium of Information retrieval), ACM-CIKM (Conference on Information and Knowledge Management). Il est depuis 2007, un des éditeurs en chef de la revue I3.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/tanguy-leroux">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Tanguy Leroux</foaf:name>
+        <rdfs:label>Tanguy Leroux</rdfs:label>
+		<foaf:firstName>Tanguy</foaf:firstName>
+        <foaf:lastName>Leroux</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Tanguy-Leroux1-73x72.jpeg</foaf:img>
+		<foaf:homepage>http://github.com/tlrx</foaf:homepage>
+		<foaf:twitter>http://www.twitter.com/tlrx</foaf:twitter>
+		<swrc:abstract>Tanguy Leroux est expert ElasticSearch. Passionné par les moteurs de recherche open source, il a participé à la mise en oeuvre de solutions de recherche (ElasticSearch, Apache SolR/Lucene) sur de nombreux projets traitant plusieurs dizaines de millions de documents. Depuis quelques années, Tanguy s'intéresse aussi aux domaines du Machine Learning et du Big Data Analytics en contribuant à faire connaitre les outils tels que Hadoop et Apache Mahout. Il travaille depuis septembre 2010 au sein de l'agence lyonnaise de Zenika en tant que consultant et formateur sur les technologies Java, ElasticSearch, Spring, GWT et Apache ServiceMix.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/jade-le-maitre">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Jade Le Maître</foaf:name>
+        <rdfs:label>Jade Le Maître</rdfs:label>
+		<foaf:firstName>Jade</foaf:firstName>
+        <foaf:lastName>Le Maître</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/jade-lm-aratta-73x72.jpg</foaf:img>
+		<foaf:homepage>http://www.jadelemaitre.fr/</foaf:homepage>
+		<foaf:twitter>https://twitter.com/Aratta</foaf:twitter>
+		<swrc:abstract>"Einstein took science, I took curiosity..". Entre science et social média, Jade Le Maître est une passionnée d'innovation et live-tweeteuse compulsive. Elle rêve d‘interfaces entre le web et les différents acteurs des sciences – laboratoires, instituts, universités, entreprises. Suite à un projet de recherche sur l'interaction entre l'homme et le robot à l'ISIR, elle rejoint l'UPMC, université de sciences, pour s'occuper du community management. Jade Le Maître travaille actuellement chez Provaltis, une agence de communication scientifique, en tant que consultante web et médias sociaux.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/goulven-champenois">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Goulven Champenois</foaf:name>
+        <rdfs:label>Goulven Champenois</rdfs:label>
+		<foaf:firstName>Goulven</foaf:firstName>
+        <foaf:lastName>Champenois</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Capture-d%E2%80%99%C3%A9cran-2013-07-12-%C3%A0-14.42.35-73x72.png</foaf:img>
+		<foaf:homepage>http://userland.fr/</foaf:homepage>
+		<foaf:twitter>https://twitter.com/goulvench</foaf:twitter>
+		<swrc:abstract>Intégrateur passionné, Goulven Champenois jongle avec l’accessibilité, l’ergonomie, les performances et le mobile pour une expérience utilisateur optimale intégrant les dernières évolutions technologiques. Après une expérience chez Alptis en tant que développeur front-end, il se lance en freelance en 2012. Formé en grande partie grâce aux sites OpenWeb et Pompage, il rejoint ce projet en 2006. Trouvant le temps trop long entre deux éditions de Paris Web, il participe à l'organisation de SudWeb depuis 2011.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+		
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/ludovic-cellier">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Ludovic Cellier</foaf:name>
+        <rdfs:label>Ludovic Cellier</rdfs:label>
+		<foaf:firstName>Ludovic</foaf:firstName>
+        <foaf:lastName>Cellier</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/08/ludoviccellier-280-200-73x72.jpg</foaf:img>
+		<foaf:homepage>http://www.mre-web.com/</foaf:homepage>
+		<foaf:twitter>http://www.twitter.com/lcellier</foaf:twitter>
+		<swrc:abstract>Titulaire d'un Master en software engineering obtenu à Édimbourg en 1999, Ludovic Cellier intègre dès sa création l'équipe du comparateur de prix Kelkoo et participe activement à son développement Européen. Il se spécialise dans les outils de crawl des marchands en lignes dans de nombreux pays et différentes langues et s'occupe de la formation des équipes locales. En 2004, la société est acheté par Yahoo!, Ludovic est propulsé engineering manager community for Europe à Londres. C'est en 2006 qu'il commence sa carrière Freelance, passionné par la visibilité naturelle et impressionné par les potentiels des techniques de référencement. Depuis, il accompagne de nombreux clients de profils très divers dans le développement de leur visibilité internationale.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+			
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/ludovic-cellier">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Ludovic Cellier</foaf:name>
+        <rdfs:label>Ludovic Cellier</rdfs:label>
+		<foaf:firstName>Ludovic</foaf:firstName>
+        <foaf:lastName>Cellier</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Capture-d%E2%80%99%C3%A9cran-2013-07-12-%C3%A0-14.42.35-73x72.png</foaf:img>
+		<foaf:homepage>http://www.mre-web.com/</foaf:homepage>
+		<foaf:twitter>http://www.twitter.com/lcellier</foaf:twitter>
+		<swrc:abstract>Titulaire d'un Master en software engineering obtenu à Édimbourg en 1999, Ludovic Cellier intègre dès sa création l'équipe du comparateur de prix Kelkoo et participe activement à son développement Européen. Il se spécialise dans les outils de crawl des marchands en lignes dans de nombreux pays et différentes langues et s'occupe de la formation des équipes locales. En 2004, la société est acheté par Yahoo!, Ludovic est propulsé engineering manager community for Europe à Londres. C'est en 2006 qu'il commence sa carrière Freelance, passionné par la visibilité naturelle et impressionné par les potentiels des techniques de référencement. Depuis, il accompagne de nombreux clients de profils très divers dans le développement de leur visibilité internationale.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/ludovic-cellier">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Ludovic Cellier</foaf:name>
+        <rdfs:label>Ludovic Cellier</rdfs:label>
+		<foaf:firstName>Ludovic</foaf:firstName>
+        <foaf:lastName>Cellier</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Capture-d%E2%80%99%C3%A9cran-2013-07-12-%C3%A0-14.42.35-73x72.png</foaf:img>
+		<foaf:homepage>http://www.mre-web.com/</foaf:homepage>
+		<foaf:twitter>http://www.twitter.com/lcellier</foaf:twitter>
+		<swrc:abstract>Titulaire d'un Master en software engineering obtenu à Édimbourg en 1999, Ludovic Cellier intègre dès sa création l'équipe du comparateur de prix Kelkoo et participe activement à son développement Européen. Il se spécialise dans les outils de crawl des marchands en lignes dans de nombreux pays et différentes langues et s'occupe de la formation des équipes locales. En 2004, la société est acheté par Yahoo!, Ludovic est propulsé engineering manager community for Europe à Londres. C'est en 2006 qu'il commence sa carrière Freelance, passionné par la visibilité naturelle et impressionné par les potentiels des techniques de référencement. Depuis, il accompagne de nombreux clients de profils très divers dans le développement de leur visibilité internationale.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/mathieu-nebra">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Mathieu Nebra</foaf:name>
+        <rdfs:label>Mathieu Nebra</rdfs:label>
+		<foaf:firstName>Mathieu</foaf:firstName>
+        <foaf:lastName>Nebra</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/mathieu_nebra_photo-73x72.jpg</foaf:img>
+		<foaf:homepage>http://www.siteduzero.com/</foaf:homepage>
+		<foaf:twitter>https://twitter.com/m_nebra</foaf:twitter>
+		<swrc:abstract>Mathieu Nebra a créé le Site du Zéro à l'âge de 13 ans, alors qu'il était au collège. Son but : partager la connaissance d'une façon nouvelle, chaleureuse et enfin accessible à tous. 13 années et 600 000 membres plus tard, une communauté de membres passionnés s'est formée où l'entraide et l'échange sont les valeurs-clé. Le site totalise plus de 2 millions de visiteurs uniques mensuels. Mathieu est le co-fondateur de Simple IT, la start-up de 25 personnes qui fait vivre aujourd'hui le Site du Zéro. Ses tutoriels sur l'informatique (HTML5, PHP, C, Linux, Node.js...) ont formé un grand nombre de développeurs. Il projette aujourd'hui d'étendre les thématiques du Site du Zéro aux sciences et au monde de l'entreprise.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/jean-philippe-cabaroc">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Jean-Philippe Cabaroc</foaf:name>
+        <rdfs:label>Jean-Philippe Cabaroc</rdfs:label>
+		<foaf:firstName>Jean-Philippe</foaf:firstName>
+        <foaf:lastName>Cabaroc</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/zombie-cab1-73x72.jpg</foaf:img>
+		<foaf:homepage>http://cabaroc.com/</foaf:homepage>
+		<foaf:twitter>https://twitter.com/cabaroc</foaf:twitter>
+		<swrc:abstract>Designer et directeur artistique, diplômé de l'ESADSE, Jean-Philippe Cabaroc aime les designs beaux et fonctionnels. Il a fondé son studio de création graphique en 2009 après avoir travaillé 5 ans en agence de communication. Intervenant sur des projets web et multimédia, son travail donne une place importante à l’émotion pour véhiculer le contenu. Passionné par la création visuelle et l’échange d’idées, il débat avec ses collègues designers au sein du premier podcast français consacré au webdesign, The Walking Web. Il donne également des cours de design multimédia dans une école d'art lyonnaise.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/antony-legrand">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Antony Legrand</foaf:name>
+        <rdfs:label>Antony Legrand</rdfs:label>
+		<foaf:firstName>Antony</foaf:firstName>
+        <foaf:lastName>Legrand</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/zombie-tony-73x72.jpg</foaf:img>
+		<foaf:homepage>http://www.twitter.com/wisibility</foaf:homepage>
+		<foaf:twitter>http://www.twitter.com/wisibility</foaf:twitter>
+		<swrc:abstract>Tony est un hyperactif professionnel. Il débute sa carrière comme expert formateur Photoshop et devient rapidement démonstrateur conférencier officiel pour Adobe sur des salons et autres évènements professionnels. Co-créateur du site de tutoriels vidéos Wisibility il est en charge de la communication et de la gestion des formateurs de la société Trait d’Union Graphique. Par la suite il deviendra Directeur éditorial durant 3 ans des magazines Advanced Photoshop et Webdesignmag puis se spécialisera dans le Webdesign, l’ergonomie et l’interfaçage (application, mobile…) et la gestion de projets global en tant que membre du collectif Gang Corporate. Passionnés par le marketing viral Tony a appris à domestiquer l’oiseau des followers. Aujourd'hui en plus de toutes ces activités, il co-anime un podcast nommé Walking Web dédiés aux Webdesigners and graphistes. Vous l’aurez compris, Tony est un boulimique du travail qui n’est pas prêt de se mettre au régime.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/jeremie-fontana">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Jérémie Fontana</foaf:name>
+        <rdfs:label>Jérémie Fontana</rdfs:label>
+		<foaf:firstName>Jérémie</foaf:firstName>
+        <foaf:lastName>Fontana</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/zombie-jere-73x72.jpg</foaf:img>
+		<foaf:homepage>http://jfontana.fr/</foaf:homepage>
+		<foaf:twitter>http://www.twitter.com/SkyNebula</foaf:twitter>
+		<swrc:abstract>Jérémie est un designer de 33 ans, élevé au digital dans les Alpes françaises et vivant actuellement à Genève, en Suisse. Depuis 10 ans, il accumule les expériences dans différentes agences de publicité et travaille pour des marques et en tant que designer freelance. Il travaille actuellement comme directeur artistique de SQLI, où il crée de gourmandes histoires numériques et des expériences utilisateurs fraîches pour de grandes marques. Il dirige également 17slash, une caisse de conception et de laboratoire de recherche fondé avec Darja Gartner, où l'on aime travailler et expérience sur la typographie, les réseaux, dispositifs interactifs et connectés ... Il est également membre de l'équipe du Creative Morning Genève et UX Romandie, où des événements mensuels sont organisés pour réunir les créatifs suisses. Pendant son temps libre, il parle deux fois par mois sur The Walking Web, le premier podcast français sur le design web et la créativité numérique, avec cinq autres designers talentueux (et grands amis). Enfin, il a également été l'ambassadeur français de la création du réseau Behance et maintenant il organise les Behance Portfolio Reviews à Genève.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/nicolas-debock">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Nicolas Debock</foaf:name>
+        <rdfs:label>Nicolas Debock</rdfs:label>
+		<foaf:firstName>Nicolas</foaf:firstName>
+        <foaf:lastName>Debock</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Nicolas-Debock-HD-73x72.jpg</foaf:img>
+		<foaf:homepage>http://www.xange.fr</foaf:homepage>
+		<foaf:twitter>http://www.twitter.com/ndebock</foaf:twitter>
+		<swrc:abstract>Diplômé de l’EM Lyon et d’un MBA de l’université du Connecticut en 2000, Nicolas a commencé sa carrière dans une start-up dans les moyens de paiements aux Etats-Unis. De retour en France il a travaillé 5 ans au sein de l’équipe étude de marché de la SSII Unilog puis 5 ans au sein de la direction de l’innovation du Groupe la Poste. Son rôle était alors de gérer les relations entre le Groupe La Poste et l’écosystème des Start-ups. Dans ce cadre il a participé à de nombreux événements en tant que mentor ou Jury (Le Camping, Start-Up Week-end, Barcamp,…). Il est spécialiste du secteur des services financiers innovants. Nicolas a rejoint XAnge en 2012 afin notamment de contribuer à l’alimentation du dealflow sur les secteurs Internet B2C, mobile, services financiers innovants et offres SaaS en BtoB.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/jean-francois-longy">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Jean-François Longy</foaf:name>
+        <rdfs:label>Jean-François Longy</rdfs:label>
+		<foaf:firstName>Jean-François</foaf:firstName>
+        <foaf:lastName>Longy</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/jf_longy-73x72.jpg</foaf:img>
+		<foaf:homepage>http://www.cybercite.fr/</foaf:homepage>
+		<foaf:twitter>http://www.twitter.com/AgenceCyberCite</foaf:twitter>
+		<swrc:abstract>Jean-François Longy s’est intéressé très tôt aux problématiques liées aux moteurs de recherche, alors qu’il est encore étudiant, bien avant que Google n’occupe une position quasi monopolistique. Il co-fonde avec Nicolas Claraz en 1999, CyberCité, une société indépendante spécialisée dans la génération de trafic sur internet (référencement naturel, référencement payant, webanalytic, SMO). CyberCité est aujourd’hui l’un des leaders français sur ce marché. Expert des problématiques génération de trafic web, il occupe aujourd’hui au sein de CyberCité la fonction de Directeur Général, en charge du développement commercial. Pour suivre son actualité et celle du référencement, ajoutez Jean-François Longy dans vos cercles Google+.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/alain-mille">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Alain Mille</foaf:name>
+        <rdfs:label>Alain Mille</rdfs:label>
+		<foaf:firstName>Alain</foaf:firstName>
+        <foaf:lastName>Mille</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/08/Capture-d%E2%80%99%C3%A9cran-2013-08-02-%C3%A0-13.42.29-73x72.png</foaf:img>
+		<foaf:homepage>http://liris.cnrs.fr/alain.mille/</foaf:homepage>
+		<foaf:twitter>http://www.twitter.com/amil310</foaf:twitter>
+		<swrc:abstract>Après une première carrière comme ingénieur en informatique et chef de projet (Hospices Civils de Lyon), Alain Mille a eu l'occasion de créer une équipe de recherche en obtenant un poste de professeur à l'Université Claude Bernard (Lyon, France). Directeur de recherche au LIRIS (UMR 5205 CNRS), il est impliqué dans l'équipe Silex "favoriser les interactions et l'apprentissage par l'expérience» qu'il a créée en 2005. Ses principales compétences sont l'intelligence artificielle (ECAI 2002 - Président de l'Organisation) et Web (WWW2012 - président de la conférence). Ses intérêts de recherche actuel concernent le "Couplage de l'environnement Humain-Ordinateur" . Il est actuellement chargé d'une mission pour le CNRS sur les phénomènes Mooc.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/marcel-lebrun">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Marcel Lebrun</foaf:name>
+        <rdfs:label>Marcel Lebrun</rdfs:label>
+		<foaf:firstName>Marcel</foaf:firstName>
+        <foaf:lastName>Lebrun</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/08/Marcel-Lebrun-73x72.jpg</foaf:img>
+		<foaf:homepage>http://lebrunremy.be/WordPress/</foaf:homepage>
+		<foaf:twitter>https://twitter.com/mlebrun2</foaf:twitter>
+		<swrc:abstract>Marcel Lebrun, docteur en Sciences, est actuellement professeur en technologies de l’éducation et conseiller pédagogique à l’Institut de Pédagogie universitaire et des Multimédias (IPM) de l’UCL (Université catholique de Louvain à Louvain-la-Neuve, Belgique). En particulier, il accompagne les enseignants dans la mise en place de dispositifs techno-pédagogiques à valeurs ajoutées pour l’apprentissage. Il est à l’origine de la plate-forme Claroline dont il assure la responsabilité pédagogique au sein de l’équipe de développement et la présidence du Consortium International Claroline. Il participe à plusieurs recherches à l'échelon national et européen, en particulier sur les effets et les conditions d'impact des TIC sur l'apprentissage et la formation. Il est l’auteur de plusieurs ouvrages sur les rapports entre technologies et pédagogies.  </swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/christophe-batier">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Christophe Batier</foaf:name>
+        <rdfs:label>Christophe Batier</rdfs:label>
+		<foaf:firstName>Christophe</foaf:firstName>
+        <foaf:lastName>Batier</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/08/batier-73x72.jpg</foaf:img>
+		<foaf:homepage>http://about.me/christophe.batier</foaf:homepage>
+		<foaf:twitter>https://twitter.com/batier</foaf:twitter>
+		<swrc:abstract>Au début des années 1990, Christophe Batier était chercheur chez EDF, il rejoint ensuite l’Université Claude Bernard Lyon1 à partir de 1993. Il mène des recherche autour de l’analyse de matériaux. Dans ce cadre, il participe  à un projet d’envergure européenne autour de l’EAO (Enseignement Assisté par Ordinateur) pour expliquer les différentes interactions entre les particules à haute énergie et les matériaux.
+Cela le mènera en 1996, à être sollicité pour participer et s’impliquer dans la mise en place d’un service dédié aux Nouvelles Technologies Educatives au sein de l’Université Claude Bernard Lyon 1. À l’origine constitué de deux personnes, ce service compte aujourd’hui un peu plus de quarante employés. Christophe Batier est actuellement le Directeur Technique du service TICE et travaille autour des axes suivants :
+Développement (informatique et usages) de plateforme d’enseignement Claroline Connect et Spiralconnect
+Développement de la plate forme d’évaluation des enseignements Eval Connect
+Développement de contenus pédagogiques : animation, simulation, podcast, serious games, 3D
+Formation des enseignants à la pédagogie et aux TICE
+Formation des étudiants à la culture numérique
+Conférencier autour des usages du numérique et du Elearning.
+De plus, il a participé à plusieurs projets de recherche sur l’utilisation de la technologie dans l’enseignement et il présente dans différentes conférences ses résultats. Il essaye également de touiller l’écosystème lyonnais en organisant des barcamps réunissant des étudiants, des entreprises et des chercheurs.</swrc:abstract>
+		<swrc:abstract>Marcel Lebrun, docteur en Sciences, est actuellement professeur en technologies de l’éducation et conseiller pédagogique à l’Institut de Pédagogie universitaire et des Multimédias (IPM) de l’UCL (Université catholique de Louvain à Louvain-la-Neuve, Belgique). En particulier, il accompagne les enseignants dans la mise en place de dispositifs techno-pédagogiques à valeurs ajoutées pour l’apprentissage. Il est à l’origine de la plate-forme Claroline dont il assure la responsabilité pédagogique au sein de l’équipe de développement et la présidence du Consortium International Claroline. Il participe à plusieurs recherches à l'échelon national et européen, en particulier sur les effets et les conditions d'impact des TIC sur l'apprentissage et la formation. Il est l’auteur de plusieurs ouvrages sur les rapports entre technologies et pédagogies.  </swrc:abstract>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/martin-mignot">
+        <rdf:type rdf:resource="&foaf;Person"/>
+		<foaf:name>Martin Mignot</foaf:name>
+        <rdfs:label>Martin Mignot</rdfs:label>
+		<foaf:firstName>Martin</foaf:firstName>
+        <foaf:lastName>Mignot</foaf:lastName>
+        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
+		<foaf:mbox></foaf:mbox>
+		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/08/MartinMignot-73x72.jpg</foaf:img>
+		<foaf:homepage>http://unvalidatedlearnings.com</foaf:homepage>
+		<foaf:twitter>http://www.twitter.com/martinmignot</foaf:twitter>
+		<swrc:abstract>Martin Mignot travaille à Londres chez Index depuis 4 ans, il s'occupe principalement des investissements de type "Early stage" en Europe et plus particulièrement en France. Il est également membre du conseil d'administration de Rad, Capitaine Train et Drivy. Il s'intéresse surtout aux business consumer, Saas et marketplace. Avant de rejoindre Index, il co-fonde une radio en ligne (www.rsp.fm) et travaille pendant deux ans au sein d'une banque d'affaires londonienne. Par ailleurs, il a également cofondé Boudoir Privé, un site de e-commerce de cosmétique, racheté depuis par Joliebox en 2011.</swrc:abstract>
+    </NamedIndividual>
+	
+	
+	
+	
+	
+</rdf:RDF>
+	
+	
+	
+	

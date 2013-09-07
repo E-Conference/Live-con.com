@@ -27,7 +27,7 @@ class Person
 
     /**
      *  
-     * @ORM\OneToMany(targetEntity="Role", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="Role",  mappedBy="person")
      * 
      */
     private $role;
@@ -36,7 +36,7 @@ class Person
      * autho
      * Paper make by this person
      *  
-     * @ORM\OneToMany(targetEntity="Author", mappedBy="person")
+     * @ORM\OneToMany(targetEntity="Author",  mappedBy="person")
      */
     private $paper;
 
@@ -44,7 +44,7 @@ class Person
      * Organizations
      * Organizations where the person is member
      *
-     * @ORM\ManyToMany(targetEntity="Organization", mappedBy="members", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Organization",   mappedBy="members", cascade={"persist"})
      */
     private $organizations;
     
@@ -53,7 +53,7 @@ class Person
      * email
      *
      *
-     * @ORM\Column(type="string", name="email")
+     * @ORM\Column(type="string", nullable=true,  name="email")
      */
     protected $email;
 
@@ -75,57 +75,76 @@ class Person
      *
      * An agent (eg. person, group, software or physical artifact)
      *
-     * @ORM\Column(type="string", name="agent")
+     * @ORM\Column(type="string", nullable=true, name="agent")
      */
     protected $agent;
 
     /**
      * name
      * A name for some thing. Name of the person 
-     * @ORM\Column(type="string", name="name")
+     * @ORM\Column(type="string", nullable=true,  name="name")
      */
     protected $name;
 
     /**
+     * firstName
+     * A name for some thing. Name of the person 
+     * @ORM\Column(type="string", nullable=true,  name="firstName")
+     */
+    protected $firstName;
+
+    /**
+     * lastName
+     *. lastName - The last name of some person. 
+     *
+     * @ORM\Column(type="string", length=255, nullable=true, name="lastName")
+     */
+     protected $lastName;
+
+    /**
+     * description
+     *. something about the person
+     *
+     * @ORM\Column(type="string", length=2000, nullable=true, name="description")
+     */
+     protected $description;
+
+    /**
+     * homepage
+     *. person's homepage 
+     *
+     * @ORM\Column(type="string", length=255, nullable=true, name="homepage")
+     */
+     protected $homepage;
+
+    /**
+     * twitter
+     *. person's twitter 
+     *
+     * @ORM\Column(type="string", length=255, nullable=true, name="twitter")
+     */
+     protected $twitter;
+
+    /**
      * title
      *
-	* Title (Mr, Mrs, Ms, Dr. etc) 
+    * Title (Mr, Mrs, Ms, Dr. etc) 
      *
      * @ORM\Column(type="string", length=255, nullable=true,name="title")
      */
-    protected $title;
-
-    /**
-     * img
-     *
-     *  image - An image that can be used to represent some thing (ie. those depictions which are particularly representative of something, eg. one's photo on a homepage). 
-     * Status:	testing
-     * Domain:	having this property implies being a Person
-     * Range : every value of this property is a Image
-     *
-     * @ORM\Column(type="string", nullable=true, name="img")
-     */
-    protected $img;
+    protected $title; 
 
     /**
      * depiction
      *
      * depiction - A depiction of some thing. 
-	 * Status:	testing
-	 * Domain:	having this property implies being a Thing
-	 * Range:	every value of this property is a Image
+     * Status:  testing
+     * Domain:  having this property implies being a Thing
+     * Range:   every value of this property is a Image
      *
      * @ORM\Column(type="string", length=255, nullable=true, name="depiction")
      */
      protected $depiction;
-
-    /**
-     * familyName
-     *. familyName - The family name of some person. 
-     *
-     * @ORM\Column(type="string", length=255, nullable=true, name="familyName")
-     */
-     protected $familyName;
 
     /**
      * givenName
@@ -159,7 +178,7 @@ class Person
      *
      * age - The age in years of some agent. 
      *
-     * @ORM\Column(type="string", length=32, name="age")
+     * @ORM\Column(type="string", nullable=true, length=32, name="age")
      */
     protected $age ;
 
@@ -168,7 +187,7 @@ class Person
      * 
      * made - Something that was made by this agent. 
      *
-     * @ORM\Column(type="string", length=32, name="made")
+     * @ORM\Column(type="string", nullable=true, length=32, name="made")
      */
     protected $made;
 	
@@ -177,7 +196,7 @@ class Person
      * 
      * primary topic - The primary topic of some page or document. 
      *
-     * @ORM\Column(type="string", length=32, name="primary_topic")
+     * @ORM\Column(type="string", nullable=true, length=32, name="primary_topic")
      */
     protected $primary_topic;
 
@@ -186,14 +205,14 @@ class Person
      *
      * Project - A project (a collective endeavour of some kind). 
      *
-     *  @ORM\Column(type="string", length=32, name="project")
+     *  @ORM\Column(type="string", nullable=true, length=32, name="project")
      */
      protected $project;
 
     /**
      * organization
      * Organization - An organization
-	* @ORM\Column(type="string", length=32, name="organization")
+	* @ORM\Column(type="string", nullable=true, length=32, name="organization")
      */
     protected $organization;
 
@@ -201,7 +220,7 @@ class Person
      * group
      *
      * Group - A class of Agents. 
-	* @ORM\Column(type="string", length=32, name="_group")
+	* @ORM\Column(type="string", nullable=true, length=32, name="_group")
      */
     protected $_group;
 
@@ -209,7 +228,7 @@ class Person
      * member
      *
      * member - Indicates a member of a Group 
-     *  @ORM\Column(type="string", length=32, name="member")
+     *  @ORM\Column(type="string", nullable=true, length=32, name="member")
      */
      protected $member;
 
@@ -217,7 +236,7 @@ class Person
      * document
      *
      * Document - A document.
-	* @ORM\Column(type="string", length=32, name="document")
+	* @ORM\Column(type="string", nullable=true, length=32, name="document")
      */
      protected $document;
 
@@ -231,7 +250,7 @@ class Person
 	* Subclass Of	Document
 	* The class Image is a sub-class of Document corresponding to those documents which are images.
 	* Digital images (such as JPEG, PNG, GIF bitmaps, SVG diagrams etc.) are examples of Image.
-	*@ORM\Column(type="string", length=32, name="image")
+	*@ORM\Column(type="string", nullable=true, length=32, name="image")
      */
 
     protected $image;
@@ -387,30 +406,7 @@ class Person
     public function getTitle()
     {
         return $this->title;
-    }
-
-    /**
-     * Set img
-     *
-     * @param string $img
-     * @return Person
-     */
-    public function setImg($img)
-    {
-        $this->img = $img;
-    
-        return $this;
-    }
-
-    /**
-     * Get img
-     *
-     * @return string 
-     */
-    public function getImg()
-    {
-        return $this->img;
-    }
+    } 
 
     /**
      * Set depiction
@@ -436,26 +432,119 @@ class Person
     }
 
     /**
-     * Set familyName
+     * Set firstName
      *
-     * @param string $familyName
+     * @param string $firstName
      * @return Person
      */
-    public function setFamilyName($familyName)
+    public function setFirstName($firstName)
     {
-        $this->familyName = $familyName;
+        $this->firstName = $firstName;
     
         return $this;
     }
 
     /**
-     * Get familyName
+     * Get firstName
      *
      * @return string 
      */
-    public function getFamilyName()
+    public function getFirstName()
     {
-        return $this->familyName;
+        return $this->firstName;
+    }
+
+
+    /**
+     * Set lastName
+     *
+     * @param string $lastName
+     * @return Person
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+    
+        return $this;
+    }
+
+    /**
+     * Get lastName
+     *
+     * @return string 
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Person
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set twitter
+     *
+     * @param string $twitter
+     * @return Person
+     */
+    public function setTwitter($twitter)
+    {
+        $this->twitter = $twitter;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getTwitter()
+    {
+        return $this->twitter;
+    }
+
+    /**
+     * Set homepage
+     *
+     * @param string $homepage
+     * @return Person
+     */
+    public function setHomepage($homepage)
+    {
+        $this->homepage = $twihomepagetter;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getHomepage()
+    {
+        return $this->homepage;
     }
 
     /**

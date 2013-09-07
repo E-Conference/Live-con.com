@@ -18,49 +18,6 @@
                 return;
             }
             
-            /*
-            <NamedIndividual rdf:about="http://blendconference.com/speakers/olivier-marx">
-              <rdf:type rdf:resource="&foaf;Person"/>
-              <foaf:name>Olivier Marx</foaf:name>
-              <rdfs:label>Olivier Marx</rdfs:label>
-              <foaf:firstName>Olivier</foaf:firstName>
-              <foaf:lastName>Marx</foaf:lastName>
-              <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
-              <foaf:mbox></foaf:mbox>
-              <foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Capture-d%E2%80%99%C3%A9cran-2013-07-17-%C3%A0-13.24.19-73x72.png</foaf:img>
-              <foaf:homepage>http://www.altics.fr</foaf:homepage>
-              <foaf:twitter>http://www.twitter.com/oliviermarx</foaf:twitter>
-              <foaf:description>Passionné de Digital et d’Economie, Olivier Marx tombe dans le Net dès 1996, suite à un DESS multimédia complété par une maitrise de sciences économiques, De 1998 à 2004, il est consultant internet au sein de Framfab, Agence Web de 3000 collaborateurs dans 16 pays européen. Il fonde Altics en 2004 autour d’une conviction : c’est en simplifiant les parcours d’achat digitaux que l’on accélére les ventes des sites marchands. Spécialiste de l’Eye tracking, Altics a publié plus de 30 livres blancs sur l’eCommerce depuis 2008. Savoyard de naissance et dévoreur de presse, Olivier Marx est membre actif de de La Cuisine Du Web, mentor à BoostInLyon et aux Startup Weekends.</foaf:description>
-            </NamedIndividual> 
-            */
-
-            var personMapping = {
-                nodeName : 'Person',
-                label : {
-                    'foaf:firstName' : {
-                        setter : 'setFirstName'
-                    },
-                    'foaf:lastName' : {
-                        setter : 'setLastName'
-                    },
-                    'foaf:name' : {
-                        setter : 'setName'
-                    },
-                    'foaf:img' : {
-                        setter : 'setImg'
-                    },
-                    'foaf:homepage' : {
-                        setter : 'setHomepage'
-                    },
-                    'foaf:twitter' : {
-                        setter : 'setTwitter'
-                    },
-                    'foaf:description' : {
-                        setter : 'setDescription'
-                    },
-                } 
-            }
-            
             //check if it's rdf or owl file
             
             var isRdfFile=true; 
@@ -76,14 +33,13 @@
             var relations= [];
             var categories= [];
             var proceedings= [];
-            var persons= [];
             var confName ;
              
             var defaultDate='now'; 
             //////////////////////////////////////////////////////////////////////////
             ///////////////////////  first round for locations  //////////////////////
             //////////////////////////////////////////////////////////////////////////
-            // console.log($(completeConfRdf).children().children());
+            console.log($(completeConfRdf).children().children());
             if(isRdfFile){
                 $(completeConfRdf).children().children().each(function(index){
                     if(this.nodeName=="swc:MeetingRoomPlace"){
@@ -116,36 +72,6 @@
             //console.log(locations);
             
             
-            
-            //////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////  Person  //////////////////////////////
-            //////////////////////////////////////////////////////////////////////////
-            
-            if(isRdfFile){
-                
-            }else
-            {
-                $(completeConfRdf).children().children().each(function(index,node){ 
-                    if( node.nodeName=="NamedIndividual" ) {
-                        var n = getNodeName(node); 
-                        if(n && n.indexOf(personMapping.nodeName)!= -1){  
-                            add(persons,personMapping,this); 
-                        }
-                    }
-                });
-            }
-
-            function add(addArray,mapping,XmlNode){
-                var rtnArray = {};
-                $(XmlNode).children().each(function(){ 
-                    if(mapping.label[this.nodeName]){  
-                       rtnArray[mapping.label[this.nodeName].setter]=format(this.textContent);
-                    }
-                });
-                 
-                if(Object.size(rtnArray) > 0)
-                    addArray.push( rtnArray );
-            }
             
             //////////////////////////////////////////////////////////////////////////
             ///////////////////////////////////  Event  //////////////////////////////
@@ -278,22 +204,22 @@
             //////////////////////////////////////////////////////////////////////////
              for(var i=0;i<events.length;i++){
                 if(events[i]['setStartAt']!=undefined){
-            
-                    //alert(events[i]['setStartAt']);
-                    
-                    if(moment(events[i]['setStartAt']).dayOfYear() != moment(events[i]['setEndAt']).dayOfYear()){
-                        events[i]['setStartAt'] = moment(events[i]['setStartAt']).hour(0).minute(0).second(0).millisecond(0).format('YYYY-MM-DDTHH:mm:ss Z');
-                        events[i]['setEndAt'] = moment(events[i]['setEndAt']).hour(0).minute(0).second(0).millisecond(0).add('d', 1).format('YYYY-MM-DDTHH:mm:ss Z');
+                
+                        //alert(events[i]['setStartAt']);
+                        
+                        if(moment(events[i]['setStartAt']).dayOfYear() != moment(events[i]['setEndAt']).dayOfYear()){
+                            events[i]['setStartAt'] = moment(events[i]['setStartAt']).hour(0).minute(0).second(0).millisecond(0).format('YYYY-MM-DDTHH:mm:ss Z');
+                            events[i]['setEndAt'] = moment(events[i]['setEndAt']).hour(0).minute(0).second(0).millisecond(0).add('d', 1).format('YYYY-MM-DDTHH:mm:ss Z');
+                        }
+                        events[i]['setStartAt']= events[i]['setStartAt'] ;
+                        events[i]['setEndAt']=events[i]['setEndAt'] ;
+                    }else{
+                        
+                        events[i]['setStartAt']= defaultDate ;
+                        delete events[i]['setParent'];
+                        events[i]['setEndAt']=moment().format('YYYY-MM-DDTHH:mm:ss Z') ;
                     }
-                    events[i]['setStartAt']= events[i]['setStartAt'] ;
-                    events[i]['setEndAt']=events[i]['setEndAt'] ;
-                }else{
-                    
-                    events[i]['setStartAt']= defaultDate ;
-                    delete events[i]['setParent'];
-                    events[i]['setEndAt']=moment().format('YYYY-MM-DDTHH:mm:ss Z') ;
                 }
-            }
             
             //////////////////////////////////////////////////////////////////////////
             ////////////////////////  INHERIT Child DATE  ///////////////////////////
@@ -353,7 +279,8 @@
                         rtnArray['setStartAt']=$(this).text(); 
                     }else if(this.nodeName=="ical:dtstart"){
                         $(this).children().each(function(){
-                            if(this.nodeName=="ical:date"){ 
+                            if(this.nodeName=="ical:date"){
+                                console.log(  this );
                                 rtnArray['setStartAt']=$(this).text(); 
                             }
                         });
@@ -540,8 +467,8 @@
                         return relations[i]['setCalendarEntity'];
                      }
                 }
-                // console.log("event "+ eventIndex +" has no parent");
-                // console.log(events[eventIndex]);
+                console.log("event "+ eventIndex +" has no parent");
+                console.log(events[eventIndex]);
                 return undefined;
             }
              
@@ -599,10 +526,10 @@
                 if( parentIndex == undefined )
                     return undefined;
                 
-                // console.log("getParentProp(eventIndex,parentProp)");
-                // console.log(eventIndex);
-                // console.log(parentProp);
-                // console.log(events[parentIndex][parentProp]);
+                console.log("getParentProp(eventIndex,parentProp)");
+                console.log(eventIndex);
+                console.log(parentProp);
+                console.log(events[parentIndex][parentProp]);
                 if( events[parentIndex][parentProp])
                     return events[parentIndex][parentProp];
                     
@@ -686,14 +613,15 @@
                 dataArray['events']=events;
                 dataArray['xproperties']=xproperties; 
                 dataArray['locations']=locations;  
-                dataArray['persons']=persons;   
-                if(events.length<1 && xproperties.length<1 && relations.length<1 && locations.length<1 && persons.length<1)
+                    
+                if(events.length<1 && xproperties.length<1 && relations.length<1 && locations.length<1)
                 {
                     if(fallback!=undefined)fallback("bad format"); 
                     return;
                 }
                 console.log('---------finished---------' );
-                console.log(dataArray); 
+                console.log(dataArray);
+                console.log(relations);
                 if(callback!=undefined)callback(dataArray,confName); 
            }
            
@@ -701,13 +629,8 @@
             function getNodeName(node){
                 var uri=[]; 
                 $(node).children().each(function(){ 
-                    if(this.nodeName.indexOf("rdf:type")!== -1 ){
-                        if($(this).attr('rdf:resource').indexOf("#")!== -1 ){ 
-                            uri.push($(this).attr('rdf:resource').split('#')[1]); 
-                        }else{
-                            var nodeName = $(this).attr('rdf:resource').split('/'); 
-                            uri.push(nodeName[nodeName.length-1]);  
-                        }
+                    if(this.nodeName.indexOf("rdf:type")!== -1 ){    
+                        uri.push($(this).attr('rdf:resource').split('#')[1]); 
                     } 
                 });
                 if(uri.length==1)
@@ -749,10 +672,6 @@ function format(string){
 }
 
 
- Object.size = function(obj) {
-    var size = 0, key;
-    for (key in obj) {
-        if (obj.hasOwnProperty(key)) size++;
-    }
-    return size;
-};
+
+
+

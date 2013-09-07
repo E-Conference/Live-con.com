@@ -11,7 +11,7 @@
         top: 1em;
         right: 1em ;
         min-width: 20em;
-        z-index: 1000;
+        z-index: 1001;
     }
     </style>
  {% endblock %}
@@ -54,7 +54,7 @@
                 title:"Info : ",
                 icon:"<i class='icon-info'></i>"
             },
-            error:{
+            warning:{
                 title:"Error : ",
                 icon:"<i class='icon-meh'></i>"
             }
@@ -107,7 +107,7 @@
 
             {% for flashMessage in app.session.flashbag.get('error') %}
                 <script type="text/javascript" >
-                bootstrapAlert("error","{{ flashMessage }}","Error : ",'<i class="icon-meh"></i> '); 
+                bootstrapAlert("warning","{{ flashMessage }}","Error : ",'<i class="icon-meh"></i> '); 
                 </script> 
             {% endfor %}
              

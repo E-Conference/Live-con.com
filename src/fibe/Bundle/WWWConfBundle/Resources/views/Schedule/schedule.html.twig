@@ -872,7 +872,7 @@
                 //check if it's going to do a loop in the tree
                 if(isChild(draggedEvent,event)){
                   bootstrapAlert("stop");
-                  bootstrapAlert("error","cannot set event <b>"+event.title+"</b> as child of <b>"+parent.title+"</b> because this is going to do a loop in the event tree","Circular reference : "); 
+                  bootstrapAlert("warning","cannot set event <b>"+event.title+"</b> as child of <b>"+parent.title+"</b> because this is going to do a loop in the event tree","Circular reference : "); 
             
                   return;
                 }
@@ -1137,7 +1137,7 @@
           deleteParent(event);
           //check if this is going to do a loop in the tree 
           if(isChild(parent,event)){
-            bootstrapAlert("error","cannot set event <b>"+event.title+"</b> as child of <b>"+parent.title+"</b> because this is going to do a loop in the event tree","Circular reference : "); 
+            bootstrapAlert("warning","cannot set event <b>"+event.title+"</b> as child of <b>"+parent.title+"</b> because this is going to do a loop in the event tree","Circular reference : "); 
             return;
           }
  
