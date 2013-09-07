@@ -106,13 +106,13 @@
         </tbody>
     </table>
 
-         <a class="btn btn-warning" href="{{ path('person') }}">
+         <a class="btn btn-warning" href="{{ path('schedule_person_index') }}">
             <i class="icon-th-list"></i>
         </a>
-         <a  class="btn btn-warning" href="{{ path('person_edit', { 'id': entity.id }) }}">
+         <a  class="btn btn-warning" href="{{ path('schedule_person_edit', { 'id': entity.id }) }}">
             <i class="icon-edit"></i>
          </a>
-        <form action="{{ path('person_delete', { 'id': entity.id }) }}" method="post">
+        <form action="{{ path('schedule_person_delete', { 'id': entity.id }) }}" method="post">
             <input type="hidden" name="_method" value="DELETE" />
             {{ form_widget(delete_form) }}
             <button type="submit" class="btn btn-danger"> <i class="icon-remove"></i></button>

@@ -11,13 +11,13 @@
 
     <h1>Person creation</h1>
 
-    <form action="{{ path('person_create') }}" method="post" {{ form_enctype(form) }}>
+    <form action="{{ path('schedule_person_create') }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
         <div class="row-fluid">
             <div class="col-lg-9"></div>
             <div class="col-lg-2">
                   <button type="submit" class="btn btn-default"><i class="icon-ok"></i></button>
-                  <a class="btn btn-warning" href="{{ path('wwwconf_person_index') }}">
+                  <a class="btn btn-warning" href="{{ path('schedule_person_index') }}">
                     <i class="icon-th-list"></i>
                 </a>
             </div>

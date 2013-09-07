@@ -12,6 +12,7 @@ use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
  *
  * This class define a Person.
  *   @ORM\Table(name="person")
+ *   @ORM\HasLifecycleCallbacks
  *   @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\PersonRepository")
  * 	
  */
@@ -279,6 +280,22 @@ class Person
     {
         return $this->email;
     }
+
+
+
+
+    /**
+     * onCreation
+     *
+     * @ORM\PrePersist()
+     */
+    public function onCreation()
+    {
+        $now = new \DateTime('now');
+
+        $this->setCreatedAt($now); 
+    }
+    
 
     /**
      * Set created_at
@@ -631,7 +648,7 @@ class Person
      * @param string $group
      * @return Person
      */
-    public function setGroup($group)
+    public function set_group($group)
     {
         $this->_group = $group;
     
@@ -643,7 +660,7 @@ class Person
      *
      * @return string 
      */
-    public function getGroup()
+    public function get_group()
     {
         return $this->_group;
     }

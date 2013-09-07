@@ -415,9 +415,9 @@
             //update Event array
             
             updateEventArray();
-            if($('#reposition').is(':checked'))
-              reposition(view);
-
+            if($('#reposition').is(':checked')){
+                          reposition(view);
+            }
           },repositionTimeout);
               
             }, 
@@ -635,7 +635,7 @@
             positionned=[]; 
         }
 
-        function positionBlock(events,colWidth,parentZindex,parentPos,parentStart,parentEnd){ 
+        function positionBlock(events,colWidth,parentZindex,parentPos,parent){ 
           // console.log(" ######positionBlocks######");
  
           colWidth-=eventMargin; 
@@ -647,14 +647,15 @@
                
 
             //position left margin
-            var elemProp = getProp(event.elem);
-            if(parentPos){
+            var elemProp = getProp(event.elem); 
+            if(parentPos && parent && parent.allDay !== true){
               event.elem.css("left",parentPos.x+eventMargin/2);
-              if(moment(parentStart).isSame(moment(event.start))){
+
+              if(moment(parent.start).isSame(moment(event.start))){
                event.elem.css("top",elemProp.y+eventMargin/2+5); 
                event.elem.css("height",elemProp.h-eventMargin/2-1);
               }
-              if(moment(parentEnd).isSame(moment(event.end))){
+              if(moment(parent.end).isSame(moment(event.end))){
                // event.elem.css("top",elemProp.y+eventMargin/2); 
                 event.elem.css("height",elemProp.h-eventMargin/2-3);
               }
@@ -711,7 +712,7 @@
             // console.log("elem",children)
             elemProp = getProp(event.elem);
 
-            positionBlock(children,newColWidth,parentZindex+1,elemProp,event.start,event.end);
+            positionBlock(children,newColWidth,parentZindex+1,elemProp,event);
   
           }
         }
@@ -731,13 +732,13 @@
               // console.log("bro was positionned");
               broRange++;
             }
-              var broProp = getProp(getDivById(bro.id));
-              // console.log("minLeft",minLeft);
-              // console.log(getProp(getDivById(bro.id)));
-              if (broProp.x < minLeft ){
-                minLeft = broProp.x;
-                // console.log(minLeft);
-              } 
+            var broProp = getProp(getDivById(bro.id));
+            // console.log("minLeft",minLeft);
+            // console.log(getProp(getDivById(bro.id))); 
+            if (broProp.x < minLeft && bro.allDay !== true ){ 
+              minLeft = broProp.x;
+              // console.log(minLeft);
+            } 
           } 
           broCount = getBros(event,events).length;
           //get bro count 
@@ -771,7 +772,7 @@
           event['minLeft'] = minLeft; 
         }
 
-        //get 
+        
         function getBros(event,events,exclude){
           var bros=[];
 
