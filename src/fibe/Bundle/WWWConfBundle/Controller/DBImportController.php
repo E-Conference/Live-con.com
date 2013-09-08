@@ -8,9 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event; 
+use fibe\Bundle\WWWConfBundle\Entity\Person;
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Category; 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Location; 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty; 
+use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;  
  
 
 /**
@@ -28,10 +29,11 @@ class DBImportController extends Controller
       
     public function importAction(Request $request)
     {  
-        $JSONFile = json_decode($request->request->get('dataArray'),true); 
+        $JSONFile = $request->request->get('dataArray'); 
         $em = $this->getDoctrine()->getManager(); 
         $entity=null;
         $eventEntities= array();
+        $personEntities= array();
         $locationEntities= array();
         $categoryEntities= array();
         $wwwConf =  $em->getRepository('fibeWWWConfBundle:WwwConf')->find(1);
@@ -71,6 +73,20 @@ class DBImportController extends Controller
             $entity->setColor($colorArray[$i]);
             $em->persist($entity);
             array_push($categoryEntities,$entity); 
+        }  
+        
+        
+        //////////////////////  person  //////////////////////  
+        $entities = $JSONFile['persons']; 
+        for($i=0;$i<count($entities);$i++){
+            $current = $entities[$i];  
+            $entity= new Person();
+            foreach ($current as $setter => $value) {
+                //if($setter!="setStartAt" && $setter!="setEndAt")echo "Event->".$setter."(".$value.");\n"; 
+                call_user_func_array(array($entity, $setter), array($value)); 
+            } 
+            $em->persist($entity);
+            array_push($personEntities,$entity); 
         }  
             
         

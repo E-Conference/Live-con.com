@@ -14,31 +14,42 @@
             console.log(completeConfRdf);
             if(completeConfRdf==undefined )
             {
-                if(fallback!=undefined)fallback(""); 
+                if(fallback!=undefined)fallback("Empty response"); 
                 return;
-            }
+            } 
+
+
+ 
+            //check if it's rdf or owl file
             
-            /*
-            <NamedIndividual rdf:about="http://blendconference.com/speakers/olivier-marx">
-              <rdf:type rdf:resource="&foaf;Person"/>
-              <foaf:name>Olivier Marx</foaf:name>
-              <rdfs:label>Olivier Marx</rdfs:label>
-              <foaf:firstName>Olivier</foaf:firstName>
-              <foaf:lastName>Marx</foaf:lastName>
-              <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
-              <foaf:mbox></foaf:mbox>
-              <foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Capture-d%E2%80%99%C3%A9cran-2013-07-17-%C3%A0-13.24.19-73x72.png</foaf:img>
-              <foaf:homepage>http://www.altics.fr</foaf:homepage>
-              <foaf:twitter>http://www.twitter.com/oliviermarx</foaf:twitter>
-              <foaf:description>Passionné de Digital et d’Economie, Olivier Marx tombe dans le Net dès 1996, suite à un DESS multimédia complété par une maitrise de sciences économiques, De 1998 à 2004, il est consultant internet au sein de Framfab, Agence Web de 3000 collaborateurs dans 16 pays européen. Il fonde Altics en 2004 autour d’une conviction : c’est en simplifiant les parcours d’achat digitaux que l’on accélére les ventes des sites marchands. Spécialiste de l’Eye tracking, Altics a publié plus de 30 livres blancs sur l’eCommerce depuis 2008. Savoyard de naissance et dévoreur de presse, Olivier Marx est membre actif de de La Cuisine Du Web, mentor à BoostInLyon et aux Startup Weekends.</foaf:description>
-            </NamedIndividual> 
-            */
+            var isRdfFile=true; 
+            var rootNode; 
+            console.log($(completeConfRdf).children().find("namedindividual"))
+            $(completeConfRdf).children().children().each(function(){
+                    console.log(this.nodeName);
+                    if(this.nodeName !== "NamedIndividual" || isRdfFile===false)return; 
+                    isRdfFile=false; 
+                    rootNode = $(this).parent();
+            });
+            
+            var events= []; 
+            var locations= []; 
+            var xproperties= [];
+            var relations= [];
+            var categories= [];
+            var proceedings= [];
+            var persons= [];
+            var confName ;
+            
+            var defaultDate='now'; 
+            var objectMap = {};
+
 
             var personMapping = {
                 nodeName : 'Person',
                 label : {
                     'foaf:firstName' : {
-                        setter : 'setFirstName'
+                        setter : 'setFirstName',
                     },
                     'foaf:lastName' : {
                         setter : 'setLastName'
@@ -58,224 +69,285 @@
                     'foaf:description' : {
                         setter : 'setDescription'
                     },
-                } 
-            }
-            
-            //check if it's rdf or owl file
-            
-            var isRdfFile=true; 
-            $(completeConfRdf).children().children().each(function(){ 
-                if(this.nodeName=="ObjectProperty" || this.nodeName=="NamedIndividual"){
-                    isRdfFile=false;
                 }
-            }) 
-            
-            var events= []; 
-            var locations= []; 
-            var xproperties= [];
-            var relations= [];
-            var categories= [];
-            var proceedings= [];
-            var persons= [];
-            var confName ;
-             
-            var defaultDate='now'; 
+            };
+ 
+            var locationMapping = {
+                nodeName : 'MeetingRoomplace',
+                label : {
+                    'rdfs:label' : {
+                        setter : 'setName'
+                    }, 
+                    'rdfs:comment' : {
+                        setter : 'setDescription',
+                    },
+                }
+            };
+
+            var eventMapping = {
+                nodeName : 'Event',
+                label : {
+                    'rdfs:label' : {
+                        setter : 'setSummary'
+                    },
+                    'icaltzd:dtstart' : {
+                        setter : 'setStartAt'
+                    },
+                    'ical:dtstart' : {
+                        setter : 'setStartAt',
+                        format : function(node){ 
+                            var rtn;
+                            $(node).children().each(function(){
+                                if(this.nodeName !=="ical:date") return;
+                                rtn = $(this).text();  
+                            });
+                            return rtn || $(node).text();
+                        }
+                    },
+                    'icaltzd:dtend' : {
+                        setter : 'setEndAt'
+                    },
+                    'ical:dtend' : {
+                        setter : 'setEndAt',
+                        format : function(node){ 
+                            var rtn;
+                            $(node).children().each(function(){
+                                if(this.nodeName !=="ical:date") return;
+                                rtn = $(this).text();  
+                            });
+                            return rtn || $(node).text();
+                        }
+                    },
+                    'dce:description' : {
+                        setter : 'setDescription'
+                    },
+                    'swc:hasRelatedDocument' : { 
+                        action : function(node){
+                            var xproperty= {}; 
+                            xproperty['setCalendarEntity']=events.length;
+                            xproperty['setXNamespace']="publication_uri";
+                            xproperty['setXValue']=$(node).attr('rdf:resource');
+                            xproperties.push(xproperty);
+                        }
+                    },
+                    'swc:hasLocation' : {
+                        setter : 'setLocation',
+                        format : function(node){ 
+                            var key = $(node).attr('rdf:resource');
+                            if(objectMap[key])
+                                locationName = objectMap[key]['setName'];
+                            else {
+                                locationName = key.split("/");
+                                locationName = locationName[locationName.length -1 ];
+                            }
+                            return getLocationIdFromName(locationName);
+                        },
+                        action : function(node){
+                            var key = $(node).attr('rdf:resource');
+                            if(objectMap[key])
+                                locationName = objectMap[key]['setName'];
+                            else {
+                                locationName = key.split("/");
+                                locationName = locationName[locationName.length -1 ];
+                            }
+                            if(getLocationIdFromName(locationName)=== -1 ){
+                                locations.push({setDescription:"",setName:format(locationName)});  
+                            }
+                        }
+                    },
+                    'icaltzd:location' : {
+                        setter : 'setLocation',
+                        format : function(node){ 
+                            var key = $(node).attr('rdf:resource');
+                            if(objectMap[key])
+                                locationName = objectMap[key]['setName'];
+                            else {
+                                locationName = key.split("/");
+                                locationName = locationName[locationName.length -1 ];
+                            }
+                            return getLocationIdFromName(locationName);
+                        },
+                    },
+                    'foaf:homepage' : {
+                        setter : 'setUrl',
+                        format : function(node){ 
+                            return $(node).attr('rdf:resource');
+                        }, 
+                    },
+                },
+                action : function(node,event){
+                      // EVENT CAT
+                    var catName = node.nodeName.split("swc:").join("").split("event:").join("");
+                    if(catName=="NamedIndividual")catName= getNodeName(node);
+                    var tmp=catName;
+                    if(tmp.split("Event").join("")!="")
+                    {
+                        catName=tmp;
+                    }else //OWL fix
+                    {
+                        catName = getNodeName(node).split("swc:").join("").split("event:").join("") ;
+                        tmp=catName;
+                        if(tmp.split("Event").join("")!="")
+                        {
+                            catName=tmp; 
+                        }
+                    }  //OWL fix
+
+                    var catId = getCategoryIdFromName(catName);
+                    if(catId==undefined){ 
+                      var category= {}; 
+                      category['setName']=catName;
+                      if(catName == "ConferenceEvent") confName = event['setSummary'];
+                      categories.push(category);
+                      catId = categories.length-1;
+                    }
+                    event['addCategorie']=catId;
+                    
+                    
+                      // EVENT XPROP
+                    var xproperty= {}; 
+                    xproperty['setCalendarEntity']=events.length;
+                    xproperty['setXNamespace']="event_uri";
+                    xproperty['setXValue']=$(node).attr('rdf:about');
+                    xproperties.push(xproperty);
+                },
+                
+            };
+
+
+
+            function add(addArray,mapping,node){
+                var rtnArray = {};
+                var key = $(node).attr("rdf:about");
+                $(node).children().each(function(){ 
+                    if(mapping.label[this.nodeName]){
+                        if(mapping.label[this.nodeName].action){ 
+                            mapping.label[this.nodeName].action(this);
+                        }
+                        if(mapping.label[this.nodeName].setter){
+                            var val = this.textContent;
+                            if(mapping.label[this.nodeName].format){   
+                                val = mapping.label[this.nodeName].format(this);
+                            }
+                            rtnArray[mapping.label[this.nodeName].setter]= typeof val === 'string' ? format(val) : val ;
+                        } 
+                    }
+                });
+                if(mapping.action){
+                    mapping.action(node,rtnArray); 
+                }
+                if(Object.size(rtnArray) > 0){
+                    objectMap[key] = rtnArray;
+                    addArray.push( rtnArray );
+                }
+            }
+
             //////////////////////////////////////////////////////////////////////////
             ///////////////////////  first round for locations  //////////////////////
             //////////////////////////////////////////////////////////////////////////
-            // console.log($(completeConfRdf).children().children());
-            if(isRdfFile){
-                $(completeConfRdf).children().children().each(function(index){
-                    if(this.nodeName=="swc:MeetingRoomPlace"){
-                      /////////////////////         LOCATION NODE         //////////////////
-                      
-                        var location={setDescription:""};
-                        
-                        $(this).children().each(function(){ 
-                        
-                            if(this.nodeName=="rdfs:comment"){
-                            
-                              location['setDescription']= format(location.setDescription+$(this).text())+", ";
-                              
-                            }else if(this.nodeName=="rdfs:label"){ 
-                            
-                              location['setName']=format($(this).text());
-                              
-                            }
-                            
-                        });
-                        
-                        location['uri']=$(this).attr('rdf:about');
-                        
-                        locations.push(location);
+            
+            // console.log($(completeConfRdf).children().children()); 
+             
+
+            rootNode.children().each(function(index,node){
+                if( node.nodeName=="NamedIndividual" ) {
+                    var n = getNodeName(node); 
+                    if(n && n.indexOf(locationMapping.nodeName)!= -1){  
+                        add(locations,locationMapping,this); 
                     }
-                    
-                });
-            }
+                }
+            }); 
+
             //console.log('-------locations--------');
             //console.log(locations);
-            
+            //////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////  Event  //////////////////////////////
+            //////////////////////////////////////////////////////////////////////////
+             
+                rootNode.children().each(function(index,node){
+                    if( node.nodeName=="NamedIndividual" ){
+                        var n = getNodeName(node);
+                        if(n && n.indexOf(eventMapping.nodeName)!= -1){
+                            add(events,eventMapping,this); 
+                        }
+                    }
+                });  
             
             
             //////////////////////////////////////////////////////////////////////////
             //////////////////////////////////  Person  //////////////////////////////
             //////////////////////////////////////////////////////////////////////////
-            
-            if(isRdfFile){
-                
-            }else
-            {
-                $(completeConfRdf).children().children().each(function(index,node){ 
-                    if( node.nodeName=="NamedIndividual" ) {
-                        var n = getNodeName(node); 
-                        if(n && n.indexOf(personMapping.nodeName)!= -1){  
-                            add(persons,personMapping,this); 
-                        }
+             
+            rootNode.children().each(function(index,node){ 
+                if( node.nodeName=="NamedIndividual" ) {
+                    var n = getNodeName(node); 
+                    if(n && n.indexOf(personMapping.nodeName)!= -1){  
+                        add(persons,personMapping,this); 
                     }
-                });
-            }
-
-            function add(addArray,mapping,XmlNode){
-                var rtnArray = {};
-                $(XmlNode).children().each(function(){ 
-                    if(mapping.label[this.nodeName]){  
-                       rtnArray[mapping.label[this.nodeName].setter]=format(this.textContent);
-                    }
-                });
-                 
-                if(Object.size(rtnArray) > 0)
-                    addArray.push( rtnArray );
-            }
-            
-            //////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////  Event  //////////////////////////////
-            //////////////////////////////////////////////////////////////////////////
-            
-            if(isRdfFile){
-                $(completeConfRdf).children().children().each(function(index){
-                    if( this.nodeName.indexOf("Event")!== -1 ) { 
-                    /////////////////////         EVENT NODE         //////////////////
-                           
-                      doEvent(this); 
-                      
-                      //addRelation(this);
-                      //console.log(events);
-                      //console.log(relations);
-                    }
-                });
-            }else
-            {
-                $(completeConfRdf).children().children().each(function(index,node){ 
-                    if( node.nodeName=="NamedIndividual" ) {
-                        var n = getNodeName(node);
-                        if(n && n.indexOf("Event")!= -1){ 
-                            doEvent(this); 
-                        }
-                    }
-                });
-            }
+                }
+            }); 
             
             //////////////////////////////////////////////////////////////////////////
             //////////////////////////////  relations  ///////////////////////////////
             //////////////////////////////////////////////////////////////////////////
             
             var j=0;
-            if(isRdfFile){
-                $(completeConfRdf).children().children().each(function(index){
-                    if( this.nodeName.indexOf("Event")!== -1 ) { 
-                 
-                      addRelation(this,j);
-                      j++; 
-                      //console.log(events);
-                      //console.log(relations);
-                    }  
-                });
-            }else //OWL FIX
-            {
-                $(completeConfRdf).children().children().each(function(index,node){ 
-                    if( node.nodeName=="NamedIndividual" ) {
-                        var n = getNodeName(node);
-                        if(n && n.indexOf("Event")!= -1){ 
-                            addRelation(node,j);
-                      j++; 
-                        }
+            $(completeConfRdf).children().children().each(function(index,node){ 
+                if( node.nodeName=="NamedIndividual" ) {
+                    var n = getNodeName(node);
+                    if(n && n.indexOf("Event")!= -1){ 
+                        addRelation(node,j);
+                  j++; 
                     }
-                }); 
-            } //OWL FIX
+                }
+            }); 
             //////////////////////////////////////////////////////////////////////////
             ///////////////////  fourth round for publication  ///////////////////////
             //////////////////////////////////////////////////////////////////////////
             
-            if(isRdfFile){
-                $(completeConfRdf).children().children().each(function(index){
-                    
-                    if(this.nodeName=="swrc:InProceedings")
-                    {
-                        //for each proceeding
-                        var uri = $(this).attr('rdf:about'); 
-                        for (var i=0;i<xproperties.length;i++)
+            $(completeConfRdf).children().children().each(function(index,node){ 
+                if( node.nodeName=="NamedIndividual" ) 
+                {
+                    var n = getNodeName(node);
+                    if(n && n.indexOf("InProceedings")!= -1)
+                    {   
+                        var eventUri;
+                        $(node).children().each(function()
                         {
-                        
-                            if(xproperties[i]['setXValue']==uri){
-                            // if we find the corresponding xproperty  
-                                $(this).children().each(function()
-                                {
-                                    //we look for the title
-                                    if(this.nodeName=="dce:title")
-                                    {  
-                                      //to finally store it in the setXKey !
-                                      xproperties[i]['setXKey']=format($(this).text());
-                                    }
-                                });
-                            }
-                        }
-                    }
-                }); 
-            }else //OWL FIX
-            {
-                $(completeConfRdf).children().children().each(function(index,node){ 
-                    if( node.nodeName=="NamedIndividual" ) 
-                    {
-                        var n = getNodeName(node);
-                        if(n && n.indexOf("InProceedings")!= -1)
-                        {   
-                            var eventUri;
-                            $(node).children().each(function()
+                            if(this.nodeName=="swc:relatedToEvent"  )
                             {
-                                if(this.nodeName=="swc:relatedToEvent"  )
-                                {
-                                    eventUri = $(this).attr("rdf:resource");
-                                }
-                                
-                            });
+                                eventUri = $(this).attr("rdf:resource");
+                            }
                             
-                            if(eventUri){ 
-                                eventId = getEventIdFromURI(eventUri);
- 
-                                //if we find a related event 
-                                var xproperty= {}; 
-                                xproperty['setCalendarEntity']=eventId;
-                                xproperty['setXNamespace']="publication_uri";
-                                xproperty['setXValue']=$(node).attr('rdf:about');
-                                
-                                //we look for the title
-                                $(node).children().each(function(){
-                                    if(this.nodeName=="dce:title" || this.nodeName=="rdfs:label"  || this.nodeName=="dc:title" )
-                                    {
-                                        //to finally store it in the setXKey !
-                                        xproperty.setXKey=format($(node).text());
-                                    }
-                                });
-                                xproperties.push(xproperty);
-                            } 
-                        }
+                        });
+                        
+                        if(eventUri){ 
+                            eventId = getEventIdFromURI(eventUri);
+
+                            //if we find a related event 
+                            var xproperty= {}; 
+                            xproperty['setCalendarEntity']=eventId;
+                            xproperty['setXNamespace']="publication_uri";
+                            xproperty['setXValue']=$(node).attr('rdf:about');
+                            
+                            //we look for the title
+                            $(node).children().each(function(){
+                                if(this.nodeName=="dce:title" || this.nodeName=="rdfs:label"  || this.nodeName=="dc:title" )
+                                {
+                                    //to finally store it in the setXKey !
+                                    xproperty.setXKey=format($(node).text());
+                                }
+                            });
+                            xproperties.push(xproperty);
+                        } 
                     }
-                }); 
-            } //OWL FIX
+                }
+            }); 
              
             //////////////////////////////////////////////////////////////////////////
             ////////////////////////  startAt less  ///////////////////////////
             //////////////////////////////////////////////////////////////////////////
+            //startat less get the 'now' date
              for(var i=0;i<events.length;i++){
                 if(events[i]['setStartAt']!=undefined){
             
@@ -340,112 +412,7 @@
             
             //EVENT PARSE : CATCH START, END AT, LOCATION
             // THEN ADD 2 XPROPERTIES RELATED TO ITS EVENT AND PUBLICATION
-            function doEvent(event){
-                var rtnArray={}; 
-                $(event).children().each(function(){
-                
-                    if(this.nodeName=="rdfs:label"){   // LABEL 
-                        // replace & caractere ... 
-                        rtnArray['setSummary']=format(this.textContent);
-                        
-                        
-                    }else if(this.nodeName=="icaltzd:dtstart"){ // START AT 
-                        rtnArray['setStartAt']=$(this).text(); 
-                    }else if(this.nodeName=="ical:dtstart"){
-                        $(this).children().each(function(){
-                            if(this.nodeName=="ical:date"){ 
-                                rtnArray['setStartAt']=$(this).text(); 
-                            }
-                        });
-                        if(!rtnArray['setStartAt'])rtnArray['setStartAt']=$(this).text();
-                        
-                        
-                    }else if(this.nodeName=="icaltzd:dtend"){   // END AT
-                    
-                        rtnArray['setEndAt']=$(this).text(); 
-                        
-                    }else if(this.nodeName=="ical:dtend"){   
-                    
-                        $(this).children().each(function(){
-                            if(this.nodeName=="ical:date"){
-                                rtnArray['setEndAt']=$(this).text(); 
-                            }
-                        });
-                        if(!rtnArray['setEndAt'])rtnArray['setEndAt']=$(this).text();
-                        
-                    }else if(this.nodeName=="dce:description"){ // DESCRIPTION
-                    
-                        rtnArray['setDescription']=format(this.textContent);
-                        
-                    }else if(this.nodeName=="swrc:abstract"){ // ABSTRACT
-                    
-                        rtnArray['setComment']=format(this.textContent);
-                        
-                    }else if(this.nodeName=="swc:hasRelatedDocument"){ // RELATED PUBLICATION XPROP
-                    
-                        var xproperty= {}; 
-                        xproperty['setCalendarEntity']=events.length;
-                        xproperty['setXNamespace']="publication_uri";
-                        xproperty['setXValue']=$(this).attr('rdf:resource');
-                        xproperties.push(xproperty);  
-                        
-                    }else if(this.nodeName=="swc:hasLocation"){ // LOCATION //OWL fix
-                        var locationName= $(this).attr('rdf:resource').replace('http://data.semanticweb.org/conference/eswc/2013/place/','');
-                        
-                        if(getLocationIdFromName(locationName)== -1 ){ locations.push({setDescription:"",setName:locationName});  }  
-                        rtnArray.setLocation=getLocationIdFromName(locationName);
-                        
-                    }else if(this.nodeName=="icaltzd:location"){   // LOCATION
-                     
-                        var locationId = getLocationIdFromUri($(this).attr('rdf:resource'));
-                        rtnArray['setLocation']=locationId;
-                        
-                    } else if(this.nodeName=="foaf:homepage"){   // url
-                        
-                        rtnArray['setUrl']=format($(this).attr('rdf:resource')); 
-                    } 
-                    
-                });  
-                
-                  // EVENT CAT
-                var catName = event.nodeName.split("swc:").join("").split("event:").join("");
-                if(catName=="NamedIndividual")catName= getNodeName(event);
-                var tmp=catName;
-                if(tmp.split("Event").join("")!="")
-                {
-                    catName=tmp;
-                }else //OWL fix
-                {
-                    catName = getNodeName(event).split("swc:").join("").split("event:").join("") ;
-                    tmp=catName;
-                    if(tmp.split("Event").join("")!="")
-                    {
-                        catName=tmp;
-                        
-                    }
-                }  //OWL fix
-
-                var catId = getCategoryIdFromName(catName);
-                if(catId==undefined){ 
-                  var category= {}; 
-                  category['setName']=catName;
-                  if(catName == "ConferenceEvent") confName = rtnArray['setSummary'];
-                  categories.push(category);
-                  catId = categories.length-1;
-                }
-                rtnArray['addCategorie']=catId;
-                 
-                events.push( rtnArray );
-                
-                  // EVENT XPROP
-                var xproperty= {}; 
-                xproperty['setCalendarEntity']=events.length-1;
-                xproperty['setXNamespace']="event_uri";
-                xproperty['setXValue']=$(event).attr('rdf:about');
-                xproperties.push(xproperty);
-                
-                 
-             }
+             
              
             //ADD BOTH PARENT AND CHILD RELATION BETWEEN 2 EVENTS
             function addRelation(event,currentEventId){ 
@@ -485,7 +452,7 @@
                 }); 
             }
             
-            // GET THE INDEX OF A CATEGORY GIVEN ITS NAME
+            // GET THE INDEX OF A CATEGORY GIVEN BY ITS NAME
             function getCategoryIdFromName(name){
             
                 for (var i=0;i<categories.length;i++){
@@ -687,13 +654,13 @@
                 dataArray['xproperties']=xproperties; 
                 dataArray['locations']=locations;  
                 dataArray['persons']=persons;   
+                console.log('---------finished---------' );
+                console.log(dataArray); 
                 if(events.length<1 && xproperties.length<1 && relations.length<1 && locations.length<1 && persons.length<1)
                 {
                     if(fallback!=undefined)fallback("bad format"); 
                     return;
                 }
-                console.log('---------finished---------' );
-                console.log(dataArray); 
                 if(callback!=undefined)callback(dataArray,confName); 
            }
            
@@ -727,8 +694,11 @@
             }
            
        },
-       error:function(){
-                if(fallback)fallback("wrong path");
+       error:function(a,b,c){
+            console.log(a)
+            console.log(b)
+            console.log(c)
+            if(fallback)fallback('Request failed giving this error <b>"'+c+'"</b> ');
        }
    });
 }
@@ -742,9 +712,15 @@
 
 
 function format(string){
+    // return string ;
+    // return $('<div/>').text(string).html();
+        // return unescape(encodeURIComponent(string));  
+
     return string.replace(/(\r\n|\n|\r)/gm," ")//line break
                  .replace(/\s+/g," ")//spaces
-                 .split(/\x26/).join("%26").split(/\x3D/).join("%3D")// & caract
+                 .split(/\x26/).join("%26")//spaces
+                 .split(/\x3D/).join("%3D")// & caract
+                 .split(/\ue00E9/).join("e")// & caract
                  ;
 }
 

@@ -14,7 +14,7 @@
 <div id="sidebar">  
   <div class="checkbox">
     <label>
-      <input id="reposition" type="checkbox"> Reposition parent/child
+      <input id="reposition" checked="ckecked" type="checkbox"> Reposition parent/child
     </label>
   </div>
   <h4>Filter by category</h4>
@@ -1336,7 +1336,7 @@
           } 
               $.post(
                 op.quickUpdateUrl,
-                $.extend( {} , toSend ),
+                toSend,
                 function(doc) {   
                         bootstrapAlert("success","event <b>"+event['title']+"</b> has been well updated"); 
                 },
