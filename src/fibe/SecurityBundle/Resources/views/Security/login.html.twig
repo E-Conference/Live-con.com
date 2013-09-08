@@ -1,9 +1,10 @@
-{% extends 'fibeWWWConfBundle::base.html.twig' %}
+{% extends '::base.html.twig' %}
 
 
 {% block title %}Login to enter into schedule admin area{% endblock title %} 
 
 {% block body %}
+{{ parent() }}
   
   {% if error %}
     <div class="alert alert-error">{{ error.message }}</div>

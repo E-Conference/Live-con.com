@@ -2,6 +2,7 @@
 
 {% block title %}Index{% endblock title %}
 {% block body %}
+{{ parent() }}
  
 
 {% trans_default_domain 'FOSUserBundle' %}
@@ -93,6 +94,7 @@
 {% endblock body %}
 
 {%  block javascripts %}
+{{ parent() }}
     <script src="{{ asset('bundles/fibewwwconf/js/moment.min.js') }}" type="text/javascript" ></script>
     <script  type="text/javascript" >
         $(document).ready(function(){

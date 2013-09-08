@@ -2,6 +2,7 @@
 
 {% block title %}Index{% endblock title %}
 {% block body %}
+{{ parent() }}
  
 <div class="container">
     <div>
@@ -40,6 +41,7 @@
 {% endblock body %}
 
 {%  block javascripts %}  
+{{ parent() }}
 {% endblock %}
 
 

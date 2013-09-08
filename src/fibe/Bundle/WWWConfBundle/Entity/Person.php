@@ -282,7 +282,49 @@ class Person
         return $this->email;
     }
 
+<<<<<<< HEAD
    
+=======
+
+
+
+    /**
+     * onCreation
+     *
+     * @ORM\PrePersist()
+     */
+    public function onCreation()
+    {
+        $now = new \DateTime('now');
+
+        $this->setCreatedAt($now); 
+    }
+    
+
+    /**
+     * Set created_at
+     *
+     * @param \DateTime $createdAt
+     * @return Person
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+>>>>>>> 8be7114a079eaa516b464549ff8d8b7bce95a68d
     /**
      * Set agent
      *

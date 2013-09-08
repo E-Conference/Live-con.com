@@ -21,7 +21,7 @@ class PersonController extends Controller
     /**
      * Lists all Person entities.
      *
-     * @Route("/", name="person_index")
+     * @Route("/", name="schedule_person_index")
      * @Template()
      */
      
@@ -38,7 +38,7 @@ class PersonController extends Controller
 
     /**
      * Creates a new Person entity.
-     * @Route("/create", name="person_create")
+     * @Route("/create", name="schedule_person_create")
      * @Template()
      */
     public function createAction(Request $request)
@@ -52,7 +52,7 @@ class PersonController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('person_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('schedule_person_show', array('id' => $entity->getId())));
         }
 
         return $this->render('fibeWWWConfBundle:Person:new.html.twig', array(
@@ -63,7 +63,7 @@ class PersonController extends Controller
 
     /**
      * Displays a form to create a new Person entity.
-     * @Route("/new", name="person_new")
+     * @Route("/new", name="schedule_person_new")
      * @Template()
      */
     public function newAction()
@@ -79,7 +79,7 @@ class PersonController extends Controller
 
     /**
      * Finds and displays a Person entity.
-     * @Route("/{id}/show", name="person_show")
+     * @Route("/{id}/show", name="schedule_person_show")
      * @Template()
      */
     public function showAction($id)
@@ -101,7 +101,7 @@ class PersonController extends Controller
 
     /**
      * Displays a form to edit an existing Person entity.
-     * @Route("/{id}/edit", name="person_edit")
+     * @Route("/{id}/edit", name="schedule_person_edit")
      * @Template()
      */
     public function editAction($id)
@@ -126,7 +126,7 @@ class PersonController extends Controller
 
     /**
      * Edits an existing Person entity.
-     * @Route("/{id}/update", name="person_update")
+     * @Route("/{id}/update", name="schedule_person_update")
      */
     public function updateAction(Request $request, $id)
     {
@@ -146,7 +146,7 @@ class PersonController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('person_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('schedule_person_edit', array('id' => $id)));
         }
 
         return $this->render('fibeWWWConfBundle:Person:edit.html.twig', array(
@@ -158,7 +158,7 @@ class PersonController extends Controller
 
     /**
      * Deletes a Person entity.
-     * @Route("/{id}/delete", name="person_delete")
+     * @Route("/{id}/delete", name="schedule_person_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request, $id)
@@ -178,7 +178,7 @@ class PersonController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('person'));
+        return $this->redirect($this->generateUrl('schedule_person'));
     }
 
     /**

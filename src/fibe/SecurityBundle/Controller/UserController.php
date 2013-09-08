@@ -25,7 +25,7 @@ class UserController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction()
+    public function listAction()
     {
         if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') )
         {
@@ -55,7 +55,7 @@ class UserController extends Controller
 
     
     /**
-     * update User entity.
+     * switch between admin and user role
      *
      * @Route("/toggle/{id}", name="schedule_user_toggle_role") 
      * @Template()
