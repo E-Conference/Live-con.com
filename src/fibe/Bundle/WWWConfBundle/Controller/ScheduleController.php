@@ -9,9 +9,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event;
 use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;
+use fibe\Bundle\WWWConfBundle\Entity\Role;
 
 use IDCI\Bundle\SimpleScheduleBundle\Form\EventType;
 use IDCI\Bundle\SimpleScheduleBundle\Form\RecurChoiceType;
+use fibe\Bundle\WWWConfBundle\Form\RoleType;
+use fibe\Bundle\WWWConfBundle\Form\ConfEventType;
 
 use fibe\Bundle\WWWConfBundle\Form\XPropertyType; 
 
@@ -146,27 +149,19 @@ class ScheduleController extends Controller
                     ->find(1); 
          
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Event entity.');
+            throw $this->createNotFoundException('Unable to find ConfEvent entity.');
         }
 
-        $form = $this->createForm(new EventType(), $entity);
-        $deleteForm =  $this->createFormBuilder(array('id' => $id))
-                            ->add('id', 'hidden')
-                            ->getForm();
-
-        $xproperty = new XProperty();
-        $xproperty->setCalendarEntity($entity);
-        $xpropertyForm = $this->createForm(new XPropertyType(), $xproperty);
-
-        
-        return array(
-            'entity'            => $entity,
-            'formEvent'         => $form->createView(),
-            'delete_form'       => $deleteForm->createView(),
-            'xproperty_form'    => $xpropertyForm->createView(),
-            'SparqlUrl'         => $conf->getConfUri()
-        );
-      
+        $role = new Role();
+        $roleForm = $this->createForm(new RoleType(), $role);
+        $editForm = $this->createForm(new ConfEventType(), $entity);
+       
+        return $this->render('fibeWWWConfBundle:Schedule:scheduleEdit.html.twig', array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'role_form'    => $roleForm->createView(),
+          
+        ));
     }
     
      

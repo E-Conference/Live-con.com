@@ -926,4 +926,27 @@ class Person
     {
         return $this->name;
     }
+
+    /**
+     * Set _group
+     *
+     * @param string $group
+     * @return Person
+     */
+    public function setGroup($group)
+    {
+        $this->_group = $group;
+    
+        return $this;
+    }
+
+    /**
+     * Get _group
+     *
+     * @return string 
+     */
+    public function getGroup()
+    {
+        return $this->_group;
+    }
 }
