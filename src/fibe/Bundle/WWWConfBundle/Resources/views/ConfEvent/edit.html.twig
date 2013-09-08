@@ -26,6 +26,16 @@
 
         <button class="btn btn-default" type="submit"><i class="icon-ok"></i></button>
   
+
+         <p>
+            <h1>Themes</h1>
+            <div id="themes_related_list">
+                {% include "fibeWWWConfBundle:ConfEvent:themeRelation.html.twig" %}
+            </div>
+             {{ form_row(edit_form.themes) }}
+        </p>
+  
+
         <p>
             <h1>Papers Relation</h1>
             <div id="paper_related_list">
@@ -76,6 +86,20 @@
                 {id_entity : '{{entity.id}}', id_paper: id_paper}, 
             function(response){
                    $('#paper_related_list').html(response);
+                
+            }, "html");    
+       });
+
+    //listen for the form beeing submitted
+   $("select[id='fibe_bundle_wwwconfbundle_confeventtype_themes']").change(function(){
+      //get the url for the form
+      var id_theme= $(this).val();
+  
+      //start send the post request
+       $.post('{{path("schedule_confevent_addTheme") }}',               
+                {id_entity : '{{entity.id}}', id_theme: id_theme}, 
+            function(response){
+                   $('#themes_related_list').html(response);
                 
             }, "html");    
        });

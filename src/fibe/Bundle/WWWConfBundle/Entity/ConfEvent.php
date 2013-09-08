@@ -37,6 +37,15 @@ class ConfEvent extends Event
      */
     private $papers;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Theme", inversedBy="confEvents", cascade={"persist"})
+     * @ORM\JoinTable(name="theme_confEvent",
+     *     joinColumns={@ORM\JoinColumn(name="confEvent_id", referencedColumnName="id", onDelete="Cascade")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="theme_id", referencedColumnName="id", onDelete="Cascade")})
+     */
+    private $themes;
+
+
 
     /**
      * role
@@ -198,5 +207,38 @@ class ConfEvent extends Event
     }
 
 
-   
+     /**
+     * Add themes
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Theme $themes
+     * @return ConfEvent
+     */
+    public function addTheme(\fibe\Bundle\WWWConfBundle\Entity\Theme $themes)
+    {
+        $this->themes[] = $themes;
+    
+        return $this;
+    }
+
+    /**
+     * Remove themes
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Theme $themes
+     */
+    public function removeTheme(\fibe\Bundle\WWWConfBundle\Entity\Theme $themes)
+    {
+        $this->themes->removeElement($themes);
+    }
+
+    /**
+     * Get themes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getThemes()
+    {
+        return $this->themes;
+    }
+
+
 }

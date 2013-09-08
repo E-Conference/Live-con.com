@@ -22,6 +22,8 @@ class ConfEventType extends EventType
                                               'property' => 'title'))
             ->add('role', 'entity', array('class' => 'fibeWWWConfBundle:Role',
                                               'property' => 'person'))
+            ->add('themes', 'entity', array('class' => 'fibeWWWConfBundle:Theme',
+                                              'property' => 'libelle'))
         ;
     }
 

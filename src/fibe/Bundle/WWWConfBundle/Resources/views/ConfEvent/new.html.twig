@@ -1,10 +1,25 @@
-{% extends '::base.html.twig' %}
+{% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body -%}
+{% block body %}
+{{ parent() }}
     <h1>ConfEvent creation</h1>
 
-    <form action="{{ path('confevent_create') }}" method="post" {{ form_enctype(form) }}>
-        {{ form_widget(form) }}
+    <form action="{{ path('schedule_confevent_create') }}" method="post" {{ form_enctype(form) }}>
+        {{ form_row(form.summary) }}
+        {{ form_row(form.categories) }}
+        {{ form_row(form.startAt) }}
+        {{ form_row(form.url) }}
+        {{ form_row(form.parent) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.comment) }}
+        {{ form_row(form.organizer) }}
+        {{ form_row(form.contacts) }}
+        {{ form_row(form.location) }}
+        {{ form_row(form.priority) }}
+        {{ form_row(form.resources) }}
+        {{ form_row(form.endAt) }}
+        {{ form_row(form.isTransparent) }}
+        {{ form_row(form.wwwConf) }}
         <p>
             <button type="submit">Create</button>
         </p>

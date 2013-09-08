@@ -1,0 +1,42 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Relation Id</th>
+            <th>Theme</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for theme in entity.getThemes() %} 
+            <tr> 
+                <td>{{ theme.id }}</td>
+                <td>{{ theme.libelle }}</td>
+                <td>
+                     <a id="{{theme.id}}" class="btn btn-danger delete_theme" data-toggle="tooltip" title="Remove this Theme from the list"><i class="icon-minus"></i>
+                     </a>
+                </td>
+                 
+            </tr> 
+        {% endfor %}
+    </tbody>
+
+   
+</table>
+
+{% block javascripts %}
+<script type="text/javascript">
+
+$(".delete_theme").click(function(){
+
+      var id_theme = $(this).attr('id');
+      //start send the post request
+       $.post("{{path('schedule_confevent_deleteTheme')}}",               
+               {id_theme : id_theme, id_entity: "{{ entity.id }}"} , 
+            function(response){
+                   $('#themes_related_list').html(response);
+            }, "html");    
+       });
+
+</script>
+{% endblock javascripts %}
