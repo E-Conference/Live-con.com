@@ -11,7 +11,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
 use fibe\Bundle\WWWConfBundle\Form\ConfEventType;
 use fibe\Bundle\WWWConfBundle\Entity\Role;
+use fibe\Bundle\WWWConfBundle\Entity\Theme;
 use fibe\Bundle\WWWConfBundle\Form\RoleType as RoleType;
+use fibe\Bundle\WWWConfBundle\Form\ThemeType as ThemeType;
 
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
@@ -42,7 +44,7 @@ class ConfEventController extends Controller
 
     /**
      * Creates a new ConfEvent entity.
-     * 
+     *  @Route("/create", name="schedule_confevent_create")
      */
     public function createAction(Request $request)
     {
@@ -66,7 +68,7 @@ class ConfEventController extends Controller
 
     /**
      * Displays a form to create a new ConfEvent entity.
-     * @Route(name="schedule_confevent_new") 
+     * @Route("/new",name="schedule_confevent_new") 
      */
     public function newAction()
     {
@@ -163,6 +165,65 @@ class ConfEventController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
+
+
+       /**
+     * Add theme to a confEvent
+     *  @Route("/addTheme", name="schedule_confevent_addTheme")
+     *  @Method("POST")
+     *  
+     */
+    public function addThemeAction(Request $request)
+    {
+        $id_theme = $request->request->get('id_theme');
+        $id_entity = $request->request->get('id_entity');
+           
+         $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id_entity);
+        $theme =  $em->getRepository('fibeWWWConfBundle:Theme')->find($id_theme);
+
+        //Add paper to the confEvent
+        $entity->addTheme($theme);
+        //Sauvegarde des données
+        $em->persist($entity);
+        $em->flush();
+
+        return $this->render('fibeWWWConfBundle:ConfEvent:themeRelation.html.twig', array(
+            'entity'  => $entity,
+        ));
+    }
+
+
+     /**
+     * Delete theme of a confEvent
+     *  @Route("/deleteTheme", name="schedule_confevent_deleteTheme")
+     *  @Method("POST")
+     *  
+     */
+    public function deleteThemeAction(Request $request)
+    {
+        $id_theme = $request->request->get('id_theme');
+        $id_entity = $request->request->get('id_entity');
+           
+         $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id_entity);
+        $theme =  $em->getRepository('fibeWWWConfBundle:Theme')->find($id_theme);
+
+        //Add paper to the confEvent
+        $entity->removeTheme($theme);
+        //Sauvegarde des données
+        $em->persist($entity);
+        $em->flush();
+
+        return $this->render('fibeWWWConfBundle:ConfEvent:themeRelation.html.twig', array(
+            'entity'  => $entity,
+        ));
+    }
+
+
 
      /**
      * Add paper to the confEvent
