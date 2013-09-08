@@ -4,15 +4,11 @@
 {{ parent() }}
 
     <h1>Person edit</h1>
-<<<<<<< HEAD
+
 <div class="row">
   <div class="col-lg-2"></div>
   <div class="col-lg-9">
     <form action="{{ path('person_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
-=======
-
-    <form action="{{ path('schedule_person_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
->>>>>>> 8be7114a079eaa516b464549ff8d8b7bce95a68d
         <input type="hidden" name="_method" value="PUT" />
         {{ form_widget(edit_form) }}
         <div class="row-fluid">
@@ -22,7 +18,7 @@
           </div>
     </div>
     </form>
-<<<<<<< HEAD
+
   </div>
 </div>
      <div class="row">
@@ -39,26 +35,7 @@
           </div>
     </div></br>
    
-=======
 
-        <ul class="record_actions">
-    <li>
-        <a class="btn btn-warning" href="{{ path('schedule_person_index') }}">
-            <i class="icon-th-list"></i>
-
-        <a href="{{ path('schedule_person_index') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <form action="{{ path('schedule_person_delete', { 'id': entity.id }) }}" method="post">
-            <input type="hidden" name="_method" value="DELETE" />
-            {{ form_widget(delete_form) }}
-             <button type="submit" class="btn btn-danger"> <i class="icon-remove"></i></button>
-        </form>
-    </li>
-</ul>
->>>>>>> 8be7114a079eaa516b464549ff8d8b7bce95a68d
 
 <script src="{{ asset('bundles/fibewwwconf/js/bootstrap-datetimepicker.min.js') }}" type="text/javascript" ></script>  
 <script src="{{ asset('bundles/fibewwwconf/js/datepickerTools.js') }}" type="text/javascript" ></script>
