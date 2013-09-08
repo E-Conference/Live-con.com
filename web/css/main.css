@@ -28,14 +28,18 @@ option
 	lineheight: 40% !important ;
 }*/
 
-.equipment_button >.delete_equipment
+.equipment_remove
 {
-	margin-bottom: 50%;
+	margin-bottom: 50%!important;
 
 }
 
 .btn-info
 {
 
-	margin-top: 8% !important;
+	margin-top: 8%!important;
+}
+.btn
+{
+	margin-bottom: 5%!important;
 }

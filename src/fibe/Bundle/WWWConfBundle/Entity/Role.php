@@ -41,7 +41,7 @@ class Role
      /**
      * Event
      * Persons related to an event 
-     * @ORM\ManyToOne(targetEntity="ConfEvent", inversedBy="person")
+     * @ORM\ManyToOne(targetEntity="ConfEvent", inversedBy="role")
      * @Assert\NotBlank(message="You have to choose a Role for the person")
      * 
      */

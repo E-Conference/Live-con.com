@@ -33,7 +33,15 @@ class Person
     private $role;
 
     /**
-     * autho
+     *  Homepage
+     *
+     * @ORM\Column(type="string", name="homepage")
+     * 
+     */
+    private $homepage;
+
+    /**
+     * paper
      * Paper make by this person
      *  
      * @ORM\OneToMany(targetEntity="Author", mappedBy="person")
@@ -791,5 +799,74 @@ class Person
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * Set hashtag
+     *
+     * @param string $hashtag
+     * @return Person
+     */
+    public function setHashtag($hashtag)
+    {
+        $this->hashtag = $hashtag;
+    
+        return $this;
+    }
+
+    /**
+     * Get hashtag
+     *
+     * @return string 
+     */
+    public function getHashtag()
+    {
+        return $this->hashtag;
+    }
+
+    /**
+     * Set _group
+     *
+     * @param string $group
+     * @return Person
+     */
+    public function setGroup($group)
+    {
+        $this->_group = $group;
+    
+        return $this;
+    }
+
+    /**
+     * Get _group
+     *
+     * @return string 
+     */
+    public function getGroup()
+    {
+        return $this->_group;
+    }
+
+    /**
+     * Set homepage
+     *
+     * @param string $homepage
+     * @return Person
+     */
+    public function setHomepage($homepage)
+    {
+        $this->homepage = $homepage;
+    
+        return $this;
+    }
+
+    /**
+     * Get homepage
+     *
+     * @return string 
+     */
+    public function getHomepage()
+    {
+        return $this->homepage;
     }
 }

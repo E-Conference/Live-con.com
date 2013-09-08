@@ -52,4 +52,77 @@ class Theme
 
    
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->confEvents = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set libelle
+     *
+     * @param string $libelle
+     * @return Theme
+     */
+    public function setLibelle($libelle)
+    {
+        $this->libelle = $libelle;
+    
+        return $this;
+    }
+
+    /**
+     * Get libelle
+     *
+     * @return string 
+     */
+    public function getLibelle()
+    {
+        return $this->libelle;
+    }
+
+    /**
+     * Add confEvents
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $confEvents
+     * @return Theme
+     */
+    public function addConfEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $confEvents)
+    {
+        $this->confEvents[] = $confEvents;
+    
+        return $this;
+    }
+
+    /**
+     * Remove confEvents
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $confEvents
+     */
+    public function removeConfEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $confEvents)
+    {
+        $this->confEvents->removeElement($confEvents);
+    }
+
+    /**
+     * Get confEvents
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getConfEvents()
+    {
+        return $this->confEvents;
+    }
 }

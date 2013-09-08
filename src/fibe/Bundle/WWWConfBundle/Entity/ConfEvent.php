@@ -204,5 +204,40 @@ class ConfEvent extends Event
         return $this->role;
     }
 
+     /**
+     * Add themes
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Theme $themes
+     * @return ConfEvent
+     */
+    public function addTheme(\fibe\Bundle\WWWConfBundle\Entity\Theme $themes)
+    {
+        $this->themes[] = $themes;
+    
+        return $this;
+    }
 
-  }
+    /**
+     * Remove themes
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Theme $themes
+     */
+    public function removeTheme(\fibe\Bundle\WWWConfBundle\Entity\Theme $themes)
+    {
+        $this->themes->removeElement($themes);
+    }
+
+    /**
+     * Get themes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getThemes()
+    {
+        return $this->themes;
+    }
+
+
+
+   
+}

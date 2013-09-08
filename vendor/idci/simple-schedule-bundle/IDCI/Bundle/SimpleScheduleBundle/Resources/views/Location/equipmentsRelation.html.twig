@@ -1,23 +1,38 @@
-<h3>Equipments</h3>
+<div class="row">
+  <div class="col-lg-2">
+      <h2>Equipments</h2>
+  </div> 
+  <div class="col-lg-2">   
+    <button class="btn btn-small btn-info" id="add_equipment">
+      <i class="icon-plus"></i>
+    </button>
+  </div>
+</div>
 
- {% for equipment in entity.getEquipments() %}
-   <button class="btn btn-default equipment_button" title="{{equipment.label}}">
-        <i class='icon-{{ equipment.icon }} icon-2x'></i>
-        <i id='{{equipment.id}}' class='icon-remove delete_equipment'></i>
-   </button>
- {% endfor %}
+<div class="row">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">         
+       {% for equipment in entity.getEquipments() %}
+         <button class="btn btn-default " title="{{equipment.label}}">
+              <i class='icon-{{ equipment.icon }} icon-2x equipment_remove'></i>
+              <i id='{{equipment.id}}' class='icon-remove delete_equipment'></i>
+         </button>
+       {% endfor %}
+    </div>
+</div></br>
      
 
- <!-- Select box equipment -->             
-<select id="equipment_list" class="form-control">
-        {% for equipment in equipments %}
-            <option value="{{ equipment.id }}">{{ equipment.label }}</option>
-        {% endfor %}
-</select>        
-<button class="btn btn-small btn-info" id="add_equipment">
-    <i class="icon-plus"></i>
-</button>
-   
+ <!-- Select box equipment -->    
+ <div class="row">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">         
+        <select id="equipment_list" class="form-control">
+                {% for equipment in equipments %}
+                    <option value="{{ equipment.id }}">{{ equipment.label }}</option>
+                {% endfor %}
+        </select>  
+    </div> 
+</div>   
 
 
 {% block javascripts %}

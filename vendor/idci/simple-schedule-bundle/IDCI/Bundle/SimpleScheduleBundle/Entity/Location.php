@@ -31,6 +31,11 @@ class Location
      */
     protected $name;
 
+     /**
+     * @ORM\Column(type="integer")
+     */
+    protected $capacity;
+
 	/**
      * 
      * @ORM\ManyToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Equipment")
@@ -119,6 +124,28 @@ class Location
     public function getName()
     {
         return $this->name;
+    }
+
+    /** Set capacity
+     *
+     * @param string $capacity
+     * @return Location
+     */
+    public function setCapacity($capacity)
+    {
+        $this->capacity = $capacity;
+    
+        return $this;
+    }
+
+    /**
+     * Get capacity
+     *
+     * @return integer 
+     */
+    public function getCapacity()
+    {
+        return $this->capacity;
     }
 
     /**

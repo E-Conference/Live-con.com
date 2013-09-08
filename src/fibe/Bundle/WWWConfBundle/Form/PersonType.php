@@ -14,6 +14,8 @@ class PersonType extends AbstractType
             ->add('email')
             ->add('agent')
             ->add('name')
+            ->add('homepage')
+            ->add('hashtag')
             ->add('title')
             ->add('img')
             ->add('depiction')
