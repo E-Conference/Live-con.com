@@ -82,14 +82,14 @@ class Person
     /**
      * name
      * A name for some thing. Name of the person 
-     * @ORM\Column(type="string", nullable=true,  name="name")
+     * @ORM\Column(type="string", name="name")
      */
     protected $name;
 
     /**
      * firstName
      * A name for some thing. Name of the person 
-     * @ORM\Column(type="string", nullable=true,  name="firstName")
+     * @ORM\Column(type="string", name="firstName")
      */
     protected $firstName;
 
@@ -97,7 +97,7 @@ class Person
      * lastName
      *. lastName - The last name of some person. 
      *
-     * @ORM\Column(type="string", length=255, nullable=true, name="lastName")
+     * @ORM\Column(type="string", length=255, name="lastName")
      */
      protected $lastName;
 
@@ -254,8 +254,8 @@ class Person
      */
 
     protected $image;
-	 
-	
+
+    
 
     /**
      * Constructor
@@ -266,7 +266,35 @@ class Person
         $this->paper = new \Doctrine\Common\Collections\ArrayCollection();
         $this->organizations = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+     
+
+
+    /**
+     * onCreation
+     *
+     * @ORM\PrePersist()
+     */
+    public function onCreation()
+    {
+        $now = new \DateTime('now');
+
+        $this->setCreatedAt($now); 
+        $this->concatName();
+    }
+ 
+    /**
+     * onUpdate
+     *
+     * @ORM\PreUpdate()
+     */
+    public function onUpdate()
+    {
+        $this->concatName();
+    }
+
+    private function concatName(){
+        $this->setName($this->getFirstName() . " " . $this->getLastName());
+     }
     /**
      * Get id
      *
@@ -275,6 +303,29 @@ class Person
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set created_at
+     *
+     * @param \DateTime $createdAt
+     * @return Person
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
     }
 
     /**
@@ -299,45 +350,7 @@ class Person
     {
         return $this->email;
     }
-
-
-
-
-    /**
-     * onCreation
-     *
-     * @ORM\PrePersist()
-     */
-    public function onCreation()
-    {
-        $now = new \DateTime('now');
-
-        $this->setCreatedAt($now); 
-    }
     
-
-    /**
-     * Set created_at
-     *
-     * @param \DateTime $createdAt
-     * @return Person
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->created_at = $createdAt;
-    
-        return $this;
-    }
-
-    /**
-     * Get created_at
-     *
-     * @return \DateTime 
-     */
-    public function getCreatedAt()
-    {
-        return $this->created_at;
-    }
 
     /**
      * Set agent
