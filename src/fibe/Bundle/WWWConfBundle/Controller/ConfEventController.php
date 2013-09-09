@@ -135,7 +135,7 @@ class ConfEventController extends Controller
     /**
      * Edits an existing ConfEvent entity.
      *  @Route("/{id}/update", name="schedule_confevent_update")
-     *  @Method("POST")
+     *  @Method({"PUT","POST"})
      *  @Template("fibeWWWConfBundle:ConfEvent:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
@@ -255,7 +255,7 @@ class ConfEventController extends Controller
      /**
      * Delete paper to a confEvent
      *  @Route("/deletePaper", name="schedule_confevent_deletePaper")
-     *  @Method("POST")
+     *  @Method({"DELETE","POST"})
      *  
      */
     public function deletePaperAction(Request $request)

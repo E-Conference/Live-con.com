@@ -358,8 +358,8 @@
                             $modalBody.html(doc);
                             bootstrapAlert("stop");
                         }
-                    });
-                    bootstrapAlert("info","edit <b>"+event['title']+"</b> request sent","Info : ","<i class='icon-spinner icon-spin'></i>"); 
+                    }); 
+                    bootstrapAlert("info","edit <b>"+(calEvent['title'] || calEvent['name'])+"</b> request sent","Info : ","<i class='icon-spinner icon-spin'></i>"); 
 
             },
             selectable: true, 
