@@ -14,7 +14,7 @@
 <div id="sidebar">  
   <div class="checkbox">
     <label>
-      <input id="reposition" checked="ckecked" type="checkbox"> Reposition parent/child
+      <input id="reposition"  type="checkbox"> Reposition parent/child
     </label>
   </div> 
   <div class="history hide">
@@ -1303,6 +1303,8 @@
           events[i]["start"]  = events[i].start_at;
           events[i]["end"]    = events[i].end_at; 
           events[i]["allDay"] = events[i].is_allday==="true";
+          if(events[i].categories && events[i].categories[0] && events[i].categories[0].color)
+            events[i]["color"] = events[i].categories[0].color;
 
           delete events[i]["url"];
           // console.log(events[i].categories);

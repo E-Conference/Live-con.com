@@ -1,0 +1,33 @@
+{% extends 'fibeWWWConfBundle::base.html.twig' %}
+
+{% block body %}
+{{ parent() }}
+    <h1>RoleType list
+    </h1>
+    <a class="btn btn-info"  href="{{ path('schedule_roletype_new') }}">
+       <i class="icon-plus"></i> 
+    </a> 
+    
+    <table class="table table-hover records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Libelle</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('schedule_roletype_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.libelle }}</td>
+                <td> 
+                    <a class="btn btn-default" href="{{ path('schedule_roletype_show', { 'id': entity.id }) }}"><i class="icon-eye-open"></i></a> 
+                    <a class="btn btn-warning" href="{{ path('schedule_roletype_edit', { 'id': entity.id }) }}"><i class="icon-edit"></i></a> 
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% endblock %}

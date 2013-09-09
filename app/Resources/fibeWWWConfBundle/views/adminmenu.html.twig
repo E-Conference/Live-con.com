@@ -17,8 +17,10 @@
         <li><a href ="{{ path('schedule_status') }}" title="Status">Status</a></li>
         <li><a href ="{{ path('schedule_location') }}" title="Location">Location</a></li>
         <li><a href ="{{ path('schedule_category') }}" title="Category">Category</a></li>
+        <li><a href ="{{ path('schedule_theme') }}" title="Theme">Theme</a></li>
         <li><a href ="{{ path('schedule_event') }}" title="Event">Event</a></li>
         <li><a href ="{{ path('schedule_person_index') }}" title="Person">Person</a></li>
+        <li><a href ="{{ path('schedule_roletype') }}" title="Person">RoleType</a></li>
 
     </ul><!-- end class nav-->
 
@@ -28,7 +30,7 @@
           <i class="icon-user "></i> {{ app.user.username }}
           <b class="caret"></b>
         </a>
-        <ul class="dropdown-menu"> 
+        <ul class="dropdown-menu">
           <li> 
             <a style="padding-right:5px;" href="{{ path('fos_user_profile_edit') }}" title="Profile">
               <span class="icon-user glyphicon-white "> Profile		
