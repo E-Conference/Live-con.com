@@ -10,7 +10,7 @@ parameters:
     mailer_host:       localhost
     mailer_user:       ~
     mailer_password:   ~
-    routing_dev_file:  routing.yml
+    routing_dev_file:  routing_dev.yml
 
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt

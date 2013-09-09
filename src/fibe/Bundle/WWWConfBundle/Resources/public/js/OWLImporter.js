@@ -58,7 +58,7 @@
                         setter : 'setName'
                     },
                     'foaf:img' : {
-                        escape : false;
+                        escape : false,
                         setter : 'setImage'
                     },
                     'foaf:homepage' : {
@@ -230,7 +230,7 @@
                             if(mapping.label[this.nodeName].format){   
                                 val = mapping.label[this.nodeName].format(this);
                             }
-                            rtnArray[mapping.label[this.nodeName].setter]= mapping.label[this.nodeName].setter !== false || typeof val === 'string' ? format(val) : val ;
+                            rtnArray[mapping.label[this.nodeName].setter]= mapping.label[this.nodeName].setter === false ? val : typeof val === 'string' ? format(val) : val ;
                         } 
                     }
                 });
