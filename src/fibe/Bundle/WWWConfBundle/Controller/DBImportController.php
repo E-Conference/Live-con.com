@@ -41,122 +41,128 @@ class DBImportController extends Controller
         
         
         //////////////////////  locations  //////////////////////
-        $locations = $JSONFile['locations'];
-        for($i=0;$i<count($locations);$i++){
-            $entity= new Location();
-            $current = $locations[$i];  
-            foreach ($current as $setter => $value) { 
-                call_user_func_array(array($entity, $setter), array($value)); 
-            } 
-            $em->persist($entity); 
-            array_push($locationEntities,$entity); 
-        }  
+        if(isset($JSONFile['locations'])){
+            $locations = $JSONFile['locations'];
+            for($i=0;$i<count($locations);$i++){
+                $entity= new Location();
+                $current = $locations[$i];  
+                foreach ($current as $setter => $value) { 
+                    call_user_func_array(array($entity, $setter), array($value)); 
+                } 
+                $em->persist($entity); 
+                array_push($locationEntities,$entity); 
+            }  
+        }     
         
         
         //////////////////////  categories  ////////////////////// 
-        $colorArray = array('lime', 'red', 'blue', 'orange', 'gold', 'coral', 'crimson', 'aquamarine', 'darkOrchid', 'forestGreen', 'peru','purple' ,'seaGreen'  );
-        $entities = $JSONFile['categories']; 
-        for($i=0;$i<count($entities);$i++){
-            $current = $entities[$i]; 
-            $existsTest = $this->getDoctrine()
-                               ->getRepository('IDCISimpleScheduleBundle:Category')
-                               ->findOneBy(array('name' => $current['setName']));
-            if($existsTest!=null){
-              array_push($categoryEntities,$existsTest); 
-              continue; //skip existing category
-            }
-            $entity= new Category();
-            foreach ($current as $setter => $value) {
-                //if($setter!="setStartAt" && $setter!="setEndAt")echo "Event->".$setter."(".$value.");\n"; 
-                call_user_func_array(array($entity, $setter), array($value)); 
-            }
-            $entity->setColor($colorArray[$i]);
-            $em->persist($entity);
-            array_push($categoryEntities,$entity); 
-        }  
-        
-        
-        //////////////////////  person  //////////////////////  
-        $entities = $JSONFile['persons']; 
-        for($i=0;$i<count($entities);$i++){
-            $current = $entities[$i];  
-            $entity= new Person();
-            foreach ($current as $setter => $value) {
-                //if($setter!="setStartAt" && $setter!="setEndAt")echo "Event->".$setter."(".$value.");\n"; 
-                call_user_func_array(array($entity, $setter), array($value)); 
-            } 
-            $em->persist($entity);
-            array_push($personEntities,$entity); 
-        }  
-            
-        
-        //////////////////////  events  //////////////////////
-        $entities = $JSONFile['events'];
-        for($i=0;$i<count($entities);$i++){
-            $entity= new Event();
-            $current = $entities[$i];
-            foreach ($current as $setter => $value) {
-
-                if($setter=="setStartAt" || $setter=="setEndAt"){
-                    $date= explode(' ', $value); 
-                    $value=new \DateTime($date[0], new \DateTimeZone(date_default_timezone_get()));
-                    
+        if(isset($JSONFile['categories'])){
+            $colorArray = array('lime', 'red', 'blue', 'orange', 'gold', 'coral', 'crimson', 'aquamarine', 'darkOrchid', 'forestGreen', 'peru','purple' ,'seaGreen'  );
+            $entities = $JSONFile['categories']; 
+            for($i=0;$i<count($entities);$i++){
+                $current = $entities[$i]; 
+                $existsTest = $this->getDoctrine()
+                                   ->getRepository('IDCISimpleScheduleBundle:Category')
+                                   ->findOneBy(array('name' => $current['setName']));
+                if($existsTest!=null){
+                  array_push($categoryEntities,$existsTest); 
+                  continue; //skip existing category
                 }
-                
-                if($setter=="setLocation"){
-                 
-                    $value=$locationEntities[$value]; 
-                } 
-                
-                if($setter=="addCategorie"){
-                    $value=$categoryEntities[$value];  
-                    
-                }
-                
-                if($setter=="setParent"){  
-                    // $current["addChild"] = $entities[$value];
-                } else{
+                $entity= new Category();
+                foreach ($current as $setter => $value) {
+                    //if($setter!="setStartAt" && $setter!="setEndAt")echo "Event->".$setter."(".$value.");\n"; 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 }
-            }
-            $entity->setWwwConf(  $wwwConf );
-            $em->persist($entity); 
-            array_push($eventEntities,$entity); 
+                $entity->setColor($colorArray[$i]);
+                $em->persist($entity);
+                array_push($categoryEntities,$entity); 
+            }  
         }
+        
+        //////////////////////  person  ////////////////////// 
+        if(isset($JSONFile['persons'])){
+            $entities = $JSONFile['persons']; 
+            for($i=0;$i<count($entities);$i++){
+                $current = $entities[$i];  
+                $entity= new Person();
+                foreach ($current as $setter => $value) {
+                    //if($setter!="setStartAt" && $setter!="setEndAt")echo "Event->".$setter."(".$value.");\n"; 
+                    call_user_func_array(array($entity, $setter), array($value)); 
+                } 
+                $em->persist($entity);
+                array_push($personEntities,$entity); 
+            }  
+        }    
+        
+        //////////////////////  events  //////////////////////
+        if(isset($JSONFile['events'])){
+            $entities = $JSONFile['events'];
+            for($i=0;$i<count($entities);$i++){
+                $entity= new Event();
+                $current = $entities[$i];
+                foreach ($current as $setter => $value) {
 
-        for($i=0;$i<count($entities);$i++){
-            $entity= $eventEntities[$i];
-            $current = $entities[$i];
-            foreach ($current as $setter => $value) {
-                if($setter=="setParent"){ 
-                    $value=$eventEntities[$value]; 
-                    call_user_func_array(array($entity, $setter), array($value));  
-                }  
+                    if($setter=="setStartAt" || $setter=="setEndAt"){
+                        $date= explode(' ', $value); 
+                        $value=new \DateTime($date[0], new \DateTimeZone(date_default_timezone_get()));
+                        
+                    }
+                    
+                    if($setter=="setLocation"){
+                     
+                        $value=$locationEntities[$value]; 
+                    } 
+                    
+                    if($setter=="addCategorie"){
+                        $value=$categoryEntities[$value];  
+                        
+                    }
+                    
+                    if($setter=="setParent"){  
+                        // $current["addChild"] = $entities[$value];
+                    } else{
+                        call_user_func_array(array($entity, $setter), array($value)); 
+                    }
+                }
+                $entity->setWwwConf(  $wwwConf );
+                $em->persist($entity); 
+                array_push($eventEntities,$entity); 
             }
-            $entity->setWwwConf(  $wwwConf  );
-            $em->persist($entity);
-        }
 
+            for($i=0;$i<count($entities);$i++){
+                $entity= $eventEntities[$i];
+                $current = $entities[$i];
+                foreach ($current as $setter => $value) {
+                    if($setter=="setParent"){ 
+                        $value=$eventEntities[$value]; 
+                        call_user_func_array(array($entity, $setter), array($value));  
+                    }  
+                }
+                $entity->setWwwConf(  $wwwConf  );
+                $em->persist($entity);
+            }
+        }
         //echo implode(",\t",$eventEntities)  ;
         //////////////////////  x prop  //////////////////////
         //echo "xproperties->\n";
-        $xproperties = $JSONFile['xproperties']; 
-        for($i=0;$i<count($xproperties);$i++){
-            $current = $xproperties[$i];
-            $entity= new XProperty();
-            foreach ($current as $setter => $value) { 
-                if($setter=="setCalendarEntity"){
-                
-                    //echo "XProperty->->".$eventEntities[strval($value)]."->".$value.");\n";
-                    $value=$eventEntities[$value]; 
-                } 
-                //echo "XProperty->".$setter."(".$value.");\n";
-                call_user_func_array(array($entity, $setter), array($value)); 
+        if(isset($JSONFile['xproperties'])){
+            $xproperties = $JSONFile['xproperties']; 
+            for($i=0;$i<count($xproperties);$i++){
+                $current = $xproperties[$i];
+                $entity= new XProperty();
+                foreach ($current as $setter => $value) { 
+                    if($setter=="setCalendarEntity"){
+                    
+                        //echo "XProperty->->".$eventEntities[strval($value)]."->".$value.");\n";
+                        $value=$eventEntities[$value]; 
+                    } 
+                    //echo "XProperty->".$setter."(".$value.");\n";
+                    call_user_func_array(array($entity, $setter), array($value)); 
+                }
+                if(!$entity->getXKey())$entity->setXKey(rand (0,9999999999));
+                $em->persist($entity);
             }
-            if(!$entity->getXKey())$entity->setXKey(rand (0,9999999999));
-            $em->persist($entity);
         }
-         
          
         
          

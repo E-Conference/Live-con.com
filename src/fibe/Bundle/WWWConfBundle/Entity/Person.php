@@ -178,7 +178,7 @@ class Person
      *
      * age - The age in years of some agent. 
      *
-     * @ORM\Column(type="string", nullable=true, length=32, name="age")
+     * @ORM\Column(type="string", nullable=true, length=255, name="age")
      */
     protected $age ;
 
@@ -187,7 +187,7 @@ class Person
      * 
      * made - Something that was made by this agent. 
      *
-     * @ORM\Column(type="string", nullable=true, length=32, name="made")
+     * @ORM\Column(type="string", nullable=true, length=255, name="made")
      */
     protected $made;
 	
@@ -196,7 +196,7 @@ class Person
      * 
      * primary topic - The primary topic of some page or document. 
      *
-     * @ORM\Column(type="string", nullable=true, length=32, name="primary_topic")
+     * @ORM\Column(type="string", nullable=true, length=255, name="primary_topic")
      */
     protected $primary_topic;
 
@@ -205,14 +205,14 @@ class Person
      *
      * Project - A project (a collective endeavour of some kind). 
      *
-     *  @ORM\Column(type="string", nullable=true, length=32, name="project")
+     *  @ORM\Column(type="string", nullable=true, length=255, name="project")
      */
      protected $project;
 
     /**
      * organization
      * Organization - An organization
-	* @ORM\Column(type="string", nullable=true, length=32, name="organization")
+	* @ORM\Column(type="string", nullable=true, length=255, name="organization")
      */
     protected $organization;
 
@@ -220,7 +220,7 @@ class Person
      * group
      *
      * Group - A class of Agents. 
-	* @ORM\Column(type="string", nullable=true, length=32, name="_group")
+	* @ORM\Column(type="string", nullable=true, length=255, name="_group")
      */
     protected $_group;
 
@@ -228,7 +228,7 @@ class Person
      * member
      *
      * member - Indicates a member of a Group 
-     *  @ORM\Column(type="string", nullable=true, length=32, name="member")
+     *  @ORM\Column(type="string", nullable=true, length=255, name="member")
      */
      protected $member;
 
@@ -236,7 +236,7 @@ class Person
      * document
      *
      * Document - A document.
-	* @ORM\Column(type="string", nullable=true, length=32, name="document")
+	* @ORM\Column(type="string", nullable=true, length=255, name="document")
      */
      protected $document;
 
@@ -250,7 +250,7 @@ class Person
 	* Subclass Of	Document
 	* The class Image is a sub-class of Document corresponding to those documents which are images.
 	* Digital images (such as JPEG, PNG, GIF bitmaps, SVG diagrams etc.) are examples of Image.
-	*@ORM\Column(type="string", nullable=true, length=32, name="image")
+	*@ORM\Column(type="string", nullable=true, length=255, name="image")
      */
 
     protected $image;
@@ -532,7 +532,7 @@ class Person
      */
     public function setHomepage($homepage)
     {
-        $this->homepage = $twihomepagetter;
+        $this->homepage = $homepage;
     
         return $this;
     }

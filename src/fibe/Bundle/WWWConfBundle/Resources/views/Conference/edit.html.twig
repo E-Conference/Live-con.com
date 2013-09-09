@@ -182,9 +182,9 @@
                                 
                             },
                             error:function(a,b,c)
-                            { 
-                                bootstrapAlert("warning",ConfRdfFile.events.length+' events found but import failed'); 
-                                confOwlUriInput.parent().addClass('has-warning');
+                            {  
+                                    bootstrapAlert("warning",'import failed because : '+c); 
+                                    confOwlUriInput.parent().addClass('has-warning');  
                             },
                         });
                         
