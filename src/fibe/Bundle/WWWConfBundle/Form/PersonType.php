@@ -13,8 +13,10 @@ class PersonType extends AbstractType
         $builder
             ->add('email')
             ->add('agent')
-            ->add('name')
             ->add('title')
+            ->add('name')
+            ->add('homepage')
+            ->add('twitter')
             ->add('depiction')
             ->add('givenName')
             ->add('based_near')
