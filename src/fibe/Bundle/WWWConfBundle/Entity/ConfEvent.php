@@ -173,6 +173,19 @@ class ConfEvent extends Event
         return $this->papers;
     }
 
+
+    /**
+     * Set papers
+     *
+     * @param Doctrine\Common\Collections\ArrayCollection $papers
+     * @return confEvent
+     */
+
+    public function setPapers()
+    {
+       
+    }
+
     /**
      * Add role
      *
@@ -238,6 +251,18 @@ class ConfEvent extends Event
     public function getThemes()
     {
         return $this->themes;
+    }
+
+     /**
+     * Set themes
+     *
+     * @param Doctrine\Common\Collections\ArrayCollection $themes
+     * @return confEvent
+     */
+
+    public function setThemes()
+    {
+       
     }
 
 

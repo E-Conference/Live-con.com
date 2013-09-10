@@ -135,7 +135,6 @@ class ConfEventController extends Controller
     /**
      * Edits an existing ConfEvent entity.
      *  @Route("/{id}/update", name="schedule_confevent_update")
-     *  @Method("POST")
      *  @Template("fibeWWWConfBundle:ConfEvent:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
