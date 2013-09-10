@@ -30,7 +30,7 @@ class Person
      * @ORM\OneToMany(targetEntity="Role",  mappedBy="person")
      * 
      */
-    private $role;
+    private $roles;
 
     /**
      * autho
@@ -864,9 +864,9 @@ class Person
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getRole()
+    public function getRoles()
     {
-        return $this->role;
+        return $this->roles;
     }
 
     /**

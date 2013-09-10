@@ -1,31 +1,25 @@
 {
-    "id": "{{ entity.id }}",
-    "name": "{{ entity.summary }}",
-    "created_at": "{{ entity.createdAt | date('Y-m-d H:i') }}",
-    "end_at": "{{ entity.endAt | date('Y-m-d H:i') }}",
-    "start_at": "{{ entity.startAt | date('Y-m-d H:i') }}",
-
-    "parent":
-    {
-        "id": "{{ entity.parent.id }}",
-        "name": "{{ entity.parent.summary }}"
-    },
-    "is_transparent": "{{ entity.isTransparent }}",
-    "is_allday": "{% if entity.isAllDay == true %}true{% elseif entity.isAllDay == false %}false{% endif %}",
-    "resources": "{{ entity.resources }}",
-    "duration": "{{ entity.duration }}",
-    "last_modified_at": "{{ entity.lastModifiedAt | date('Y-m-d H:i') }}",
-    "description": "{{ entity.description }}",
-    "comment": "{{ entity.comment }}",
-    "url": "{{ entity.url }}",
-    "organizer": "{{ entity.organizer }}",
+    "id"               : "{{ entity.id }}",
+    "name"             : "{{ entity.summary }}",
+    "created_at"       : "{{ entity.createdAt | date('Y-m-d H:i') }}",
+    "end_at"           : "{{ entity.endAt | date('Y-m-d H:i') }}",
+    "start_at"         : "{{ entity.startAt | date('Y-m-d H:i') }}",
+    "is_transparent"   : "{{ entity.isTransparent }}",
+    "is_allday"        : "{% if entity.isAllDay == true %}true{% elseif entity.isAllDay == false %}false{% endif %}",
+    "resources"        : "{{ entity.resources }}",
+    "duration"         : "{{ entity.duration }}",
+    "last_modified_at" : "{{ entity.lastModifiedAt | date('Y-m-d H:i') }}",
+    "description"      : "{{ entity.description }}",
+    "comment"          : "{{ entity.comment }}",
+    "url"              : "{{ entity.url }}",
+    "organizer"        : "{{ entity.organizer }}",
     "revision_sequence": "{{ entity.revisionSequence }}",
-    "attendees": "{{ entity.attendees }}",
-    "contacts": "{{ entity.contacts }}",
-    "excluded_dates": "{{ entity.excludedDates }}",
-    "included_dates": "{{ entity.includedDates }}",
-    "classification": "{{ entity.classification }}",
-    "r_rule": "{% autoescape false %}{{ entity.includedRule }}{% endautoescape %}",
+    "attendees"        : "{{ entity.attendees }}",
+    "contacts"         : "{{ entity.contacts }}",
+    "excluded_dates"   : "{{ entity.excludedDates }}",
+    "included_dates"   : "{{ entity.includedDates }}",
+    "classification"   : "{{ entity.classification }}",
+    "r_rule"           : "{% autoescape false %}{{ entity.includedRule }}{% endautoescape %}",
     "location":
     {
         "id": "{{ entity.location.id }}",
@@ -36,45 +30,47 @@
         {% endif %}
         "description": "{{ entity.location.getDescription() }}"
     },
+    "parent"           :
+    {
+        "id"           : "{{ entity.parent.id }}",
+        "name"         : "{{ entity.parent.summary }}"
+    },
     {% spaceless %}
     "children":
     [
     {% for child in entity.children %}
-        {% if loop.first %}
-        { "id": "{{ child.id }}", "name": "{{ child.getSummary() }}"}
-        {% else %}
-        ,{ "id": "{{ child.id }}", "name": "{{ child.getSummary() }}"}
-        {% endif %}
+        {% if loop.first %} {% else %},{% endif %}{ "id": "{{ child.id }}", "name": "{{ child.getSummary() }}"}
     {% endfor %}
     ],
     "themes":
     [
     {% for theme in entity.themes %}
-        {% if loop.first %}
-        { "id": "{{ theme.id }}", "name": "{{ theme.getLibelle() }}"}
-        {% else %}
-        ,{ "id": "{{ theme.id }}", "name": "{{ theme.getLibelle() }}"}
-        {% endif %}
+        {% if loop.first %} {% else %},{% endif %}{ "id": "{{ theme.id }}", "name": "{{ theme.getLibelle() }}"}
     {% endfor %}
     ],
     "categories":
     [
     {% for category in entity.categories %}
-        {% if loop.first %}
-        { "id": "{{ category.id }}", "name": "{{ category.name }}", "slug": "{{ category.slug }}", "color": "{{ category.color }}" }
-        {% else %}
-        ,{ "id": "{{ category.id }}", "name": "{{ category.name }}", "slug": "{{ category.slug }}", "color": "{{ category.color }}" }
-        {% endif %}
+        {% if loop.first %} {% else %},{% endif %}{ "id": "{{ category.id }}", "name": "{{ category.name }}", "slug": "{{ category.slug }}", "color": "{{ category.color }}" }
+    {% endfor %}
+    ],
+    "roles":
+    [
+    {% for role in entity.roles %}
+        {% if loop.first %} {% else %},{% endif %}{ 
+            "id": "{{ role.id }}", 
+            "type": "{{ role.getType().libelle }}", 
+            "person": {
+                "id"  : "{{ role.person.getId() }}"
+                "name"  : "{{ role.person.name }}"
+            }
+        }
     {% endfor %}
     ],
     "xproperties":
     [
     {% for xproperty in entity.xProperties %}
-        {% if loop.first %}
-        { "id": "{{ xproperty.id }}","xNamespace": "{{ xproperty.xNamespace }}","xKey": "{{ xproperty.xKey }}","xValue": "{{ xproperty.xValue }}" }
-        {% else %}
-,{ "id": "{{ xproperty.id }}","xNamespace": "{{ xproperty.xNamespace }}","xKey": "{{ xproperty.xKey }}","xValue": "{{ xproperty.xValue }}" }
-        {% endif %}
+        {% if loop.first %} {% else %},{% endif %}{ "id": "{{ xproperty.id }}","xNamespace": "{{ xproperty.xNamespace }}","xKey": "{{ xproperty.xKey }}","xValue": "{{ xproperty.xValue }}" }
     {% endfor %}
     ]
     {% endspaceless %}

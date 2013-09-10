@@ -39,7 +39,7 @@ class RoleType
      *  
      * @ORM\OneToMany(targetEntity="Role", mappedBy="type")
      */
-    private $role;
+    private $roles;
     
 
     /**
@@ -111,9 +111,9 @@ class RoleType
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getRole()
+    public function getRoles()
     {
-        return $this->role;
+        return $this->roles;
     }
 
     public function __toString()

@@ -1,0 +1,33 @@
+{
+    "id"          : "{{ entity.id }}",
+    "email"       : "{{ entity.email }}",
+    "created_at"  : "{{ entity.createdAt | date('Y-m-d H:i') }}",
+    "agent"       : "{{ entity.agent  }}",
+    "title"       : "{{ entity.title  }}",
+    "first_name"  : "{{ entity.firstName }}",
+    "last_name"   : "{{ entity.lastName }}",
+    "name"        : "{{ entity.name }}",
+    "description" : "{{ entity.description }}",
+    "homepage"    : "{{ entity.homepage }}",
+    "twitter"     : "{{ entity.twitter }}",
+    "given_name"  : "{{ entity.givenName }}",
+    "based_near"  : "{{ entity.based_near }}",
+    "image"       : "{{ entity.image }}",
+    {% spaceless %}
+    "roles":
+    [
+    {% for role in entity.roles %}
+        {% if loop.first %}{% else %},{% endif %}
+        { 
+            "id": "{{ role.id }}", 
+            "type": "{{ role.getType().libelle }}", 
+            "event": {
+                "id"  : "{{ role.getEvent().id }}",
+                "name": "{{ role.getEvent().summary }}"
+            }
+        }
+    {% endfor %}
+    ],
+    {% endspaceless %}
+    
+} 

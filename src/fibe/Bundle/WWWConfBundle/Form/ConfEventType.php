@@ -18,7 +18,7 @@ class ConfEventType extends EventType
                                     'required'  => true,
                                     'label'     => 'Belongs to conf'
             ))                               
-            ->add('role', 'entity', array('class' => 'fibeWWWConfBundle:Role',
+            ->add('roles', 'entity', array('class' => 'fibeWWWConfBundle:Role',
                                               'required' => false,
                                               'property' => 'person'))
             

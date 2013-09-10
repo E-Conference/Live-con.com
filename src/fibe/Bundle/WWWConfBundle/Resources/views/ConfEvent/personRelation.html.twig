@@ -9,7 +9,7 @@
     </thead>
 
     <tbody>
-        {% for role in entity.getRole() %} 
+        {% for role in entity.getRoles() %} 
             <tr> 
                 <td>{{ role.getType().libelle }}</td>
                 <td>{{ role.getPerson().name }}</td>

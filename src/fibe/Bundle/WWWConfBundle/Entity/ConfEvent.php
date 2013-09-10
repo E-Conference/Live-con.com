@@ -48,12 +48,12 @@ class ConfEvent extends Event
 
 
     /**
-     * role
+     * roles
      * Persons related to an event 
      *  
      * @ORM\OneToMany(targetEntity="Role", mappedBy="event")
      */
-    private $role;
+    private $roles;
 
 
     /**
@@ -89,7 +89,7 @@ class ConfEvent extends Event
     public function __construct()
     {
         $this->papers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->role = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->xProperties = new \Doctrine\Common\Collections\ArrayCollection();
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
@@ -194,7 +194,7 @@ class ConfEvent extends Event
      */
     public function addRole(\fibe\Bundle\WWWConfBundle\Entity\Role $role)
     {
-        $this->role[] = $role;
+        $this->roles[] = $role;
     
         return $this;
     }
@@ -206,7 +206,7 @@ class ConfEvent extends Event
      */
     public function removeRole(\fibe\Bundle\WWWConfBundle\Entity\Role $role)
     {
-        $this->role->removeElement($role);
+        $this->roles->removeElement($role);
     }
 
     /**
@@ -214,9 +214,9 @@ class ConfEvent extends Event
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getRole()
+    public function getRoles()
     {
-        return $this->role;
+        return $this->roles;
     }
 
      /**
