@@ -19,9 +19,9 @@ class LocationType extends AbstractType
     {
         $builder
             ->add('name','text')
+            ->add('capacity')
             ->add('description')
-            ->add('latitude')
-            ->add('longitude')
+          
 
         ;
     }
