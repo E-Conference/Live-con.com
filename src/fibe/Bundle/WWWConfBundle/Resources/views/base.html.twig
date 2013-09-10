@@ -9,9 +9,16 @@
     #bootstrap_alert{
         position: fixed;
         top: 1em;
-        right: 1em ;
-        min-width: 20em;
+        right: 1em ; 
+        max-width: 60em;
+        max-height: 20em;
         z-index: 1001;
+        text-overflow:ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }     
+    #bootstrap_alert ul{
+        margin: 1em 0 1 0.5em;
     }
     </style>
  {% endblock %}
@@ -79,7 +86,7 @@
 
         if(!$bootstrapAlert.is(":visible"))
             // $bootstrapAlert.hide().animate({'opacity': 1 }, {queue: false});
-            $bootstrapAlert.hide().fadeIn(1500);
+            $bootstrapAlert.hide().fadeIn('fast');
         clearTimeout(bootstrapAlertTimeout);
         bootstrapAlertTimeout=setTimeout(function(){
                 // $bootstrapAlert.animate({'opacity': 0 }, {queue: false, duration: 1500});

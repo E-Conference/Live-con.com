@@ -1,0 +1,1332 @@
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY dcterms "http://purl.org/dc/terms/" >
+    <!ENTITY foaf "http://xmlns.com/foaf/0.1/" >
+    <!ENTITY dbpedia "http://dbpedia.org/property/" >
+    <!ENTITY bibo "http://purl.org/ontology/bibo/" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY dc "http://purl.org/dc/elements/1.1/" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY swrc "http://swrc.ontoware.org/ontology#" >
+    <!ENTITY vcard "http://www.w3.org/2001/vcard-rdf/3.0#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY ical "http://www.w3.org/2002/12/cal/icaltzd#" >
+    <!ENTITY geo "http://www.w3.org/2003/01/geo/wgs84_pos#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY swc "http://data.semanticweb.org/ns/swc/ontology#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.w3.org/2002/07/owl"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+     xmlns:foaf="http://xmlns.com/foaf/0.1/"
+     xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#"
+     xmlns:dcterms="http://purl.org/dc/terms/"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:bibo="http://purl.org/ontology/bibo/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:dbpedia="http://dbpedia.org/property/"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:swrc="http://swrc.ontoware.org/ontology#"
+     xmlns:ical="http://www.w3.org/2002/12/cal/icaltzd#"
+     xmlns:swc="http://data.semanticweb.org/ns/swc/ontology#">
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#completeGraph -->
+
+    <AnnotationProperty rdf:about="&swc;completeGraph"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasAcronym -->
+
+    <AnnotationProperty rdf:about="&swc;hasAcronym"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasLogo -->
+
+    <AnnotationProperty rdf:about="&swc;hasLogo"/>
+    
+
+
+    <!-- http://purl.org/dc/elements/1.1/creator -->
+
+    <AnnotationProperty rdf:about="&dc;creator"/>
+    
+
+
+    <!-- http://purl.org/dc/elements/1.1/subject -->
+
+    <AnnotationProperty rdf:about="&dc;subject"/>
+    
+
+
+    <!-- http://purl.org/dc/elements/1.1/title -->
+
+    <AnnotationProperty rdf:about="&dc;title"/>
+    
+
+
+    <!-- http://purl.org/ontology/bibo/authorList -->
+
+    <AnnotationProperty rdf:about="&bibo;authorList"/>
+    
+
+
+    <!-- http://purl.org/ontology/bibo/editorList -->
+
+    <AnnotationProperty rdf:about="&bibo;editorList"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#abstract -->
+
+    <AnnotationProperty rdf:about="&swrc;abstract"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#affiliation -->
+
+    <AnnotationProperty rdf:about="&swrc;affiliation"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#booktitle -->
+
+    <AnnotationProperty rdf:about="&swrc;booktitle"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#editor -->
+
+    <AnnotationProperty rdf:about="&swrc;editor"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#month -->
+
+    <AnnotationProperty rdf:about="&swrc;month"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#series -->
+
+    <AnnotationProperty rdf:about="&swrc;series"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#year -->
+
+    <AnnotationProperty rdf:about="&swrc;year"/>
+    
+
+
+    <!-- http://www.w3.org/2002/12/cal/icaltzd#description -->
+
+    <AnnotationProperty rdf:about="&ical;description"/>
+    
+
+
+    <!-- http://www.w3.org/2002/12/cal/icaltzd#dtend -->
+
+    <AnnotationProperty rdf:about="&ical;dtend"/>
+    
+
+
+    <!-- http://www.w3.org/2002/12/cal/icaltzd#dtstart -->
+
+    <AnnotationProperty rdf:about="&ical;dtstart"/>
+    
+
+
+    <!-- http://www.w3.org/2002/12/cal/icaltzd#summary -->
+
+    <AnnotationProperty rdf:about="&ical;summary"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/based_near -->
+
+    <AnnotationProperty rdf:about="&foaf;based_near"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/firstName -->
+
+    <AnnotationProperty rdf:about="&foaf;firstName"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/homepage -->
+
+    <AnnotationProperty rdf:about="&foaf;homepage"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/lastName -->
+
+    <AnnotationProperty rdf:about="&foaf;lastName"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/made -->
+
+    <AnnotationProperty rdf:about="&foaf;made"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/maker -->
+
+    <AnnotationProperty rdf:about="&foaf;maker"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/mbox_sha1sum -->
+
+    <AnnotationProperty rdf:about="&foaf;mbox_sha1sum"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/member -->
+
+    <AnnotationProperty rdf:about="&foaf;member"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/name -->
+
+    <AnnotationProperty rdf:about="&foaf;name"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Datatypes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.w3.org/2001/XMLSchema#date -->
+
+    <rdfs:Datatype rdf:about="&xsd;date"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasLocation -->
+
+    <ObjectProperty rdf:about="&swc;hasLocation"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasPart -->
+
+    <ObjectProperty rdf:about="&swc;hasPart"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasRelatedDocument 
+    A changer
+    -->
+
+    <ObjectProperty rdf:about="&swc;hasRelatedDocument">
+        <inverseOf rdf:resource="&swc;relatedToEvent"/>
+        <rdfs:subPropertyOf rdf:resource="&owl;topObjectProperty"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasRole -->
+
+    <ObjectProperty rdf:about="&swc;hasRole">
+        <inverseOf rdf:resource="&swc;isRoleAt"/>
+        <rdfs:subPropertyOf rdf:resource="&owl;topObjectProperty"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#heldBy -->
+
+    <ObjectProperty rdf:about="&swc;heldBy">
+        <inverseOf rdf:resource="&swc;holdsRole"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#holdsRole 
+    
+    A changer
+    -->
+
+    <ObjectProperty rdf:about="&swc;holdsRole">
+        <inverseOf rdf:resource="&swc;heldBy"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isPartOf -->
+
+    <ObjectProperty rdf:about="&swc;isPartOf"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isRoleAt -->
+
+    <ObjectProperty rdf:about="&swc;isRoleAt">
+        <inverseOf rdf:resource="&swc;hasRole"/>
+        <rdfs:subPropertyOf rdf:resource="&owl;topObjectProperty"/>
+    </ObjectProperty>
+
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isSubEventOf 
+    
+    A changer
+    -->
+
+    <TransitiveProperty rdf:about="&swc;isSubEventOf">
+        <inverseOf rdf:resource="&swc;isSuperEventOf"/>
+    </TransitiveProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isSuperEventOf 
+    
+    A changer
+    -->
+
+    <TransitiveProperty rdf:about="&swc;isSuperEventOf">
+        <inverseOf rdf:resource="&swc;isSubEventOf"/>
+        <rdfs:subPropertyOf rdf:resource="&owl;topObjectProperty"/>
+    </TransitiveProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#relatedToEvent 
+    
+    A changer
+    -->
+
+    <ObjectProperty rdf:about="&swc;relatedToEvent">
+        <inverseOf rdf:resource="&swc;hasRelatedDocument"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isSubPropertyOf -->
+
+    <ObjectProperty rdf:about="&swc;isSubPropertyOf"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isSuperPropertyOf -->
+
+    <ObjectProperty rdf:about="&swc;isSuperPropertyOf">
+        <inverseOf rdf:resource="&swc;isSubPropertyOf"/>
+    </ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#AcademicEvent -->
+
+    <Class rdf:about="&swc;AcademicEvent"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#BreakEvent -->
+
+    <Class rdf:about="&swc;BreakEvent">
+        <rdfs:subClassOf rdf:resource="&swc;NonAcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#Chair -->
+
+    <Class rdf:about="&swc;Chair">
+        <rdfs:subClassOf rdf:resource="&swc;Role"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#ConferenceEvent -->
+
+    <Class rdf:about="&swc;ConferenceEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#KeynoteTalk -->
+
+    <Class rdf:about="&swc;KeynoteTalk">
+        <rdfs:subClassOf rdf:resource="&swc;TalkEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#NonAcademicEvent -->
+
+    <Class rdf:about="&swc;NonAcademicEvent"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#PanelEvent -->
+
+    <Class rdf:about="&swc;PanelEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#Poster -->
+
+    <Class rdf:about="&swc;Poster"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#Presenter -->
+
+    <Class rdf:about="&swc;Presenter">
+        <rdfs:subClassOf rdf:resource="&swc;Role"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#ProgrammeCommitteeMember -->
+
+    <Class rdf:about="&swc;ProgrammeCommitteeMember">
+        <rdfs:subClassOf rdf:resource="&swc;Role"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#Role -->
+
+    <Class rdf:about="&swc;Role"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#SessionEvent -->
+
+    <Class rdf:about="&swc;SessionEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#SocialEvent -->
+
+    <Class rdf:about="&swc;SocialEvent">
+        <rdfs:subClassOf rdf:resource="&swc;NonAcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#TalkEvent -->
+
+    <Class rdf:about="&swc;TalkEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#OrganisedEvent -->
+
+    <Class rdf:about="&swc;OrganisedEvent">
+        <rdfs:subClassOf rdf:resource="&swc;NonAcademicEvent"/>
+    </Class>
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#TrackEvent -->
+
+    <Class rdf:about="&swc;TrackEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#TutorialEvent -->
+
+    <Class rdf:about="&swc;TutorialEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#WorkshopEvent -->
+
+    <Class rdf:about="&swc;WorkshopEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#InProceedings -->
+
+    <Class rdf:about="&swrc;InProceedings"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#Proceedings -->
+
+    <Class rdf:about="&swrc;Proceedings"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/Organization -->
+
+    <Class rdf:about="&foaf;Organization"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/Person -->
+
+    <Class rdf:about="&foaf;Person"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+    
+	<!--  LOCATIONS  -->
+	<NamedIndividual rdf:about="http://www.blendconference.com/rooms/auditorium-lumiere">
+		<rdf:type rdf:resource="&swc;MeetingRoomplace"/>
+		<rdfs:label>Auditorium Lumière</rdfs:label>
+        <rdfs:comment>Amphithéatre de 800 places</rdfs:comment>
+    </NamedIndividual>
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/rooms/rhone-1">
+		<rdf:type rdf:resource="&swc;MeetingRoomplace"/>
+		<rdfs:label>Rhône 1</rdfs:label>
+        <rdfs:comment>Salle de 80 places</rdfs:comment>
+    </NamedIndividual>
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/rooms/rhone-2">
+		<rdf:type rdf:resource="&swc;MeetingRoomplace"/>
+		<rdfs:label>Rhône 2</rdfs:label>
+        <rdfs:comment>Salle de 80 places</rdfs:comment>
+    </NamedIndividual>
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/rooms/rhone-3">
+		<rdf:type rdf:resource="&swc;MeetingRoomplace"/>
+		<rdfs:label>Rhône 3</rdfs:label>
+        <rdfs:comment>Salle de 180 places</rdfs:comment>
+    </NamedIndividual>
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/rooms/rhone-4">
+		<rdf:type rdf:resource="&swc;MeetingRoomplace"/>
+		<rdfs:label>Rhône 4</rdfs:label>
+        <rdfs:comment>Salle de 50 places</rdfs:comment>
+    </NamedIndividual>
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/rooms/salon-pasteur">
+		<rdf:type rdf:resource="&swc;MeetingRoomplace"/>
+		<rdfs:label>Salon Pasteur</rdfs:label>
+        <rdfs:comment>Salle de 280 places</rdfs:comment>
+    </NamedIndividual>
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/rooms/forum">
+		<rdf:type rdf:resource="&swc;MeetingRoomplace"/>
+		<rdfs:label>Forum</rdfs:label>
+        <rdfs:comment></rdfs:comment>
+    </NamedIndividual>
+	
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // CONFERENCE
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     --> 
+     <NamedIndividual rdf:about="http://www.blendconference.com">
+        <rdf:type rdf:resource="&swc;ConferenceEvent"/>
+        <rdfs:label>Blend</rdfs:label>
+        <ical:dtstart rdf:datatype="&xsd;date">2013-10-01</ical:dtstart>
+        <ical:dtend rdf:datatype="&xsd;date">2013-10-02</ical:dtend>
+        <swc:hasAcronym>Blend</swc:hasAcronym>
+        <foaf:homepage rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLogo rdf:resource="https://sphotos-b-ord.xx.fbcdn.net/hphotos-ash3/p480x480/11451_385071141616439_937835407_n.png"/>
+        <swc:completeGraph rdf:resource=""/>
+    </NamedIndividual>
+    
+    
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // JOUR 1 
+    // 
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+
+	<NamedIndividual rdf:about="http://www.blendconference.com/keynote-event/keynote-1">
+        <rdf:type rdf:resource="&swc;KeynoteEvent"/>
+        <rdfs:label>Accueil</rdfs:label>
+        <ical:dtstart>2013-10-01T08:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T09:00:00+02:00</ical:dtend>
+        <ical:description>Accueil des participants et résumé de la journée</ical:description>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/auditorium-lumiere"/>
+    </NamedIndividual>
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/keynote-event/inconnu-1">
+        <rdf:type rdf:resource="&swc;KeynoteEvent"/>
+        <rdfs:label>Accueil</rdfs:label>
+        <ical:dtstart>2013-10-01T09:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T10:00:00+02:00</ical:dtend>
+        <ical:description>Grand lyon W3C mairie</ical:description>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/auditorium-lumiere"/>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/break-event/break-1">
+        <rdf:type rdf:resource="&swc;BreakEvent"/>
+        <rdfs:label>Un petit café ?</rdfs:label>
+        <ical:dtstart>2013-10-01T10:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T10:30:00+02:00</ical:dtend>
+        <ical:description>Un petit café ?</ical:description>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/panel-event/panel-1">
+        <rdf:type rdf:resource="&swc;PanelEvent"/>
+        <rdfs:label>Money is king!</rdfs:label>
+        <ical:dtstart>2013-10-01T10:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T11:30:00+02:00</ical:dtend>
+        <ical:description>Comme dans toute activité, le financement est un aspect clé du développement de chaque structure. Sur le web également, cette partie est un enjeu crucial en particulier pour les startups en quête de fond pour se développer. Plusieurs investisseurs seront donc réunis sur scène pour aborder la thématique du financement.
+		Les investisseurs présents sur scène :
+		Jean-David Chamboredon (ISAI)
+		Nicolas Debock (Xange Private Equity)
+		Jérôme Masurel (50 partners)
+		Martin Mignot (Index)
+		Jeremy Uzan (Alven Capita)</ical:description>
+		<dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+
+
+	<NamedIndividual rdf:about="http://www.blendconference.com/panel-event/panel-2">
+        <rdf:type rdf:resource="&swc;PanelEvent"/>
+        <rdfs:label>Money is king!</rdfs:label>
+        <ical:dtstart>2013-10-01T11:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T12:30:00+02:00</ical:dtend>
+        <ical:description>"Eric Dupin, Renaud Visage, Clubic.com  Les grandes tendances qui vont impacter votre business"</ical:description>
+		<dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/break-event/break-2">
+        <rdf:type rdf:resource="&swc;BreakEvent"/>
+        <rdfs:label>Lunch tiiiime!</rdfs:label>
+        <ical:dtstart>2013-10-01T12:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T13:30:00+02:00</ical:dtend>
+        <ical:description>Un petit buffet, plein de bonnes choses à manger, faites vous plaisir!</ical:description>
+		<dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-1">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>L’art de Bricoler : l’expérience mobile ultime</rdfs:label>
+        <ical:dtstart>2013-10-01T13:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T14:30:00+02:00</ical:dtend>
+        <ical:description>« Pour explorer le champ des possibles, le bricolage est la méthode la plus efficace« . Hubert Reeves, astrophysicien.
+        Sylvain présentera comment à partir d’une intuition et d’un peu d’huile de coude, il est possible de créer une expérimentation innovante. De fil en aiguille, ces bricolages réunissent plusieurs centaines de développeurs chaque mois à Paris où chacun est invité à partager ses trouvailles. Pour cette édition exceptionnelle, une expérience mobile inédite sera proposée aux 800 participants à la conférence qui tenteront tous ensemble de relever un record du monde !
+        </ical:description>
+		<dc:subject>Business</dc:subject>
+		<dc:subject>Tech</dc:subject>
+		<dc:subject>Design</dc:subject>
+		<dc:subject>Recherche</dc:subject>
+		<dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-2">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Podcast par The Walking Web</rdfs:label>
+        <ical:dtstart>2013-10-01T14:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T15:30:00+02:00</ical:dtend>
+        <ical:description>Les membres de The Walking Web aborderont également d’autres questions telles que :
+		Comment le webdesign peut aider à développer son entreprise ?
+		Les start up et le web : Une histoire d’amour ?
+		L’UI et l’UX : amener ses clients à agir (en gros à adhérer à ses produits).
+		Doit-on forcément suivre la tendance pour avoir du succès ?
+		Casser les codes pour se faire remarquer.
+		Cette conférence se déroulera comme un épisode classique de The Walking Web et reprendra les rubriques habituelles. Cependant ces dernières seront adapter pour permettre une davantage d’interactions avec le public.</ical:description>
+		<dc:subject>Design</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/break-event/break-3">
+        <rdf:type rdf:resource="&swc;BreakEvent"/>
+        <rdfs:label>Lunch tiiiime!</rdfs:label>
+        <ical:dtstart>2013-10-01T15:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T16:00:00+02:00</ical:dtend>
+        <ical:description>Un petit creux?</ical:description>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+	
+	
+	<NamedIndividual rdf:about="http://www.blendconference.com/panel-event/panel-3">
+        <rdf:type rdf:resource="&swc;PanelEvent"/>
+        <rdfs:label>Grandir à l'international : ils l'ont fait!</rdfs:label>
+        <ical:dtstart>2013-10-01T16:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T17:30:00+02:00</ical:dtend>
+        <ical:description>En cloture de la journée, nous vous proposons une conférence avec ces entrepreneurs français qui ont connu le succès au-delà de l’hexagone. Leurs expériences les ont amenés à travailler avec des personnes et des cultures différentes, nous vous proposons un retour sur les expériences des conférenciers.
+		Au programme :
+		Introduction d’Olivier Mathiot – La success-story d’un e-commerçant français racheté par un grand groupe japonais.
+		Suivi de
+		Thibaud Elzière, fondateur de Photolia (1ère banque d’images en Europe)
+		Renaud Visage, co-fondateur d’Evenbrite (Plus de 100 millions de billets vendus dans le monde)
+		Céline Lazorthes, fondatrice de Leetchi (1ère cagnotte en ligne utilisée en Europe)
+		Mathieu Hug, co-fondateur de RunMyProcess (Solutions de Cloud racheté par Fujitsu)
+		</ical:description>
+		<dc:subject>Business</dc:subject>
+		<dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+
+
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-3">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Introduction aux design patterns avec PHP</rdfs:label>
+        <ical:dtstart>2013-10-01T10:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T11:30:00+02:00</ical:dtend>
+        <ical:description>Le développement d’un logiciel n’est pas toujours une tâche aisée. Heureusement, une approche orientée objet du code aide le développeur dans cette tâche.
+        Pour le développeur, la POO est une approche plus naturelle dans la manière de concevoir le code et confère à ce dernier de nombreux avantages : testabilité, modularité, découplage, extensibilité ou encore réutilisabilité. Mais encore faut-il maîtriser la POO et les bonnes pratiques de développement pour y parvenir ! Les design patterns, ou patrons de conception en français, sont non seulement des outils qui favorisent l’architecture de vos applications mais ils sont aussi un moyen de communication puissant entre les développeurs.
+        Au cours de cette conférence technique, nous vous proposons une introduction à quelques uns des design patterns les plus courants et les plus utiles. Vous découvrirez quels problèmes ils résolvent et comment les mettre en pratique simplement dans votre code.
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-1"/>
+    </NamedIndividual>
+	
+	
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-1">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Intégrateur web : aime SASS et simplifie toi la vie!</rdfs:label>
+        <ical:dtstart>2013-10-01T11:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T12:00:00+02:00</ical:dtend>
+        <ical:description>Ce n’est un secret pour personne : le travail d’intégrateur web peut rapidement tourner au cauchemar. Entre le support des navigateurs obsolètes, les problématiques de performance et la prise en charge des nouveaux périphériques mobiles, l’intégrateur doit jongler entre de multiples langages et connaître une liste interminable de _hacks_ à appliquer pour satisfaire tout ce petit monde. Que diriez-vous de vous simplifier la vie avec CSS grâce à Sass/Compass ?
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <dc:subject>Design</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-1"/>
+    </NamedIndividual>
+
+
+     <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-2">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>La relation intégrateur + designer, pour un design</rdfs:label>
+        <ical:dtstart>2013-10-01T12:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T12:30:00+02:00</ical:dtend>
+        <ical:description>Quand on regarde des couples tels que Marty Mc Fly et Doc Brown, R2D2 et C3PO ou même Thor et Hulk, on se dit que tout les sépare… Et pourtant, ils sont amenés à travailler ensemble, main dans la main, pour l’amour du travail bien fait (bouter le mal hors de ce monde).
+        Dans le web, c’est comme dans les films. Designer et intégrateur ne se comprennent pas forcément, mais ils doivent cohabiter pour mener à bien leurs tâches (et re-booter le mal hors de ce monde).
+        Entre retour d’expérience et bonnes pratiques, cet échange vise à harmoniser les relations entre ces 2 entités au sein d’un projet réel.
+        Des premiers coups de crayons à la mise en ligne, cette conférence abordera les problématiques récurrentes que sont l’ergonomie, le design, l’intégration, la gestion des interactions mais aussi la préparation des livrables graphiques et techniques ainsi que l’optimisation du workflow. Des étapes du quotidien mais nécessaires au bon déroulement d’une collaboration.
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <dc:subject>Design</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-1"/>
+    </NamedIndividual>
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-3">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Notre métier est accessible à tous. Prouvons le !</rdfs:label>
+        <ical:dtstart>2013-10-01T13:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T14:00:00+02:00</ical:dtend>
+        <ical:description>Plus personne ne conteste l’importance critique du métier de développeur, tout le monde cherche LA star qui déterminera le succès de son projet. Pourtant, trop de gens voient encore notre métier comme de la magie noire et ne le comprennent pas.
+        L’image du geek barbu et asocial a fait son temps ! Et si on prouvait qu’on ne sait pas seulement coder, mais aussi expliquer ?
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-1"/>
+    </NamedIndividual>
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-4">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Thierry Debarnot</rdfs:label>
+        <ical:dtstart>2013-10-01T14:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T14:30:00+02:00</ical:dtend>
+        <ical:description>?????
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-1"/>
+    </NamedIndividual>
+
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/organized-event/organized-event-1">
+        <rdf:type rdf:resource="&swc;OrganisedEvent"/>
+        <rdfs:label>Startup Contest (1iere partie)</rdfs:label>
+        <ical:dtstart>2013-10-01T14:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T15:30:00+02:00</ical:dtend>
+        <ical:description>Pour Blend, nous avons voulu concevoir une rencontre entre ceux qui *font* le web : développeurs, designers, bizdev, marketeux.
+        Qui mieux que des startups pour montrer ce que le web fait de plus innovant lorsque, comme par magie, ces compétences se rencontrent dans une équipe de fondateurs ?
+        C’est toute l’essence du Blend Startup Contest, première édition !
+        12 startups s’affronteront dans un concours de pitchs que nous souhaitons no bullsh!t, devant des jurys d’investisseurs.
+        Seules les startups avec un produit en ligne ou fonctionnel au moment de Blend sont appelées à participer. Pour le reste, c’est assez ouvert, tant que :
+        vous avez levé moins d’un million d’euros
+        vous avez moins de 3 ans (la startup, pas vous !)
+        vous êtes une équipe sympa
+        Notre processus de sélection est très simple :
+        vous remplissez, jusqu’au 11 septembre 2013 à minuit, le formulaire ci-dessous
+        la sélection sera achevée le 15 septembre et annoncée de suite
+        les 12 demi-finalistes retenus auront 5 minutes chacun de pitch, avec séance de QandA avec un jury d’investisseurs au cours de la première journée de Blend, le 1er octobre
+        3 finalistes seront appelés à pitcher en plénière de clôture le 2 octobre
+        1 vainqueur !
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-1"/>
+    </NamedIndividual>
+
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/organized-event/organized-event-2">
+        <rdf:type rdf:resource="&swc;OrganisedEvent"/>
+        <rdfs:label>Startup Contest (2ième partie)</rdfs:label>
+        <ical:dtstart>2013-10-01T16:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T17:00:00+02:00</ical:dtend>
+        <ical:description>Pour Blend, nous avons voulu concevoir une rencontre entre ceux qui *font* le web : développeurs, designers, bizdev, marketeux.
+        Qui mieux que des startups pour montrer ce que le web fait de plus innovant lorsque, comme par magie, ces compétences se rencontrent dans une équipe de fondateurs ?
+        C’est toute l’essence du Blend Startup Contest, première édition !
+        12 startups s’affronteront dans un concours de pitchs que nous souhaitons no bullsh!t, devant des jurys d’investisseurs.
+        Seules les startups avec un produit en ligne ou fonctionnel au moment de Blend sont appelées à participer. Pour le reste, c’est assez ouvert, tant que :
+        vous avez levé moins d’un million d’euros
+        vous avez moins de 3 ans (la startup, pas vous !)
+        vous êtes une équipe sympa
+        Notre processus de sélection est très simple :
+        vous remplissez, jusqu’au 11 septembre 2013 à minuit, le formulaire ci-dessous
+        la sélection sera achevée le 15 septembre et annoncée de suite
+        les 12 demi-finalistes retenus auront 5 minutes chacun de pitch, avec séance de QandA avec un jury d’investisseurs au cours de la première journée de Blend, le 1er octobre
+        3 finalistes seront appelés à pitcher en plénière de clôture le 2 octobre
+        1 vainqueur !
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-1"/>
+    </NamedIndividual>
+
+    <!-- Salle Rhône 2 -->
+	<NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-5">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Le m-commerce : mon levier de business prioritaire pour 2014 ?</rdfs:label>
+        <ical:dtstart>2013-10-01T10:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T11:00:00+02:00</ical:dtend>
+        <ical:description>Aujourd’hui 30% des français sont prêts à utiliser leur mobile pour faire des achats et on estime que 40% des connections Internet se feront sur mobile en 2014. Vous ne pouvez plus passer à côté de cette tendance de fond !
+        Le programme de la conférence :
+        Les bonnes pratiques m-commerce
+        Le m-commerce à l’international (le taux de visiteurs en France est de 10% contre 25% sur le marché UK
+        4 études de cas : PlacedesGones.com, TopDecoMeuble.com, Homemaison.com et Acycles.fr (version mobile multi-lingue et multi-devises)
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
+    </NamedIndividual>
+
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-6">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Stioui marketing mobile</rdfs:label>
+        <ical:dtstart>2013-10-01T11:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T11:30:00+02:00</ical:dtend>
+        <ical:description>?????
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
+    </NamedIndividual>
+
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-4">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Les nouveaux indicateurs du SEO</rdfs:label>
+        <ical:dtstart>2013-10-01T11:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T12:30:00+02:00</ical:dtend>
+        <ical:description>Quels sont, en 2013, les indicateurs SEO pour suivre son l’indexation et son trafic SEO par Google ? L’objectif est de démontrer que la concurrence est devenue tellement féroce dans les pages de Google qu’il est désormais indispensable d’avoir les bons métrics en tête pour maîtriser son indexation. L’idée n’est pas tant de présenter plus de contenus à Google mais surtout de lui présenter les bons contenus. Nous verrons donc qu’ils existent des indicateurs à manipuler au quotidien.
+        1)Avant l’audience : les indicateurs structurels
+            - le nombre de page dans la structure (par catégorie, profondeur)
+            - le duplicate
+            - les performances
+            - le linking interne
+        2)L’indexation avant l’audience : le crawl des bots de Google
+            - crawl / crawl unique par catégorie
+            - nouveau crawl
+            - crawl perdu / crawl retrouvé
+            - crawl par code http
+        3)L’indexation pour l’audience : le nombre de visites ne fait pas tout !
+            - visites
+            - urls actives
+            - âge des pages actives
+            - audience top / middle / long-tail
+        4)Pour aller plus loin : les indicateurs de chiffre d’affaires, le SEO comme tous les autres leviers webmarketing (seulement si ce n’est pas trop long)
+            - transformation vente, parcours clients, liens avec vos données métiers : quelles méthodologies ?
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <dc:subject>Recherche</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
+    </NamedIndividual>
+
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-7">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Science et médias sociaux : une réaction exothermique</rdfs:label>
+        <ical:dtstart>2013-10-01T13:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T14:00:00+02:00</ical:dtend>
+        <ical:description>Cette conférence animée par Jade Le Maître propose une exploration des différentes façon dont les médias sociaux participent à l’activité scientifique, des initiatives prometteuses aux outils du quotidien.
+        Les questions abordées pendant la conférence :
+        Twitter a-t’il une utilité pour un chercheur ?
+        Pourquoi bloguer son projet de recherche ?
+        Comment citer un article de blog dans un article académique ?
+        Les médias sociaux peuvent-ils réintéresser le grand public à la science ?
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <dc:subject>Recherche</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
+    </NamedIndividual>
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-8">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Fabien Gandon : web sémantique</rdfs:label>
+        <ical:dtstart>2013-10-01T14:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T14:30:00+02:00</ical:dtend>
+        <ical:description>??????
+        </ical:description>
+        <dc:subject>Recherche</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
+    </NamedIndividual>
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-9">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Les futurs effets graphiques CSS3</rdfs:label>
+        <ical:dtstart>2013-10-01T14:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T15:00:00+02:00</ical:dtend>
+        <ical:description>Depuis environ 2-3 ans, les effets graphiques en CSS3 ont révolutionné le design web. Cette conférence propose une présentation d’effets avancés CSS tels que les filtres, les custom filters (shaders), les masques CSS et SVG, les exclusions and shapes ainsi que les fonctions d’images. Le but étant de présenter les possibilités graphiques de CSS que l’on peut déjà mettre en place aujourd’hui ainsi que celles auxquelles on peut s’attendre dans les prochains mois, voire années.
+        </ical:description>
+        <dc:subject>Recherche</dc:subject>
+        <dc:subject>Design</dc:subject>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
+    </NamedIndividual>
+
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-10">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Intégration : automatisez vos tâches répétitives avec Grunt.js</rdfs:label>
+        <ical:dtstart>2013-10-01T15:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T15:30:00+02:00</ical:dtend>
+        <ical:description>L’intégration web est une discipline qui reste encore très artisanale. Et s’il est difficile d’envisager une industrialisation complète du processus, il est néanmoins possible d’automatiser un certain nombre de choses :
+        compilation des feuilles de styles,
+        concaténation et minification des fichiers JavaScript
+        optimisation des images.
+        Cet atelier vous propose de découvrir les possibilités offertes par Grunt, et de voir comment le mettre en place pour l’utiliser sur votre prochain projet.
+        </ical:description>
+        <dc:subject>Design</dc:subject>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
+    </NamedIndividual>
+
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-11">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Les enjeux de la réputation digitale pour les e-commerçants</rdfs:label>
+        <ical:dtstart>2013-10-01T16:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T16:30:00+02:00</ical:dtend>
+        <ical:description>Pour améliorer leur taux de transformation, les e-commerçants ont tous travaillé leurs pages d’accueil ou leurs landing page. Mais peu ont encore travaillé leur e-réputation. Pourtant cela leur permet de faire baisser coûts d’acquisition client, le graal du e-commerçant ! Cette conférence permet d’être très pragmatique et apporte une méthode en 3 étapes pour prendre soin de son e-réputation. Cet aspect encore méconnu est devenu un enjeu majeur pour les e-commerçants et plus globalement toute les personnes souhaitant contrôler leurs réputations digitales.
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
+    </NamedIndividual>
+
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/organized-event/organized-event-3">
+        <rdf:type rdf:resource="&swc;OrganizedEvent"/>
+        <rdfs:label>SPONSOR GOLD</rdfs:label>
+        <ical:dtstart>2013-10-01T16:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T17:00:00+02:00</ical:dtend>
+        <ical:description>?????
+        </ical:description>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
+    </NamedIndividual>
+
+    <!-- Salon Pasteur --> 
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-5">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Le Design emotionnel</rdfs:label>
+        <ical:dtstart>2013-10-01T10:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T11:30:00+02:00</ical:dtend>
+        <ical:description>Engager, convaincre et fidéliser vos internautes avec une expérience utilisateur est un défi au quotidien ! Une ligne éditoriale, une mascotte, des fonctionnalités ou encore un effet sonore peuvent provoquer des réactions émotionnelles positives ou négatives à votre visiteur. Cette présentation a pour but d’aborder les différents domaines du design, de décrypter ensemble la stratégie et les atouts de plusieurs cas concrets dans le domaine du design d’application web et mobile. L’ergonomie et l’utilisabilité des interfaces seront abordées afin de vous aidez à donner un côté humain à vos interfaces.
+        </ical:description>
+        <dc:subject>Design</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+
+     <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-6">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>De « old school » à pure player, remixer son business model</rdfs:label>
+        <ical:dtstart>2013-10-01T13:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T14:30:00+02:00</ical:dtend>
+        <ical:description>Comment des entreprises construites autour de business models traditionnels (« old schools ») peuvent se remixer en tirant parti du pouvoir destructeur du web ?
+        Nous commencerons à passer en revue des causes d’échecs classiques liées à une trop forte crispation sur d’anciens business models. Puis nous considérons comment certains « pure players » parviennent à émerger de façon parfois explosive, en s’affranchissant des fondamentaux habituels. De Virgin, à Square, Moo, ou aux Food Trucks ce tour d’horizon nous permettra d’échanger sur les stratégies de remix et d’adaptation de ceux qui ne veulent pas forcément devenir « pure player » mais qui doivent néanmoins ajuster efficacement leur business model en comprenant comment pense, fonctionne et s’organiserait un nouvel entrant dans une économie globale et connectée.
+        </ical:description>
+        <dc:subject>Marketing</dc:subject>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+
+
+     <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-7">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Brand stories : repenser le marketing et les univers de marques avec le digital et les réseaux sociaux</rdfs:label>
+        <ical:dtstart>2013-10-01T14:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T15:30:00+02:00</ical:dtend>
+        <ical:description>Les ressources du digital et la généralisation des usages sociaux modifient en profondeur les stratégies de communication des marques. Pour autant, les réflexions et expériences restent bien souvent dans une logique de stratégie de moyens.
+        Le changement dans les modes relationnels remet en cause un modèle basé sur la répétition, l’idée unique et l’interruption. Malgré tout, les marques restent ancrées dans ces approches, tout en les combinant à des actions de paid, earned et owned media. En amont de cette problématique, ce sont les outils marketing de plateformes de marques qui s’avèrent dépassés et ne peuvent plus répondre aux nouveaux enjeux.
+        Dans cette conférence, seront abordés :
+        la nature fondamentale des mutations dans la relation avec les consommateurs
+        l’importance et l’efficience des histoires dans les nouveaux univers de marque
+        des cas exemplaires de contenus générateurs d’univers de marque
+        une nouvelle matrice pour repenser sa marque dans une perspective dynamique
+        </ical:description>
+        <dc:subject>Marketing</dc:subject>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/session-event/session-1">
+        <rdf:type rdf:resource="&swc;SessionEvent"/>
+        <rdfs:label>Speed demo</rdfs:label>
+        <ical:dtstart>2013-10-01T16:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T17:00:00+02:00</ical:dtend>
+        <ical:description>?????
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+
+     <!-- Salon Rhône 3 --> 
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-8">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Cluster Edit Ou API guillhem</rdfs:label>
+        <ical:dtstart>2013-10-01T10:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T11:30:00+02:00</ical:dtend>
+        <ical:description>????????
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-3"/>
+    </NamedIndividual>
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-9">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Ciel, mes données ne sont plus relationnelles</rdfs:label>
+        <ical:dtstart>2013-10-01T11:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T12:30:00+02:00</ical:dtend>
+        <ical:description>Quand la gestion des données de nos applications web dépasse la simple persistance dans une base de données relationnelle (type SGBD), l’utilisation de technologies alternatives dites « NoSql » est nécessaire. Nous aborderons les 4 grandes familles de NoSql (Key/Value, Document, Column-oriented et Graph) ainsi que leur intégration dans des applications PHP.
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-3"/>
+    </NamedIndividual>
+
+
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-12">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Maitriser le Owned, Earned and Paid Media dans le fil d’actualité (News Feed) Facebook</rdfs:label>
+        <ical:dtstart>2013-10-01T13:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T14:00:00+02:00</ical:dtend>
+        <ical:description>Faire du Social Media Marketing, c’est apprendre à maîtriser le Earned, Paid, Owned Media sur les réseaux sociaux, gardant en tête que Facebook est l’espace qui offre le plus de possibilités et de potentiel dans le monde entier.
+        Et aujourd’hui, l’espace le plus stratégique sur Facebook, c’est le fil d’actualité (ou News Feed). Nous allons donc dérouler comment il est possible de créer un cercle vertueux sur Facebook.
+        Partant du Paid Media (pour accroître son nombre de fans), nous verrons comment engager ses fans et leurs amis avec du community management, du contenu et des applications virales (Owned Media), et comment créer de la viralité avec du contenu partagé authentiquement (Earned Media). Enfin, après avoir identifié les meilleurs signaux, nous verrons comment amplifier les sujets émergents avec du Paid Media, grâce à des outils comme les Custom Audience et les Post Sponsorisés.
+        Cette conférence est orientée marketing et business. Des exemples concrets et des études de cas seront présentés et vous permettront de vous mettre à jour sur les dernières possibilités qu’offre le News Feed Facebook en 2013-2014.
+        </ical:description>
+        <dc:subject>Marketing</dc:subject>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-3"/>
+    </NamedIndividual>
+
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-13">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Emailing : fidélisation VS acquisition</rdfs:label>
+        <ical:dtstart>2013-10-01T14:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T14:30:00+02:00</ical:dtend>
+        <ical:description>Les campagnes d’emailing constituent un levier commercial non négligeable par son efficacité et son coût. Edouard Ducray, pionnier du marketing à la performance vous propose de mieux comprendre les stratégies d’acquisition et de fidélisation.
+        Cette conférence est constitué de quatres grandes parties :
+        Emailing de fidélisation Vs emailing d’acquisition : quelles stratégies pour mon entreprise ?
+        La collecte optin : les stratégies d’acquisition
+        Les nouveaux enjeux de la délivrabilité
+        Fichiers inactifs : mine d’or ou mine antipersonnel ?
+        </ical:description>
+        <dc:subject>Marketing</dc:subject>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-3"/>
+    </NamedIndividual>
+
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-14">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Comment recruter un développeur ?</rdfs:label>
+        <ical:dtstart>2013-10-01T14:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T15:00:00+02:00</ical:dtend>
+        <ical:description>???????????
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-3"/>
+    </NamedIndividual>
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-15">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Bootstrapper sa startup, bullshit ou clé pour réussir ?</rdfs:label>
+        <ical:dtstart>2013-10-01T15:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T15:30:00+02:00</ical:dtend>
+        <ical:description>Cette conférence abordera les points clés pour bootstrapper son business : s’associer, construire un prototype, tester les hypothèses de départ et itérer, optimiser ses dépenses, trouver le bon pricing, se focaliser sur les premiers clients plus que sur une levée de fonds.
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-3"/>
+    </NamedIndividual>
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-16">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Web perf : Damian La Nouaille</rdfs:label>
+        <ical:dtstart>2013-10-01T16:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T16:30:00+02:00</ical:dtend>
+        <ical:description>??????
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-3"/>
+    </NamedIndividual>
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-17">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Bootstrapper sa startup, bullshit ou clé pour réussir ?</rdfs:label>
+        <ical:dtstart>2013-10-01T16:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T17:00:00+02:00</ical:dtend>
+        <ical:description>??????
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-3"/>
+    </NamedIndividual>
+
+     <!-- Forum  --> 
+    <NamedIndividual rdf:about="http://www.blendconference.com/session-event/session-2">
+        <rdf:type rdf:resource="&swc;SessionEvent"/>
+        <rdfs:label>Networking (1ière partie)</rdfs:label>
+        <ical:dtstart>2013-10-01T10:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T12:30:00+02:00</ical:dtend>
+        <ical:description>?????
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/session-event/session-3">
+        <rdf:type rdf:resource="&swc;SessionEvent"/>
+        <rdfs:label>Networking (2ième partie)</rdfs:label>
+        <ical:dtstart>2013-10-01T13:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T15:30:00+02:00</ical:dtend>
+        <ical:description>?????
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/session-event/session-4">
+        <rdf:type rdf:resource="&swc;SessionEvent"/>
+        <rdfs:label>Networking (3ième partie)</rdfs:label>
+        <ical:dtstart>2013-10-01T16:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T17:00:00+02:00</ical:dtend>
+        <ical:description>?????
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+
+     <!-- Salle Rônes 4 --> 
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-10">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Découverte du Machine Learning avec Apache Mahout</rdfs:label>
+        <ical:dtstart>2013-10-01T10:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T11:30:00+02:00</ical:dtend>
+        <ical:description>L’explosion du volume de données en ligne et l’utilisation de plus en plus intense des réseaux sociaux amènent une nouvelle génération d’applications web intelligentes, capables de proposer des recommandations aux utilisateurs, de classer automatiquement de l’information, ou encore de regrouper des données par affinités.
+        Cette session présente les principaux concepts du Machine Learning, qui permet aux applications « d’apprendre automatiquement » à partir d’informations collectées, et introduit la librairie Apache Mahout et ses nombreuses fonctionnalités et algorithmes de classification, recommandation et clusterisation dédiés aux gros volumes de données.
+        </ical:description>
+        <dc:subject>Recherche</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-4"/>
+    </NamedIndividual>
+
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-11">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Cluster Edit Sass (1ière partie)</rdfs:label>
+        <ical:dtstart>2013-10-01T11:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T12:30:00+02:00</ical:dtend>
+        <ical:description>???????
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <dc:subject>Recherche</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-4"/>
+    </NamedIndividual>
+
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-12">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Cluster Edit Sass (2ième partie)</rdfs:label>
+        <ical:dtstart>2013-10-01T13:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T14:30:00+02:00</ical:dtend>
+        <ical:description>???????
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <dc:subject>Recherche</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-4"/>
+    </NamedIndividual>
+
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-13">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Why ElasticSearch Rocks !</rdfs:label>
+        <ical:dtstart>2013-10-01T14:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T15:30:00+02:00</ical:dtend>
+        <ical:description>Venez découvrir pourquoi Elasticsearch est le moteur de recherche open source qui fait le plus parler de lui en ce moment!
+        De plus en plus utilisé en entreprise, Elasticsearch permet d’indexer dans le Cloud de très gros volumes de données et d’y rechercher une information en un temps record.
+        Intitulée « Why elasticsearch rocks », cette présentation permettra de découvrir les principales fonctionnalités d’Elasticsearch ainsi que les différents aspects qui en font un outil vraiment différent des autres moteur de recherche.
+        En se basant sur des exemples concrets – certains réalisés en live – et des retours d’expérience terrain, cette soirée sera aussi l’occasion d’acquérir les connaissances nécessaires pour commencer à utiliser et à s’amuser avec Elasticsearch!
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <dc:subject>Recherche</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-4"/>
+    </NamedIndividual>
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-18">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Ecosysteme d’amorçage : s’y retrouver parmi les incubateurs / accélérateurs / leveurs de fonds …</rdfs:label>
+        <ical:dtstart>2013-10-01T16:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T16:30:00+02:00</ical:dtend>
+        <ical:description>Cette conférence propose de faire un mapping des différents intervenants de l’amorçage auxquels devront s’adresser les Startups en développement.
+        Les principaux thèmes abordés sont :
+        Les services proposés et les différences entre pépinières, accélérateurs, incubateurs etc. (public, privé, programme courts ou longs, prise de capital ou non etc.)
+        Les intervenants publics des prêts et subventions
+        Les intervenants privés du financement (leveurs, angels et reseaux, crowdfunding, VC’s etc.)
+        La bonne compréhension des nombreux dispositifs, permet de trouver les meilleurs soutiens en fonction du stade du développement d’une société. Le timing est alors clé pour débloquer facilement les bons financements.
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-4"/>
+    </NamedIndividual>
+
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-19">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Moteurs de recherche: challenges et perspectives scientifiques</rdfs:label>
+        <ical:dtstart>2013-10-01T16:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T17:00:00+02:00</ical:dtend>
+        <ical:description>Les moteurs de recherches sont, sans équivoque, des composants essentiels aux fonctionnement du Web. Au fil du temps la recherche scientifique contribue à faire avancer les performances de ces moteurs qui doivent également s’adapter aux multiples changements du Web. Notamment, les chercheurs se penchent sur la manière de prendre en compte et de gérer les contenus sociaux générés par les utlisateurs dans les moteurs de recherche. Cette présentation fera un tour de la thématique scientifique de « recherche d’information ». On mettra particulièrement l’accent  sur l’impact des média sociaux et des contenus qu’ils génèrent  dans les moteurs de recherche de demain.
+        </ical:description>
+        <dc:subject>Recherche</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-4"/>
+    </NamedIndividual>
+
+
+
+</rdf:RDF>
+

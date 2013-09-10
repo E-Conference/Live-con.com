@@ -161,30 +161,37 @@
     				    isConfOwlUriInputOK = true;
                         ConfRdfFile = dataArray ; 
                         confName=confname;
+                        var data = $.param({dataArray:ConfRdfFile});
                         $.ajax({ //DBimport
                             type: "POST",
                             cache: false,  
                             url: "{{ path('schedule_admin_DBimport') }}",
-                            data: "dataArray=" + JSON.stringify(ConfRdfFile, null),
+                            data: data,
                             success:function(a,b,c)
                             {
                                 if(ConfRdfFile!=undefined){
-                                    bootstrapAlert("success",' : \n\t'+ConfRdfFile.events.length+' events and '+ConfRdfFile.locations.length+' locations\n',confName+'" has been well added');
+                                    var msg = "<ul>";
+                                    for (var i in ConfRdfFile){
+                                        if(ConfRdfFile[i].length >0)
+                                            msg +="<li>"+ConfRdfFile[i].length +" "+i+" added !</li>"
+                                    }
+                                    msg += "</ul>";
+                                    bootstrapAlert("success",' '+msg);
                                     confOwlUriInput.parent().addClass('has-success');
                                 }
                                 
                             },
                             error:function(a,b,c)
-                            { 
-                                bootstrapAlert("warning",ConfRdfFile.events.length+' events found but import failed'); 
-                                confOwlUriInput.parent().addClass('has-warning');
+                            {  
+                                    bootstrapAlert("warning",'import failed because : '+c); 
+                                    confOwlUriInput.parent().addClass('has-warning');  
                             },
                         });
                         
                     },function(msg)
                     {
                         confOwlUriInput.parent().addClass('has-warning');
-                        bootstrapAlert("warning", msg || "");
+                        bootstrapAlert("warning", msg || "there was an error import this file");
                     });
                 }
                 

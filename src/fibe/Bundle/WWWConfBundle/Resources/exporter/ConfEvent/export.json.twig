@@ -34,7 +34,7 @@
         "latitude": "{{ entity.location.latitude }}",
         "latitude": "{{ entity.location.longitude }}",
         {% endif %}
-        "description": "{% autoescape 'js' %}{{ entity.location.description }}{% endautoescape %}"
+        "description": "{{ entity.location.description }}"
     },
     {% spaceless %}
     "children":

@@ -1,0 +1,31 @@
+{% extends 'fibeWWWConfBundle::base.html.twig' %}
+
+{% block body %}
+{{ parent() }}
+    <h1>RoleType</h1>
+
+    <table class="table table-hover record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Libelle</th>
+                <td>{{ entity.libelle }}</td>
+            </tr>
+        </tbody>
+    </table>
+ 
+    <a class="btn btn-warning" href="{{ path('schedule_roletype') }}">
+            <i class="icon-th-list"></i>
+    </a>
+    <a class="btn btn-primary"  href="{{ path('schedule_roletype_edit', { 'id': entity.id }) }}">
+         <i class="icon-edit"></i>
+    </a> 
+    <form action="{{ path('schedule_roletype_delete', { 'id': entity.id }) }}" method="post">
+        <input type="hidden" name="_method" value="DELETE" />
+        {{ form_widget(delete_form) }}
+        <button class="btn btn-danger"  type="submit"><i class="icon-trash"></i></button>
+    </form>
+{% endblock %}

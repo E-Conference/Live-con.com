@@ -254,7 +254,7 @@ class ConfEventController extends Controller
      /**
      * Delete paper to a confEvent
      *  @Route("/deletePaper", name="schedule_confevent_deletePaper")
-     *  @Method("POST")
+     *  @Method({"DELETE","POST"})
      *  
      */
     public function deletePaperAction(Request $request)

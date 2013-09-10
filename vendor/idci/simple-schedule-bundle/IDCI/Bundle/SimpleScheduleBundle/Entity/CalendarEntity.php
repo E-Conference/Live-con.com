@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * a schedulable element.
  *
  * @ORM\Entity(repositoryClass="IDCI\Bundle\SimpleScheduleBundle\Repository\CalendarEntityRepository")
- * @ORM\Table(name="event", indexes={
+ * @ORM\Table(name="event", options={"collate"="utf8_general_ci", "charset"="utf8"},indexes={
  *    @ORM\Index(name="start_at_idx", columns={"start_at"})
  * })
  * @ORM\HasLifecycleCallbacks

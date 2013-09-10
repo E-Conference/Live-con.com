@@ -82,14 +82,14 @@ class Person
     /**
      * name
      * A name for some thing. Name of the person 
-     * @ORM\Column(type="string", nullable=true,  name="name")
+     * @ORM\Column(type="string", name="name")
      */
     protected $name;
 
     /**
      * firstName
      * A name for some thing. Name of the person 
-     * @ORM\Column(type="string", nullable=true,  name="firstName")
+     * @ORM\Column(type="string", name="firstName")
      */
     protected $firstName;
 
@@ -97,7 +97,7 @@ class Person
      * lastName
      *. lastName - The last name of some person. 
      *
-     * @ORM\Column(type="string", length=255, nullable=true, name="lastName")
+     * @ORM\Column(type="string", length=255, name="lastName")
      */
      protected $lastName;
 
@@ -178,7 +178,7 @@ class Person
      *
      * age - The age in years of some agent. 
      *
-     * @ORM\Column(type="string", nullable=true, length=32, name="age")
+     * @ORM\Column(type="string", nullable=true, length=255, name="age")
      */
     protected $age ;
 
@@ -187,7 +187,7 @@ class Person
      * 
      * made - Something that was made by this agent. 
      *
-     * @ORM\Column(type="string", nullable=true, length=32, name="made")
+     * @ORM\Column(type="string", nullable=true, length=255, name="made")
      */
     protected $made;
 	
@@ -196,7 +196,7 @@ class Person
      * 
      * primary topic - The primary topic of some page or document. 
      *
-     * @ORM\Column(type="string", nullable=true, length=32, name="primary_topic")
+     * @ORM\Column(type="string", nullable=true, length=255, name="primary_topic")
      */
     protected $primary_topic;
 
@@ -205,14 +205,14 @@ class Person
      *
      * Project - A project (a collective endeavour of some kind). 
      *
-     *  @ORM\Column(type="string", nullable=true, length=32, name="project")
+     *  @ORM\Column(type="string", nullable=true, length=255, name="project")
      */
      protected $project;
 
     /**
      * organization
      * Organization - An organization
-	* @ORM\Column(type="string", nullable=true, length=32, name="organization")
+	* @ORM\Column(type="string", nullable=true, length=255, name="organization")
      */
     protected $organization;
 
@@ -220,7 +220,7 @@ class Person
      * group
      *
      * Group - A class of Agents. 
-	* @ORM\Column(type="string", nullable=true, length=32, name="_group")
+	* @ORM\Column(type="string", nullable=true, length=255, name="_group")
      */
     protected $_group;
 
@@ -228,7 +228,7 @@ class Person
      * member
      *
      * member - Indicates a member of a Group 
-     *  @ORM\Column(type="string", nullable=true, length=32, name="member")
+     *  @ORM\Column(type="string", nullable=true, length=255, name="member")
      */
      protected $member;
 
@@ -236,7 +236,7 @@ class Person
      * document
      *
      * Document - A document.
-	* @ORM\Column(type="string", nullable=true, length=32, name="document")
+	* @ORM\Column(type="string", nullable=true, length=255, name="document")
      */
      protected $document;
 
@@ -250,12 +250,12 @@ class Person
 	* Subclass Of	Document
 	* The class Image is a sub-class of Document corresponding to those documents which are images.
 	* Digital images (such as JPEG, PNG, GIF bitmaps, SVG diagrams etc.) are examples of Image.
-	*@ORM\Column(type="string", nullable=true, length=32, name="image")
+	*@ORM\Column(type="string", nullable=true, length=255, name="image")
      */
 
     protected $image;
-	 
-	
+
+    
 
     /**
      * Constructor
@@ -266,7 +266,35 @@ class Person
         $this->paper = new \Doctrine\Common\Collections\ArrayCollection();
         $this->organizations = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+     
+
+
+    /**
+     * onCreation
+     *
+     * @ORM\PrePersist()
+     */
+    public function onCreation()
+    {
+        $now = new \DateTime('now');
+
+        $this->setCreatedAt($now); 
+        $this->concatName();
+    }
+ 
+    /**
+     * onUpdate
+     *
+     * @ORM\PreUpdate()
+     */
+    public function onUpdate()
+    {
+        $this->concatName();
+    }
+
+    private function concatName(){
+        $this->setName($this->getFirstName() . " " . $this->getLastName());
+     }
     /**
      * Get id
      *
@@ -275,6 +303,29 @@ class Person
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set created_at
+     *
+     * @param \DateTime $createdAt
+     * @return Person
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->created_at = $createdAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get created_at
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
     }
 
     /**
@@ -299,45 +350,7 @@ class Person
     {
         return $this->email;
     }
-
-
-
-
-    /**
-     * onCreation
-     *
-     * @ORM\PrePersist()
-     */
-    public function onCreation()
-    {
-        $now = new \DateTime('now');
-
-        $this->setCreatedAt($now); 
-    }
     
-
-    /**
-     * Set created_at
-     *
-     * @param \DateTime $createdAt
-     * @return Person
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->created_at = $createdAt;
-    
-        return $this;
-    }
-
-    /**
-     * Get created_at
-     *
-     * @return \DateTime 
-     */
-    public function getCreatedAt()
-    {
-        return $this->created_at;
-    }
 
     /**
      * Set agent
@@ -532,7 +545,7 @@ class Person
      */
     public function setHomepage($homepage)
     {
-        $this->homepage = $twihomepagetter;
+        $this->homepage = $homepage;
     
         return $this;
     }

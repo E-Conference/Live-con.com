@@ -9,24 +9,21 @@
         <input type="hidden" name="_method" value="PUT" />
         {{ form_widget(edit_form) }}
         <p>
-            <button type="submit" class="btn btn-default"><i class="icon-ok"></i></button>
+            <button type="submit" class="btn btn-default"><i class="icon-ok"></i> Save</button>
         </p>
     </form>
 
         <ul class="record_actions">
     <li>
-        <a class="btn btn-warning" href="{{ path('schedule_person_index') }}">
-            <i class="icon-th-list"></i>
-
-        <a href="{{ path('schedule_person_index') }}">
-            Back to the list
+         <a class="btn btn-warning" href="{{ path('schedule_person_index') }}">
+            <i class="icon-th-list"></i> List
         </a>
     </li>
     <li>
         <form action="{{ path('schedule_person_delete', { 'id': entity.id }) }}" method="post">
             <input type="hidden" name="_method" value="DELETE" />
             {{ form_widget(delete_form) }}
-             <button type="submit" class="btn btn-danger"> <i class="icon-remove"></i></button>
+             <button type="submit" class="btn btn-danger"> <i class="icon-trash"></i> Delete</button>
         </form>
     </li>
 </ul>

@@ -1,5 +1,6 @@
 /src/fibe/MobileAppBundle/Resources/public/DataConf/
 
+reset
 
 # Symfony directories
 */logs/*

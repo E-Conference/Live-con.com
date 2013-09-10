@@ -14,8 +14,12 @@
 <div id="sidebar">  
   <div class="checkbox">
     <label>
-      <input id="reposition" type="checkbox"> Reposition parent/child
+      <input id="reposition"  type="checkbox"> Reposition parent/child
     </label>
+  </div> 
+  <div class="history hide">
+    <button id="backwardBtn" class="btn btn-default" disabled="disabled" ><i class="icon-undo"></i></button>
+    <button id="forewardBtn" class="btn btn-default" disabled="disabled" ><i class="icon-repeat"></i></button>
   </div>
   <h4>Filter by category</h4>
   <div id='filter-category'>
@@ -141,6 +145,10 @@
         padding-top: 1em;
     }
         
+    #sidebar .history{
+        text-align: center;
+    }
+        
     #sidebar p {
         margin   : 1.5em 0;
         font-size: 11px;
@@ -251,6 +259,14 @@
 
             };
 
+
+        //init history
+        History.setForewardBtn($('#forewardBtn'))
+               .setBackwardBtn($('#backwardBtn')); 
+        $(History).on('updateState',function(ev,events){ 
+          renderHistory(events);
+        })
+
         /*-----------------------------------------------------------------------------------------------------*/
         /*------------------------------------- initialize filters --------------------------------------------*/
         /*-----------------------------------------------------------------------------------------------------*/
@@ -358,8 +374,8 @@
                             $modalBody.html(doc);
                             bootstrapAlert("stop");
                         }
-                    });
-                    bootstrapAlert("info","edit <b>"+event['title']+"</b> request sent","Info : ","<i class='icon-spinner icon-spin'></i>"); 
+                    }); 
+                    bootstrapAlert("info","edit <b>"+(calEvent['title'] || calEvent['name'])+"</b> request sent","Info : ","<i class='icon-spinner icon-spin'></i>"); 
 
             },
             selectable: true, 
@@ -479,6 +495,7 @@
           
           //set sidebar bubble draggable
           for (var i in instant_events){ 
+            if(!isInstant(instant_events[i])) continue;
             var $event = $(eventHtml);
             $event = sidebarDraggable($event,instant_events[i]);
           }
@@ -505,7 +522,7 @@
                 $sidebarTmp.hide();
                 $(this).css("border","solid 1px #ccc"); 
 
-                console.log("end Drag to sidebar") ;
+                // console.log("end Drag to sidebar") ;
 
                 var event = dragged[1]; 
                 //delete parent relation
@@ -598,8 +615,13 @@
             var id = parseInt($(this).find(".fc-event-id").text()); 
             Events[id]['elem'] = $(this);
           });
-          console.log("###updateEventArray###") 
+          console.log("###event array updated###");
           console.log(Events) 
+
+          //if we render from history, dont store the state
+          if(!History.isRenderingStateFromHistory()){
+              History.storeState(Events);
+          } 
         }
 
 
@@ -613,8 +635,7 @@
         var eventMargin = 3;
         var repositionTimeout = 10;
         function reposition(view){
- 
-            console.log("### end updateEventArray ###")
+  
             var colWidth = view.getColWidth();
             positionned=[];
             // console.log("##########################")
@@ -669,7 +690,7 @@
             var newColWidth = colWidth/(event.count+1)-(event.count+1)*eventMargin;
             // console.log("newColWidth : ",newColWidth,"left : ",event.minLeft+(event.range*newColWidth));
             if(event.allDay !==true && !isInstant(event)){ 
-              console.log("POSITION"+event.id, event)
+              // console.log("POSITION"+event.id, event)
               event.elem.width(newColWidth); 
               event.elem.css("left",event.minLeft+eventMargin/2+(event.range*(newColWidth+eventMargin))); 
             } 
@@ -955,7 +976,7 @@
             });
           // }
           if(hasParent(event)){
-            var parent = getElementAndEventbyId(event.parent.id,{noSidebar:true});
+            var parent = getEventbyId(event.parent.id,{noSidebar:true});
             // in sidebar
             if(!parent)return;
             if(!moment(parent['start']).isBefore(event['end']) ||
@@ -975,7 +996,7 @@
 
         function isOutOfParent(event){
           if(!hasParent(event))return false;
-          var parent = getElementAndEventbyId(event.parent.id,{noSidebar:true});
+          var parent = getEventbyId(event.parent.id,{noSidebar:true});
           return (moment(parent['start']).isAfter(event['start']) ||
                   moment(parent['end']).isBefore(event['end']));
         }
@@ -1036,8 +1057,9 @@
 
         /** 
          * @param parent        :  db model event
-         * @param op            : concat(default true), noSidebar(default false), recursive(default true)
-         *                       concat : ( boolean ) if true : dont preserve the tree nature of the relation (just concat them)
+         * @param op            : concat : ( boolean ) if true : dont preserve the tree nature of the relation (just concat children/subchildren/subsu... them)
+         *                        noSidebar(default false),
+         *                        recursive(default true) get only direct children
          * return children      : [{event:event,element:$element}, ... ]
          * events               : db modele events
          * elements             : jquery draggable div array;
@@ -1051,7 +1073,7 @@
           $.each(parent.children,function(i,childId){
             if( !parent.children.hasOwnProperty( i ) ) return;
 
-            var child = getElementAndEventbyId(childId.id,op);
+            var child = getEventbyId(childId.id,op);
             if( !child) return;
             // console.log("child",child);
 
@@ -1066,34 +1088,10 @@
                 } 
               }
             }
-            children.push(child );  
-            // console.log(children,".push(",child,");"   );
+            children.push(child );   
 
-          });
-          // console.log(children)
-          return children;
-
-          // // console.log("getChildren",parent)
-          // $.each(parent.children,function(i,child){
-          //   if( !parent.children.hasOwnProperty( i ) ) return; 
-          //   var cElandEv = getElementAndEventbyId(child.id,op);
-          //   if( !cElandEv) return;
-
-          //   if(op.recursive!==false){
-          //     var subChildren  = getChildren(cElandEv,op);  
-
-          //     if (subChildren && subChildren.length > 0){
-          //       if(op.concat===true)
-          //         children = children.concat(subChildren);
-          //       else{
-          //         cElandEv['subChildren'] = subChildren;
-          //       } 
-          //     }
-          //   }
-          //   children.push(cElandEv );  
-
-          // });
-          // return children;
+          }); 
+          return children; 
         }
 
         /** 
@@ -1104,7 +1102,7 @@
          * events   : db model events
          * elements : jquery draggable div array;
          */
-        function getElementAndEventbyId(id,op){
+        function getEventbyId(id,op){
           if(id==="" || !id)return ;
           if(!op)op={}; 
           var event = Events[id];
@@ -1129,36 +1127,18 @@
           return Events[id];
         }
 
-        // remove relation with old parent if exists
-        // and update relation with new parent
-        function setParent(event,parent){
 
-
-          deleteParent(event);
-          //check if this is going to do a loop in the tree 
-          if(isChild(parent,event)){
-            bootstrapAlert("warning","cannot set event <b>"+event.title+"</b> as child of <b>"+parent.title+"</b> because this is going to do a loop in the event tree","Circular reference : "); 
-            return;
-          }
- 
-          //affect parent to child
-          event.parent = { "id": parent.id};
-          //add child to parent
-          parent.children.push( { "id": event.id});  
-
-          //update parentDate
-          updateParentDate(event);
-          render(event); 
-          render(parent); 
-           
-        }
-
+        /**
+         * child date has changed, update parent's one to fit
+         * @param  {obj} event db event (with start,end,allDay,title...)
+         * @return nothing;
+         */
         function updateParentDate(event){
           //check if the event has been dropped out of the parent 
           if(isOutOfParent(event)){
               //event is out of parent
               console.log("isOutOfParent"); 
-              var parent = getElementAndEventbyId(event.parent.id);
+              var parent = getEventbyId(event.parent.id);
               var Eduration = moment(event['end']).diff(event['start']); 
 
               //event start is before parent start
@@ -1176,13 +1156,14 @@
                 event['start'] = moment(event['end']).subtract(Eduration).format();
               } 
               if(hasParent(event)){
-                var p = getElementAndEventbyId(event.parent.id);
+                var p = getEventbyId(event.parent.id);
                 updateParentDate(p);
               }
               render(parent);
           } 
         }
 
+        // when resized, affect recursively child date
         function updateChildrenDate(event){
           var children = getChildren(event, {concat:false,recursive:false,onlyEvent:true}); 
           // console.log("OLOLOLOL",children);
@@ -1225,6 +1206,45 @@
           }
         }
 
+        // remove relation with old parent if exists
+        // and update relation with new parent (render event but dont submit changes to db)
+        function setParent(event,parent){
+
+
+          deleteParent(event);
+          //check if this is going to do a loop in the tree 
+          if(isChild(parent,event)){
+            bootstrapAlert("warning","cannot set event <b>"+event.title+"</b> as child of <b>"+parent.title+"</b> because this is going to do a loop in the event tree","Circular reference : "); 
+            return;
+          }
+ 
+          //affect parent to child
+          event.parent = { "id": parent.id};
+          //add child to parent
+          parent.children.push( { "id": event.id});  
+
+          //update parentDate
+          updateParentDate(event);
+          render(event); 
+          render(parent); 
+           
+        }
+
+        function deleteParent(event){   
+          if(!event || !hasParent(event))return;
+              
+          parent = getEventbyId(event.parent.id)  ; 
+          event.parent.id = "";
+          event.parent.title = "";
+          event.parent.name = "";
+          for( var i in parent.children){
+            if(parent.children[i].id === event.id && event.id !== ""){ 
+              delete parent.children[i];
+              return;
+            }
+          } 
+        }
+
         function isChild(parent,event){
  
             var children = getChildren(parent, {concat:true,onlyEvent:true}); 
@@ -1246,21 +1266,6 @@
             return true;
         }
 
-        function deleteParent(event){   
-          if(!event || !hasParent(event))return;
-              
-          parent = getElementAndEventbyId(event.parent.id)  ; 
-          event.parent.id = "";
-          event.parent.title = "";
-          event.parent.name = "";
-          for( var i in parent.children){
-            if(parent.children[i].id === event.id && event.id !== ""){ 
-              delete parent.children[i];
-              return;
-            }
-          } 
-        }
-
         function hasParent(event){
           // alert(event.id+", parent : "+event.parent.id);
           return !(!event.parent || !event.parent.id || event.parent.id==="");
@@ -1271,6 +1276,7 @@
           return isNaN(v) ? 0 : v;
         };
 
+        //get css positionning properties from an event $div (see getDivById) 
         function getProp(elem){
           return {
               y: $(elem).cssNumber("top"),
@@ -1287,17 +1293,18 @@
         /*-----------------------------------------------------------------------------------------------------*/
 
       // empty fullcalendar events and populate it with new
-      var Events = {};
+      var Events;
       function renderEvent(events){
-        $calendar.fullCalendar( 'removeEvents');
-        //TODO ALLDAY
-        var instant_events   = [];
-        var callendar_events = [];
+        Events = {};
+        $calendar.fullCalendar( 'removeEvents'); 
+        var instant_events   = []; 
         for (var i in events){  
           events[i]["title"]  = events[i].name; 
           events[i]["start"]  = events[i].start_at;
           events[i]["end"]    = events[i].end_at; 
           events[i]["allDay"] = events[i].is_allday==="true";
+          if(events[i].categories && events[i].categories[0] && events[i].categories[0].color)
+            events[i]["color"] = events[i].categories[0].color;
 
           delete events[i]["url"];
           // console.log(events[i].categories);
@@ -1316,6 +1323,24 @@
         setInstantEvents(instant_events);
       }
 
+      //render an Events array
+      function renderHistory(events){
+        console.log("renderHistory",events);
+        Events = events;
+        var instant_events   = []; 
+        $calendar.fullCalendar( 'removeEvents');
+        storeinHistory = false;
+        for (var i in Events){
+          var event = Events[i]; 
+          if(events[i]["instant"]){
+            instant_events.push(event);
+          }else{ 
+              $calendar.fullCalendar( 'renderEvent',event);
+          } 
+        }
+        setInstantEvents(instant_events); 
+      }
+
       function render(event){
         formatDate(event);
 
@@ -1324,6 +1349,7 @@
         $calendar.fullCalendar('removeEvents', event.id); 
         $calendar.fullCalendar('renderEvent', event); 
       }
+
       function updateEventInDB(event){ 
           var toSend = {
             parent : event['parent'],
@@ -1336,7 +1362,7 @@
           } 
               $.post(
                 op.quickUpdateUrl,
-                $.extend( {} , toSend ),
+                toSend,
                 function(doc) {   
                         bootstrapAlert("success","event <b>"+event['title']+"</b> has been well updated"); 
                 },
@@ -1351,6 +1377,73 @@
         e['end'] = moment(e['end']).format();
         return e;
      }
+    
+/* Gestion de l'historique */
+    var History = {
+        _statesHistory : [],
+        _currentState : -1,
+        _backwarded : false,
+
+        _backwardBtn : '',
+        _forewardBtn : '',
+        
+        _forewardBtn : '',
+        _renderingState : true,
+        isRenderingStateFromHistory : function(){
+          if(this._renderingState===true){
+            this._renderingState = false;
+            return true;
+          }
+          return false;
+        },
+        setBackwardBtn : function(btn){
+          this._backwardBtn = $(btn);
+          this._backwardBtn.click(function(){History._backward()}); 
+          return this;
+        },
+        setForewardBtn : function(btn){
+          this._forewardBtn = $(btn);
+          this._forewardBtn.click(function(){History._foreward()});   
+          return this;
+        },
+        storeState : function(model){
+          console.log("history state stored");
+          var state = jQuery.extend(true, {}, model); 
+          var arraySplice = this._backwarded ? 2000 : 0; 
+          this._backwarded = false;
+          this._currentState++;
+          this._statesHistory.splice(this._currentState,arraySplice,state);
+          this._checkBtn();
+          return this;
+        },
+        //pseudo private methods
+
+        //disable btn
+        _checkBtn : function(){
+            if(this._currentState<=0)this._backwardBtn.attr("disabled","disabled");
+            else this._backwardBtn.removeAttr("disabled");
+
+            if(!this._statesHistory[this._currentState+1])this._forewardBtn.attr("disabled","disabled");
+            else this._forewardBtn.removeAttr("disabled"); 
+        },
+        _backward : function(btn){
+            if(this._currentState<=0)return;
+            this._currentState--;
+            this._backwarded=true;
+            // fb(this._statesHistory);
+            this._render();
+        },
+        _foreward : function(btn){
+            if(!this._statesHistory[this._currentState+1])return;
+            this._currentState++;
+            this._render();
+        },
+        _render : function(){
+            this._checkBtn();
+            this._renderingState = true;
+            $(this).trigger('updateState', jQuery.extend(true, {}, this._statesHistory[this._currentState]));  
+        },
+    };
 
     </script>    
 	

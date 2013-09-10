@@ -21,7 +21,7 @@
         {{ form_row(edit_form.isTransparent) }}
         {{ form_row(edit_form.wwwConf) }}
 
-        <button class="btn btn-default" type="submit"><i class="icon-ok"></i></button>
+        <button class="btn btn-primary" type="submit"><i class="icon-ok"></i> Save</button>
   
         <p>
               <h1>Themes</h1>
@@ -36,16 +36,18 @@
                 {% include "fibeWWWConfBundle:ConfEvent:paperRelation.html.twig" %}
             </div>
              {{ form_row(edit_form.papers) }}
+        </p>
              
-            </form>
-              <h1>Persons Relation</h1>
-             <div id="person_related_list"> 
+      </form>
+        <p>
+            <h1>Role</h1>
+            <div id="person_related_list"> 
                 {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
-             </div>
+            </div>
             <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
                  {{ form_widget(role_form) }}
                 <button id="role_form_submit"class="btn btn-info" type="button">
-                    <i class="icon-plus"></i>
+                    <i class="icon-plus"></i> add Role
                 </button>
             </form>
         </p>

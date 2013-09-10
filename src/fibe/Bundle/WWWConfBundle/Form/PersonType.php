@@ -11,10 +11,14 @@ class PersonType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('firstName')
+            ->add('lastName')
             ->add('email')
             ->add('agent')
-            ->add('name')
             ->add('title')
+            // ->add('name')  // the name is the concatenation of first and last name
+            ->add('homepage')
+            ->add('twitter')
             ->add('depiction')
             ->add('givenName')
             ->add('based_near')
