@@ -19,6 +19,17 @@ idci_exporter:
                         options:
 #                            template_path:
                             template_name_format: "export.json.twig"
+
+        schedule_theme:
+            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Theme"
+            formats:
+                jsonp:
+                    transformer:
+#                        service: "idci_exporter.transformer_twig"
+                        options:
+#                            template_path:
+                            template_name_format: "export.json.twig"
+
         schedule_person:
             class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Person"
             formats:
