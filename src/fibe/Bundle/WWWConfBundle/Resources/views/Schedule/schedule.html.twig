@@ -14,7 +14,7 @@
 <div id="sidebar">  
   <div class="checkbox">
     <label>
-      <input id="reposition"  type="checkbox"> Reposition parent/child
+      <input id="reposition"  type="checkbox"> Reposition parent/child <small>(<i>alpha</i>)</small>
     </label>
   </div> 
   <div class="history hide">
@@ -431,9 +431,7 @@
             //update Event array
             
             updateEventArray();
-            if($('#reposition').is(':checked')){
-                          reposition(view);
-            }
+            reposition(view); 
           },repositionTimeout);
               
             }, 
@@ -667,63 +665,70 @@
             if(!event.elem)  continue; //event is in another view
                
 
-            //position left margin
-            var elemProp = getProp(event.elem); 
-            if(parentPos && parent && parent.allDay !== true){
-              event.elem.css("left",parentPos.x+eventMargin/2);
+            if($('#reposition').is(':checked')){
+              //position margins
+              var elemProp = getProp(event.elem); 
+              if(parentPos && parent && parent.allDay !== true){
+                event.elem.css("left",parentPos.x+eventMargin/2);
 
-              if(moment(parent.start).isSame(moment(event.start))){
-               event.elem.css("top",elemProp.y+eventMargin/2+5); 
-               event.elem.css("height",elemProp.h-eventMargin/2-1);
+                if(moment(parent.start).isSame(moment(event.start))){
+                 event.elem.css("top",elemProp.y+eventMargin/2+5); 
+                 event.elem.css("height",elemProp.h-eventMargin/2-1);
+                }
+                if(moment(parent.end).isSame(moment(event.end))){
+                 // event.elem.css("top",elemProp.y+eventMargin/2); 
+                  event.elem.css("height",elemProp.h-eventMargin/2-3);
+                }
               }
-              if(moment(parent.end).isSame(moment(event.end))){
-               // event.elem.css("top",elemProp.y+eventMargin/2); 
-                event.elem.css("height",elemProp.h-eventMargin/2-3);
-              }
+
+              
+              //position width and left margin for brothers
+              getBroCountRange(event,events); 
+
+              // console.log("event "+event.id+" has "+event.count+" bros. range = "+event.range+" minLeft = "+event.minLeft);
+              var newColWidth = colWidth/(event.count+1)-(event.count+1)*eventMargin;
+              // console.log("newColWidth : ",newColWidth,"left : ",event.minLeft+(event.range*newColWidth));
+              if(event.allDay !==true && !isInstant(event)){ 
+                // console.log("POSITION"+event.id, event)
+                event.elem.width(newColWidth); 
+                event.elem.css("left",event.minLeft+eventMargin/2+(event.range*(newColWidth+eventMargin))); 
+              }  
             }
-
-            //get brothers count and self range ( to calculate width and xPos)
-            // console.log("getBroCountRange")
-            getBroCountRange(event,events); 
-
-            // console.log("event "+event.id+" has "+event.count+" bros. range = "+event.range+" minLeft = "+event.minLeft);
-            var newColWidth = colWidth/(event.count+1)-(event.count+1)*eventMargin;
-            // console.log("newColWidth : ",newColWidth,"left : ",event.minLeft+(event.range*newColWidth));
-            if(event.allDay !==true && !isInstant(event)){ 
-              // console.log("POSITION"+event.id, event)
-              event.elem.width(newColWidth); 
-              event.elem.css("left",event.minLeft+eventMargin/2+(event.range*(newColWidth+eventMargin))); 
-            } 
-            
 
             //set opacity to all children
             
             //z-index 
             event.elem.css('z-index',parentZindex+1)
             
-            // console.log('OPACITY of'+event.id ); 
-            
-            var oldBorderColor = event.elem.css("border-color")
-            event.elem.hover(function(){
-              //enter
-              $(this).animate({"border-color":"#3F3F3F"},{queue:false})
-              var elemEvent = getEventByDiv($(this));
-              var childrenDiv = getChildren(elemEvent,{concat:true});  
-              for (var j in childrenDiv){
-                var curChildDiv = getDivById(childrenDiv[j].id); 
-                curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false});
-              }
-            },function(){
+            // console.log('OPACITY of'+event.id );  
+            event.elem.data("border-color",event.elem.css("border-color"))
+            event.elem.popover({
+                        trigger : 'hover',
+                        html : true,
+                        title : "<b>"+event.title+"</b>",
+                        content : getPopoverContent(event),
+                      })
+                      .hover(function(){
+                          //enter
+                          $(this).animate({"border-color":"#3F3F3F"},{queue:false});
 
-              $(this).animate({"border-color":oldBorderColor},{queue:false})
-              var elemEvent = getEventByDiv($(this));
-              var childrenDiv = getChildren(elemEvent,{concat:true,onlyEvent:true}); 
-              for (var j in childrenDiv){
-                var curChildDiv = getDivById(childrenDiv[j].id );
-                curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
-              }
-            }) 
-            
+                          var elemEvent = getEventByDiv($(this));
+                          var childrenDiv = getChildren(elemEvent,{concat:true});  
+                          for (var j in childrenDiv){
+                            var curChildDiv = getDivById(childrenDiv[j].id); 
+                            curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false});
+                          }
+                        },function(){
+
+                          $(this).data("border-color");
+                          $(this).animate({"border-color":$(this).data("border-color")},{queue:false})
+                          var elemEvent = getEventByDiv($(this));
+                          var childrenDiv = getChildren(elemEvent,{concat:true,onlyEvent:true}); 
+                          for (var j in childrenDiv){
+                            var curChildDiv = getDivById(childrenDiv[j].id );
+                            curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
+                          }
+                      }); 
             //end set opacity to all children 
             
 
@@ -736,6 +741,33 @@
             positionBlock(children,newColWidth,parentZindex+1,elemProp,event);
   
           }
+        }
+
+        function getPopoverContent(event){
+          var categories = "no categories"
+          if(event.categories && event.categories[0] && event.categories[0].name!==""){
+            categories = "<ul>";
+            for (var i=0;i<event.categories.length;i++){
+              categories += "<li style='color:"+event.categories[i].color+";'>"+event.categories[i].name+"</li>";
+            }
+            categories += "</ul>";
+          }
+          var themes = "no themes"
+          if(event.themes && event.themes[0] && event.themes[0].name!==""){
+            themes = "<ul>";
+            for (var i=0;i<event.themes.length;i++){
+              themes += "<li>"+event.themes[i].name+"</li>";
+            }
+            themes += "</ul>";
+          }
+          return "<ul style='min-width:200px;'>\
+                    <li><b>duration : </b>"+moment.duration(moment(event.end).diff(event.start)).humanize()+"</li>\
+                    <li><b>location : </b>"+(event.location.name || "")+"</li>\
+                    <li><b>description : </b>"+(event.description || "")+"</li>\
+                    <li><b>categories : </b>"+categories+"\
+                    <li><b>themes : </b>"+themes+"\
+                    </li>\
+                  </ul>"
         }
 
         function getBroCountRange(event,events){
@@ -864,8 +896,8 @@
         /*------------------------------------- parent/child  -------------------------------------------------*/
         /*-----------------------------------------------------------------------------------------------------*/
 
-        //drag event to a calendar event
-        //highlight 
+        //    drag a callendar event over a calendar event
+        // => highlight 
         function setTooltip(element,event){
           var oldBorderColor = element.css("border-color");
           var overBorderColor = "green";

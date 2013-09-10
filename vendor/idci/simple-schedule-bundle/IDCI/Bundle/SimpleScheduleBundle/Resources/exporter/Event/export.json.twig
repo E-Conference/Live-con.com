@@ -11,6 +11,7 @@
         "name": "{{ entity.parent.summary }}"
     },
     "is_transparent": "{{ entity.isTransparent }}",
+    "is_allday": "{% if entity.isAllDay == true %}true{% elseif entity.isAllDay == false %}false{% endif %}",
     "resources": "{{ entity.resources }}",
     "duration": "{{ entity.duration }}",
     "last_modified_at": "{{ entity.lastModifiedAt | date('Y-m-d H:i') }}",
@@ -28,21 +29,31 @@
     "location":
     {
         "id": "{{ entity.location.id }}",
-        "name": "{{ entity.location.name }}",
+        "name": "{{ entity.location.getName() }}",
         {% if entity.hasGeo() %}
         "latitude": "{{ entity.location.latitude }}",
         "latitude": "{{ entity.location.longitude }}",
         {% endif %}
-        "description": "{% autoescape 'js' %}{{ entity.location.description }}{% endautoescape %}"
+        "description": "{{ entity.location.getDescription() }}"
     },
     {% spaceless %}
     "children":
     [
     {% for child in entity.children %}
         {% if loop.first %}
-        { "id": "{{ child.id }}", "name": "{{ child.summary }}"}
+        { "id": "{{ child.id }}", "name": "{{ child.getSummary() }}"}
         {% else %}
-        ,{ "id": "{{ child.id }}", "name": "{{ child.summary }}"}
+        ,{ "id": "{{ child.id }}", "name": "{{ child.getSummary() }}"}
+        {% endif %}
+    {% endfor %}
+    ],
+    "themes":
+    [
+    {% for theme in entity.themes %}
+        {% if loop.first %}
+        { "id": "{{ theme.id }}", "name": "{{ theme.getLibelle() }}"}
+        {% else %}
+        ,{ "id": "{{ theme.id }}", "name": "{{ theme.getLibelle() }}"}
         {% endif %}
     {% endfor %}
     ],
