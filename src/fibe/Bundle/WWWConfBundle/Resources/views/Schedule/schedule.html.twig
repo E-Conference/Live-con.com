@@ -197,14 +197,18 @@
     }
     .fc-event{
       font-size: 1em;
+      min-width: 2em;
     }
     .fc-event-id {
       display: none;
     }
-  .fc-view { /* prevents dragging outside of widget */
-      overflow: visible;
-  }
-
+    .fc-view { /* prevents dragging outside of widget */
+        overflow: visible;
+    }
+    .popover{
+      min-width: 20em;
+      z-index: 2000;
+    }
 
     </style>
 
@@ -702,9 +706,14 @@
             
             // console.log('OPACITY of'+event.id );  
             event.elem.data("border-color",event.elem.css("border-color"))
+                      .data("prop",getProp(event.elem));
             event.elem.popover({
                         trigger : 'hover',
                         html : true,
+                        placement : function(context,source){ 
+                          var position = getProp(source);
+                          return ((position.x > $calendar.width()/2) ? "left" : "right") ;
+                        },
                         title : "<b>"+event.title+"</b>",
                         content : getPopoverContent(event),
                       })
@@ -719,8 +728,7 @@
                             curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false});
                           }
                         },function(){
-
-                          $(this).data("border-color");
+ 
                           $(this).animate({"border-color":$(this).data("border-color")},{queue:false})
                           var elemEvent = getEventByDiv($(this));
                           var childrenDiv = getChildren(elemEvent,{concat:true,onlyEvent:true}); 
@@ -760,10 +768,10 @@
             }
             themes += "</ul>";
           }
-          return "<ul style='min-width:200px;'>\
+          return "<ul >\
                     <li><b>duration : </b>"+moment.duration(moment(event.end).diff(event.start)).humanize()+"</li>\
-                    <li><b>location : </b>"+(event.location.name || "")+"</li>\
-                    <li><b>description : </b>"+(event.description || "")+"</li>\
+                    <li><b>location : </b>"+(event.location && event.location.name && event.location.name!==""|| "no location")+"</li>\
+                    <li><b>description : </b>"+(event.description || "no description")+"</li>\
                     <li><b>categories : </b>"+categories+"\
                     <li><b>themes : </b>"+themes+"\
                     </li>\

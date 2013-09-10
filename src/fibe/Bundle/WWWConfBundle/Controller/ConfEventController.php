@@ -127,12 +127,14 @@ class ConfEventController extends Controller
             ->add('papers', 'entity', array(
                       'class'    => 'fibeWWWConfBundle:Paper',
                       'property' => 'title',
+                      'required' => false,
                       'multiple' => false))
             ->getForm();
 
          $form_theme = $this->createFormBuilder($entity)
             ->add('themes', 'entity', array(
                   'class'    => 'fibeWWWConfBundle:Theme',
+                  'required' => false,
                   'property' => 'libelle',
                   'multiple' => false))
             ->getForm();
