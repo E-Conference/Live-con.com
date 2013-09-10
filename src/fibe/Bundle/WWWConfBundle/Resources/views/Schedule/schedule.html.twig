@@ -421,23 +421,24 @@
                     updateParentDate(event);
                     updateChildrenDate(event);
                     render(event);
+                    updateEventInDB(event); 
             },
             eventDataTransform: function(data){return data;},
             droppable: true, // this allows things to be dropped onto the calendar !!!
-            eventDrop : function(event){ //drop from calendar ")
+            eventDrop : function(event){ //drop from calendar
                     updateEventInDB(event);
                     // render(event);
             }, 
             eventAfterAllRender: function( view ) { 
-          //avoid repeating this function 10 times...
-          clearTimeout(repositionTimeout);
-          repositionTimeout=setTimeout(function(){  
-            //update Event array
-            
-            updateEventArray();
-            reposition(view); 
-          },repositionTimeout);
-              
+            //avoid repeating this function 10 times...
+            clearTimeout(repositionTimeout);
+            repositionTimeout=setTimeout(function(){  
+                //update Event array
+                
+                updateEventArray();
+                reposition(view); 
+            },repositionTimeout);
+                
             }, 
             drop: function(date, allDay) { //drop from sidebar
             
@@ -710,9 +711,8 @@
             event.elem.popover({
                         trigger : 'hover',
                         html : true,
-                        placement : function(context,source){ 
-                          var position = getProp(source);
-                          return ((position.x > $calendar.width()/2) ? "left" : "right") ;
+                        placement : function(context,source){  
+                          return ((getProp(source).x > $calendar.width()/2) ? "left" : "right") ;
                         },
                         title : "<b>"+event.title+"</b>",
                         content : getPopoverContent(event),
@@ -1012,12 +1012,13 @@
                
               childEvent['start']  = moment(childEvent['start']).subtract(diff);
               childEvent['end']  = moment(childEvent['end']).subtract(diff);
-              render(childEvent); 
+              render(childEvent);
+              updateEventInDB(childEvent);
             });
           // }
           if(hasParent(event)){
             var parent = getEventbyId(event.parent.id,{noSidebar:true});
-            // in sidebar
+            // return if not in callendar view 
             if(!parent)return;
             if(!moment(parent['start']).isBefore(event['end']) ||
                !moment(parent['end']).isAfter(event['start'])){
@@ -1028,15 +1029,15 @@
 
             }else{
               updateParentDate(event);
-              render(event);
+              // render(event);
             }
           }
 
         }
 
         function isOutOfParent(event){
-          if(!hasParent(event))return false;
           var parent = getEventbyId(event.parent.id,{noSidebar:true});
+          if(!parent)return false;
           return (moment(parent['start']).isAfter(event['start']) ||
                   moment(parent['end']).isBefore(event['end']));
         }
@@ -1200,6 +1201,7 @@
                 updateParentDate(p);
               }
               render(parent);
+              updateEventInDB(parent)
           } 
         }
 
@@ -1384,7 +1386,6 @@
       function render(event){
         formatDate(event);
 
-        updateEventInDB(event); 
         // render the event on the calendar
         $calendar.fullCalendar('removeEvents', event.id); 
         $calendar.fullCalendar('renderEvent', event); 
