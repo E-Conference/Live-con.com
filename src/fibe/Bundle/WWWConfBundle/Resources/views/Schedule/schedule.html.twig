@@ -213,7 +213,9 @@
       overflow: hidden;
       text-overflow: ellipsis; 
       max-height: 8em;
+      list-style-type: disc;
     } 
+
     @media (-webkit-min-device-pixel-ratio: 0) {
         .popover .description {
             display: -webkit-box;
@@ -325,7 +327,7 @@
                                       op.getOrderedUrl,
                                       data,
                                       function(events) {  
-                                          bootstrapAlert("success","events have been well fetched" );
+                                          bootstrapAlert("success",events.length+" events have been well fetched" );
                                           renderEvent(events);
                                           //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                                       },
@@ -346,7 +348,7 @@
                                       op.getOrderedUrl,
                                       data,
                                       function(events) {  
-                                          bootstrapAlert("success","events have been well fetched" );
+                                          bootstrapAlert("success",events.length+" events have been well fetched" );
                                           renderEvent(events);
                                           //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                                       },
@@ -382,7 +384,7 @@
                 op.getOrderedUrl,
                 {},
                 function(events) {  
-                    bootstrapAlert("success","events have been well fetched" );
+                    bootstrapAlert("success",events.length+" events have been well fetched" );
                     renderEvent(events);
                     //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                 },
@@ -1073,7 +1075,7 @@
 
             }else{
               updateParentDate(event);
-              // render(event);
+               render(event);
             }
           }
 
@@ -1414,7 +1416,7 @@
             setTimeout(doWork, 1);
           }
         };
-        setTimeout(doWork, 1);
+        if(events[i])setTimeout(doWork, 1);
  
         setInstantEvents(instant_events);
 

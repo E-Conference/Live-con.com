@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
+use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
 
 /**
  * This entity is based on the specification FOAF.
@@ -34,7 +35,7 @@ class Person
 
     /**
      * autho
-     * Paper make by this person
+     * Paper made by this person
      *  
      * @ORM\OneToMany(targetEntity="Author",  mappedBy="person")
      */
@@ -255,6 +256,12 @@ class Person
 
     protected $image;
 
+
+
+    /**
+     * @ORM\Column(type="string", length=128, unique=true)
+     */
+    protected $slug;
     
 
     /**
@@ -280,6 +287,7 @@ class Person
 
         $this->setCreatedAt($now); 
         $this->concatName();
+        $this->slugify();
     }
  
     /**
@@ -290,7 +298,19 @@ class Person
     public function onUpdate()
     {
         $this->concatName();
+        $this->slugify();
     }
+
+
+
+    /**
+     * Slugify
+     */
+    public function slugify()
+    {
+        $this->setSlug(StringTools::slugify($this->getName()));
+    }
+ 
 
     private function concatName(){
         $this->setName($this->getFirstName() . " " . $this->getLastName());
@@ -962,4 +982,30 @@ class Person
     {
         return $this->_group;
     }
+    
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return Category
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+
 }
