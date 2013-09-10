@@ -206,9 +206,30 @@
         overflow: visible;
     }
     .popover{
-      min-width: 20em;
       z-index: 2000;
+      width: 276px;
     }
+    .popover .description {
+      overflow: hidden;
+      text-overflow: ellipsis; 
+      max-height: 8em;
+    } 
+    @media (-webkit-min-device-pixel-ratio: 0) {
+        .popover .description {
+            display: -webkit-box;
+            -webkit-line-clamp: 5; /* number of lines to show */
+            -webkit-box-orient: vertical;
+        }
+    }
+}
+
+@media (-webkit-min-device-pixel-ratio: 0) {
+    .giveMeEllipsis {
+        display: -webkit-box;
+        -webkit-line-clamp: N; /* number of lines to show */
+        -webkit-box-orient: vertical;
+    }
+}
 
     </style>
 
@@ -636,6 +657,7 @@
 
         var repositionTimeout,positionned ;
         var eventMargin = 3;
+        var popoverWidth = 276;
         var repositionTimeout = 10;
         function reposition(view){
   
@@ -718,8 +740,16 @@
             event.elem.popover({
                         trigger : 'hover',
                         html : true,
-                        placement : function(context,source){  
-                          return ((getProp(source).x > $calendar.width()/2) ? "left" : "right") ;
+                        placement : function( context,source){
+                          var popoverProp = getProp($(context));
+                          var eventProp = getProp(source);
+                          var calendarProp = getProp($calendar);
+                          console.log(popoverProp,eventProp,calendarProp)
+                          if(eventProp.x + eventProp.w + popoverWidth < calendarProp.x + calendarProp.w )
+                            return "right";
+                          if(eventProp.x - popoverWidth > calendarProp.x)
+                            return "left";
+                          return "bottom"; 
                         },
                         title : "<b>"+event.title+"</b>",
                         content : getPopoverContent(event),
@@ -778,7 +808,7 @@
           return "<ul >\
                     <li><b>duration : </b>"+moment.duration(moment(event.end).diff(event.start)).humanize()+"</li>\
                     <li><b>location : </b>"+(event.location && event.location.name && event.location.name!==""|| "no location")+"</li>\
-                    <li><b>description : </b>"+(event.description || "no description")+"</li>\
+                    <li class='description'><b>description : </b>"+(event.description || "no description")+"</li>\
                     <li><b>categories : </b>"+categories+"\
                     <li><b>themes : </b>"+themes+"\
                     </li>\
