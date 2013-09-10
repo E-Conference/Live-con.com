@@ -114,28 +114,43 @@ class databaseCommand extends ContainerAwareCommand
 
         //categories
         $category = new Category(); 
-        $category->setName("Keynote")
+        $category->setName("KeynoteEvent")
                  ->setColor("#afcbe0");
         $em->persist($category);
 
         $category = new Category(); 
-        $category->setName("Tour de table / Blend mix")
+        $category->setName("PanelEvent")
                  ->setColor("#e7431e");
         $em->persist($category);
 
         $category = new Category(); 
-        $category->setName("Conference")
+        $category->setName("ConferenceEvent")
                  ->setColor("#b0ca0f");
         $em->persist($category);
 
         $category = new Category(); 
-        $category->setName("Atelier")
+        $category->setName("WorkshopEvent")
                  ->setColor("#e1cc25");
         $em->persist($category);
 
         $category = new Category(); 
-        $category->setName("Speed Demos")
+        $category->setName("SessionEvent")
+                 ->setColor("#8F00FF");
+        $em->persist($category);
+        
+        $category = new Category(); 
+        $category->setName("BreakEvent")
                  ->setColor("#00a2e0");
+        $em->persist($category);
+
+        $category = new Category(); 
+        $category->setName("TalkEvent")
+                 ->setColor("#FF5A45");
+        $em->persist($category);
+
+        $category = new Category(); 
+        $category->setName("OrganisedEvent")
+                 ->setColor("#0EFF74");
         $em->persist($category);
         /*
 

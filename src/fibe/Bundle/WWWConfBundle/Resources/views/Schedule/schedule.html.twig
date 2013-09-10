@@ -14,7 +14,7 @@
 <div id="sidebar">  
   <div class="checkbox">
     <label>
-      <input id="reposition"  type="checkbox"> Reposition parent/child
+      <input id="reposition"  type="checkbox"> Reposition parent/child <small>(<i>alpha</i>)</small>
     </label>
   </div> 
   <div class="history hide">
@@ -197,14 +197,18 @@
     }
     .fc-event{
       font-size: 1em;
+      min-width: 2em;
     }
     .fc-event-id {
       display: none;
     }
-  .fc-view { /* prevents dragging outside of widget */
-      overflow: visible;
-  }
-
+    .fc-view { /* prevents dragging outside of widget */
+        overflow: visible;
+    }
+    .popover{
+      min-width: 20em;
+      z-index: 2000;
+    }
 
     </style>
 
@@ -417,25 +421,24 @@
                     updateParentDate(event);
                     updateChildrenDate(event);
                     render(event);
+                    updateEventInDB(event); 
             },
             eventDataTransform: function(data){return data;},
             droppable: true, // this allows things to be dropped onto the calendar !!!
-            eventDrop : function(event){ //drop from calendar ")
+            eventDrop : function(event){ //drop from calendar
                     updateEventInDB(event);
                     // render(event);
             }, 
             eventAfterAllRender: function( view ) { 
-          //avoid repeating this function 10 times...
-          clearTimeout(repositionTimeout);
-          repositionTimeout=setTimeout(function(){  
-            //update Event array
-            
-            updateEventArray();
-            if($('#reposition').is(':checked')){
-                          reposition(view);
-            }
-          },repositionTimeout);
-              
+            //avoid repeating this function 10 times...
+            clearTimeout(repositionTimeout);
+            repositionTimeout=setTimeout(function(){  
+                //update Event array
+                
+                updateEventArray();
+                reposition(view); 
+            },repositionTimeout);
+                
             }, 
             drop: function(date, allDay) { //drop from sidebar
             
@@ -658,72 +661,89 @@
 
         function positionBlock(events,colWidth,parentZindex,parentPos,parent){ 
           // console.log(" ######positionBlocks######");
- 
+          
           colWidth-=eventMargin; 
+
+ 
 
           for (var i in events){
             var event = events[i];
             // console.log(event.id+"######"); 
             if(!event.elem)  continue; //event is in another view
                
+              var elemProp = getProp(event.elem); 
 
-            //position left margin
-            var elemProp = getProp(event.elem); 
-            if(parentPos && parent && parent.allDay !== true){
-              event.elem.css("left",parentPos.x+eventMargin/2);
+            if($('#reposition').is(':checked')){
 
-              if(moment(parent.start).isSame(moment(event.start))){
-               event.elem.css("top",elemProp.y+eventMargin/2+5); 
-               event.elem.css("height",elemProp.h-eventMargin/2-1);
+                  
+              //position margins
+              if(parentPos && parent && parent.allDay !== true){
+                event.elem.css("left",parentPos.x+eventMargin/2);
+
+                if(moment(parent.start).isSame(moment(event.start))){
+                 event.elem.css("top",elemProp.y+eventMargin/2+5); 
+                 event.elem.css("height",elemProp.h-eventMargin/2-5);
+                }
+                if(moment(parent.end).isSame(moment(event.end))){
+                 // event.elem.css("top",elemProp.y+eventMargin/2); 
+                  event.elem.css("height",elemProp.h-eventMargin/2-5);
+                }
               }
-              if(moment(parent.end).isSame(moment(event.end))){
-               // event.elem.css("top",elemProp.y+eventMargin/2); 
-                event.elem.css("height",elemProp.h-eventMargin/2-3);
+
+              
+              //position width and left margin for brothers
+              getBroCountRange(event,events); 
+
+              // console.log("event "+event.id+" has "+event.count+" bros. range = "+event.range+" minLeft = "+event.minLeft);
+              var newColWidth = colWidth/(event.count+1)-(event.count+1)*eventMargin;
+              // console.log("newColWidth : ",newColWidth,"left : ",event.minLeft+(event.range*newColWidth));
+              if(event.allDay !==true && !isInstant(event)){ 
+                // console.log("POSITION"+event.id, event)
+                event.elem.width(newColWidth); 
+                event.elem.css("left",event.minLeft+eventMargin/2+(event.range*(newColWidth+eventMargin))); 
               }
+
+       
+                
             }
-
-            //get brothers count and self range ( to calculate width and xPos)
-            // console.log("getBroCountRange")
-            getBroCountRange(event,events); 
-
-            // console.log("event "+event.id+" has "+event.count+" bros. range = "+event.range+" minLeft = "+event.minLeft);
-            var newColWidth = colWidth/(event.count+1)-(event.count+1)*eventMargin;
-            // console.log("newColWidth : ",newColWidth,"left : ",event.minLeft+(event.range*newColWidth));
-            if(event.allDay !==true && !isInstant(event)){ 
-              // console.log("POSITION"+event.id, event)
-              event.elem.width(newColWidth); 
-              event.elem.css("left",event.minLeft+eventMargin/2+(event.range*(newColWidth+eventMargin))); 
-            } 
-            
 
             //set opacity to all children
             
             //z-index 
             event.elem.css('z-index',parentZindex+1)
             
-            // console.log('OPACITY of'+event.id ); 
-            
-            var oldBorderColor = event.elem.css("border-color")
-            event.elem.hover(function(){
-              //enter
-              $(this).animate({"border-color":"#3F3F3F"},{queue:false})
-              var elemEvent = getEventByDiv($(this));
-              var childrenDiv = getChildren(elemEvent,{concat:true});  
-              for (var j in childrenDiv){
-                var curChildDiv = getDivById(childrenDiv[j].id); 
-                curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false});
-              }
-            },function(){
+            // console.log('OPACITY of'+event.id );  
+            event.elem.data("border-color",event.elem.css("border-color"))
+                      .data("prop",getProp(event.elem));
+            event.elem.popover({
+                        trigger : 'hover',
+                        html : true,
+                        placement : function(context,source){  
+                          return ((getProp(source).x > $calendar.width()/2) ? "left" : "right") ;
+                        },
+                        title : "<b>"+event.title+"</b>",
+                        content : getPopoverContent(event),
+                      })
+                      .hover(function(){
+                          //enter
+                          $(this).animate({"border-color":"#3F3F3F"},{queue:false});
 
-              $(this).animate({"border-color":oldBorderColor},{queue:false})
-              var elemEvent = getEventByDiv($(this));
-              var childrenDiv = getChildren(elemEvent,{concat:true,onlyEvent:true}); 
-              for (var j in childrenDiv){
-                var curChildDiv = getDivById(childrenDiv[j].id );
-                curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
-              }
-            }) 
-            
+                          var elemEvent = getEventByDiv($(this));
+                          var childrenDiv = getChildren(elemEvent,{concat:true});  
+                          for (var j in childrenDiv){
+                            var curChildDiv = getDivById(childrenDiv[j].id); 
+                            curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false});
+                          }
+                        },function(){
+ 
+                          $(this).animate({"border-color":$(this).data("border-color")},{queue:false})
+                          var elemEvent = getEventByDiv($(this));
+                          var childrenDiv = getChildren(elemEvent,{concat:true,onlyEvent:true}); 
+                          for (var j in childrenDiv){
+                            var curChildDiv = getDivById(childrenDiv[j].id );
+                            curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
+                          }
+                      }); 
             //end set opacity to all children 
             
 
@@ -736,6 +756,33 @@
             positionBlock(children,newColWidth,parentZindex+1,elemProp,event);
   
           }
+        }
+
+        function getPopoverContent(event){
+          var categories = "no categories"
+          if(event.categories && event.categories[0] && event.categories[0].name!==""){
+            categories = "<ul>";
+            for (var i=0;i<event.categories.length;i++){
+              categories += "<li style='color:"+event.categories[i].color+";'>"+event.categories[i].name+"</li>";
+            }
+            categories += "</ul>";
+          }
+          var themes = "no themes"
+          if(event.themes && event.themes[0] && event.themes[0].name!==""){
+            themes = "<ul>";
+            for (var i=0;i<event.themes.length;i++){
+              themes += "<li>"+event.themes[i].name+"</li>";
+            }
+            themes += "</ul>";
+          }
+          return "<ul >\
+                    <li><b>duration : </b>"+moment.duration(moment(event.end).diff(event.start)).humanize()+"</li>\
+                    <li><b>location : </b>"+(event.location && event.location.name && event.location.name!==""|| "no location")+"</li>\
+                    <li><b>description : </b>"+(event.description || "no description")+"</li>\
+                    <li><b>categories : </b>"+categories+"\
+                    <li><b>themes : </b>"+themes+"\
+                    </li>\
+                  </ul>"
         }
 
         function getBroCountRange(event,events){
@@ -864,8 +911,8 @@
         /*------------------------------------- parent/child  -------------------------------------------------*/
         /*-----------------------------------------------------------------------------------------------------*/
 
-        //drag event to a calendar event
-        //highlight 
+        //    drag a callendar event over a calendar event
+        // => highlight 
         function setTooltip(element,event){
           var oldBorderColor = element.css("border-color");
           var overBorderColor = "green";
@@ -967,17 +1014,25 @@
           // }else{
             $.each(children,function(i,child){
 
-              // console.log("#draggin child : ",child );
-              var childEvent = child ;
-               
-              childEvent['start']  = moment(childEvent['start']).subtract(diff);
-              childEvent['end']  = moment(childEvent['end']).subtract(diff);
-              render(childEvent); 
+              var i = 0;
+              //non-blocking loop
+              function doWork() {
+                      
+                  // console.log("#draggin child : ",child );
+                  var childEvent = child ;
+                   
+                  childEvent['start']  = moment(childEvent['start']).subtract(diff);
+                  childEvent['end']  = moment(childEvent['end']).subtract(diff);
+                  render(childEvent);
+                  updateEventInDB(childEvent);
+              };
+              setTimeout(doWork, 1);
+       
             });
           // }
           if(hasParent(event)){
             var parent = getEventbyId(event.parent.id,{noSidebar:true});
-            // in sidebar
+            // return if not in callendar view 
             if(!parent)return;
             if(!moment(parent['start']).isBefore(event['end']) ||
                !moment(parent['end']).isAfter(event['start'])){
@@ -988,15 +1043,15 @@
 
             }else{
               updateParentDate(event);
-              render(event);
+              // render(event);
             }
           }
 
         }
 
         function isOutOfParent(event){
-          if(!hasParent(event))return false;
           var parent = getEventbyId(event.parent.id,{noSidebar:true});
+          if(!parent)return false;
           return (moment(parent['start']).isAfter(event['start']) ||
                   moment(parent['end']).isBefore(event['end']));
         }
@@ -1160,6 +1215,7 @@
                 updateParentDate(p);
               }
               render(parent);
+              updateEventInDB(parent)
           } 
         }
 
@@ -1298,7 +1354,10 @@
         Events = {};
         $calendar.fullCalendar( 'removeEvents'); 
         var instant_events   = []; 
-        for (var i in events){  
+        var i = 0;
+        //non-blocking loop
+        function doWork() {
+            
           events[i]["title"]  = events[i].name; 
           events[i]["start"]  = events[i].start_at;
           events[i]["end"]    = events[i].end_at; 
@@ -1319,8 +1378,45 @@
           }else{ 
               $calendar.fullCalendar( 'renderEvent',events[i]);
           }
-        } 
+        
+          i += 1; 
+          if (i < events.length) {
+            setTimeout(doWork, 1);
+          }
+        };
+        setTimeout(doWork, 1);
+ 
         setInstantEvents(instant_events);
+
+
+        
+
+        // for (var i in events){  
+        //   events[i]["title"]  = events[i].name; 
+        //   events[i]["start"]  = events[i].start_at;
+        //   events[i]["end"]    = events[i].end_at; 
+        //   events[i]["allDay"] = events[i].is_allday==="true";
+        //   if(events[i].categories && events[i].categories[0] && events[i].categories[0].color)
+        //     events[i]["color"] = events[i].categories[0].color;
+
+        //   delete events[i]["url"];
+        //   // console.log(events[i].categories);
+        //   if(events[i].categories.length > 0 && events[i].categories[0].color)
+        //     events[i]["background-color"] = events[i].categories[0].color;
+          
+        //   var diff =moment(events[i]["start"]).diff(events[i]["end"]);
+        //   events[i]["instant"] = (diff  === 0 ) || (diff  === 1 );  
+        //   Events[events[i]["id"]] = events[i];
+        //   if(events[i]["instant"]){
+        //     instant_events.push(events[i]);
+        //   }else{ 
+        //       $calendar.fullCalendar( 'renderEvent',events[i]);
+        //   }
+        // } 
+        // setInstantEvents(instant_events);
+
+
+
       }
 
       //render an Events array
@@ -1344,7 +1440,6 @@
       function render(event){
         formatDate(event);
 
-        updateEventInDB(event); 
         // render the event on the calendar
         $calendar.fullCalendar('removeEvents', event.id); 
         $calendar.fullCalendar('renderEvent', event); 
