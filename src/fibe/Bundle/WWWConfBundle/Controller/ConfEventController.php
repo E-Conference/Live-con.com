@@ -122,6 +122,21 @@ class ConfEventController extends Controller
         $role = new Role();
         $roleForm = $this->createForm(new RoleType(), $role);
         $editForm = $this->createForm(new ConfEventType(), $entity);
+
+        $form_paper = $this->createFormBuilder($entity)
+            ->add('papers', 'entity', array(
+                      'class'    => 'fibeWWWConfBundle:Paper',
+                      'property' => 'title',
+                      'multiple' => false))
+            ->getForm();
+
+         $form_theme = $this->createFormBuilder($entity)
+            ->add('themes', 'entity', array(
+                  'class'    => 'fibeWWWConfBundle:Theme',
+                  'property' => 'libelle',
+                  'multiple' => false))
+            ->getForm();
+
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('fibeWWWConfBundle:ConfEvent:edit.html.twig', array(
@@ -129,13 +144,14 @@ class ConfEventController extends Controller
             'edit_form'   => $editForm->createView(),
             'role_form'    => $roleForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'paper_form' => $form_paper->createView(),
+            'theme_form' => $form_theme->createView(),
         ));
     }
 
     /**
      * Edits an existing ConfEvent entity.
      *  @Route("/{id}/update", name="schedule_confevent_update")
-     *  @Method({"PUT","POST"})
      *  @Template("fibeWWWConfBundle:ConfEvent:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
@@ -152,18 +168,12 @@ class ConfEventController extends Controller
         $editForm = $this->createForm(new ConfEventType(), $entity);
         $editForm->bind($request);
 
-        if ($editForm->isValid()) {
+      
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('confevent_edit', array('id' => $id)));
-        }
-
-        return $this->render('fibeWWWConfBundle:ConfEvent:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+            return $this->redirect($this->generateUrl('schedule_confevent_edit', array('id' => $id)));
+    
     }
 
 

@@ -1,9 +1,10 @@
-{% extends '::base.html.twig' %}
+{% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body -%}
+{% block body %}
+{{ parent() }}
     <h1>Paper creation</h1>
 
-    <form action="{{ path('paper_create') }}" method="post" {{ form_enctype(form) }}>
+    <form action="{{ path('schedule_paper_create') }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
         <p>
             <button type="submit">Create</button>
@@ -12,7 +13,7 @@
 
         <ul class="record_actions">
     <li>
-        <a href="{{ path('paper') }}">
+        <a href="{{ path('schedule_paper') }}">
             Back to the list
         </a>
     </li>

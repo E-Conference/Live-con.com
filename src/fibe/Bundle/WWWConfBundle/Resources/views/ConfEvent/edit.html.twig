@@ -23,61 +23,64 @@
         {{ form_row(edit_form.endAt) }}
         {{ form_row(edit_form.isTransparent) }}
         {{ form_row(edit_form.wwwConf) }}
-
+        </br>
         <button class="btn btn-default" type="submit"><i class="icon-ok"></i></button>
-  
+             
+    </form>
+     <div class="row">
+            <div class="col-lg-1"></div>
+            <div class="col-lg-2 btn-group">
+                <a href="{{ path('schedule_event') }}" class="btn btn-warning">
+                    <i class="icon-th-list"></i>
+                </a>
+               <form action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
+                  <input type="hidden" name="_method" value="DELETE" />
+                    {{ form_widget(delete_form) }}
+              </form>
+                <button type="submit" class="btn btn-danger">
+                    <i class="icon-remove"></i>
+                </button>
+            </div>
+        </div>
+        </br></br>
 
          <p>
             <h1>Themes</h1>
             <div id="themes_related_list">
                 {% include "fibeWWWConfBundle:ConfEvent:themeRelation.html.twig" %}
             </div>
-             {{ form_row(edit_form.themes) }}
+                 {{ form_widget(theme_form) }}        
         </p>
   
-
         <p>
             <h1>Papers Relation</h1>
             <div id="paper_related_list">
+
                 {% include "fibeWWWConfBundle:ConfEvent:paperRelation.html.twig" %}
             </div>
-             {{ form_row(edit_form.papers) }}
-             
-            </form>
+                {{ form_widget(paper_form) }}
+
               <h1>Persons Relation</h1>
              <div id="person_related_list"> 
                 {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
              </div>
             <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
                  {{ form_widget(role_form) }}
-                <button id="role_form_submit"class="btn btn-default" type="button">
-                    <i class="icon-ok"></i>
+                 </form>
+                 </br>
+                <button id="role_form_submit"class="btn btn-info" type="button">
+                    <i class="icon-plus"></i> add Role
                 </button>
             </form>
         </p>
-  
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('schedule_event') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <form action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
-            <input type="hidden" name="_method" value="DELETE" />
-            {{ form_row(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
-    </li>
-</ul>
 
 {% block javascripts %}
 <script type="text/javascript">
 
    
    //listen for the form beeing submitted
-   $("select[id='fibe_bundle_wwwconfbundle_confeventtype_papers']").change(function(){
+   $("select[id='form_papers']").change(function(){
       //get the url for the form
       var id_paper= $(this).val();
   
@@ -91,7 +94,7 @@
        });
 
     //listen for the form beeing submitted
-   $("select[id='fibe_bundle_wwwconfbundle_confeventtype_themes']").change(function(){
+   $("select[id='form_themes']").change(function(){
       //get the url for the form
       var id_theme= $(this).val();
   

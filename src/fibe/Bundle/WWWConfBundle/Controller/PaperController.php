@@ -4,6 +4,9 @@ namespace fibe\Bundle\WWWConfBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 use fibe\Bundle\WWWConfBundle\Entity\Paper;
 use fibe\Bundle\WWWConfBundle\Form\PaperType;
@@ -16,7 +19,8 @@ class PaperController extends Controller
 {
     /**
      * Lists all Paper entities.
-     *
+     * @Route("/paper", name="schedule_paper")
+     * @Template()
      */
     public function indexAction()
     {
@@ -31,7 +35,8 @@ class PaperController extends Controller
 
     /**
      * Creates a new Paper entity.
-     *
+     * @Route("/create", name="schedule_paper_create")
+     * @Template()
      */
     public function createAction(Request $request)
     {
@@ -55,6 +60,8 @@ class PaperController extends Controller
 
     /**
      * Displays a form to create a new Paper entity.
+     * @Route("/new", name="schedule_paper_new")
+     * @Template()
      *
      */
     public function newAction()
@@ -70,7 +77,8 @@ class PaperController extends Controller
 
     /**
      * Finds and displays a Paper entity.
-     *
+     * @Route("/{id}/show", name="schedule_paper_show")
+     * @Template()
      */
     public function showAction($id)
     {
@@ -91,7 +99,8 @@ class PaperController extends Controller
 
     /**
      * Displays a form to edit an existing Paper entity.
-     *
+     * @Route("/{id}/edit", name="schedule_paper_edit")
+     * @Template()
      */
     public function editAction($id)
     {
@@ -115,7 +124,7 @@ class PaperController extends Controller
 
     /**
      * Edits an existing Paper entity.
-     *
+     * @Route("/{id}/update", name="schedule_paper_update")
      */
     public function updateAction(Request $request, $id)
     {
@@ -147,7 +156,8 @@ class PaperController extends Controller
 
     /**
      * Deletes a Paper entity.
-     *
+     * @Route("/{id}/delete", name="schedule_paper_delete")
+     * @Method("POST")
      */
     public function deleteAction(Request $request, $id)
     {

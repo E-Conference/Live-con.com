@@ -17,16 +17,12 @@ class ConfEventType extends EventType
             ->add('wwwConf', null, array(
                                     'required'  => true,
                                     'label'     => 'Belongs to conf'
-            ))
-            ->add('papers', 'entity', array('class'    => 'fibeWWWConfBundle:Paper',
-                                              'required' => false,
-                                              'property' => 'title'))
+            ))                               
             ->add('role', 'entity', array('class' => 'fibeWWWConfBundle:Role',
                                               'required' => false,
                                               'property' => 'person'))
-            ->add('themes', 'entity', array('class' => 'fibeWWWConfBundle:Theme',
-                                              'required' => false,
-                                              'property' => 'libelle'))
+            
+ 
         ;
     }
 
