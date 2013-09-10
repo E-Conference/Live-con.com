@@ -219,6 +219,16 @@ class ConfEvent extends Event
         return $this->role;
     }
 
+     /**
+     * Set role
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function setRole()
+    {
+       
+    }
+
 
      /**
      * Add themes
