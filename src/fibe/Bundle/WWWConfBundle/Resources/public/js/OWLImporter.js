@@ -45,6 +45,9 @@
             var objectMap = {};
 
 
+ 
+
+
             var personMapping = {
                 nodeName : 'Person',
                 label : {
@@ -91,6 +94,12 @@
                     'rdfs:label' : {
                         setter : 'setSummary'
                     },
+                    'dce:description' : {
+                        setter : 'setDescription'
+                    },
+                    'ical:description' : {
+                        setter : 'setDescription'
+                    },
                     'icaltzd:dtstart' : {
                         setter : 'setStartAt'
                     },
@@ -118,9 +127,6 @@
                             });
                             return rtn || $(node).text();
                         }
-                    },
-                    'dce:description' : {
-                        setter : 'setDescription'
                     },
                     'swc:hasRelatedDocument' : { 
                         action : function(node){

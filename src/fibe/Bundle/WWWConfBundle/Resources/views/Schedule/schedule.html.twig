@@ -661,28 +661,32 @@
 
         function positionBlock(events,colWidth,parentZindex,parentPos,parent){ 
           // console.log(" ######positionBlocks######");
- 
+          
           colWidth-=eventMargin; 
+
+ 
 
           for (var i in events){
             var event = events[i];
             // console.log(event.id+"######"); 
             if(!event.elem)  continue; //event is in another view
                
+              var elemProp = getProp(event.elem); 
 
             if($('#reposition').is(':checked')){
+
+                  
               //position margins
-              var elemProp = getProp(event.elem); 
               if(parentPos && parent && parent.allDay !== true){
                 event.elem.css("left",parentPos.x+eventMargin/2);
 
                 if(moment(parent.start).isSame(moment(event.start))){
                  event.elem.css("top",elemProp.y+eventMargin/2+5); 
-                 event.elem.css("height",elemProp.h-eventMargin/2-1);
+                 event.elem.css("height",elemProp.h-eventMargin/2-5);
                 }
                 if(moment(parent.end).isSame(moment(event.end))){
                  // event.elem.css("top",elemProp.y+eventMargin/2); 
-                  event.elem.css("height",elemProp.h-eventMargin/2-3);
+                  event.elem.css("height",elemProp.h-eventMargin/2-5);
                 }
               }
 
@@ -697,7 +701,10 @@
                 // console.log("POSITION"+event.id, event)
                 event.elem.width(newColWidth); 
                 event.elem.css("left",event.minLeft+eventMargin/2+(event.range*(newColWidth+eventMargin))); 
-              }  
+              }
+
+       
+                
             }
 
             //set opacity to all children
@@ -1007,13 +1014,20 @@
           // }else{
             $.each(children,function(i,child){
 
-              // console.log("#draggin child : ",child );
-              var childEvent = child ;
-               
-              childEvent['start']  = moment(childEvent['start']).subtract(diff);
-              childEvent['end']  = moment(childEvent['end']).subtract(diff);
-              render(childEvent);
-              updateEventInDB(childEvent);
+              var i = 0;
+              //non-blocking loop
+              function doWork() {
+                      
+                  // console.log("#draggin child : ",child );
+                  var childEvent = child ;
+                   
+                  childEvent['start']  = moment(childEvent['start']).subtract(diff);
+                  childEvent['end']  = moment(childEvent['end']).subtract(diff);
+                  render(childEvent);
+                  updateEventInDB(childEvent);
+              };
+              setTimeout(doWork, 1);
+       
             });
           // }
           if(hasParent(event)){
@@ -1340,7 +1354,10 @@
         Events = {};
         $calendar.fullCalendar( 'removeEvents'); 
         var instant_events   = []; 
-        for (var i in events){  
+        var i = 0;
+        //non-blocking loop
+        function doWork() {
+            
           events[i]["title"]  = events[i].name; 
           events[i]["start"]  = events[i].start_at;
           events[i]["end"]    = events[i].end_at; 
@@ -1361,8 +1378,45 @@
           }else{ 
               $calendar.fullCalendar( 'renderEvent',events[i]);
           }
-        } 
+        
+          i += 1; 
+          if (i < events.length) {
+            setTimeout(doWork, 1);
+          }
+        };
+        setTimeout(doWork, 1);
+ 
         setInstantEvents(instant_events);
+
+
+        
+
+        // for (var i in events){  
+        //   events[i]["title"]  = events[i].name; 
+        //   events[i]["start"]  = events[i].start_at;
+        //   events[i]["end"]    = events[i].end_at; 
+        //   events[i]["allDay"] = events[i].is_allday==="true";
+        //   if(events[i].categories && events[i].categories[0] && events[i].categories[0].color)
+        //     events[i]["color"] = events[i].categories[0].color;
+
+        //   delete events[i]["url"];
+        //   // console.log(events[i].categories);
+        //   if(events[i].categories.length > 0 && events[i].categories[0].color)
+        //     events[i]["background-color"] = events[i].categories[0].color;
+          
+        //   var diff =moment(events[i]["start"]).diff(events[i]["end"]);
+        //   events[i]["instant"] = (diff  === 0 ) || (diff  === 1 );  
+        //   Events[events[i]["id"]] = events[i];
+        //   if(events[i]["instant"]){
+        //     instant_events.push(events[i]);
+        //   }else{ 
+        //       $calendar.fullCalendar( 'renderEvent',events[i]);
+        //   }
+        // } 
+        // setInstantEvents(instant_events);
+
+
+
       }
 
       //render an Events array
