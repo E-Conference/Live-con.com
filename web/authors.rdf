@@ -624,20 +624,6 @@
 		<foaf:description>Lee Schlenker est professeur à EMLYON et le directeur du cabinet LHST sarl . Lauréat du prix EDSF pour son utilisation des TIC en enseignement, il a établi des Chairs académiques avec IBM, Cegid et Oracle. Reconnu en tant qu'expert en e-learning par la Commission Européenne, Prof. Schlenker a dirigé des études visant à améliorer la formation au management en Europe, en Asie et en Aftrique du Nord. En industrie, il a dirigé des missions et assurer une cinquantaine de conférences depuis dix ans pour des clients tels qu’Apple, Ernst and Young, IBM, Microsoft, Oracle et SAP dans les secteurs de l’informatique, des télécommunications, du secteur public et du tertiaire.</foaf:description>
     </NamedIndividual>
 	
-	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/olivier-marx">
-        <rdf:type rdf:resource="&foaf;Person"/>
-		<foaf:name>Olivier Marx</foaf:name>
-        <rdfs:label>Olivier Marx</rdfs:label>
-		<foaf:firstName>Olivier</foaf:firstName>
-        <foaf:lastName>Marx</foaf:lastName>
-        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
-		<foaf:mbox></foaf:mbox>
-		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Lee1-73x72.jpg</foaf:img>
-		<foaf:homepage>http://www.altics.fr</foaf:homepage>
-		<foaf:twitter>http://www.twitter.com/oliviermarx</foaf:twitter>
-		<foaf:description>Passionné de Digital et d’Economie, Olivier Marx tombe dans le Net dès 1996, suite à un DESS multimédia complété par une maitrise de sciences économiques, De 1998 à 2004, il est consultant internet au sein de Framfab, Agence Web de 3000 collaborateurs dans 16 pays européen. Il fonde Altics en 2004 autour d’une conviction : c’est en simplifiant les parcours d’achat digitaux que l’on accélére les ventes des sites marchands. Spécialiste de l’Eye tracking, Altics a publié plus de 30 livres blancs sur l’eCommerce depuis 2008. Savoyard de naissance et dévoreur de presse, Olivier Marx est membre actif de de La Cuisine Du Web, mentor à BoostInLyon et aux Startup Weekends.</foaf:description>
-    </NamedIndividual>
-	
 	
 	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/olivier-marx">
         <rdf:type rdf:resource="&foaf;Person"/>
@@ -848,37 +834,6 @@ Il a publié plus de 100 articles dans des revues et conférences internationale
         <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
 		<foaf:mbox></foaf:mbox>
 		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/08/ludoviccellier-280-200-73x72.jpg</foaf:img>
-		<foaf:homepage>http://www.mre-web.com/</foaf:homepage>
-		<foaf:twitter>http://www.twitter.com/lcellier</foaf:twitter>
-		<foaf:description>Titulaire d'un Master en software engineering obtenu à Édimbourg en 1999, Ludovic Cellier intègre dès sa création l'équipe du comparateur de prix Kelkoo et participe activement à son développement Européen. Il se spécialise dans les outils de crawl des marchands en lignes dans de nombreux pays et différentes langues et s'occupe de la formation des équipes locales. En 2004, la société est acheté par Yahoo!, Ludovic est propulsé engineering manager community for Europe à Londres. C'est en 2006 qu'il commence sa carrière Freelance, passionné par la visibilité naturelle et impressionné par les potentiels des techniques de référencement. Depuis, il accompagne de nombreux clients de profils très divers dans le développement de leur visibilité internationale.</foaf:description>
-    </NamedIndividual>
-	
-	
-			
-	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/ludovic-cellier">
-        <rdf:type rdf:resource="&foaf;Person"/>
-		<foaf:name>Ludovic Cellier</foaf:name>
-        <rdfs:label>Ludovic Cellier</rdfs:label>
-		<foaf:firstName>Ludovic</foaf:firstName>
-        <foaf:lastName>Cellier</foaf:lastName>
-        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
-		<foaf:mbox></foaf:mbox>
-		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Capture-d%E2%80%99%C3%A9cran-2013-07-12-%C3%A0-14.42.35-73x72.png</foaf:img>
-		<foaf:homepage>http://www.mre-web.com/</foaf:homepage>
-		<foaf:twitter>http://www.twitter.com/lcellier</foaf:twitter>
-		<foaf:description>Titulaire d'un Master en software engineering obtenu à Édimbourg en 1999, Ludovic Cellier intègre dès sa création l'équipe du comparateur de prix Kelkoo et participe activement à son développement Européen. Il se spécialise dans les outils de crawl des marchands en lignes dans de nombreux pays et différentes langues et s'occupe de la formation des équipes locales. En 2004, la société est acheté par Yahoo!, Ludovic est propulsé engineering manager community for Europe à Londres. C'est en 2006 qu'il commence sa carrière Freelance, passionné par la visibilité naturelle et impressionné par les potentiels des techniques de référencement. Depuis, il accompagne de nombreux clients de profils très divers dans le développement de leur visibilité internationale.</foaf:description>
-    </NamedIndividual>
-	
-	
-	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/ludovic-cellier">
-        <rdf:type rdf:resource="&foaf;Person"/>
-		<foaf:name>Ludovic Cellier</foaf:name>
-        <rdfs:label>Ludovic Cellier</rdfs:label>
-		<foaf:firstName>Ludovic</foaf:firstName>
-        <foaf:lastName>Cellier</foaf:lastName>
-        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
-		<foaf:mbox></foaf:mbox>
-		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/07/Capture-d%E2%80%99%C3%A9cran-2013-07-12-%C3%A0-14.42.35-73x72.png</foaf:img>
 		<foaf:homepage>http://www.mre-web.com/</foaf:homepage>
 		<foaf:twitter>http://www.twitter.com/lcellier</foaf:twitter>
 		<foaf:description>Titulaire d'un Master en software engineering obtenu à Édimbourg en 1999, Ludovic Cellier intègre dès sa création l'équipe du comparateur de prix Kelkoo et participe activement à son développement Européen. Il se spécialise dans les outils de crawl des marchands en lignes dans de nombreux pays et différentes langues et s'occupe de la formation des équipes locales. En 2004, la société est acheté par Yahoo!, Ludovic est propulsé engineering manager community for Europe à Londres. C'est en 2006 qu'il commence sa carrière Freelance, passionné par la visibilité naturelle et impressionné par les potentiels des techniques de référencement. Depuis, il accompagne de nombreux clients de profils très divers dans le développement de leur visibilité internationale.</foaf:description>
@@ -1103,21 +1058,6 @@ De plus, il a participé à plusieurs projets de recherche sur l’utilisation d
 		<foaf:description>Arnault et Robin Coulet sont frères, jumeaux et associés depuis 36 ans. Ils sont les fondateurs de Conversationnel, agence de communication digitale et de Ad-Me, atelier créatif.</foaf:description>
     </NamedIndividual>
 	
-	
-	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/arnault-coulet">
-        <rdf:type rdf:resource="&foaf;Person"/>
-		<foaf:name>Arnault Coulet</foaf:name>
-        <rdfs:label>Arnault Coulet</rdfs:label>
-		<foaf:firstName>Arnault</foaf:firstName>
-        <foaf:lastName>Coulet</foaf:lastName>
-        <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
-		<foaf:mbox></foaf:mbox>
-		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/08/arnaudrobincoulet-280-200-73x72.jpg</foaf:img>
-		<foaf:homepage>http://www.conversationnel.fr</foaf:homepage>
-		<foaf:twitter></foaf:twitter>
-		<foaf:description>Arnault et Robin Coulet sont frères, jumeaux et associés depuis 36 ans. Ils sont les fondateurs de Conversationnel, agence de communication digitale et de Ad-Me, atelier créatif.</foaf:description>
-    </NamedIndividual>
-	
 	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/robin-coulet">
         <rdf:type rdf:resource="&foaf;Person"/>
 		<foaf:name>Robin Coulet</foaf:name>
@@ -1253,10 +1193,10 @@ De plus, il a participé à plusieurs projets de recherche sur l’utilisation d
 	
 	<NamedIndividual rdf:about="http://www.blendconference.com/speakers/michel-buffa">
         <rdf:type rdf:resource="&foaf;Person"/>
-		<foaf:name>Jean-David Chamboredon</foaf:name>
-        <rdfs:label>Jean-David Chamboredon</rdfs:label>
-		<foaf:firstName>Jean-David</foaf:firstName>
-        <foaf:lastName>Chamboredon</foaf:lastName>
+		<foaf:name>Michel Buffa</foaf:name>
+        <rdfs:label>Michel Buffa</rdfs:label>
+		<foaf:firstName>Michel</foaf:firstName>
+        <foaf:lastName>Buffa</foaf:lastName>
         <foaf:mbox_sha1sum></foaf:mbox_sha1sum>
 		<foaf:mbox></foaf:mbox>
 		<foaf:img>http://www.blendconference.com/wp-content/uploads/2013/08/Capture-d%E2%80%99%C3%A9cran-2013-08-02-%C3%A0-11.47.30-73x72.png</foaf:img>
