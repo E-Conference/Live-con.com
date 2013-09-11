@@ -219,6 +219,16 @@ class ConfEvent extends Event
         return $this->roles;
     }
 
+    /**
+     * Set role
+     *
+     * 
+     */
+    public function setRoles()
+    {
+        
+    }
+
      /**
      * Set role
      *

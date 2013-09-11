@@ -120,7 +120,7 @@ class CalendarEntityRepository extends EntityRepository
      * @param array $params
      * @return QueryBuilder
      */
-    public function extractQueryBuilder($params)
+    public function extractQuery1Builder($params)
     {
         $qb = $this->getAllOrderByStartAtQueryBuilder();
 

@@ -3,7 +3,7 @@
 {% block body %}
 
 
-    <form action="{{ path('schedule_confevent_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+    <form action="{{ path('schedule_view_event_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
         <input type="hidden" name="_method" value="PUT" />
         {{ form_row(edit_form.summary) }}
         {{ form_row(edit_form.categories) }}
@@ -22,58 +22,45 @@
         {{ form_row(edit_form.wwwConf) }}
 
         <button class="btn btn-primary" type="submit"><i class="icon-ok"></i> Save</button>
-  
-        <p>
-              <h1>Themes</h1>
+          </form>
+         <p>
+            <h1>Themes</h1>
             <div id="themes_related_list">
                 {% include "fibeWWWConfBundle:ConfEvent:themeRelation.html.twig" %}
             </div>
-             {{ form_row(edit_form.themes) }}
-
-
+                 {{ form_widget(theme_form) }}        
+        </p>
+  
+        <p>
             <h1>Papers Relation</h1>
             <div id="paper_related_list">
                 {% include "fibeWWWConfBundle:ConfEvent:paperRelation.html.twig" %}
             </div>
-             {{ form_row(edit_form.papers) }}
-        </p>
-             
-      </form>
-        <p>
-            <h1>Role</h1>
-            <div id="person_related_list"> 
+                {{ form_widget(paper_form) }}
+
+              <h1>Persons Relation</h1>
+             <div id="person_related_list"> 
                 {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
-            </div>
+             </div>
             <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
                  {{ form_widget(role_form) }}
+                 </form>
+                 </br>
                 <button id="role_form_submit"class="btn btn-info" type="button">
                     <i class="icon-plus"></i> add Role
                 </button>
             </form>
         </p>
+
   
 
     
 {% block javascripts %}
 <script type="text/javascript">
 
-    //listen for the form beeing submitted
-   $("select[id='fibe_bundle_wwwconfbundle_confeventtype_themes']").change(function(){
-      //get the url for the form
-      var id_theme= $(this).val();
-  
-      //start send the post request
-       $.post('{{path("schedule_confevent_addTheme") }}',               
-                {id_entity : '{{entity.id}}', id_theme: id_theme}, 
-            function(response){
-                   $('#themes_related_list').html(response);
-                
-            }, "html");    
-       });
-
-       
+   
    //listen for the form beeing submitted
-   $("select[id='fibe_bundle_wwwconfbundle_confeventtype_papers']").change(function(){
+   $("select[id='form_papers']").change(function(){
       //get the url for the form
       var id_paper= $(this).val();
   
@@ -82,6 +69,20 @@
                 {id_entity : '{{entity.id}}', id_paper: id_paper}, 
             function(response){
                    $('#paper_related_list').html(response);
+                
+            }, "html");    
+       });
+
+    //listen for the form beeing submitted
+   $("select[id='form_themes']").change(function(){
+      //get the url for the form
+      var id_theme= $(this).val();
+  
+      //start send the post request
+       $.post('{{path("schedule_confevent_addTheme") }}',               
+                {id_entity : '{{entity.id}}', id_theme: id_theme}, 
+            function(response){
+                   $('#themes_related_list').html(response);
                 
             }, "html");    
        });

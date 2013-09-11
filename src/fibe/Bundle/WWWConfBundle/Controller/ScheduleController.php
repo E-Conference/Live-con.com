@@ -156,11 +156,30 @@ class ScheduleController extends Controller
         $roleForm = $this->createForm(new RoleType(), $role);
         $editForm = $this->createForm(new ConfEventType(), $entity);
        
+         $form_paper = $this->createFormBuilder($entity)
+            ->add('papers', 'entity', array(
+                      'class'    => 'fibeWWWConfBundle:Paper',
+                      'property' => 'title',
+                      'required' => false,
+                      'multiple' => false))
+            ->getForm();
+
+         $form_theme = $this->createFormBuilder($entity)
+            ->add('themes', 'entity', array(
+                  'class'    => 'fibeWWWConfBundle:Theme',
+                  'required' => false,
+                  'property' => 'libelle',
+                  'multiple' => false))
+            ->getForm();
+
+       
+
         return $this->render('fibeWWWConfBundle:Schedule:scheduleEdit.html.twig', array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'role_form'    => $roleForm->createView(),
-          
+            'paper_form' => $form_paper->createView(),
+            'theme_form' => $form_theme->createView(),
         ));
     }
     
