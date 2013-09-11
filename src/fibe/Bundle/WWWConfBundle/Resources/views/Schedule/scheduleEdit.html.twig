@@ -22,25 +22,25 @@
         {{ form_row(edit_form.wwwConf) }}
 
         <button class="btn btn-primary" type="submit"><i class="icon-ok"></i> Save</button>
-  
+   
+      </form>
         <p>
-              <h1>Themes</h1>
-            <div id="themes_related_list">
-                {% include "fibeWWWConfBundle:ConfEvent:themeRelation.html.twig" %}
-            </div>
-             {{ form_row(edit_form.themes) }}
-
 
             <h1>Papers Relation</h1>
             <div id="paper_related_list">
+
                 {% include "fibeWWWConfBundle:ConfEvent:paperRelation.html.twig" %}
             </div>
-             {{ form_row(edit_form.papers) }}
-        </p>
-             
-      </form>
-        <p>
-            <h1>Role</h1>
+                {{ form_widget(paper_form) }}
+
+            <h1>Themes</h1>
+            <div id="themes_related_list">
+
+                {% include "fibeWWWConfBundle:ConfEvent:themeRelation.html.twig" %}
+            </div>
+                {{ form_widget(theme_form) }}
+
+            <h1>Persons Relation</h1>
             <div id="person_related_list"> 
                 {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
             </div>
@@ -57,23 +57,9 @@
 {% block javascripts %}
 <script type="text/javascript">
 
-    //listen for the form beeing submitted
-   $("select[id='fibe_bundle_wwwconfbundle_confeventtype_themes']").change(function(){
-      //get the url for the form
-      var id_theme= $(this).val();
-  
-      //start send the post request
-       $.post('{{path("schedule_confevent_addTheme") }}',               
-                {id_entity : '{{entity.id}}', id_theme: id_theme}, 
-            function(response){
-                   $('#themes_related_list').html(response);
-                
-            }, "html");    
-       });
-
-       
+   
    //listen for the form beeing submitted
-   $("select[id='fibe_bundle_wwwconfbundle_confeventtype_papers']").change(function(){
+   $("select[id='form_papers']").change(function(){
       //get the url for the form
       var id_paper= $(this).val();
   
@@ -82,6 +68,20 @@
                 {id_entity : '{{entity.id}}', id_paper: id_paper}, 
             function(response){
                    $('#paper_related_list').html(response);
+                
+            }, "html");    
+       });
+
+    //listen for the form beeing submitted
+   $("select[id='form_themes']").change(function(){
+      //get the url for the form
+      var id_theme= $(this).val();
+  
+      //start send the post request
+       $.post('{{path("schedule_confevent_addTheme") }}',               
+                {id_entity : '{{entity.id}}', id_theme: id_theme}, 
+            function(response){
+                   $('#themes_related_list').html(response);
                 
             }, "html");    
        });

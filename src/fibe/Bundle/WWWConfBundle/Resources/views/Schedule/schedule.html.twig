@@ -746,7 +746,7 @@
                           var popoverProp = getProp($(context));
                           var eventProp = getProp(source);
                           var calendarProp = getProp($calendar);
-                          console.log(popoverProp,eventProp,calendarProp)
+                          // console.log(popoverProp,eventProp,calendarProp)
                           if(eventProp.x + eventProp.w + popoverWidth < calendarProp.x + calendarProp.w )
                             return "right";
                           if(eventProp.x - popoverWidth > calendarProp.x)

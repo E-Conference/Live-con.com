@@ -59,10 +59,11 @@
     {% for role in entity.roles %}
         {% if loop.first %} {% else %},{% endif %}{ 
             "id": "{{ role.id }}", 
-            "type": "{{ role.getType().libelle }}", 
+            "type": "{{ role.type.libelle }}", 
             "person": {
-                "id"  : "{{ role.person.getId() }}"
-                "name"  : "{{ role.person.name }}"
+                "id"  : "{{ role.person.id }}",
+                "name"  : "{{ role.person.name }}",
+                "slug"  : "{{ role.person.slug }}"
             }
         }
     {% endfor %}
