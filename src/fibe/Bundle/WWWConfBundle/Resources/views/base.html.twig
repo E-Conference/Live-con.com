@@ -7,15 +7,15 @@
     <style type="text/css">
             
     #bootstrap_alert{
-        position: fixed;
-        top: 1em;
-        right: 1em ; 
-        max-width: 60em;
-        max-height: 20em;
-        z-index: 1001;
-        text-overflow:ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
+        position      : fixed;
+        top           : 1em;
+        right         : 1em ; 
+        max-width     : 60em;
+        max-height    : 20em;
+        z-index       : 1001;
+        text-overflow :ellipsis;
+        overflow      : hidden;
+        white-space   : nowrap;
     }     
     #bootstrap_alert ul{
         margin: 1em 0 1 0.5em;
@@ -34,65 +34,12 @@
             format: 'dd/mm/yyyy hh:ii',
             autoclose: true,
         });
+        $("select").select2();
     });
 </script>
 <!-- <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>  -->
-<script src="{{ asset('bundles/fibewwwconf/js/json2.js') }}" type="text/javascript" ></script>
-<script type="text/javascript" >
-    var bootstrapAlertTimeout;
-    function bootstrapAlert(type,msg,title,icon){
-        var $body = $("body");
-
-        //get unique #bootstrap_alert
-        var $bootstrapAlert = $('#bootstrap_alert').length < 1 ? $('<div id="bootstrap_alert"></div>').prependTo($body) : $('#bootstrap_alert');
-        
-        if(type== "stop"){
-          clearTimeout(bootstrapAlertTimeout); 
-          // $bootstrapAlert.animate({'opacity': 0 }, {queue: false, duration: 1500});
-          $bootstrapAlert.fadeOut(1500);
-          return;
-        } 
-        var config = {
-            success:{
-                title:"Success : ",
-                icon:"<i class='icon-ok'></i>"
-            },
-            info:{
-                title:"Info : ",
-                icon:"<i class='icon-info'></i>"
-            },
-            warning:{
-                title:"Error : ",
-                icon:"<i class='icon-meh'></i>"
-            }
-        }
-        //default values
-        if(!config[type]){
-            msg=type;
-            type="info";
-        }
-        if(!icon && icon!=""){ 
-            icon = config[type].icon
-        } 
-
-        if(!title && title!="" ){
-            title = config[type].title;
-        }
-
-        $bootstrapAlert.attr("class","")
-                       .addClass("alert alert-"+type) 
-                       .html('<button type="button" class="close" data-dismiss="alert">&times;</button><strong> '+title+' </strong>'+msg)  
-                       .prepend($(icon).addClass("icon-2x").css("margin-right","0.5em"));
-
-        if(!$bootstrapAlert.is(":visible"))
-            // $bootstrapAlert.hide().animate({'opacity': 1 }, {queue: false});
-            $bootstrapAlert.hide().fadeIn('fast');
-        clearTimeout(bootstrapAlertTimeout);
-        bootstrapAlertTimeout=setTimeout(function(){
-                // $bootstrapAlert.animate({'opacity': 0 }, {queue: false, duration: 1500});
-                $bootstrapAlert.fadeOut(1500);
-            },5000);
-    }
+<script src ="{{ asset('bundles/fibewwwconf/js/json2.js') }}" type="text/javascript" ></script>
+    
 </script>   
 {% endblock%}
 

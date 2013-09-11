@@ -7,6 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use fibe\Bundle\WWWConfBundle\Entity\Person;
 use fibe\Bundle\WWWConfBundle\Entity\RoleType;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 
@@ -16,6 +17,13 @@ use fibe\Bundle\WWWConfBundle\Entity\RoleType;
  *
  *  @ORM\Table(name="role")
  *  @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\RoleRepository")
+ *
+ *  Don't seem to work with ajax form
+ *  @UniqueEntity(
+ *     fields={"person", "event","type"},
+ *     errorPath="role",
+ *     message="This person has already this role at this event"
+ * )
  *
  */
 

@@ -98,6 +98,21 @@ class PersonRepository extends EntityRepository
             ;
         }
 
+        if(isset($params['slug'])) {
+            $qb
+                ->andWhere('loc.slug = :slug')
+                ->setParameter('slug', $params['slug'])
+            ;
+        }
+
+        if(isset($params['event_id'])) {
+            $qb
+                ->leftJoin('loc.roles', 'r')
+                ->andWhere('r.event = :ev_id')
+                ->setParameter('ev_id', $params['event_id'])
+            ;
+        }
+ 
         return $qb;
     }
 

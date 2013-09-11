@@ -22,6 +22,7 @@
         {{ form_row(edit_form.wwwConf) }}
 
         <button class="btn btn-primary" type="submit"><i class="icon-ok"></i> Save</button>
+
           </form>
          <p>
             <h1>Themes</h1>
@@ -32,14 +33,16 @@
         </p>
   
         <p>
+
             <h1>Papers Relation</h1>
             <div id="paper_related_list">
+
                 {% include "fibeWWWConfBundle:ConfEvent:paperRelation.html.twig" %}
             </div>
                 {{ form_widget(paper_form) }}
 
+
               <h1>Persons Relation</h1>
-             <div id="person_related_list"> 
                 {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
              </div>
             <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
@@ -56,8 +59,8 @@
 
     
 {% block javascripts %}
-<script type="text/javascript">
 
+<script type="text/javascript">
    
    //listen for the form beeing submitted
    $("select[id='form_papers']").change(function(){

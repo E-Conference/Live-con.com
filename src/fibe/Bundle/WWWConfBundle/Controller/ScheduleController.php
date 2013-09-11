@@ -157,6 +157,7 @@ class ScheduleController extends Controller
         $editForm = $this->createForm(new ConfEventType(), $entity);
        
          $form_paper = $this->createFormBuilder($entity)
+
             ->add('papers', 'entity', array(
                       'class'    => 'fibeWWWConfBundle:Paper',
                       'property' => 'title',
@@ -172,7 +173,7 @@ class ScheduleController extends Controller
                   'multiple' => false))
             ->getForm();
 
-       
+
 
         return $this->render('fibeWWWConfBundle:Schedule:scheduleEdit.html.twig', array(
             'entity'      => $entity,
@@ -181,6 +182,7 @@ class ScheduleController extends Controller
             'paper_form' => $form_paper->createView(),
             'theme_form' => $form_theme->createView(),
         ));
+
     }
     
      
@@ -265,6 +267,13 @@ class ScheduleController extends Controller
         return $response;
     
      
+    }
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder(array('id' => $id))
+            ->add('id', 'hidden')
+            ->getForm()
+        ;
     }
 }
 

@@ -32,6 +32,7 @@ class EventRepository extends LocationAwareCalendarEntityRepository
     {
          $qb = $this->createQueryBuilder('event');
 
+       
         if(isset($params['id_theme'])) {
             $qb
                  ->leftJoin('event.themes', 't')

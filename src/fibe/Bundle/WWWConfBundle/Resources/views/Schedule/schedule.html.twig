@@ -213,7 +213,9 @@
       overflow: hidden;
       text-overflow: ellipsis; 
       max-height: 8em;
+      list-style-type: disc;
     } 
+
     @media (-webkit-min-device-pixel-ratio: 0) {
         .popover .description {
             display: -webkit-box;
@@ -319,13 +321,14 @@
       var $categoryCtn = $('#filter-category').html("");
       var $categorySelect = $('<select name="filter_category_select" id="filter_category_select" class="form-control" ><option value="*">See all</option></select>')
                                   .appendTo($categoryCtn)
+                                  .select2()
                                   .change(function(){
                                     var data = $(this).val()==='*' ? {} : { category_id: $(this).val() };
                                     $.get(
                                       op.getOrderedUrl,
                                       data,
                                       function(events) {  
-                                          bootstrapAlert("success","events have been well fetched" );
+                                          bootstrapAlert("success",events.length+" events have been well fetched" );
                                           renderEvent(events);
                                           //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                                       },
@@ -340,13 +343,14 @@
       var $locationCtn = $('#filter-location').html(""); 
       var $locationSelect = $('<select name="filter_location_select" id="filter_location_select" class="form-control" ><option value="*">See all</option></select>')
                                   .appendTo($locationCtn)
+                                  .select2()
                                   .change(function(){
                                     var data = $(this).val()==='*' ? {} : { location_id: $(this).val() };
                                     $.get(
                                       op.getOrderedUrl,
                                       data,
                                       function(events) {  
-                                          bootstrapAlert("success","events have been well fetched" );
+                                          bootstrapAlert("success",events.length+" events have been well fetched" );
                                           renderEvent(events);
                                           //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                                       },
@@ -382,7 +386,7 @@
                 op.getOrderedUrl,
                 {},
                 function(events) {  
-                    bootstrapAlert("success","events have been well fetched" );
+                    bootstrapAlert("success",events.length+" events have been well fetched" );
                     renderEvent(events);
                     //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                 },
@@ -744,7 +748,7 @@
                           var popoverProp = getProp($(context));
                           var eventProp = getProp(source);
                           var calendarProp = getProp($calendar);
-                          console.log(popoverProp,eventProp,calendarProp)
+                          // console.log(popoverProp,eventProp,calendarProp)
                           if(eventProp.x + eventProp.w + popoverWidth < calendarProp.x + calendarProp.w )
                             return "right";
                           if(eventProp.x - popoverWidth > calendarProp.x)
@@ -1073,7 +1077,7 @@
 
             }else{
               updateParentDate(event);
-              // render(event);
+               render(event);
             }
           }
 
@@ -1414,7 +1418,7 @@
             setTimeout(doWork, 1);
           }
         };
-        setTimeout(doWork, 1);
+        if(events[i])setTimeout(doWork, 1);
  
         setInstantEvents(instant_events);
 
