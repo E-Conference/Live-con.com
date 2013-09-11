@@ -55,8 +55,13 @@
 
     
 {% block javascripts %}
+
 <script type="text/javascript">
 
+    $(document).ready(function() { 
+      $("select").select2(); 
+   });
+        
    
    //listen for the form beeing submitted
    $("select[id='form_papers']").change(function(){

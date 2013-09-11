@@ -61,9 +61,9 @@
                 {{ form_widget(paper_form) }}
 
               <h1>Persons Relation</h1>
-             <div id="person_related_list"> 
+            <div id="person_related_list"> 
                 {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
-             </div>
+            </div>
             <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
                  {{ form_widget(role_form) }}
                  </form>
@@ -76,6 +76,7 @@
 
 
 {% block javascripts %}
+{{ parent() }}
 <script type="text/javascript">
 
    

@@ -17,10 +17,17 @@ class ConfEventType extends EventType
             ->add('wwwConf', null, array(
                                     'required'  => true,
                                     'label'     => 'Belongs to conf'
-            ))                               
-            ->add('roles', 'entity', array('class' => 'fibeWWWConfBundle:Role',
-                                              'required' => false,
-                                              'property' => 'person'))
+            ))     
+             ->add('startAt', 'datetime', array(  
+                'widget' =>'single_text',
+                'format' =>'dd/MM/yyyy HH:mm', 
+              
+            ))
+            ->add('endAt', 'datetime', array(  
+                'widget' =>'single_text',
+                'format' =>'dd/MM/yyyy HH:mm', 
+             
+            ))                          
             
  
         ;

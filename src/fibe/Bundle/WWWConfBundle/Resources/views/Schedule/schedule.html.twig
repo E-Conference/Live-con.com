@@ -321,6 +321,7 @@
       var $categoryCtn = $('#filter-category').html("");
       var $categorySelect = $('<select name="filter_category_select" id="filter_category_select" class="form-control" ><option value="*">See all</option></select>')
                                   .appendTo($categoryCtn)
+                                  .select2()
                                   .change(function(){
                                     var data = $(this).val()==='*' ? {} : { category_id: $(this).val() };
                                     $.get(
@@ -342,6 +343,7 @@
       var $locationCtn = $('#filter-location').html(""); 
       var $locationSelect = $('<select name="filter_location_select" id="filter_location_select" class="form-control" ><option value="*">See all</option></select>')
                                   .appendTo($locationCtn)
+                                  .select2()
                                   .change(function(){
                                     var data = $(this).val()==='*' ? {} : { location_id: $(this).val() };
                                     $.get(
