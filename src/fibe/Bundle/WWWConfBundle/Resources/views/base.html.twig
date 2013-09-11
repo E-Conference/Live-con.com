@@ -4,8 +4,6 @@
  {% block stylesheets %} 
 {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibewwwconf/css/datetimepicker.css') }}" />  
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibewwwconf/css/select2.css') }}" />  
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibewwwconf/css/select2-bootstrap.css') }}" />  
     <style type="text/css">
             
     #bootstrap_alert{
@@ -36,15 +34,11 @@
             format: 'dd/mm/yyyy hh:ii',
             autoclose: true,
         });
+        $("select").select2();
     });
 </script>
 <!-- <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>  -->
 <script src ="{{ asset('bundles/fibewwwconf/js/json2.js') }}" type="text/javascript" ></script>
-<script src ="{{ asset('bundles/fibewwwconf/js/bootstrapAlert.js') }}" type="text/javascript" ></script> 
-<script src ="{{ asset('bundles/fibewwwconf/js/select2.js') }}" type="text/javascript" ></script> 
-<script type="text/javascript" >
-    $(document).ready(function() { $("select").select2(); });
-</script> 
     
 </script>   
 {% endblock%}
