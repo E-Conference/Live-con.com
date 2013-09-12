@@ -3,7 +3,7 @@
 {% block body %}
 
 
-    <form action="{{ path('schedule_view_event_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+    <form id="eventForm" action="#" method="post" {{ form_enctype(edit_form) }}>
         <input type="hidden" name="_method" value="PUT" />
         {{ form_row(edit_form.summary) }}
         {{ form_row(edit_form.categories) }}
@@ -62,7 +62,29 @@
 {% block javascripts %}
 
 <script type="text/javascript">
-   
+
+    var ajaxForms = [
+        {
+            formId : "#eventForm",
+            route : '{{path("schedule_confevent_update", { "id": entity.id }) }}',
+            callback : function(response){
+              bootstrapAlert("success","Event updated")
+            }
+        },
+    ];
+
+    for (var i=0; i<ajaxForms.length;i++){
+
+      var form = ajaxForms[i]; 
+      $(form.formId).submit(function(){
+        $.post(form.route,               
+          $(this).serialize(),
+          function(r){form.callback(r);}
+        );    
+        return false;
+      });
+    } 
+
    //listen for the form beeing submitted
    $("select[id='form_papers']").change(function(){
       //get the url for the form
@@ -70,7 +92,7 @@
   
       //start send the post request
        $.post('{{path("schedule_confevent_addPaper") }}',               
-                {id_entity : '{{entity.id}}', id_paper: id_paper}, 
+                {id_entity : '{{entity.id}}', id_paper: id_paper},
             function(response){
                    $('#paper_related_list').html(response);
                 
