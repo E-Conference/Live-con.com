@@ -46,8 +46,17 @@ class EventRepository extends LocationAwareCalendarEntityRepository
             $qb
                 ->leftJoin('event.roles', 'r')
 		        ->leftJoin('r.person', 'p')
-		        ->andWhere('p.name = :person_slug')
+		        ->andWhere('p.slug = :person_slug')
 		        ->setParameter('person_slug',$params['person_slug']);
+            ;
+        }
+
+        if(isset($params['id_person'])) {
+            $qb
+                ->leftJoin('event.roles', 'r')
+		        ->leftJoin('r.person', 'p')
+		        ->andWhere('p.id = :id_person')
+		        ->setParameter('id_person',$params['id_person']);
             ;
         }
         return $qb;

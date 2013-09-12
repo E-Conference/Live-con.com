@@ -43,6 +43,7 @@
 
 
               <h1>Persons Relation</h1>
+               <div id="person_related_list">
                 {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
              </div>
             <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
