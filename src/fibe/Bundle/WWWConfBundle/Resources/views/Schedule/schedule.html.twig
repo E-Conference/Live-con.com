@@ -216,6 +216,7 @@
       list-style-type: disc;
     } 
 
+    /* 5 line displayed about event's description*/
     @media (-webkit-min-device-pixel-ratio: 0) {
         .popover .description {
             display: -webkit-box;
@@ -241,62 +242,62 @@
 
 {%  block javascripts %}   
   {{ parent() }} 
-<script src="{{ asset('bundles/fibewwwconf/js/moment.min.js') }}" type="text/javascript" ></script>
-     
-<!-- <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/jquery-ui-1.10.3.custom.min.js') }}"></script> -->
-<script type="text/javascript" src="{{ asset('js/jquery-ui-1.10.3.custom.js') }}"></script>
-<script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.js') }}"></script>
+  <script src="{{ asset('bundles/fibewwwconf/js/moment.min.js') }}" type="text/javascript" ></script>
+       
+  <!-- <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/jquery-ui-1.10.3.custom.min.js') }}"></script> -->
+  <script type="text/javascript" src="{{ asset('js/jquery-ui-1.10.3.custom.js') }}"></script>
+  <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.js') }}"></script>
 
     
-    <script type="text/javascript">
-        $(document).ready(function() {    
- 
-            //event edit popup
-            var $modal = $('#modal').hide();
-            var $modalNewEvent = $('#modal-new-event').hide();
-            var $modalSetParent = $('#modal-set-parent').hide();
-            var $modalBody = $modal.find(".modal-body");
-            var $modalNewEventBody = $modalNewEvent.find(".modal-body");
-            var $calendar = $('#calendar');
-            var $sidebar = $('#external-events');
+  <script type="text/javascript">
+    $(document).ready(function() {    
 
-           // calcule du premier jour
-            var firstDay = moment('5000-10-10');
-            {% for event in currentConf.confEvents %}
-                {% if date(event.startAt) > date("1980-01-02") %}
-                    
-                    if(moment('{{event.startAt|date("Y-m-d")}}').isBefore(firstDay)){
-                        firstDay = moment('{{event.startAt|date("Y-m-d")}}');
-                    }
+      //event edit popup
+      var $modal = $('#modal').hide();
+      var $modalNewEvent = $('#modal-new-event').hide();
+      var $modalSetParent = $('#modal-set-parent').hide();
+      var $modalBody = $modal.find(".modal-body");
+      var $modalNewEventBody = $modalNewEvent.find(".modal-body");
+      var $calendar = $('#calendar');
+      var $sidebar = $('#external-events');
 
-                {% endif %}
-            {% endfor %}
-            if(firstDay.isSame(moment('5000-10-10'))) firstDay = moment();
+      // calcule du premier jour
+      var firstDay = moment('5000-10-10');
+      {% for event in currentConf.confEvents %}
+          {% if date(event.startAt) > date("1980-01-02") %}
+              
+              if(moment('{{event.startAt|date("Y-m-d")}}').isBefore(firstDay)){
+                  firstDay = moment('{{event.startAt|date("Y-m-d")}}');
+              }
 
-            
-            //path
-            var DATA_FEED_URL = "{{ path('schedule_view_event_get') }}";
+          {% endif %}
+      {% endfor %}
+      if(firstDay.isSame(moment('5000-10-10'))) firstDay = moment();
 
-            var op = {  
-                getOrderedUrl     : "{{ path('exporter_api', { 'entity_reference': 'schedule_event','_format': 'json' }) }}",
-                updateUrl     : "{{ path('schedule_view_event_edit') }}", //event modal form
-                quickAddUrl   : DATA_FEED_URL + "?method=add", 
-                quickUpdateUrl: DATA_FEED_URL + "?method=update",
-                quickDeleteUrl: DATA_FEED_URL + "?method=remove"
+      
+      //path
+      var DATA_FEED_URL = "{{ path('schedule_view_event_get') }}";
 
-            };
+      var op = {  
+          getOrderedUrl     : "{{ path('exporter_api', { 'entity_reference': 'schedule_event','_format': 'json' }) }}",
+          updateUrl     : "{{ path('schedule_view_event_edit') }}", //event modal form
+          quickAddUrl   : DATA_FEED_URL + "?method=add", 
+          quickUpdateUrl: DATA_FEED_URL + "?method=update",
+          quickDeleteUrl: DATA_FEED_URL + "?method=remove"
+
+      };
 
 
-        //init history
-        History.setForewardBtn($('#forewardBtn'))
-               .setBackwardBtn($('#backwardBtn')); 
-        $(History).on('updateState',function(ev,events){ 
-          renderHistory(events);
-        })
+      //init history
+      History.setForewardBtn($('#forewardBtn'))
+             .setBackwardBtn($('#backwardBtn')); 
+      $(History).on('updateState',function(ev,events){ 
+        renderHistory(events);
+      })
 
-        /*-----------------------------------------------------------------------------------------------------*/
-        /*------------------------------------- initialize filters --------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------*/
+      /*-----------------------------------------------------------------------------------------------------*/
+      /*------------------------------------- initialize filters --------------------------------------------*/
+      /*-----------------------------------------------------------------------------------------------------*/
  
  
       var categories = [];
@@ -329,7 +330,7 @@
                                       data,
                                       function(events) {  
                                           bootstrapAlert("success",events.length+" events have been well fetched" );
-                                          renderEvent(events);
+                                          renderEvents(events);
                                           //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                                       },
                                       'json'
@@ -351,7 +352,7 @@
                                       data,
                                       function(events) {  
                                           bootstrapAlert("success",events.length+" events have been well fetched" );
-                                          renderEvent(events);
+                                          renderEvents(events);
                                           //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                                       },
                                       'json'
@@ -370,7 +371,7 @@
         /*------------------------------------- initialize the calendar ---------------------------------------*/
         /*-----------------------------------------------------------------------------------------------------*/
         var dragged = null;
-        $calendar.fullCalendar({ 
+        var calendarOption = { 
             header: {
                 left: 'prev,next today',
                 center: 'title',
@@ -387,7 +388,7 @@
                 {},
                 function(events) {  
                     bootstrapAlert("success",events.length+" events have been well fetched" );
-                    renderEvent(events);
+                    renderEvents(events);
                     //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                 },
                 'json'
@@ -506,7 +507,9 @@
               setTooltip(element,event);
 
             }
-        }); 
+        };
+
+        $calendar.fullCalendar(calendarOption); 
         $calendar.fullCalendar('changeView', "agendaWeek" );
         /*-----------------------------------------------------------------------------------------------------*/
         /*------------------------------------- end initialize the calendar -----------------------------------*/
@@ -1384,7 +1387,7 @@
 
       // empty fullcalendar events and populate it with new
       var Events;
-      function renderEvent(events){
+      function renderEvents(events){
         Events = {};
         $calendar.fullCalendar( 'removeEvents'); 
         var instant_events   = []; 
@@ -1574,7 +1577,7 @@
         },
     };
 
-    </script>    
+  </script>    
 	
 {% endblock javascripts %}
 
