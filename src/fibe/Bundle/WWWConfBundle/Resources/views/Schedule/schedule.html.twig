@@ -21,15 +21,32 @@
     <button id="backwardBtn" class="btn btn-default" disabled="disabled" ><i class="icon-undo"></i></button>
     <button id="forewardBtn" class="btn btn-default" disabled="disabled" ><i class="icon-repeat"></i></button>
   </div>
-  <h4>Filter by category</h4>
-  <div id='filter-category'>
+  <div id="filters">  
+
+    <h4>Filter by category</h4>
+    <div class="filter">
+      <select class="form-control" data-filter="category_id">
+        <option value="*">See all</option>
+        {% for category in categories %}
+          <option value="{{category.id}}">{{category.name}}</option>
+        {% endfor %}
+      </select>  
+    </div>
+
+    <h4>Filter by location</h4>
+    <div class="filter">
+      <select class="form-control" data-filter="location_id">
+        <option value="*">See all</option>
+        {% for location in locations %}
+          <option value="{{location.id}}">{{location.name}}</option>
+        {% endfor %}
+      </select>  
+    </div>
   </div>
-  <h4>Filter by location</h4>
-  <div id='filter-location'>
-  </div>
+
   <h4>Dateless Events</h4>
   <div id='external-events'>
-  </div>
+  </div> 
 </div>  
 
 
@@ -283,9 +300,24 @@
           updateUrl     : "{{ path('schedule_view_event_edit') }}", //event modal form
           quickAddUrl   : DATA_FEED_URL + "?method=add", 
           quickUpdateUrl: DATA_FEED_URL + "?method=update",
-          quickDeleteUrl: DATA_FEED_URL + "?method=remove"
-
+          quickDeleteUrl: DATA_FEED_URL + "?method=remove",
+          data          : {}
       };
+
+      //get event function used by fullcalendar
+      var eventSource = function(start, end, callback) { 
+        $.get(
+          op.getOrderedUrl,
+          op.data,
+          function(events) {  
+              bootstrapAlert("success",events.length+" events have been well fetched" );
+              renderEvents(events);
+              //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
+          },
+          'json'
+        ); 
+        bootstrapAlert("info","event request sent","","<i class='icon-spinner icon-spin'></i>");
+      }
 
 
       //init history
@@ -299,70 +331,21 @@
       /*------------------------------------- initialize filters --------------------------------------------*/
       /*-----------------------------------------------------------------------------------------------------*/
  
- 
-      var categories = [];
-      {% for category in categories %} 
-        categories.push({
-          id   : "{{category.id}}",
-          name : "{{category.name}}",
-          color: "{{category.color}}"
-        });
-      {% endfor %}
-      var locations= [];
-      {% for location in locations %} 
-        locations.push({
-          id   : "{{location.id}}",
-          name : "{{location.name}}",
-          color: "{{location.description}}"
-        });
-      {% endfor %}
-
-      // console.log(categories,locations);
- 
-      var $categoryCtn = $('#filter-category').html("");
-      var $categorySelect = $('<select name="filter_category_select" id="filter_category_select" class="form-control" ><option value="*">See all</option></select>')
-                                  .appendTo($categoryCtn)
-                                  .select2()
-                                  .change(function(){
-                                    var data = $(this).val()==='*' ? {} : { category_id: $(this).val() };
-                                    $.get(
-                                      op.getOrderedUrl,
-                                      data,
-                                      function(events) {  
-                                          bootstrapAlert("success",events.length+" events have been well fetched" );
-                                          renderEvents(events);
-                                          //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
-                                      },
-                                      'json'
-                                    );
-                                    bootstrapAlert("info","Request sent for categorie "+ $(this).find("option[value='"+$(this).val()+"']").text(),"Info : ","<i class='icon-spinner icon-spin'></i>"); 
-                                  }); 
-      for(var i =0; i < categories.length;i++){
-        $categorySelect.append('<option value="'+categories[i].id+'">'+categories[i].name+'</option>');
-      }
-
-      var $locationCtn = $('#filter-location').html(""); 
-      var $locationSelect = $('<select name="filter_location_select" id="filter_location_select" class="form-control" ><option value="*">See all</option></select>')
-                                  .appendTo($locationCtn)
-                                  .select2()
-                                  .change(function(){
-                                    var data = $(this).val()==='*' ? {} : { location_id: $(this).val() };
-                                    $.get(
-                                      op.getOrderedUrl,
-                                      data,
-                                      function(events) {  
-                                          bootstrapAlert("success",events.length+" events have been well fetched" );
-                                          renderEvents(events);
-                                          //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
-                                      },
-                                      'json'
-                                    );
-                                    bootstrapAlert("info","Request sent for location "+ $(this).find("option[value='"+$(this).val()+"']").text(),"Info : ","<i class='icon-spinner icon-spin'></i>");  
-                                  });
-      for(var i =0; i < locations.length;i++){
-        $locationSelect.append('<option value="'+locations[i].id+'">'+locations[i].name+'</option>');
-      }
-
+      $('#filters').find("select").each(function(){ 
+        $(this).change(function(){  
+              //update fullcalendar getEvent 's url
+              $calendar.fullCalendar('removeEventSource', eventSource);
+              op.data={};
+              $('#filters').find("select").each(function(){
+                if($(this).val()==='*')return;
+                op.data[$(this).data("filter")] = $(this).val();
+              });
+              stopWork=true;
+              $calendar.fullCalendar( 'removeEvents'); 
+              $calendar.fullCalendar('addEventSource', eventSource);  
+        });  
+      })
+  
         /*-----------------------------------------------------------------------------------------------------*/
         /*------------------------------------- end initialize filters ----------------------------------------*/ 
         /*-----------------------------------------------------------------------------------------------------*/
@@ -382,19 +365,6 @@
             month: firstDay.month(),
             date: firstDay.date(),
             //get events
-            events: function(start, end, callback) { 
-              $.get(
-                op.getOrderedUrl,
-                {},
-                function(events) {  
-                    bootstrapAlert("success",events.length+" events have been well fetched" );
-                    renderEvents(events);
-                    //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
-                },
-                'json'
-              ); 
-              bootstrapAlert("info","event request sent","","<i class='icon-spinner icon-spin'></i>");
-            },  
             eventClick: function(calEvent, jsEvent, view) { 
   
                     $.ajax({
@@ -508,8 +478,8 @@
 
             }
         };
-
         $calendar.fullCalendar(calendarOption); 
+        $calendar.fullCalendar('addEventSource', eventSource); 
         $calendar.fullCalendar('changeView', "agendaWeek" );
         /*-----------------------------------------------------------------------------------------------------*/
         /*------------------------------------- end initialize the calendar -----------------------------------*/
@@ -1008,7 +978,6 @@
           // console.log("parentElement",parentElement.text(),parentElement)
           children = getChildren(event,{concat:true}); 
           draggedStart = moment(event['start']); 
-;
 
           $.each(children,function(i,child){ 
             $(child.elem).fadeTo(200, 0.5);
@@ -1043,15 +1012,12 @@
       
           console.log("endDrag");
           //get diff
-          var diff = moment(draggedStart).diff(moment(event['start'])); 
+          var diff = moment(draggedStart).diff(moment(event['start']));
+          if(diff===0)return;
 
-          //apply to children
-          // if(event['allDay']===true){
-          //   updateChildrenDate(event);
-          // }else{
+          //apply to children 
             $.each(children,function(i,child){
 
-              var i = 0;
               //non-blocking loop
               function doWork() {
                       
@@ -1198,7 +1164,7 @@
           if(id==="" || !id)return ;
           if(!op)op={}; 
           var event = Events[id];
-          if(op.noSidebar ===true && isInstant(Events[id]))return; 
+          if(!Events[id] || (op.noSidebar ===true && isInstant(Events[id])))return; 
           return event;
         }
 
@@ -1326,7 +1292,7 @@
         function deleteParent(event){   
           if(!event || !hasParent(event))return;
               
-          parent = getEventbyId(event.parent.id)  ; 
+          parent = getEventbyId(event.parent.id);
           event.parent.id = "";
           event.parent.title = "";
           event.parent.name = "";
@@ -1387,9 +1353,11 @@
 
       // empty fullcalendar events and populate it with new
       var Events;
+      var stopWork;
       function renderEvents(events){
         Events = {};
         $calendar.fullCalendar( 'removeEvents'); 
+        stopWork=false;
         var instant_events   = []; 
         var i = 0;
         //non-blocking loop
@@ -1417,7 +1385,7 @@
           }
         
           i += 1; 
-          if (i < events.length) {
+          if (i < events.length && stopWork===false) {
             setTimeout(doWork, 1);
           }
         };
@@ -1425,34 +1393,7 @@
  
         setInstantEvents(instant_events);
 
-
-        
-
-        // for (var i in events){  
-        //   events[i]["title"]  = events[i].name; 
-        //   events[i]["start"]  = events[i].start_at;
-        //   events[i]["end"]    = events[i].end_at; 
-        //   events[i]["allDay"] = events[i].is_allday==="true";
-        //   if(events[i].categories && events[i].categories[0] && events[i].categories[0].color)
-        //     events[i]["color"] = events[i].categories[0].color;
-
-        //   delete events[i]["url"];
-        //   // console.log(events[i].categories);
-        //   if(events[i].categories.length > 0 && events[i].categories[0].color)
-        //     events[i]["background-color"] = events[i].categories[0].color;
-          
-        //   var diff =moment(events[i]["start"]).diff(events[i]["end"]);
-        //   events[i]["instant"] = (diff  === 0 ) || (diff  === 1 );  
-        //   Events[events[i]["id"]] = events[i];
-        //   if(events[i]["instant"]){
-        //     instant_events.push(events[i]);
-        //   }else{ 
-        //       $calendar.fullCalendar( 'renderEvent',events[i]);
-        //   }
-        // } 
-        // setInstantEvents(instant_events);
-
-
+ 
 
       }
 
