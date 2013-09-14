@@ -23,20 +23,18 @@
   </div>
   <div id="filters">  
 
-    <h4>Filter by category</h4>
+    <h4>Filter by categories</h4>
     <div class="filter">
-      <select class="form-control" data-filter="category_id">
-        <option value="*">See all</option>
+      <select multiple class="form-control" data-filter="category_ids">
         {% for category in categories %}
           <option value="{{category.id}}">{{category.name}}</option>
         {% endfor %}
       </select>  
     </div>
 
-    <h4>Filter by location</h4>
+    <h4>Filter by locations</h4>
     <div class="filter">
-      <select class="form-control" data-filter="location_id">
-        <option value="*">See all</option>
+      <select multiple class="form-control" data-filter="location_ids">
         {% for location in locations %}
           <option value="{{location.id}}">{{location.name}}</option>
         {% endfor %}
@@ -306,10 +304,15 @@
 
       //get event function used by fullcalendar
       var eventSource = function(start, end, callback) { 
+        var stopRender = false;
+        $calendar.off("stopRender").on("stopRender",function(){
+          stopRender = true;
+        })
         $.get(
           op.getOrderedUrl,
           op.data,
           function(events) {  
+              if(stopRender===true)return;
               bootstrapAlert("success",events.length+" events have been well fetched" );
               renderEvents(events);
               //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
@@ -332,16 +335,16 @@
       /*-----------------------------------------------------------------------------------------------------*/
  
       $('#filters').find("select").each(function(){ 
-        $(this).change(function(){  
+        $(this).select2({closeOnSelect : false})
+               .change(function(){  
               //update fullcalendar getEvent 's url
-              $calendar.fullCalendar('removeEventSource', eventSource);
               op.data={};
-              $('#filters').find("select").each(function(){
-                if($(this).val()==='*')return;
+              $('#filters').find("select").each(function(){ 
                 op.data[$(this).data("filter")] = $(this).val();
               });
-              stopWork=true;
+              $calendar.trigger("stopRender");
               $calendar.fullCalendar( 'removeEvents'); 
+              $calendar.fullCalendar('removeEventSource', eventSource);
               $calendar.fullCalendar('addEventSource', eventSource);  
         });  
       })
@@ -369,10 +372,22 @@
   
                     $.ajax({
                         url: op.updateUrl+"?id="+calEvent.id,  
-                        success: function(doc) {  
+                        success: function(doc) {
                             $modal.modal("show");
                             $modalBody.html(doc);
                             bootstrapAlert("stop");
+
+                                // rerender if changed
+                            $modalBody.find("#eventForm,#delete-event-form").submit(function(){
+                              $modal.on('hidden.bs.modal', function () {
+                                $calendar.fullCalendar( 'refetchEvents' )
+                                $(this).off('hidden.bs.modal')
+                              })
+                            }) 
+                            // $modal.on('hidden.bs.modal', function () {
+                            //   // rerender if changed
+
+                            // })
                         }
                     }); 
                     bootstrapAlert("info","edit <b>"+(calEvent['title'] || calEvent['name'])+"</b> request sent","Info : ","<i class='icon-spinner icon-spin'></i>"); 
@@ -736,9 +751,10 @@
                           $(this).animate({"border-color":"#3F3F3F"},{queue:false});
 
                           var elemEvent = getEventByDiv($(this));
-                          var childrenDiv = getChildren(elemEvent,{concat:true});  
+                          var childrenDiv = getChildren(elemEvent,{concat:true,onlyEvent:true});  
                           for (var j in childrenDiv){
-                            var curChildDiv = getDivById(childrenDiv[j].id); 
+                            var curChildDiv = getDivById(childrenDiv[j].id);
+                            if(!curChildDiv)continue;
                             curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false});
                           }
                         },function(){
@@ -748,6 +764,7 @@
                           var childrenDiv = getChildren(elemEvent,{concat:true,onlyEvent:true}); 
                           for (var j in childrenDiv){
                             var curChildDiv = getDivById(childrenDiv[j].id );
+                            if(!curChildDiv)continue;
                             curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
                           }
                       }); 
@@ -1197,6 +1214,7 @@
               //event is out of parent
               console.log("isOutOfParent"); 
               var parent = getEventbyId(event.parent.id);
+              if(!parent)return;
               var Eduration = moment(event['end']).diff(event['start']); 
 
               //event start is before parent start
@@ -1213,10 +1231,7 @@
 
                 event['start'] = moment(event['end']).subtract(Eduration).format();
               } 
-              if(hasParent(event)){
-                var p = getEventbyId(event.parent.id);
-                updateParentDate(p);
-              }
+              updateParentDate(parent); 
               render(parent);
               updateEventInDB(parent)
           } 
@@ -1296,6 +1311,7 @@
           event.parent.id = "";
           event.parent.title = "";
           event.parent.name = "";
+          if(!parent)return;
           for( var i in parent.children){
             if(parent.children[i].id === event.id && event.id !== ""){ 
               delete parent.children[i];
@@ -1353,11 +1369,10 @@
 
       // empty fullcalendar events and populate it with new
       var Events;
-      var stopWork;
       function renderEvents(events){
         Events = {};
         $calendar.fullCalendar( 'removeEvents'); 
-        stopWork=false;
+
         var instant_events   = []; 
         var i = 0;
         //non-blocking loop
@@ -1384,11 +1399,17 @@
               $calendar.fullCalendar( 'renderEvent',events[i]);
           }
         
-          i += 1; 
-          if (i < events.length && stopWork===false) {
+          i++; 
+          if(stopRender!==false)
+            console.log("stopRenderstopRenderstopRenderstopRenderstopRender")
+
+          if (i < events.length && stopRender===false) {
             setTimeout(doWork, 1);
-          }
-        };
+          }        };
+        var stopRender = false;
+        $calendar.off("stopRender").on("stopRender",function(){
+          stopRender = true;
+        })
         if(events[i])setTimeout(doWork, 1);
  
         setInstantEvents(instant_events);

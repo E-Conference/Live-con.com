@@ -32,16 +32,16 @@ class ConfEvent extends Event
     /**
      * @ORM\ManyToMany(targetEntity="Paper", inversedBy="confEvents", cascade={"persist"})
      * @ORM\JoinTable(name="confEvent_paper",
-     *     joinColumns={@ORM\JoinColumn(name="confEvent_id", referencedColumnName="id", onDelete="Cascade")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="paper_id", referencedColumnName="id", onDelete="Cascade")})
+     *     joinColumns={@ORM\JoinColumn(name="confEvent_id", referencedColumnName="id", onDelete="SET NULL")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="paper_id", referencedColumnName="id", onDelete="SET NULL")})
      */
     private $papers;
 
     /**
      * @ORM\ManyToMany(targetEntity="Theme", inversedBy="confEvents", cascade={"persist"})
      * @ORM\JoinTable(name="theme_confEvent",
-     *     joinColumns={@ORM\JoinColumn(name="confEvent_id", referencedColumnName="id", onDelete="Cascade")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="theme_id", referencedColumnName="id", onDelete="Cascade")})
+     *     joinColumns={@ORM\JoinColumn(name="confEvent_id", referencedColumnName="id", onDelete="SET NULL")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="theme_id", referencedColumnName="id", onDelete="SET NULL")})
      */
     private $themes;
 

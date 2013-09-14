@@ -172,15 +172,16 @@ class ScheduleController extends Controller
                   'property' => 'libelle',
                   'multiple' => false))
             ->getForm();
-
-
-
+            
+        $deleteForm = $this->createDeleteForm($id);
+ 
         return $this->render('fibeWWWConfBundle:Schedule:scheduleEdit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'role_form'    => $roleForm->createView(),
+            'entity'     => $entity,
+            'edit_form'  => $editForm->createView(),
+            'role_form'  => $roleForm->createView(),
             'paper_form' => $form_paper->createView(),
             'theme_form' => $form_theme->createView(),
+            'delete_form' => $deleteForm->createView()
         ));
 
     }

@@ -37,10 +37,10 @@
                <form action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
                   <input type="hidden" name="_method" value="DELETE" />
                     {{ form_widget(delete_form) }}
-              </form>
                 <button type="submit" class="btn btn-danger">
                     <i class="icon-remove"></i>
                 </button>
+              </form>
             </div>
         </div>
         </br></br>

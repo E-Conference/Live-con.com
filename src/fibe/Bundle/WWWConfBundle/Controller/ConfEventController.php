@@ -357,7 +357,7 @@ class ConfEventController extends Controller
     /**
      * Deletes a ConfEvent entity.
      * @Route("/{id}/delete", name="schedule_confevent_delete")
-     * @Method("POST")
+     * @Method({"DELETE","POST"})
      */
     public function deleteAction(Request $request, $id)
     {

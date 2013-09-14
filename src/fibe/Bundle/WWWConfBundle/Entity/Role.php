@@ -50,7 +50,8 @@ class Role
      * Event
      * Persons related to an event 
      * @ORM\ManyToOne(targetEntity="ConfEvent", inversedBy="roles")
-     * @Assert\NotBlank(message="You have to choose a Role for the person")
+     * @ORM\JoinColumn(name="event_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Assert\NotBlank(message="You have to choose an event")
      * 
      */
     private $event;
@@ -58,7 +59,7 @@ class Role
     /**
      *  
      * @ORM\ManyToOne(targetEntity="RoleType", inversedBy="roles")
-     * @Assert\NotBlank(message="You have to choose an Event")
+     * @Assert\NotBlank(message="You have to choose an type")
      */
 
     private $type;

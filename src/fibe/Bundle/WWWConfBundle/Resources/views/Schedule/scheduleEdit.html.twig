@@ -24,6 +24,14 @@
         <button class="btn btn-primary" type="submit"><i class="icon-ok"></i> Save</button>
 
           </form>
+
+               <form id="delete-event-form">
+                  <input type="hidden" name="_method" value="DELETE" />
+                    {{ form_widget(delete_form) }}
+                <button type="submit" class="btn btn-danger">
+                    <i class="icon-trash"></i>
+                </button>
+              </form>
          <p>
             <h1>Themes</h1>
             <div id="themes_related_list">
@@ -48,9 +56,8 @@
              </div>
             <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
                  {{ form_widget(role_form) }}
-                 </form>
                  </br>
-                <button id="role_form_submit"class="btn btn-info" type="button">
+                <button type="submit" class="btn btn-info" type="button">
                     <i class="icon-plus"></i> add Role
                 </button>
             </form>
@@ -70,6 +77,13 @@
             callback : function(response){
               bootstrapAlert("success","Event updated")
             }
+        },
+        {
+            formId : "#delete-event-form",
+            route : "{{ path('schedule_confevent_delete', { 'id': entity.id }) }}",
+            callback : function(response){
+              bootstrapAlert("success","Event deleted")
+            },
         },
     ];
 
@@ -113,7 +127,7 @@
             }, "html");    
        });
 
-     $("#role_form_submit").click(function(){
+     $("#role_form").submit(function(){
       //get the url for the form
       var id_person = $('#fibe_bundle_wwwconfbundle_roletype_person').val();
       var id_type = $('#fibe_bundle_wwwconfbundle_roletype_type').val();
@@ -124,6 +138,7 @@
                    $('#person_related_list').html(response);
                 
             }, "html");    
+        return false;
        });
 
 </script>
