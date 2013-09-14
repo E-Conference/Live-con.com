@@ -812,9 +812,14 @@
             }
             themes += "</ul>";
           }
+          //Affichage Location
+          var location = event.location.name;
+          if(location==""){
+            location = "no location";
+          }
           return "<ul >\
                     <li><b>duration : </b>"+moment.duration(moment(event.end).diff(event.start)).humanize()+"</li>\
-                    <li><b>location : </b>"+(event.location && event.location.name && event.location.name!==""|| "no location")+"</li>\
+                    <li><b>location : </b>"+location+"</li>\
                     <li class='description'><b>description : </b>"+(event.description || "no description")+"</li>\
                     <li><b>categories : </b>"+categories+"\
                     <li><b>themes : </b>"+themes+"\
