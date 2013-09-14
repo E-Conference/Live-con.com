@@ -19,47 +19,4 @@ use Doctrine\ORM\EntityRepository;
  */
 class EventRepository extends LocationAwareCalendarEntityRepository
 {
-
-
-
-    /**
-     * extractQueryBuilder
-     *
-     * @param array $params
-     * @return QueryBuilder
-     */
-    public function extractQueryBuilder($params)
-    {
-         $qb = $this->createQueryBuilder('event');
-
-       
-        if(isset($params['id_theme'])) {
-            $qb
-                 ->leftJoin('event.themes', 't')
-			     ->andWhere('t.id = :id_theme')
-			     ->setParameter('id_theme',$params['id_theme']);
-
-            ;
-        }
-
-        if(isset($params['person_slug'])) {
-            $qb
-                ->leftJoin('event.roles', 'r')
-		        ->leftJoin('r.person', 'p')
-		        ->andWhere('p.slug = :person_slug')
-		        ->setParameter('person_slug',$params['person_slug']);
-            ;
-        }
-
-        if(isset($params['id_person'])) {
-            $qb
-                ->leftJoin('event.roles', 'r')
-		        ->leftJoin('r.person', 'p')
-		        ->andWhere('p.id = :id_person')
-		        ->setParameter('id_person',$params['id_person']);
-            ;
-        }
-        return $qb;
-    }
-
 }

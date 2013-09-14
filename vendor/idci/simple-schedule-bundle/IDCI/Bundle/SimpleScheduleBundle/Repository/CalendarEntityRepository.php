@@ -120,7 +120,7 @@ class CalendarEntityRepository extends EntityRepository
      * @param array $params
      * @return QueryBuilder
      */
-    public function extractQuery1Builder($params)
+    public function extractQueryBuilder($params)
     {
         $qb = $this->getAllOrderByStartAtQueryBuilder();
 
@@ -282,6 +282,33 @@ class CalendarEntityRepository extends EntityRepository
             $qb
                 ->andWhere('cer.wwwConf = :schedule_id')
                 ->setParameter('schedule_id', $params['schedule_id'])
+            ;
+        }
+
+        if(isset($params['id_theme'])) {
+            $qb
+                 ->leftJoin('cer.themes', 't')
+                 ->andWhere('t.id = :id_theme')
+                 ->setParameter('id_theme',$params['id_theme']);
+
+            ;
+        }
+
+        if(isset($params['person_slug'])) {
+            $qb
+                ->leftJoin('cer.roles', 'r')
+                ->leftJoin('r.person', 'p')
+                ->andWhere('p.slug = :person_slug')
+                ->setParameter('person_slug',$params['person_slug']);
+            ;
+        }
+
+        if(isset($params['person_id'])) {
+            $qb
+                ->leftJoin('cer.roles', 'r')
+                ->leftJoin('r.person', 'p')
+                ->andWhere('p.id = :person_id')
+                ->setParameter('person_id',$params['person_id']);
             ;
         }
 
