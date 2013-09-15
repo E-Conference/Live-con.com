@@ -112,6 +112,25 @@ class PersonRepository extends EntityRepository
                 ->setParameter('ev_id', $params['event_id'])
             ;
         }
+
+        if(isset($params['event_uri'])) {
+            $qb
+                ->leftJoin('loc.roles', 'ro')
+                ->leftJoin('ro.event', 'ev')
+                ->leftJoin('ev.xProperties', 'xpv')
+                ->andWhere('xpv.xValue = :xproperty_value')
+                ->setParameter('xproperty_value', $params['event_uri'])
+            ;
+        }
+
+        if(isset($params['role_type'])) {
+            $qb
+                ->leftJoin('loc.roles', 'rol')
+                ->leftJoin('rol.type', 'rolt')
+                ->andWhere('rolt.libelle = :role_type')
+                ->setParameter('role_type',$params['role_type']);
+            ;
+        }
  
         return $qb;
     }
