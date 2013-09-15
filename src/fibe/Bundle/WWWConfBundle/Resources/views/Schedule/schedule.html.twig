@@ -39,6 +39,15 @@
           <option value="{{location.id}}">{{location.name}}</option>
         {% endfor %}
       </select>  
+    </div> 
+
+    <h4>Filter by theme</h4>
+    <div class="filter">
+      <select multiple class="form-control" data-filter="theme_ids">
+        {% for theme in themes %}
+          <option value="{{theme.id}}">{{theme.libelle}}</option>
+        {% endfor %}
+      </select>  
     </div>
   </div>
 

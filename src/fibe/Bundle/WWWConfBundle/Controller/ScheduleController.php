@@ -63,11 +63,12 @@ class ScheduleController extends Controller
                  ->find(1);
         $categories = $em->getRepository('IDCISimpleScheduleBundle:Category')->getOrdered();
         $locations = $em->getRepository('IDCISimpleScheduleBundle:Location')->findAll();
+        $themes = $em->getRepository('fibeWWWConfBundle:Theme')->findAll();
 
         return array(
                 'currentConf' => $conf,
                 'categories'  => $categories,
-                'locations'   => $locations
+                'themes'   => $themes
             );     
     
 }

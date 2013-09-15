@@ -295,6 +295,13 @@ class CalendarEntityRepository extends EntityRepository
             ;
         }
 
+        if(isset($params['theme_ids'])) {
+            $qb 
+                 ->leftJoin('cer.themes', 't')
+                 ->andWhere($qb->expr()->in('t.id', $params['theme_ids'])) 
+            ;
+        }
+
         if(isset($params['theme_name'])) {
             $qb
                  ->leftJoin('cer.themes', 't')
