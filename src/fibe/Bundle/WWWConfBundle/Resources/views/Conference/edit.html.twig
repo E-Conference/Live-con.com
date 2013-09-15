@@ -159,9 +159,9 @@
                     {
     					owlLessMode=false;
     				    isConfOwlUriInputOK = true;
-                        ConfRdfFile = dataArray ; 
                         confName=confname;
-                        var data = $.param({dataArray:ConfRdfFile});
+                        // var data = $.param({dataArray:dataArray});
+                        var data = $.param({dataArray:dataArray});
                         $.ajax({ //DBimport
                             type: "POST",
                             cache: false,  
@@ -169,16 +169,16 @@
                             data: data,
                             success:function(a,b,c)
                             {
-                                if(ConfRdfFile!=undefined){
+                                if(dataArray!=undefined){
                                     var msg = "<ul>";
-                                    for (var i in ConfRdfFile){
-                                        if(ConfRdfFile[i].length >0)
-                                            msg +="<li>"+ConfRdfFile[i].length +" "+i+" added !</li>"
+                                    for (var i in dataArray){
+                                        if(dataArray[i].length >0)
+                                            msg +="<li>"+dataArray[i].length +" "+i+" added !</li>"
                                     }
                                     msg += "</ul>";
                                     bootstrapAlert("success",' '+msg);
                                     confOwlUriInput.parent().addClass('has-success');
-                                }
+                                } 
                                 
                             },
                             error:function(a,b,c)
