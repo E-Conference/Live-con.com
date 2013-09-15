@@ -67,7 +67,9 @@
 
     
 {% block javascripts %}
-
+      <script type="text/javascript" >
+        $(document).ready(function() { $("select").select2(); });
+      </script> 
 <script type="text/javascript">
 
     var ajaxForms = [
@@ -75,14 +77,14 @@
             formId : "#eventForm",
             route : '{{path("schedule_confevent_update", { "id": entity.id }) }}',
             callback : function(response){
-              bootstrapAlert("success","Event updated")
+              bootstrapAlert("success","Event updated");
             }
         },
         {
             formId : "#delete-event-form",
             route : "{{ path('schedule_confevent_delete', { 'id': entity.id }) }}",
             callback : function(response){
-              bootstrapAlert("success","Event deleted")
+              bootstrapAlert("success","Event deleted");
             },
         },
     ];

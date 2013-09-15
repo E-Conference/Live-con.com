@@ -801,7 +801,7 @@
           }
           return "<ul >\
                     <li><b>duration : </b>"+moment.duration(moment(event.end).diff(event.start)).humanize()+"</li>\
-                    <li><b>location : </b>"+(event.location && event.location.name && event.location.name!==""|| "no location")+"</li>\
+                    <li><b>location : </b>"+((event.location && event.location.name && event.location.name!=="" && event.location.name) || "no location")+"</li>\
                     <li class='description'><b>description : </b>"+(event.description || "no description")+"</li>\
                     <li><b>categories : </b>"+categories+"\
                     <li><b>themes : </b>"+themes+"\
@@ -904,12 +904,17 @@
             for (var i in Events){
               var event = Events[i];
               var isSidebar =false;
-
-              while(hasParent(event)){ 
-                event = Events[event.parent.id];  
+              var breakWhile=false;
+              while(hasParent(event) && breakWhile===false){ 
+                parent = getEventbyId(event.parent.id);  
                 // console.log(event);
-                if(!event) return false; //not all event were  loaded
+                if(!parent || !parent.elem){ 
+                  breakWhile = true;
+                }else {
+                  event = parent;
+                }
                 isSidebar = $(event.elem).hasClass("external-event");
+
               }
 
               //toppest parent
