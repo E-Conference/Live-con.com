@@ -345,6 +345,7 @@ class ConfEventController extends Controller
 
         //Add paper to the confEvent
         $entity->removeRole($role);
+        $em->remove($role);
         //Sauvegarde des données
         $em->persist($entity);
         $em->flush();
@@ -376,7 +377,7 @@ class ConfEventController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('confevent'));
+        return $this->redirect($this->generateUrl('schedule_event'));
     }
 
     /**

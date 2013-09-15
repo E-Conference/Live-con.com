@@ -50,7 +50,7 @@ class Role
      * Event
      * Persons related to an event 
      * @ORM\ManyToOne(targetEntity="ConfEvent", inversedBy="roles")
-     * @ORM\JoinColumn(name="event_id", referencedColumnName="id", onDelete="Cascade")
+     * @ORM\JoinColumn(name="event_id", referencedColumnName="id")
      * @Assert\NotBlank(message="You have to choose an event")
      * 
      */
