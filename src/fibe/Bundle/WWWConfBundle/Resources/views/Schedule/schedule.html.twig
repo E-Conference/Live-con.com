@@ -395,9 +395,8 @@
 
                                 // rerender if changed
                             $modalBody.find("#eventForm,#delete-event-form").submit(function(){
-                              $modal.on('hidden.bs.modal', function () {
-                                $calendar.fullCalendar( 'refetchEvents' )
-                                $(this).off('hidden.bs.modal')
+                              $modal.off('hidden.bs.modal').on('hidden.bs.modal', function () {
+                                $calendar.fullCalendar( 'refetchEvents' ) 
                               })
                             }) 
                             // $modal.on('hidden.bs.modal', function () {
