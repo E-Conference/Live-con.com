@@ -230,22 +230,18 @@ class CalendarEntityRepository extends EntityRepository
 
         if(isset($params['parent_xproperty_value'])) {
             $qb
-                ->leftJoin('cer.relateds', 'rlt')
-                ->leftJoin('rlt.relatedTo','parent')
+                ->leftJoin('cer.parent', 'parent')
                 ->leftJoin('parent.xProperties','parentxp')
                 ->andWhere('parentxp.xValue = :parent_xproperty_value')
-                ->andWhere("rlt.relationType = 'CHILD'") 
                 ->setParameter('parent_xproperty_value', $params['parent_xproperty_value'])
             ;
         }
 
         if(isset($params['child_xproperty_value'])) {
             $qb
-                ->leftJoin('cer.relateds', 'rlt')
-                ->leftJoin('rlt.relatedTo','child')
+                ->leftJoin('cer.children', 'child')
                 ->leftJoin('child.xProperties','childxp')
                 ->andWhere('childxp.xValue = :child_xproperty_value')
-                ->andWhere("rlt.relationType = 'PARENT'") 
                 ->setParameter('child_xproperty_value', $params['child_xproperty_value'])
             ;
         }
@@ -262,18 +258,15 @@ class CalendarEntityRepository extends EntityRepository
 
         if(isset($params['parent_id'])) {
             $qb
-                ->leftJoin('cer.relateds', 'pid')
-                ->andWhere('pid.relatedTo = :parent_id')
-                ->andWhere("pid.relationType = 'CHILD'")
+                ->andWhere('cer.parent = :parent_id')
                 ->setParameter('parent_id', $params['parent_id'])
             ;
         }
 
         if(isset($params['child_id'])) {
             $qb
-                ->leftJoin('cer.relateds', 'pid')
-                ->andWhere('pid.relatedTo = :child_id')
-                ->andWhere("pid.relationType = 'PARENT'")
+                ->leftJoin('cer.children', 'child')
+                ->andWhere('child.id = :child_id')
                 ->setParameter('child_id', $params['child_id'])
             ;
         }
