@@ -90,6 +90,13 @@ class CategoryRepository extends EntityRepository
             ;
         }
 
+        if(isset($params['name'])) {
+            $qb
+                ->andWhere('cat.name = :name')
+                ->setParameter('name', $params['name'])
+            ;
+        }
+
         if(isset($params['parent_category_id'])) {
             $qb
                 ->andWhere('cat.parent = :parent_id')

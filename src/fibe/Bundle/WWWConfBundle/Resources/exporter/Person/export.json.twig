@@ -21,10 +21,10 @@
         {% if loop.first %}{% else %},{% endif %}
         { 
             "id": "{{ role.id }}", 
-            "type": "{{ role.getType().libelle }}", 
+            "type": "{{ role.type.libelle }}", 
             "event": {
-                "id"  : "{{ role.getEvent().id }}",
-                "name": "{{ role.getEvent().summary }}"
+                "id"  : "{{ role.event.id }}",
+                "name": "{{ role.event }}"
             }
         }
     {% endfor %}

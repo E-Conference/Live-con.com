@@ -152,6 +152,14 @@ class CalendarEntityRepository extends EntityRepository
             ;
         }
 
+        if(isset($params['category_name'])) {
+            $qb
+                ->leftJoin('cer.categories', 'c')
+                ->andWhere('c.name = :category_name')
+                ->setParameter('category_name', $params['category_name'])
+            ;
+        }
+
         if(isset($params['parent_category_id'])) {
             $qb
                 ->leftJoin('cer.categories', 'pc')
@@ -278,21 +286,21 @@ class CalendarEntityRepository extends EntityRepository
             ;
         }
 
-        if(isset($params['id_theme'])) {
+        if(isset($params['theme_id'])) {
             $qb
                  ->leftJoin('cer.themes', 't')
-                 ->andWhere('t.id = :id_theme')
-                 ->setParameter('id_theme',$params['id_theme']);
+                 ->andWhere('t.id = :theme_id')
+                 ->setParameter('theme_id',$params['theme_id']);
 
             ;
         }
 
-        if(isset($params['person_slug'])) {
+        if(isset($params['theme_name'])) {
             $qb
-                ->leftJoin('cer.roles', 'r')
-                ->leftJoin('r.person', 'p')
-                ->andWhere('p.slug = :person_slug')
-                ->setParameter('person_slug',$params['person_slug']);
+                 ->leftJoin('cer.themes', 't')
+                 ->andWhere('t.libelle = :theme_name')
+                 ->setParameter('theme_name',$params['theme_name']);
+
             ;
         }
 
@@ -302,6 +310,15 @@ class CalendarEntityRepository extends EntityRepository
                 ->leftJoin('r.person', 'p')
                 ->andWhere('p.id = :person_id')
                 ->setParameter('person_id',$params['person_id']);
+            ;
+        }
+
+        if(isset($params['person_slug'])) {
+            $qb
+                ->leftJoin('cer.roles', 'r')
+                ->leftJoin('r.person', 'p')
+                ->andWhere('p.slug = :person_slug')
+                ->setParameter('person_slug',$params['person_slug']);
             ;
         }
 
