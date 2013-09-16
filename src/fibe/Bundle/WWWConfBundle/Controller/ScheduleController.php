@@ -68,6 +68,7 @@ class ScheduleController extends Controller
         return array(
                 'currentConf' => $conf,
                 'categories'  => $categories,
+                'locations'  => $locations,
                 'themes'   => $themes
             );     
     
