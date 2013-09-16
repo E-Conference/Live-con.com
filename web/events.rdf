@@ -1335,6 +1335,610 @@
         <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-4"/>
     </NamedIndividual>
 
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // JOUR 2
+    // 
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+                    
+    <NamedIndividual rdf:about="http://www.blendconference.com/keynote-event/keynote-4">
+        <rdf:type rdf:resource="&swc;KeynoteEvent"/>
+        <rdfs:label>Accueil jour 2</rdfs:label>
+        <ical:dtstart>2013-10-02T08:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T09:00:00+02:00</ical:dtend>
+        <ical:description>Accueil des participants et résumé de la journée</ical:description>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/auditorium-lumiere"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/break-event/break-4">
+        <rdf:type rdf:resource="&swc;BreakEvent"/>
+        <rdfs:label>Un petit café ?</rdfs:label>
+        <ical:dtstart>2013-10-02T10:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T10:30:00+02:00</ical:dtend>
+        <ical:description>Un petit café ?</ical:description>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/break-event/break-5">
+        <rdf:type rdf:resource="&swc;BreakEvent"/>
+        <rdfs:label>Un autre petit café ?</rdfs:label>
+        <ical:dtstart>2013-10-02T15:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T16:00:00+02:00</ical:dtend>
+        <ical:description>Un petit café ?</ical:description>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/break-event/break-6">
+        <rdf:type rdf:resource="&swc;BreakEvent"/>
+        <rdfs:label>Lunch tiiiime!</rdfs:label>
+        <ical:dtstart>2013-10-02T12:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T13:30:00+02:00</ical:dtend>
+        <ical:description>Un petit buffet, plein de bonnes choses à manger, faites vous plaisir!</ical:description>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+    
+                                <!-- Auditorium lumière -->
+                                
+     <NamedIndividual rdf:about="http://www.blendconference.com/panel-event/panel-4">
+        <rdf:type rdf:resource="&swc;PanelEvent"/>
+        <rdfs:label>Table ronde « tendance forte » : la consommation collaborative</rdfs:label>
+        <ical:dtstart>2013-10-02T09:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T10:00:00+02:00</ical:dtend>
+        <ical:description>Un nouveau phénomène est apparu ces dernières années influencé par l’émergence du web 2.0 : la consommation collaborative. Internet a facilitée la mise en relation entre les individus, ces derniers peuvent désormais plus facilement se tourner les uns vers les autres. Cette table ronde a pour objectif d’aborder les points forts et faibles de cette tendance
+        Présents sur scène :
+        Cédric Giorgi (co-fondateur de Cookening)
+        Michael Goldman (co-fondateur de MyMajorCompany)
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/auditorium-lumiere"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/panel-event/panel-5">
+        <rdf:type rdf:resource="&swc;PanelEvent"/>
+        <rdfs:label>Table ronde : atouts et limites des plateformes BtoB de e-commerce</rdfs:label>
+        <ical:dtstart>2013-10-02T10:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T11:30:00+02:00</ical:dtend>
+        <ical:description>Un nouveau phénomène est apparu ces dernières années influencé par l’émergence du web 2.0 : la consommation collaborative. Internet a facilitée la mise en relation entre les individus, ces derniers peuvent désormais plus facilement se tourner les uns vers les autres. Cette table ronde a pour objectif d’aborder les points forts et faibles de cette tendance
+        Présents sur scène :
+        Cédric Giorgi (co-fondateur de Cookening)
+        Michael Goldman (co-fondateur de MyMajorCompany)
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/auditorium-lumiere"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-14">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Backbone, Ember et Angular sont dans un bateau… tour d’horizon, différences et spécificités</rdfs:label>
+        <ical:dtstart>2013-10-02T11:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T12:30:00+02:00</ical:dtend>
+        <ical:description>Backbone, Ember et Angular sont trois frameworks en vogue, ils permettent le développement d’applications riches en JavaScript. Lorsque vous recherchez des comparatifs en ligne, les passionnés se déchirent et les avis sont souvent forts et tranchés : difficile de faire un choix.
+        Cette conférence propose de passer en revue les différences d’approche de chacun en essayant de comprendre quels sont leurs philosophies et spécificités. Aussi il sera abordé les forces et faiblesses en les illustrant au travers d’exemples tirés de l’implémentation d’une même application prétexte avec chacune de ces technologies.
+        Le but n’est pas de ressortir un vainqueur parmi les trois mais de voir en quoi leurs approches sont différentes afin que chacun puisse se forger sa propre opinion.
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/auditorium-lumiere"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-15">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Lea Verrou W3C</rdfs:label>
+        <ical:dtstart>2013-10-02T13:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T14:30:00+02:00</ical:dtend>
+        <ical:description>?????
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/auditorium-lumiere"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-16">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>MOOC UDL</rdfs:label>
+        <ical:dtstart>2013-10-02T14:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T15:30:00+02:00</ical:dtend>
+        <ical:description>????
+        </ical:description>
+        <dc:subject>Recherche</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/auditorium-lumiere"/>
+    </NamedIndividual>
+    
+        
+    <NamedIndividual rdf:about="http://www.blendconference.com/keynote-event/keynote-5">
+        <rdf:type rdf:resource="&swc;KeynoteEvent"/>
+        <rdfs:label>Cloture jour 2</rdfs:label>
+        <ical:dtstart>2013-10-02T16:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T17:00:00+02:00</ical:dtend>
+        <ical:description>??????</ical:description>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/auditorium-lumiere"/>
+    </NamedIndividual>
+    
+    
+    <!--  Salle Rhônes 1 -->
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-17">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Mobile First : Capter l’expérience client dans un monde mobile</rdfs:label>
+        <ical:dtstart>2013-10-02T09:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T10:00:00+02:00</ical:dtend>
+        <ical:description>Destinée aux SSCII et développeurs indépendants et à l’appui des témoignages des DSI de trois grands groupes, cette conférence répond concrètement aux enjeux stratégiques des applications mobiles et de la mobilité.
+        Quels sont les opportunités et les challenges des apps mobiles en entreprise ?
+        Comment concevoir et comment vendre une stratégie de « Mobile First » à vos prospects et à vos clients ?
+        Quelles en sont les implications pour la conception, le développement et la mise en œuvre des applications mobiles ?
+        Quelles métriques peuvent mesurer l’apport de cette vision à l’entreprise client ?
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-1"/>
+    </NamedIndividual>
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-20">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Du javascript garanti sans bogue</rdfs:label>
+        <ical:dtstart>2013-10-02T10:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T11:00:00+02:00</ical:dtend>
+        <ical:description>JS souffre au quotidien d’une mauvaise réputation non-méritée. La plupart des développeurs travaille encore au copier/coller médiocre de scripts trouvés sur le net. Même si cette tendance s’inverse fortement, les outils pour correctement coder une fois qu’on a passé le cap du « faire soi-même » existent déjà. Et en quantité.
+        Les outils pour tracker les erreurs de syntaxe, les outils de tests, les outils proposés par les navigateurs, les outils d’intégration continue et plus. Nous allons donc faire un tour dans la magie de l’industrialisation de votre code JavaScript.
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-1"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-21">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Provisioning et déploiement continu</rdfs:label>
+        <ical:dtstart>2013-10-02T11:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T11:30:00+02:00</ical:dtend>
+        <ical:description>Retour d’expérience autour du projet Klubup.com sur la mise en place d’une infrastructure virtualisée classique (Symfony, Mysql, SOLR, Redis) pilotée avec la solution Chef d’OpsCode.
+        Nous présenterons aussi les process de dev mis en place pour le déploiement continu sur les différents environnements, ainsi que l’utilisation de Jmeter pour les tirs de performances, le monitoring avec la solution NewRelic ou bien la gestion des logs avec LogEntries.
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-1"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-22">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Bigdata, mythe ou réalité ?</rdfs:label>
+        <ical:dtstart>2013-10-02T11:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T12:00:00+02:00</ical:dtend>
+        <ical:description>Depuis bientôt 2 ans le terme Bigdata est sortie du chapeau par tout le monde pour pleins de raisons différentes (faire croire à une complexité, vendre son CV, faire le buzz et surfer sur la vague etc…)
+        Mais qu’en est-il vraiment ? Nous vous proposons d’en savoir plus à travers le point de vue d’un ingénieur pratiquant le Digital Marketing Technology depuis maintenant 15 ans à 300 % !
+        Le Bigdata apporte de véritables solutions au Marketing Digital, mais c’est aussi un piège, comment peut-on les éviter tout en conservant les bénéfices ?
+        •    Comment définir le Bigdata ? Mes éléments de réflexion
+        •    Bigdata : technologie ou usage ?
+        •    Bigdata pour faire quoi ?
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-1"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-23">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Les makers peuvent ils refabriquer la société ?</rdfs:label>
+        <ical:dtstart>2013-10-02T12:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T12:30:00+02:00</ical:dtend>
+        <ical:description>Si le couple impression 3D – Fablab, fait tant bouillir les esprits, c’est parce que ses principes reposent sur 4 tendances de fonds : l’Internet, la conception des objets sur ordinateur, la personnalisation et enfin l’accessibilité des machines à couches.
+        La 4° révolution industrielle est vraisemblablement en marche et fait résonner son cri de ralliement : Do It Yourself. Mais jusqu’où exactement ?
+        Cette conférence présentera les initiatives de makers à travers le monde, qui, parfois sans le savoir, transforment les modèles économiques et les métiers d’aujourd’hui : comment le design s’incruste dans la santé ? les points de vente deviendront ils des lieux de rencontre ? L’unique est il le nouveau luxe ? Les concepteurs 3D seront-ils les seuls maitres du jeu ?
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <dc:subject>Design</dc:subject>
+        <dc:subject>Recherche</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-1"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-18">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Open source et business</rdfs:label>
+        <ical:dtstart>2013-10-02T13:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T14:00:00+02:00</ical:dtend>
+        <ical:description>Comment tirer partie de l’Open Source pour faire du business.
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-1"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-24">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>M commerce par Catherine Barba</rdfs:label>
+        <ical:dtstart>2013-10-02T14:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T15:00:00+02:00</ical:dtend>
+        <ical:description>?????</ical:description>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-1"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-25">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Olivier Bernasson E-commerce</rdfs:label>
+        <ical:dtstart>2013-10-02T15:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T15:30:00+02:00</ical:dtend>
+        <ical:description>?????</ical:description>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-1"/>
+    </NamedIndividual>
+    
+                            <!--  Salle rhône 2 -->
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-26">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Apprendre à être critiqué en maquettant</rdfs:label>
+        <ical:dtstart>2013-10-02T09:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T09:30:00+02:00</ical:dtend>
+        <ical:description>Le maquettage (rapide ou non) permet de communiquer rapidement sur les choix de conception d’un produit web. Cet outil itératif est accessible à tous pour la peine que l’on se donne les moyens de représenter ses idées à l’aide d’un crayon ou d’un logiciel. Mais une fois les idées transmises, le travail le plus dur consiste à essuyer les critiques.
+        Au cours de cette intervention, la réalisation d’une maquette servira de prétexte pour analyser le sens d’une critique, et pour comprendre la relation qui se construit entre les acteurs d’un projet.
+        Les objectifs de la conférence sont de :
+        Communiquer avec une maquette
+        Comprendre les critiques
+        Apprendre à formuler les réponses
+        </ical:description>
+        <dc:subject>Design</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-27">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Le futur du web est mobile</rdfs:label>
+        <ical:dtstart>2013-10-02T09:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T10:00:00+02:00</ical:dtend>
+        <ical:description>Dans cette conférence, Serge Roukine expliquera, données à l'appui, pourquoi le mobile devrait être au coeur des préoccupations des entrepreneurs du web et de toute personne en charge d'un projet web.
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-19">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>SCRUM : Il était une fois la vie d’un Product Owner</rdfs:label>
+        <ical:dtstart>2013-10-02T10:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T11:30:00+02:00</ical:dtend>
+        <ical:description>Cette conférence est un retour d’expérience de 9 mois, une immersion dans la peau d’un Product Owner qui découvre son rôle et qui doit livrer son premier produit.
+        Entre les visionnaires, les utilisateurs, l’équipe de développement et les investisseurs, il évolue dans un environnement exigeant, sans filet. De l’initiation à la maturité, ce Product Owner va vivre des échecs, des réussites et construire pas à pas son produit en utilisant des techniques d’expression de besoins dans le seul et unique but de valider ses hypothèses.
+        Entre fiction et réalité, « Il était une fois la vie d’un Product Owner » est une illustration concrète et fantastique du quotidien et de l’apprentissage d’un Product Owner fraîchement débarqué qui va gérer son produit en mode startup.
+        Cette session illustre par des exemples concrets la réalité de ce rôle où rien n’est simple ni écrit d’avance avec des focus particuliers sur :
+        L’évolution d’une approche déterministe de la gestion de produit vers la mise en place d’hypothèses et de mesures associées
+        L’articulation des outils actuellement à disposition des Product Owner : de la vision à la production en passant par les User stories, les exigences non-fonctionnelles, Kanban pour les Product Owner, l’impact mapping et le Lean Startup,.
+        L’apprentissage des erreurs commises, leurs analyses et des idées pour les éviter : UX, communication, gestion du backlog
+        La remise en question de la stratégie du Product Owner par son travail avec les parties prenantes
+        Maintenir un équilibre fragile entre une approche analytique de l’expression de besoins et un contexte émergent inhérent à l’environnement startup.. .
+        Cette session s’adresse particulièrement à tous les Product Owner et les responsables produit qui souhaitent développer et enrichir leur gestion de produit agile. Elle sera conduite en mode Story Telling.
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-28">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Le SEO et la visibilité à l’international</rdfs:label>
+        <ical:dtstart>2013-10-02T11:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T12:00:00+02:00</ical:dtend>
+        <ical:description>Cette conférence aborde la visibilité sur les moteurs de recherche en rapport avec le développement international. Tout ce qui peut intéresser une société qui veut lancer ou améliorer sa visibilité web hors des frontières.
+        Comment gérer le SEO sur du multilingue, multi-pays, nom de domaines, traductions, techniques spécifiques, différences entre les pays, recherche de liens…
+        Les grandes questions traités lors de cette sessions :
+        Où et comment ? Pays différents, cultures différentes : référencement différent.
+        S’organiser, recruter.
+        Bonnes pratiques, erreurs à éviter
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-29">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Le E-Commerce expliquée à ma grand-mère : se lancer efficacement dans le E-Commerce</rdfs:label>
+        <ical:dtstart>2013-10-02T12:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T12:30:00+02:00</ical:dtend>
+        <ical:description>?????
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-30">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Smartphone, tablette et desktop : comment organiser un discours de marque dans un environnement multi-écrans ?</rdfs:label>
+        <ical:dtstart>2013-10-02T13:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T14:00:00+02:00</ical:dtend>
+        <ical:description>Dans une journée, le consommateur d’aujourd’hui passe successivement d’un device à un autre. Quelle stratégie doit adopter une marque pour proposer la bonne information, au bon moment, sur le bon device pour qu’elle est de la valeur aux yeux de l’utilisateur ? 
+        Les grandes lignes de la conférences :
+         Comprendre le comportement d’un consommateur multicanal
+        Appréhender les impacts sur le discours de marque
+        Orchestrer un discours de marque dans un dispositif web multi-écran avec la matrice de l’œuf :
+        - planification du contenu,
+        - organisation des fonctionnalités,
+        - architecture du dispositif digitale
+        - répartition des points de contacts.
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-31">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Votre Stratégie de trafic en 2013 : le fondamental, le nécessaire (et le superflu), l’inutile, le risqué…</rdfs:label>
+        <ical:dtstart>2013-10-02T14:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T14:30:00+02:00</ical:dtend>
+        <ical:description>Après des mises à jour qui ont fait grand bruit (Panda puis Pingouin), la fin de la gratuité de Google Shopping, la marche vers le Social Search, Google impose encore et toujours de nouvelles règles. Toutes ces évolutions influent sur les stratégies de trafic des entreprises.
+        Animé par un pionnier du référencement, Jean-François Longy, cette conférence a pour objectif de proposer des réponses concrètes à ces nouvelles problématiques afin de définir une stratégie de trafic la plus adaptée à ses besoins.
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
+    </NamedIndividual>
+    
+    
+     <NamedIndividual rdf:about="http://www.blendconference.com/organised-event/organised-event-4">
+        <rdf:type rdf:resource="&swc;OrganisedEvent"/>
+        <rdfs:label>Startup Contest</rdfs:label>
+        <ical:dtstart>2013-10-02T14:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T15:30:00+02:00</ical:dtend>
+        <ical:description>Pour Blend, nous avons voulu concevoir une rencontre entre ceux qui *font* le web : développeurs, designers, bizdev, marketeux.
+        Qui mieux que des startups pour montrer ce que le web fait de plus innovant lorsque, comme par magie, ces compétences se rencontrent dans une équipe de fondateurs ?
+        C’est toute l’essence du Blend Startup Contest, première édition !
+        12 startups s’affronteront dans un concours de pitchs que nous souhaitons no bullsh!t, devant des jurys d’investisseurs.
+        Seules les startups avec un produit en ligne ou fonctionnel au moment de Blend sont appelées à participer. Pour le reste, c’est assez ouvert, tant que :
+        vous avez levé moins d’un million d’euros
+        vous avez moins de 3 ans (la startup, pas vous !)
+        vous êtes une équipe sympa
+        Notre processus de sélection est très simple :
+        vous remplissez, jusqu’au 11 septembre 2013 à minuit, le formulaire ci-dessous
+        la sélection sera achevée le 15 septembre et annoncée de suite
+        les 12 demi-finalistes retenus auront 5 minutes chacun de pitch, avec séance de QandA avec un jury d’investisseurs au cours de la première journée de Blend, le 1er octobre
+        3 finalistes seront appelés à pitcher en plénière de clôture le 2 octobre
+        1 vainqueur !
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
+    </NamedIndividual>
+    
+                                    <!-- Salle Pasteur -->
+                
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-20">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Lean Analytics : exploiter la donnée et le test pour améliorer sa performance digitale</rdfs:label>
+        <ical:dtstart>2013-10-02T09:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T10:00:00+02:00</ical:dtend>
+        <ical:description>Le lean management (mettre à contribution tous les acteurs pour éliminer les gaspillages qui réduisent l’efficacité et la performance d’une entreprise) est une tendance de fond pour les entreprises, quelque soit leur taille. L’objectif de cette conférence est de présenter la démarche, des outils des des études de cas pour mieux l’appréhender.
+        I. Analyse du contexte digital : « Bienvenue dans un monde de grande incertitude »
+        II. Présentation du lean management dans les secteurs de l’industrie et des services
+        III Présentation du concept de lean analytics et de lean start-up
+        IV. Bénéfices de l’approche lean pour l’amélioration de la performance digitale et la conduite de projets webmarketing (SEO, SEA, display, A/B Testing…)
+        V. Les outils et méthodes
+        VI. Etude de cas
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-21">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Tour d’horizon de Node.js</rdfs:label>
+        <ical:dtstart>2013-10-02T10:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T11:30:00+02:00</ical:dtend>
+        <ical:description>Node.js est l’une des technologies les plus en vue de ces dernières années, des services web à la   robotique ; désormais bien industrialisé et doté d’un écosystème et d’une communauté très vifs, Node a remis sur le devant de la scène un modèle de programmation non bloquant / asynchrone et, surtout, des techniques de code élégantes pour réaliser celui-ci.
+        Dans cette présentation, Christophe Porteneuve va tenter de brosser un tableau de Node.js aussi concret que possible, en posant rapidement quelques notions fondamentales (Node, modules, npm, asynchrone…) et en déroulant le développement d’une application web qui mettra conjointement en œuvre quelques-uns des usages les plus célèbres, d’Express à Docco en passant par de l’OAuth 2, du Redis, des Web Sockets, Brunch, Mocha et Uglify.
+        Et peut-être même, qui sait, un petit bonus qui sortira du strict domaine dématérialisé du web pour se manifester physiquement.
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-32">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>La puissance du copywriting au service de l’UX</rdfs:label>
+        <ical:dtstart>2013-10-02T11:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T12:00:00+02:00</ical:dtend>
+        <ical:description>?????
+        </ical:description>
+        <dc:subject>Design</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-33">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>La contrainte génératrice d’UX performante</rdfs:label>
+        <ical:dtstart>2013-10-02T12:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T12:30:00+02:00</ical:dtend>
+        <ical:description>?????
+        </ical:description>
+        <dc:subject>Design</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-22">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Optimiser la lisibilité typographique sur le web</rdfs:label>
+        <ical:dtstart>2013-10-02T13:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T14:30:00+02:00</ical:dtend>
+        <ical:description>Cette conférence sera l’opportunité de discuter d’un sujet finalement assez peu abordé en design web mais pourtant primordial : la lisibilité du contenu.
+        </ical:description>
+        <dc:subject>Design</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-34">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Pourquoi les workers queues sont importantes pour dynamiser votre application web ?</rdfs:label>
+        <ical:dtstart>2013-10-02T14:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T15:00:00+02:00</ical:dtend>
+        <ical:description>Cette conférence porte sur les Queues Worker, ce sont des briques techniques qui font le travail en arrière plan sans ralentir l’utilisateur. On peut les utiliser pour des traitements lourds comme l’envoi d’emails, l’envoi de messages sur les réseaux sociaux, tout ce qui pourrait ralentir l’utilisateur dans la navigation du site.
+        Les questions abordées lors de cette conférence :
+        Les queues workers c’est quoi?
+        Pourquoi les utiliser avec des cas d’utilisation
+        Les queues workers existants avec un comparatif.
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+    
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-35">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Dart, one language to rule them all</rdfs:label>
+        <ical:dtstart>2013-10-02T15:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T15:30:00+02:00</ical:dtend>
+        <ical:description>Dart est un langage (et une plateforme incluant VM, compilateur, etc.) actuellement en cours de développement chez Google. Son mode de développement est itératif et représente un juste équilibre en tant que langage client et serveur. De plus le fait que Google ait réuni ses plus grands talents pour le développer sont autant de points qui donnent à penser que Dart sera une technologie majeure dans les prochaines années.
+        Avant de plonger dans le code, nous commencerons par étudier les raisons qui ont conduit Google à se lancer dans une telle aventure. Au programme :
+        Dette technologique
+        Brevets logiciels
+        Flex
+        GWT
+        Oracle
+        Scala
+        NodeJS
+        Android
+        Nous passerons ensuite en revue la dernière version du langage et de son écosystème :
+        Les bases du langage ou comment coder efficacement
+        Les différents environnements cibles visés par Google : applications web côté client, mais également serveur et mobile avec Dart sur Android
+        Nouvelles API Streams, Mixins, Isolates
+        Web UI : développement web orienté composant
+        Pub : le « Maven » de Dart (en mieux je vous rassure)
+        Les différents environnements de développement disponibles
+        Minimiser la duplication de code en partageant le code entre client et serveur
+        Retour sur dart2js, le compilateur Dart vers Javascript
+        Enfin, la dernière partie de la présentation sera dédiée à des démonstrations d’applications Dart en mode VM Dart ou Javascript.
+        Loin de se cantonner au développement web côté client, cette présentation sera l’occasion d’explorer les possibilités offertes par Dart pour permettre de construire une nouvelle génération d’application.
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+    
+     <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-60">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Le developpement rapide d'applications audio pour le web </rdfs:label>
+        <ical:dtstart>2013-10-01T11:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T12:00:00+02:00</ical:dtend>
+        <ical:description>La WEB audio API de HTML5 préfigure le futur de l’audio dans le WEB, en permettant de développer des applications audio plus sophistiquées, plus interactives et plus performantes.
+        Faust (Functional Audio Stream) est un langage de programmation spécifiquement conçu pour les applications musicales. Il permet de développer beaucoup plus rapidement des applications efficaces et fiables pour les principales plateformes audios (plugins VST, MaxMSP, Puredata, applications MacOSX, iPhone, Linux, etc.).Nous montrerons comment cette technologie peut être maintenant intégrée dans la WEB audio API, soit en utilisant le générateur de code JavaScript ou directement de manière native grâce à la chaine de compilation dynamique basée sur LLVM.
+        </ical:description>
+        <dc:subject>Recherche</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-4"/>
+    </NamedIndividual>
+
+
+     <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-70">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Combien vous coûte le support IE7 ?</rdfs:label>
+        <ical:dtstart>2013-10-01T12:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T12:30:00+02:00</ical:dtend>
+        <ical:description>??????????
+        </ical:description>
+        <dc:subject>Recherche</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-4"/>
+    </NamedIndividual>
+
+
+     <NamedIndividual rdf:about="http://www.blendconference.com/session-event/session-5">
+        <rdf:type rdf:resource="&swc;SessionEvent"/>
+        <rdfs:label>Networking (1ière partie)</rdfs:label>
+        <ical:dtstart>2013-10-01T09:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T10:00:00+02:00</ical:dtend>
+        <ical:description>??????????????
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+
+     <NamedIndividual rdf:about="http://www.blendconference.com/session-event/session-6">
+        <rdf:type rdf:resource="&swc;SessionEvent"/>
+        <rdfs:label>Networking (2éme partie)</rdfs:label>
+        <ical:dtstart>2013-10-01T10:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T12:30:00+02:00</ical:dtend>
+        <ical:description>??????????????
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+
+     <NamedIndividual rdf:about="http://www.blendconference.com/session-event/session-7">
+        <rdf:type rdf:resource="&swc;SessionEvent"/>
+        <rdfs:label>Networking (3éme partie)</rdfs:label>
+        <ical:dtstart>2013-10-01T13:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T15:30:00+02:00</ical:dtend>
+        <ical:description>??????????????
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+
+     <NamedIndividual rdf:about="http://www.blendconference.com/session-event/session-8">
+        <rdf:type rdf:resource="&swc;SessionEvent"/>
+        <rdfs:label>Concevoir son API Web</rdfs:label>
+        <ical:dtstart>2013-10-01T09:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T10:00:00+02:00</ical:dtend>
+        <ical:description>L’API est un peu de Graal des données mais elle a un défaut majeur : Une fois publiée vous n’en contrôlez plus les clients et faire évoluer les bases n’est pas évident.
+        Ce que vous construisez est là pour longtemps. Quelles sont les retours d’expériences et bonnes pratiques pour ne pas se prendre les pieds dans le tapis ?
+        Vous avez certainement déjà entendu parler de REST mais les choses sont plus complexes que ça. Comment gérer les évolutions et les versions de l’API ? les formats en entrée et en sortie ? les variations et paramètres d’une même ressources ? les relations entre ressources ? la sécurité ? l’authentification ? la gestion des erreurs ? la pagination ? l’i18n et l10n ? Qu’est-ce que l’hypermedia ?. .
+        Plus généralement, nous partons avec pour objectif premier de concevoir une API le plus tôt possible, avec des bases solides mais les plus simples possible.
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-3"/>
+    </NamedIndividual>
+
+     <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-98">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>HTML5 W3C</rdfs:label>
+        <ical:dtstart>2013-10-01T10:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T11:30:00+02:00</ical:dtend>
+        <ical:description>????????
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-3"/>
+    </NamedIndividual>
 	
 </rdf:RDF>
 
