@@ -317,6 +317,8 @@
         $calendar.off("stopRender").on("stopRender",function(){
           stopRender = true;
         })
+        op.data['before']=moment(end).format();
+        op.data['after']=moment(start).format();
         $.get(
           op.getOrderedUrl,
           op.data,
