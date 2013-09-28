@@ -1,10 +1,16 @@
 
+ 
+
+var EventCollection = { 
 
 
-var EventCollection = {
+      /*-----------------------------------------------------------------------------------------------------*/
+      /*------------------------------------- get/find functions --------------------------------------------*/
+      /*-----------------------------------------------------------------------------------------------------*/
+
         /** 
          * @param int id    : event id
-         * @param obj op    : noSidebar
+         * @param obj op    : noSidebar (default false)
          * 
          * return children = [{event:event,element:$element}, ... ]
          *         events   : db model events
@@ -16,10 +22,7 @@ var EventCollection = {
           var event = Events[id];
           if(!Events[id] || (op.noSidebar ===true && Events[id].isInstant()))return; 
           return event; 
-    },
-
-
-
+    }, 
         /** 
          * @param parent        :  db model event
          * @param op            : concat : ( boolean ) if true : dont preserve the tree nature of the relation (just concat children/subchildren/subsu... them)
@@ -57,5 +60,55 @@ var EventCollection = {
 
           }); 
           return children; 
-    }
+    },
+
+
+    getToppestParent : function (){
+        var toppestParent = []; 
+
+          // get toppest parent 
+        for (var i in Events){
+            var event = Events[i];
+            var isSidebar =false;
+            var breakWhile=false;
+            while(breakWhile===false){ 
+              // console.log(event);
+              var parent = EventCollection.find(event.parent.id);  
+              if(!parent || !parent.elem){ 
+                breakWhile = true;
+              }else {
+                event = parent;
+              }
+              isSidebar = $(event.elem).hasClass("external-event");
+
+            }
+
+            //toppest parent
+            if(isSidebar || event.isInstant() || $.inArray(event, toppestParent)!==-1 ){
+              // console.log("event "+event.id+" already toppest") ;
+              continue;
+            }
+            toppestParent.push(event); 
+        }
+        return toppestParent;
+    },
+
+
+
+    /**
+    * @param id : event i
+    * get div with with class fc-event and with a hidden div containing event id
+    * <div class='fc-event-id hide'>event.id</div>
+    */ 
+
+    getDivById : function(id){
+        // console.log(id,Events[parseInt(id)])
+        return Events[parseInt(id)]['elem'];
+    },
+
+    getEventByDiv : function(div){
+        var id = div.find(".fc-event-id").text();
+        // console.log()
+        return Events[id];
+    },
 }
