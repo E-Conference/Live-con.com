@@ -15,6 +15,8 @@ use fibe\Bundle\WWWConfBundle\Entity\Theme;
 use fibe\Bundle\WWWConfBundle\Form\RoleType as RoleType;
 use fibe\Bundle\WWWConfBundle\Form\ThemeType as ThemeType;
 
+use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;  
+
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Exception\NotValidCurrentPageException;
@@ -59,8 +61,8 @@ class ConfEventController extends Controller
             $xprop= new XProperty(); 
             $xprop->setXNamespace("event_uri"); 
             $xprop->setXKey(rand(0,999999));
-            $xprop->setXValue("http://dataconf-event/" . $em->getId());  
-            $xprop->setCalendarEntity($event);
+            $xprop->setXValue("http://dataconf-event/" . $entity->getId());  
+            $xprop->setCalendarEntity($entity);
             
             $em->persist($xprop); 
 
