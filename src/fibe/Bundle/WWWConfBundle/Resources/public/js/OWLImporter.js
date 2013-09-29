@@ -42,12 +42,11 @@
             var themes= [];
             var confName ;
             
-            var defaultDate='now'; 
+            var defaultDate='now';
+
+            //map of   Uri (string) ,Object
             var objectMap = {};
-
-
  
-
 
             var personMapping = {
                 nodeName : 'Person',
@@ -139,6 +138,7 @@
                         }
                     },
                     'dc:subject' : {
+                        multiple: true,
                         setter : 'addTheme',
                         format : function(node){ 
                             var themeName = $(node).text(); 
@@ -250,7 +250,15 @@
                             if(mapping.label[this.nodeName].format){   
                                 val = mapping.label[this.nodeName].format(this);
                             }
-                            rtnArray[mapping.label[this.nodeName].setter]= mapping.label[this.nodeName].setter === false ? val : typeof val === 'string' ? format(val) : val ;
+                            val = mapping.label[this.nodeName].setter === false ? val : typeof val === 'string' ? format(val) : val ;
+                            if(mapping.label[this.nodeName].multiple === true){
+                                if(!rtnArray[mapping.label[this.nodeName].setter])
+                                    rtnArray[mapping.label[this.nodeName].setter]={};
+                                var index = Object.size(rtnArray[mapping.label[this.nodeName].setter]);
+                                rtnArray[mapping.label[this.nodeName].setter][index] = val;
+                            }else{
+                                rtnArray[mapping.label[this.nodeName].setter]= val;
+                            }
                         } 
                     }
                 });

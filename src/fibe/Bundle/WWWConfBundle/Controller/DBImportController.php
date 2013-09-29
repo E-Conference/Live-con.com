@@ -40,6 +40,10 @@ class DBImportController extends Controller
         $themeEntities= array();
         $wwwConf =  $em->getRepository('fibeWWWConfBundle:WwwConf')->find(1);
 
+        //categories color.
+        $colorArray = array('lime', 'red', 'blue', 'orange', 'gold', 'coral', 'crimson', 'aquamarine', 'darkOrchid', 'forestGreen', 'peru','purple' ,'seaGreen'  );
+        
+
         
         
         //////////////////////  locations  ////////////////////// 
@@ -89,7 +93,6 @@ class DBImportController extends Controller
         
         //////////////////////  categories  ////////////////////// 
         if(isset($JSONFile['categories'])){
-            $colorArray = array('lime', 'red', 'blue', 'orange', 'gold', 'coral', 'crimson', 'aquamarine', 'darkOrchid', 'forestGreen', 'peru','purple' ,'seaGreen'  );
             $entities = $JSONFile['categories']; 
             for($i=0;$i<count($entities);$i++){
                 $current = $entities[$i]; 
@@ -131,26 +134,33 @@ class DBImportController extends Controller
             $entities = $JSONFile['events'];
             for($i=0;$i<count($entities);$i++){
                 $entity= new Event();
-                $current = $entities[$i];
+                $current = $entities[$i]; 
                 foreach ($current as $setter => $value) {
 
                     if($setter=="setStartAt" || $setter=="setEndAt"){
                         $date= explode(' ', $value); 
                         $value=new \DateTime($date[0], new \DateTimeZone(date_default_timezone_get()));
-                        
                     }
                     
                     if($setter=="setLocation"){
-                        $value=$locationEntities[$value]; 
-                    } 
+                        $value=$locationEntities[$value];
+                    }
                     
                     if($setter=="addCategorie"){
-                        $value=$categoryEntities[$value];  
-                        
+                        $value=$categoryEntities[$value];
                     }
                     
                     if($setter=="addTheme"){
-                        $value=$themeEntities[$value];  
+                        $j=0;
+                        foreach ($value as $theme) {
+                            if($j!=0){
+                                $val=$themeEntities[$theme];
+
+                                call_user_func_array(array($entity, $setter), array($val));
+                            }
+                            $j++;
+                        } 
+                        $value=$themeEntities[$value[0]];  
                         
                     }
                     
@@ -165,6 +175,7 @@ class DBImportController extends Controller
                 array_push($eventEntities,$entity); 
             }
 
+            //parent / child relationship
             for($i=0;$i<count($entities);$i++){
                 $entity= $eventEntities[$i];
                 $current = $entities[$i];
