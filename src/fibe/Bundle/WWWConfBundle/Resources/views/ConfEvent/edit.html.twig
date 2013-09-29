@@ -6,7 +6,7 @@
 
     <h1>ConfEvent edit</h1>
 
-    <form action="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+    <form action="{{ path('schedule_confevent_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
         <input type="hidden" name="_method" value="PUT" />
         {{ form_row(edit_form.summary) }}
         {{ form_row(edit_form.categories) }}
@@ -26,6 +26,9 @@
         </br>
         <button class="btn btn-default" type="submit"><i class="icon-ok"></i></button>
              
+            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
+                {{ form_rest(edit_form  )}}
+            </div> 
     </form>
     
      <div class="row">
