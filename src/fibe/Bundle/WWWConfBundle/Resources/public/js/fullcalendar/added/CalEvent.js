@@ -9,7 +9,7 @@ CalEvent.prototype.render = function () {
         this.formatDate();
 
         // render the event on the calendar
-        $calendar.fullCalendar('removeEvents', this.id); 
+        // $calendar.fullCalendar('removeEvents', this.id); 
         $calendar.fullCalendar('renderEvent', this);
 };
 

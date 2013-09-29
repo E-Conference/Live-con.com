@@ -195,9 +195,75 @@
       if(firstDay.isSame(moment('5000-10-10'))) firstDay = moment(); 
 
 
+
+      /*-----------------------------------------------------------------------------------------------------*/
+      /*------------------------------- render json array from datasource -----------------------------------*/
+      /*-----------------------------------------------------------------------------------------------------*/
+
+      // empty fullcalendar events and populate it with new
+      var fetched = false;
+      var calendar_events   = []; 
+      function renderEvents(events,callback){
+          Events = {};
+          $calendar.fullCalendar( 'removeEvents'); 
+
+          var instant_events   = [];  
+          calendar_events   = []; 
+          var i = 0;
+          //non-blocking loop
+          function doWork() {
+
+            events[i]["title"]  = events[i].name; 
+            events[i]["start"]  = events[i].start_at;
+            events[i]["end"]    = events[i].end_at; 
+            events[i]["allDay"] = events[i].is_allday==="true";
+            if(events[i].categories && events[i].categories[0] && events[i].categories[0].color)
+              events[i]["color"] = events[i].categories[0].color;
+
+            delete events[i]["url"];
+            // console.log(events[i].categories);
+            if(events[i].categories.length > 0 && events[i].categories[0].color)
+              events[i]["background-color"] = events[i].categories[0].color;
+            
+            var diff =moment(events[i]["start"]).diff(events[i]["end"]);
+            events[i]["instant"] = (diff  === 0 ) || (diff  === 1 ); 
+
+            var event = new CalEvent(events[i]); 
+            Events[events[i]["id"]] = event;
+
+            if(event["instant"]){
+              instant_events.push(Events[events[i]["id"]]); 
+            }else{ 
+                calendar_events.push(Events[events[i]["id"]]); 
+                // $calendar.fullCalendar( 'renderEvent',event);
+            } 
+            
+          
+            i++; 
+
+            if (!events[i]) {
+              //last iteration  
+              sidebar.setInstantEvents(instant_events); 
+
+              fetched = true;
+              console.log(calendar_events)
+              $calendar.fullCalendar('refetchEvents');
+
+            }else if (stopRender!==true){ 
+              //the loop goes on
+              setTimeout(doWork, 1);
+            }       
+          };
+          var stopRender = false;
+          $calendar.off("stopRender").on("stopRender",function(){
+            stopRender = true;
+          })
+          if(events[i])setTimeout(doWork, 1);
+      } 
+ 
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------------- fullcalendar options ------------------------------------------*/
-      /*-----------------------------------------------------------------------------------------------------*/
+      /*-----------------------------------------------------------------------------------------------------*/ 
       var calendarOption = { 
           header: {
               left: 'prev,next today',
@@ -213,7 +279,12 @@
               var stopRender = false;
               $calendar.off("stopRender").on("stopRender",function(){
                 stopRender = true;
-              })
+              }); 
+              if(fetched === true){
+                fetched = false;
+                callback(calendar_events ); // 3rd arg make the event "stick" 
+                return;
+              }
               op.data['before']=moment(end).format();
               op.data['after']=moment(start).format();
               $.get(
@@ -346,11 +417,7 @@
           }
       };
       $calendar.fullCalendar(calendarOption);  
-      $calendar.fullCalendar('changeView', "agendaWeek" );
-      /*-----------------------------------------------------------------------------------------------------*/
-      /*------------------------------------- end initialize the calendar -----------------------------------*/
-      /*-----------------------------------------------------------------------------------------------------*/
-
+      $calendar.fullCalendar('changeView', "agendaWeek" ); 
 
       /*-------------------------------------------------------------------------------------------------*/
       /*------------------------------------- initialize sidebar ----------------------------------------*/
@@ -467,6 +534,8 @@
                     
                 var elemProp = getProp(element); 
 
+
+
                 if($('#reposition').is(':checked')){ 
                     //position margins
                     if(parentPos && parent && parent.allDay !== true){
@@ -498,79 +567,81 @@
                     element.css('z-index',parentZindex+1) 
                 } // end reposition if
   
-                //action on hovered by another dragging event  
-                var oldBorderColor = element.css("border-color");
-                var overBorderColor = "green";
 
-                element.droppable({
-                    over: function( ev, ui ) {
-                      if ( $(ui.draggable).hasClass("fc-event") ){
-                        $(this).css("border-color",overBorderColor); 
-                      }
-                    },
-                    out: function( ev, ui ) { 
-                      if ( $(ui.draggable).hasClass("fc-event") ){
-                        $(this).css("border-color",oldBorderColor);  
-                      }
-                    },
-                    drop: function( ev, ui ) { 
-                      if ( $(ui.draggable).hasClass("fc-event") ){ 
-                        $(this).css("border-color",oldBorderColor);  
-                        var event = EventCollection.getEventByDiv($(this));
-                        var draggedEvent = dragged[1];
-                        if(draggedEvent.parent.id 
-                          === event.id){
-                          // already sub-event
-                          return;
-                        }
+                if(!element.data("is-ui-initted")){
+                  
+                    element.data("is-ui-initted",true); 
 
-                        //check if it's going to do a loop in the tree
-                        if(event.isChild(draggedEvent)){
-                          bootstrapAlert("stop");
-                          bootstrapAlert("warning","cannot set event <b>"+event.title+"</b> as child of <b>"+draggedEvent.title+"</b> because this is going to do a loop in the event tree","Circular reference : "); 
-                    
-                          return;
-                        } 
-                        setTimeout(function(){
-                          if(event.isOutOf(draggedEvent))return;
-                          // console.log("lol" ,draggedEvent)
-                          $modalSetParent.modal('show').find(".sub-event").text(draggedEvent.title);
-                          $modalSetParent.find(".super-event").text(event.title);
+                    //action on hovered by another dragging event  
+                    element.data("border-color",element.css("border-color"))
+                              .data("prop",getProp(element)); 
+                    var overBorderColor = "green";
+                    element.droppable({
+                        over: function( ev, ui ) {
+                          if ( $(ui.draggable).hasClass("fc-event") ){
+                            $(this).css("border-color",overBorderColor); 
+                          }
+                        },
+                        out: function( ev, ui ) { 
+                          if ( $(ui.draggable).hasClass("fc-event") ){
+                          $(this).animate({"border-color":$(this).data("border-color")},{queue:false}) 
+                          }
+                        },
+                        drop: function( ev, ui ) { 
+                          if ( $(ui.draggable).hasClass("fc-event") ){ 
+                          $(this).animate({"border-color":$(this).data("border-color")},{queue:false}) 
+                            var event = EventCollection.getEventByDiv($(this));
+                            var draggedEvent = dragged[1];
+                            if(draggedEvent.parent.id 
+                              === event.id){
+                              // already sub-event
+                              return;
+                            }
 
-                          $modalSetParent.find('button.yes').off("click").click(function(){
-
-                            //set event as parent of draggedEvent and children relation
-                            draggedEvent.setParent(event);
-                            event.updateParentDate();
-                            draggedEvent.persist(); 
-                          });  
-                        },50)
+                            //check if it's going to do a loop in the tree
+                            if(event.isChild(draggedEvent)){
+                              bootstrapAlert("stop");
+                              bootstrapAlert("warning","cannot set event <b>"+event.title+"</b> as child of <b>"+draggedEvent.title+"</b> because this is going to do a loop in the event tree","Circular reference : "); 
                         
-                      }
-                    }
-                }); //end droppable
+                              return;
+                            } 
+                            setTimeout(function(){
+                              if(event.isOutOf(draggedEvent))return;
+                              // console.log("lol" ,draggedEvent)
+                              $modalSetParent.modal('show').find(".sub-event").text(draggedEvent.title);
+                              $modalSetParent.find(".super-event").text(event.title);
 
-                //action on hover (children opacity and bootstrap popover)
-                element.data("border-color",element.css("border-color"))
-                          .data("prop",getProp(element));
-                element.popover({
-                            trigger : 'hover',
-                            html : true,
-                            placement : function( context,source){
-                              var popoverProp = getProp($(context));
-                              var eventProp = getProp(source);
-                              var calendarProp = getProp($calendar);
-                              // console.log(popoverProp,eventProp,calendarProp)
-                              if(eventProp.x + eventProp.w + popoverWidth < calendarProp.x + calendarProp.w )
-                                return "right";
-                              if(eventProp.x - popoverWidth > calendarProp.x)
-                                return "left";
-                              return "bottom"; 
-                            },
-                            title : "<b>"+event.title+"</b>",
-                            content : event.getPopoverContent(),
-                          })
-                          .hover(function(){
+                              $modalSetParent.find('button.yes').off("click").click(function(){
+
+                                //set event as parent of draggedEvent and children relation
+                                draggedEvent.setParent(event);
+                                event.updateParentDate();
+                                draggedEvent.persist(); 
+                              });  
+                            },50)
+                            
+                          }
+                        }
+                    }); //end droppable
+
+                    //action on hover (children opacity and bootstrap popover)
+                    element.popover({
+                                trigger : 'hover',
+                                html : true,
+                                placement : function( context,source){
+                                  var popoverProp = getProp($(context));
+                                  var eventProp = getProp(source);
+                                  var calendarProp = getProp($calendar);
+                                  // console.log(popoverProp,eventProp,calendarProp)
+                                  if(eventProp.x + eventProp.w + popoverWidth < calendarProp.x + calendarProp.w )
+                                    return "right";
+                                  if(eventProp.x - popoverWidth > calendarProp.x)
+                                    return "left";
+                                  return "bottom"; 
+                                },
+                                title : "<b>"+event.title+"</b>",
+                                content : event.getPopoverContent(),
+                    }) .hover(function(){
                               //enter
                               $(this).animate({"border-color":"#3F3F3F"},{queue:false});
 
@@ -581,7 +652,7 @@
                                 if(!curChildDiv)continue;
                                 curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false});
                               }
-                            },function(){
+                        },function(){
 
                               $(this).animate({"border-color":$(this).data("border-color")},{queue:false})
                               var elemEvent = EventCollection.getEventByDiv($(this));
@@ -591,8 +662,12 @@
                                 if(!curChildDiv)continue;
                                 curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
                               }
-                          }); 
-                //end set opacity to all children 
+                    }); 
+                    //end set opacity to all children 
+
+
+                }
+
                 
 
                 event.isPositionned = true;
@@ -700,69 +775,6 @@
           }
         } 
       } 
-
-
-
-        /*-----------------------------------------------------------------------------------------------------*/
-        /*------------------------------- render json array from datasource -----------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------*/
-
-      // empty fullcalendar events and populate it with new
-      function renderEvents(events,callback){
-          Events = {};
-          $calendar.fullCalendar( 'removeEvents'); 
-
-          var instant_events   = []; 
-          var calendar_events   = []; 
-          var i = 0;
-          //non-blocking loop
-          function doWork() {
-
-            events[i]["title"]  = events[i].name; 
-            events[i]["start"]  = events[i].start_at;
-            events[i]["end"]    = events[i].end_at; 
-            events[i]["allDay"] = events[i].is_allday==="true";
-            if(events[i].categories && events[i].categories[0] && events[i].categories[0].color)
-              events[i]["color"] = events[i].categories[0].color;
-
-            delete events[i]["url"];
-            // console.log(events[i].categories);
-            if(events[i].categories.length > 0 && events[i].categories[0].color)
-              events[i]["background-color"] = events[i].categories[0].color;
-            
-            var diff =moment(events[i]["start"]).diff(events[i]["end"]);
-            events[i]["instant"] = (diff  === 0 ) || (diff  === 1 ); 
-
-            var event = new CalEvent(events[i]); 
-            Events[events[i]["id"]] = event;
-
-
-            if(event["instant"]){
-              instant_events.push(event);
-            }else{ 
-                // calendar_events.push(event); 
-                $calendar.fullCalendar( 'renderEvent',event);
-            }
-          
-            i++; 
-
-            if (!events[i]) {
-              //last iteration 
-              console.log(calendar_events);
-              // callback(calendar_events); 
-              sidebar.setInstantEvents(instant_events); 
-            }else if (stopRender!==true){ 
-              //the loop goes on
-              setTimeout(doWork, 1);
-            }       
-          };
-          var stopRender = false;
-          $calendar.off("stopRender").on("stopRender",function(){
-            stopRender = true;
-          })
-          if(events[i])setTimeout(doWork, 1);
-      } 
-
 
 
 
