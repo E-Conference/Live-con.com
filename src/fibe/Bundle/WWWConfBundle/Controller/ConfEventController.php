@@ -55,6 +55,15 @@ class ConfEventController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
+
+            $xprop= new XProperty(); 
+            $xprop->setXNamespace("event_uri"); 
+            $xprop->setXKey(rand(0,999999));
+            $xprop->setXValue("http://dataconf-event/" . $em->getId());  
+            $xprop->setCalendarEntity($event);
+            
+            $em->persist($xprop); 
+                
             $em->flush();
 
             return $this->redirect($this->generateUrl('confevent_show', array('id' => $entity->getId())));
