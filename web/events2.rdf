@@ -588,7 +588,7 @@
         <rdfs:label>W3C</rdfs:label>
         <ical:dtstart>2013-10-01T11:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T12:00:00+02:00</ical:dtend>
-        <ical:description>????????
+        <ical:description>
         </ical:description>
         <dc:subject>Business</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
@@ -600,7 +600,7 @@
         <rdfs:label>W3C</rdfs:label>
         <ical:dtstart>2013-10-01T12:00:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T12:30:00+02:00</ical:dtend>
-        <ical:description>????????
+        <ical:description>
         </ical:description>
         <dc:subject>Tech</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
@@ -612,7 +612,7 @@
         <rdfs:label>La Technique au service de l'entrepreunariat — Comment transformer un buzz en business</rdfs:label>
         <ical:dtstart>2013-10-01T13:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T14:30:00+02:00</ical:dtend>
-        <ical:description>????????
+        <ical:description>
         </ical:description>
         <dc:subject>Business</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>

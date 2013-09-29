@@ -624,7 +624,7 @@
         <rdfs:label>Grand lyon W3C mairie</rdfs:label>
         <ical:dtstart>2013-10-01T09:00:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T10:00:00+02:00</ical:dtend>
-        <ical:description>??????</ical:description>
+        <ical:description></ical:description>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
         <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/auditorium-lumiere"/>
     </NamedIndividual>
@@ -634,7 +634,7 @@
         <rdfs:label>Cloture jour 1</rdfs:label>
         <ical:dtstart>2013-10-01T09:00:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T10:00:00+02:00</ical:dtend>
-        <ical:description>??????</ical:description>
+        <ical:description></ical:description>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
         <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/auditorium-lumiere"/>
     </NamedIndividual>
@@ -673,7 +673,7 @@
         <rdfs:label>Les grandes tendances qui vont impacter votre business</rdfs:label>
         <ical:dtstart>2013-10-01T11:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T12:30:00+02:00</ical:dtend>
-        <ical:description>??????</ical:description>
+        <ical:description></ical:description>
 		<dc:subject>Business</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
         <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
@@ -822,7 +822,7 @@
         <rdfs:label>Thierry Debarnot</rdfs:label>
         <ical:dtstart>2013-10-01T14:00:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T14:30:00+02:00</ical:dtend>
-        <ical:description>?????
+        <ical:description>
         </ical:description>
         <dc:subject>Business</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
@@ -905,7 +905,7 @@
         <rdfs:label>Stioui marketing mobile</rdfs:label>
         <ical:dtstart>2013-10-01T11:00:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T11:30:00+02:00</ical:dtend>
-        <ical:description>?????
+        <ical:description>
         </ical:description>
         <dc:subject>Business</dc:subject>
         <dc:subject>Marketing</dc:subject>
@@ -969,7 +969,7 @@
         <rdfs:label>Fabien Gandon : web sémantique</rdfs:label>
         <ical:dtstart>2013-10-01T14:00:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T14:30:00+02:00</ical:dtend>
-        <ical:description>??????
+        <ical:description>
         </ical:description>
         <dc:subject>Recherche</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
@@ -1028,7 +1028,7 @@
         <rdfs:label>SPONSOR GOLD</rdfs:label>
         <ical:dtstart>2013-10-01T16:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T17:00:00+02:00</ical:dtend>
-        <ical:description>?????
+        <ical:description>
         </ical:description>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
         <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-2"/>
@@ -1088,7 +1088,7 @@
         <rdfs:label>Speed demo</rdfs:label>
         <ical:dtstart>2013-10-01T16:00:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T17:00:00+02:00</ical:dtend>
-        <ical:description>?????
+        <ical:description>
         </ical:description>
         <dc:subject>Tech</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
@@ -1102,7 +1102,7 @@
         <rdfs:label>Cluster Edit Ou API guillhem</rdfs:label>
         <ical:dtstart>2013-10-01T10:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T11:30:00+02:00</ical:dtend>
-        <ical:description>????????
+        <ical:description>
         </ical:description>
         <dc:subject>Business</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
@@ -1164,7 +1164,7 @@
         <rdfs:label>Comment recruter un développeur ?</rdfs:label>
         <ical:dtstart>2013-10-01T14:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T15:00:00+02:00</ical:dtend>
-        <ical:description>???????????
+        <ical:description>
         </ical:description>
         <dc:subject>Tech</dc:subject>
         <dc:subject>Business</dc:subject>
@@ -1189,7 +1189,7 @@
         <rdfs:label>Web perf : Damian La Nouaille</rdfs:label>
         <ical:dtstart>2013-10-01T16:00:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T16:30:00+02:00</ical:dtend>
-        <ical:description>??????
+        <ical:description>
         </ical:description>
         <dc:subject>Tech</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
@@ -1201,7 +1201,7 @@
         <rdfs:label>Bootstrapper sa startup, bullshit ou clé pour réussir ?</rdfs:label>
         <ical:dtstart>2013-10-01T16:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T17:00:00+02:00</ical:dtend>
-        <ical:description>??????
+        <ical:description>
         </ical:description>
         <dc:subject>Tech</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
@@ -1214,7 +1214,7 @@
         <rdfs:label>Networking (1ière partie)</rdfs:label>
         <ical:dtstart>2013-10-01T10:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T12:30:00+02:00</ical:dtend>
-        <ical:description>?????
+        <ical:description>
         </ical:description>
         <dc:subject>Tech</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
@@ -1226,7 +1226,7 @@
         <rdfs:label>Networking (2ième partie)</rdfs:label>
         <ical:dtstart>2013-10-01T13:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T15:30:00+02:00</ical:dtend>
-        <ical:description>?????
+        <ical:description>
         </ical:description>
         <dc:subject>Tech</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
@@ -1238,7 +1238,7 @@
         <rdfs:label>Networking (3ième partie)</rdfs:label>
         <ical:dtstart>2013-10-01T16:00:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T17:00:00+02:00</ical:dtend>
-        <ical:description>?????
+        <ical:description>
         </ical:description>
         <dc:subject>Tech</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
@@ -1266,7 +1266,7 @@
         <rdfs:label>Cluster Edit Sass (1ière partie)</rdfs:label>
         <ical:dtstart>2013-10-01T11:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T12:30:00+02:00</ical:dtend>
-        <ical:description>???????
+        <ical:description>
         </ical:description>
         <dc:subject>Tech</dc:subject>
         <dc:subject>Recherche</dc:subject>
@@ -1280,7 +1280,7 @@
         <rdfs:label>Cluster Edit Sass (2ième partie)</rdfs:label>
         <ical:dtstart>2013-10-01T13:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T14:30:00+02:00</ical:dtend>
-        <ical:description>???????
+        <ical:description>
         </ical:description>
         <dc:subject>Tech</dc:subject>
         <dc:subject>Recherche</dc:subject>
@@ -1436,7 +1436,7 @@
         <rdfs:label>Lea Verrou W3C</rdfs:label>
         <ical:dtstart>2013-10-02T13:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-02T14:30:00+02:00</ical:dtend>
-        <ical:description>?????
+        <ical:description>
         </ical:description>
         <dc:subject>Tech</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
@@ -1448,7 +1448,7 @@
         <rdfs:label>MOOC UDL</rdfs:label>
         <ical:dtstart>2013-10-02T14:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-02T15:30:00+02:00</ical:dtend>
-        <ical:description>????
+        <ical:description>
         </ical:description>
         <dc:subject>Recherche</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
@@ -1461,7 +1461,7 @@
         <rdfs:label>Cloture jour 2</rdfs:label>
         <ical:dtstart>2013-10-02T16:00:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-02T17:00:00+02:00</ical:dtend>
-        <ical:description>??????</ical:description>
+        <ical:description></ical:description>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
         <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/auditorium-lumiere"/>
     </NamedIndividual>
@@ -1562,7 +1562,7 @@
         <rdfs:label>M commerce par Catherine Barba</rdfs:label>
         <ical:dtstart>2013-10-02T14:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-02T15:00:00+02:00</ical:dtend>
-        <ical:description>?????</ical:description>
+        <ical:description></ical:description>
         <dc:subject>Business</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
         <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-1"/>
@@ -1573,7 +1573,7 @@
         <rdfs:label>Olivier Bernasson E-commerce</rdfs:label>
         <ical:dtstart>2013-10-02T15:00:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-02T15:30:00+02:00</ical:dtend>
-        <ical:description>?????</ical:description>
+        <ical:description></ical:description>
         <dc:subject>Business</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
         <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-1"/>
@@ -1658,7 +1658,7 @@
         <rdfs:label>Le E-Commerce expliquée à ma grand-mère : se lancer efficacement dans le E-Commerce</rdfs:label>
         <ical:dtstart>2013-10-02T12:00:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-02T12:30:00+02:00</ical:dtend>
-        <ical:description>?????
+        <ical:description>
         </ical:description>
         <dc:subject>Business</dc:subject>
         <dc:subject>Marketing</dc:subject>
@@ -1768,7 +1768,7 @@
         <rdfs:label>La puissance du copywriting au service de l’UX</rdfs:label>
         <ical:dtstart>2013-10-02T11:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-02T12:00:00+02:00</ical:dtend>
-        <ical:description>?????
+        <ical:description>
         </ical:description>
         <dc:subject>Design</dc:subject>
         <dc:subject>Marketing</dc:subject>
@@ -1781,7 +1781,7 @@
         <rdfs:label>La contrainte génératrice d’UX performante</rdfs:label>
         <ical:dtstart>2013-10-02T12:00:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-02T12:30:00+02:00</ical:dtend>
-        <ical:description>?????
+        <ical:description>
         </ical:description>
         <dc:subject>Design</dc:subject>
         <dc:subject>Marketing</dc:subject>
@@ -1869,7 +1869,7 @@
         <rdfs:label>Combien vous coûte le support IE7 ?</rdfs:label>
         <ical:dtstart>2013-10-01T12:00:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T12:30:00+02:00</ical:dtend>
-        <ical:description>??????????
+        <ical:description>
         </ical:description>
         <dc:subject>Recherche</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
@@ -1882,7 +1882,7 @@
         <rdfs:label>Networking (1ière partie)</rdfs:label>
         <ical:dtstart>2013-10-01T09:00:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T10:00:00+02:00</ical:dtend>
-        <ical:description>??????????????
+        <ical:description>
         </ical:description>
         <dc:subject>Tech</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
@@ -1894,7 +1894,7 @@
         <rdfs:label>Networking (2éme partie)</rdfs:label>
         <ical:dtstart>2013-10-01T10:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T12:30:00+02:00</ical:dtend>
-        <ical:description>??????????????
+        <ical:description>
         </ical:description>
         <dc:subject>Tech</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
@@ -1906,7 +1906,7 @@
         <rdfs:label>Networking (3éme partie)</rdfs:label>
         <ical:dtstart>2013-10-01T13:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T15:30:00+02:00</ical:dtend>
-        <ical:description>??????????????
+        <ical:description>
         </ical:description>
         <dc:subject>Tech</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
@@ -1933,7 +1933,7 @@
         <rdfs:label>HTML5 W3C</rdfs:label>
         <ical:dtstart>2013-10-01T10:30:00+02:00</ical:dtstart>
         <ical:dtend>2013-10-01T11:30:00+02:00</ical:dtend>
-        <ical:description>????????
+        <ical:description>
         </ical:description>
         <dc:subject>Business</dc:subject>
         <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
