@@ -57,6 +57,7 @@ class ConfEventController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
+            $em->flush();
 
             $xprop= new XProperty(); 
             $xprop->setXNamespace("event_uri"); 

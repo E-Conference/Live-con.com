@@ -104,16 +104,15 @@ class ScheduleController extends Controller
                 $event->setWwwConf($conf);
 
                 $em->persist($event); 
+                $em->flush();
 
                 $xprop= new XProperty(); 
                 $xprop->setXNamespace("event_uri"); 
                 $xprop->setXKey(rand(0,999999));
                 $xprop->setXValue("http://dataconf-event/" . $event->getId());  
                 $xprop->setCalendarEntity($event);
-                
-                $em->persist($xprop); 
 
-                
+                $em->persist($xprop);  
                 $em->flush();
 
                 $JSONArray['id'] = $event->getId();
