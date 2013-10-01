@@ -76,12 +76,12 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3 class="modal-title">Give a name to the new event</h3>
+        <h3 class="modal-title">Event creation</h3>
       </div>
       <form>
         <div class="modal-body">
           <div class="input-group input-group-lg"> 
-            <input name="name" id="name" type="text" class="form-control input-lg" value="New event" placeholder="New event">
+            <input name="name" id="name" type="text" class="form-control input-lg" placeholder="Give me a name!">
           </div> 
         </div>
         <div class="modal-footer">
@@ -282,7 +282,7 @@
               }); 
               if(fetched === true){
                 fetched = false;
-                callback(calendar_events ); // 3rd arg make the event "stick" 
+                callback(calendar_events );
                 return;
               }
               op.data['before']=moment(end).format();
@@ -297,7 +297,9 @@
                     //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                 },
                 'json'
-              ); 
+              ).error(function(jqXHR, textStatus, errorThrown) {
+                bootstrapAlert("warning","there was an error during the fetch of events",""); 
+              });
               bootstrapAlert("info","event request sent","","<i class='icon-spinner icon-spin'></i>");
           },
           eventClick: function(calEvent, jsEvent, view) {  
@@ -321,7 +323,10 @@
           selectable: true, 
           selectHelper: true,
           select: function(start, end, allDay) { //new event
-              $modalNewEvent.modal("show");
+              $modalNewEvent.modal("show")
+                            .on('shown.bs.modal', function() {
+                                $(this).find("#name").focus();
+                            });
 
               $modalNewEvent.find("form").off("submit").submit(function(e){ 
                 var title = $(this).find("#name").val(); 
@@ -349,11 +354,14 @@
                             'json'
                     );
                     bootstrapAlert("info","add request sent","Info : ","<i class='icon-spinner icon-spin'></i>");
+                  $modalNewEvent.modal("hide");
+                }else{
+                    bootstrapAlert("info","You must give a name to the event");
                 }
-                $modalNewEvent.modal("hide");
                 return false;
               });
               $calendar.fullCalendar('unselect');
+              
           },
           eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
               setTimeout(function(){ //bug... event isn't yet updated 
