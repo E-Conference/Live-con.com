@@ -1,10 +1,15 @@
 
-function run(url,callback,fallback){ 
-    var completeConfRdfURL =  url;    
-    $.ajax({
-        url: completeConfRdfURL,   
-        cache:false,
-        success:function(completeConfRdf){
+ function run(url,callback,fallback){
+     
+         
+        var completeConfRdfURL =  url;  
+        
+        
+        
+        $.ajax({
+          url: completeConfRdfURL,   
+          cache:false,
+          success:function(completeConfRdf){
              
             console.log(completeConfRdf);
             if(completeConfRdf==undefined )
@@ -12,6 +17,20 @@ function run(url,callback,fallback){
                 if(fallback!=undefined)fallback("Empty response"); 
                 return;
             } 
+
+
+ 
+            //check if it's rdf or owl file
+            
+            var isRdfFile=true; 
+            var rootNode; 
+            console.log($(completeConfRdf).children().find("namedindividual"))
+            $(completeConfRdf).children().children().each(function(){
+                    console.log(this.nodeName);
+                    if(this.nodeName !== "NamedIndividual" || isRdfFile===false)return; 
+                    isRdfFile=false; 
+                    rootNode = $(this).parent();
+            });
             
             var events= []; 
             var locations= []; 
@@ -27,54 +46,263 @@ function run(url,callback,fallback){
 
             //map of   Uri (string) ,Object
             var objectMap = {};
-
-
-            //format config
-
-            var formatConfig = {
-                'rdf': rdfConfig,
-            }
-
  
-            //check format (default : rdf)
-            var format = 'rdf'; 
+
+            var personMapping = {
+                nodeName : 'Person',
+                label : {
+                    'foaf:firstName' : {
+                        setter : 'setFirstName',
+                    },
+                    'foaf:lastName' : {
+                        setter : 'setLastName'
+                    },
+                    'foaf:name' : {
+                        setter : 'setName'
+                    },
+                    'foaf:img' : {
+                        escape : false,
+                        setter : 'setImage'
+                    },
+                    'foaf:homepage' : {
+                        setter : 'setHomepage'
+                    },
+                    'foaf:twitter' : {
+                        setter : 'setTwitter'
+                    },
+                    'foaf:description' : {
+                        setter : 'setDescription'
+                    },
+                }
+            };
+ 
+            var locationMapping = {
+                nodeName : 'MeetingRoomplace',
+                label : {
+                    'rdfs:label' : {
+                        setter : 'setName'
+                    }, 
+                    'rdfs:comment' : {
+                        setter : 'setDescription',
+                    },
+                }
+            };
+
+            var eventMapping = {
+                nodeName : 'Event',
+                label : {
+                    'rdfs:label' : {
+                        setter : 'setSummary'
+                    },
+                    'dce:description' : {
+                        setter : 'setDescription'
+                    },
+                    'ical:description' : {
+                        setter : 'setDescription'
+                    },
+                    'icaltzd:dtstart' : {
+                        setter : 'setStartAt'
+                    },
+                    'ical:dtstart' : {
+                        setter : 'setStartAt',
+                        format : function(node){ 
+                            var rtn;
+                            $(node).children().each(function(){
+                                if(this.nodeName !=="ical:date") return;
+                                rtn = $(this).text();  
+                            });
+                            return rtn || $(node).text();
+                        }
+                    },
+                    'icaltzd:dtend' : {
+                        setter : 'setEndAt'
+                    },
+                    'ical:dtend' : {
+                        setter : 'setEndAt',
+                        format : function(node){ 
+                            var rtn;
+                            $(node).children().each(function(){
+                                if(this.nodeName !=="ical:date") return;
+                                rtn = $(this).text();  
+                            });
+                            return rtn || $(node).text();
+                        }
+                    },
+                    'swc:hasRelatedDocument' : { 
+                        action : function(node){
+                            var xproperty= {}; 
+                            xproperty['setCalendarEntity']=events.length;
+                            xproperty['setXNamespace']="publication_uri";
+                            xproperty['setXValue']=$(node).attr('rdf:resource');
+                            xproperties.push(xproperty);
+                        }
+                    },
+                    'dc:subject' : {
+                        multiple: true,
+                        setter : 'addTheme',
+                        format : function(node){ 
+                            var themeName = $(node).text(); 
+                            return getThemeIdFromName(themeName);
+                        },
+                        action : function(node){
+                            var themeName = $(node).text(); 
+                            if(getThemeIdFromName(themeName)=== -1 ){
+                                themes.push({setLibelle:format(themeName)});  
+                            }
+                        }
+                    },
+                    'swc:hasLocation' : {
+                        setter : 'setLocation',
+                        format : function(node){ 
+                            var key = $(node).attr('rdf:resource');
+                            if(objectMap[key])
+                                locationName = objectMap[key]['setName'];
+                            else {
+                                locationName = key.split("/");
+                                locationName = locationName[locationName.length -1 ];
+                            }
+                            return getLocationIdFromName(locationName);
+                        },
+                        action : function(node){
+                            var key = $(node).attr('rdf:resource');
+                            if(objectMap[key])
+                                locationName = objectMap[key]['setName'];
+                            else {
+                                locationName = key.split("/");
+                                locationName = locationName[locationName.length -1 ];
+                            }
+                            if(getLocationIdFromName(locationName)=== -1 ){
+                                locations.push({setDescription:"",setName:format(locationName)});  
+                            }
+                        }
+                    },
+                    'icaltzd:location' : {
+                        setter : 'setLocation',
+                        format : function(node){ 
+                            var key = $(node).attr('rdf:resource');
+                            if(objectMap[key])
+                                locationName = objectMap[key]['setName'];
+                            else {
+                                locationName = key.split("/");
+                                locationName = locationName[locationName.length -1 ];
+                            }
+                            return getLocationIdFromName(locationName);
+                        },
+                    },
+                    'foaf:homepage' : {
+                        setter : 'setUrl',
+                        format : function(node){ 
+                            return $(node).attr('rdf:resource');
+                        }, 
+                    },
+                },
+                action : function(node,event){
+                      // EVENT CAT
+                    var catName = node.nodeName.split("swc:").join("").split("event:").join("");
+                    if(catName=="NamedIndividual")catName= getNodeName(node);
+                    var tmp=catName;
+                    if(tmp.split("Event").join("")!="")
+                    {
+                        catName=tmp;
+                    }else //OWL fix
+                    {
+                        catName = getNodeName(node).split("swc:").join("").split("event:").join("") ;
+                        tmp=catName;
+                        if(tmp.split("Event").join("")!="")
+                        {
+                            catName=tmp; 
+                        }
+                    }  //OWL fix
+
+                    var catId = getCategoryIdFromName(catName);
+                    if(catId==undefined){ 
+                      var category= {}; 
+                      category['setName']=catName;
+                      if(catName == "ConferenceEvent") confName = event['setSummary'];
+                      categories.push(category);
+                      catId = categories.length-1;
+                    }
+                    event['addCategorie']=catId;
+                    
+                    
+                      // EVENT store URI
+                    var xproperty= {}; 
+                    xproperty['setCalendarEntity']=events.length;
+                    xproperty['setXNamespace']="event_uri";
+                    xproperty['setXValue']=$(node).attr('rdf:about');
+                    xproperties.push(xproperty);
+                },
+                
+            };
 
 
 
-
-
-
-
-
-            var rootNode = formatConfig[format].getRootNode(completeConfRdf);
-            var mappingConfig = formatConfig[format]; 
+            function add(addArray,mapping,node){
+                var rtnArray = {};
+                var key = $(node).attr("rdf:about");
+                $(node).children().each(function(){ 
+                    if(mapping.label[this.nodeName]){
+                        if(mapping.label[this.nodeName].action){ 
+                            mapping.label[this.nodeName].action(this);
+                        }
+                        if(mapping.label[this.nodeName].setter){
+                            var val = this.textContent;
+                            if(mapping.label[this.nodeName].format){   
+                                val = mapping.label[this.nodeName].format(this);
+                            }
+                            val = mapping.label[this.nodeName].setter === false ? val : typeof val === 'string' ? format(val) : val ;
+                            if(mapping.label[this.nodeName].multiple === true){
+                                if(!rtnArray[mapping.label[this.nodeName].setter])
+                                    rtnArray[mapping.label[this.nodeName].setter]={};
+                                var index = Object.size(rtnArray[mapping.label[this.nodeName].setter]);
+                                rtnArray[mapping.label[this.nodeName].setter][index] = val;
+                            }else{
+                                rtnArray[mapping.label[this.nodeName].setter]= val;
+                            }
+                        } 
+                    }
+                });
+                if(mapping.action){
+                    mapping.action(node,rtnArray); 
+                }
+                if(Object.size(rtnArray) > 0){
+                    objectMap[key] = rtnArray;
+                    addArray.push( rtnArray );
+                }
+            }
 
             //////////////////////////////////////////////////////////////////////////
             ///////////////////////  first round for locations  //////////////////////
-            ////////////////////////////////////////////////////////////////////////// 
+            //////////////////////////////////////////////////////////////////////////
+            
+            // console.log($(completeConfRdf).children().children()); 
+             
 
             rootNode.children().each(function(index,node){
                 if( node.nodeName=="NamedIndividual" ) {
                     var n = getNodeName(node); 
                     if(n && n.indexOf(locationMapping.nodeName)!= -1){  
-                        add(locations,mappingConfig.locationMapping,this); 
+                        add(locations,locationMapping,this); 
                     }
                 }
             }); 
- 
+
+            //console.log('-------locations--------');
+            //console.log(locations);
             //////////////////////////////////////////////////////////////////////////
             ///////////////////////////////////  Event  //////////////////////////////
             //////////////////////////////////////////////////////////////////////////
-         
-            rootNode.children().each(function(index,node){
-                if( node.nodeName=="NamedIndividual" ){
-                    var n = getNodeName(node);
-                    if(n && n.indexOf(eventMapping.nodeName)!= -1){
-                        add(events,mappingConfig.eventMapping,this); 
+             
+                rootNode.children().each(function(index,node){
+                    if( node.nodeName=="NamedIndividual" ){
+                        var n = getNodeName(node);
+                        if(n && n.indexOf(eventMapping.nodeName)!= -1){
+                            add(events,eventMapping,this); 
+                        }
                     }
-                }
-            });  
-         
+                });  
+            
+            
             //////////////////////////////////////////////////////////////////////////
             //////////////////////////////////  Person  //////////////////////////////
             //////////////////////////////////////////////////////////////////////////
@@ -83,7 +311,7 @@ function run(url,callback,fallback){
                 if( node.nodeName=="NamedIndividual" ) {
                     var n = getNodeName(node); 
                     if(n && n.indexOf(personMapping.nodeName)!= -1){  
-                        add(persons,mappingConfig.personMapping,this); 
+                        add(persons,personMapping,this); 
                     }
                 }
             }); 
@@ -146,7 +374,7 @@ function run(url,callback,fallback){
             }); 
              
             //////////////////////////////////////////////////////////////////////////
-            //////////////////////// fifth round startAt less  ///////////////////////
+            ////////////////////////  startAt less  ///////////////////////////
             //////////////////////////////////////////////////////////////////////////
             //startat less get the 'now' date
              for(var i=0;i<events.length;i++){
@@ -205,76 +433,16 @@ function run(url,callback,fallback){
                 }
             }  */
             
+            send(); 
+            //////////////////////////////////////////////////////////////////////////
+            ////////////////////////  run() workflow end  ////////////////////////////
+            //////////////////////////////////////////////////////////////////////////
             
-            // SEND TO IMPORT PHP SCRIPT 
-            for (var i=0;i<locations.length;i++)
-            {
-                delete locations[i]["uri"];
-            }
-            var dataArray={}; 
-            dataArray['locations']=locations;  
-            dataArray['categories']=categories;
-            dataArray['persons']=persons;   
-            dataArray['themes']=themes;   
-            dataArray['events']=events;
-            dataArray['xproperties']=xproperties; 
-            console.log('---------finished---------' );
-            console.log(dataArray); 
-            if(events.length<1 && xproperties.length<1 && relations.length<1 && locations.length<1 && persons.length<1&& themes.length<1)
-            {
-                if(fallback!=undefined)fallback("bad format"); 
-                return;
-            }
-            if(callback!=undefined)callback(dataArray,confName);  
-
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////  run() workflow end  //////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////
             
-            /**
-             *          add
-             *          
-             * parse config files
-             * @param {array} addArray      the array to populate
-             * @param {object} mapping      mapping object (defined in config files)
-             * @param {dom elem} node       the xml dom element from the import file
-             */
-            function add(addArray,mapping,node){
-                var rtnArray = {};
-                var key = $(node).attr("rdf:about");
-                $(node).children().each(function(){ 
-                    if(mapping.label[this.nodeName]){
-                        if(mapping.label[this.nodeName].action){ 
-                            mapping.label[this.nodeName].action(this);
-                        }
-                        if(mapping.label[this.nodeName].setter){
-                            var val = this.textContent;
-                            if(mapping.label[this.nodeName].format){   
-                                val = mapping.label[this.nodeName].format(this);
-                            }
-                            val = mapping.label[this.nodeName].setter === false ? val : typeof val === 'string' ? format(val) : val ;
-                            if(mapping.label[this.nodeName].multiple === true){
-                                if(!rtnArray[mapping.label[this.nodeName].setter])
-                                    rtnArray[mapping.label[this.nodeName].setter]={};
-                                var index = Object.size(rtnArray[mapping.label[this.nodeName].setter]);
-                                rtnArray[mapping.label[this.nodeName].setter][index] = val;
-                            }else{
-                                rtnArray[mapping.label[this.nodeName].setter]= val;
-                            }
-                        } 
-                    }
-                });
-                if(mapping.action){
-                    mapping.action(node,rtnArray); 
-                }
-                if(Object.size(rtnArray) > 0){
-                    objectMap[key] = rtnArray;
-                    addArray.push( rtnArray );
-                }
-            }
-
+            //EVENT PARSE : CATCH START, END AT, LOCATION
+            // THEN ADD 2 XPROPERTIES RELATED TO ITS EVENT AND PUBLICATION
+             
+             
             //ADD BOTH PARENT AND CHILD RELATION BETWEEN 2 EVENTS
             function addRelation(event,currentEventId){ 
                 var found=false;
@@ -512,6 +680,30 @@ function run(url,callback,fallback){
             }
             
             
+            // SEND TO IMPORT PHP SCRIPT
+            function send()
+            {
+
+                for (var i=0;i<locations.length;i++)
+                {
+                    delete locations[i]["uri"];
+                }
+                var dataArray={}; 
+                dataArray['locations']=locations;  
+                dataArray['categories']=categories;
+                dataArray['persons']=persons;   
+                dataArray['themes']=themes;   
+                dataArray['events']=events;
+                dataArray['xproperties']=xproperties; 
+                console.log('---------finished---------' );
+                console.log(dataArray); 
+                if(events.length<1 && xproperties.length<1 && relations.length<1 && locations.length<1 && persons.length<1&& themes.length<1)
+                {
+                    if(fallback!=undefined)fallback("bad format"); 
+                    return;
+                }
+                if(callback!=undefined)callback(dataArray,confName); 
+           }
            
            
             function getNodeName(node){
@@ -541,8 +733,8 @@ function run(url,callback,fallback){
                 return uri;
                     
             }
+           
        },
-       //get import file ajax fallback
        error:function(a,b,c){
             console.log(a)
             console.log(b)
@@ -550,7 +742,13 @@ function run(url,callback,fallback){
             if(fallback)fallback('Request failed giving this error <b>"'+c+'"</b> ');
        }
    });
-} // end run()
+}
+
+
+
+
+
+
 
 
 
@@ -577,6 +775,8 @@ function format(string){
 
  Object.size = function(obj) {
     var size = 0, key;
-    for (key in obj)if (obj.hasOwnProperty(key)) size++;
+    for (key in obj) {
+        if (obj.hasOwnProperty(key)) size++;
+    }
     return size;
 };
