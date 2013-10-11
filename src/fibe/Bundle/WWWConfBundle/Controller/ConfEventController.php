@@ -128,7 +128,8 @@ class ConfEventController extends Controller
                       'class'    => 'fibeWWWConfBundle:Paper',
                       'property' => 'title',
                       'required' => false,
-                      'multiple' => false))
+                      'multiple' => false,
+                      'label'    => "Select paper"))
             ->getForm();
 
          $form_theme = $this->createFormBuilder($entity)
@@ -136,7 +137,8 @@ class ConfEventController extends Controller
                   'class'    => 'fibeWWWConfBundle:Theme',
                   'required' => false,
                   'property' => 'libelle',
-                  'multiple' => false))
+                  'multiple' => false,
+                  'label'    => "Select theme" ))
             ->getForm();
 
         $deleteForm = $this->createDeleteForm($id);

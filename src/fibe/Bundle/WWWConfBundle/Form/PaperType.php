@@ -18,7 +18,13 @@ class PaperType extends AbstractType
             ->add('month')
             ->add('year')
             ->add('url_pdf')
-            ->add('keywords')
+            ->add('keywords', 'entity', array(
+                      'class'    => 'fibeWWWConfBundle:Keyword',
+                      'property' => 'libelle',
+                      'required' => false,
+                      'multiple' => false,
+                      'required' => false,
+                      'label'    => "Select keyword"))
             ->add('confEvents')
             ->add('conference')
         ;
