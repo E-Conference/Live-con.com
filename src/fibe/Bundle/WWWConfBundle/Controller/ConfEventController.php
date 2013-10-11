@@ -15,6 +15,8 @@ use fibe\Bundle\WWWConfBundle\Entity\Theme;
 use fibe\Bundle\WWWConfBundle\Form\RoleType as RoleType;
 use fibe\Bundle\WWWConfBundle\Form\ThemeType as ThemeType;
 
+use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;  
+
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Exception\NotValidCurrentPageException;
@@ -57,7 +59,17 @@ class ConfEventController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('confevent_show', array('id' => $entity->getId())));
+            $xprop= new XProperty(); 
+            $xprop->setXNamespace("event_uri"); 
+            $xprop->setXKey(rand(0,999999));
+            $xprop->setXValue("http://dataconf-event/" . $entity->getId());  
+            $xprop->setCalendarEntity($entity);
+            
+            $em->persist($xprop); 
+
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('schedule_confevent_show', array('id' => $entity->getId())));
         }
 
         return $this->render('fibeWWWConfBundle:ConfEvent:new.html.twig', array(
@@ -167,16 +179,19 @@ class ConfEventController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ConfEvent entity.');
         }
+ 
+        $form = $this->createForm(new ConfEventType(), $entity);
+        $form->bind($request);
 
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new ConfEventType(), $entity);
-        $editForm->bind($request);
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($entity); 
 
-      
-            $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('schedule_confevent_edit', array('id' => $id)));
+        }
+
+            return $this->redirect($this->generateUrl('schedule_confevent_show', array('id' => $id)));
     
     }
 

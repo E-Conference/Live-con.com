@@ -16,6 +16,7 @@ class PersonType extends AbstractType
             ->add('email')
             ->add('agent')
             ->add('title')
+            ->add('description')
             // ->add('name')  // the name is the concatenation of first and last name
             ->add('homepage')
             ->add('twitter')

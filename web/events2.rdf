@@ -1,0 +1,851 @@
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY dcterms "http://purl.org/dc/terms/" >
+    <!ENTITY foaf "http://xmlns.com/foaf/0.1/" >
+    <!ENTITY dbpedia "http://dbpedia.org/property/" >
+    <!ENTITY bibo "http://purl.org/ontology/bibo/" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY dc "http://purl.org/dc/elements/1.1/" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY swrc "http://swrc.ontoware.org/ontology#" >
+    <!ENTITY vcard "http://www.w3.org/2001/vcard-rdf/3.0#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY ical "http://www.w3.org/2002/12/cal/icaltzd#" >
+    <!ENTITY geo "http://www.w3.org/2003/01/geo/wgs84_pos#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY swc "http://data.semanticweb.org/ns/swc/ontology#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.w3.org/2002/07/owl"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+     xmlns:foaf="http://xmlns.com/foaf/0.1/"
+     xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#"
+     xmlns:dcterms="http://purl.org/dc/terms/"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:bibo="http://purl.org/ontology/bibo/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:dbpedia="http://dbpedia.org/property/"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:swrc="http://swrc.ontoware.org/ontology#"
+     xmlns:ical="http://www.w3.org/2002/12/cal/icaltzd#"
+     xmlns:swc="http://data.semanticweb.org/ns/swc/ontology#">
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#completeGraph -->
+
+    <AnnotationProperty rdf:about="&swc;completeGraph"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasAcronym -->
+
+    <AnnotationProperty rdf:about="&swc;hasAcronym"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasLogo -->
+
+    <AnnotationProperty rdf:about="&swc;hasLogo"/>
+    
+
+
+    <!-- http://purl.org/dc/elements/1.1/creator -->
+
+    <AnnotationProperty rdf:about="&dc;creator"/>
+    
+
+
+    <!-- http://purl.org/dc/elements/1.1/subject -->
+
+    <AnnotationProperty rdf:about="&dc;subject"/>
+    
+
+
+    <!-- http://purl.org/dc/elements/1.1/title -->
+
+    <AnnotationProperty rdf:about="&dc;title"/>
+    
+
+
+    <!-- http://purl.org/ontology/bibo/authorList -->
+
+    <AnnotationProperty rdf:about="&bibo;authorList"/>
+    
+
+
+    <!-- http://purl.org/ontology/bibo/editorList -->
+
+    <AnnotationProperty rdf:about="&bibo;editorList"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#abstract -->
+
+    <AnnotationProperty rdf:about="&swrc;abstract"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#affiliation -->
+
+    <AnnotationProperty rdf:about="&swrc;affiliation"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#booktitle -->
+
+    <AnnotationProperty rdf:about="&swrc;booktitle"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#editor -->
+
+    <AnnotationProperty rdf:about="&swrc;editor"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#month -->
+
+    <AnnotationProperty rdf:about="&swrc;month"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#series -->
+
+    <AnnotationProperty rdf:about="&swrc;series"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#year -->
+
+    <AnnotationProperty rdf:about="&swrc;year"/>
+    
+
+
+    <!-- http://www.w3.org/2002/12/cal/icaltzd#description -->
+
+    <AnnotationProperty rdf:about="&ical;description"/>
+    
+
+
+    <!-- http://www.w3.org/2002/12/cal/icaltzd#dtend -->
+
+    <AnnotationProperty rdf:about="&ical;dtend"/>
+    
+
+
+    <!-- http://www.w3.org/2002/12/cal/icaltzd#dtstart -->
+
+    <AnnotationProperty rdf:about="&ical;dtstart"/>
+    
+
+
+    <!-- http://www.w3.org/2002/12/cal/icaltzd#summary -->
+
+    <AnnotationProperty rdf:about="&ical;summary"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/based_near -->
+
+    <AnnotationProperty rdf:about="&foaf;based_near"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/firstName -->
+
+    <AnnotationProperty rdf:about="&foaf;firstName"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/homepage -->
+
+    <AnnotationProperty rdf:about="&foaf;homepage"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/lastName -->
+
+    <AnnotationProperty rdf:about="&foaf;lastName"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/made -->
+
+    <AnnotationProperty rdf:about="&foaf;made"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/maker -->
+
+    <AnnotationProperty rdf:about="&foaf;maker"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/mbox_sha1sum -->
+
+    <AnnotationProperty rdf:about="&foaf;mbox_sha1sum"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/member -->
+
+    <AnnotationProperty rdf:about="&foaf;member"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/name -->
+
+    <AnnotationProperty rdf:about="&foaf;name"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Datatypes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.w3.org/2001/XMLSchema#date -->
+
+    <rdfs:Datatype rdf:about="&xsd;date"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasLocation -->
+
+    <ObjectProperty rdf:about="&swc;hasLocation"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasPart -->
+
+    <ObjectProperty rdf:about="&swc;hasPart"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasRelatedDocument 
+    A changer
+    -->
+
+    <ObjectProperty rdf:about="&swc;hasRelatedDocument">
+        <inverseOf rdf:resource="&swc;relatedToEvent"/>
+        <rdfs:subPropertyOf rdf:resource="&owl;topObjectProperty"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasRole -->
+
+    <ObjectProperty rdf:about="&swc;hasRole">
+        <inverseOf rdf:resource="&swc;isRoleAt"/>
+        <rdfs:subPropertyOf rdf:resource="&owl;topObjectProperty"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#heldBy -->
+
+    <ObjectProperty rdf:about="&swc;heldBy">
+        <inverseOf rdf:resource="&swc;holdsRole"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#holdsRole 
+    
+    A changer
+    -->
+
+    <ObjectProperty rdf:about="&swc;holdsRole">
+        <inverseOf rdf:resource="&swc;heldBy"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isPartOf -->
+
+    <ObjectProperty rdf:about="&swc;isPartOf"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isRoleAt -->
+
+    <ObjectProperty rdf:about="&swc;isRoleAt">
+        <inverseOf rdf:resource="&swc;hasRole"/>
+        <rdfs:subPropertyOf rdf:resource="&owl;topObjectProperty"/>
+    </ObjectProperty>
+
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isSubEventOf 
+    
+    A changer
+    -->
+
+    <TransitiveProperty rdf:about="&swc;isSubEventOf">
+        <inverseOf rdf:resource="&swc;isSuperEventOf"/>
+    </TransitiveProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isSuperEventOf 
+    
+    A changer
+    -->
+
+    <TransitiveProperty rdf:about="&swc;isSuperEventOf">
+        <inverseOf rdf:resource="&swc;isSubEventOf"/>
+        <rdfs:subPropertyOf rdf:resource="&owl;topObjectProperty"/>
+    </TransitiveProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#relatedToEvent 
+    
+    A changer
+    -->
+
+    <ObjectProperty rdf:about="&swc;relatedToEvent">
+        <inverseOf rdf:resource="&swc;hasRelatedDocument"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isSubPropertyOf -->
+
+    <ObjectProperty rdf:about="&swc;isSubPropertyOf"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isSuperPropertyOf -->
+
+    <ObjectProperty rdf:about="&swc;isSuperPropertyOf">
+        <inverseOf rdf:resource="&swc;isSubPropertyOf"/>
+    </ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#AcademicEvent -->
+
+    <Class rdf:about="&swc;AcademicEvent"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#BreakEvent -->
+
+    <Class rdf:about="&swc;BreakEvent">
+        <rdfs:subClassOf rdf:resource="&swc;NonAcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#Chair -->
+
+    <Class rdf:about="&swc;Chair">
+        <rdfs:subClassOf rdf:resource="&swc;Role"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#ConferenceEvent -->
+
+    <Class rdf:about="&swc;ConferenceEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#KeynoteTalk -->
+
+    <Class rdf:about="&swc;KeynoteTalk">
+        <rdfs:subClassOf rdf:resource="&swc;TalkEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#NonAcademicEvent -->
+
+    <Class rdf:about="&swc;NonAcademicEvent"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#PanelEvent -->
+
+    <Class rdf:about="&swc;PanelEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#Poster -->
+
+    <Class rdf:about="&swc;Poster"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#Presenter -->
+
+    <Class rdf:about="&swc;Presenter">
+        <rdfs:subClassOf rdf:resource="&swc;Role"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#ProgrammeCommitteeMember -->
+
+    <Class rdf:about="&swc;ProgrammeCommitteeMember">
+        <rdfs:subClassOf rdf:resource="&swc;Role"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#Role -->
+
+    <Class rdf:about="&swc;Role"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#SessionEvent -->
+
+    <Class rdf:about="&swc;SessionEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#SocialEvent -->
+
+    <Class rdf:about="&swc;SocialEvent">
+        <rdfs:subClassOf rdf:resource="&swc;NonAcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#TalkEvent -->
+
+    <Class rdf:about="&swc;TalkEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#OrganisedEvent -->
+
+    <Class rdf:about="&swc;OrganisedEvent">
+        <rdfs:subClassOf rdf:resource="&swc;NonAcademicEvent"/>
+    </Class>
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#TrackEvent -->
+
+    <Class rdf:about="&swc;TrackEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#TutorialEvent -->
+
+    <Class rdf:about="&swc;TutorialEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#WorkshopEvent -->
+
+    <Class rdf:about="&swc;WorkshopEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#InProceedings -->
+
+    <Class rdf:about="&swrc;InProceedings"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#Proceedings -->
+
+    <Class rdf:about="&swrc;Proceedings"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/Organization -->
+
+    <Class rdf:about="&foaf;Organization"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/Person -->
+
+    <Class rdf:about="&foaf;Person"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+    
+    <!--  LOCATIONS  -->
+    <NamedIndividual rdf:about="http://www.blendconference.com/rooms/auditorium-lumiere">
+        <rdf:type rdf:resource="&swc;MeetingRoomplace"/>
+        <rdfs:label>Auditorium Lumière</rdfs:label>
+        <rdfs:comment>Amphithéatre de 800 places</rdfs:comment>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/rooms/rhone-1">
+        <rdf:type rdf:resource="&swc;MeetingRoomplace"/>
+        <rdfs:label>Rhône 1</rdfs:label>
+        <rdfs:comment>Salle de 80 places</rdfs:comment>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/rooms/rhone-2">
+        <rdf:type rdf:resource="&swc;MeetingRoomplace"/>
+        <rdfs:label>Rhône 2</rdfs:label>
+        <rdfs:comment>Salle de 80 places</rdfs:comment>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/rooms/rhone-3">
+        <rdf:type rdf:resource="&swc;MeetingRoomplace"/>
+        <rdfs:label>Rhône 3</rdfs:label>
+        <rdfs:comment>Salle de 180 places</rdfs:comment>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/rooms/rhone-4">
+        <rdf:type rdf:resource="&swc;MeetingRoomplace"/>
+        <rdfs:label>Rhône 4</rdfs:label>
+        <rdfs:comment>Salle de 50 places</rdfs:comment>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/rooms/salon-pasteur">
+        <rdf:type rdf:resource="&swc;MeetingRoomplace"/>
+        <rdfs:label>Salon Pasteur</rdfs:label>
+        <rdfs:comment>Salle de 280 places</rdfs:comment>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/rooms/forum">
+        <rdf:type rdf:resource="&swc;MeetingRoomplace"/>
+        <rdfs:label>Forum</rdfs:label>
+        <rdfs:comment></rdfs:comment>
+    </NamedIndividual>
+    
+
+
+     <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-98">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>W3C</rdfs:label>
+        <ical:dtstart>2013-10-01T11:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T12:00:00+02:00</ical:dtend>
+        <ical:description>
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-3"/>
+    </NamedIndividual>
+
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-99">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>W3C</rdfs:label>
+        <ical:dtstart>2013-10-01T12:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T12:30:00+02:00</ical:dtend>
+        <ical:description>
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-3"/>
+    </NamedIndividual>
+
+      <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-99">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>La Technique au service de l'entrepreunariat — Comment transformer un buzz en business</rdfs:label>
+        <ical:dtstart>2013-10-01T13:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T14:30:00+02:00</ical:dtend>
+        <ical:description>
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-3"/>
+    </NamedIndividual>
+
+     <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-100">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Panorama des stratégies black hat seo en 2013 : netlinking, réseaux, contenu, outils</rdfs:label>
+        <ical:dtstart>2013-10-01T14:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T15:30:00+02:00</ical:dtend>
+        <ical:description>Panorama des stratégies black hat seo en 2013 : netlinking, réseaux, contenu, outils
+        </ical:description>
+        <dc:subject>Marketing</dc:subject>
+        <dc:subject>Recherche</dc:subject>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-3"/>
+    </NamedIndividual>
+
+    
+    
+                                    <!-- Salle Pasteur -->
+                
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-20">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Lean Analytics : exploiter la donnée et le test pour améliorer sa performance digitale</rdfs:label>
+        <ical:dtstart>2013-10-02T09:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T10:00:00+02:00</ical:dtend>
+        <ical:description>Le lean management (mettre à contribution tous les acteurs pour éliminer les gaspillages qui réduisent l’efficacité et la performance d’une entreprise) est une tendance de fond pour les entreprises, quelque soit leur taille. L’objectif de cette conférence est de présenter la démarche, des outils des des études de cas pour mieux l’appréhender.
+        I. Analyse du contexte digital : « Bienvenue dans un monde de grande incertitude »
+        II. Présentation du lean management dans les secteurs de l’industrie et des services
+        III Présentation du concept de lean analytics et de lean start-up
+        IV. Bénéfices de l’approche lean pour l’amélioration de la performance digitale et la conduite de projets webmarketing (SEO, SEA, display, A/B Testing…)
+        V. Les outils et méthodes
+        VI. Etude de cas
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-21">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Tour d’horizon de Node.js</rdfs:label>
+        <ical:dtstart>2013-10-02T10:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T11:30:00+02:00</ical:dtend>
+        <ical:description>Node.js est l’une des technologies les plus en vue de ces dernières années, des services web à la   robotique ; désormais bien industrialisé et doté d’un écosystème et d’une communauté très vifs, Node a remis sur le devant de la scène un modèle de programmation non bloquant / asynchrone et, surtout, des techniques de code élégantes pour réaliser celui-ci.
+        Dans cette présentation, Christophe Porteneuve va tenter de brosser un tableau de Node.js aussi concret que possible, en posant rapidement quelques notions fondamentales (Node, modules, npm, asynchrone…) et en déroulant le développement d’une application web qui mettra conjointement en œuvre quelques-uns des usages les plus célèbres, d’Express à Docco en passant par de l’OAuth 2, du Redis, des Web Sockets, Brunch, Mocha et Uglify.
+        Et peut-être même, qui sait, un petit bonus qui sortira du strict domaine dématérialisé du web pour se manifester physiquement.
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-32">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>La puissance du copywriting au service de l’UX</rdfs:label>
+        <ical:dtstart>2013-10-02T11:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T12:00:00+02:00</ical:dtend>
+        <ical:description>
+        </ical:description>
+        <dc:subject>Design</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-33">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>La contrainte génératrice d’UX performante</rdfs:label>
+        <ical:dtstart>2013-10-02T12:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T12:30:00+02:00</ical:dtend>
+        <ical:description>
+        </ical:description>
+        <dc:subject>Design</dc:subject>
+        <dc:subject>Marketing</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-22">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>Optimiser la lisibilité typographique sur le web</rdfs:label>
+        <ical:dtstart>2013-10-02T13:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T14:30:00+02:00</ical:dtend>
+        <ical:description>Cette conférence sera l’opportunité de discuter d’un sujet finalement assez peu abordé en design web mais pourtant primordial : la lisibilité du contenu.
+        </ical:description>
+        <dc:subject>Design</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-34">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Pourquoi les workers queues sont importantes pour dynamiser votre application web ?</rdfs:label>
+        <ical:dtstart>2013-10-02T14:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T15:00:00+02:00</ical:dtend>
+        <ical:description>Cette conférence porte sur les Queues Worker, ce sont des briques techniques qui font le travail en arrière plan sans ralentir l’utilisateur. On peut les utiliser pour des traitements lourds comme l’envoi d’emails, l’envoi de messages sur les réseaux sociaux, tout ce qui pourrait ralentir l’utilisateur dans la navigation du site.
+        Les questions abordées lors de cette conférence :
+        Les queues workers c’est quoi?
+        Pourquoi les utiliser avec des cas d’utilisation
+        Les queues workers existants avec un comparatif.
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+    
+    
+    <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-35">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Dart, one language to rule them all</rdfs:label>
+        <ical:dtstart>2013-10-02T15:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-02T15:30:00+02:00</ical:dtend>
+        <ical:description>Dart est un langage (et une plateforme incluant VM, compilateur, etc.) actuellement en cours de développement chez Google. Son mode de développement est itératif et représente un juste équilibre en tant que langage client et serveur. De plus le fait que Google ait réuni ses plus grands talents pour le développer sont autant de points qui donnent à penser que Dart sera une technologie majeure dans les prochaines années.
+        Avant de plonger dans le code, nous commencerons par étudier les raisons qui ont conduit Google à se lancer dans une telle aventure. Au programme :
+        Dette technologique
+        Brevets logiciels
+        Flex
+        GWT
+        Oracle
+        Scala
+        NodeJS
+        Android
+        Nous passerons ensuite en revue la dernière version du langage et de son écosystème :
+        Les bases du langage ou comment coder efficacement
+        Les différents environnements cibles visés par Google : applications web côté client, mais également serveur et mobile avec Dart sur Android
+        Nouvelles API Streams, Mixins, Isolates
+        Web UI : développement web orienté composant
+        Pub : le « Maven » de Dart (en mieux je vous rassure)
+        Les différents environnements de développement disponibles
+        Minimiser la duplication de code en partageant le code entre client et serveur
+        Retour sur dart2js, le compilateur Dart vers Javascript
+        Enfin, la dernière partie de la présentation sera dédiée à des démonstrations d’applications Dart en mode VM Dart ou Javascript.
+        Loin de se cantonner au développement web côté client, cette présentation sera l’occasion d’explorer les possibilités offertes par Dart pour permettre de construire une nouvelle génération d’application.
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/salon-pasteur"/>
+    </NamedIndividual>
+    
+     <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-60">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Le developpement rapide d'applications audio pour le web </rdfs:label>
+        <ical:dtstart>2013-10-01T11:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T12:00:00+02:00</ical:dtend>
+        <ical:description>La WEB audio API de HTML5 préfigure le futur de l’audio dans le WEB, en permettant de développer des applications audio plus sophistiquées, plus interactives et plus performantes.
+        Faust (Functional Audio Stream) est un langage de programmation spécifiquement conçu pour les applications musicales. Il permet de développer beaucoup plus rapidement des applications efficaces et fiables pour les principales plateformes audios (plugins VST, MaxMSP, Puredata, applications MacOSX, iPhone, Linux, etc.).Nous montrerons comment cette technologie peut être maintenant intégrée dans la WEB audio API, soit en utilisant le générateur de code JavaScript ou directement de manière native grâce à la chaine de compilation dynamique basée sur LLVM.
+        </ical:description>
+        <dc:subject>Recherche</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-4"/>
+    </NamedIndividual>
+
+
+     <NamedIndividual rdf:about="http://www.blendconference.com/workshop-event/workshop-70">
+        <rdf:type rdf:resource="&swc;WorkshopEvent"/>
+        <rdfs:label>Combien vous coûte le support IE7 ?</rdfs:label>
+        <ical:dtstart>2013-10-01T12:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T12:30:00+02:00</ical:dtend>
+        <ical:description>
+        </ical:description>
+        <dc:subject>Recherche</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-4"/>
+    </NamedIndividual>
+
+
+     <NamedIndividual rdf:about="http://www.blendconference.com/session-event/session-5">
+        <rdf:type rdf:resource="&swc;SessionEvent"/>
+        <rdfs:label>Networking (1ière partie)</rdfs:label>
+        <ical:dtstart>2013-10-01T09:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T10:00:00+02:00</ical:dtend>
+        <ical:description>
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+
+     <NamedIndividual rdf:about="http://www.blendconference.com/session-event/session-6">
+        <rdf:type rdf:resource="&swc;SessionEvent"/>
+        <rdfs:label>Networking (2éme partie)</rdfs:label>
+        <ical:dtstart>2013-10-01T10:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T12:30:00+02:00</ical:dtend>
+        <ical:description>
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+
+     <NamedIndividual rdf:about="http://www.blendconference.com/session-event/session-7">
+        <rdf:type rdf:resource="&swc;SessionEvent"/>
+        <rdfs:label>Networking (3éme partie)</rdfs:label>
+        <ical:dtstart>2013-10-01T13:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T15:30:00+02:00</ical:dtend>
+        <ical:description>
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/forum"/>
+    </NamedIndividual>
+
+     <NamedIndividual rdf:about="http://www.blendconference.com/session-event/session-8">
+        <rdf:type rdf:resource="&swc;SessionEvent"/>
+        <rdfs:label>Concevoir son API Web</rdfs:label>
+        <ical:dtstart>2013-10-01T09:00:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T10:00:00+02:00</ical:dtend>
+        <ical:description>L’API est un peu de Graal des données mais elle a un défaut majeur : Une fois publiée vous n’en contrôlez plus les clients et faire évoluer les bases n’est pas évident.
+        Ce que vous construisez est là pour longtemps. Quelles sont les retours d’expériences et bonnes pratiques pour ne pas se prendre les pieds dans le tapis ?
+        Vous avez certainement déjà entendu parler de REST mais les choses sont plus complexes que ça. Comment gérer les évolutions et les versions de l’API ? les formats en entrée et en sortie ? les variations et paramètres d’une même ressources ? les relations entre ressources ? la sécurité ? l’authentification ? la gestion des erreurs ? la pagination ? l’i18n et l10n ? Qu’est-ce que l’hypermedia ?. .
+        Plus généralement, nous partons avec pour objectif premier de concevoir une API le plus tôt possible, avec des bases solides mais les plus simples possible.
+        </ical:description>
+        <dc:subject>Tech</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-3"/>
+    </NamedIndividual>
+
+     <NamedIndividual rdf:about="http://www.blendconference.com/talk-event/talk-98">
+        <rdf:type rdf:resource="&swc;TalkEvent"/>
+        <rdfs:label>HTML5 W3C</rdfs:label>
+        <ical:dtstart>2013-10-01T10:30:00+02:00</ical:dtstart>
+        <ical:dtend>2013-10-01T11:30:00+02:00</ical:dtend>
+        <ical:description>
+        </ical:description>
+        <dc:subject>Business</dc:subject>
+        <swc:isSubEventOf rdf:resource="http://www.blendconference.com"/>
+        <swc:hasLocation rdf:resource="http://www.blendconference.com/rooms/rhone-3"/>
+    </NamedIndividual>
+    
+</rdf:RDF>

@@ -23,15 +23,18 @@
 
         <button class="btn btn-primary" type="submit"><i class="icon-ok"></i> Save</button>
 
-          </form>
+            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
+                {{ form_rest(edit_form  )}}
+            </div> 
+    </form>
 
-               <form id="delete-event-form">
-                  <input type="hidden" name="_method" value="DELETE" />
-                    {{ form_widget(delete_form) }}
-                <button type="submit" class="btn btn-danger">
-                    <i class="icon-trash"></i>
-                </button>
-              </form>
+    <form id="delete-event-form">
+        <input type="hidden" name="_method" value="DELETE" />
+          {{ form_widget(delete_form) }}
+      <button type="submit" class="btn btn-danger">
+          <i class="icon-trash"></i>
+      </button>
+    </form>
          <p>
             <h1>Themes</h1>
             <div id="themes_related_list">
@@ -71,7 +74,6 @@
         $(document).ready(function() { $("select").select2(); });
       </script> 
 <script type="text/javascript">
-    
     var ajaxForms = [
         {
             formId : "#eventForm",
@@ -89,60 +91,61 @@
         },
     ];
 
-    for (var i=0; i<ajaxForms.length;i++){
+    $(document).ready(function() { 
+      for (var i in ajaxForms){
+        var form = ajaxForms[i];   
+        $(form.formId).off("submit").submit({form:form},function(e){ 
+          form = e.data.form;
+          $.post(form.route,               
+            $(form.formId).serialize(),
+            function(r){form.callback(r);}
+          );    
+          return false;
+        });
+      } 
 
-      var form = ajaxForms[i]; 
-      $(form.formId).submit(function(){
-        $.post(form.route,               
-          $(this).serialize(),
-          function(r){form.callback(r);}
-        );    
-        return false;
-      });
-    } 
+     //listen for the form beeing submitted
+     $("select[id='form_papers']").change(function(){
+        //get the url for the form
+        var id_paper= $(this).val();
+    
+        //start send the post request
+         $.post('{{path("schedule_confevent_addPaper") }}',               
+                  {id_entity : '{{entity.id}}', id_paper: id_paper},
+              function(response){
+                     $('#paper_related_list').html(response);
+                  
+              }, "html");    
+         });
 
-   //listen for the form beeing submitted
-   $("select[id='form_papers']").change(function(){
-      //get the url for the form
-      var id_paper= $(this).val();
-  
-      //start send the post request
-       $.post('{{path("schedule_confevent_addPaper") }}',               
-                {id_entity : '{{entity.id}}', id_paper: id_paper},
-            function(response){
-                   $('#paper_related_list').html(response);
-                
-            }, "html");    
-       });
+      //listen for the form beeing submitted
+     $("select[id='form_themes']").change(function(){
+        //get the url for the form
+        var id_theme= $(this).val();
+    
+        //start send the post request
+         $.post('{{path("schedule_confevent_addTheme") }}',               
+                  {id_entity : '{{entity.id}}', id_theme: id_theme}, 
+              function(response){
+                     $('#themes_related_list').html(response);
+                  
+              }, "html");    
+         });
 
-    //listen for the form beeing submitted
-   $("select[id='form_themes']").change(function(){
-      //get the url for the form
-      var id_theme= $(this).val();
-  
-      //start send the post request
-       $.post('{{path("schedule_confevent_addTheme") }}',               
-                {id_entity : '{{entity.id}}', id_theme: id_theme}, 
-            function(response){
-                   $('#themes_related_list').html(response);
-                
-            }, "html");    
-       });
-
-     $("#role_form").submit(function(){
-      //get the url for the form
-      var id_person = $('#fibe_bundle_wwwconfbundle_roletype_person').val();
-      var id_type = $('#fibe_bundle_wwwconfbundle_roletype_type').val();
-      //start send the post request
-       $.post("{{path('schedule_confevent_addPerson')}}",               
-               {id_person : id_person, id_type:id_type, id: "{{entity.id }}"} , 
-            function(response){
-                   $('#person_related_list').html(response);
-                
-            }, "html");    
-        return false;
-       });
-
+       $("#role_form").submit(function(){
+        //get the url for the form
+        var id_person = $('#fibe_bundle_wwwconfbundle_roletype_person').val();
+        var id_type = $('#fibe_bundle_wwwconfbundle_roletype_type').val();
+        //start send the post request
+         $.post("{{path('schedule_confevent_addPerson')}}",               
+                 {id_person : id_person, id_type:id_type, id: "{{entity.id }}"} , 
+              function(response){
+                     $('#person_related_list').html(response);
+                  
+              }, "html");    
+          return false;
+         });
+        })
 </script>
 {% endblock javascripts %}
 

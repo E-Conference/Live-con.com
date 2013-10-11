@@ -63,11 +63,13 @@ class ScheduleController extends Controller
                  ->find(1);
         $categories = $em->getRepository('IDCISimpleScheduleBundle:Category')->getOrdered();
         $locations = $em->getRepository('IDCISimpleScheduleBundle:Location')->findAll();
+        $themes = $em->getRepository('fibeWWWConfBundle:Theme')->findAll();
 
         return array(
                 'currentConf' => $conf,
                 'categories'  => $categories,
-                'locations'   => $locations
+                'locations'  => $locations,
+                'themes'   => $themes
             );     
     
 }
@@ -98,11 +100,19 @@ class ScheduleController extends Controller
                 $event->setEndAt(new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()))); 
                 $event->setStartAt(new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get())));  
                 $event->setSummary( $postData['title'] );
-                $event->setIsAllDay($postData['allDay']=="true") ;
-
+                $event->setIsAllDay($postData['allDay']=="true") ; 
                 $event->setWwwConf($conf);
-                
-                $em->persist($event);
+
+                $em->persist($event); 
+                $em->flush();
+
+                $xprop= new XProperty(); 
+                $xprop->setXNamespace("event_uri"); 
+                $xprop->setXKey(rand(0,999999));
+                $xprop->setXValue("http://dataconf-event/" . $event->getId());  
+                $xprop->setCalendarEntity($event);
+
+                $em->persist($xprop);  
                 $em->flush();
 
                 $JSONArray['id'] = $event->getId();

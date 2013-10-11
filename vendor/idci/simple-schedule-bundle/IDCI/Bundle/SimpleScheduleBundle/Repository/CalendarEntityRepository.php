@@ -137,6 +137,26 @@ class CalendarEntityRepository extends EntityRepository
             ;
         }
 
+        if(isset($params['before'])) {
+            $qb
+                ->andWhere('cer.endAt <= :before')
+                ->setParameter('before', new \DateTime($params['before']))
+            ;
+        }
+
+        if(isset($params['after'])) {
+            $qb
+                ->andWhere('cer.startAt >= :after')
+                ->setParameter('after', new \DateTime($params['after']))
+            ;
+        }
+
+        if(isset($params['ids'])) {
+            $qb
+                ->andWhere($qb->expr()->in('cer.id', $params['ids']))
+            ;
+        }
+
         if(isset($params['category_id'])) {
             $qb
                 ->leftJoin('cer.categories', 'c')
@@ -292,6 +312,13 @@ class CalendarEntityRepository extends EntityRepository
                  ->andWhere('t.id = :theme_id')
                  ->setParameter('theme_id',$params['theme_id']);
 
+            ;
+        }
+
+        if(isset($params['theme_ids'])) {
+            $qb 
+                 ->leftJoin('cer.themes', 't')
+                 ->andWhere($qb->expr()->in('t.id', $params['theme_ids'])) 
             ;
         }
 

@@ -39,14 +39,14 @@
             var categories= [];
             var proceedings= [];
             var persons= [];
+            var themes= [];
             var confName ;
             
-            var defaultDate='now'; 
+            var defaultDate='now';
+
+            //map of   Uri (string) ,Object
             var objectMap = {};
-
-
  
-
 
             var personMapping = {
                 nodeName : 'Person',
@@ -137,6 +137,20 @@
                             xproperties.push(xproperty);
                         }
                     },
+                    'dc:subject' : {
+                        multiple: true,
+                        setter : 'addTheme',
+                        format : function(node){ 
+                            var themeName = $(node).text(); 
+                            return getThemeIdFromName(themeName);
+                        },
+                        action : function(node){
+                            var themeName = $(node).text(); 
+                            if(getThemeIdFromName(themeName)=== -1 ){
+                                themes.push({setLibelle:format(themeName)});  
+                            }
+                        }
+                    },
                     'swc:hasLocation' : {
                         setter : 'setLocation',
                         format : function(node){ 
@@ -211,7 +225,7 @@
                     event['addCategorie']=catId;
                     
                     
-                      // EVENT XPROP
+                      // EVENT store URI
                     var xproperty= {}; 
                     xproperty['setCalendarEntity']=events.length;
                     xproperty['setXNamespace']="event_uri";
@@ -236,7 +250,15 @@
                             if(mapping.label[this.nodeName].format){   
                                 val = mapping.label[this.nodeName].format(this);
                             }
-                            rtnArray[mapping.label[this.nodeName].setter]= mapping.label[this.nodeName].setter === false ? val : typeof val === 'string' ? format(val) : val ;
+                            val = mapping.label[this.nodeName].setter === false ? val : typeof val === 'string' ? format(val) : val ;
+                            if(mapping.label[this.nodeName].multiple === true){
+                                if(!rtnArray[mapping.label[this.nodeName].setter])
+                                    rtnArray[mapping.label[this.nodeName].setter]={};
+                                var index = Object.size(rtnArray[mapping.label[this.nodeName].setter]);
+                                rtnArray[mapping.label[this.nodeName].setter][index] = val;
+                            }else{
+                                rtnArray[mapping.label[this.nodeName].setter]= val;
+                            }
                         } 
                     }
                 });
@@ -494,6 +516,17 @@
                 return -1;
             }
             
+            function getThemeIdFromName(themeName){
+                
+                for (var i=0;i<themes.length;i++){
+                    //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
+                    if(themes[i]['setLibelle']==themeName){
+                        return i; 
+                    }
+                }
+                return -1;
+            }
+            
             // GET THE INDEX OF AN EVENT GIVEN ITS URI
             function getEventIdFromURI(uri,show){
             
@@ -656,14 +689,15 @@
                     delete locations[i]["uri"];
                 }
                 var dataArray={}; 
+                dataArray['locations']=locations;  
                 dataArray['categories']=categories;
+                dataArray['persons']=persons;   
+                dataArray['themes']=themes;   
                 dataArray['events']=events;
                 dataArray['xproperties']=xproperties; 
-                dataArray['locations']=locations;  
-                dataArray['persons']=persons;   
                 console.log('---------finished---------' );
                 console.log(dataArray); 
-                if(events.length<1 && xproperties.length<1 && relations.length<1 && locations.length<1 && persons.length<1)
+                if(events.length<1 && xproperties.length<1 && relations.length<1 && locations.length<1 && persons.length<1&& themes.length<1)
                 {
                     if(fallback!=undefined)fallback("bad format"); 
                     return;
@@ -723,12 +757,19 @@ function format(string){
     // return $('<div/>').text(string).html();
         // return unescape(encodeURIComponent(string));  
 
-    return string.replace(/(\r\n|\n|\r)/gm," ")//line break
-                 .replace(/\s+/g," ")//spaces
+    // console.log("format:",string)
+    return string.split(/(\r\n|\n|\r)/gm).join(" ")//line break
+                 .split(/\s+/g).join(" ")//spaces
                  .split(/\x26/).join("%26")//spaces
                  .split(/\x3D/).join("%3D")// & caract
                  .split(/\ue00E9/).join("e")// & caract
                  ;
+    // return string.replace(/(\r\n|\n|\r)/gm," ")//line break
+    //              .replace(/\s+/g," ")//spaces
+    //              .split(/\x26/).join("%26")//spaces
+    //              .split(/\x3D/).join("%3D")// & caract
+    //              .split(/\ue00E9/).join("e")// & caract
+    //              ;
 }
 
 

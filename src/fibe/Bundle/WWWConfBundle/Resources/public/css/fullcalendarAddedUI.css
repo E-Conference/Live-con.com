@@ -1,0 +1,114 @@
+.navbar { 
+      margin-bottom: 0; 
+    }
+    #calendar {  
+        width  : 80%; 
+        margin : 0;
+        padding: 1em;
+        float  : left
+    }
+        
+    #sidebar {   
+        padding   : 1em 0.5em;
+        /*height  : 100%; */
+        width     : 20%;
+        padding   : 0 10px; 
+        background: #eee;
+        z-index   : 1;
+        float     : right;
+    }
+        
+    #sidebar h4 {
+        font-size  : 16px;
+        margin-top : 0;
+        padding-top: 1em;
+    }
+        
+    #sidebar .history{
+        text-align: center;
+    }
+        
+    #sidebar p {
+        margin   : 1.5em 0;
+        font-size: 11px;
+        color    : #666;
+    }
+        
+    #sidebar p input {
+        margin        : 0;
+        vertical-align: middle;
+    } 
+
+    #external-events{
+        border        : 1px solid #ccc;
+        padding       : 1em 0.5em;
+        margin        : 0;
+        margin-bottom : 1em;
+        position      : relative; 
+        z-index       : 2; 
+        /*overflow-y    :    auto;*/
+        height        : 100%;  /*sidebar h4 height*/
+        min-height    : 15em;
+
+    }
+        
+    .external-event { /* try to mimick the look of a real event */
+        margin-bottom: 1em;
+        border        : 1px solid rgb(58, 135, 173); 
+        padding      : 2px 4px;
+        background   : #3a87ad;
+        color        : #fff;
+        font-size    : .85em;
+        cursor       : pointer;
+    }
+    #modal .modal-dialog { 
+        width: 90%; 
+    }  
+    #modal-set-parent .modal-body { 
+      /*text-align: center; */
+    }
+    #calendar table { table-layout: fixed; }
+
+    .event-name { 
+      text-align: center;
+      margin:2em;
+      font-weight: bolder; 
+    }
+    .fc-event{
+      font-size: 1em;
+      min-width: 2em;
+    }
+    .fc-event-id {
+      display: none;
+    }
+    .fc-view { /* prevents dragging outside of widget */
+        overflow: visible;
+    }
+    .popover{
+      z-index: 2000;
+      width: 276px;
+    }
+    .popover .description {
+      overflow: hidden;
+      text-overflow: ellipsis; 
+      max-height: 8em;
+      list-style-type: disc;
+    } 
+
+    /* 5 line displayed about event's description*/
+    @media (-webkit-min-device-pixel-ratio: 0) {
+        .popover .description {
+            display: -webkit-box;
+            -webkit-line-clamp: 5; /* number of lines to show */
+            -webkit-box-orient: vertical;
+        }
+    }
+}
+
+@media (-webkit-min-device-pixel-ratio: 0) {
+    .giveMeEllipsis {
+        display: -webkit-box;
+        -webkit-line-clamp: N; /* number of lines to show */
+        -webkit-box-orient: vertical;
+    }
+}

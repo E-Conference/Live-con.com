@@ -9,7 +9,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event; 
 use fibe\Bundle\WWWConfBundle\Entity\Person;
-use IDCI\Bundle\SimpleScheduleBundle\Entity\Category; 
+use fibe\Bundle\WWWConfBundle\Entity\Theme;
+use IDCI\Bundle\SimpleScheduleBundle\Entity\Category;
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Location; 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;  
  
@@ -36,17 +37,30 @@ class DBImportController extends Controller
         $personEntities= array();
         $locationEntities= array();
         $categoryEntities= array();
+        $themeEntities= array();
         $wwwConf =  $em->getRepository('fibeWWWConfBundle:WwwConf')->find(1);
+
+        //categories color.
+        $colorArray = array('lime', 'red', 'blue', 'orange', 'gold', 'coral', 'crimson', 'aquamarine', 'darkOrchid', 'forestGreen', 'peru','purple' ,'seaGreen'  );
+        
 
         
         
-        //////////////////////  locations  //////////////////////
+        //////////////////////  locations  ////////////////////// 
         if(isset($JSONFile['locations'])){
             $locations = $JSONFile['locations'];
             for($i=0;$i<count($locations);$i++){
-                $entity= new Location();
                 $current = $locations[$i];  
-                foreach ($current as $setter => $value) { 
+                $existsTest = $this->getDoctrine()
+                                   ->getRepository('IDCISimpleScheduleBundle:Location')
+                                   ->findOneBy(array('name' => $current['setName']));
+                if($existsTest!=null){
+                  array_push($locationEntities,$existsTest); 
+                  continue; //skip existing category
+                }
+                $entity= new Location();
+                foreach ($current as $setter => $value) {
+
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
                 $em->persist($entity); 
@@ -55,9 +69,30 @@ class DBImportController extends Controller
         }     
         
         
+        //////////////////////  themes  //////////////////////
+        if(isset($JSONFile['themes'])){
+            $theme = $JSONFile['themes'];
+            for($i=0;$i<count($theme);$i++){
+                $current = $theme[$i];  
+                $existsTest = $this->getDoctrine()
+                                   ->getRepository('fibeWWWConfBundle:Theme')
+                                   ->findOneBy(array('libelle' => $current['setLibelle']));
+                if($existsTest!=null){
+                  array_push($themeEntities,$existsTest); 
+                  continue; //skip existing category
+                }
+                $entity= new Theme();
+                foreach ($current as $setter => $value) { 
+                    call_user_func_array(array($entity, $setter), array($value)); 
+                } 
+                $em->persist($entity); 
+                array_push($themeEntities,$entity); 
+            }  
+        }     
+        
+        
         //////////////////////  categories  ////////////////////// 
         if(isset($JSONFile['categories'])){
-            $colorArray = array('lime', 'red', 'blue', 'orange', 'gold', 'coral', 'crimson', 'aquamarine', 'darkOrchid', 'forestGreen', 'peru','purple' ,'seaGreen'  );
             $entities = $JSONFile['categories']; 
             for($i=0;$i<count($entities);$i++){
                 $current = $entities[$i]; 
@@ -99,22 +134,33 @@ class DBImportController extends Controller
             $entities = $JSONFile['events'];
             for($i=0;$i<count($entities);$i++){
                 $entity= new Event();
-                $current = $entities[$i];
+                $current = $entities[$i]; 
                 foreach ($current as $setter => $value) {
 
                     if($setter=="setStartAt" || $setter=="setEndAt"){
                         $date= explode(' ', $value); 
                         $value=new \DateTime($date[0], new \DateTimeZone(date_default_timezone_get()));
-                        
                     }
                     
                     if($setter=="setLocation"){
-                     
-                        $value=$locationEntities[$value]; 
-                    } 
+                        $value=$locationEntities[$value];
+                    }
                     
                     if($setter=="addCategorie"){
-                        $value=$categoryEntities[$value];  
+                        $value=$categoryEntities[$value];
+                    }
+                    
+                    if($setter=="addTheme"){
+                        $j=0;
+                        foreach ($value as $theme) {
+                            if($j!=0){
+                                $val=$themeEntities[$theme];
+
+                                call_user_func_array(array($entity, $setter), array($val));
+                            }
+                            $j++;
+                        } 
+                        $value=$themeEntities[$value[0]];  
                         
                     }
                     
@@ -129,6 +175,7 @@ class DBImportController extends Controller
                 array_push($eventEntities,$entity); 
             }
 
+            //parent / child relationship
             for($i=0;$i<count($entities);$i++){
                 $entity= $eventEntities[$i];
                 $current = $entities[$i];

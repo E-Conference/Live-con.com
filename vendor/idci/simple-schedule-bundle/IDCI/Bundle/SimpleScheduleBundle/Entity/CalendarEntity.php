@@ -102,7 +102,7 @@ class CalendarEntity
      * This property provides a more complete description of the
      * calendar component, than that provided by the "SUMMARY" property.
      *
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="text", length=1023, nullable=true)
      */
     protected $description;
 
@@ -112,7 +112,7 @@ class CalendarEntity
      * This property specifies non-processing information intended
      * to provide a comment to the calendar user.
      *
-     * @ORM\Column(type="string", length=4047, nullable=true)
+     * @ORM\Column(type="string", length=4095, nullable=true)
      */
      protected $comment;
 
