@@ -92,7 +92,7 @@ class MobileAppThemeController extends Controller
         $form = $this->createForm(new EventType(), $entity);
         $deleteForm = $this->createDeleteForm($id);*/
 
-        $mobile_app_config = new MobileAppConfig();
+      /*  $mobile_app_config = new MobileAppConfig();
         $mobile_app_form = $this->createForm(new MobileAppConfigType(), $mobile_app_config);
 
 
@@ -105,5 +105,18 @@ class MobileAppThemeController extends Controller
             );
 
         
+        }*/
+
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('fibeWWWConfBundle:MobileAppConfig')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find MobileAppConfig entity.');
         }
+
+        $em->persist($entity);
+        $em->flush();
+
+        return $this->redirect($this->generateUrl('mobileAppTheme_index'));
 }

@@ -112,7 +112,6 @@ class ConfEventController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id);
 
         if (!$entity) {
