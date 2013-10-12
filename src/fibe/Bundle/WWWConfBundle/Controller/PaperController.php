@@ -27,6 +27,7 @@ class PaperController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('fibeWWWConfBundle:Paper')->findAll();
+        
 
         return $this->render('fibeWWWConfBundle:Paper:index.html.twig', array(
             'entities' => $entities,
