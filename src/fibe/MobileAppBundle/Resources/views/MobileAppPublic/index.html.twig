@@ -7,19 +7,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
 
-    <link rel="stylesheet" href="{{ asset('bundles/fibemobileapp/dataconf2/css/jquery.mobile-1.3.0.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/fibemobileapp/mobileApp/css/jquery.mobile-1.3.0.min.css') }}" />
     <!--<link rel="stylesheet" href="css/themes/A.min.css" />
     <link rel="stylesheet" href="css/themes/B.min.css" />
     <link rel="stylesheet" href="css/themes/C.min.css" />-->
     
-    <link rel="stylesheet" href="{{ asset('bundles/fibemobileapp/dataconf2/css/appStyle.css') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/fibemobileapp/mobileApp/css/appStyle.css') }}" />
 
-    <script  src="{{ asset('bundles/fibemobileapp/dataconf2/js/lib/require.js') }}"></script>
+    <script  src="{{ asset('bundles/fibemobileapp/mobileApp/js/lib/require.js') }}"></script>
     <script>
 
       //Require.js configurations
       require.config({
-          baseUrl: "{{ asset('bundles/fibemobileapp/dataconf2/js') }}",
+          baseUrl: "{{ asset('bundles/fibemobileapp/mobileApp/js') }}",
         shim: {
           backbone: {
             deps: [
@@ -91,7 +91,7 @@
       //Configurations
       require(['config', 'tpl'], function(configuration, tpl){
           configuration.datasources.eventDatasource.uri = "http://dataconf.liris.cnrs.fr/simpleschedule/web/app.php/api/schedule_event.jsonp?wwwconf_id=3";
-          tpl.uri = "{{ asset('bundles/fibemobileapp/dataconf2/templates/') }}";
+          tpl.uri = "{{ asset('bundles/fibemobileapp/mobileApp/templates/') }}";
       });
       
       //Entry point

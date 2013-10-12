@@ -11,14 +11,41 @@ class MobileAppConfigType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('BGColorContent')
-            ->add('BGColorHeader')
-            ->add('BGColorNavBar')
-            ->add('BGColorfooter')
-            ->add('ColorContentTitle')
-            ->add('ColorHeaderTitle')
-            ->add('ColorNavBarTitle')
-            ->add('IsPublished')
+            ->add('BGColorContent', 'text', array(
+                                    'required'  => true,
+                                    'label'     => 'Content background',
+                                    'attr'  => array('class'   => 'color')
+            ))     
+            ->add('BGColorHeader', 'text', array(
+                                    'required'  => true,
+                                    'label'     => 'Header background',
+                                    'attr'  => array('class'   => 'color')
+            ))     
+            ->add('BGColorNavBar', 'text', array(
+                                    'required'  => true,
+                                    'label'     => 'Nav barre background',
+                                    'attr'  => array('class'   => 'color')
+            ))     
+            ->add('BGColorfooter', 'text', array(
+                                    'required'  => true,
+                                    'label'     => 'Footer background',
+                                    'attr'  => array('class'   => 'color')
+            ))     
+            ->add('ColorContentTitle', 'text', array(
+                                    'required'  => true,
+                                    'label'     => 'Content titles',
+                                    'attr'  => array('class'   => 'color')
+            ))     
+            ->add('ColorHeaderTitle', 'text', array(
+                                    'required'  => true,
+                                    'label'     => 'Header titles',
+                                    'attr'  => array('class'   => 'color')
+            ))     
+            ->add('ColorNavBarTitle', 'text', array(
+                                    'required'  => true,
+                                    'label'     => 'Nav Barre titles',
+                                    'attr'  => array('class'   => 'color')
+            ))     
             ->add('Conference')
         ;
     }

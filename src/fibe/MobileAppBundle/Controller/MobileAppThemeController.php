@@ -62,4 +62,48 @@ class MobileAppThemeController extends Controller
 
 		
 		}
+
+     /**
+     * @Route("/update",name="mobileAppTheme_update")
+     * @Template()
+     */
+    public function updateAction()
+    {
+
+
+
+        /*$em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id);
+ 
+
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Event entity.');
+        }
+        
+        $this->get('session')->getFlashBag()->add(
+            'info',
+            $this->get('translator')->trans('%entity%[%id%] has been updated', array(
+                '%entity%' => 'Event',
+                '%id%'     => $entity->getId()
+            ))
+        );
+            
+        $form = $this->createForm(new EventType(), $entity);
+        $deleteForm = $this->createDeleteForm($id);*/
+
+        $mobile_app_config = new MobileAppConfig();
+        $mobile_app_form = $this->createForm(new MobileAppConfigType(), $mobile_app_config);
+
+
+        $WwwConf="";
+
+            return array(
+                'entity' => $mobile_app_config,
+                "mobile_app_form" => $mobile_app_form->createView(),
+
+            );
+
+        
+        }
 }
