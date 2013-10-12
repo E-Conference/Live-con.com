@@ -9,7 +9,7 @@ CalEvent.prototype.render = function () {
         this.formatDate();
 
         // render the event on the calendar
-        $calendar.fullCalendar('removeEvents', this.id); 
+        // $calendar.fullCalendar('removeEvents', this.id); 
         $calendar.fullCalendar('renderEvent', this);
 };
 
@@ -251,12 +251,21 @@ CalEvent.prototype.getPopoverContent = function(){
         }
         themes += "</ul>";
     }
+    var speakers = "no speakers"
+    if(this.roles && this.roles[0] && this.roles[0].id!==""){
+        speakers = "<ul>";
+        for (var i=0;i<this.roles.length;i++){
+            speakers += "<li>"+this.roles[i].person.name+"</li>";
+        }
+        speakers += "</ul>";
+    }
     return "<ul >\
               <li><b>duration : </b>"+moment.duration(moment(this.end).diff(this.start)).humanize()+"</li>\
               <li><b>location : </b>"+((this.location && this.location.name && this.location.name!=="" && this.location.name) || "no location")+"</li>\
               <li class='description'><b>description : </b>"+(this.description || "no description")+"</li>\
               <li><b>categories : </b>"+categories+"\
               <li><b>themes : </b>"+themes+"\
+              <li><b>speakers : </b>"+speakers+"\
               </li>\
             </ul>"
 }
