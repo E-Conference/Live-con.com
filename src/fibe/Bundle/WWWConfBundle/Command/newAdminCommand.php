@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
+use fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig;
 
 use FOS\UserBundle\Model\User;
 
@@ -72,6 +73,14 @@ EOT
         //Create the default conference
         $defaultConference = new WwwConf();
         $defaultConference->setConfName("Conference");
+        $em->persist($defaultConference);
+
+        //Create new App config for the conference
+        $defaultAppConfig = new MobileAppConfig();
+        $em->persist($defaultAppConfig);
+
+        //Linking app config to conference
+        $defaultConference->setAppConfig($defaultAppConfig);
         $em->persist($defaultConference);
 
         //Join the new user with his default conference

@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig;
+use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
+
+use fibe\Bundle\WWWConfBundle\Form\WwwConfType;
 use fibe\Bundle\WWWConfBundle\Form\MobileAppConfigType;
 /**
  * Mobile app controller.
@@ -27,96 +30,45 @@ class MobileAppThemeController extends Controller
     {
 
 
-
-    	/*$em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id);
- 
-
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Event entity.');
-        }
-        
-        $this->get('session')->getFlashBag()->add(
-            'info',
-            $this->get('translator')->trans('%entity%[%id%] has been updated', array(
-                '%entity%' => 'Event',
-                '%id%'     => $entity->getId()
-            ))
-        );
-            
-        $form = $this->createForm(new EventType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);*/
-
-        $mobile_app_config = new MobileAppConfig();
+        $mobile_app_config = $this->getUser()->getCurrentConf()->getAppConfig();
         $mobile_app_form = $this->createForm(new MobileAppConfigType(), $mobile_app_config);
 
+        $conference = $this->getUser()->getCurrentConf();
+        $conference_form = $this->createForm(new WwwConfType(), $conference);
 
-		$WwwConf="";
 
-			return array(
-			    'entity' => $mobile_app_config,
-			    "mobile_app_form" => $mobile_app_form->createView(),
 
-			);
-
-		
-		}
+		return array(
+		    'mobile_app_config' => $mobile_app_config,
+            'conference' => $conference,
+		    'mobile_app_form' => $mobile_app_form->createView(),
+            'conference_form' => $conference_form->createView(),
+		);
+	}
 
      /**
-     * @Route("/update",name="mobileAppTheme_update")
+     * @Route("/{id}/update",name="mobileAppTheme_update")
      * @Template()
      */
-    public function updateAction()
+    public function updateAction(Request $request, $id)
     {
 
 
-
-        /*$em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id);
- 
-
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Event entity.');
-        }
-        
-        $this->get('session')->getFlashBag()->add(
-            'info',
-            $this->get('translator')->trans('%entity%[%id%] has been updated', array(
-                '%entity%' => 'Event',
-                '%id%'     => $entity->getId()
-            ))
-        );
-            
-        $form = $this->createForm(new EventType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);*/
-
-      /*  $mobile_app_config = new MobileAppConfig();
-        $mobile_app_form = $this->createForm(new MobileAppConfigType(), $mobile_app_config);
-
-
-        $WwwConf="";
-
-            return array(
-                'entity' => $mobile_app_config,
-                "mobile_app_form" => $mobile_app_form->createView(),
-
-            );
-
-        
-        }*/
-
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('fibeWWWConfBundle:MobileAppConfig')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find MobileAppConfig entity.');
+            throw $this->createNotFoundException('Unable to find mobile app config entity.');
         }
 
-        $em->persist($entity);
-        $em->flush();
+        $editForm = $this->createForm(new MobileAppConfigType(), $entity);
+        $editForm->bind($request);
 
+        if ($editForm->isValid()) {
+            $em->persist($entity);
+            $em->flush();
+        }
         return $this->redirect($this->generateUrl('mobileAppTheme_index'));
+    }
+
 }

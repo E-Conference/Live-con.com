@@ -1,6 +1,4 @@
-
-
-<form action="{{ path('mobileAppTheme_update') }}" method="post">
+<form action="{{ path('mobileAppTheme_update',  { 'id': mobile_app_config.id }) }}" method="post">
     {{ form_widget(mobile_app_form) }}
     <button type="submit" class="btn btn-danger"><i class="icon-trash"></i></button>
 </form>

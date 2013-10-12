@@ -89,6 +89,28 @@ class WwwConf
     private $confManagers;
     
 
+    /**
+    * Mobile app configurations
+    *
+    * @ORM\OneToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig",cascade={"persist"})
+    * @ORM\JoinColumn(name="appConfig", referencedColumnName="id")
+    */
+    private $appConfig;
+
+    /**
+    * @var string
+    *
+    * @ORM\Column(name="logo", type="string", length=255,nullable=true)
+    */
+    private $logo;
+
+
+    /**
+    * @var string
+    *
+    * @ORM\Column(name="acronym", type="string", length=255,nullable=true)
+    */
+    private $acronym;
 
 
     
@@ -138,7 +160,6 @@ class WwwConf
     }
     
     
-    
     public function setConfUri($ConfUri)
     {
         $this->confUri = $ConfUri;
@@ -149,6 +170,31 @@ class WwwConf
     public function getConfUri()
     {
         return $this->confUri;
+    }
+
+
+    public function setLogo($Logo)
+    {
+        $this->logo = $Logo;
+    
+        return $this;
+    } 
+    
+    public function getLogo()
+    {
+        return $this->logo;
+    }
+
+
+    public function setAcronym($Acronym)
+    {
+        $this->acronym = $Acronym;
+        return $this;
+    } 
+    
+    public function getAcronym()
+    {
+        return $this->acronym;
     }
     
     
@@ -167,6 +213,7 @@ class WwwConf
     }
     
     
+
 
     /**
      * confEvents
@@ -351,5 +398,23 @@ class WwwConf
     public function getThemes()
     {
         return $this->themes;
+    }
+
+    /**
+     * Add app config
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig $AppConfig
+     * @return WwwConf
+     */
+    public function setAppConfig($AppConfig)
+    {
+        $this->appConfig = $AppConfig;
+    
+        return $this;
+    } 
+    
+    public function getAppConfig()
+    {
+        return $this->appConfig;
     }
 }

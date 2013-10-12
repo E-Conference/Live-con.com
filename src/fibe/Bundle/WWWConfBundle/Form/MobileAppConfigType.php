@@ -46,7 +46,6 @@ class MobileAppConfigType extends AbstractType
                                     'label'     => 'Nav Barre titles',
                                     'attr'  => array('class'   => 'color')
             ))     
-            ->add('Conference')
         ;
     }
 

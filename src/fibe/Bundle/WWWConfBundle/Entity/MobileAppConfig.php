@@ -5,62 +5,95 @@ namespace fibe\Bundle\WWWConfBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * MobileAppConfig
+ * This entity define a keyword
+ *
+ *  @ORM\Table(name="mobileAppConfig")
+ *  @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\MobileAppConfigRepository")
+ *  @ORM\HasLifecycleCallbacks
  */
 class MobileAppConfig
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
-    /**
-     * @var string
+   /**
+     * BGContent
+     *
+     *
+     * @ORM\Column(type="string", name="BGContent", nullable=true)
      */
-    private $BGColorContent;
+    protected $BGColorContent;
 
-    /**
-     * @var string
+     /**
+     * BGHeader
+     *
+     *
+     * @ORM\Column(type="string", name="BGHeader", nullable=true)
      */
-    private $BGColorHeader;
+    protected $BGColorHeader;
 
-    /**
-     * @var string
+     /**
+     * BGNavBar
+     *
+     *
+     * @ORM\Column(type="string", name="BGNavBar", nullable=true)
      */
-    private $BGColorNavBar;
+    protected $BGColorNavBar;
 
-    /**
-     * @var string
+
+     /**
+     * BGfooter
+     *
+     *
+     * @ORM\Column(type="string", name="BGfooter", nullable=true)
      */
-    private $BGColorfooter;
+    protected $BGColorfooter;
 
-    /**
-     * @var string
+
+     /**
+     * ColorContentTitle
+     *
+     *
+     * @ORM\Column(type="string", name="ColorContentTitle", nullable=true)
      */
-    private $ColorContentTitle;
+    protected $ColorContentTitle;
 
-    /**
-     * @var string
+      /**
+     * ColorHeaderTitle
+     *
+     *
+     * @ORM\Column(type="string", name="ColorHeaderTitle", nullable=true)
      */
-    private $ColorHeaderTitle;
+    protected $ColorHeaderTitle;
 
-    /**
-     * @var string
+
+      /**
+     * ColorNavBarTitle
+     *
+     *
+     * @ORM\Column(type="string", name="ColorNavBarTitle", nullable=true)
      */
-    private $ColorNavBarTitle;
+    protected $ColorNavBarTitle;
 
-    /**
-     * @var boolean
+
+     /**
+     * IsPublished
+     *
+     *
+     * @ORM\Column(type="boolean", name="IsPublished", nullable=true)
      */
-    private $IsPublished;
-
-    /**
-     * @var \fibe\Bundle\WWWConfBundle\Entity\wwwConf
-     */
-    private $Conference;
+    protected $IsPublished;
+        
 
 
-    /**
+
+  /**
      * Get id
      *
      * @return integer 
@@ -254,26 +287,5 @@ class MobileAppConfig
         return $this->IsPublished;
     }
 
-    /**
-     * Set Conference
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\wwwConf $conference
-     * @return MobileAppConfig
-     */
-    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\wwwConf $conference = null)
-    {
-        $this->Conference = $conference;
-    
-        return $this;
-    }
 
-    /**
-     * Get Conference
-     *
-     * @return \fibe\Bundle\WWWConfBundle\Entity\wwwConf 
-     */
-    public function getConference()
-    {
-        return $this->Conference;
-    }
 }

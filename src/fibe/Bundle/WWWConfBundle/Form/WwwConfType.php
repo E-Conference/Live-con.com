@@ -12,9 +12,15 @@ class WwwConfType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('confName', null, array('required' => false,
+            ->add('confName', 'text', array('required' => false,
                                           'attr'  => array(
-                                                    'placeholder'   => 'Conference name'))) 
+                                                    'placeholder'   => 'Conference name')))
+             ->add('logo', 'text', array('required' => false,
+                                          'attr'  => array(
+                                                    'placeholder'   => 'logo uri')))
+            ->add('acronym', 'text', array('required' => false,
+                                          'attr'  => array(
+                                                    'placeholder'   => 'Acronym')))
             
         ;
     }
