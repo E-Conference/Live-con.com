@@ -14,37 +14,37 @@ class MobileAppConfigType extends AbstractType
             ->add('BGColorContent', 'text', array(
                                     'required'  => true,
                                     'label'     => 'Content background',
-                                    'attr'  => array('class'   => 'color')
+                                    'attr'  => array('class'   => 'color form-control')
             ))     
             ->add('BGColorHeader', 'text', array(
                                     'required'  => true,
                                     'label'     => 'Header background',
-                                    'attr'  => array('class'   => 'color')
+                                    'attr'  => array('class'   => 'color form-control')
             ))     
             ->add('BGColorNavBar', 'text', array(
                                     'required'  => true,
                                     'label'     => 'Nav barre background',
-                                    'attr'  => array('class'   => 'color')
+                                    'attr'  => array('class'   => 'color form-control')
             ))     
             ->add('BGColorfooter', 'text', array(
                                     'required'  => true,
                                     'label'     => 'Footer background',
-                                    'attr'  => array('class'   => 'color')
+                                    'attr'  => array('class'   => 'color form-control')
             ))     
             ->add('ColorContentTitle', 'text', array(
                                     'required'  => true,
                                     'label'     => 'Content titles',
-                                    'attr'  => array('class'   => 'color')
+                                    'attr'  => array('class'   => 'color form-control')
             ))     
             ->add('ColorHeaderTitle', 'text', array(
                                     'required'  => true,
                                     'label'     => 'Header titles',
-                                    'attr'  => array('class'   => 'color')
+                                    'attr'  => array('class'   => 'color form-control')
             ))     
             ->add('ColorNavBarTitle', 'text', array(
                                     'required'  => true,
                                     'label'     => 'Nav Barre titles',
-                                    'attr'  => array('class'   => 'color')
+                                    'attr'  => array('class'   => 'color form-control')
             ))     
         ;
     }

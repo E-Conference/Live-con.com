@@ -1,6 +1,18 @@
-<form action="{{ path('mobileAppTheme_update',  { 'id': mobile_app_config.id }) }}" method="post">
-    {{ form_widget(mobile_app_form) }}
-    <button type="submit" class="btn btn-danger"><i class="icon-trash"></i></button>
-</form>
+<div class="row-fluid">
+	<div class="col-lg-2"></div>
+	<div class='col-lg-4'>
+		<form action="{{ path('mobileAppTheme_update_style',  { 'id': mobile_app_config.id }) }}" method="post">
+		    {{ form_widget(mobile_app_form) }}
+		    <button type="submit" class="btn btn-success"><i class="icon-edit"></i></button>
+		</form>
+	</div>
+	<div class='col-lg-4'>
+		<form action="{{ path('mobileAppTheme_update_conference', { 'id': conference.id })}}" method="post">
+		    {{ form_widget(conference_form)}}
+		    <button type="submit" class="btn btn-success"><i class="icon-edit"></i></button>
+		</form>
+	</div>
+</div>
+
 
 

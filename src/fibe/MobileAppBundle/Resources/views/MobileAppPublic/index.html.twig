@@ -8,11 +8,6 @@
     
 
     <link rel="stylesheet" href="{{ asset('bundles/fibemobileapp/mobileApp/css/jquery.mobile-1.3.0.min.css') }}" />
-    <!--<link rel="stylesheet" href="css/themes/A.min.css" />
-    <link rel="stylesheet" href="css/themes/B.min.css" />
-    <link rel="stylesheet" href="css/themes/C.min.css" />-->
-    
-    <link rel="stylesheet" href="{{ asset('bundles/fibemobileapp/mobileApp/css/appStyle.css') }}" />
 
     <script  src="{{ asset('bundles/fibemobileapp/mobileApp/js/lib/require.js') }}"></script>
     <script>
@@ -46,13 +41,7 @@
               },
           'underscore': {
             exports: '_'
-          },
-          'arbor':{
-            deps : [
-              'jquery'
-            ],
-            exports: 'arbor'
-          },
+          }
         },
           paths: {
               // the left side is the module ID,
@@ -69,12 +58,7 @@
           'jqueryMobile.config' : 'lib/jquerymobile.config',
           'jsw' : 'reasoner/jsw',
           'jswui' : 'reasoner/jswui',
-          'processOntoloy' : 'reasoner/processOntoloy',
           'query' : 'reasoner/query',
-          'utilsMin' : 'reasoner/utils-min',
-          'reasoner' : 'reasoner/Reasoner',
-          'reasonerWorker' : 'reasoner/ReasonerWorker',
-          'arbor': 'lib/arbor',
           'encoder': 'lib/encoder',
           'blob': 'lib/blob',
           'fileSaver' : 'lib/FileSaver',
@@ -91,13 +75,140 @@
       //Configurations
       require(['config', 'tpl'], function(configuration, tpl){
           configuration.datasources.eventDatasource.uri = "http://dataconf.liris.cnrs.fr/simpleschedule/web/app.php/api/schedule_event.jsonp?wwwconf_id=3";
-          tpl.uri = "{{ asset('bundles/fibemobileapp/mobileApp/templates/') }}";
+          // configuration.conference.name = {{ mobile_app_config.acronym}};
+          // configuration.conference.logo = {{ mobile_app_config.logo}};
+
+            tpl.uri = "{{ asset('bundles/fibemobileapp/mobileApp/templates/') }}";
       });
       
       //Entry point
       require(['app']);
 
     </script>
+    <style type="text/css">
+
+        /*Titles*/
+        H2, H3 {
+          color : "{{ mobile_app_config.ColorHeaderTitle}}";
+        }
+
+        H1 , H2 {
+          font-size : 14pt !important;
+        }
+
+        .inline{
+          font-size : 12pt !important;
+          color: black;
+        }
+
+         H3, H4{
+          font-size : 13pt !important;
+        }
+
+        H4,H5{
+          margin-top:2pt;
+          margin-bottom:2pt;
+        }
+        a, span {
+          font-size : 10pt !important;
+        }
+
+        p{
+          font-size : 12pt !important;
+          color: black;
+        }
+
+
+        #logoContainer{
+          float:left;
+          height : 42px;
+          width: 50px;
+        }
+
+        #logoContainer a {
+          height : 100%;
+          width : 100%;
+        }
+
+        #logoContainer img {
+          height : 100%;
+          width : 100%;
+         
+        }
+
+        #textHeader H1{
+          text-align: center;
+        }
+         .ui-btn-inner{
+          padding-top : .35em!important;
+          padding-bottom : .3em!important;
+          
+        }
+
+        //Special buttons
+        a .swtich{
+          background : #9fc3db!important;
+        }
+
+         .ui-btn-inner:hover{
+          color :#bf1278!important;
+         }
+
+        .ui-btn-text{
+          padding-top : 0em!important;
+          padding-bottom : 0em!important;
+        }
+
+        .ui-li{
+          padding-top : 0em!important;
+          padding-bottom : 0em!important;
+
+        }
+        .ui-listview-filter{
+          margin-top: 0px;
+
+        }
+
+
+
+        #navBar .ui-btn-inner:hover{
+          
+          background : #333!important;
+          color :#bf1278!important;
+        }
+
+
+
+        /* Schedule */
+
+        #getConferenceSchedule .ui-btn-inner{
+          padding-top : 0!important;
+          padding-bottom : 0!important;
+
+        }
+
+        #getConferenceSchedule H2 {
+          padding-left:0.5em;
+          line-height:1.5em; 
+        } 
+        #getConferenceSchedule H2 span{ 
+          font-size : 10pt !important;
+        } 
+        #getConferenceSchedule p.ui-li-desc{
+          font-size : 11pt !important;
+          margin-top : 0em!important;
+          margin-bottom : 0em!important;
+        }
+
+        #getConferenceSchedule H3.ui-li-heading{
+          white-space : normal;
+          overflow : visible;
+          text-overflow : visible;
+          font-size : 11pt !important;
+          margin-top : 0em!important;
+          margin-bottom : 0em!important;
+        }
+    </style>
   </head>
   <body>
     

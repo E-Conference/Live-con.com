@@ -7,7 +7,7 @@
 *   Version: 0.8
 *   Tags:  Backbone Jquery-ui-mobile Adapter Linked-Data Graph html5 canvas
 **/
-define(['jquery', 'arbor'], function($, arbor){
+define(['jquery'], function($){
 	var ViewAdapterText ={
 
 		generateContainer : function(page,commandName){

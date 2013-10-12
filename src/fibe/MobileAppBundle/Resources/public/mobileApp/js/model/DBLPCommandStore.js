@@ -9,7 +9,7 @@
 *   Version: 1.2
 *   Tags:  JSON, SPARQL, AJAX
 **/
-define(['jquery', 'underscore', 'encoder','view/ViewAdapter',  'view/ViewAdapterGraph', 'view/ViewAdapterText', 'localStorage/localStorageManager', ], function($, _, Encoder, ViewAdapter, ViewAdapterGraph, ViewAdapterText, StorageManager){
+define(['jquery', 'underscore', 'encoder','view/ViewAdapter',  'view/ViewAdapterText', 'localStorage/localStorageManager', ], function($, _, Encoder, ViewAdapter, ViewAdapterText, StorageManager){
 	var DBLPCommandStore = {
 	 
 		getAuthorPublications : {
@@ -55,15 +55,6 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter',  'view/ViewAdapter
 														 parameters.contentEl,
 														 {type:"Node",labelCllbck:function(str){return "External paper : "+str["publiTitle"];}}
 														 );
-						}else{
-							ViewAdapterGraph.appendList(parameters.JSONdata,
-														 {baseHref:'#externPublication/',
-														  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])},}, 
-														 "publiTitle",
-														 parameters.contentEl,
-														 {type:"Node",labelCllbck:function(str){return "External paper : "+str["publiTitle"];}}
-														 );
-						
 						}
 					}
 				} 
@@ -104,10 +95,6 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter',  'view/ViewAdapter
 							parameters.contentEl.append('<h2>Authors</h2>');
 							$.each(parameters.JSONdata, function(i,auhtor){
 								ViewAdapterText.appendButton(parameters.contentEl,'#author/'+Encoder.encode(auhtor.authorName)+'/'+Encoder.encode(auhtor.authorUri),auhtor.authorName,{tiny : true});
-							});
-						}else{
-							$.each(parameters.JSONdata, function(i,auhtor){
-								ViewAdapterGraph.addNode("Author : "+auhtor.authorName,'#author/'+Encoder.encode(auhtor.authorName)+'/'+Encoder.encode(auhtor.authorUri),{color:"#7db9e8"});
 							});
 						}
 					}

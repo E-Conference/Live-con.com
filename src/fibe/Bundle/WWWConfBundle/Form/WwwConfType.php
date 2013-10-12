@@ -13,14 +13,16 @@ class WwwConfType extends AbstractType
     {
         $builder
             ->add('confName', 'text', array('required' => false,
-                                          'attr'  => array(
-                                                    'placeholder'   => 'Conference name')))
+                                        'label'     => 'Conference name',
+                                        'attr'  => array('placeholder'   => 'Conference name')))
+
              ->add('logo', 'text', array('required' => false,
-                                          'attr'  => array(
-                                                    'placeholder'   => 'logo uri')))
+                                        'label'     => 'Logo',
+                                        'attr'  => array('placeholder'   => 'Logo uri')))
+
             ->add('acronym', 'text', array('required' => false,
-                                          'attr'  => array(
-                                                    'placeholder'   => 'Acronym')))
+                                        'label'     => 'Acronym',
+                                        'attr'  => array('placeholder'   => 'Acronym')))
             
         ;
     }

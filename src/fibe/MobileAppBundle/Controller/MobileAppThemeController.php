@@ -35,9 +35,7 @@ class MobileAppThemeController extends Controller
 
         $conference = $this->getUser()->getCurrentConf();
         $conference_form = $this->createForm(new WwwConfType(), $conference);
-
-
-
+  
 		return array(
 		    'mobile_app_config' => $mobile_app_config,
             'conference' => $conference,
@@ -47,13 +45,11 @@ class MobileAppThemeController extends Controller
 	}
 
      /**
-     * @Route("/{id}/update",name="mobileAppTheme_update")
+     * @Route("/{id}/update/style",name="mobileAppTheme_update_style")
      * @Template()
      */
-    public function updateAction(Request $request, $id)
+    public function updateMobileAppAction(Request $request, $id)
     {
-
-
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('fibeWWWConfBundle:MobileAppConfig')->find($id);
 
@@ -62,6 +58,30 @@ class MobileAppThemeController extends Controller
         }
 
         $editForm = $this->createForm(new MobileAppConfigType(), $entity);
+        $editForm->bind($request);
+
+        if ($editForm->isValid()) {
+            $em->persist($entity);
+            $em->flush();
+        }
+        return $this->redirect($this->generateUrl('mobileAppTheme_index'));
+    }
+
+
+    /**
+    * @Route("/{id}/update/conference",name="mobileAppTheme_update_conference")
+    * @Template()
+    */
+    public function updateConferenceAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('fibeWWWConfBundle:WwwConf')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find conference entity.');
+        }
+
+        $editForm = $this->createForm(new WwwConfType(), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {

@@ -10,7 +10,7 @@ ions on. After calling a command, the results are parsed with it own callback fu
 *   Version: 1.2
 *   Tags:  JSON, AJAX
 **/
-define(['jquery', 'underscore', 'encoder', 'view/ViewAdapter', 'view/ViewAdapterGraph', 'view/ViewAdapterText', 'localStorage/localStorageManager'], function($, _, Encoder, ViewAdapter, ViewAdapterGraph, ViewAdapterText, StorageManager){
+define(['jquery', 'underscore', 'encoder', 'view/ViewAdapter', 'view/ViewAdapterText', 'localStorage/localStorageManager'], function($, _, Encoder, ViewAdapter, ViewAdapterText, StorageManager){
 	 var GoogleCommandStore = {
 
 		/** Command used to get and display the most probable homepage of a given author**/
@@ -39,10 +39,6 @@ define(['jquery', 'underscore', 'encoder', 'view/ViewAdapter', 'view/ViewAdapter
 							var homepageUrl  = authorHomepage[0].authorHomepage;
 							parameters.contentEl.append('<h2>Personal Page</h2>');	
 							parameters.contentEl.append('<a href="'+homepageUrl+'" >'+homepageUrl+'</a>');	
-						}else{
-							var homepageUrl  = authorHomepage[0].authorHomepage;
-							ViewAdapterGraph.addNode("Personnal page : "+homepageUrl, homepageUrl);
-						
 						}
 					}
 				}

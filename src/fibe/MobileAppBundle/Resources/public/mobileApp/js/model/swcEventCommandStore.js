@@ -9,7 +9,7 @@
 *   Version: 1.1
 *   Tags:  JSON, SPARQL, AJAX
 **/
-define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterGraph', 'view/ViewAdapterText', 'localStorage/localStorageManager','moment'], function($, _, Encoder, ViewAdapter, ViewAdapterGraph, ViewAdapterText, StorageManager, moment){
+define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterText', 'localStorage/localStorageManager','moment'], function($, _, Encoder, ViewAdapter, ViewAdapterText, StorageManager, moment){
 	var swcEventCommandStore = { 
 		/** Command used to get the track events of a given conference **/ 
 	    getConferenceMainTrackEvent : {
@@ -53,19 +53,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterG
 													 "eventLabel",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "Track : "+str["eventLabel"];}});
-						}else{ 
-							ViewAdapterGraph.appendList(parameters.JSONdata,
-												 {baseHref:'#event/',
-												  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
-												  },
-												 "eventLabel",
-												 parameters.contentEl,
-												 {type:"Node",
-												  labelCllbck:function(str){return "Track : "+str["eventLabel"];},
-												  option:{color:"#3366CC"},
-												 }); 
 						}
-
 					}
 				} 
 			}
@@ -114,19 +102,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterG
 													 "eventLabel",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "Track : "+str["eventLabel"];}});
-						}else{ 
-							ViewAdapterGraph.appendList(parameters.JSONdata,
-												 {baseHref:'#event/',
-												  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
-												  },
-												 "eventLabel",
-												 parameters.contentEl,
-												 {type:"Node",
-												  labelCllbck:function(str){return "Track : "+str["eventLabel"];},
-												  option:{color:"#3366CC"},
-												 }); 
 						}
-
 					}
 				} 
 			}
@@ -175,19 +151,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterG
 													 "eventLabel",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "Track : "+str["eventLabel"];}});
-						}else{ 
-							ViewAdapterGraph.appendList(parameters.JSONdata,
-												 {baseHref:'#event/',
-												  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
-												  },
-												 "eventLabel",
-												 parameters.contentEl,
-												 {type:"Node",
-												  labelCllbck:function(str){return "Track : "+str["eventLabel"];},
-												  option:{color:"#3366CC"},
-												 }); 
 						}
-
 					}
 				} 
 			}
@@ -235,19 +199,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterG
 													 "eventLabel",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "Track : "+str["eventLabel"];}});
-						}else{ 
-							ViewAdapterGraph.appendList(parameters.JSONdata,
-												 {baseHref:'#event/',
-												  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
-												  },
-												 "eventLabel",
-												 parameters.contentEl,
-												 {type:"Node",
-												  labelCllbck:function(str){return "Track : "+str["eventLabel"];},
-												  option:{color:"#3366CC"},
-												 }); 
 						}
-
 					}
 				} 
 			}
@@ -296,19 +248,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterG
 													 "eventLabel",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "Track : "+str["eventLabel"];}});
-						}else{ 
-							ViewAdapterGraph.appendList(parameters.JSONdata,
-												 {baseHref:'#event/',
-												  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
-												  },
-												 "eventLabel",
-												 parameters.contentEl,
-												 {type:"Node",
-												  labelCllbck:function(str){return "Track : "+str["eventLabel"];},
-												  option:{color:"#3366CC"},
-												 }); 
 						}
-
 					}
 				} 
 			}
@@ -510,11 +450,6 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterG
 							$.each(parameters.JSONdata, function(i,track){
 								ViewAdapterText.appendButton(parameters.contentEl,'#event/'+Encoder.encode(track.eventUri),track.eventLabel);
 							});
-						}else{
-							$.each(parameters.JSONdata, function(i,track){
-								ViewAdapterGraph.addNode("Sub track : "+track.eventLabel,'#event/'+Encoder.encode(track.eventUri),{color:"#003399"});
-							});
-						
 						}
 					}
 				}
@@ -566,15 +501,6 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterG
 												 "publiTitle",
 												 parameters.contentEl
 												 );
-						}else{
-							ViewAdapterGraph.appendList(parameters.JSONdata,
-												 {baseHref:'#publication/',
-												  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])},
-												  },
-												 "publiTitle",
-												 parameters.contentEl,
-												 {type:"Node",labelCllbck:function(str){return "Publication : "+str["publiTitle"];}});
-						
 						}
 					}
 				} 
@@ -624,14 +550,6 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterG
 												 parameters.contentEl,
 												 {type:"Node",labelCllbck:function(str){return "presentation : "+str["eventLabel"];}});
 
-						}else{
-							ViewAdapterGraph.appendList(parameters.JSONdata,
-												 {baseHref:'#event/',
-												  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
-												  },
-												 "eventLabel",
-												 parameters.contentEl,
-												 {type:"Node",labelCllbck:function(str){return "presentation : "+str["eventLabel"];}});
 						}
 					}
 				} 
@@ -680,14 +598,6 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterG
 												 parameters.contentEl,
 												 {type:"Node",labelCllbck:function(str){return "presentation : "+str["eventLabel"];}});
 
-						}else{
-							ViewAdapterGraph.appendList(parameters.JSONdata,
-												 {baseHref:'#event/',
-												  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
-												  },
-												 "eventLabel",
-												 parameters.contentEl,
-												 {type:"Node",labelCllbck:function(str){return "presentation : "+str["eventLabel"];}});
 						}
 					}
 				} 

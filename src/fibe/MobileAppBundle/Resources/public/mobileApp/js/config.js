@@ -11,8 +11,8 @@
 				   
 *   Tags:  JSON, ENDPOINT, SPARQL
 **/
-define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandStore','model/GoogleCommandStore','model/swcEventCommandStore','model/ReasonerCommandStore', 'model/DPCommandStore'],
-	function(SWDFCommandStore, DBLPCommandStore, DDGoCommandStore, GoogleCommandStore, swcEventCommandStore, ReasonerCommandStore, DPCommandStore) {
+define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandStore','model/GoogleCommandStore','model/swcEventCommandStore', 'model/DPCommandStore'],
+	function(SWDFCommandStore, DBLPCommandStore, DDGoCommandStore, GoogleCommandStore, swcEventCommandStore, DPCommandStore) {
 		var AppConfig = {
 			//Defnition of the conference
 			"conference" : {
@@ -30,39 +30,35 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 				"SemanticWebConferenceDatasource" : {
 					"uri" : "http://poster.www2012.org/endpoint/eswc2013/sparql/",
 					"crossDomainMode" : "CORS",
-					"commands" : SWDFCommandStore, 
+					"commands" : SWDFCommandStore
 				},
 				
 				"DblpDatasource" : {
 					"uri" : "http://dblp.rkbexplorer.com/sparql/",
 					"crossDomainMode" : "CORS",
-					"commands" : DBLPCommandStore,
+					"commands" : DBLPCommandStore
 				},
 
 				"DuckDuckGoDatasource" : {   
 					"uri" : "http://api.duckduckgo.com/",
 					"crossDomainMode" : "JSONP",
-					"commands" : DDGoCommandStore,
+					"commands" : DDGoCommandStore
 				},
 				
 				"GoogleDataSource" : {   
 					"uri" : "https://ajax.googleapis.com/ajax/services/search/web",
 					"crossDomainMode" : "JSONP",
-					"commands" : GoogleCommandStore,
+					"commands" : GoogleCommandStore
 				},
 				"eventDatasource" : {
 					"uri" : "default",
 					"crossDomainMode" : "JSONP",
-					"commands" : swcEventCommandStore,
+					"commands" : swcEventCommandStore
 				},
 				"DataPaperDatasource" : {
 					"uri" : "http://dataconf.liris.cnrs.fr:5984/datapaper/_design/public/_view/by_type",
 					"crossDomainMode" : "JSONP",
-					"commands" : DPCommandStore, 
-				},
-				"ReasonerDatasource" : {
-					"uri" : "local",
-					"commands" : ReasonerCommandStore, 
+					"commands" : DPCommandStore
 				}
 
 			}, 
@@ -269,15 +265,7 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					    {
 							"datasource" : "SemanticWebConferenceDatasource",
 							"name" : "getPublicationsByKeyword",
-						},
-						{
-							"datasource" : "ReasonerDatasource",
-							"name" : "getMoreSpecificKeywords",
-						},
-						{
-							"datasource" : "ReasonerDatasource",
-							"name" : "getLessSpecificKeywords",
-						},
+						}
 					]
 				},
 				"Organization" : {
@@ -295,19 +283,7 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 							"name" : "getOrganization",
 						}
 					]
-				},
-				"Recommendation" : {
-					"hash" : "recommendation",
-					"view" : "recommendation",
-					"graphView" : "no",
-					"title": "Recommendation",
-					"commands" : [
-						{
-							"datasource" : "SemanticWebConferenceDatasource",
-							"name" : "getRecommendedPublications",
-						}
-					]
-				},
+				}
 			}
 		};
 		return AppConfig;

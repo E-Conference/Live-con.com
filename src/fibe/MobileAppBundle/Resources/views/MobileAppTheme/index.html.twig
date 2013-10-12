@@ -8,8 +8,9 @@
     <div class="center">
       <div class="row">
           <div class='col-10'>
-            <iframe style="height:500px;width:100%;" src="{{path('mobileAppPublic_index', { 'id': 3 })}}"/></iframe>
+            <iframe style="height:500px;width:100%;" src="{{path('mobileAppPublic_index', { 'id': conference.id })}}"/></iframe>
           </div>
+          <a href="{{path('mobileAppPublic_index', { 'id': conference.id })}}" ><i class="icon-eye-open icon-4x"></i></a>
        <!--    <div class='col-2'>
              <ul class="list-group">
                 <li class="list-group-item"><a href="{{path('mobileAppPublic_index', { 'id': 3 })}}" target="_blank"><i class="icon-eye-open icon-4x"></i> </a></li>
@@ -28,7 +29,7 @@
 {% endblock body %}
 
 {% block javascripts %}
-  <script type="text/javascript" src="{{ asset('js/jscolor/jscolor.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('js/jscolor/jscolor.js')}}"></script>
   $( document ).ready(function() {
       console.log( "ready!" );
   });
