@@ -262,6 +262,14 @@ class Person
      * @ORM\Column(type="string", length=128, unique=true)
      */
     protected $slug;
+
+    /**
+     *  Conference associated to this person
+     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="persons", cascade={"persist"})
+     * @ORM\JoinColumn(name="wwwConf_id", referencedColumnName="id")
+     *
+     */
+    protected $conference;
     
 
     /**
@@ -1008,4 +1016,27 @@ class Person
     }
 
 
+
+    /**
+     * Set conference
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
+     * @return Person
+     */
+    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference = null)
+    {
+        $this->conference = $conference;
+    
+        return $this;
+    }
+
+    /**
+     * Get conference
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
+     */
+    public function getConference()
+    {
+        return $this->conference;
+    }
 }

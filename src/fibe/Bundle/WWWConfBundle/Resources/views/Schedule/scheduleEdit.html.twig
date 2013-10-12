@@ -23,15 +23,18 @@
 
         <button class="btn btn-primary" type="submit"><i class="icon-ok"></i> Save</button>
 
-          </form>
+            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
+                {{ form_rest(edit_form  )}}
+            </div> 
+    </form>
 
-               <form id="delete-event-form">
-                  <input type="hidden" name="_method" value="DELETE" />
-                    {{ form_widget(delete_form) }}
-                <button type="submit" class="btn btn-danger">
-                    <i class="icon-trash"></i>
-                </button>
-              </form>
+    <form id="delete-event-form">
+        <input type="hidden" name="_method" value="DELETE" />
+          {{ form_widget(delete_form) }}
+      <button type="submit" class="btn btn-danger">
+          <i class="icon-trash"></i>
+      </button>
+    </form>
          <p>
             <h1>Themes</h1>
             <div id="themes_related_list">

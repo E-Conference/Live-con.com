@@ -194,6 +194,7 @@ class EventController extends Controller
      * @Route("/{id}/update", name="schedule_event_update")
      * @Method("POST")
      * @Template("IDCISimpleScheduleBundle:Event:edit.html.twig")
+     * @Method({"PUT","POST"})
      */
     public function updateAction(Request $request, $id)
     {

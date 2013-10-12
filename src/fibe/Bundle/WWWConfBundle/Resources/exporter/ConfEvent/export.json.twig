@@ -9,7 +9,7 @@
     "resources"        : "{{ entity.resources }}",
     "duration"         : "{{ entity.duration }}",
     "last_modified_at" : "{{ entity.lastModifiedAt | date('Y-m-d H:i') }}",
-    "description"      : "{{ entity.description }}",
+    "description"      : {{ entity.description|json_encode|raw()  }},
     "comment"          : "{{ entity.comment }}",
     "url"              : "{{ entity.url }}",
     "organizer"        : "{{ entity.organizer }}",

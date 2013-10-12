@@ -100,11 +100,19 @@ class ScheduleController extends Controller
                 $event->setEndAt(new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()))); 
                 $event->setStartAt(new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get())));  
                 $event->setSummary( $postData['title'] );
-                $event->setIsAllDay($postData['allDay']=="true") ;
-
+                $event->setIsAllDay($postData['allDay']=="true") ; 
                 $event->setWwwConf($conf);
-                
-                $em->persist($event);
+
+                $em->persist($event); 
+                $em->flush();
+
+                $xprop= new XProperty(); 
+                $xprop->setXNamespace("event_uri"); 
+                $xprop->setXKey(rand(0,999999));
+                $xprop->setXValue("http://dataconf-event/" . $event->getId());  
+                $xprop->setCalendarEntity($event);
+
+                $em->persist($xprop);  
                 $em->flush();
 
                 $JSONArray['id'] = $event->getId();
