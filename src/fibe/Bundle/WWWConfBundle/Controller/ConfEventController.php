@@ -31,13 +31,13 @@ class ConfEventController extends Controller
 {
     /**
      * Lists all ConfEvent entities.
-     * @Route(name="confevent")
+     * @Route(name="schedule_confevent")
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findAll();
+        $entities = $this->getUser()->getCurrentConf()->getConfEvents();
 
         return $this->render('fibeWWWConfBundle:ConfEvent:index.html.twig', array(
             'entities' => $entities,
@@ -57,6 +57,10 @@ class ConfEventController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
+
+            //Link the new Event to the current Conf 
+            $entity->setWwwConf($this->getUser()->getCurrentConf());
+            $em->persist($entity); 
             $em->flush();
 
             $xprop= new XProperty(); 

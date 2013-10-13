@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *
  *
  * This class define an Equipment for a location.
- *  @ORM\Table(name="equipment")
+ * @ORM\Table(name="equipment")
  * @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\EquipmentRepository")
  * @ORM\HasLifecycleCallbacks
  */

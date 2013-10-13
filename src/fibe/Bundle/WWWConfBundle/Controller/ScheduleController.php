@@ -44,9 +44,7 @@ class ScheduleController extends Controller
     public function indexAction()
     {
 
-        $conf = $this->getDoctrine()
-                     ->getRepository('fibeWWWConfBundle:WwwConf')
-                     ->find(1); 
+        $conf = $this->getUser()->getCurrentConf();
         return array('currentConf' => $conf);     
     
 }    
@@ -59,8 +57,7 @@ class ScheduleController extends Controller
     {
 
         $em = $this->getDoctrine();
-        $conf = $em->getRepository('fibeWWWConfBundle:WwwConf')
-                 ->find(1);
+        $conf =$this->getUser()->getCurrentConf();
         $categories = $em->getRepository('IDCISimpleScheduleBundle:Category')->getOrdered();
         $locations = $em->getRepository('IDCISimpleScheduleBundle:Location')->findAll();
         $themes = $em->getRepository('fibeWWWConfBundle:Theme')->findAll();

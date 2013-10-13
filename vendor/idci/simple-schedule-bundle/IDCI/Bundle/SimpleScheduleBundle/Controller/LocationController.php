@@ -41,8 +41,10 @@ class LocationController extends Controller
     {
         
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('IDCISimpleScheduleBundle:Location')->findAll();
-    
+        //$entities = $em->getRepository('IDCISimpleScheduleBundle:Location')->findAll();
+        $currentConf = $this->getUser()->getCurrentConf();
+        $entities = $currentConf->getLocations()->toArray();
+     
         $adapter = new ArrayAdapter($entities);
         $pager = new PagerFanta($adapter);
         $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
@@ -112,7 +114,7 @@ class LocationController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            
+            $entity->setConference($this->getUser()->getCurrentConf());
             $em->persist($entity);
             $em->flush();
 

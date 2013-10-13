@@ -293,4 +293,27 @@ class Location
         return $this->equipments;
     }
 
+     /**
+     * Set conference
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\wwwConf $conference
+     * @return Paper
+     */
+    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\wwwConf $conference = null)
+    {
+        $this->conference = $conference;
+    
+        return $this;
+    }
+
+    /**
+     * Get conference
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\wwwConf 
+     */
+    public function getConference()
+    {
+        return $this->conference;
+    }
+
 }
