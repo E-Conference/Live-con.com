@@ -43,11 +43,6 @@
 								out+="</table>";
 								parameters.contentEl.append('<h2>Ressource</h2>');
 								parameters.contentEl.append(out);	
-							}else{
-								for(i=0;i<dataPaper[0].ressource.length;i++){
-									ViewAdapterGraph.addNode("Ressource "+dataPaper[0].ressource[i].value.type+' '+dataPaper[0].ressource[i].value.description, dataPaper[0].ressource[i].value.url);
-								}
-							
 							}
 						}
 					}

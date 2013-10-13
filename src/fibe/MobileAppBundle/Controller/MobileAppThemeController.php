@@ -63,7 +63,9 @@ class MobileAppThemeController extends Controller
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
+            $this->clearCache();
         }
+        
         return $this->redirect($this->generateUrl('mobileAppTheme_index'));
     }
 
@@ -87,8 +89,17 @@ class MobileAppThemeController extends Controller
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
+            $this->clearCache();
         }
         return $this->redirect($this->generateUrl('mobileAppTheme_index'));
+    }
+
+    public function clearCache(){
+        $fileCache = $this->container->get('twig')->getCacheFilename('fibeMobileAppBundle:MobileAppPublic:index.html.twig');
+
+        if (is_file($fileCache)) {
+            @unlink($fileCache);
+        }
     }
 
 }

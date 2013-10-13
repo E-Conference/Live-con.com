@@ -9,7 +9,7 @@
 *   Version: 1.2
 *   Tags:  JSON, SPARQL, AJAX
 **/
-define(['jquery', 'underscore', 'encoder','view/ViewAdapter',  'view/ViewAdapterText', 'localStorage/localStorageManager', ], function($, _, Encoder, ViewAdapter, ViewAdapterText, StorageManager){
+define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterText', 'localStorage/localStorageManager' ], function($, _, Encoder, ViewAdapter, ViewAdapterText, StorageManager){
 	var DBLPCommandStore = {
 	 
 		getAuthorPublications : {
@@ -55,6 +55,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter',  'view/ViewAdapter
 														 parameters.contentEl,
 														 {type:"Node",labelCllbck:function(str){return "External paper : "+str["publiTitle"];}}
 														 );
+				
 						}
 					}
 				} 
@@ -172,31 +173,6 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter',  'view/ViewAdapter
 								parameters.contentEl.append('<h2>Publisher</h2>');
 								parameters.contentEl.append('<p>'+publisher+'</p>'); 
 							}
-						}else{
-									  
-							var title  = publiInfo[0].title;				
-							var link  = publiInfo[0].publiLink;	
-							var resume  = publiInfo[0].resume;	
-							var year  = publiInfo[0].year;	
-							var publisher  = publiInfo[0].publisher;	
-							
-						
-							if(title != ""){  
-								ViewAdapterGraph.addLeaf("Title :"+title);
-							} 
-							if(resume != ""){  
-								ViewAdapterGraph.addLeaf("Reference :"+resume);
-							} 
-							if(link != ""){ 
-								ViewAdapterGraph.addLeaf("Link : "+link);
-							}
-							if(year != ""){ 
-								ViewAdapterGraph.addLeaf("Year :"+year);
-							}
-							if(publisher !=""){ 
-								ViewAdapterGraph.addLeaf("Publisher :"+publisher);
-							}
-						
 						}
 					}
 				}

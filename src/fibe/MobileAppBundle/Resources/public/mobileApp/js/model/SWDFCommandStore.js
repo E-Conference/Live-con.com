@@ -62,6 +62,15 @@ var SWDFCommandStore = {
 										 parameters.contentEl,
 										{autodividers:"force",count :true}
 										 );
+					}else{
+						ViewAdapterGraph.appendList(parameters.JSONdata,
+										 {baseHref: '#author/',
+										 hrefCllbck:function(str){return Encoder.encode(str["authorName"])+'/'+Encoder.encode(str["authorUri"])}
+										 },
+										 "authorName",
+										 parameters.contentEl,
+										 {type:"Node",labelCllbck:function(str){return "Name : "+str["authorName"];}});
+					
 					}
 				}
 			}
@@ -253,6 +262,15 @@ var SWDFCommandStore = {
 									 {autodividers:"force",count :false}
 									 );
 					
+					}else{
+						ViewAdapterGraph.appendList(parameters.JSONdata,
+									 {baseHref: '#publication/',
+									 hrefCllbck:function(str){return Encoder.encode(str["publiTitle"])+'/'+Encoder.encode(str["publiUri"])},
+									 },
+									 "publiTitle",
+									 parameters.contentEl,
+									 {type:"Node",labelCllbck:function(str){return "Publication : "+str["publiTitle"];}});
+					
 					}
 				}
 			}
@@ -299,6 +317,19 @@ var SWDFCommandStore = {
 										 parameters.contentEl,
 										 {autodividers:"force",count :true}
 										 );
+
+					}else{
+						ViewAdapterGraph.appendList(parameters.JSONdata,
+										 {baseHref:'#keyword/',
+										  hrefCllbck:function(str){return Encoder.encode(str["keyword"])},
+										  },
+										 "keyword",
+										 parameters.contentEl,
+										 {
+										    type:"Node",
+										    labelCllbck:function(str){return "Publication : "+str["keyword"];},
+										    option:{color:"#3366CC"}
+										 });
 
 					}
 				}
@@ -348,6 +379,19 @@ var SWDFCommandStore = {
 										 {autodividers:"force",count :true}
 										 );
 
+					}else{
+						ViewAdapterGraph.appendList(parameters.JSONdata,
+										 {baseHref:'#keyword/',
+										  hrefCllbck:function(str){return Encoder.encode(str["keyword"])},
+										  },
+										 "keyword",
+										 parameters.contentEl,
+										 {
+										    type:"Node",
+										    labelCllbck:function(str){return "Publication : "+str["keyword"];},
+										    option:{color:"#3366CC"}
+										 });
+
 					}
 				}
 			} 
@@ -395,6 +439,11 @@ var SWDFCommandStore = {
 						$.each(parameters.JSONdata, function(i,publication){
 							ViewAdapterText.appendButton(parameters.contentEl,'#publication/'+Encoder.encode(publication.publiUri),publication.publiTitle);
 						});
+					}else{
+						$.each(parameters.JSONdata, function(i,publication){
+							ViewAdapterGraph.addNode("Publication : "+publication.publiTitle,'#publication/'+Encoder.encode(publication.publiTitle)+'/'+Encoder.encode(publication.publiUri));
+						});
+					
 					}
 				}
 			}
@@ -440,7 +489,6 @@ var SWDFCommandStore = {
 		},
 		
 		ViewCallBack : function(parameters){
-			
 			if(parameters.JSONdata != null ){
 				var publicationInfo = parameters.JSONdata;
 				if(_.size(publicationInfo) > 0 ){
@@ -519,6 +567,11 @@ var SWDFCommandStore = {
 						$.each(parameters.JSONdata, function(i,author){
 							ViewAdapterText.appendButton(parameters.contentEl,'#author/'+Encoder.encode(author.authorName)+'/'+Encoder.encode(author.authorUri),author.authorName,{tiny:true});
 						});
+					}else{
+						$.each(parameters.JSONdata, function(i,author){
+							ViewAdapterGraph.addNode("Author : "+author.authorName,'#author/'+Encoder.encode(author.authorName)+'/'+Encoder.encode(author.authorUri),{color:"#7db9e8"});
+						});
+					
 					}
 				}
 			}
@@ -570,6 +623,11 @@ var SWDFCommandStore = {
 						$.each(parameters.JSONdata, function(i,session){
 							ViewAdapterText.appendButton(parameters.contentEl,'#event/'+Encoder.encode(session.eventUri),session.eventLabel);
 						});
+					}else{
+						$.each(parameters.JSONdata, function(i,session){
+							ViewAdapterGraph.addNode("Sub session : "+session.eventLabel,'#event/'+Encoder.encode(session.eventUri),{color:"#003399"});
+						});
+					
 					}
 				}
 			}
@@ -620,6 +678,11 @@ var SWDFCommandStore = {
 						$.each(parameters.JSONdata, function(i,track){
 							ViewAdapterText.appendButton(parameters.contentEl,'#event/'+Encoder.encode(track.eventUri),track.eventLabel);
 						});
+					}else{
+						$.each(parameters.JSONdata, function(i,track){
+							ViewAdapterGraph.addNode("Sub track : "+track.eventLabel,'#event/'+Encoder.encode(track.eventUri),{color:"#003399"});
+						});
+					
 					}
 				}
 			}
@@ -846,6 +909,15 @@ var SWDFCommandStore = {
 											 "publiTitle",
 											 parameters.contentEl
 											 );
+					}else{
+						ViewAdapterGraph.appendList(parameters.JSONdata,
+											 {baseHref:'#publication/',
+											  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])},
+											  },
+											 "publiTitle",
+											 parameters.contentEl,
+											 {type:"Node",labelCllbck:function(str){return "Publication : "+str["publiTitle"];}});
+					
 					}
 				}
 			} 
@@ -899,6 +971,17 @@ var SWDFCommandStore = {
 												 "eventLabel",
 												 parameters.contentEl,
 												 {type:"Node",labelCllbck:function(str){return "Track : "+str["eventLabel"];}});
+					}else{ 
+						ViewAdapterGraph.appendList(parameters.JSONdata,
+												 {baseHref:'#event/',
+												  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
+												  },
+												 "eventLabel",
+												 parameters.contentEl,
+												 {type:"Node",
+												  labelCllbck:function(str){return "Track : "+str["eventLabel"];},
+												  option:{color:"#3366CC"},
+												 }); 
 					}
 				}
 			} 
@@ -950,6 +1033,14 @@ var SWDFCommandStore = {
 											 parameters.contentEl,
 											 {type:"Node",labelCllbck:function(str){return "presentation : "+str["eventLabel"];}});
 
+					}else{
+						ViewAdapterGraph.appendList(parameters.JSONdata,
+											 {baseHref:'#event/',
+											  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
+											  },
+											 "eventLabel",
+											 parameters.contentEl,
+											 {type:"Node",labelCllbck:function(str){return "presentation : "+str["eventLabel"];}});
 					}
 				}
 			} 
@@ -1000,6 +1091,17 @@ var SWDFCommandStore = {
 											 {type:"Node",labelCllbck:function(str){return "Track : "+str["sessionEvent"];}});
 
 					
+					}else{
+					
+					  ViewAdapterGraph.appendList(parameters.JSONdata,
+											 {baseHref:'#event/',
+											  hrefCllbck:function(str){return Encoder.encode(str["sessionEvent"])},
+											  },
+											 "sessionEventLabel",
+											 parameters.contentEl,
+											 {type:"Node",labelCllbck:function(str){return "Track : "+str["sessionEvent"];},
+												  option:{color:"#3366CC"},
+											 });
 					}
 				}
 			} 
@@ -1049,6 +1151,17 @@ var SWDFCommandStore = {
 										 "eventLabel",
 										 parameters.contentEl,
 										 {type:"Node",labelCllbck:function(str){return "Keynote : "+str["eventLabel"];}});
+					}else{
+					
+				    ViewAdapterGraph.appendList(parameters.JSONdata,
+										 {baseHref:'#event/',
+										  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
+										  },
+										 "eventLabel",
+										 parameters.contentEl,
+										 {type:"Node",labelCllbck:function(str){return "Keynote : "+str["eventLabel"];}});
+					
+					
 					}
 				}
 			} 
@@ -1094,6 +1207,11 @@ var SWDFCommandStore = {
 						$.each(parameters.JSONdata, function(i,keyword){
 							StorageManager.pushKeywordToStorage(keyword.keyword);
 							ViewAdapterText.appendButton(parameters.contentEl,'#keyword/'+Encoder.encode(keyword.keyword),keyword.keyword,{tiny:true});
+						});
+					}else{
+						$.each(parameters.JSONdata, function(i,keyword){
+							
+							ViewAdapterGraph.addNode("Keyword : "+keyword.keyword,'#keyword/'+Encoder.encode(keyword.keyword),{color:"#3366CC"});
 						});
 					}
 				}
@@ -1167,6 +1285,15 @@ var SWDFCommandStore = {
 											 parameters.contentEl
 											);
 
+					}else{
+						ViewAdapterGraph.appendList(parameters.JSONdata,
+											 {baseHref:'#publication/',
+											  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])},
+											  },
+											 "publiTitle",
+											 parameters.contentEl,
+											 {type:"Node",labelCllbck:function(str){return "Publication : "+str["publiTitle"];}});
+
 					}
 				}
 			}
@@ -1220,6 +1347,14 @@ var SWDFCommandStore = {
 							ViewAdapterText.appendButton(parameters.contentEl,'#organization/'+Encoder.encode(organization.OrganizationName)+'/'+Encoder.encode(organization.OrganizationUri),organization.OrganizationName,{tiny:true});
 
 						});
+					}else{
+						
+						$.each(parameters.JSONdata, function(i,organization){
+						
+							ViewAdapterGraph.addNode("Organization : "+organization.OrganizationName,'#organization/'+Encoder.encode(organization.OrganizationName)+'/'+Encoder.encode(organization.OrganizationUri),{color:"#FF9999"});
+						
+						});
+					
 					}
 				}
 			}
@@ -1264,6 +1399,11 @@ var SWDFCommandStore = {
 						$.each(parameters.JSONdata, function(i,author){
 							ViewAdapterText.appendButton(parameters.contentEl,'#author/'+Encoder.encode(author.MemberName)+'/'+Encoder.encode(author.MemberUri),author.MemberName,{tiny:true});
 						});
+					}else{
+						$.each(parameters.JSONdata, function(i,author){
+							ViewAdapterGraph.addNode("Member : "+author.MemberName,'#author/'+Encoder.encode(author.MemberName)+'/'+Encoder.encode(author.MemberUri),{color:"#000015"});
+						});
+					
 					}
 				}
 			}
@@ -1391,6 +1531,15 @@ var SWDFCommandStore = {
 								}
 							});
 						}
+					}else{
+						ViewAdapterGraph.appendList(parameters.JSONdata,
+											 {baseHref:'#publication/',
+											  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])},
+											  },
+											 "publiTitle",
+											 parameters.contentEl,
+											 {type:"Node",labelCllbck:function(str){return "Publication : "+str["publiTitle"];}});
+
 					}
 				}
 			}

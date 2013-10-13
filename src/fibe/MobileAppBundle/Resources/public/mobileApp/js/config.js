@@ -13,13 +13,14 @@
 **/
 define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandStore','model/GoogleCommandStore','model/swcEventCommandStore', 'model/DPCommandStore'],
 	function(SWDFCommandStore, DBLPCommandStore, DDGoCommandStore, GoogleCommandStore, swcEventCommandStore, DPCommandStore) {
+		
 		var AppConfig = {
 			//Defnition of the conference
 			"conference" : {
-				"name": "ESWC'2013",
-				"logoUri": "http://2013.eswc-conferences.org/sites/default/files/ESWC2013-logo.png",
-				"website": "http://2013.eswc-conferences.org/",
-				"baseUri": "http://data.semanticweb.org/conference/eswc/2013",
+				"name": "BLEND",
+				"logoUri": "css/images/banniereTranspBlend.png",
+				"website": "http://www.blendconference.com/",
+				"baseUri": "http://www.blendconference.com/",
 			},
 			
 			//Defnition of the datasources 
@@ -30,37 +31,36 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 				"SemanticWebConferenceDatasource" : {
 					"uri" : "http://poster.www2012.org/endpoint/eswc2013/sparql/",
 					"crossDomainMode" : "CORS",
-					"commands" : SWDFCommandStore
+					"commands" : SWDFCommandStore, 
 				},
 				
 				"DblpDatasource" : {
 					"uri" : "http://dblp.rkbexplorer.com/sparql/",
 					"crossDomainMode" : "CORS",
-					"commands" : DBLPCommandStore
+					"commands" : DBLPCommandStore,
 				},
 
 				"DuckDuckGoDatasource" : {   
 					"uri" : "http://api.duckduckgo.com/",
 					"crossDomainMode" : "JSONP",
-					"commands" : DDGoCommandStore
+					"commands" : DDGoCommandStore,
 				},
 				
 				"GoogleDataSource" : {   
 					"uri" : "https://ajax.googleapis.com/ajax/services/search/web",
 					"crossDomainMode" : "JSONP",
-					"commands" : GoogleCommandStore
+					"commands" : GoogleCommandStore,
 				},
 				"eventDatasource" : {
-					"uri" : "default",
+					"uri" : "http://dataconf.liris.cnrs.fr/simpleschedule-blend/web/api/",
 					"crossDomainMode" : "JSONP",
-					"commands" : swcEventCommandStore
+					"commands" : swcEventCommandStore,
 				},
 				"DataPaperDatasource" : {
 					"uri" : "http://dataconf.liris.cnrs.fr:5984/datapaper/_design/public/_view/by_type",
 					"crossDomainMode" : "JSONP",
-					"commands" : DPCommandStore
+					"commands" : DPCommandStore, 
 				}
-
 			}, 
 			//Declaration of all the routes to be used by the router
 			// hash : url to be catched by the router
@@ -72,31 +72,32 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"hash" : "",
 					"view" : "home",
 					"graphView" : "no",
-					"title": "ESWC2013 - publications",
+					"title": "Du 1 au 2 octobre",
 					"commands" : [ 
-						{
-						    "datasource" : "eventDatasource",
-						    "name" : "getConferenceMainTrackEvent",
-						},
-						{
-							"datasource" : "eventDatasource",
-							"name" : "getConferenceKeynote",
-						},
 						{
 							"datasource" : "eventDatasource",
 							"name" : "getConferencePanel",
 						},
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getConferenceTutorial",
+							"name" : "getConferenceTalk",
 						},
 						{
 							"datasource" : "eventDatasource",
 							"name" : "getConferenceWorkshop",
+						},
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getSessionEvent",
+						},
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getConferenceSpecialEvent",
 						}
+						
 					]
 				}, 
-		    "Schedule" : {
+		    	"Schedule" : {
 					"hash" : "schedule/*locationLabel",
 					"view" : "schedule",
 					"graphView" : "no",
@@ -107,7 +108,19 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						    "name" : "getConferenceSchedule",
 						},
 					]
-				}, 
+				},
+				"WhatsNext" : {
+					"hash" : "whatsnext/",
+					"view" : "whatsnext",
+					"graphView" : "no",
+					"title": "What's next?",
+					"commands" : [
+						{
+						    "datasource" : "eventDatasource",
+						    "name" : "getWhatsNext",
+						},
+					]
+				},  
 			    "qrScan" : {
 					"hash" : "qrcScan",
 					"view" : "qrcScan",
@@ -116,39 +129,39 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [ 
 					]
 				}, 
-				"Proceedings-search-by-author" : { 
-					"hash" : "search/by-author/*uri",
+				"Proceedings-search-by-speaker" : { 
+					"hash" : "search/by-speaker/*uri",
 					"view" : "",
 					"graphView" : "no",
-					"title": "Search by author",
+					"title": "Search by speaker",
 					"commands" : [
 					    {
-							"datasource" : "SemanticWebConferenceDatasource",
-							"name" : "getAllAuthors",
+							"datasource" : "eventDatasource",
+							"name" : "getAllSpeakers",
 						} 
 					]
 				},
-			    "Proceedings-search-by-keyword" : { 
-					"hash" : "search/by-keyword/*uri",
+			    "Proceedings-search-by-theme" : { 
+					"hash" : "search/by-theme/*uri",
 					"view" : "",
 					"graphView" : "no",
-					"title": "Search by keywords",
+					"title": "Search by theme",
 					"commands" : [
 					    {
-							"datasource" : "SemanticWebConferenceDatasource",
-							"name" : "getAllKeyword",
+							"datasource" : "eventDatasource",
+							"name" : "getAllTheme",
 						} 
 					]
 				},
-			    "Proceedings-search-by-title" : { 
-					"hash" : "search/by-title/*uri",
+			    "Proceedings-search-by-category" : { 
+					"hash" : "search/by-category/*uri",
 					"view" : "",
 					"graphView" : "no",
-					"title": "Search by title",
+					"title": "Search by category",
 					"commands" : [
 					    {
-							"datasource" : "SemanticWebConferenceDatasource",
-							"name" : "getAllTitle",
+							"datasource" : "eventDatasource",
+							"name" : "getAllCategories",
 						} 
 					]
 				},
@@ -175,6 +188,14 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						{
 							"datasource" : "eventDatasource",
 							"name" : "getEventPublications",
+						},
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getSpeakersFromEventUri",
+						},
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getChairsFromEventUri",
 						},
 						
 						
@@ -205,38 +226,50 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						{
 							"datasource" : "eventDatasource",
 							"name" : "getEventRelatedPublication",
+						}
+					]
+				},
+				"Speaker" : {
+					"hash" : "speaker/:name",
+					"view" : "speaker",
+					"graphView" : "no",
+					"title": "Speaker",
+					"commands" : [
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getSpeaker",
+						},
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getEventBySpeakerName",
+						},
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getEventByChairName",
 						},
 					]
 				},
-				"Author" : {
-					"hash" : "author/:name/*uri",
-					"view" : "author",
+				"Theme" : {
+					"hash" : "theme/:name",
+					"view" : "theme",
 					"graphView" : "no",
-					"title": "Author",
+					"title": "Theme",
 					"commands" : [
 						{
-							"datasource" : "DataPaperDatasource",
-							"name" : "getDataPaperAuthor",
+							"datasource" : "eventDatasource",
+							"name" : "getEventbyTheme",
 						},
+					]
+				},
+				"Category" : {
+					"hash" : "category/:name",
+					"view" : "category",
+					"graphView" : "no",
+					"title": "Category",
+					"commands" : [
 						{
-							"datasource" : "DataPaperDatasource",
-							"name" : "getDataPaperRessource",
-						},
-						{
-							"datasource" : "GoogleDataSource",
-							"name" : "getAuthorPersonalPage",
-						},
-						{
-							"datasource" : "SemanticWebConferenceDatasource",
-							"name" : "getAuthorsProceedings",
-						},
-						{
-							"datasource" : "SemanticWebConferenceDatasource",
-							"name" : "getAuthorOrganization",
-						},
-					    {
-							"datasource" : "DblpDatasource",
-							"name" : "getAuthorPublications",
+							"datasource" : "eventDatasource",
+							"name" : "getEventbyCategory",
 						},
 					]
 				},
@@ -259,7 +292,7 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 				"Keyword" : {
 					"hash" : "keyword/*uri",
 					"view" : "keyword",
-					"graphView" : "yes",
+					"graphView" : "no",
 					"title": "Keyword",
 					"commands" : [
 					    {
@@ -271,7 +304,7 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 				"Organization" : {
 					"hash" : "organization/:name/*uri",
 					"view" : "organization",
-					"graphView" : "yes",
+					"graphView" : "no",
 					"title": "Organization",
 					"commands" : [
 						{
@@ -283,7 +316,19 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 							"name" : "getOrganization",
 						}
 					]
-				}
+				},
+				"Recommendation" : {
+					"hash" : "recommendation",
+					"view" : "recommendation",
+					"graphView" : "no",
+					"title": "Recommendation",
+					"commands" : [
+						{
+							"datasource" : "SemanticWebConferenceDatasource",
+							"name" : "getRecommendedPublications",
+						}
+					]
+				},
 			}
 		};
 		return AppConfig;

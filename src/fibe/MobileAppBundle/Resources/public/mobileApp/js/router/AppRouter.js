@@ -38,9 +38,7 @@ define(['backbone', 'jquery', 'config', 'encoder', 'localStorage/localStorageMan
 			//Initialize storage manager
 			StorageManager.initialize();
 			//Initialize ViewAdapter to text mode
-			ViewAdapter.initialize("text");
-
-			
+			ViewAdapter.initialize("text");	
 			//Initialize ajax Loader 
 			AjaxLoader.initialize(ViewAdapter);
 		
@@ -81,30 +79,49 @@ define(['backbone', 'jquery', 'config', 'encoder', 'localStorage/localStorageMan
 					
 						var currentDatasource = self.datasources[commandItem.datasource];
 						var currentCommand    = currentDatasource.commands[commandItem.name];
-						var doRequest = true;
-						if(JSONdata != null){
-							if(JSONdata.hasOwnProperty(commandItem.name)){
-								doRequest = false;
-								console.log("CAll : "+commandItem.name+" ON Storage");
-								//Informations already exists so we directly call the command callBack view to render them 
-								currentCommand.ViewCallBack({JSONdata : JSONdata[commandItem.name], contentEl : currentPage.find("#"+commandItem.name), name : name, mode : ViewAdapter.mode});
+						
+						if(currentDatasource.uri == "local"){
+							$("#textHeader > h1").html(uri);
+							var doRequest = true;
+							if(JSONdata != null){
+								if(JSONdata.hasOwnProperty(commandItem.name)){
+									doRequest = false;
+									currentCommand.ViewCallBack({JSONdata : JSONdata[commandItem.name], contentEl : currentPage.find("#"+commandItem.name),currentUri : uri});
+								}
+							}
+							if(doRequest){
+								currentCommand.ModelCallBack({contentEl : "#"+commandItem.name,currentUri : uri});
+							}
+						}else{
+							var doRequest = true;
+							if(JSONdata != null){
+								if(JSONdata.hasOwnProperty(commandItem.name)){
+									doRequest = false;
+									console.log("CAll : "+commandItem.name+" ON Storage");
+									//Informations already exists so we directly call the command callBack view to render them 
+									currentCommand.ViewCallBack({JSONdata : JSONdata[commandItem.name], contentEl : currentPage.find("#"+commandItem.name), name : name, mode : ViewAdapter.mode});
+									
+								}
+							}
+							if(doRequest){
+								console.log("CAll : "+commandItem.name+" ON "+commandItem.datasource);
+								//Retrieveing the query built by the command function "getQuery"
+								try {
+									//Preparing Ajax call 
+									var ajaxData   = currentCommand.getQuery({conferenceUri : self.conference.baseUri, uri : uri,datasource : currentDatasource, name : name, conference : self.conference})
+							    } catch (e) {
+							    	e.message = "cannot find command '"+commandItem.name+"' in the commandStore '"+commandItem.datasource+"'";
+							    	throw e;
+							    }
+
+								if(ajaxData != null){
+									AjaxLoader.executeCommand({datasource : currentDatasource, command : currentCommand,data : ajaxData, currentUri : uri, contentEl :  currentPage.find("#"+commandItem.name), name : name, conference : self.conference});
+								}
+								
 								
 							}
-						}
-						if(doRequest){
-							console.log("CAll : "+commandItem.name+" ON "+commandItem.datasource);
-							//Retrieveing the query built by the command function "getQuery"
-							var ajaxData   = currentCommand.getQuery({conferenceUri : self.conference.baseUri, uri : uri,datasource : currentDatasource, name : name, conference : self.conference})
-							//Preparing Ajax call 
-
-							if(ajaxData != null){
-								AjaxLoader.executeCommand({datasource : currentDatasource, command : currentCommand,data : ajaxData, currentUri : uri, contentEl :  currentPage.find("#"+commandItem.name), name : name, conference : self.conference});
-							}
-							
-							
-						}
 						
-						
+						}
 					});
 
 					ViewAdapter.generateJQMobileElement();
