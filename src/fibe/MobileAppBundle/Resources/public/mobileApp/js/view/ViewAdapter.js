@@ -7,12 +7,12 @@
 *   Version: 1.2
 *   Tags:  arborjs   
 **/
-define(['jquery', 'jqueryMobile','arbor', 'view/ViewAdapterGraph', 'view/ViewAdapterText', 'view/AbstractView'], function($, jqueryMobile, arbor, ViewAdapterGraph, ViewAdapterText, AbstractView){
+define(['jquery', 'jqueryMobile', 'view/ViewAdapterText', 'view/AbstractView', 'localStorage/localStorageManager', 'ajaxLoader'], function($, jqueryMobile, ViewAdapterText, AbstractView, StorageManager, AjaxLoader){
 	var ViewAdapter = {
 
 		initialize : function(mode){
 			this.mode = mode;
-			ViewAdapterGraph.initSystem();
+			//ViewAdapterGraph.initSystem();
 		},
 
 		update : function(routeItem,title,conference,datasources,uri,name){
@@ -25,7 +25,7 @@ define(['jquery', 'jqueryMobile','arbor', 'view/ViewAdapterGraph', 'view/ViewAda
 			this.commands = routeItem.commands;
 			this.uri = uri;
 			this.name = name;
-			this.initPage(this.graphView);
+			this.initPage();
 			return this.currentPage ;
 		},
 
@@ -48,58 +48,59 @@ define(['jquery', 'jqueryMobile','arbor', 'view/ViewAdapterGraph', 'view/ViewAda
 			return $(page.el);
 		},
 		
-		initPage : function (showButton){
+		initPage : function (){
 			
-			if(this.mode == "text" || showButton == "no"){
-				if(showButton == "yes"){
-					this.addswitchButton();
-				}
+			// if(this.mode == "text" || showButton == "no"){
+			// 	if(showButton == "yes"){
+			// 		this.addswitchButton();
+			// 	}
 				this.mode = "text";
 				_.each(this.commands,function(commandItem){
 					ViewAdapterText.generateContainer(this.currentPage,commandItem.name);	
 				},this);
-			}else{
-				this.currentPage.find(".content").empty();
-				this.addswitchButton();
-				ViewAdapterGraph.initContainer(this.currentPage.find(".content"),this.uri,this.name);
-			}
+			// }else{
+			// 	this.currentPage.find(".content").empty();
+			// 	this.addswitchButton();
+			// 	ViewAdapterGraph.initContainer(this.currentPage.find(".content"),this.uri,this.name);
+			// }
 		},
 		addswitchButton : function (){
-			var btnLabel = "";
-			if(this.mode == "text"){
-				btnlabel = "Graph View";
-			}else{
-				btnlabel = "Text View";
-			}
+			// var btnLabel = "";
+			// if(this.mode == "text"){
+			// 	btnlabel = "Graph View";
+			// }else{
+			// 	btnlabel = "Text View";
+			// }
 
-			switchViewBtn = ViewAdapterText.appendButton(this.currentPage.find(".content"),'javascript:void(0)',btnlabel,{tiny:true,theme:"b",prepend:true, align : "right",margin: "20px"}) ;
-			switchViewBtn.addClass("switch");
-			switchViewBtn.css("margin"," 0px");   
-			switchViewBtn.css("z-index","20"); 
-			switchViewBtn.trigger("create");
+			// switchViewBtn = ViewAdapterText.appendButton(this.currentPage.find(".content"),'javascript:void(0)',btnlabel,{tiny:true,theme:"b",prepend:true, align : "right",margin: "20px"}) ;
+			// switchViewBtn.addClass("switch");
+			// switchViewBtn.css("margin"," 0px");   
+			// switchViewBtn.css("z-index","20"); 
+			// switchViewBtn.trigger("create");
 
-			switchViewBtn.click(function(){  
-				this.changeMode();
-			});
+			// var self = this;
+			// switchViewBtn.click(function(){  
+			// 	self.changeMode();
+			// });
 		},
 		changeMode : function(){
-		
-			if(this.mode == "text"){
-				this.mode = "graph";
-			}else{
-				this.mode = "text";
-			}
+			
+			// if(this.mode == "text"){
+			// 	this.mode = "graph";
+			// }else{
+			// 	this.mode = "text";
+			// }
 			this.currentPage = this.changePage(new AbstractView({templateName :  this.template ,title : this.title, model : this.conference }), "flip");
 			this.initPage(this.graphView);
 			
 			var JSONdata = StorageManager.pullCommandFromStorage(this.uri);
-			$.each(this.commands,function(i,commandItem){
-			
+			_.each(this.commands,function(commandItem,i){
+
 				var currentDatasource = this.datasources[commandItem.datasource];
 				var currentCommand    = currentDatasource.commands[commandItem.name];
 				if(JSONdata != null){
 					if(JSONdata.hasOwnProperty(commandItem.name)){
-						currentCommand.ViewCallBack({JSONdata : JSONdata[commandItem.name],contentEl : this.currentPage.find("#"+commandItem.name), name : this.name, currentUri : this.uri});
+						currentCommand.ViewCallBack({JSONdata : JSONdata[commandItem.name],contentEl : this.currentPage.find("#"+commandItem.name), name : this.name, currentUri : this.uri, mode : ViewAdapter.mode });
 					}
 				}else{
 					var ajaxData   = currentCommand.getQuery({conferenceUri : this.conference.baseUri, uri : this.uri,datasource : currentDatasource, name : name, conference : this.conference});

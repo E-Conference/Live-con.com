@@ -8,11 +8,6 @@
     
 
     <link rel="stylesheet" href="{{ asset('bundles/fibemobileapp/mobileApp/css/jquery.mobile-1.3.0.min.css') }}" />
-    <!--<link rel="stylesheet" href="css/themes/A.min.css" />
-    <link rel="stylesheet" href="css/themes/B.min.css" />
-    <link rel="stylesheet" href="css/themes/C.min.css" />-->
-    
-    <link rel="stylesheet" href="{{ asset('bundles/fibemobileapp/mobileApp/css/appStyle.css') }}" />
 
     <script  src="{{ asset('bundles/fibemobileapp/mobileApp/js/lib/require.js') }}"></script>
     <script>
@@ -46,13 +41,7 @@
               },
           'underscore': {
             exports: '_'
-          },
-          'arbor':{
-            deps : [
-              'jquery'
-            ],
-            exports: 'arbor'
-          },
+          }
         },
           paths: {
               // the left side is the module ID,
@@ -64,40 +53,197 @@
               // js/lib/jquery-1.9.0.js, relative to
               // the HTML page.
               jquery: 'lib/jquery',
-          backbone: 'lib/backbone',
-          underscore : 'lib/underscore-min',
-          'jqueryMobile.config' : 'lib/jquerymobile.config',
-          'jsw' : 'reasoner/jsw',
-          'jswui' : 'reasoner/jswui',
-          'processOntoloy' : 'reasoner/processOntoloy',
-          'query' : 'reasoner/query',
-          'utilsMin' : 'reasoner/utils-min',
-          'reasoner' : 'reasoner/Reasoner',
-          'reasonerWorker' : 'reasoner/ReasonerWorker',
-          'arbor': 'lib/arbor',
-          'encoder': 'lib/encoder',
-          'blob': 'lib/blob',
-          'fileSaver' : 'lib/FileSaver',
-          'jqueryMobile' : 'lib/jquery.mobile',
-          'jStorage' : 'lib/jstorage.min',
-          'moment' : 'lib/moment.min',
-          'tpl' : 'lib/templateLoader',
-          'ajaxLoader' : 'ajaxLoader/AjaxLoader'
-        
+              backbone: 'lib/backbone',
+              underscore : 'lib/underscore-min',
+              'jqueryMobile.config' : 'lib/jquerymobile.config',
+              'jsw' : 'reasoner/jsw',
+              'jswui' : 'reasoner/jswui',
+              'query' : 'reasoner/query',
+              'encoder': 'lib/encoder',
+              'blob': 'lib/blob',
+              'fileSaver' : 'lib/FileSaver',
+              'jqueryMobile' : 'lib/jquery.mobile',
+              'jStorage' : 'lib/jstorage.min',
+              'moment' : 'lib/moment.min',
+              'tpl' : 'lib/templateLoader',
+              'ajaxLoader' : 'ajaxLoader/AjaxLoader'
           }
 
       });
       
       //Configurations
       require(['config', 'tpl'], function(configuration, tpl){
-          configuration.datasources.eventDatasource.uri = "http://dataconf.liris.cnrs.fr/simpleschedule/web/app.php/api/schedule_event.jsonp?wwwconf_id=3";
-          tpl.uri = "{{ asset('bundles/fibemobileapp/mobileApp/templates/') }}";
+        configuration.datasources.eventDatasource.uri = "http://127.0.1.1/livecon.com/web/app_dev.php/api/";
+        configuration.conference.name = {{ conference.acronym |json_encode|raw }};
+        configuration.conference.logoUri = {{ conference.logo |json_encode|raw }};
+        configuration.routes.Home.title = {{ conference.acronym |json_encode|raw }};
+        tpl.uri = "{{ asset('bundles/fibemobileapp/mobileApp/templates/') }}";
       });
       
       //Entry point
       require(['app']);
 
     </script>
+    <style type="text/css">
+
+        /* global */
+        /*Titles*/
+        H1 , H2 {
+          font-size : 14pt !important;
+        }
+
+        H3, H4{
+          font-size : 13pt !important;
+        }
+
+        H4,H5{
+          margin-top:2pt;
+          margin-bottom:2pt;
+        }
+
+        .inline{
+          font-size : 12pt !important;
+          color: black;
+        }
+
+        a, span {
+          font-size : 10pt !important;
+        }
+
+        p{
+          font-size : 12pt !important;
+          color: black;
+        }
+
+        /**********************   Header ************************/
+        #header {
+          background-color: #{{ mobile_app_config.BGColorHeader}} !important;
+          color: #{{ mobile_app_config.TitleColorHeader}} !important;
+        }
+
+        #header * {
+          background-color: #{{ mobile_app_config.BGColorHeader}} !important;
+          color: #{{ mobile_app_config.TitleColorHeader}} !important;
+        }
+
+        /**********************   Navbar ************************/
+        #navBar{
+          background-color: #{{ mobile_app_config.BGColorNavBar}} !important;
+        }
+
+        #navBar *{
+          background-color: #{{ mobile_app_config.BGColorNavBar}} !important;
+          color: #{{ mobile_app_config.TitleColorNavBar}} !important;
+        }
+
+        /**********************   Content ************************/
+        .content{
+          background-color: #{{ mobile_app_config.BGColorContent}} !important;
+        }
+
+        .content h1,h2,h3,h4{
+          color: #{{ mobile_app_config.TitleColorContent}} !important;
+        }
+
+        /**********************   Footer ************************/
+        #footer{
+          background-color: #{{ mobile_app_config.BGColorFooter}} !important;
+        }
+
+        #footer *{
+          background-color: #{{ mobile_app_config.BGColorFooter}} !important;
+          color: #{{ mobile_app_config.TitleColorFooter}} !important;
+        }
+
+        /**********************   Buttons ************************/
+        .button{
+          background-color: #{{ mobile_app_config.BGColorButton}} !important;
+        }
+
+        .button *{
+          background-color: #{{ mobile_app_config.BGColorButton}} !important;
+          color: #{{ mobile_app_config.TitleColorButton}} !important;
+        }
+
+
+        #logoContainer{
+          float:left;
+          height : 42px;
+          width: 50px;
+        }
+
+        #logoContainer a {
+          height : 100%;
+          width : 100%;
+        }
+
+        #logoContainer img {
+          height : 100%;
+          width : 100%;
+         
+        }
+
+        #textHeader H1{
+          text-align: center;
+        }
+         .ui-btn-inner{
+          padding-top : .35em!important;
+          padding-bottom : .3em!important;
+          
+        }
+
+        //Special buttons
+        a .swtich{
+          background : #9fc3db!important;
+        }
+
+
+        .ui-btn-text{
+          padding-top : 0em!important;
+          padding-bottom : 0em!important;
+        }
+
+        .ui-li{
+          padding-top : 0em!important;
+          padding-bottom : 0em!important;
+
+        }
+        .ui-listview-filter{
+          margin-top: 0px;
+
+        }
+
+
+        /* Schedule */
+
+        #getConferenceSchedule .ui-btn-inner{
+          padding-top : 0!important;
+          padding-bottom : 0!important;
+
+        }
+
+        #getConferenceSchedule H2 {
+          padding-left:0.5em;
+          line-height:1.5em; 
+        } 
+        #getConferenceSchedule H2 span{ 
+          font-size : 10pt !important;
+        } 
+        #getConferenceSchedule p.ui-li-desc{
+          font-size : 11pt !important;
+          margin-top : 0em!important;
+          margin-bottom : 0em!important;
+        }
+
+        #getConferenceSchedule H3.ui-li-heading{
+          white-space : normal;
+          overflow : visible;
+          text-overflow : visible;
+          font-size : 11pt !important;
+          margin-top : 0em!important;
+          margin-bottom : 0em!important;
+        }
+    </style>
   </head>
   <body>
     

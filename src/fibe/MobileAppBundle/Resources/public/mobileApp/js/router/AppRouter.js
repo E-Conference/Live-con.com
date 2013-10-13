@@ -12,7 +12,7 @@
 *	Version: 1.2				   
 *   Tags:  BACKBONE, AJAX, ROUTING
 **/
-define(['backbone', 'jquery', 'config', 'encoder', 'localStorage/localStorageManager', 'view/ViewAdapter', 'reasoner', 'ajaxLoader'], function(Backbone, $, configuration, Encoder, StorageManager, ViewAdapter, Reasoner, AjaxLoader){
+define(['backbone', 'jquery', 'config', 'encoder', 'localStorage/localStorageManager', 'view/ViewAdapter', 'ajaxLoader'], function(Backbone, $, configuration, Encoder, StorageManager, ViewAdapter, AjaxLoader){
 
 	AppRouter = Backbone.Router.extend({
 
@@ -38,10 +38,7 @@ define(['backbone', 'jquery', 'config', 'encoder', 'localStorage/localStorageMan
 			//Initialize storage manager
 			StorageManager.initialize();
 			//Initialize ViewAdapter to text mode
-			ViewAdapter.initialize("text");
-			//Initialize Reasonner with the keywords ontology
-			//Reasoner.initialize();
-			
+			ViewAdapter.initialize("text");	
 			//Initialize ajax Loader 
 			AjaxLoader.initialize(ViewAdapter);
 		
@@ -109,8 +106,13 @@ define(['backbone', 'jquery', 'config', 'encoder', 'localStorage/localStorageMan
 							if(doRequest){
 								console.log("CAll : "+commandItem.name+" ON "+commandItem.datasource);
 								//Retrieveing the query built by the command function "getQuery"
-								var ajaxData   = currentCommand.getQuery({conferenceUri : self.conference.baseUri, uri : uri,datasource : currentDatasource, name : name, conference : self.conference})
-								//Preparing Ajax call 
+								try {
+									//Preparing Ajax call 
+									var ajaxData   = currentCommand.getQuery({conferenceUri : self.conference.baseUri, uri : uri,datasource : currentDatasource, name : name, conference : self.conference})
+							    } catch (e) {
+							    	e.message = "cannot find command '"+commandItem.name+"' in the commandStore '"+commandItem.datasource+"'";
+							    	throw e;
+							    }
 
 								if(ajaxData != null){
 									AjaxLoader.executeCommand({datasource : currentDatasource, command : currentCommand,data : ajaxData, currentUri : uri, contentEl :  currentPage.find("#"+commandItem.name), name : name, conference : self.conference});

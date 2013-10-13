@@ -57,30 +57,56 @@ class MobileAppConfig
 
 
      /**
-     * ColorContentTitle
+     * TitleColorContent
      *
      *
-     * @ORM\Column(type="string", name="ColorContentTitle", nullable=true)
+     * @ORM\Column(type="string", name="TitleColorContent", nullable=true)
      */
-    protected $ColorContentTitle;
+    protected $TitleColorContent;
+
+    /**
+     * TitleColorHeader
+     *
+     *
+     * @ORM\Column(type="string", name="TitleColorHeader", nullable=true)
+     */
+    protected $TitleColorHeader;
+
 
       /**
-     * ColorHeaderTitle
+     * TitleColorNavBar
      *
      *
-     * @ORM\Column(type="string", name="ColorHeaderTitle", nullable=true)
+     * @ORM\Column(type="string", name="TitleColorNavBar", nullable=true)
      */
-    protected $ColorHeaderTitle;
+    protected $TitleColorNavBar;
 
 
-      /**
-     * ColorNavBarTitle
+    /**
+     * TitleColorContent
      *
      *
-     * @ORM\Column(type="string", name="ColorNavBarTitle", nullable=true)
+     * @ORM\Column(type="string", name="TitleColorFooter", nullable=true)
      */
-    protected $ColorNavBarTitle;
+    protected $TitleColorFooter;
 
+
+
+    /**
+     * BGColorButton
+     *
+     *
+     * @ORM\Column(type="string", name="BGColorButton", nullable=true)
+     */
+    protected $BGColorButton;
+
+    /**
+     * TitleColorButton
+     *
+     *
+     * @ORM\Column(type="string", name="TitleColorButton", nullable=true)
+     */
+    protected $TitleColorButton;
 
      /**
      * IsPublished
@@ -196,72 +222,97 @@ class MobileAppConfig
     }
 
     /**
-     * Set ColorContentTitle
+     * Set TitleColorContent
      *
-     * @param string $colorContentTitle
+     * @param string $TitleColorContent
      * @return MobileAppConfig
      */
-    public function setColorContentTitle($colorContentTitle)
+    public function setTitleColorContent($TitleColorContent)
     {
-        $this->ColorContentTitle = $colorContentTitle;
+        $this->TitleColorContent = $TitleColorContent;
     
         return $this;
     }
 
     /**
-     * Get ColorContentTitle
+     * Get TitleColorContent
      *
      * @return string 
      */
-    public function getColorContentTitle()
+    public function getTitleColorContent()
     {
-        return $this->ColorContentTitle;
+        return $this->TitleColorContent;
     }
 
     /**
-     * Set ColorHeaderTitle
+     * Set TitleColorHeader
      *
-     * @param string $colorHeaderTitle
+     * @param string $TitleColorHeader
      * @return MobileAppConfig
      */
-    public function setColorHeaderTitle($colorHeaderTitle)
+    public function setTitleColorHeader($TitleColorHeader)
     {
-        $this->ColorHeaderTitle = $colorHeaderTitle;
+        $this->TitleColorHeader = $TitleColorHeader;
     
         return $this;
     }
 
     /**
-     * Get ColorHeaderTitle
+     * Get TitleColorHeader
      *
      * @return string 
      */
-    public function getColorHeaderTitle()
+    public function getTitleColorHeader()
     {
-        return $this->ColorHeaderTitle;
+        return $this->TitleColorHeader;
     }
 
     /**
-     * Set ColorNavBarTitle
+     * Set TitleColorNavBar
      *
-     * @param string $colorNavBarTitle
+     * @param string $TitleColorNavBar
      * @return MobileAppConfig
      */
-    public function setColorNavBarTitle($colorNavBarTitle)
+    public function setTitleColorNavBar($TitleColorNavBar)
     {
-        $this->ColorNavBarTitle = $colorNavBarTitle;
+        $this->TitleColorNavBar = $TitleColorNavBar;
     
         return $this;
     }
 
     /**
-     * Get ColorNavBarTitle
+     * Get TitleColorNavBar
      *
      * @return string 
      */
-    public function getColorNavBarTitle()
+    public function getTitleColorNavBar()
     {
-        return $this->ColorNavBarTitle;
+        return $this->TitleColorNavBar;
+    }
+
+
+     /**
+     * Get TitleColorFooter
+     *
+     * @return string 
+     */
+    public function getTitleColorFooter()
+    {
+        return $this->TitleColorFooter;
+    }
+
+
+     /**
+     * Set TitleColorFooter
+     *
+     * @param string $titleColorFooter
+     * @return MobileAppConfig
+     */
+    public function setTitleColorFooter($titleColorFooter)
+    {
+        $this->TitleColorFooter = $titleColorFooter;
+    
+        return $this;
     }
 
     /**
@@ -286,6 +337,55 @@ class MobileAppConfig
     {
         return $this->IsPublished;
     }
+
+
+     /**
+     * Set BGColorButton
+     *
+     * @param string $BGColorButton
+     * @return MobileAppConfig
+     */
+    public function setBGColorButton($BGColorButton)
+    {
+        $this->BGColorButton = $BGColorButton;
+    
+        return $this;
+    }
+
+     /**
+     * Get BGColorButtond
+     *
+     * @return string
+     */
+    public function getBGColorButton()
+    {
+        return $this->BGColorButton;
+    }
+
+      /**
+     * Set BGColorButton
+     *
+     * @param string $TitleColorButton
+     * @return MobileAppConfig
+     */
+    public function setTitleColorButton($TitleColorButton)
+    {
+        $this->TitleColorButton = $TitleColorButton;
+    
+        return $this;
+    }
+
+     /**
+     * Get TitleColorButton
+     *
+     * @return string 
+     */
+    public function getTitleColorButton()
+    {
+        return $this->TitleColorButton;
+    }
+
+    
 
 
 }

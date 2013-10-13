@@ -42,7 +42,7 @@ define(['jquery','jqueryMobile'], function($, jqueryMobile){
 			jqueryMobile.loading( 'show' );
 			//Sending AJAX request on the datasource
 			$.ajax({
-				url: datasource.uri,
+				url: datasource.uri + command.serviceUri,
 				type: command.method,
 				cache: false,
 				dataType: command.dataType,

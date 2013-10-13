@@ -9,7 +9,7 @@
 *   Version: 1.2
 *   Tags:  JSON, SPARQL, AJAX
 **/
-define(['jquery', 'underscore', 'encoder', 'view/ViewAdapter', 'view/ViewAdapterGraph', 'view/ViewAdapterText', 'localStorage/localStorageManager','moment','reasoner', 'model/ReasonerCommandStore'], function($, _, Encoder, ViewAdapter, ViewAdapterGraph, ViewAdapterText, StorageManager, moment, Reasoner, ReasonerCommandStore){
+define(['jquery', 'underscore', 'encoder', 'view/ViewAdapter', 'view/ViewAdapterText', 'localStorage/localStorageManager','moment'], function($, _, Encoder, ViewAdapter, ViewAdapterText, StorageManager, moment){
 var SWDFCommandStore = { 
 	/** Command used to get and display  all the authors that have a publication in the conference's proceedings using the conference uri **/
 	getAllAuthors : {
@@ -489,7 +489,6 @@ var SWDFCommandStore = {
 		},
 		
 		ViewCallBack : function(parameters){
-			
 			if(parameters.JSONdata != null ){
 				var publicationInfo = parameters.JSONdata;
 				if(_.size(publicationInfo) > 0 ){

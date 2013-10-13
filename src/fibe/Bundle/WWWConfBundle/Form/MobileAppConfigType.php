@@ -11,41 +11,60 @@ class MobileAppConfigType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('BGColorContent', 'text', array(
-                                    'required'  => true,
-                                    'label'     => 'Content background',
-                                    'attr'  => array('class'   => 'color')
-            ))     
+           
             ->add('BGColorHeader', 'text', array(
                                     'required'  => true,
                                     'label'     => 'Header background',
-                                    'attr'  => array('class'   => 'color')
+                                    'attr'  => array('class'   => 'color form-control')
+            ))
+            ->add('TitleColorHeader', 'text', array(
+                                    'required'  => true,
+                                    'label'     => 'Header titles',
+                                    'attr'  => array('class'   => 'color form-control')
             ))     
             ->add('BGColorNavBar', 'text', array(
                                     'required'  => true,
                                     'label'     => 'Nav barre background',
-                                    'attr'  => array('class'   => 'color')
-            ))     
-            ->add('BGColorfooter', 'text', array(
-                                    'required'  => true,
-                                    'label'     => 'Footer background',
-                                    'attr'  => array('class'   => 'color')
-            ))     
-            ->add('ColorContentTitle', 'text', array(
-                                    'required'  => true,
-                                    'label'     => 'Content titles',
-                                    'attr'  => array('class'   => 'color')
-            ))     
-            ->add('ColorHeaderTitle', 'text', array(
-                                    'required'  => true,
-                                    'label'     => 'Header titles',
-                                    'attr'  => array('class'   => 'color')
-            ))     
-            ->add('ColorNavBarTitle', 'text', array(
+                                    'attr'  => array('class'   => 'color form-control')
+            ))
+            ->add('TitleColorNavBar', 'text', array(
                                     'required'  => true,
                                     'label'     => 'Nav Barre titles',
-                                    'attr'  => array('class'   => 'color')
+                                    'attr'  => array('class'   => 'color form-control')
+            ))
+             ->add('BGColorContent', 'text', array(
+                                    'required'  => true,
+                                    'label'     => 'Content background',
+                                    'attr'  => array('class'   => 'color form-control')
+            )) 
+            ->add('TitleColorContent', 'text', array(
+                                    'required'  => true,
+                                    'label'     => 'Content titles',
+                                    'attr'  => array('class'   => 'color form-control')
+            ))
+            ->add('BGColorButton', 'text', array(
+                                    'required'  => true,
+                                    'label'     => 'Button background',
+                                    'attr'  => array('class'   => 'color form-control')
+            )) 
+            ->add('TitleColorButton', 'text', array(
+                                    'required'  => true,
+                                    'label'     => 'Button text',
+                                    'attr'  => array('class'   => 'color form-control')
             ))     
+            ->add('BGColorFooter', 'text', array(
+                                    'required'  => true,
+                                    'label'     => 'Footer background',
+                                    'attr'  => array('class'   => 'color form-control')
+            ))
+            ->add('TitleColorFooter', 'text', array(
+                                    'required'  => true,
+                                    'label'     => 'Footer titles',
+                                    'attr'  => array('class'   => 'color form-control')
+            ))    
+              
+              
+              
         ;
     }
 

@@ -1,7 +1,7 @@
 define(['underscore', 'jquery', 'jqueryMobile', 'router/AppRouter','tpl'], function( _, $, jqueryMobile, appRouter, templateLoader) {
  
 	//Loading templates from /templates directory
-	templateLoader.loadTemplates(['header', 'footer', 'navBar', 'home', 'qrcScan'], 
+	templateLoader.loadTemplates(['header', 'footer', 'navBar', 'home'], 
 
 	function () {
 		//Instantiate the router with configuration (see Configuration.js)

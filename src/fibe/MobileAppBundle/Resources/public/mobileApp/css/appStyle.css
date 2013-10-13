@@ -1,18 +1,23 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:400,700);
 
+/*vert : #b0ca0f;
+	bleue : #00a2e0;
+	bleu-clair: #afcbe0;
+	grey : #fafafa;
+	rouge: #e7431e;
+*/
+/*Titles*/
 H2, H3 {
-	color : #bf1278;
+	color : #F06E50;
+	font-family:  Helvetica;
+	
 }
 
 H1 , H2 {
-	font-size : 14pt !important;
+	font-size : 13.5pt !important;
 }
 
-.inline{
-	font-size : 12pt !important;
-	color: black;
-}
-
- H3, H4{
+H3, H4{
 	font-size : 13pt !important;
 }
 
@@ -20,20 +25,64 @@ H4,H5{
 	margin-top:2pt;
 	margin-bottom:2pt;
 }
-a, span {
-	font-size : 10pt !important;
-}
 
 p{
 	font-size : 12pt !important;
+	font-family: Helvetica, Arial, Tahoma, sans-serif;
 	color: black;
 }
 
 
+
+.inline{
+	font-size : 12pt !important;
+	color: black;
+}
+
+/*boxes*/
+
+header{
+	background: #fafafa !important;
+	border : none !important;
+}
+
+
+nav  .ui-btn-inner:hover{
+	
+	background : #F06E50!important;
+	color:#F06E50;
+}
+
+nav  .ui-btn-inner{
+	
+	background :  #4C9DDB!important;
+	color : white!important;
+	
+}
+
+nav  a{
+	border : 1px solid white!important;
+	text-shadow : none!important;
+}
+
+
+
+
+a, span {
+	font-size : 10pt !important;
+}
+
+
+
+ .ui-bar-b{
+ 	background: #b3b3b3!important;
+ }
+
+
 #logoContainer{
 	float:left;
-	height : 42px;
-	width: 50px;
+	height : 60px;
+	width: 210px;
 }
 
 #logoContainer a {
@@ -58,12 +107,13 @@ p{
 
 //Special buttons
 a .swtich{
-	background : #9fc3db!important;
+	background : #b0ca0f!important;
+}
+.ui-btn-up-b{
+	background : #444!important;
 }
 
- .ui-btn-inner:hover{
-	color :#bf1278!important;
- }
+
 
 .ui-btn-text{
 	padding-top : 0em!important;
@@ -82,11 +132,7 @@ a .swtich{
 
 
 
-#navBar .ui-btn-inner:hover{
-	
-	background : #333!important;
-	color :#bf1278!important;
-}
+
 
 
 
@@ -95,6 +141,7 @@ a .swtich{
 #getConferenceSchedule .ui-btn-inner{
 	padding-top : 0!important;
 	padding-bottom : 0!important;
+	
 
 }
 
