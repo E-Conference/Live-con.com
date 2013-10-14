@@ -6,32 +6,34 @@ var CalEvent = function(event){
 } 
 
 CalEvent.prototype.render = function () {  
-        this.formatDate();
+    this.formatDate();
 
-        // render the event on the calendar
-        // $calendar.fullCalendar('removeEvents', this.id); 
-        $calendar.fullCalendar('renderEvent', this);
+    // render the event on the calendar
+    // $calendar.fullCalendar('removeEvents', this.id); 
+    EventCollection.eventsToRender.push(this["id"]);
+    $calendar.fullCalendar('renderEvent', this); 
+
 };
 
 CalEvent.prototype.persist = function(){ 
-      var toSend = {
-        parent : this['parent'],
-        id  : this['id'],
-        allDay  : this['allDay'],
-        title : this['title'],
-        parent  : this['parent'],
-        end : this['end'],
-        start : this['start']
-      } 
-      $.post(
-        op.quickUpdateUrl,
-        toSend,
-        function(doc) {   
-                bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well updated"); 
-        },
-        'json'
-      );
-      bootstrapAlert("info","update request sent ","Info : ","<i class='icon-spinner icon-spin'></i>");
+    var toSend = {
+      parent : this['parent'],
+      id  : this['id'],
+      allDay  : this['allDay'],
+      title : this['title'],
+      parent  : this['parent'],
+      end : this['end'],
+      start : this['start']
+    } 
+    $.post(
+      op.quickUpdateUrl,
+      toSend,
+      function(doc) {   
+              bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well updated"); 
+      },
+      'json'
+    );
+    bootstrapAlert("info","update request sent ","Info : ","<i class='icon-spinner icon-spin'></i>");
 };
 
 

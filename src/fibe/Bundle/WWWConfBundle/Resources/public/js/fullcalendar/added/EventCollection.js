@@ -3,6 +3,13 @@
 
 var EventCollection = { 
 
+ 
+      /**
+       * events that need an UI update
+       * @type {CalEvent}
+       */
+      eventsToRender:[],
+
 
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------------- get/find functions --------------------------------------------*/
@@ -60,6 +67,41 @@ var EventCollection = {
 
           }); 
           return children; 
+    },
+
+    /**
+     * get Toppest Events in the eventsToRender array
+     * @return {[CalEvent]} 
+     */
+    getToppestEventsToRender : function (){
+
+        var toppestParent = []; 
+
+          // get toppest parent 
+        for (var i in this.eventsToRender){
+            var event = Events[this.eventsToRender[i]];
+            var isSidebar =false;
+            var breakWhile=false;
+            while(breakWhile===false){ 
+              // console.log(event);
+              var parent = EventCollection.find(event.parent.id);  
+              if(!parent || !parent.elem){ 
+                breakWhile = true;
+              }else {
+                event = parent;
+              }
+              isSidebar = $(event.elem).hasClass("external-event");
+
+            }
+
+            //toppest parent
+            if(isSidebar || event.isInstant() || $.inArray(event, toppestParent)!==-1 ){
+              // console.log("event "+event.id+" already toppest") ;
+              continue;
+            }
+            toppestParent.push(event); 
+        }
+        return toppestParent;
     },
 
 
