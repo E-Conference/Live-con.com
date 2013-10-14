@@ -31,7 +31,7 @@ class Author
     
     /**
      *  
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="paper")
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="paper",cascade={"persist"})
      *
      */
     private $person;

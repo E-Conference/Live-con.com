@@ -48,7 +48,7 @@ class Paper
      * type
      *
      *
-     * @ORM\Column(type="string", name="type")
+     * @ORM\Column(type="string", nullable=true, name="type")
      */
     protected $type;
 
@@ -65,7 +65,7 @@ class Paper
      * label
      *
      *
-     * @ORM\Column(type="string", name="label")
+     * @ORM\Column(type="string", nullable=true,  name="label")
      */
     protected $label;
 	
@@ -98,7 +98,7 @@ class Paper
      * month
      *
      *
-     * @ORM\Column(type="string", name="month")
+     * @ORM\Column(type="string", nullable=true,   name="month")
      */
     protected $month;
 
@@ -106,7 +106,7 @@ class Paper
      * year
      *
      *
-     * @ORM\Column(type="string", name="year")
+     * @ORM\Column(type="string", nullable=true, name="year")
      */
     protected $year;
 
@@ -114,7 +114,7 @@ class Paper
      * url_pdf
      *
      *
-     * @ORM\Column(type="string", name="url_pdf")
+     * @ORM\Column(type="string", nullable=true, name="url_pdf")
      */
     protected $url_pdf;
 

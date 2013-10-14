@@ -164,49 +164,33 @@
     				    isConfOwlUriInputOK = true;
                         confName=confname;
                         // var data = $.param({dataArray:dataArray});
-                        var data = $.param({dataArray:dataArray});
-
-
-
-                        if(dataArray!=undefined){
-                            var msg = "<ul>";
-                            for (var i in dataArray){
-                                if(dataArray[i].length >0)
-                                    msg +="<li>"+dataArray[i].length +" "+i+" added !</li>"
-                            }
-                            msg += "</ul>";
-                            bootstrapAlert("success",' '+msg);
-                            confOwlUriInput.parent().addClass('has-success');
-                        } 
-
-
-
-
-                        // $.ajax({ //DBimport
-                        //     type: "POST",
-                        //     cache: false,  
-                        //     url: "{{ path('schedule_admin_DBimport') }}",
-                        //     data: data,
-                        //     success:function(a,b,c)
-                        //     {
-                        //         if(dataArray!=undefined){
-                        //             var msg = "<ul>";
-                        //             for (var i in dataArray){
-                        //                 if(dataArray[i].length >0)
-                        //                     msg +="<li>"+dataArray[i].length +" "+i+" added !</li>"
-                        //             }
-                        //             msg += "</ul>";
-                        //             bootstrapAlert("success",' '+msg);
-                        //             confOwlUriInput.parent().addClass('has-success');
-                        //         } 
+                        var data = {dataArray:JSON.stringify(dataArray)};
+ 
+                        $.ajax({ //DBimport
+                            type: "POST",
+                            cache: false,  
+                            url: "{{ path('schedule_admin_DBimport') }}",
+                            data: data,
+                            success:function(a,b,c)
+                            {
+                                if(dataArray!=undefined){
+                                    var msg = "<ul>";
+                                    for (var i in dataArray){
+                                        if(dataArray[i].length >0)
+                                            msg +="<li>"+dataArray[i].length +" "+i+" added !</li>"
+                                    }
+                                    msg += "</ul>";
+                                    bootstrapAlert("success",' '+msg);
+                                    confOwlUriInput.parent().addClass('has-success');
+                                } 
                                 
-                        //     },
-                        //     error:function(a,b,c)
-                        //     {  
-                        //             bootstrapAlert("warning",'import failed because : '+c); 
-                        //             confOwlUriInput.parent().addClass('has-warning');  
-                        //     },
-                        // });
+                            },
+                            error:function(a,b,c)
+                            {  
+                                    bootstrapAlert("warning",'import failed because : '+c); 
+                                    confOwlUriInput.parent().addClass('has-warning');  
+                            },
+                        });
                         
                     },function(msg)
                     {

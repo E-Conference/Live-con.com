@@ -51,7 +51,7 @@ class ConfEvent extends Event
      * roles
      * Persons related to an event 
      *  
-     * @ORM\OneToMany(targetEntity="Role", mappedBy="event")
+     * @ORM\OneToMany(targetEntity="Role", mappedBy="event",cascade={"persist"})
      * @ORM\JoinColumn( onDelete="CASCADE")
      */
     private $roles;
@@ -219,28 +219,7 @@ class ConfEvent extends Event
     {
         return $this->roles;
     }
-
-    /**
-     * Set role
-     *
-     * 
-     */
-    public function setRoles()
-    {
-        
-    }
-
-     /**
-     * Set role
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function setRole()
-    {
-       
-    }
-
-
+ 
      /**
      * Add themes
      *

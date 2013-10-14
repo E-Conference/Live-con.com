@@ -37,7 +37,7 @@ class Person
      * autho
      * Paper made by this person
      *  
-     * @ORM\OneToMany(targetEntity="Author",  mappedBy="person")
+     * @ORM\OneToMany(targetEntity="Paper",  mappedBy="person")
      */
     private $paper;
 
@@ -106,7 +106,7 @@ class Person
      * description
      *. something about the person
      *
-     * @ORM\Column(type="string", length=2000, nullable=true, name="description")
+     * @ORM\Column(type="string", length=2048, nullable=true, name="description")
      */
      protected $description;
 
@@ -131,9 +131,17 @@ class Person
      *
     * Title (Mr, Mrs, Ms, Dr. etc) 
      *
-     * @ORM\Column(type="string", length=255, nullable=true,name="title")
+     * @ORM\Column(type="string", length=10, nullable=true,name="title")
      */
     protected $title; 
+
+    /**
+     * country
+     * 
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $country; 
 
     /**
      * depiction
@@ -285,36 +293,25 @@ class Person
     {
         $now = new \DateTime('now');
 
-        $this->setCreatedAt($now); 
-        $this->concatName();
-        $this->slugify();
-    }
- 
-    /**
-     * onUpdate
-     *
-     * @ORM\PreUpdate()
-     */
-    public function onUpdate()
-    {
-        $this->concatName();
-        $this->slugify();
-    }
+        $this->setCreatedAt($now);
+    } 
 
 
 
     /**
      * Slugify
-     */
-    public function slugify()
-    {
-        $this->setSlug(StringTools::slugify($this->getName()));
-    }
- 
-
+     */ 
     private function concatName(){
         $this->setName($this->getFirstName() . " " . $this->getLastName());
-     }
+        $this->slugify();
+    }
+    public function slugify()
+    {
+        $id = $this->getId();
+        if(!$id) $id = rand (0,9999999999);
+        $this->setSlug($id . "-" .StringTools::slugify($this->getName()));
+    }
+ 
     /**
      * Get id
      *
@@ -442,6 +439,29 @@ class Person
     } 
 
     /**
+     * Set country
+     *
+     * @param string $country
+     * @return Person
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string 
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    } 
+
+    /**
      * Set depiction
      *
      * @param string $depiction
@@ -473,6 +493,7 @@ class Person
     public function setFirstName($firstName)
     {
         $this->firstName = $firstName;
+        $this->concatName();
     
         return $this;
     }
@@ -497,6 +518,7 @@ class Person
     public function setLastName($lastName)
     {
         $this->lastName = $lastName;
+        $this->concatName();
     
         return $this;
     }
@@ -892,10 +914,10 @@ class Person
     /**
      * Add paper
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Author $paper
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Paper $paper
      * @return Person
      */
-    public function addPaper(\fibe\Bundle\WWWConfBundle\Entity\Author $paper)
+    public function addPaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $paper)
     {
         $this->paper[] = $paper;
     
@@ -905,9 +927,9 @@ class Person
     /**
      * Remove paper
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Author $paper
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Paper $paper
      */
-    public function removePaper(\fibe\Bundle\WWWConfBundle\Entity\Author $paper)
+    public function removePaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $paper)
     {
         $this->paper->removeElement($paper);
     }
@@ -956,7 +978,7 @@ class Person
     }
 
     public function __toString()
-    {
+    { 
         return $this->name;
     }
 

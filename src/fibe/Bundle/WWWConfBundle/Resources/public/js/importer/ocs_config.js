@@ -9,190 +9,144 @@ var ocsConfig = {
     getRootNode : function(documentRootNode){
         return $(documentRootNode).children();
     },
+    getNodeKey : function(node){
+        return $(node).attr("id");
+    },
+    action : function(documentRootNode){
+        var confName = $(documentRootNode).children("name").text();
+        var acronym = $(documentRootNode).children("acronym").text();
+        var description = $(documentRootNode).children("description").text();
+        var homepage = $(documentRootNode).children("homepage").text();
+        //TODO save that
+    },
     personMapping : {
-        nodeName : 'Person',
+        //nodes are wrapped in a collection node
+        wrapped : true,
+        nodeName : 'persons',
         label : {
-            'foaf:firstName' : {
+            'firstname' : {
                 setter : 'setFirstName',
             },
-            'foaf:lastName' : {
+            'lastname' : {
                 setter : 'setLastName'
             },
-            'foaf:name' : {
-                setter : 'setName'
+            'email' : {
+                setter : 'setEmail'
             },
-            'foaf:img' : {
-                escape : false,
-                setter : 'setImage'
+            'country' : {
+                setter : 'setCountry',
             },
-            'foaf:homepage' : {
-                setter : 'setHomepage'
-            },
-            'foaf:twitter' : {
-                setter : 'setTwitter'
-            },
-            'foaf:description' : {
-                setter : 'setDescription'
+            'organization-id' : {
+                setter : 'addOrganization',
+                format : function(node){ 
+                    var key = $(node).text(); 
+                    if(objectMap[key])
+                        return $.inArray(objectMap[key], organizations);
+                    else {
+                        console.warn("organization : "+key+" can't be found");
+                    }  
+                }, 
+
             },
         }
     },
 
     locationMapping : {
-        nodeName : 'MeetingRoomplace',
+    },
+
+    eventMapping : {  
+        nodeName : 'sessions',
+        wrapped : true,
         label : {
-            'rdfs:label' : {
-                setter : 'setName'
-            }, 
-            'rdfs:comment' : {
-                setter : 'setDescription',
+            'name' : {
+                setter : 'setSummary'
             },
+            'papers' : {
+                wrapped : true,
+                multiple : true,
+                setter : 'addPaper',
+                format : function(node){ 
+                    var key = $(node).text(); 
+                    if(objectMap[key])
+                        return $.inArray(objectMap[key], proceedings);
+                    else {
+                        console.warn("paper : "+key+" can't be found");
+                    }  
+                }, 
+            },
+            'pc-chairs' : {
+                wrapped : true,
+                multiple : true,
+                setter : 'addChair',
+                format : function(node){ 
+                    var key = $(node).text(); 
+                    if(objectMap[key])
+                        return $.inArray(objectMap[key], persons);
+                    else {
+                        console.warn("chair : "+key+" can't be found");
+                    }  
+                },  
+            }
         }
     },
 
-    eventMapping : {
-        nodeName : 'Event',
+    proceedingMapping : {
+        nodeName : 'papers',
+        wrapped : true,
         label : {
-            'rdfs:label' : {
-                setter : 'setSummary'
+            'title' : {
+                setter : 'setTitle',
             },
-            'dce:description' : {
-                setter : 'setDescription'
-            },
-            'ical:description' : {
-                setter : 'setDescription'
-            },
-            'icaltzd:dtstart' : {
-                setter : 'setStartAt'
-            },
-            'ical:dtstart' : {
-                setter : 'setStartAt',
+            'abstract': {
+                setter : 'setAbstract',
+            }, 
+            //keywords entity are created directly here (or retrieved)
+            //then we register the correct index
+            'keywords' : {
+                wrapped : true,
+                multiple : true,
+                setter : 'addKeyword',
                 format : function(node){ 
-                    var rtn;
-                    $(node).children().each(function(){
-                        if(this.nodeName !=="ical:date") return;
-                        rtn = $(this).text();  
-                    });
-                    return rtn || $(node).text();
-                }
-            },
-            'icaltzd:dtend' : {
-                setter : 'setEndAt'
-            },
-            'ical:dtend' : {
-                setter : 'setEndAt',
-                format : function(node){ 
-                    var rtn;
-                    $(node).children().each(function(){
-                        if(this.nodeName !=="ical:date") return;
-                        rtn = $(this).text();  
-                    });
-                    return rtn || $(node).text();
-                }
-            },
-            'swc:hasRelatedDocument' : { 
-                action : function(node){
-                    var xproperty= {}; 
-                    xproperty['setCalendarEntity']=events.length;
-                    xproperty['setXNamespace']="publication_uri";
-                    xproperty['setXValue']=$(node).attr('rdf:resource');
-                    xproperties.push(xproperty);
-                }
-            },
-            'dc:subject' : {
-                multiple: true,
-                setter : 'addTheme',
-                format : function(node){ 
-                    var themeName = $(node).text(); 
-                    return getThemeIdFromName(themeName);
+                    var keywordName = $(node).text();
+                    var index = getKeywordIdFromName(keywordName);
+                    return index !== -1 ? index : false ;
                 },
                 action : function(node){
-                    var themeName = $(node).text(); 
-                    if(getThemeIdFromName(themeName)=== -1 ){
-                        themes.push({setLibelle:str_format(themeName)});  
+                    var keywordName = $(node).text();  
+                    if(getKeywordIdFromName(keywordName)=== -1 ){
+                        keywords.push({setLibelle:str_format(keywordName)});  
                     }
                 }
             },
-            'swc:hasLocation' : {
-                setter : 'setLocation',
+            //authors are retrieved from their id in the objectMap .
+            'authors' : {
+                wrapped : true,
+                multiple : true,
+                setter : 'addAuthor',
                 format : function(node){ 
-                    var key = $(node).attr('rdf:resource');
+                    var key = $(node).text(); 
                     if(objectMap[key])
-                        locationName = objectMap[key]['setName'];
+                        return $.inArray(objectMap[key], persons);
                     else {
-                        locationName = key.split("/");
-                        locationName = locationName[locationName.length -1 ];
-                    }
-                    return getLocationIdFromName(locationName);
-                },
-                action : function(node){
-                    var key = $(node).attr('rdf:resource');
-                    if(objectMap[key])
-                        locationName = objectMap[key]['setName'];
-                    else {
-                        locationName = key.split("/");
-                        locationName = locationName[locationName.length -1 ];
-                    }
-                    if(getLocationIdFromName(locationName)=== -1 ){
-                        locations.push({setDescription:"",setName:str_format(locationName)});  
-                    }
-                }
-            },
-            'icaltzd:location' : {
-                setter : 'setLocation',
-                format : function(node){ 
-                    var key = $(node).attr('rdf:resource');
-                    if(objectMap[key])
-                        locationName = objectMap[key]['setName'];
-                    else {
-                        locationName = key.split("/");
-                        locationName = locationName[locationName.length -1 ];
-                    }
-                    return getLocationIdFromName(locationName);
-                },
-            },
-            'foaf:homepage' : {
-                setter : 'setUrl',
-                format : function(node){ 
-                    return $(node).attr('rdf:resource');
+                        console.warn("author : "+key+" can't be found");
+                    }  
                 }, 
-            },
-        },
-        action : function(node,event){
-              // EVENT CAT
-            var catName = node.nodeName.split("swc:").join("").split("event:").join("");
-            if(catName=="NamedIndividual")catName= getNodeName(node);
-            var tmp=catName;
-            if(tmp.split("Event").join("")!="")
-            {
-                catName=tmp;
-            }else //OWL fix
-            {
-                catName = getNodeName(node).split("swc:").join("").split("event:").join("") ;
-                tmp=catName;
-                if(tmp.split("Event").join("")!="")
-                {
-                    catName=tmp; 
-                }
-            }  //OWL fix
-
-            var catId = getCategoryIdFromName(catName);
-            if(catId==undefined){ 
-              var category= {}; 
-              category['setName']=catName;
-              if(catName == "ConferenceEvent") confName = event['setSummary'];
-              categories.push(category);
-              catId = categories.length-1;
             }
-            event['addCategorie']=catId;
-            
-            
-              // EVENT store URI
-            var xproperty= {}; 
-            xproperty['setCalendarEntity']=events.length;
-            xproperty['setXNamespace']="event_uri";
-            xproperty['setXValue']=$(node).attr('rdf:about');
-            xproperties.push(xproperty);
-        }, 
+        },
     },
-}
- 
+
+    organizationMapping : {
+        nodeName : 'organizations',
+        wrapped : true,
+        label : {
+            'name' : {
+                setter : 'setLibelle',
+            },
+            'country' : {
+                setter : 'setCountry',
+            },
+        }
+
+    },
+    relationMapping : {}
+};

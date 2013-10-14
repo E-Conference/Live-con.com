@@ -3,8 +3,11 @@
 
 
 var rdfConfig = {
-    getRootNode : function(node){
-        return $(node).children();
+    getRootNode : function(documentRootNode){   
+        return $(documentRootNode).children();
+    },
+    getNodeKey : function(node){
+        return $(node).attr("rdf:about");
     },
     personMapping : {
         nodeName : 'Person',
@@ -264,6 +267,9 @@ var rdfConfig = {
                 }  
             }); 
         }
+    },
+    organizationMapping : {
+
     },
 
 }

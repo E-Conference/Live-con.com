@@ -9,7 +9,11 @@ var events,
     persons,
     themes,
     proceedings,
-    relations,
+    keywords,
+    organizations,
+    relations;
+
+var mappingConfig,
     objectMap;
 
 function run(url,callback,fallback){ 
@@ -26,16 +30,18 @@ function run(url,callback,fallback){
                 return;
             } 
             var confName ;
-            events      = [],
-            locations   = [],
-            xproperties = [],
-            relations   = [],
-            categories  = [],
-            proceedings = [],
-            persons     = [],
-            themes      = [],
-            proceedings = [],
-            objectMap   = {};
+            events        = [],
+            locations     = [],
+            xproperties   = [],
+            relations     = [],
+            categories    = [],
+            proceedings   = [],
+            persons       = [],
+            themes        = [],
+            proceedings   = [],
+            keywords      = [],
+            organizations = [],
+            objectMap     = {};
             
             var defaultDate='now';
 
@@ -50,30 +56,70 @@ function run(url,callback,fallback){
 
  
             //check format (default : rdf)
-            var format;  
+            var format = undefined;   
 
 
             for (var i in formatConfig){
-                if(formatConfig[i].checkFormat(completeConfRdf))
+                if(formatConfig[i].checkFormat(completeConfRdf) === true){
                     console.log("format found ! :" + i);
                     format = i;
-            }
+                }
+            } 
 
-            //set format and config
-            var rootNode = (formatConfig[format] || rdfConfig).getRootNode(completeConfRdf);
-            var mappingConfig = (formatConfig[format] || rdfConfig); 
+            //set format and config 
+            var rootNode = format !== undefined ? formatConfig[format].getRootNode(completeConfRdf) : rdfConfig.getRootNode(completeConfRdf);
+            mappingConfig =  format !== undefined ? formatConfig[format] : rdfConfig;
 
             //////////////////////////////////////////////////////////////////////////
-            ///////////////////////  first round for locations  //////////////////////
+            ///////////////////////////  pre processing  /////////////////////////////
             ////////////////////////////////////////////////////////////////////////// 
 
-            rootNode.children().each(function(index,node){
-                if( node.nodeName=="NamedIndividual" ) {
+            if(mappingConfig.action!==undefined){
+                mappingConfig.action(rootNode);
+            } 
+            //////////////////////////////////////////////////////////////////////////
+            ///////////////////////  first round for locations  //////////////////////
+            ////////////rootNode////////////////////////////////////////////////////////////// 
+            console.log(rootNode)
+            rootNode.children().each(function(index,node){ 
                     var n = getNodeName(node); 
                     if(n && n.indexOf(mappingConfig.locationMapping.nodeName)!= -1){  
                         add(locations,mappingConfig.locationMapping,this); 
                     }
-                }
+            }); 
+ 
+            //////////////////////////////////////////////////////////////////////////
+            ////////////////////////////  Organization  //////////////////////////////
+            //////////////////////////////////////////////////////////////////////////
+             
+            rootNode.children().each(function(index,node){ 
+                    var n = getNodeName(node); 
+                    if(n && n.indexOf(mappingConfig.organizationMapping.nodeName)!= -1){  
+                        add(organizations,mappingConfig.organizationMapping,this); 
+                    }
+            });
+         
+            //////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////  Person  //////////////////////////////
+            //////////////////////////////////////////////////////////////////////////
+             
+            rootNode.children().each(function(index,node){ 
+                    var n = getNodeName(node); 
+                    if(n && n.indexOf(mappingConfig.personMapping.nodeName)!= -1){  
+                        add(persons,mappingConfig.personMapping,this); 
+                    }
+            });
+
+
+            //////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////  publication  ////////////////////////////
+            //////////////////////////////////////////////////////////////////////////
+            
+            rootNode.children().each(function(index,node){ 
+                    var n = getNodeName(node); 
+                    if(n && n.indexOf(mappingConfig.proceedingMapping.nodeName)!= -1){  
+                        add(proceedings,mappingConfig.proceedingMapping,this);  
+                    }
             }); 
  
             //////////////////////////////////////////////////////////////////////////
@@ -81,27 +127,12 @@ function run(url,callback,fallback){
             //////////////////////////////////////////////////////////////////////////
             
             rootNode.children().each(function(index,node){
-                if( node.nodeName=="NamedIndividual" ){
                     var n = getNodeName(node); 
                     if(n && n.indexOf(mappingConfig.eventMapping.nodeName)!= -1){
                         add(events,mappingConfig.eventMapping,this); 
 
                     }
-                }
             });  
-         
-            //////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////  Person  //////////////////////////////
-            //////////////////////////////////////////////////////////////////////////
-             
-            rootNode.children().each(function(index,node){ 
-                if( node.nodeName=="NamedIndividual" ) {
-                    var n = getNodeName(node); 
-                    if(n && n.indexOf(mappingConfig.personMapping.nodeName)!= -1){  
-                        add(persons,mappingConfig.personMapping,this); 
-                    }
-                }
-            }); 
             
             //////////////////////////////////////////////////////////////////////////
             /////////////////////////////  relationships  ////////////////////////////
@@ -109,12 +140,10 @@ function run(url,callback,fallback){
             
             var j=0;
             rootNode.children().each(function(index,node){ 
-                if( node.nodeName=="NamedIndividual" ) {
                     var n = getNodeName(node); 
                     if(n && n.indexOf(mappingConfig.relationMapping.nodeName)!= -1){  
                         add(relations,mappingConfig.relationMapping,this,{eventId:j});  
                         j++;
-                    }
                 }
             });
             // $(completeConfRdf).children().children().each(function(index,node){ 
@@ -126,19 +155,9 @@ function run(url,callback,fallback){
             //             j++;
             //         }
             //     }
-            // }); 
-            //////////////////////////////////////////////////////////////////////////
-            ///////////////////  fourth round for publication  ///////////////////////
-            //////////////////////////////////////////////////////////////////////////
+            // });
+              
             
-            rootNode.children().each(function(index,node){ 
-                if( node.nodeName=="NamedIndividual" ) {
-                    var n = getNodeName(node); 
-                    if(n && n.indexOf(mappingConfig.proceedingMapping.nodeName)!= -1){  
-                        add(proceedings,mappingConfig.proceedingMapping,this);  
-                    }
-                }
-            }); 
             // $(completeConfRdf).children().children().each(function(index,node){ 
             //     if( node.nodeName=="NamedIndividual" ) 
             //     {
@@ -179,9 +198,8 @@ function run(url,callback,fallback){
             // }); 
              
             //////////////////////////////////////////////////////////////////////////
-            //////////////////////// fifth round startAt less  ///////////////////////
+            ///////////////////////////// startAt less  //////////////////////////////
             //////////////////////////////////////////////////////////////////////////
-            //startat less get the 'now' date
              for(var i=0;i<events.length;i++){
                 if(events[i]['setStartAt']!=undefined){
                     
@@ -193,9 +211,9 @@ function run(url,callback,fallback){
                     events[i]['setEndAt']=events[i]['setEndAt'] ;
                 }else{
                     
-                    events[i]['setStartAt']= defaultDate ;
+                    //startat less get the 'now' date
                     delete events[i]['setParent'];
-                    events[i]['setEndAt']=moment().format('YYYY-MM-DDTHH:mm:ss Z') ;
+                    events[i]['setEndAt'] = events[i]['setStartAt'] = defaultDate;
                 }
             }
             
@@ -249,6 +267,9 @@ function run(url,callback,fallback){
             dataArray['themes']=themes;   
             dataArray['events']=events;
             dataArray['xproperties']=xproperties; 
+            dataArray['keywords']=keywords; 
+            dataArray['proceedings']=proceedings; 
+            dataArray['organizations']=organizations; 
             console.log('---------finished---------' );
             console.log(dataArray); 
             if(events.length<1 && xproperties.length<1 && relations.length<1 && locations.length<1 && persons.length<1&& themes.length<1)
@@ -268,52 +289,85 @@ function run(url,callback,fallback){
    });
 } // end run()
 
-/**
- *          add
- *          
- * parse config files
+
+
+
+/**  function add() parse config files
+ *
  * @param {array} addArray      the array to populate
  * @param {object} mapping      mapping object (defined in config files)
  * @param {dom elem} node       the xml dom element from the import file
  * @param {object} arg          arg for overide function
  */
 function add(addArray,mapping,node,arg){
-    var rtnArray = {};
-    var key = $(node).attr("rdf:about");
 
-    //to override this method, write an "overide : function(){...}" in the mapping file of the function.
+    //to override this method, write an "overide : function(){...}" in the mapping file of the function. 
     if(mapping.overide!==undefined){
         return mapping.overide(node,arg);
     }
-    
-    $(node).children().each(function(){
-        if(mapping.label[this.nodeName]){
-            if(mapping.label[this.nodeName].action){ 
-                mapping.label[this.nodeName].action(this);
-            }
-            if(mapping.label[this.nodeName].setter){
-                var val = this.textContent;
-                if(mapping.label[this.nodeName].format){   
-                    val = mapping.label[this.nodeName].format(this);
-                }
-                val = mapping.label[this.nodeName].setter === false ? val : typeof val === 'string' ? str_format(val) : val ;
-                if(mapping.label[this.nodeName].multiple === true){
-                    if(!rtnArray[mapping.label[this.nodeName].setter])
-                        rtnArray[mapping.label[this.nodeName].setter]={};
-                    var index = Object.size(rtnArray[mapping.label[this.nodeName].setter]);
-                    rtnArray[mapping.label[this.nodeName].setter][index] = val;
-                }else{
-                    rtnArray[mapping.label[this.nodeName].setter]= val;
-                }
-            } 
-        }
-    });
-    if(mapping.action){
-        mapping.action(node,rtnArray); 
+    //unwrapped if needed
+    if(mapping.wrapped===true){ 
+        $(node).children().each(function(){
+            process(addArray,mapping,this,arg);
+        });
+    }else{
+        process(addArray,mapping,node,arg); 
     }
-    if(Object.size(rtnArray) > 0){
-        objectMap[key] = rtnArray;
-        addArray.push( rtnArray );
+
+    function process(addArray,mapping,node,arg){
+        var rtnArray = {};
+        var key = mappingConfig.getNodeKey(node);
+        console.log("processing : "+key);
+        $(node).children().each(function(){ 
+            if(mapping.label[this.nodeName]!== undefined){
+                
+                if(mapping.label[this.nodeName].setter){
+                    var nodeName = this.nodeName;
+                    //unwrapped if needed
+                    if(mapping.label[this.nodeName].wrapped === true){
+                        $(this).children().each(function(){ 
+                            set(mapping,nodeName,this); 
+                        });
+                    }else{
+                        set(mapping,nodeName,this); 
+                    }
+                }
+            }else{ 
+                console.warn("no mapping for : "+node.nodeName+"/"+ this.nodeName);
+            }
+        });
+             
+        if(mapping.action){
+            mapping.action(node,rtnArray); 
+        }
+        if(Object.size(rtnArray) > 0){
+            objectMap[key] = rtnArray;
+            addArray.push( rtnArray );
+        }
+
+        function set(mapping,nodeName,node){
+            console.log("set : "+nodeName+", "+node.nodeName);
+            var val = node.textContent;
+                
+            // pre processing
+            if(mapping.label[nodeName].action){
+                mapping.label[nodeName].action(node,rtnArray); 
+            }
+
+            if(mapping.label[nodeName].format){   
+                val = mapping.label[nodeName].format(node);
+            }
+            val = mapping.label[nodeName].setter === false ? val : typeof val === 'string' ? str_format(val) : val ;
+            if(mapping.label[nodeName].multiple === true){
+                if(!rtnArray[mapping.label[nodeName].setter])
+                    rtnArray[mapping.label[nodeName].setter]={};
+                var index = Object.size(rtnArray[mapping.label[nodeName].setter]);
+                rtnArray[mapping.label[nodeName].setter][index] = val;
+            }else{
+                rtnArray[mapping.label[nodeName].setter]= val;
+            }
+
+        }
     }
 }
 
@@ -359,6 +413,22 @@ function getThemeIdFromName(themeName){
         if(themes[i]['setLibelle']==themeName){
             return i; 
         }
+    }
+    return -1;
+}
+
+function getKeywordIdFromName(keywordName,debug){
+    
+    for (var i=0;i<keywords.length;i++){
+        //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
+        if(keywords[i]['setLibelle']==keywordName){
+            return i; 
+        }
+    }
+    if (debug){
+
+        console.log(keywords);
+        alert("keyword "+keywordName+" not found");
     }
     return -1;
 }
@@ -533,13 +603,13 @@ function getNodeName(node){
     }
     else if(uri.length==0)
     {
-        return undefined;
+        return node.nodeName;
     }
     else if($.inArray('KeynoteTalk', uri) > -1)
     { 
         return 'KeynoteEvent';
     }
-    return uri;
+    return undefined;
         
 }
 
