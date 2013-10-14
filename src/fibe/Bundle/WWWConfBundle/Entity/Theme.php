@@ -31,10 +31,10 @@ class Theme
 	
     
     /**
-    *   Libelle
-    *   @ORM\Column(type="string", name="libelle")
+    *   Name
+    *   @ORM\Column(type="string", name="name")
     */
-    private $libelle;
+    private $name;
 
      /**
      * confEvents
@@ -73,29 +73,6 @@ class Theme
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set libelle
-     *
-     * @param string $libelle
-     * @return Theme
-     */
-    public function setLibelle($libelle)
-    {
-        $this->libelle = $libelle;
-    
-        return $this;
-    }
-
-    /**
-     * Get libelle
-     *
-     * @return string 
-     */
-    public function getLibelle()
-    {
-        return $this->libelle;
     }
 
     /**
@@ -152,5 +129,28 @@ class Theme
     public function getConference()
     {
         return $this->conference;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Theme
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

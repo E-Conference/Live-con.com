@@ -25,27 +25,6 @@ class WwwConf
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="confName", type="string", length=255)
-     */
-    private $confName;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="confUri", type="string", length=255,nullable=true)
-     */
-    private $confUri;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="confOwlUri", type="string", length=255,nullable=true)
-     */
-    private $confOwlUri;
-
-    /**
     * confEvents
     *
     * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\ConfEvent", mappedBy="wwwConf",cascade={"persist", "remove"})
@@ -72,6 +51,20 @@ class WwwConf
     * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Person", mappedBy="conference",cascade={"persist", "remove"})
     */
     private $persons;
+
+    /**
+    * Keywords
+    *
+    * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Keyword", mappedBy="conference",cascade={"persist", "remove"})
+    */
+    private $keywords;
+
+    /**
+    * Keywords
+    *
+    * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Organization", mappedBy="conference",cascade={"persist", "remove"})
+    */
+    private $organizations;
 
     /**
     * Themes
@@ -111,6 +104,12 @@ class WwwConf
     */
     private $acronym;
 
+    /**
+     * @ORM\OneToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\ConfEvent", cascade={"persist"})
+     * @ORM\JoinColumn(name="event_id", referencedColumnName="id")
+     **/
+     private $mainConfEvent;
+
 
     
     public function __toString() 
@@ -145,32 +144,6 @@ class WwwConf
         return $this->confManagers;
     }
     
-    
-    public function setConfOwlUri($ConfOwlUri)
-    {
-        $this->confOwlUri = $ConfOwlUri;
-    
-        return $this;
-    } 
-    
-    public function getConfOwlUri()
-    {
-        return $this->confOwlUri;
-    }
-    
-    
-    public function setConfUri($ConfUri)
-    {
-        $this->confUri = $ConfUri;
-    
-        return $this;
-    } 
-    
-    public function getConfUri()
-    {
-        return $this->confUri;
-    }
-
 
     public function setLogo($Logo)
     {
@@ -415,5 +388,96 @@ class WwwConf
     public function getAppConfig()
     {
         return $this->appConfig;
+    }
+
+    
+
+    /**
+     * Add keywords
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Keyword $keywords
+     * @return WwwConf
+     */
+    public function addKeyword(\fibe\Bundle\WWWConfBundle\Entity\Keyword $keywords)
+    {
+        $this->keywords[] = $keywords;
+    
+        return $this;
+    }
+
+    /**
+     * Remove keywords
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Keyword $keywords
+     */
+    public function removeKeyword(\fibe\Bundle\WWWConfBundle\Entity\Keyword $keywords)
+    {
+        $this->keywords->removeElement($keywords);
+    }
+
+    /**
+     * Get keywords
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getKeywords()
+    {
+        return $this->keywords;
+    }
+
+    /**
+     * Add organizations
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Organization $organizations
+     * @return WwwConf
+     */
+    public function addOrganization(\fibe\Bundle\WWWConfBundle\Entity\Organization $organizations)
+    {
+        $this->organizations[] = $organizations;
+    
+        return $this;
+    }
+
+    /**
+     * Remove organizations
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Organization $organizations
+     */
+    public function removeOrganization(\fibe\Bundle\WWWConfBundle\Entity\Organization $organizations)
+    {
+        $this->organizations->removeElement($organizations);
+    }
+
+    /**
+     * Get organizations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOrganizations()
+    {
+        return $this->organizations;
+    }
+
+    /**
+     * Set mainConfEvent
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $mainConfEvent
+     * @return WwwConf
+     */
+    public function setMainConfEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $mainConfEvent = null)
+    {
+        $this->mainConfEvent = $mainConfEvent;
+    
+        return $this;
+    }
+
+    /**
+     * Get mainConfEvent
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\ConfEvent 
+     */
+    public function getMainConfEvent()
+    {
+        return $this->mainConfEvent;
     }
 }
