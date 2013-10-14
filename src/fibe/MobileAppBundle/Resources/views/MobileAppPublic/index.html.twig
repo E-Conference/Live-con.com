@@ -86,8 +86,8 @@
     </script>
     <style type="text/css">
 
-        /* global */
-        /*Titles*/
+        /********************  global **********************/
+        
         H1 , H2 {
           font-size : 14pt !important;
         }
@@ -115,6 +115,7 @@
           color: black;
         }
 
+
         /**********************   Header ************************/
         #header {
           background: #{{ mobile_app_config.BGColorHeader}} !important;
@@ -139,6 +140,8 @@
         /**********************   Content ************************/
         .page{
           background: #{{ mobile_app_config.BGColorContent}} !important;
+          text-shadow : none !important;
+          text-decoration : none !important;
         }
 
         .content h1,h2,h3,h4{
@@ -158,10 +161,10 @@
         /**********************   Buttons ************************/
         .button{
           background: #{{ mobile_app_config.BGColorButton}} !important;
+          border: none !important;
         }
 
         .button *{
-          background: #{{ mobile_app_config.BGColorButton}} !important;
           color: #{{ mobile_app_config.TitleColorButton}} !important;
         }
 

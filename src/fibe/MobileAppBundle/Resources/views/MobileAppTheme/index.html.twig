@@ -6,33 +6,29 @@
 {% include "fibeMobileAppBundle::navbar.html.twig" %}
 <div class="container">
     <div class="row center">
-      <div class='col-lg-4'>
-        <form action="{{ path('mobileAppTheme_update_conference', { 'id': conference.id })}}" method="post">
-            {{ form_widget(conference_form)}}
-            <button type="submit" class="btn btn-success"><i class="icon-edit"></i></button>
-        </form>
-      </div>
+     
       <div class="row">
          <div class="row-fluid">
             <div class='col-lg-8'>
-              <iframe style="height:500px;width:100%;" src="{{path('mobileAppPublic_index', { 'id': conference.id })}}"/></iframe>
+              <iframe style="height:700px;width:100%;" src="{{path('mobileAppPublic_index', { 'id': conference.id })}}"/></iframe>
             </div>
             
           </div>
           {% include "fibeMobileAppBundle:MobileAppTheme:edit.html.twig" %}
           <a href="{{path('mobileAppPublic_index', { 'id': conference.id })}}" ><i class="icon-eye-open icon-4x"></i></a>
-       <!--    <div class='col-2'>
-             <ul class="list-group">
-                <li class="list-group-item"><a href="{{path('mobileAppPublic_index', { 'id': 3 })}}" target="_blank"><i class="icon-eye-open icon-4x"></i> </a></li>
-                <li class="list-group-item"><a href="#"><i class="icon-refresh icon-4x"></i> </a></li>
-                <li class="list-group-item"><a href="#"><i class="icon-cloud-download icon-4x"></i></a></li>
-              </ul>
-          </div> -->
-        
-        
+      </div>
+       <div>
+        <form action="{{ path('mobileAppTheme_update_conference', { 'id': conference.id })}}" method="post">
+            {{ form_widget(conference_form)}}
+            <button type="submit" class="btn btn-success"><i class="icon-edit"></i></button>
+        </form>
       </div>
 
-
+       <div class='logo' style="width:300px; height: 200px">
+          <div class="logo-choice"  style="width:300px; height: 200px">
+              <img src="{{ conference.logo}}" style="width:auto; height: 100%">
+          </div>
+       </div>
     </div> 
 </div>    
 
@@ -40,9 +36,10 @@
 
 {% block javascripts %}
   <script type="text/javascript" src="{{ asset('js/jscolor/jscolor.js')}}"></script>
+   <script type="text/javascript">
   $( document ).ready(function() {
-      console.log( "ready!" );
   });
+  </script>
 {% endblock%}
 
 
