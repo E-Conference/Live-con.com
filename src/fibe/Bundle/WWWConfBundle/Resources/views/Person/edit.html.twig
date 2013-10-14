@@ -3,6 +3,8 @@
 {% block body %}
 {{ parent() }}
 
+<div class="container">
+    <div class="row center">
     <h1>Person edit</h1>
 
     <form action="{{ path('schedule_person_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
@@ -26,8 +28,9 @@
              <button type="submit" class="btn btn-danger"> <i class="icon-trash"></i> Delete</button>
         </form>
     </li>
-</ul>
-
+    </ul>
+</div>
+</div>
 <script src="{{ asset('bundles/fibewwwconf/js/bootstrap-datetimepicker.min.js') }}" type="text/javascript" ></script>  
 <script src="{{ asset('bundles/fibewwwconf/js/datepickerTools.js') }}" type="text/javascript" ></script>
 <script type="text/javascript" >

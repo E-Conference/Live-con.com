@@ -2,6 +2,8 @@
 
 {% block body -%}
 {{ parent() }}
+<div class="container">
+    <div class="row center">
     <h1>Theme list</h1>
     <a class="btn  btn-info" href="{{ path('schedule_theme_new') }}"> 
         <i class="icon-plus"></i> 
@@ -28,5 +30,7 @@
         {% endfor %}
         </tbody>
     </table>
+</div>
+</div>
  
     {% endblock %}

@@ -2,7 +2,7 @@
 
 {% block title %}Index{% endblock title %}
  {% block stylesheets %} 
-{{ parent() }}
+    
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibewwwconf/css/datetimepicker.css') }}" />  
     <style type="text/css">
             
@@ -21,6 +21,7 @@
         margin: 1em 0 1 0.5em;
     }
     </style>
+    {{ parent() }}
  {% endblock %}
 
 {% block javascripts %} 
@@ -44,27 +45,27 @@
 
 
 {% block body %}
-<div class="symfony-content">
-            {% include "fibeWWWConfBundle::adminmenu.html.twig" %}
-            {% for flashMessage in app.session.flashbag.get('info') %}
-                <script type="text/javascript" >
-                    bootstrapAlert("info","{{ flashMessage }}","Info : ",'<i class="icon-info"></i> ');
-                </script> 
-            {% endfor %}
+    {{ parent() }}
+    {% include "fibeWWWConfBundle::adminmenu.html.twig" %}
 
-            {% for flashMessage in app.session.flashbag.get('success') %} 
-                <script type="text/javascript" >
-                bootstrapAlert("success","{{ flashMessage }}","Success : ",'<i class="icon-ok-sign"></i> '); 
-                </script>  
-            {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('info') %}
+        <script type="text/javascript" >
+            bootstrapAlert("info","{{ flashMessage }}","Info : ",'<i class="icon-info"></i> ');
+        </script> 
+    {% endfor %}
 
-            {% for flashMessage in app.session.flashbag.get('error') %}
-                <script type="text/javascript" >
-                bootstrapAlert("warning","{{ flashMessage }}","Error : ",'<i class="icon-meh"></i> '); 
-                </script> 
-            {% endfor %}
-             
-        </div> 
+    {% for flashMessage in app.session.flashbag.get('success') %} 
+        <script type="text/javascript" >
+        bootstrapAlert("success","{{ flashMessage }}","Success : ",'<i class="icon-ok-sign"></i> '); 
+        </script>  
+    {% endfor %}
 
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <script type="text/javascript" >
+        bootstrapAlert("warning","{{ flashMessage }}","Error : ",'<i class="icon-meh"></i> '); 
+        </script> 
+    {% endfor %}
+
+    
 {% endblock body %}
  

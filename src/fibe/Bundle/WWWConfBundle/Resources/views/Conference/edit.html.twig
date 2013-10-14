@@ -3,6 +3,8 @@
 {% block title %}edit conference{{ parent() }}{% endblock title %}
 {% block body %}
 {{ parent() }}
+<div class="container">
+    <div class="row center">
 <header class="subhead container" id="overview">
     <div class="page-header">
         <h1 id="confName" title="double click to change name">{{ wwwConf.confName }}
@@ -14,8 +16,8 @@
             
             <div class="col-lg-6">
                 <div class="input-group">
-                 {{ form_widget(form.confName) }} 
-                 {{ form_errors(form.confName) }} 
+                 {{ form_widget(form) }} 
+                 {{ form_errors(form) }} 
                   <span class="input-group-btn">
                     <button type="submit" class="btn btn-default">
                         Set conference name <i class="icon-arrow-right"></i> 
@@ -26,27 +28,29 @@
             <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(form) }}</div>  
         </form>
   </div>
-</header> 
-    <div class="container col-lg-6" >
-        <form id="EventImportForm"  class="input-append">
-            <label for="EventImport">
-                <h3 class="text-success">Import Events from file  </h3>
-                <h5 class="text-info">Please, provide a OWL/RDF file</h5>
-                <h5 class="muted"><i>(such as : http://data.semanticweb.org/conference/eswc/2013/complete)</i></h5>
-            </label>
-            
-            <div class="input-group">
-                <input id="EventImport" class="form-control" name="EventImport" type="text"/>
-                <span class="input-group-btn">
-                    <button type="submit"class="btn btn-default">
-                        Process import <i class="icon-arrow-right"></i> 
-                    </button>
-                </span>
-            </div><!-- /input-group --> 
-        </form>
-    </div> 
-
-
+    </header> 
+        <div class="container" >
+            <div class="row">
+                <form id="EventImportForm"  class="input-append">
+                    <label for="EventImport">
+                        <h3 class="text-success">Import Events from file  </h3>
+                        <h5 class="text-info">Please, provide a OWL/RDF file</h5>
+                        <h5 class="muted"><i>(such as : http://data.semanticweb.org/conference/eswc/2013/complete)</i></h5>
+                    </label>
+                    
+                    <div class="input-group">
+                        <input id="EventImport" class="form-control" name="EventImport" type="text"/>
+                        <span class="input-group-btn">
+                            <button type="submit"class="btn btn-default">
+                                Process import <i class="icon-arrow-right"></i> 
+                            </button>
+                        </span>
+                    </div><!-- /input-group --> 
+                </form>
+            </div>
+        </div> 
+    </div>
+</div>
 {% endblock body %}
 
 {%  block stylesheets %}

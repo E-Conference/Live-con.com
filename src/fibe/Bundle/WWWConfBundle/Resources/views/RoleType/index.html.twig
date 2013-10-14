@@ -2,6 +2,8 @@
 
 {% block body %}
 {{ parent() }}
+<div class="container">
+    <div class="row center">
     <h1>RoleType list
     </h1>
     <a class="btn btn-info"  href="{{ path('schedule_roletype_new') }}">
@@ -29,5 +31,6 @@
         {% endfor %}
         </tbody>
     </table>
-
+    </div>
+</div>
     {% endblock %}

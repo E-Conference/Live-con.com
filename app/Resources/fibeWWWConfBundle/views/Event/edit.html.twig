@@ -4,31 +4,33 @@
 
 {{ parent() }}
 <div class="container">
-<div class="page-header">
-  <h1>{% trans %}Edit{% endtrans %}</h1>
-</div>
+    <div class="row center">
+        <div class="page-header">
+          <h1>{% trans %}Edit{% endtrans %}</h1>
+        </div>
 
-<form action="{{ path('schedule_event_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(form) }}>
-    {% include "IDCISimpleScheduleBundle:Event:form.html.twig" %}
-    <button type="submit" class="btn btn-primary">{% trans %}Edit{% endtrans %}</button>
-</form>
-
-{% include "IDCISimpleScheduleBundle:Event:xproperties.html.twig" with {"with_form": true} %}
-
-
-<ul class="record_actions">
-    <li>
-        <a class="btn" href="{{ path('schedule_event') }}">
-            {% trans %}Back to the list{% endtrans %}
-        </a>
-    </li>
-    <li>
-        <form action="{{ path('schedule_event_delete', { 'id': entity.id }) }}" method="post">
-            {{ form_widget(delete_form) }}
-            <button type="submit" class="btn btn-danger">{% trans %}Delete{% endtrans %}</button>
+        <form action="{{ path('schedule_event_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(form) }}>
+            {% include "IDCISimpleScheduleBundle:Event:form.html.twig" %}
+            <button type="submit" class="btn btn-primary">{% trans %}Edit{% endtrans %}</button>
         </form>
-    </li>
-</ul>
+
+        {% include "IDCISimpleScheduleBundle:Event:xproperties.html.twig" with {"with_form": true} %}
+
+
+        <ul class="record_actions">
+            <li>
+                <a class="btn" href="{{ path('schedule_event') }}">
+                    {% trans %}Back to the list{% endtrans %}
+                </a>
+            </li>
+            <li>
+                <form action="{{ path('schedule_event_delete', { 'id': entity.id }) }}" method="post">
+                    {{ form_widget(delete_form) }}
+                    <button type="submit" class="btn btn-danger">{% trans %}Delete{% endtrans %}</button>
+                </form>
+            </li>
+        </ul>
+    </div>
 </div>
 {% endblock body %}
 

@@ -3,7 +3,8 @@
 {% block body %}
 {{ parent() }}
 
-
+<div class="container">
+    <div class="row center">
     <h1>ConfEvent edit</h1>
 
     <form action="{{ path('schedule_confevent_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
@@ -112,7 +113,8 @@
         </div>
       </br>
 
-
+  </div>
+</div>
 {% block javascripts %}
 {{ parent() }}
 <script type="text/javascript">
