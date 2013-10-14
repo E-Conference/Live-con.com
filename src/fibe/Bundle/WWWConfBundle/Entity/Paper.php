@@ -74,7 +74,7 @@ class Paper
 	
 	/**
      *  Conference associated to this paper
-     * @ORM\ManyToOne(targetEntity="wwwConf",inversedBy="papers")
+     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="papers", cascade={"persist"})
      * @ORM\JoinColumn(name="wwwConf_id", referencedColumnName="id")
      *
      */
@@ -368,6 +368,7 @@ class Paper
         return $this->keywords;
     }
 
+    
     /**
      * Add confEvents
      *
