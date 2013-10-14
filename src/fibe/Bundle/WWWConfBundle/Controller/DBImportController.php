@@ -8,11 +8,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event; 
-use fibe\Bundle\WWWConfBundle\Entity\Person;
+use fibe\Bundle\WWWConfBundle\Entity\Person; 
 use fibe\Bundle\WWWConfBundle\Entity\Theme;
+use fibe\Bundle\WWWConfBundle\Entity\Keyword;
+use fibe\Bundle\WWWConfBundle\Entity\Organization;
+use fibe\Bundle\WWWConfBundle\Entity\Paper;
+use fibe\Bundle\WWWConfBundle\Entity\Role;
+use fibe\Bundle\WWWConfBundle\Entity\RoleType;
+
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Category;
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Location; 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;  
+use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;   
  
 
 /**
@@ -30,21 +36,49 @@ class DBImportController extends Controller
       
     public function importAction(Request $request)
     {  
-        $JSONFile = $request->request->get('dataArray'); 
+        // $JSONFile = $request->request->get('dataArray');          
+        $JSONFile = json_decode($request->request->get('dataArray'),true); 
+        
         $em = $this->getDoctrine()->getManager(); 
         $entity=null;
         $eventEntities= array();
-        $personEntities= array();
+        $personEntities= array(); 
         $locationEntities= array();
         $categoryEntities= array();
         $themeEntities= array();
-        $wwwConf =  $em->getRepository('fibeWWWConfBundle:WwwConf')->find(1);
+        $organizationEntities= array();
+        $keywordEntities= array();
+        $proceedingEntities= array();
+        $wwwConf =  $this->getUser()->getCurrentConf();
 
         //categories color.
         $colorArray = array('lime', 'red', 'blue', 'orange', 'gold', 'coral', 'crimson', 'aquamarine', 'darkOrchid', 'forestGreen', 'peru','purple' ,'seaGreen'  );
         
 
         
+        
+        //////////////////////  keywords  ////////////////////// 
+        if(isset($JSONFile['keywords'])){
+            $keywords = $JSONFile['keywords'];
+            for($i=0;$i<count($keywords);$i++){
+                $current = $keywords[$i];  
+                $existsTest = $this->getDoctrine()
+                                   ->getRepository('fibeWWWConfBundle:Keyword')
+                                   ->findOneBy(array('libelle' => $current['setLibelle']));
+                if($existsTest!=null){
+                  array_push($keywordEntities,$existsTest); 
+                  continue; //skip existing category
+                }
+                $entity= new Keyword();
+                foreach ($current as $setter => $value) {
+
+                    call_user_func_array(array($entity, $setter), array($value)); 
+                } 
+                $entity->setWwwConf(  $wwwConf );
+                $em->persist($entity); 
+                array_push($keywordEntities,$entity); 
+            }  
+        }   
         
         //////////////////////  locations  ////////////////////// 
         if(isset($JSONFile['locations'])){
@@ -63,17 +97,116 @@ class DBImportController extends Controller
 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
+                $entity->setWwwConf(  $wwwConf );
                 $em->persist($entity); 
                 array_push($locationEntities,$entity); 
             }  
+        }   
+        
+        //////////////////////  organizations  //////////////////////
+        if(isset($JSONFile['organizations'])){
+            $organizations = $JSONFile['organizations'];
+            for($i=0;$i<count($organizations);$i++){
+                $current = $organizations[$i];  
+                $existsTest = $this->getDoctrine()
+                                   ->getRepository('fibeWWWConfBundle:Organization')
+                                   ->findOneBy(array('libelle' => $current['setLibelle']));
+                if($existsTest!=null){
+                  array_push($organizationEntities,$existsTest);
+                  continue; //skip existing category
+                }
+
+                $entity= new Organization();
+                foreach ($current as $setter => $value) {
+
+                    call_user_func_array(array($entity, $setter), array($value)); 
+                }
+                $entity->setWwwConf(  $wwwConf );
+                $em->persist($entity); 
+                array_push($organizationEntities,$entity); 
+            }  
         }     
+        
+        //////////////////////  persons  ////////////////////// 
+        if(isset($JSONFile['persons'])){
+            $entities = $JSONFile['persons']; 
+            for($i=0;$i<count($entities);$i++){
+                $current = $entities[$i];   
+
+                $entity= new Person();
+                foreach ($current as $setter => $value) {
+                    //if($setter!="setStartAt" && $setter!="setEndAt")echo "Event->".$setter."(".$value.");\n"; 
+                    if($setter=="addOrganization"){
+                        $value=$organizationEntities[$value];
+                    }
+                    call_user_func_array(array($entity, $setter), array($value)); 
+                } 
+                //person must be registered as Author
+                $entity->setWwwConf(  $wwwConf );
+                $em->persist($entity); 
+                array_push($personEntities,$entity);  
+            }  
+        }    
+        
+        
+        //////////////////////  proceedings  //////////////////////
+        if(isset($JSONFile['proceedings'])){
+            $proceedings = $JSONFile['proceedings'];
+            for($i=0;$i<count($proceedings);$i++){
+                $current = $proceedings[$i];  
+                $existsTest = $this->getDoctrine()
+                                   ->getRepository('fibeWWWConfBundle:Paper')
+                                   ->findOneBy(array('title' => $current['setTitle']));
+                if($existsTest!=null){
+                  array_push($proceedingEntities,$existsTest); 
+                  continue; //skip existing category
+                }
+                $entity= new Paper();
+                foreach ($current as $setter => $value) { 
+                    if($setter=="addKeyword"){
+                        //addKeyword is an array of index
+                        
+                        $j=0;
+                        foreach ($value as $keyword) {
+                            if($j!=0){
+                                $val=$keywordEntities[$keyword];
+
+                                call_user_func_array(array($entity, $setter), array($val));
+                            }
+                            $j++;
+                        } 
+                        $value=$keywordEntities[$value[0]];  
+                    }
+
+                    if($setter=="addAuthor"){
+                        //addAuthor is an array of index
+                        
+                        $j=0;
+                        foreach ($value as $persons) {
+                            if($j!=0){
+                                $val=$personEntities[$persons];
+
+                                call_user_func_array(array($entity, $setter), array($val));
+                            }
+                            $j++;
+                        } 
+                        $value=$personEntities[$value[0]];  
+                    }
+
+                    call_user_func_array(array($entity, $setter), array($value)); 
+                } 
+                $entity->setWwwConf(  $wwwConf );
+                $em->persist($entity); 
+                array_push($proceedingEntities,$entity); 
+            }  
+        }   
         
         
         //////////////////////  themes  //////////////////////
         if(isset($JSONFile['themes'])){
-            $theme = $JSONFile['themes'];
-            for($i=0;$i<count($theme);$i++){
-                $current = $theme[$i];  
+            $themes = $JSONFile['themes'];
+            for($i=0;$i<count($themes);$i++){
+                $current = $themes[$i];  
                 $existsTest = $this->getDoctrine()
                                    ->getRepository('fibeWWWConfBundle:Theme')
                                    ->findOneBy(array('libelle' => $current['setLibelle']));
@@ -114,21 +247,6 @@ class DBImportController extends Controller
             }  
         }
         
-        //////////////////////  person  ////////////////////// 
-        if(isset($JSONFile['persons'])){
-            $entities = $JSONFile['persons']; 
-            for($i=0;$i<count($entities);$i++){
-                $current = $entities[$i];  
-                $entity= new Person();
-                foreach ($current as $setter => $value) {
-                    //if($setter!="setStartAt" && $setter!="setEndAt")echo "Event->".$setter."(".$value.");\n"; 
-                    call_user_func_array(array($entity, $setter), array($value)); 
-                } 
-                $em->persist($entity);
-                array_push($personEntities,$entity); 
-            }  
-        }    
-        
         //////////////////////  events  //////////////////////
         if(isset($JSONFile['events'])){
             $entities = $JSONFile['events'];
@@ -148,6 +266,51 @@ class DBImportController extends Controller
                     
                     if($setter=="addCategorie"){
                         $value=$categoryEntities[$value];
+                    }
+                    
+                    if($setter=="addChair"){
+                        $j=0;
+
+                        //retrieve Chair roletype
+                        $chairRoleType = $this->getDoctrine()
+                                           ->getRepository('fibeWWWConfBundle:RoleType')
+                                           ->findOneBy(array('libelle' => 'Chair'));
+                        if($chairRoleType==null){
+                            $chairRoleType = new RoleType();
+                            $chairRoleType->setLibelle("Chair");
+                            $em->persist($chairRoleType);
+                        }
+
+
+                        $setter = "addRole";
+                        foreach ($value as $chair) {
+                            if($j!=0){
+                                $person=$personEntities[$chair];
+                                $val = new Role();
+                                $val->setType($chairRoleType);
+                                $val->setPerson($person);
+
+                                call_user_func_array(array($entity, $setter), array($val));
+                            }
+                            $j++;
+                        }  
+                        $person=$personEntities[$value[0]];
+                        $value = new Role();
+                        $value->setType($chairRoleType);
+                        $value->setPerson($person);
+                    }
+                    
+                    if($setter=="addPaper"){
+                        $j=0;
+                        foreach ($value as $paper) {
+                            if($j!=0){
+                                $val=$proceedingEntities[$paper];
+
+                                call_user_func_array(array($entity, $setter), array($val));
+                            }
+                            $j++;
+                        } 
+                        $value=$proceedingEntities[$value[0]];   
                     }
                     
                     if($setter=="addTheme"){
@@ -189,6 +352,7 @@ class DBImportController extends Controller
                 $em->persist($entity);
             }
         }
+
         //echo implode(",\t",$eventEntities)  ;
         //////////////////////  x prop  //////////////////////
         //echo "xproperties->\n";
