@@ -7,14 +7,29 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="{{ path('dashboard_index') }}" title="Go back to Index">Seamposium</a>
+    <a class="navbar-brand" href="{{ path('dashboard_index') }}" title="Go back to Index"> Liveon</a>
   </div> 
 
   <div class="navbar-collapse navbar-ex1-collapse">
 
     <ul class="nav navbar-nav">  
-        <li><a href ="{{ path('schedule_index') }}" title="manage schedule"> Schedule</a></li>
+        <!-- Conference dropdown -->
+       <li><a href ="{{ path('schedule_conference_edit') }}" title="manage schedule"> Conference</a></li>
+        <li class="dropdown">
+          <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
+            
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li>   
+              <a style="padding-right:5px;"  href="{{ path('schedule_conference_edit') }}"><i class="icon-cog"></i> Conference settings </a>
+            </li>
+   
+          </ul>
+        </li> 
 
+       <!-- Schedule dropdown -->
+        <li><a href ="{{ path('schedule_index') }}" title="manage schedule"> Schedule</a></li>
         <li class="dropdown">
           <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
             
@@ -25,21 +40,78 @@
               <a style="padding-right:5px;"   href="{{ path('schedule_view') }}"  >
                 <i class="icon-calendar"></i> Schedule view
               </a>  
-              <a style="padding-right:5px;"  href="{{ path('schedule_conference_edit') }}"><i class="icon-cog"></i> Conference settings </a>
-
             </li>
-   
           </ul>
         </li> 
 
-        <li><a href ="{{ path('schedule_status') }}" title="Status">Status</a></li>
-        <li><a href ="{{ path('schedule_location') }}" title="Location">Location</a></li>
+        <!-- Events dropdown -->
+        <li><a href ="{{ path('schedule_event') }}" title="manage schedule"> Events</a></li>
+        <li class="dropdown">
+          <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
+            
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li> 
+              <a style="padding-right:5px;"   href="{{ path('schedule_event') }}"  >
+                <i class="icon-th-list"></i> List
+              </a>
+              <a style="padding-right:5px;"   href="{{ path('schedule_location') }}"  >
+                <i class="icon-map-marker"></i> Locations
+              </a>
+              <a style="padding-right:5px;"   href="{{ path('schedule_category') }}"  >
+                <i class="icon-sort-by-attributes"></i> Categories
+              </a>
+               <a style="padding-right:5px;"   href="{{ path('schedule_theme') }}"  >
+                <i class="icon-screenshot "></i> Themes
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Persons dropdown -->
+        <li><a href ="{{ path('schedule_person_index') }}" title="manage schedule"> Persons</a></li>
+        <li class="dropdown">
+          <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
+            
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li> 
+              <a style="padding-right:5px;"   href="{{ path('schedule_person_index') }}"  >
+                <i class="icon-th-list"></i> List
+              </a>
+               <a style="padding-right:5px;"   href="{{ path('schedule_roletype') }}"  >
+                <i class="icon-link"></i> Roles
+              </a>
+            </li>
+          </ul>
+        </li> 
+
+        <!-- Papers dropdown -->
+        <li><a href ="{{ path('schedule_paper') }}" title="manage schedule"> Papers</a></li>
+        <li class="dropdown">
+          <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li> 
+              <a style="padding-right:5px;"   href="{{ path('schedule_paper') }}"  >
+                <i class="icon-th-list"></i> List
+              </a>
+            </li>
+          </ul>
+        </li>
+
+
+        <!-- <li><a href ="{{ path('schedule_status') }}" title="Status">Status</a></li> -->
+       <!--  <li><a href ="{{ path('schedule_location') }}" title="Location">Location</a></li>
         <li><a href ="{{ path('schedule_category') }}" title="Category">Category</a></li>
         <li><a href ="{{ path('schedule_theme') }}" title="Theme">Theme</a></li>
         <li><a href ="{{ path('schedule_event') }}" title="Event">Event</a></li>
         <li><a href ="{{ path('schedule_person_index') }}" title="Person">Person</a></li>
          <li><a href ="{{ path('schedule_paper') }}" title="Paper">Paper</a></li>
-        <li><a href ="{{ path('schedule_roletype') }}" title="Person">RoleType</a></li>
+        <li><a href ="{{ path('schedule_roletype') }}" title="Person">RoleType</a></li> -->
 
 
     </ul><!-- end class nav-->

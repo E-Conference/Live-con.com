@@ -28,7 +28,9 @@ class ThemeController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('fibeWWWConfBundle:Theme')->findAll();
+        //$entities = $em->getRepository('fibeWWWConfBundle:Theme')->findAll();
+        $currentConf = $this->getUser()->getCurrentConf();
+        $entities = $currentConf->getThemes();
 
         return array(
             'entities' => $entities,
@@ -50,6 +52,7 @@ class ThemeController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->setConference($this->getUser()->getCurrentConf());
             $em->persist($entity);
             $em->flush();
 

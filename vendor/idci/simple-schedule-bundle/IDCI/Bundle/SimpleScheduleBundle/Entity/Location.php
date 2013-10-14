@@ -12,6 +12,7 @@ namespace IDCI\Bundle\SimpleScheduleBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use fibe\Bundle\WWWConfBundle\Entity\Equipment;
+use fibe\Bundle\WWWConfBundle\Entity\wwwConf;
 
 /**
  * @ORM\Table(name="location", options={"collate"="utf8_general_ci", "charset"="utf8"})
@@ -65,6 +66,14 @@ class Location
      * @ORM\OneToMany(targetEntity="CalendarEntity", mappedBy="location")
      */
     protected $calendarEntities;
+
+    /**
+     * Conference associated to these themes
+     *  @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="locations", cascade={"persist"})
+     * @ORM\JoinColumn(name="wwwConf_id", referencedColumnName="id")
+     *
+     */
+    protected $conference;
 
     /**
      * Constructor
@@ -282,6 +291,29 @@ class Location
     public function getEquipments()
     {
         return $this->equipments;
+    }
+
+     /**
+     * Set conference
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\wwwConf $conference
+     * @return Paper
+     */
+    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\wwwConf $conference = null)
+    {
+        $this->conference = $conference;
+    
+        return $this;
+    }
+
+    /**
+     * Get conference
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\wwwConf 
+     */
+    public function getConference()
+    {
+        return $this->conference;
     }
 
 }

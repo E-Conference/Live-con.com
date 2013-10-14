@@ -42,6 +42,7 @@ class RegistrationController extends ContainerAware
         $user = $userManager->createUser();
         $user->setEnabled(true);
 
+
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, new UserEvent($user, $request));
 
         $form = $formFactory->createForm();
@@ -55,10 +56,14 @@ class RegistrationController extends ContainerAware
                 //     $user->addRole('ROLE_ADMIN');
                 // }
  
-                $conf=$this->container->get('doctrine')
-                                      ->getRepository('fibeWWWConfBundle:WwwConf')
-                                      ->find(1) ; 
-                $user->setWwwConf($conf);
+                $conf = $user->getConferences()->first(); 
+                $user->setCurrentConf($conf);
+
+                $em = $this->getContainer()->get('doctrine')->getManager('default');
+                $em->persist($user);
+                $em->flush();
+
+
                 $userManager->updateUser($user);
                 if (null === $response = $event->getResponse() ) {
                     $url = $this->container->get('router')->generate('fos_user_registration_register');

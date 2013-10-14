@@ -1,0 +1,172 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:400,700);
+
+/*vert : #b0ca0f;
+	bleue : #00a2e0;
+	bleu-clair: #afcbe0;
+	grey : #fafafa;
+	rouge: #e7431e;
+*/
+/*Titles*/
+H2, H3 {
+	color : #F06E50;
+	font-family:  Helvetica;
+	
+}
+
+H1 , H2 {
+	font-size : 13.5pt !important;
+}
+
+H3, H4{
+	font-size : 13pt !important;
+}
+
+H4,H5{
+	margin-top:2pt;
+	margin-bottom:2pt;
+}
+
+p{
+	font-size : 12pt !important;
+	font-family: Helvetica, Arial, Tahoma, sans-serif;
+	color: black;
+}
+
+
+
+.inline{
+	font-size : 12pt !important;
+	color: black;
+}
+
+/*boxes*/
+
+header{
+	background: #fafafa !important;
+	border : none !important;
+}
+
+
+nav  .ui-btn-inner:hover{
+	
+	background : #F06E50!important;
+	color:#F06E50;
+}
+
+nav  .ui-btn-inner{
+	
+	background :  #4C9DDB!important;
+	color : white!important;
+	
+}
+
+nav  a{
+	border : 1px solid white!important;
+	text-shadow : none!important;
+}
+
+
+
+
+a, span {
+	font-size : 10pt !important;
+}
+
+
+
+ .ui-bar-b{
+ 	background: #b3b3b3!important;
+ }
+
+
+#logoContainer{
+	float:left;
+	height : 60px;
+	width: 210px;
+}
+
+#logoContainer a {
+  height : 100%;
+  width : 100%;
+}
+
+#logoContainer img {
+  height : 100%;
+  width : 100%;
+ 
+}
+
+#textHeader H1{
+  text-align: center;
+}
+ .ui-btn-inner{
+	padding-top : .35em!important;
+	padding-bottom : .3em!important;
+	
+}
+
+//Special buttons
+a .swtich{
+	background : #b0ca0f!important;
+}
+.ui-btn-up-b{
+	background : #444!important;
+}
+
+
+
+.ui-btn-text{
+	padding-top : 0em!important;
+	padding-bottom : 0em!important;
+}
+
+.ui-li{
+	padding-top : 0em!important;
+	padding-bottom : 0em!important;
+
+}
+.ui-listview-filter{
+	margin-top: 0px;
+
+}
+
+
+
+
+
+
+
+/* Schedule */
+
+#getConferenceSchedule .ui-btn-inner{
+	padding-top : 0!important;
+	padding-bottom : 0!important;
+	
+
+}
+
+#getConferenceSchedule H2 {
+	padding-left:0.5em;
+	line-height:1.5em; 
+} 
+#getConferenceSchedule H2 span{ 
+	font-size : 10pt !important;
+} 
+#getConferenceSchedule p.ui-li-desc{
+	font-size : 11pt !important;
+	margin-top : 0em!important;
+	margin-bottom : 0em!important;
+}
+
+#getConferenceSchedule H3.ui-li-heading{
+	white-space : normal;
+	overflow : visible;
+	text-overflow : visible;
+	font-size : 11pt !important;
+	margin-top : 0em!important;
+	margin-bottom : 0em!important;
+}
+
+
+
+

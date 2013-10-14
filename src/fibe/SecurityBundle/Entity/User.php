@@ -22,12 +22,19 @@ class User extends BaseUser
     protected $id; 
     
     /**
-     * wwwConf
-     *
-     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="confManagers", cascade={"persist"})
-     * @ORM\JoinColumn(name="schedule_id", referencedColumnName="id")
+     * @ORM\ManyToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="confManagers", cascade={"persist"})
+     * @ORM\JoinTable(name="manager_conference",
+     *     joinColumns={@ORM\JoinColumn(name="manager_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="conference_id", referencedColumnName="id")})
      */
-    protected $wwwConf;
+    protected $conferences;
+
+    /**
+     *  
+     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf")
+     *  @ORM\JoinColumn(name="currentConf", referencedColumnName="id")
+     */
+    protected $currentConf;
     
     
     /**
@@ -38,6 +45,7 @@ class User extends BaseUser
 	    parent::__construct();
     }
     
+
     /**
      * Get id
      *
@@ -46,29 +54,61 @@ class User extends BaseUser
     public function getId()
     {
         return $this->id;
-    }  
-    
-    
+    }
+
     /**
-     * Set wwwConf
+     * Add conferences
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $wwwConf
-     * @return ConfEvent
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conferences
+     * @return User
      */
-    public function setWwwConf(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $wwwConf = null)
+    public function addConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conferences)
     {
-        $this->wwwConf = $wwwConf;
+        $this->conferences[] = $conferences;
     
         return $this;
     }
 
     /**
-     * Get wwwConf
+     * Remove conferences
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conferences
+     */
+    public function removeConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conferences)
+    {
+        $this->conferences->removeElement($conferences);
+    }
+
+    /**
+     * Get conferences
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getConferences()
+    {
+        return $this->conferences;
+    }
+
+    /**
+     * Set currentConf
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $currentConf
+     * @return User
+     */
+    public function setCurrentConf(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $currentConf = null)
+    {
+        $this->currentConf = $currentConf;
+    
+        return $this;
+    }
+
+    /**
+     * Get currentConf
      *
      * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
      */
-    public function getWwwConf()
+    public function getCurrentConf()
     {
-        return $this->wwwConf;
-    }  
+        return $this->currentConf;
+    }
 }

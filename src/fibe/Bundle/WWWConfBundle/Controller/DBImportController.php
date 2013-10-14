@@ -8,8 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event; 
-use fibe\Bundle\WWWConfBundle\Entity\Person;
-use fibe\Bundle\WWWConfBundle\Entity\Author;
+use fibe\Bundle\WWWConfBundle\Entity\Person; 
 use fibe\Bundle\WWWConfBundle\Entity\Theme;
 use fibe\Bundle\WWWConfBundle\Entity\Keyword;
 use fibe\Bundle\WWWConfBundle\Entity\Organization;
@@ -43,15 +42,14 @@ class DBImportController extends Controller
         $em = $this->getDoctrine()->getManager(); 
         $entity=null;
         $eventEntities= array();
-        $personEntities= array();
-        $authorEntities= array();
+        $personEntities= array(); 
         $locationEntities= array();
         $categoryEntities= array();
         $themeEntities= array();
         $organizationEntities= array();
         $keywordEntities= array();
         $proceedingEntities= array();
-        $wwwConf =  $em->getRepository('fibeWWWConfBundle:WwwConf')->find(1);
+        $wwwConf =  $this->getUser()->getCurrentConf();
 
         //categories color.
         $colorArray = array('lime', 'red', 'blue', 'orange', 'gold', 'coral', 'crimson', 'aquamarine', 'darkOrchid', 'forestGreen', 'peru','purple' ,'seaGreen'  );
@@ -76,6 +74,7 @@ class DBImportController extends Controller
 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
+                $entity->setWwwConf(  $wwwConf );
                 $em->persist($entity); 
                 array_push($keywordEntities,$entity); 
             }  
@@ -98,6 +97,7 @@ class DBImportController extends Controller
 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
+                $entity->setWwwConf(  $wwwConf );
                 $em->persist($entity); 
                 array_push($locationEntities,$entity); 
             }  
@@ -120,7 +120,8 @@ class DBImportController extends Controller
                 foreach ($current as $setter => $value) {
 
                     call_user_func_array(array($entity, $setter), array($value)); 
-                } 
+                }
+                $entity->setWwwConf(  $wwwConf );
                 $em->persist($entity); 
                 array_push($organizationEntities,$entity); 
             }  
@@ -132,28 +133,6 @@ class DBImportController extends Controller
             for($i=0;$i<count($entities);$i++){
                 $current = $entities[$i];   
 
-                // TODO check name duplication
-                // TODO check name duplication
-                // TODO check name duplication
-                // TODO check name duplication
-                // TODO check name duplication
-                // TODO check name duplication
-                // TODO check name duplication
-                // TODO check name duplication
-                // TODO check name duplication
-                // TODO check name duplication
-                // TODO check name duplication
-                $existsTest = $this->getDoctrine()
-                                   ->getRepository('fibeWWWConfBundle:Person')
-                                   ->findOneBy(array('name' => $current['setFirstName']. " " .$current['setLastName']));
-                if($existsTest!=null){
-                    array_push($personEntities,$existsTest); 
-                    $author = new Author();
-                    $author->setPerson($existsTest); 
-                    array_push($authorEntities,$author); 
-                    continue; //skip existing category
-                }
-
                 $entity= new Person();
                 foreach ($current as $setter => $value) {
                     //if($setter!="setStartAt" && $setter!="setEndAt")echo "Event->".$setter."(".$value.");\n"; 
@@ -163,11 +142,9 @@ class DBImportController extends Controller
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
                 //person must be registered as Author
-                array_push($personEntities,$entity); 
-                $author = new Author();
-                $author->setPerson($entity);
-                $em->persist($author);
-                array_push($authorEntities,$author); 
+                $entity->setWwwConf(  $wwwConf );
+                $em->persist($entity); 
+                array_push($personEntities,$entity);  
             }  
         }    
         
@@ -207,17 +184,18 @@ class DBImportController extends Controller
                         $j=0;
                         foreach ($value as $persons) {
                             if($j!=0){
-                                $val=$authorEntities[$persons];
+                                $val=$personEntities[$persons];
 
                                 call_user_func_array(array($entity, $setter), array($val));
                             }
                             $j++;
                         } 
-                        $value=$authorEntities[$value[0]];  
+                        $value=$personEntities[$value[0]];  
                     }
 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
+                $entity->setWwwConf(  $wwwConf );
                 $em->persist($entity); 
                 array_push($proceedingEntities,$entity); 
             }  

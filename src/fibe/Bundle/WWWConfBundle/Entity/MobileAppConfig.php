@@ -5,62 +5,121 @@ namespace fibe\Bundle\WWWConfBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * MobileAppConfig
+ * This entity define a keyword
+ *
+ *  @ORM\Table(name="mobileAppConfig")
+ *  @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\MobileAppConfigRepository")
+ *  @ORM\HasLifecycleCallbacks
  */
 class MobileAppConfig
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
-    /**
-     * @var string
+   /**
+     * BGContent
+     *
+     *
+     * @ORM\Column(type="string", name="BGContent", nullable=true)
      */
-    private $BGColorContent;
+    protected $BGColorContent;
 
-    /**
-     * @var string
+     /**
+     * BGHeader
+     *
+     *
+     * @ORM\Column(type="string", name="BGHeader", nullable=true)
      */
-    private $BGColorHeader;
+    protected $BGColorHeader;
 
-    /**
-     * @var string
+     /**
+     * BGNavBar
+     *
+     *
+     * @ORM\Column(type="string", name="BGNavBar", nullable=true)
      */
-    private $BGColorNavBar;
+    protected $BGColorNavBar;
 
-    /**
-     * @var string
+
+     /**
+     * BGfooter
+     *
+     *
+     * @ORM\Column(type="string", name="BGfooter", nullable=true)
      */
-    private $BGColorfooter;
+    protected $BGColorfooter;
 
-    /**
-     * @var string
+
+     /**
+     * TitleColorContent
+     *
+     *
+     * @ORM\Column(type="string", name="TitleColorContent", nullable=true)
      */
-    private $ColorContentTitle;
+    protected $TitleColorContent;
 
     /**
-     * @var string
+     * TitleColorHeader
+     *
+     *
+     * @ORM\Column(type="string", name="TitleColorHeader", nullable=true)
      */
-    private $ColorHeaderTitle;
+    protected $TitleColorHeader;
 
-    /**
-     * @var string
+
+      /**
+     * TitleColorNavBar
+     *
+     *
+     * @ORM\Column(type="string", name="TitleColorNavBar", nullable=true)
      */
-    private $ColorNavBarTitle;
+    protected $TitleColorNavBar;
+
 
     /**
-     * @var boolean
+     * TitleColorContent
+     *
+     *
+     * @ORM\Column(type="string", name="TitleColorFooter", nullable=true)
      */
-    private $IsPublished;
+    protected $TitleColorFooter;
+
+
 
     /**
-     * @var \fibe\Bundle\WWWConfBundle\Entity\wwwConf
+     * BGColorButton
+     *
+     *
+     * @ORM\Column(type="string", name="BGColorButton", nullable=true)
      */
-    private $Conference;
-
+    protected $BGColorButton;
 
     /**
+     * TitleColorButton
+     *
+     *
+     * @ORM\Column(type="string", name="TitleColorButton", nullable=true)
+     */
+    protected $TitleColorButton;
+
+     /**
+     * IsPublished
+     *
+     *
+     * @ORM\Column(type="boolean", name="IsPublished", nullable=true)
+     */
+    protected $IsPublished;
+        
+
+
+
+  /**
      * Get id
      *
      * @return integer 
@@ -163,72 +222,97 @@ class MobileAppConfig
     }
 
     /**
-     * Set ColorContentTitle
+     * Set TitleColorContent
      *
-     * @param string $colorContentTitle
+     * @param string $TitleColorContent
      * @return MobileAppConfig
      */
-    public function setColorContentTitle($colorContentTitle)
+    public function setTitleColorContent($TitleColorContent)
     {
-        $this->ColorContentTitle = $colorContentTitle;
+        $this->TitleColorContent = $TitleColorContent;
     
         return $this;
     }
 
     /**
-     * Get ColorContentTitle
+     * Get TitleColorContent
      *
      * @return string 
      */
-    public function getColorContentTitle()
+    public function getTitleColorContent()
     {
-        return $this->ColorContentTitle;
+        return $this->TitleColorContent;
     }
 
     /**
-     * Set ColorHeaderTitle
+     * Set TitleColorHeader
      *
-     * @param string $colorHeaderTitle
+     * @param string $TitleColorHeader
      * @return MobileAppConfig
      */
-    public function setColorHeaderTitle($colorHeaderTitle)
+    public function setTitleColorHeader($TitleColorHeader)
     {
-        $this->ColorHeaderTitle = $colorHeaderTitle;
+        $this->TitleColorHeader = $TitleColorHeader;
     
         return $this;
     }
 
     /**
-     * Get ColorHeaderTitle
+     * Get TitleColorHeader
      *
      * @return string 
      */
-    public function getColorHeaderTitle()
+    public function getTitleColorHeader()
     {
-        return $this->ColorHeaderTitle;
+        return $this->TitleColorHeader;
     }
 
     /**
-     * Set ColorNavBarTitle
+     * Set TitleColorNavBar
      *
-     * @param string $colorNavBarTitle
+     * @param string $TitleColorNavBar
      * @return MobileAppConfig
      */
-    public function setColorNavBarTitle($colorNavBarTitle)
+    public function setTitleColorNavBar($TitleColorNavBar)
     {
-        $this->ColorNavBarTitle = $colorNavBarTitle;
+        $this->TitleColorNavBar = $TitleColorNavBar;
     
         return $this;
     }
 
     /**
-     * Get ColorNavBarTitle
+     * Get TitleColorNavBar
      *
      * @return string 
      */
-    public function getColorNavBarTitle()
+    public function getTitleColorNavBar()
     {
-        return $this->ColorNavBarTitle;
+        return $this->TitleColorNavBar;
+    }
+
+
+     /**
+     * Get TitleColorFooter
+     *
+     * @return string 
+     */
+    public function getTitleColorFooter()
+    {
+        return $this->TitleColorFooter;
+    }
+
+
+     /**
+     * Set TitleColorFooter
+     *
+     * @param string $titleColorFooter
+     * @return MobileAppConfig
+     */
+    public function setTitleColorFooter($titleColorFooter)
+    {
+        $this->TitleColorFooter = $titleColorFooter;
+    
+        return $this;
     }
 
     /**
@@ -254,26 +338,54 @@ class MobileAppConfig
         return $this->IsPublished;
     }
 
-    /**
-     * Set Conference
+
+     /**
+     * Set BGColorButton
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\wwwConf $conference
+     * @param string $BGColorButton
      * @return MobileAppConfig
      */
-    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\wwwConf $conference = null)
+    public function setBGColorButton($BGColorButton)
     {
-        $this->Conference = $conference;
+        $this->BGColorButton = $BGColorButton;
     
         return $this;
     }
 
-    /**
-     * Get Conference
+     /**
+     * Get BGColorButtond
      *
-     * @return \fibe\Bundle\WWWConfBundle\Entity\wwwConf 
+     * @return string
      */
-    public function getConference()
+    public function getBGColorButton()
     {
-        return $this->Conference;
+        return $this->BGColorButton;
     }
+
+      /**
+     * Set BGColorButton
+     *
+     * @param string $TitleColorButton
+     * @return MobileAppConfig
+     */
+    public function setTitleColorButton($TitleColorButton)
+    {
+        $this->TitleColorButton = $TitleColorButton;
+    
+        return $this;
+    }
+
+     /**
+     * Get TitleColorButton
+     *
+     * @return string 
+     */
+    public function getTitleColorButton()
+    {
+        return $this->TitleColorButton;
+    }
+
+    
+
+
 }

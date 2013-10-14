@@ -44,6 +44,14 @@ class Theme
      */
     private $confEvents;
 
+     /**
+     *  Themes associated to this conference
+     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="themes", cascade={"persist"})
+     * @ORM\JoinColumn(name="wwwConf_id", referencedColumnName="id")
+     *
+     */
+    protected $conference;
+
     
 
 
@@ -121,5 +129,28 @@ class Theme
     public function getConfEvents()
     {
         return $this->confEvents;
+    }
+
+    /**
+     * Set conference
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
+     * @return Theme
+     */
+    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference = null)
+    {
+        $this->conference = $conference;
+    
+        return $this;
+    }
+
+    /**
+     * Get conference
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
+     */
+    public function getConference()
+    {
+        return $this->conference;
     }
 }

@@ -34,12 +34,12 @@ class Person
     private $roles;
 
     /**
-     * autho
+     * Paper
      * Paper made by this person
-     *  
-     * @ORM\OneToMany(targetEntity="Paper",  mappedBy="person")
+     *   
+     * @ORM\ManyToMany(targetEntity="Paper",   mappedBy="persons", cascade={"persist"})
      */
-    private $paper;
+    private $papers;
 
     /**
      * Organizations
@@ -48,6 +48,14 @@ class Person
      * @ORM\ManyToMany(targetEntity="Organization",   mappedBy="members", cascade={"persist"})
      */
     private $organizations;
+
+     /**
+     *  Person associated to this conference
+     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="persons", cascade={"persist"})
+     * @ORM\JoinColumn(name="wwwConf_id", referencedColumnName="id")
+     *
+     */
+    protected $conference;
     
 
     /**
@@ -83,6 +91,7 @@ class Person
     /**
      * name
      * A name for some thing. Name of the person 
+     * / ! \  auto built with the concatenation of first and last name
      * @ORM\Column(type="string", name="name")
      */
     protected $name;
@@ -919,7 +928,7 @@ class Person
      */
     public function addPaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $paper)
     {
-        $this->paper[] = $paper;
+        $this->papers[] = $paper;
     
         return $this;
     }
@@ -931,7 +940,7 @@ class Person
      */
     public function removePaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $paper)
     {
-        $this->paper->removeElement($paper);
+        $this->papers->removeElement($paper);
     }
 
     /**
@@ -941,7 +950,7 @@ class Person
      */
     public function getPaper()
     {
-        return $this->paper;
+        return $this->papers;
     }
 
     /**
@@ -1027,6 +1036,30 @@ class Person
     public function getSlug()
     {
         return $this->slug;
+    }
+    
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return Category
+     */
+    public function setWwwConf($conference)
+    {
+        $this->conference = $conference;
+    
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getWwwConf()
+    {
+        return $this->conference;
     }
 
 

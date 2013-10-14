@@ -48,7 +48,7 @@ class EventController extends Controller
      
         $em = $this->getDoctrine()->getManager();
         $entities=$em->getRepository('IDCISimpleScheduleBundle:Event')->findAll();
-
+       //$entities = $this->getUser()->getCurrentConf()->getConfEvents()->toArray();
         $adapter = new ArrayAdapter($entities);
         $pager = new PagerFanta($adapter);
         $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
@@ -121,8 +121,6 @@ class EventController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            
-        
         
             $em->persist($entity);
             $em->flush();

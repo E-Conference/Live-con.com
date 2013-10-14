@@ -72,7 +72,7 @@ var ocsConfig = {
                     else {
                         console.warn("paper : "+key+" can't be found");
                     }  
-                }, 
+                } 
             },
             'pc-chairs' : {
                 wrapped : true,
@@ -87,7 +87,21 @@ var ocsConfig = {
                     }  
                 },  
             }
-        }
+        },
+        action : function(node,event){
+              // add session category
+            var catName = "SessionEvent"; 
+
+            var catId = getCategoryIdFromName(catName);
+            if(catId==undefined){ 
+              var category= {}; 
+              category['setName']=catName;
+              
+              categories.push(category);
+              catId = categories.length-1;
+            }
+            event['addCategorie']=catId; 
+        }, 
     },
 
     proceedingMapping : {

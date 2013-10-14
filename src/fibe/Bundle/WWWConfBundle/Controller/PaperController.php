@@ -26,7 +26,10 @@ class PaperController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('fibeWWWConfBundle:Paper')->findAll();
+        $conf = $this->getUser()->getCurrentConf();
+        //$entities = $em->getRepository('fibeWWWConfBundle:Paper')->findAll();
+        $entities = $conf->getPapers();
+
 
         return $this->render('fibeWWWConfBundle:Paper:index.html.twig', array(
             'entities' => $entities,
@@ -46,6 +49,7 @@ class PaperController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->setConference($this->getUser()->getCurrentConf());
             $em->persist($entity);
             $em->flush();
 

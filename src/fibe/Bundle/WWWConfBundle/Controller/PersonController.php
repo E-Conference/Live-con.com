@@ -29,7 +29,8 @@ class PersonController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('fibeWWWConfBundle:Person')->findAll();
+        $currentConf = $this->getUser()->getCurrentConf();
+        $entities = $currentConf->getPersons();
 
         return $this->render('fibeWWWConfBundle:Person:index.html.twig', array(
             'entities' => $entities,
@@ -49,6 +50,7 @@ class PersonController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->setConference($this->getUser()->getCurrentConf());
             $em->persist($entity);
             $em->flush();
 
