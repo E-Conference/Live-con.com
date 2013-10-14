@@ -45,7 +45,6 @@ class WwwConf
      */
     private $confOwlUri;
 
-
     /**
     * confEvents
     *

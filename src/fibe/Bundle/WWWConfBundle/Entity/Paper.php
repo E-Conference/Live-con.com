@@ -31,10 +31,13 @@ class Paper
      /**
      * autho
      * Persons related to an event 
-     *  
-     * @ORM\OneToMany(targetEntity="Author", mappedBy="paper")
+     *   
+     * @ORM\ManyToMany(targetEntity="Person", inversedBy="papers", cascade={"persist"})
+     * @ORM\JoinTable(
+     *     joinColumns={@ORM\JoinColumn(name="paper_id", referencedColumnName="id", onDelete="Cascade")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="Cascade")})
      */
-    private $author;
+    private $persons;
 
      /**
      * @ORM\ManyToMany(targetEntity="Keyword", inversedBy="papers", cascade={"persist"})
@@ -48,7 +51,7 @@ class Paper
      * type
      *
      *
-     * @ORM\Column(type="string", name="type")
+     * @ORM\Column(type="string", nullable=true, name="type")
      */
     protected $type;
 
@@ -65,7 +68,7 @@ class Paper
      * label
      *
      *
-     * @ORM\Column(type="string", name="label")
+     * @ORM\Column(type="string", nullable=true,  name="label")
      */
     protected $label;
 	
@@ -98,7 +101,7 @@ class Paper
      * month
      *
      *
-     * @ORM\Column(type="string", name="month")
+     * @ORM\Column(type="string", nullable=true,   name="month")
      */
     protected $month;
 
@@ -106,7 +109,7 @@ class Paper
      * year
      *
      *
-     * @ORM\Column(type="string", name="year")
+     * @ORM\Column(type="string", nullable=true, name="year")
      */
     protected $year;
 
@@ -114,7 +117,7 @@ class Paper
      * url_pdf
      *
      *
-     * @ORM\Column(type="string", name="url_pdf")
+     * @ORM\Column(type="string", nullable=true, name="url_pdf")
      */
     protected $url_pdf;
 
@@ -123,8 +126,7 @@ class Paper
      * Constructor
      */
     public function __construct()
-    {
-        $this->author = new \Doctrine\Common\Collections\ArrayCollection();
+    { 
         $this->keywords = new \Doctrine\Common\Collections\ArrayCollection();
         $this->confEvents = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -306,9 +308,9 @@ class Paper
      * @param \fibe\Bundle\WWWConfBundle\Entity\Author $author
      * @return Paper
      */
-    public function addAuthor(\fibe\Bundle\WWWConfBundle\Entity\Author $author)
+    public function addAuthor(\fibe\Bundle\WWWConfBundle\Entity\Person $author)
     {
-        $this->author[] = $author;
+        $this->persons[] = $author;
     
         return $this;
     }
@@ -318,9 +320,9 @@ class Paper
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\Author $author
      */
-    public function removeAuthor(\fibe\Bundle\WWWConfBundle\Entity\Author $author)
+    public function removeAuthor(\fibe\Bundle\WWWConfBundle\Entity\Person $author)
     {
-        $this->author->removeElement($author);
+        $this->persons->removeElement($author);
     }
 
     /**
@@ -330,7 +332,7 @@ class Paper
      */
     public function getAuthor()
     {
-        return $this->author;
+        return $this->persons;
     }
 
     /**
@@ -406,7 +408,7 @@ class Paper
      * @param \fibe\Bundle\WWWConfBundle\Entity\wwwConf $conference
      * @return Paper
      */
-    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\wwwConf $conference = null)
+    public function setWwwConf(\fibe\Bundle\WWWConfBundle\Entity\wwwConf $conference = null)
     {
         $this->conference = $conference;
     
@@ -418,7 +420,7 @@ class Paper
      *
      * @return \fibe\Bundle\WWWConfBundle\Entity\wwwConf 
      */
-    public function getConference()
+    public function getWwwConf()
     {
         return $this->conference;
     }

@@ -37,9 +37,17 @@ class Organization
      * homepage
      *
      *
-     * @ORM\Column(type="string", name="homepage")
+     * @ORM\Column(type="string", name="homepage",nullable=true)
      */
     protected $homepage;
+
+     /**
+     * country
+     *
+     *
+     * @ORM\Column(type="string", name="country",nullable=true)
+     */
+    protected $country;
 
      /**
      * @ORM\ManyToMany(targetEntity="Person", inversedBy="organizations", cascade={"persist"})
@@ -90,6 +98,29 @@ class Organization
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    /**
+     * Set country
+     *
+     * @param string $country
+     * @return Organization
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string 
+     */
+    public function getCountry()
+    {
+        return $this->country;
     }
 
     /**

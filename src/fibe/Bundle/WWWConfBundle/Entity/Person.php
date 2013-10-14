@@ -34,12 +34,12 @@ class Person
     private $roles;
 
     /**
-     * autho
+     * Paper
      * Paper made by this person
-     *  
-     * @ORM\OneToMany(targetEntity="Author",  mappedBy="person")
+     *   
+     * @ORM\ManyToMany(targetEntity="Paper",   mappedBy="persons", cascade={"persist"})
      */
-    private $paper;
+    private $papers;
 
     /**
      * Organizations
@@ -48,6 +48,14 @@ class Person
      * @ORM\ManyToMany(targetEntity="Organization",   mappedBy="members", cascade={"persist"})
      */
     private $organizations;
+
+     /**
+     *  Person associated to this conference
+     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="persons", cascade={"persist"})
+     * @ORM\JoinColumn(name="wwwConf_id", referencedColumnName="id")
+     *
+     */
+    protected $conference;
     
 
     /**
@@ -83,6 +91,7 @@ class Person
     /**
      * name
      * A name for some thing. Name of the person 
+     * / ! \  auto built with the concatenation of first and last name
      * @ORM\Column(type="string", name="name")
      */
     protected $name;
@@ -106,7 +115,7 @@ class Person
      * description
      *. something about the person
      *
-     * @ORM\Column(type="string", length=2000, nullable=true, name="description")
+     * @ORM\Column(type="string", length=2048, nullable=true, name="description")
      */
      protected $description;
 
@@ -131,9 +140,17 @@ class Person
      *
     * Title (Mr, Mrs, Ms, Dr. etc) 
      *
-     * @ORM\Column(type="string", length=255, nullable=true,name="title")
+     * @ORM\Column(type="string", length=10, nullable=true,name="title")
      */
     protected $title; 
+
+    /**
+     * country
+     * 
+     *
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $country; 
 
     /**
      * depiction
@@ -262,14 +279,6 @@ class Person
      * @ORM\Column(type="string", length=128, unique=true)
      */
     protected $slug;
-
-    /**
-     *  Conference associated to this person
-     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="persons", cascade={"persist"})
-     * @ORM\JoinColumn(name="wwwConf_id", referencedColumnName="id")
-     *
-     */
-    protected $conference;
     
 
     /**
@@ -293,36 +302,25 @@ class Person
     {
         $now = new \DateTime('now');
 
-        $this->setCreatedAt($now); 
-        $this->concatName();
-        $this->slugify();
-    }
- 
-    /**
-     * onUpdate
-     *
-     * @ORM\PreUpdate()
-     */
-    public function onUpdate()
-    {
-        $this->concatName();
-        $this->slugify();
-    }
+        $this->setCreatedAt($now);
+    } 
 
 
 
     /**
      * Slugify
-     */
-    public function slugify()
-    {
-        $this->setSlug(StringTools::slugify($this->getName()));
-    }
- 
-
+     */ 
     private function concatName(){
         $this->setName($this->getFirstName() . " " . $this->getLastName());
-     }
+        $this->slugify();
+    }
+    public function slugify()
+    {
+        $id = $this->getId();
+        if(!$id) $id = rand (0,9999999999);
+        $this->setSlug($id . "-" .StringTools::slugify($this->getName()));
+    }
+ 
     /**
      * Get id
      *
@@ -450,6 +448,29 @@ class Person
     } 
 
     /**
+     * Set country
+     *
+     * @param string $country
+     * @return Person
+     */
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    
+        return $this;
+    }
+
+    /**
+     * Get country
+     *
+     * @return string 
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    } 
+
+    /**
      * Set depiction
      *
      * @param string $depiction
@@ -481,6 +502,7 @@ class Person
     public function setFirstName($firstName)
     {
         $this->firstName = $firstName;
+        $this->concatName();
     
         return $this;
     }
@@ -505,6 +527,7 @@ class Person
     public function setLastName($lastName)
     {
         $this->lastName = $lastName;
+        $this->concatName();
     
         return $this;
     }
@@ -900,12 +923,12 @@ class Person
     /**
      * Add paper
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Author $paper
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Paper $paper
      * @return Person
      */
-    public function addPaper(\fibe\Bundle\WWWConfBundle\Entity\Author $paper)
+    public function addPaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $paper)
     {
-        $this->paper[] = $paper;
+        $this->papers[] = $paper;
     
         return $this;
     }
@@ -913,11 +936,11 @@ class Person
     /**
      * Remove paper
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Author $paper
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Paper $paper
      */
-    public function removePaper(\fibe\Bundle\WWWConfBundle\Entity\Author $paper)
+    public function removePaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $paper)
     {
-        $this->paper->removeElement($paper);
+        $this->papers->removeElement($paper);
     }
 
     /**
@@ -927,7 +950,7 @@ class Person
      */
     public function getPaper()
     {
-        return $this->paper;
+        return $this->papers;
     }
 
     /**
@@ -964,7 +987,7 @@ class Person
     }
 
     public function __toString()
-    {
+    { 
         return $this->name;
     }
 
@@ -1013,6 +1036,30 @@ class Person
     public function getSlug()
     {
         return $this->slug;
+    }
+    
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return Category
+     */
+    public function setWwwConf($conference)
+    {
+        $this->conference = $conference;
+    
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getWwwConf()
+    {
+        return $this->conference;
     }
 
 

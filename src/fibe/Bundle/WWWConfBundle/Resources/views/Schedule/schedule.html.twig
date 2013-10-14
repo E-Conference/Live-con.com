@@ -227,9 +227,10 @@
             
             var diff =moment(events[i]["start"]).diff(events[i]["end"]);
             events[i]["instant"] = (diff  === 0 ) || (diff  === 1 ); 
+            EventCollection.eventsToRender.push(events[i]["id"]);
 
             var event = new CalEvent(events[i]); 
-            Events[events[i]["id"]] = event;
+            Events[events[i]["id"]] = event; 
 
             if(event["instant"]){
               instant_events.push(Events[events[i]["id"]]); 
@@ -280,11 +281,14 @@
               $calendar.off("stopRender").on("stopRender",function(){
                 stopRender = true;
               }); 
+
+              //events have already been fetched
               if(fetched === true){
                 fetched = false;
                 callback(calendar_events );
                 return;
               }
+              
               op.data['before']=moment(end).format();
               op.data['after']=moment(start).format();
               $.get(
@@ -374,7 +378,8 @@
           eventDataTransform: function(data){return data;},
           droppable: true, // this allows things to be dropped onto the calendar !!!
           eventDrop : function(event){ //drop from calendar
-                  event.persist(); 
+            EventCollection.eventsToRender.push(event["id"]);
+              event.persist(); 
           }, 
           eventAfterAllRender: function( view ) { 
               //avoid repeating this function 10 times...
@@ -402,10 +407,11 @@
               copiedEventObject.deleteParent();
               
               copiedEventObject.persist();
+              copiedEventObject.render($calendar);
+
               // render the event on the calendar 
               console.log(copiedEventObject);
               Events[copiedEventObject.id] = copiedEventObject;
-              copiedEventObject.render($calendar);
               
               $(this).remove();  
           },
@@ -454,8 +460,7 @@
           child.formatDate();
           // remove event from calendar 
           $calendar.fullCalendar('removeEvents',child.id);  
-          child.persist();  
-          
+          child.persist();
         });
         // updateEventArray();
       }).on("drag",function(ev,event){
@@ -466,30 +471,38 @@
       /*------------------------------------- update function -------------------------------------------*/ 
       /*-------------------------------------------------------------------------------------------------*/
 
-    
+      /**
+       * function triggered after all events have been rendered 
+       */
       function updateEventArray(){ 
-        var callendarEvents = $calendar.fullCalendar('clientEvents'); //loop only on calendar events
-        var callendarEventsId=[];
-        for (var i in callendarEvents){
-          var callendarEvent = callendarEvents[i];
-          if(Events[callendarEvent.id]){
-            Events[callendarEvent.id] = callendarEvent;
-            // console.log(callendarEvent.id+"_###found in calendar",Events[callendarEvent.id]) ;
+          var calendarEvents = $calendar.fullCalendar('clientEvents'); //loop only on calendar events 
+
+          for (var i in calendarEvents){
+            var calendarEvent = calendarEvents[i];
+            if(Events[calendarEvent.id]){
+              Events[calendarEvent.id] = calendarEvent;
+              // console.log(calendarEvent.id+"_###found in calendar",Events[calendarEvent.id]) ;
+            } 
+          }
+
+          $(".fc-event-draggable:visible").each(function(i){ 
+            var id = parseInt($(this).find(".fc-event-id").text());
+            //TODO
+            //TODO
+            //TODO
+            //TODO
+            //TODO
+            //$.inArray()
+            Events[id]['elem'] = $(this);
+          });
+          console.log("###event array updated###");
+          console.log("changed events :",EventCollection.eventsToRender);
+          // console.log(Events) 
+
+          //if we render from history, dont store the state
+          if(!History.isRenderingStateFromHistory()){
+              History.storeState(Events);
           } 
-        }
-
-        $(".fc-event-draggable:visible").each(function(i){ 
-
-          var id = parseInt($(this).find(".fc-event-id").text()); 
-          Events[id]['elem'] = $(this);
-        });
-        console.log("###event array updated###");
-        console.log(Events) 
-
-        //if we render from history, dont store the state
-        if(!History.isRenderingStateFromHistory()){
-            History.storeState(Events);
-        } 
       }
 
 
@@ -505,27 +518,17 @@
       var repositionTimeout = 10;
       function reposition(view){
 
-          var repositionTimeout,positionned ;
-          var eventMargin = 3;
-          var popoverWidth = 276; 
-
-          var colWidth = view.getColWidth();
-          positionned=[];
-          // console.log("##########################")
-          // console.log("########reposition########"); 
-          // console.log("##########################"); 
-          
-          var toppestParent = EventCollection.getToppestParent();
+          var repositionTimeout,
+              eventMargin = 3,
+              popoverWidth = 276,
+              colWidth = view.getColWidth(); 
+              positionned=[],
+              toppestParent = EventCollection.getToppestEventsToRender();
+          console.log("this.eventsToRender : ",EventCollection.eventsToRender);
           if(!toppestParent)return;
           // console.log("toppestParent",toppestParent);
           positionBlock(toppestParent,colWidth,2);  
-          
-          for (var i in positionned){
-            positionned[i]['isPositionned']=false;
-            delete positionned[i]['range'];
-            delete positionned[i]['count'];
-            delete positionned[i]['minLeft']; 
-          }
+           
 
           positionned=[];
           function positionBlock(events,colWidth,parentZindex,parentPos,parent){ 
@@ -550,11 +553,11 @@
                       element.css("left",parentPos.x+eventMargin/2);
 
                       if(moment(parent.start).isSame(moment(event.start))){
-                       element.css("top",elemProp.y+eventMargin/2+5); 
-                       element.css("height",elemProp.h-eventMargin/2-5);
+                        element.css("top",elemProp.y+eventMargin/2+5); 
+                        element.css("height",elemProp.h-eventMargin/2-5);
                       }
                       if(moment(parent.end).isSame(moment(event.end))){
-                       // element.css("top",elemProp.y+eventMargin/2); 
+                        // element.css("top",elemProp.y+eventMargin/2); 
                         element.css("height",elemProp.h-eventMargin/2-5);
                       }
                     } 
@@ -577,6 +580,7 @@
   
 
                 if(!element.data("is-ui-initted")){
+                    console.log("initting : ",event.id);
                   
                     element.data("is-ui-initted",true); 
 
@@ -631,7 +635,7 @@
                           }
                         }
                     }); //end droppable
-
+    
                     //action on hover (children opacity and bootstrap popover)
                     element.popover({
                                 trigger : 'hover',
@@ -645,35 +649,32 @@
                                     return "right";
                                   if(eventProp.x - popoverWidth > calendarProp.x)
                                     return "left";
-                                  return "bottom"; 
+                                  return "bottom";
                                 },
                                 title : "<b>"+event.title+"</b>",
                                 content : event.getPopoverContent(),
-                    }) .hover(function(){
+                    }).hover(function(){
                               //enter
                               $(this).animate({"border-color":"#3F3F3F"},{queue:false});
 
                               var elemEvent = EventCollection.getEventByDiv($(this));
-                              var childrenDiv = EventCollection.getChildren(elemEvent,{concat:true,onlyEvent:true});  
+                              var childrenDiv = EventCollection.getChildren(elemEvent,{concat:true,onlyEvent:true});
                               for (var j in childrenDiv){
                                 var curChildDiv = EventCollection.getDivById(childrenDiv[j].id);
                                 if(!curChildDiv)continue;
                                 curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false});
                               }
                         },function(){
-
                               $(this).animate({"border-color":$(this).data("border-color")},{queue:false})
                               var elemEvent = EventCollection.getEventByDiv($(this));
-                              var childrenDiv = EventCollection.getChildren(elemEvent,{concat:true,onlyEvent:true}); 
+                              var childrenDiv = EventCollection.getChildren(elemEvent,{concat:true,onlyEvent:true});
                               for (var j in childrenDiv){
                                 var curChildDiv = EventCollection.getDivById(childrenDiv[j].id );
                                 if(!curChildDiv)continue;
                                 curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
                               }
-                    }); 
+                    });
                     //end set opacity to all children 
-
-
                 }
 
                 
@@ -688,6 +689,7 @@
 
               }
           } 
+        EventCollection.eventsToRender=[];
       }
 
       

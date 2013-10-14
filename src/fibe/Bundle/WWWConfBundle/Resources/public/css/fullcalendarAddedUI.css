@@ -7,6 +7,8 @@
         padding: 1em;
         float  : left
     }
+
+    /****  sidebar *****/
         
     #sidebar {   
         padding   : 1em 0.5em;
@@ -61,6 +63,9 @@
         font-size    : .85em;
         cursor       : pointer;
     }
+
+    /****  modal *****/
+
     #modal .modal-dialog { 
         width: 90%; 
     }  
@@ -77,6 +82,9 @@
     .fc-event{
       font-size: 1em;
       min-width: 2em;
+      transform: translateZ(0);
+      transform: translate3d(0,0,0);
+      perspective: 1000; backface-visibility: hidden;
     }
     .fc-event-id {
       display: none;
@@ -84,10 +92,13 @@
     .fc-view { /* prevents dragging outside of widget */
         overflow: visible;
     }
+
+    /*** popover ***/
     .popover{
       z-index: 2000;
       width: 276px;
     }
+
     .popover .description {
       overflow: hidden;
       text-overflow: ellipsis; 

@@ -5,7 +5,7 @@
 {{ parent() }}
 <div class="container">
     <div class="row center">
-<header class="subhead container" id="overview">
+    <header class="subhead container" id="overview">
     <div class="page-header">
         <h1 id="confName" title="double click to change name">{{ wwwConf.confName }}
             <small> <b> {{ wwwConf.confEvents|length }} events</b></small>
@@ -28,28 +28,27 @@
             <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(form) }}</div>  
         </form>
   </div>
-    </header> 
-        <div class="container" >
-            <div class="row">
-                <form id="EventImportForm"  class="input-append">
-                    <label for="EventImport">
-                        <h3 class="text-success">Import Events from file  </h3>
-                        <h5 class="text-info">Please, provide a OWL/RDF file</h5>
-                        <h5 class="muted"><i>(such as : http://data.semanticweb.org/conference/eswc/2013/complete)</i></h5>
-                    </label>
-                    
-                    <div class="input-group">
-                        <input id="EventImport" class="form-control" name="EventImport" type="text"/>
-                        <span class="input-group-btn">
-                            <button type="submit"class="btn btn-default">
-                                Process import <i class="icon-arrow-right"></i> 
-                            </button>
-                        </span>
-                    </div><!-- /input-group --> 
-                </form>
-            </div>
-        </div> 
-    </div>
+</header> 
+    <div class="container col-lg-6" >
+        <form id="EventImportForm"  class="input-append">
+            <label for="EventImport">
+                <h3 class="text-success">Import Events from file  </h3>
+                <h5 class="text-info">Please, provide a OWL/RDF file</h5>
+                <h5 class="muted"><i>(such as : http://data.semanticweb.org/conference/eswc/2013/complete)</i></h5>
+            </label>
+            
+            <div class="input-group">
+                <input id="EventImport" class="form-control" name="EventImport" value="../../../../ICANN2013.xml" type="text"/>
+                <span class="input-group-btn">
+                    <button type="submit"class="btn btn-default">
+                        Process import <i class="icon-arrow-right"></i> 
+                    </button>
+                </span>
+            </div><!-- /input-group --> 
+        </form>
+    </div> 
+
+</div>
 </div>
 {% endblock body %}
 
@@ -76,7 +75,10 @@
 
 {%  block javascripts %} 
 {{ parent() }}
-        <script src="{{ asset('bundles/fibewwwconf/js/OWLImporter.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibewwwconf/js/importer/OWLImporter.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibewwwconf/js/importer/rdf_config.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibewwwconf/js/importer/ocs_config.js') }}" type="text/javascript" ></script>
+
         <script src="{{ asset('bundles/fibewwwconf/js/moment.min.js') }}" type="text/javascript" ></script>
         <script type="text/javascript" >
          
@@ -165,7 +167,8 @@
     				    isConfOwlUriInputOK = true;
                         confName=confname;
                         // var data = $.param({dataArray:dataArray});
-                        var data = $.param({dataArray:dataArray});
+                        var data = {dataArray:JSON.stringify(dataArray)};
+ 
                         $.ajax({ //DBimport
                             type: "POST",
                             cache: false,  
