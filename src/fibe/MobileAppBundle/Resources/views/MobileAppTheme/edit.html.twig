@@ -1,5 +1,6 @@
 <div class='col-lg-4'>
-	<form action="{{ path('mobileAppTheme_update_style',  { 'id': mobile_app_config.id }) }}" method="post">
+	<form action="{{ path('mobileAppTheme_update_style',  { 'id': mobile_app_config.id }) }}" method="post" {{ form_enctype(mobile_app_form) }}>
+		<input type="hidden" name="_method" value="PUT" />
 		<div id='headerStyle'>
 		<h1>Header</h1>
 		{{ form_row(mobile_app_form.BGColorHeader) }}
@@ -29,8 +30,10 @@
 		{{ form_row(mobile_app_form.BGColorFooter) }}
 		{{ form_row(mobile_app_form.TitleColorFooter) }}
 		</div>
-
-	    <button type="submit" class="btn btn-success"><i class="icon-edit"></i></button>
+		<button type="submit" class="btn btn-success"><i class="icon-edit"></i></button>
+		<div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
+                {{ form_rest(mobile_app_form)}}
+            </div>
 	</form>
 </div>
 

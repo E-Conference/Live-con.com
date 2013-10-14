@@ -35,13 +35,14 @@ class MobileAppThemeController extends Controller
 
         $conference = $this->getUser()->getCurrentConf();
         $conference_form = $this->createForm(new WwwConfType(), $conference);
-  
-		return array(
-		    'mobile_app_config' => $mobile_app_config,
-            'conference' => $conference,
-		    'mobile_app_form' => $mobile_app_form->createView(),
+
+		return $this->render('fibeMobileAppBundle:MobileAppTheme:index.html.twig', array(
+            'mobile_app_form' => $mobile_app_form->createView(),
             'conference_form' => $conference_form->createView(),
-		);
+		    'mobile_app_config' => $mobile_app_config,
+            'conference' => $conference
+		    
+		));
 	}
 
      /**
@@ -63,7 +64,7 @@ class MobileAppThemeController extends Controller
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
-            $this->clearCache();
+           // $this->clearCache();
         }
         
         return $this->redirect($this->generateUrl('mobileAppTheme_index'));
@@ -89,7 +90,7 @@ class MobileAppThemeController extends Controller
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
-            $this->clearCache();
+           // $this->clearCache();
         }
         return $this->redirect($this->generateUrl('mobileAppTheme_index'));
     }
