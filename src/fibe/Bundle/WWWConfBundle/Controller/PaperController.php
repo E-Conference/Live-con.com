@@ -53,7 +53,7 @@ class PaperController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('paper_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('schedule_paper_show', array('id' => $entity->getId())));
         }
 
         return $this->render('fibeWWWConfBundle:Paper:new.html.twig', array(
@@ -148,7 +148,7 @@ class PaperController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('paper_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('schedule_paper_show', array('id' => $id)));
         }
 
         return $this->render('fibeWWWConfBundle:Paper:edit.html.twig', array(
@@ -180,7 +180,7 @@ class PaperController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('paper'));
+        return $this->redirect($this->generateUrl('schedule_paper'));
     }
 
     /**

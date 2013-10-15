@@ -352,7 +352,7 @@ function run(url,callback,fallback){
                 
                 for (var i=0;i<themes.length;i++){
                     //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
-                    if(themes[i]['setLibelle']==themeName){
+                    if(themes[i]['setname']==themeName){
                         return i; 
                     }
                 }

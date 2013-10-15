@@ -11,7 +11,7 @@
     <tbody>
         {% for role in entity.getRoles() %} 
             <tr> 
-                <td>{{ role.getType().libelle }}</td>
+                <td>{{ role.getType().name }}</td>
                 <td>{{ role.getPerson().name }}</td>
                 <td>{{ role.getPerson().email }}</td>
                 <td> <a id="{{role.id}}" class="btn btn-danger delete_role" data-toggle="tooltip" title="Remove this Person from the list"><i class="icon-trash"></i>

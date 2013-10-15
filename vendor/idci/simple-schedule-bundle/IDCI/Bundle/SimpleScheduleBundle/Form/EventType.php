@@ -30,10 +30,10 @@ class EventType extends LocationAwareCalendarEntityType
                 'format' =>'dd/MM/yyyy HH:mm', 
              
             ))
-            ->add('isTransparent', null, array( 
-                'label' => 'is Transparent',
-                'required' => false
-            ))
+            // ->add('isTransparent', null, array( 
+            //     'label' => 'is Transparent',
+            //     'required' => false
+            // ))
         ;
         parent::buildForm($builder, $options);
     }

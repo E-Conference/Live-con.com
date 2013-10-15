@@ -98,7 +98,7 @@ class ScheduleController extends Controller
                 $event->setStartAt(new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get())));  
                 $event->setSummary( $postData['title'] );
                 $event->setIsAllDay($postData['allDay']=="true") ; 
-                $event->setWwwConf($conf);
+                $event->setConference($conf);
 
                 $em->persist($event); 
                 $em->flush();
@@ -176,7 +176,7 @@ class ScheduleController extends Controller
             ->add('themes', 'entity', array(
                   'class'    => 'fibeWWWConfBundle:Theme',
                   'required' => false,
-                  'property' => 'libelle',
+                  'property' => 'name',
                   'multiple' => false))
             ->getForm();
             

@@ -20,10 +20,10 @@ abstract class LocationAwareCalendarEntityType extends CalendarEntityType
 
         $builder
             ->add('location')
-            ->add('priority', 'choice', array(
-                'choices' => range(0, 9)
-            ))
-            ->add('resources')
+            // ->add('priority', 'choice', array(
+            //     'choices' => range(0, 9)
+            // ))
+            // ->add('resources')
         ;
     }
 

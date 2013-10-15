@@ -1,8 +1,8 @@
 {% extends '::base.html.twig' %}
 
 {% block title %}Index{% endblock title %}
- {% block stylesheets %} 
-{{ parent() }}
+{% block stylesheets %} 
+    
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibewwwconf/css/datetimepicker.css') }}" />  
     <style type="text/css">
             
@@ -21,50 +21,53 @@
         margin: 1em 0 1 0.5em;
     }
     </style>
- {% endblock %}
+    {{ parent() }}
+{% endblock %}
 
 {% block javascripts %} 
-{{ parent() }}
+    {{ parent() }}
 
-</script>   
-<script type="text/javascript" src="{{ asset('bundles/fibewwwconf/js/bootstrap-datetimepicker.min.js') }}"></script>
-<script type="text/javascript" >
-    $(document).ready(function(){ 
-        $('.datetimepicker').datetimepicker({
-            format: 'dd/mm/yyyy hh:ii',
-            autoclose: true,
+    </script>   
+    <script type="text/javascript" src="{{ asset('bundles/fibewwwconf/js/bootstrap-datetimepicker.min.js') }}"></script>
+    <script type="text/javascript" >
+        $(document).ready(function(){ 
+            $('.datetimepicker')
+                .wrap('<div class="input-group">') 
+                .after('<span class="input-group-addon"><span class="icon-calendar"></span></span>')
+                .datetimepicker({
+                    format: 'dd/mm/yyyy hh:ii',
+                    autoclose: true,
+                });
         });
-    });
-</script>
-<!-- <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>  -->
-<script src ="{{ asset('bundles/fibewwwconf/js/json2.js') }}" type="text/javascript" ></script>
-    
-</script>   
-{% endblock%}
-
-
+    </script> 
+    <!-- <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>  -->
+    <script src ="{{ asset('bundles/fibewwwconf/js/json2.js') }}" type="text/javascript" ></script>
+        
+    </script>   
+{% endblock %}
+ 
 {% block body %}
-<div class="symfony-content">
-            {% include "fibeWWWConfBundle::adminmenu.html.twig" %}
-            {% for flashMessage in app.session.flashbag.get('info') %}
-                <script type="text/javascript" >
-                    bootstrapAlert("info","{{ flashMessage }}","Info : ",'<i class="icon-info"></i> ');
-                </script> 
-            {% endfor %}
+    {{ parent() }}
+    {% include "fibeWWWConfBundle::adminmenu.html.twig" %}
 
-            {% for flashMessage in app.session.flashbag.get('success') %} 
-                <script type="text/javascript" >
-                bootstrapAlert("success","{{ flashMessage }}","Success : ",'<i class="icon-ok-sign"></i> '); 
-                </script>  
-            {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('info') %}
+        <script type="text/javascript" >
+            bootstrapAlert("info","{{ flashMessage }}","Info : ",'<i class="icon-info"></i> ');
+        </script> 
+    {% endfor %}
 
-            {% for flashMessage in app.session.flashbag.get('error') %}
-                <script type="text/javascript" >
-                bootstrapAlert("warning","{{ flashMessage }}","Error : ",'<i class="icon-meh"></i> '); 
-                </script> 
-            {% endfor %}
-             
-        </div> 
+    {% for flashMessage in app.session.flashbag.get('success') %} 
+        <script type="text/javascript" >
+        bootstrapAlert("success","{{ flashMessage }}","Success : ",'<i class="icon-ok-sign"></i> '); 
+        </script>  
+    {% endfor %}
 
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <script type="text/javascript" >
+        bootstrapAlert("warning","{{ flashMessage }}","Error : ",'<i class="icon-meh"></i> '); 
+        </script> 
+    {% endfor %}
+
+    
 {% endblock body %}
  

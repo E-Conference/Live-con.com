@@ -5,7 +5,7 @@
 
 {% include "fibeMobileAppBundle::navbar.html.twig" %}
 <div class="container">
-    <div class="center">
+    <div class="row center">
       <div class='col-lg-4'>
         <form action="{{ path('mobileAppTheme_update_conference', { 'id': conference.id })}}" method="post">
             {{ form_widget(conference_form)}}
@@ -19,7 +19,7 @@
             </div>
             
           </div>
-           {% include "fibeMobileAppBundle:MobileAppTheme:edit.html.twig" %}
+          {% include "fibeMobileAppBundle:MobileAppTheme:edit.html.twig" %}
           <a href="{{path('mobileAppPublic_index', { 'id': conference.id })}}" ><i class="icon-eye-open icon-4x"></i></a>
        <!--    <div class='col-2'>
              <ul class="list-group">

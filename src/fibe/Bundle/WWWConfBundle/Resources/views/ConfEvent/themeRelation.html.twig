@@ -11,7 +11,7 @@
         {% for theme in entity.getThemes() %} 
             <tr> 
                 <td>{{ theme.id }}</td>
-                <td>{{ theme.libelle }}</td>
+                <td>{{ theme.name }}</td>
                 <td>
                      <a id="{{theme.id}}" class="btn btn-danger delete_theme" data-toggle="tooltip" title="Remove this Theme from the list"><i class="icon-trash"></i>
                      </a>

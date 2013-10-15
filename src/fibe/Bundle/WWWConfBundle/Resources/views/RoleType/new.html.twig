@@ -2,6 +2,8 @@
 
 {% block body %}
 {{ parent() }}
+<div class="container">
+    <div class="row center">
     <h1>RoleType creation</h1>
 
     <form action="{{ path('schedule_roletype_create') }}" method="post" {{ form_enctype(form) }}>
@@ -13,4 +15,6 @@
     <a class="btn btn-warning" href="{{ path('schedule_roletype') }}">
             <i class="icon-th-list"></i> List
     </a>
+    </div>
+</div>
 {% endblock %}

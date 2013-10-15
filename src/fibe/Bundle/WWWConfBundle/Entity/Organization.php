@@ -26,12 +26,12 @@ class Organization
     protected $id;
 	
     /**
-     * libelle
+     * name
      *
      *
-     * @ORM\Column(type="string", name="libelle")
+     * @ORM\Column(type="string", name="name")
      */
-    protected $libelle;
+    protected $name;
 
      /**
      * homepage
@@ -57,6 +57,14 @@ class Organization
      */
     private $members;
 
+    /**
+     *  Themes associated to this conference
+     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="organizations", cascade={"persist"})
+     * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
+     *
+     */
+    protected $conference;
+
   
 
     /**
@@ -77,28 +85,6 @@ class Organization
         return $this->id;
     }
 
-    /**
-     * Set libelle
-     *
-     * @param string $libelle
-     * @return Organization
-     */
-    public function setLibelle($libelle)
-    {
-        $this->libelle = $libelle;
-    
-        return $this;
-    }
-
-    /**
-     * Get libelle
-     *
-     * @return string 
-     */
-    public function getLibelle()
-    {
-        return $this->libelle;
-    }
 
     /**
      * Set country
@@ -177,5 +163,51 @@ class Organization
     public function getMembers()
     {
         return $this->members;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Organization
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set conference
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
+     * @return Organization
+     */
+    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference = null)
+    {
+        $this->conference = $conference;
+    
+        return $this;
+    }
+
+    /**
+     * Get conference
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
+     */
+    public function getConference()
+    {
+        return $this->conference;
     }
 }

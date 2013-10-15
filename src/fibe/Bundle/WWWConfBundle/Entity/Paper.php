@@ -75,7 +75,7 @@ class Paper
 	/**
      *  Conference associated to this paper
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="papers", cascade={"persist"})
-     * @ORM\JoinColumn(name="wwwConf_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
      *
      */
     protected $conference;
@@ -368,6 +368,19 @@ class Paper
         return $this->keywords;
     }
 
+    /**
+     * Get keywords
+     *
+     * @param \Doctrine\Common\Collections\ArrayCollection $keywords
+     * @return Paper
+     */
+    public function setKeywords($keywords)
+    {
+        $this->keywords = $keywords;
+    
+        return $this;
+    }
+
     
     /**
      * Add confEvents
@@ -408,7 +421,7 @@ class Paper
      * @param \fibe\Bundle\WWWConfBundle\Entity\wwwConf $conference
      * @return Paper
      */
-    public function setWwwConf(\fibe\Bundle\WWWConfBundle\Entity\wwwConf $conference = null)
+    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\wwwConf $conference = null)
     {
         $this->conference = $conference;
     
@@ -420,7 +433,7 @@ class Paper
      *
      * @return \fibe\Bundle\WWWConfBundle\Entity\wwwConf 
      */
-    public function getWwwConf()
+    public function getConference()
     {
         return $this->conference;
     }

@@ -31,10 +31,10 @@ class Theme
 	
     
     /**
-    *   Libelle
-    *   @ORM\Column(type="string", name="libelle")
+    *   Name
+    *   @ORM\Column(type="string", name="name")
     */
-    private $libelle;
+    private $name;
 
      /**
      * confEvents
@@ -47,7 +47,7 @@ class Theme
      /**
      *  Themes associated to this conference
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="themes", cascade={"persist"})
-     * @ORM\JoinColumn(name="wwwConf_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
      *
      */
     protected $conference;
@@ -73,29 +73,6 @@ class Theme
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set libelle
-     *
-     * @param string $libelle
-     * @return Theme
-     */
-    public function setLibelle($libelle)
-    {
-        $this->libelle = $libelle;
-    
-        return $this;
-    }
-
-    /**
-     * Get libelle
-     *
-     * @return string 
-     */
-    public function getLibelle()
-    {
-        return $this->libelle;
     }
 
     /**
@@ -152,5 +129,28 @@ class Theme
     public function getConference()
     {
         return $this->conference;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Theme
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

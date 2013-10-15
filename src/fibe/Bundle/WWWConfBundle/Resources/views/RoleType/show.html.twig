@@ -2,6 +2,8 @@
 
 {% block body %}
 {{ parent() }}
+<div class="container">
+    <div class="row center">
     <h1>RoleType</h1>
 
     <table class="table table-hover record_properties">
@@ -11,8 +13,8 @@
                 <td>{{ entity.id }}</td>
             </tr>
             <tr>
-                <th>Libelle</th>
-                <td>{{ entity.libelle }}</td>
+                <th>name</th>
+                <td>{{ entity.name }}</td>
             </tr>
         </tbody>
     </table>
@@ -28,4 +30,6 @@
         {{ form_widget(delete_form) }}
         <button class="btn btn-danger"  type="submit"><i class="icon-trash"></i></button>
     </form>
+    </div>
+</div>
 {% endblock %}

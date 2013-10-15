@@ -4,7 +4,10 @@ $('#idci_simpleschedule_event_type_startAt').hide();
 $(".alert ").hide();
 
 //initialise le datepicker
-$(".form_datetime").datetimepicker({format: 'yyyy-mm-dd hh:ii'});
+$(".form_datetime")
+			.wrap('<div class="input-group">')
+            .after('<span class="input-group-addon"><span class="icon-calendar"></span></span>')
+            .datetimepicker({format: 'yyyy-mm-dd hh:ii'});
 
  //Traitement des infos du datetimepicker 
  $(".form_datetime")

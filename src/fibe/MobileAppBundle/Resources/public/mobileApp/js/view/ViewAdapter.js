@@ -33,6 +33,8 @@ define(['jquery', 'jqueryMobile', 'view/ViewAdapterText', 'view/AbstractView', '
 		changePage : function (page, transitionEffect) {
 			
 			$(page.el).attr('data-role', 'page');
+			$(page.el).attr('class', 'page');
+			
 			page.render();
 			$('body').append($(page.el));
 			var transition = $.mobile.defaultPageTransition;

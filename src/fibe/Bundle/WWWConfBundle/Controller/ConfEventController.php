@@ -59,7 +59,7 @@ class ConfEventController extends Controller
             $em->persist($entity);
 
             //Link the new Event to the current Conf 
-            $entity->setWwwConf($this->getUser()->getCurrentConf());
+            $entity->setConference($this->getUser()->getCurrentConf());
             $em->persist($entity); 
             $em->flush();
 
@@ -151,7 +151,7 @@ class ConfEventController extends Controller
             ->add('themes', 'entity', array(
                   'class'    => 'fibeWWWConfBundle:Theme',
                   'required' => false,
-                  'property' => 'libelle',
+                  'property' => 'name',
                   'multiple' => false,
                   'label'    => "Select theme" ))
             ->getForm();

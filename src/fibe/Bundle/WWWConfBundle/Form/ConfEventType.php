@@ -14,10 +14,10 @@ class ConfEventType extends EventType
     {
         parent::buildForm($builder, $options);
        $builder
-            ->add('wwwConf', null, array(
-                                    'required'  => true,
-                                    'label'     => 'Belongs to conf'
-            ))     
+            // ->add('conference', null, array(
+            //                         'required'  => true,
+            //                         'label'     => 'Belongs to conf'
+            // ))     
              ->add('startAt', 'datetime', array(  
                 'widget' =>'single_text',
                 'format' =>'dd/MM/yyyy HH:mm', 

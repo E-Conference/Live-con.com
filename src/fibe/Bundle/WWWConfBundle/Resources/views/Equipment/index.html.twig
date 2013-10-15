@@ -1,6 +1,8 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
 {% block body -%}
+<div class="container">
+    <div class="row center">
     <h1>Equipment list</h1>
 	
 	 <a  class="btn btn-info" href="{{ path('schedule_equipment_new') }}">
@@ -44,4 +46,6 @@
             </a>
         </li>
     </ul>
+</div>
+</div>
     {% endblock %}

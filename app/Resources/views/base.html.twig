@@ -12,7 +12,12 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}" /> 
 
         {% block stylesheets %}
-         
+         <style  type="text/css">
+            .content{
+                background-image: url("{{ asset('img/bg_texture2.jpg') }}"); 
+                background-position: initial initial; background-repeat: initial initial;
+            }
+         </style>
         {% endblock %}
         <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
         
@@ -27,12 +32,14 @@
         {% endblock%}
     </head>
     <body>
-        <div class="symfony-content">
+        <div class="content">
             {% block body %} 
+
             {% endblock %}
+            {% include "::footer.html.twig" %}
         </div>
     </body> 
-    {% include "::footer.html.twig" %}
+    
 </html>
 
 

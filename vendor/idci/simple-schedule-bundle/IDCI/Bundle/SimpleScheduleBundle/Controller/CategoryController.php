@@ -87,6 +87,7 @@ class CategoryController extends Controller
      */
     public function newAction()
     {
+        throw new ServiceUnavailableHttpException('Not available yet.');
         $entity = new Category();
         $form   = $this->createForm(new CategoryType(), $entity);
 
@@ -105,6 +106,7 @@ class CategoryController extends Controller
      */
     public function createAction(Request $request)
     {
+        throw new ServiceUnavailableHttpException('Not available yet.');
         $entity  = new Category();
         $form = $this->createForm(new CategoryType(), $entity);
         $form->bind($request);

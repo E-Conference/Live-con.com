@@ -1,6 +1,8 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
 {% block body -%}
+<div class="container">
+    <div class="row center">
     <h1>Equipment creation</h1>
 
     <form action="{{ path('schedule_equipment_create') }}" method="post" {{ form_enctype(form) }}>
@@ -17,5 +19,6 @@
                  <span class="icon-list glyphicon-white"></span>
             </a>
         </a>
- 
+ </div>
+</div>
 {% endblock %}
