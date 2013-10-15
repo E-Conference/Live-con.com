@@ -52,7 +52,7 @@ class Person
      /**
      *  Person associated to this conference
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="persons", cascade={"persist"})
-     * @ORM\JoinColumn(name="wwwConf_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
      *
      */
     protected $conference;
@@ -1037,32 +1037,6 @@ class Person
     {
         return $this->slug;
     }
-    
-
-    /**
-     * Set slug
-     *
-     * @param string $slug
-     * @return Category
-     */
-    public function setWwwConf($conference)
-    {
-        $this->conference = $conference;
-    
-        return $this;
-    }
-
-    /**
-     * Get slug
-     *
-     * @return string 
-     */
-    public function getWwwConf()
-    {
-        return $this->conference;
-    }
-
-
 
     /**
      * Set conference

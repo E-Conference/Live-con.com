@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
+use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
 use fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig;
 
 use FOS\UserBundle\Model\User;
@@ -60,7 +61,7 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $username   = $input->getArgument('username');
+       $username   = $input->getArgument('username');
         $email      = $input->getArgument('email');
         $password   = $input->getArgument('password');
         $inactive   = $input->getOption('inactive');
@@ -79,8 +80,20 @@ EOT
         $defaultAppConfig = new MobileAppConfig();
         $em->persist($defaultAppConfig);
 
+        $categorie = $em->getRepository('IDCISimpleScheduleBundle:Category')->findOneBySlug("conferenceevent");
+        //Main conf event 
+        $mainConfEvent = new ConfEvent();
+        $mainConfEvent->setSummary("Conference Event");
+        $mainConfEvent->setStartAt( new \DateTime('now'));
+        $mainConfEvent->setEndAt( new \DateTime('now'));
+        $mainConfEvent->addCategorie($categorie);
+        $mainConfEvent->setSummary("Conference Event");
+        $mainConfEvent->setConference($defaultConference);
+        $em->persist($mainConfEvent);
+
         //Linking app config to conference
         $defaultConference->setAppConfig($defaultAppConfig);
+        $defaultConference->setMainConfEvent($mainConfEvent);
         $em->persist($defaultConference);
 
         //Join the new user with his default conference

@@ -45,7 +45,7 @@
     "themes":
     [
     {% for theme in entity.themes %}
-        {% if loop.first %} {% else %},{% endif %}{ "id": "{{ theme.id }}", "name": "{{ theme.getLibelle() }}"}
+        {% if loop.first %} {% else %},{% endif %}{ "id": "{{ theme.id }}", "name": "{{ theme.getname() }}"}
     {% endfor %}
     ],
     "categories":
@@ -59,7 +59,7 @@
     {% for role in entity.roles %}
         {% if loop.first %} {% else %},{% endif %}{ 
             "id": "{{ role.id }}", 
-            "type": "{{ role.type.libelle }}", 
+            "type": "{{ role.type.name }}", 
             "person": {
                 "id"  : "{{ role.person.id }}",
                 "name"  : "{{ role.person.name }}",

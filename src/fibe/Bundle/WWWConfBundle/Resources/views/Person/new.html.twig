@@ -30,7 +30,10 @@
 <script src="{{ asset('bundles/fibewwwconf/js/datepickerTools.js') }}" type="text/javascript" ></script>
 <script type="text/javascript" >
     $(document).ready(function(){ 
-        $('.datetimepicker').datetimepicker({
+        $('.datetimepicker')
+            .wrap('<div class="input-group">')
+            .after('<span class="input-group-addon"><span class="icon-calendar"></span></span>')
+            .datetimepicker({
             format: 'dd/mm/yyyy hh:ii',
             autoclose: true,
         });

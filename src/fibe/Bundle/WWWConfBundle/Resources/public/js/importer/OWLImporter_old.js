@@ -147,7 +147,7 @@
                         action : function(node){
                             var themeName = $(node).text(); 
                             if(getThemeIdFromName(themeName)=== -1 ){
-                                themes.push({setLibelle:format(themeName)});  
+                                themes.push({setname:format(themeName)});  
                             }
                         }
                     },
@@ -520,7 +520,7 @@
                 
                 for (var i=0;i<themes.length;i++){
                     //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
-                    if(themes[i]['setLibelle']==themeName){
+                    if(themes[i]['setname']==themeName){
                         return i; 
                     }
                 }

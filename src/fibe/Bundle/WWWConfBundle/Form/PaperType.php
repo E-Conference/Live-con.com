@@ -20,15 +20,12 @@ class PaperType extends AbstractType
             ->add('url_pdf')
             ->add('keywords', 'entity', array(
                       'class'    => 'fibeWWWConfBundle:Keyword',
-                      'property' => 'libelle',
+                      'property' => 'name',
                       'required' => false,
-                      'multiple' => false,
-                      'required' => false,
-                      'label'    => "Select keyword"))
-            ->add('confEvents')
-            ->add('conference')
+                      'label'    => "Keywords"))
         ;
     }
+
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {

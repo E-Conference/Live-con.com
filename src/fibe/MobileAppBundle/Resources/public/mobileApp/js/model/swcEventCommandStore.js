@@ -276,7 +276,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				var JSONfile = {};
 				$.each(dataXML,function(i){  
 					var JSONToken = {};
-					JSONToken.themeLibelle =  this.libelle || "";
+					JSONToken.themename =  this.name || "";
 					JSONfile[i] = JSONToken;
 				});
 					console.log(JSONfile);
@@ -292,11 +292,11 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							parameters.contentEl.append('<h2>Themes</h2>'); 
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#theme/',
-													  hrefCllbck:function(str){return Encoder.encode(str["themeLibelle"])},
+													  hrefCllbck:function(str){return Encoder.encode(str["themename"])},
 													  },
-													 "themeLibelle",
+													 "themename",
 													 parameters.contentEl,
-													 {type:"Node",labelCllbck:function(str){return "Track : "+str["themeLibelle"];}});
+													 {type:"Node",labelCllbck:function(str){return "Track : "+str["themename"];}});
 						}
 
 					}
@@ -365,7 +365,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				var JSONfile = {};
 				$.each(dataXML,function(i){  
 					var JSONToken = {};
-					JSONToken.categoryLibelle =  this.name || "";
+					JSONToken.categoryname =  this.name || "";
 					JSONfile[i] = JSONToken;
 				});
 					console.log(JSONfile);
@@ -381,11 +381,11 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							parameters.contentEl.append('<h2>Categories</h2>'); 
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#category/',
-													  hrefCllbck:function(str){return Encoder.encode(str["categoryLibelle"])},
+													  hrefCllbck:function(str){return Encoder.encode(str["categoryname"])},
 													  },
-													 "categoryLibelle",
+													 "categoryname",
 													 parameters.contentEl,
-													 {type:"Node",labelCllbck:function(str){return "Track : "+str["categoryLibelle"];}});
+													 {type:"Node",labelCllbck:function(str){return "Track : "+str["categoryname"];}});
 						}
 					}
 				} 

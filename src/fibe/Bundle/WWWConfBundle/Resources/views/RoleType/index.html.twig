@@ -14,7 +14,7 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Libelle</th>
+                <th>name</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -22,7 +22,7 @@
         {% for entity in entities %}
             <tr>
                 <td><a href="{{ path('schedule_roletype_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.libelle }}</td>
+                <td>{{ entity.name }}</td>
                 <td> 
                     <a class="btn btn-default" href="{{ path('schedule_roletype_show', { 'id': entity.id }) }}"><i class="icon-eye-open"></i></a> 
                     <a class="btn btn-warning" href="{{ path('schedule_roletype_edit', { 'id': entity.id }) }}"><i class="icon-edit"></i></a> 

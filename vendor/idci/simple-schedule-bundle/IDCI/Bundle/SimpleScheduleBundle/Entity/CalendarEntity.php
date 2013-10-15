@@ -112,7 +112,7 @@ class CalendarEntity
      * This property specifies non-processing information intended
      * to provide a comment to the calendar user.
      *
-     * @ORM\Column(type="string", length=4095, nullable=true)
+     * @ORM\Column(type="text", length=4095, nullable=true)
      */
      protected $comment;
 

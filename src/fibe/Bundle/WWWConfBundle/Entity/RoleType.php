@@ -26,12 +26,12 @@ class RoleType
     protected $id;
 	
     /**
-     * libelle
+     * name
      *
      *
-     * @ORM\Column(type="string", name="libelle")
+     * @ORM\Column(type="string", name="name")
      */
-    protected $libelle;
+    protected $name;
 
     /**
      * role
@@ -58,29 +58,6 @@ class RoleType
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set libelle
-     *
-     * @param string $libelle
-     * @return RoleType
-     */
-    public function setLibelle($libelle)
-    {
-        $this->libelle = $libelle;
-    
-        return $this;
-    }
-
-    /**
-     * Get libelle
-     *
-     * @return string 
-     */
-    public function getLibelle()
-    {
-        return $this->libelle;
     }
 
     /**
@@ -118,6 +95,29 @@ class RoleType
 
     public function __toString()
     {
-        return $this->libelle;
+        return $this->name;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return RoleType
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

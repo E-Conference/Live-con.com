@@ -51,11 +51,11 @@ class databaseCommand extends ContainerAwareCommand
 
         //RoleType
         $roleType = new RoleType(); 
-        $roleType->setLibelle("Speaker");
+        $roleType->setName("Speaker");
         $em->persist($roleType);
 
         $roleType = new RoleType(); 
-        $roleType->setLibelle("Chair");
+        $roleType->setName("Chair");
         $em->persist($roleType);
 
 
@@ -92,23 +92,23 @@ class databaseCommand extends ContainerAwareCommand
 
         //Theme 
         $theme = new Theme(); 
-        $theme->setLibelle("Business");
+        $theme->setName("Business");
         $em->persist($theme);
 
         $theme = new Theme(); 
-        $theme->setLibelle("Design");
+        $theme->setName("Design");
         $em->persist($theme);
 
         $theme = new Theme(); 
-        $theme->setLibelle("Marketing");
+        $theme->setName("Marketing");
         $em->persist($theme);
 
         $theme = new Theme(); 
-        $theme->setLibelle("Recherche");
+        $theme->setName("Recherche");
         $em->persist($theme);
 
         $theme = new Theme(); 
-        $theme->setLibelle("Tech");
+        $theme->setName("Tech");
         $em->persist($theme);
 
 

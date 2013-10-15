@@ -25,12 +25,12 @@ class Keyword
     protected $id;
 	
     /**
-     * libelle
+     * name
      *
      *
-     * @ORM\Column(type="string", name="libelle")
+     * @ORM\Column(type="string", name="name")
      */
-    protected $libelle;
+    protected $name;
 
     /**
      * Papers related to thise keyword
@@ -38,6 +38,14 @@ class Keyword
      * @ORM\ManyToMany(targetEntity="Paper", mappedBy="keywords", cascade={"persist"})
      */
     private $papers;
+
+     /**
+     *  Themes associated to this conference
+     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="keywords", cascade={"persist"})
+     * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
+     *
+     */
+    protected $conference;
         
 
 
@@ -59,29 +67,7 @@ class Keyword
         return $this->id;
     }
 
-    /**
-     * Set libelle
-     *
-     * @param string $libelle
-     * @return Keyword
-     */
-    public function setLibelle($libelle)
-    {
-        $this->libelle = $libelle;
     
-        return $this;
-    }
-
-    /**
-     * Get libelle
-     *
-     * @return string 
-     */
-    public function getLibelle()
-    {
-        return $this->libelle;
-    }
-
     /**
      * Add papers
      *
@@ -113,5 +99,51 @@ class Keyword
     public function getPapers()
     {
         return $this->papers;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Keyword
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set conference
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
+     * @return Keyword
+     */
+    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference = null)
+    {
+        $this->conference = $conference;
+    
+        return $this;
+    }
+
+    /**
+     * Get conference
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
+     */
+    public function getConference()
+    {
+        return $this->conference;
     }
 }

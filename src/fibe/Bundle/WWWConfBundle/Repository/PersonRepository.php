@@ -127,7 +127,7 @@ class PersonRepository extends EntityRepository
             $qb
                 ->leftJoin('loc.roles', 'rol')
                 ->leftJoin('rol.type', 'rolt')
-                ->andWhere('rolt.libelle = :role_type')
+                ->andWhere('rolt.name = :role_type')
                 ->setParameter('role_type',$params['role_type']);
             ;
         }

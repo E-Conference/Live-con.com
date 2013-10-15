@@ -4,7 +4,7 @@
 {{ parent() }}
 <div class="container">
     <div class="row center">
-    <h1>ConfEvent creation</h1>
+    <h1>Event creation</h1>
 
     <form action="{{ path('schedule_confevent_create') }}" method="post" {{ form_enctype(form) }}>
 
@@ -19,17 +19,17 @@
         </div>
         <div class="col-lg-4">
             {{ form_row(form.url) }}
-        {{ form_row(form.parent) }}
+        {# {{ form_row(form.parent) }} #}
                  
-                  <!-- {{ form_row(form.comment) }} -->
-                 <!--  {{ form_row(form.organizer) }} -->
-                 <!--  {{ form_row(form.contacts) }} -->
+                 {{ form_row(form.comment) }}
+                 {{ form_row(form.organizer) }}
+                 {{ form_row(form.contacts) }}
                   {{ form_row(form.location) }}
-<!--                   {{ form_row(form.priority) }}
+{#<!--                   {{ form_row(form.priority) }}
  -->                 <!--  {{ form_row(form.resources) }} -->
                
                  <!--  {{ form_row(form.isTransparent) }} -->
-                 <!-- {{ form_row(form.wwwConf) }} -->
+                  <!-- {{ form_row(form.wwwConf) }} --> #}
              </br>
               <div class="row-fluid">
                 <div class="col-lg-8"></div>
@@ -49,6 +49,10 @@
          
         </div>
      </div>
+
+      <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
+          {{ form_rest(form)}}
+      </div> 
     </form>
   </div>
 </div>

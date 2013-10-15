@@ -1,6 +1,11 @@
 
 .center{
-	min-height : 1000px;
+	/*min-height : 1000px;*/
+
+	padding: 1.5em 1.5em 10.5em;
+	margin-bottom: 1.5em;
+
+
 	border: solid 2px #333333;
 	background-color: #eeeeee;
 	-webkit-border-radius: 18px;

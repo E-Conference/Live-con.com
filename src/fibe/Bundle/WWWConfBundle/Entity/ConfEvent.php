@@ -21,12 +21,12 @@ class ConfEvent extends Event
 {
     
     /**
-     * wwwConf
+     * conference
      *
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="confEvents", cascade={"persist"})
-     * @ORM\JoinColumn(name="wwwConf_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="conference_id", referencedColumnName="id", nullable=false)
      */
-    private $wwwConf
+    private $conference
 ;
 
     /**
@@ -117,26 +117,26 @@ class ConfEvent extends Event
     }
      
     /**
-     * Set wwwConf
+     * Set conference
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $wwwConf
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
      * @return ConfEvent
      */
-    public function setWwwConf(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $wwwConf = null)
+    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference = null)
     {
-        $this->wwwConf = $wwwConf;
+        $this->conference = $conference;
     
         return $this;
     }
 
     /**
-     * Get wwwConf
+     * Get conference
      *
      * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
      */
-    public function getWwwConf()
+    public function getConference()
     {
-        return $this->wwwConf;
+        return $this->conference;
     }
 
     /**
@@ -170,19 +170,6 @@ class ConfEvent extends Event
     public function getPapers()
     {
         return $this->papers;
-    }
-
-
-    /**
-     * Set papers
-     *
-     * @param Doctrine\Common\Collections\ArrayCollection $papers
-     * @return confEvent
-     */
-
-    public function setPapers()
-    {
-       
     }
 
     /**
@@ -250,20 +237,6 @@ class ConfEvent extends Event
     {
         return $this->themes;
     }
-
-     /**
-     * Set themes
-     *
-     * @param Doctrine\Common\Collections\ArrayCollection $themes
-     * @return confEvent
-     */
-
-    public function setThemes()
-    {
-       
-    }
-
-
  
     
 }
