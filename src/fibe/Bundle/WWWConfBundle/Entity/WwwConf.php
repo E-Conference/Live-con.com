@@ -114,7 +114,7 @@ class WwwConf
     
     public function __toString() 
     {
-        return $this->confName;
+        return $this->mainConfEvent->getSummary();
     }
     
     public function getId()
