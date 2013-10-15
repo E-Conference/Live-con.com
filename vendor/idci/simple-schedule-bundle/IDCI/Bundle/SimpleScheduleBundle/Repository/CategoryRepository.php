@@ -26,10 +26,9 @@ class CategoryRepository extends EntityRepository
      * @return QueryBuilder
      */
     public function getOrderedQueryBuilder()
+
     {
         $qb = $this->createQueryBuilder('cat')
-            ->orderBy('cat.level', 'ASC')
-            ->addOrderBy('cat.parent', 'ASC')
             ->addOrderBy('cat.name', 'ASC')
         ;
 
@@ -95,41 +94,6 @@ class CategoryRepository extends EntityRepository
                 ->andWhere('cat.name = :name')
                 ->setParameter('name', $params['name'])
             ;
-        }
-
-        if(isset($params['parent_category_id'])) {
-            $qb
-                ->andWhere('cat.parent = :parent_id')
-                ->setParameter('parent_id', $params['parent_category_id'])
-            ;
-        }
-
-        if(isset($params['parent_category_ids'])) {
-            $qb
-                ->andWhere($qb->expr()->in('cat.parent', $params['parent_category_ids']))
-            ;
-        }
-
-        if(isset($params['ancestor_category_id'])) {
-            $qb
-                ->andWhere($qb->expr()->like('cat.tree', sprintf(
-                    "'%%%d%s'",
-                    $params['ancestor_category_id'],
-                    Category::getTreeSeparator()
-                )))
-            ;
-        }
-
-        if(isset($params['ancestor_category_ids'])) {
-            $temp = array();
-            foreach($params['ancestor_category_ids'] as $id) {
-                $temp[] = $qb->expr()->like('cat.tree', sprintf(
-                    "'%%%d%s'",
-                    $id,
-                    Category::getTreeSeparator()
-                ));
-            }
-            $qb->andWhere(call_user_func_array(array($qb->expr(),'orx'), $temp));
         }
 
         if(isset($params['location_id'])) {
