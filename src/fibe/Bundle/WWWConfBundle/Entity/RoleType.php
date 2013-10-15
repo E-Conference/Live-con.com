@@ -26,7 +26,7 @@ class RoleType
     protected $id;
 	
     /**
-     * libelle
+     * name
      *
      *
      * @ORM\Column(type="string", name="name")
@@ -95,7 +95,7 @@ class RoleType
 
     public function __toString()
     {
-        return $this->libelle;
+        return $this->name;
     }
 
     /**

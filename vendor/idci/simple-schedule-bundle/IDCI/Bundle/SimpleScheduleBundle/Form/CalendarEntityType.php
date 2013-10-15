@@ -48,15 +48,15 @@ abstract class CalendarEntityType extends AbstractType
                 'required' => false
             ))*/
             ->add('url')
-            ->add('parent')
-            ->add('description')
+            // ->add('parent')
+            ->add('description')/*
             ->add('status', 'entity', array(
                 'required'      => false,
                 'class'         => 'IDCISimpleScheduleBundle:Status',
                 'query_builder' => function(StatusRepository $sr) use($discr) {
                     return $sr->getDiscrStatusQueryBuilder($discr);
                 }
-            ))/*
+            ))
             ->add('classification', 'choice', array(
                 'choices'  => CalendarEntity::getClassifications(),
                 'multiple' => false,

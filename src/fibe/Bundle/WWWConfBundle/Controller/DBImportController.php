@@ -64,7 +64,7 @@ class DBImportController extends Controller
                 $current = $keywords[$i];  
                 $existsTest = $this->getDoctrine()
                                    ->getRepository('fibeWWWConfBundle:Keyword')
-                                   ->findOneBy(array('libelle' => $current['setLibelle']));
+                                   ->findOneBy(array('name' => $current['setName']));
                 if($existsTest!=null){
                   array_push($keywordEntities,$existsTest); 
                   continue; //skip existing category
@@ -74,7 +74,7 @@ class DBImportController extends Controller
 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
-                $entity->setWwwConf(  $wwwConf );
+                $entity->setConference(  $wwwConf );
                 $em->persist($entity); 
                 array_push($keywordEntities,$entity); 
             }  
@@ -97,7 +97,7 @@ class DBImportController extends Controller
 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
-                $entity->setWwwConf(  $wwwConf );
+                $entity->setConference(  $wwwConf );
                 $em->persist($entity); 
                 array_push($locationEntities,$entity); 
             }  
@@ -110,7 +110,7 @@ class DBImportController extends Controller
                 $current = $organizations[$i];  
                 $existsTest = $this->getDoctrine()
                                    ->getRepository('fibeWWWConfBundle:Organization')
-                                   ->findOneBy(array('libelle' => $current['setLibelle']));
+                                   ->findOneBy(array('name' => $current['setname']));
                 if($existsTest!=null){
                   array_push($organizationEntities,$existsTest);
                   continue; //skip existing category
@@ -121,7 +121,7 @@ class DBImportController extends Controller
 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 }
-                $entity->setWwwConf(  $wwwConf );
+                $entity->setConference(  $wwwConf );
                 $em->persist($entity); 
                 array_push($organizationEntities,$entity); 
             }  
@@ -142,7 +142,7 @@ class DBImportController extends Controller
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
                 //person must be registered as Author
-                $entity->setWwwConf(  $wwwConf );
+                $entity->setConference(  $wwwConf );
                 $em->persist($entity); 
                 array_push($personEntities,$entity);  
             }  
@@ -195,7 +195,7 @@ class DBImportController extends Controller
 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
-                $entity->setWwwConf(  $wwwConf );
+                $entity->setConference(  $wwwConf );
                 $em->persist($entity); 
                 array_push($proceedingEntities,$entity); 
             }  
@@ -209,7 +209,7 @@ class DBImportController extends Controller
                 $current = $themes[$i];  
                 $existsTest = $this->getDoctrine()
                                    ->getRepository('fibeWWWConfBundle:Theme')
-                                   ->findOneBy(array('libelle' => $current['setLibelle']));
+                                   ->findOneBy(array('name' => $current['setname']));
                 if($existsTest!=null){
                   array_push($themeEntities,$existsTest); 
                   continue; //skip existing category
@@ -218,6 +218,7 @@ class DBImportController extends Controller
                 foreach ($current as $setter => $value) { 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
+                $entity->setConference(  $wwwConf );
                 $em->persist($entity); 
                 array_push($themeEntities,$entity); 
             }  
@@ -241,6 +242,7 @@ class DBImportController extends Controller
                     //if($setter!="setStartAt" && $setter!="setEndAt")echo "Event->".$setter."(".$value.");\n"; 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 }
+                $entity->setConference(  $wwwConf );
                 $entity->setColor($colorArray[$i]);
                 $em->persist($entity);
                 array_push($categoryEntities,$entity); 
@@ -274,10 +276,10 @@ class DBImportController extends Controller
                         //retrieve Chair roletype
                         $chairRoleType = $this->getDoctrine()
                                            ->getRepository('fibeWWWConfBundle:RoleType')
-                                           ->findOneBy(array('libelle' => 'Chair'));
+                                           ->findOneBy(array('name' => 'Chair'));
                         if($chairRoleType==null){
                             $chairRoleType = new RoleType();
-                            $chairRoleType->setLibelle("Chair");
+                            $chairRoleType->setName("Chair");
                             $em->persist($chairRoleType);
                         }
 
@@ -333,7 +335,7 @@ class DBImportController extends Controller
                         call_user_func_array(array($entity, $setter), array($value)); 
                     }
                 }
-                $entity->setWwwConf(  $wwwConf );
+                $entity->setConference(  $wwwConf );
                 $em->persist($entity); 
                 array_push($eventEntities,$entity); 
             }
@@ -348,7 +350,7 @@ class DBImportController extends Controller
                         call_user_func_array(array($entity, $setter), array($value));  
                     }  
                 }
-                $entity->setWwwConf(  $wwwConf  );
+                $entity->setConference(  $wwwConf  );
                 $em->persist($entity);
             }
         }
@@ -382,40 +384,4 @@ class DBImportController extends Controller
         return new Response("ok");
     } 
     
-}
-
- /** 
-  *  
-  */ 
-
-/*USEFULL ENTITIES FUNCTION */
-
-    /*EVENT*/
-        //setCreatedAt($createdAt) @param: /Datetime 
-        //setStartAt($startAt)
-        //setSummary($summary)
-        //setDescription($description)
-        //setOrganizer($organizer)
-        //setContacts($contacts)
-
-    /*CalendarEntityRelation*/
-        //setRelationType($relationType) {CHILD|SIBLING|PARENT}
-        //setCalendarEntity(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $calendarEntity = null)
-        //setRelatedTo(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $relatedTo = null)
-
-    /*XPROPERTY*/
-        //setCalendarEntity(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $calendarEntity = null)
-        //setXNamespace($string); {publication_uri|event_uri}
-        //setXKey(rand (0,9999999999));//todo AUTO_INCREMENT ??  
-        //setXValue($xValue) uri....
-
-    /* ???????????????????????????????????? */
-    /*CATEGORIES*/
-        //setName($name)
-        //setDescription($description)
-        //setLevel($level) int
-        //addCalendarEntities(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $calendarEntities)
-
-
-    /* ???????????????????????????????????? */
-
+} 

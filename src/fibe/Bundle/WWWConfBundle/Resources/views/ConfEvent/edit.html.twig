@@ -5,43 +5,39 @@
 
 <div class="container">
     <div class="row center">
-    <h1>ConfEvent edit</h1>
+    <h1>Event edit</h1>
 
     <form action="{{ path('schedule_confevent_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
        <input type="hidden" name="_method" value="PUT" />
        <div class="row-fluid">
            <div class="col-lg-2"></div>
            <div class="col-lg-4">
-                  {{ form_row(edit_form.summary) }}
-                  {{ form_row(edit_form.categories) }}
-                  {{ form_row(edit_form.startAt) }}
-                  {{ form_row(edit_form.endAt) }}
-                  {{ form_row(edit_form.description) }}
-                 
+                {{ form_row(edit_form.summary) }}
+                {{ form_row(edit_form.categories) }}
+                {{ form_row(edit_form.startAt) }}
+                {{ form_row(edit_form.endAt) }}
+                {{ form_row(edit_form.description) }} 
             </div>
             <div class="col-lg-4">
-                  {{ form_row(edit_form.url) }}
-                  {{ form_row(edit_form.parent) }}
-                 
-                  <!-- {{ form_row(edit_form.comment) }} -->
-                 <!--  {{ form_row(edit_form.organizer) }} -->
-                 <!--  {{ form_row(edit_form.contacts) }} -->
-                  {{ form_row(edit_form.location) }}
-<!--                   {{ form_row(edit_form.priority) }}
- -->                 <!--  {{ form_row(edit_form.resources) }} -->
-               
-                 <!--  {{ form_row(edit_form.isTransparent) }} -->
-                  {{ form_row(edit_form.wwwConf) }}
-                  </br>
-                  <div class="row-fluid">
-                    <div class="col-lg-9"></div>
-                    <div class="col-lg-1 btn-group">
-                        <button type="submit" class="btn btn-small btn-default">
-                              <i class="icon-ok"></i>
-                        </button>
-                    </div>
-                  </div>    
+                {{ form_row(edit_form.url) }}  
+                {{ form_row(edit_form.comment) }}
+                {{ form_row(edit_form.organizer) }}
+                {{ form_row(edit_form.contacts) }}
+                {{ form_row(edit_form.location) }}  
+                </br>
+                <div class="row-fluid">
+                  <div class="col-lg-9"></div>
+                  <div class="col-lg-1 btn-group">
+                      <button type="submit" class="btn btn-small btn-default">
+                            <i class="icon-ok"></i>
+                      </button>
+                  </div>
+                </div>    
             </div> 
+
+        <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
+            {{ form_rest(edit_form)}}
+        </div> 
     </form>
       
 
@@ -115,6 +111,8 @@
 
   </div>
 </div>
+{% endblock %}
+
 {% block javascripts %}
 {{ parent() }}
 <script type="text/javascript">
@@ -163,5 +161,3 @@
 
 </script>
 {% endblock javascripts %}
-
-{% endblock %}

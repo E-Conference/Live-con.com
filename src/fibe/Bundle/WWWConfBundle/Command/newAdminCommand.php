@@ -88,7 +88,7 @@ EOT
         $mainConfEvent->setEndAt( new \DateTime('now'));
         $mainConfEvent->addCategorie($categorie);
         $mainConfEvent->setSummary("Conference Event");
-        $mainConfEvent->setWwwConf($defaultConference);
+        $mainConfEvent->setConference($defaultConference);
         $em->persist($mainConfEvent);
 
         //Linking app config to conference

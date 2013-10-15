@@ -21,7 +21,7 @@
         {% if loop.first %}{% else %},{% endif %}
         { 
             "id": "{{ role.id }}", 
-            "type": "{{ role.type.libelle }}", 
+            "type": "{{ role.type.name }}", 
             "event": {
                 "id"  : "{{ role.event.id }}",
                 "name": "{{ role.event }}"

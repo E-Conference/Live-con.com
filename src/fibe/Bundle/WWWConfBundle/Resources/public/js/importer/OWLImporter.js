@@ -410,7 +410,7 @@ function getThemeIdFromName(themeName){
     
     for (var i=0;i<themes.length;i++){
         //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
-        if(themes[i]['setLibelle']==themeName){
+        if(themes[i]['setname']==themeName){
             return i; 
         }
     }
@@ -421,7 +421,7 @@ function getKeywordIdFromName(keywordName,debug){
     
     for (var i=0;i<keywords.length;i++){
         //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
-        if(keywords[i]['setLibelle']==keywordName){
+        if(keywords[i]['setname']==keywordName){
             return i; 
         }
     }

@@ -27,7 +27,7 @@ class WwwConf
     /**
     * confEvents
     *
-    * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\ConfEvent", mappedBy="wwwConf",cascade={"persist", "remove"})
+    * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\ConfEvent", mappedBy="conference",cascade={"persist", "remove"})
     */
     private $confEvents;
 
@@ -108,13 +108,13 @@ class WwwConf
      * @ORM\OneToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\ConfEvent", cascade={"persist"})
      * @ORM\JoinColumn(name="event_id", referencedColumnName="id")
      **/
-     private $mainConfEvent;
-
+     private $mainConfEvent; 
 
     
     public function __toString() 
     {
-        return $this->mainConfEvent->getSummary();
+        return ($this->mainConfEvent ? $this->mainConfEvent->getSummary() : "");
+
     }
     
     public function getId()

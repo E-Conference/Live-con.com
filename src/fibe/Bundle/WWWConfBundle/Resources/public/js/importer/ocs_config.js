@@ -128,7 +128,7 @@ var ocsConfig = {
                 action : function(node){
                     var keywordName = $(node).text();  
                     if(getKeywordIdFromName(keywordName)=== -1 ){
-                        keywords.push({setLibelle:str_format(keywordName)});  
+                        keywords.push({'setName':str_format(keywordName)});  
                     }
                 }
             },
@@ -154,7 +154,7 @@ var ocsConfig = {
         wrapped : true,
         label : {
             'name' : {
-                setter : 'setLibelle',
+                setter : 'setname',
             },
             'country' : {
                 setter : 'setCountry',

@@ -13,7 +13,7 @@ class ConfManagerType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder 
-            ->add('wwwConf', 'collection', array( 'type'         => new WwwConfType(),
+            ->add('conference', 'collection', array( 'type'         => new WwwConfType(),
                                                   'allow_add'    => true,
                                                   'allow_delete' => true))
     

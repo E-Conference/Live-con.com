@@ -21,6 +21,7 @@ use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 /**
  * Status controller.
@@ -37,6 +38,7 @@ class StatusController extends Controller
      */
     public function indexAction(Request $request)
     {
+        throw new ServiceUnavailableHttpException('Not available yet.');
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('IDCISimpleScheduleBundle:Status')->findAll();
 
@@ -62,6 +64,7 @@ class StatusController extends Controller
      */
     public function showAction($id)
     {
+        throw new ServiceUnavailableHttpException('Not available yet.');
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IDCISimpleScheduleBundle:Status')->find($id);
 
@@ -83,6 +86,7 @@ class StatusController extends Controller
      */
     public function newAction()
     {
+        throw new ServiceUnavailableHttpException('Not available yet.');
         $entity = new Status();
         $form   = $this->createForm(new StatusType(), $entity);
 
@@ -101,6 +105,7 @@ class StatusController extends Controller
      */
     public function createAction(Request $request)
     {
+        throw new ServiceUnavailableHttpException('Not available yet.');
         $entity  = new Status();
         $form = $this->createForm(new StatusType(), $entity);
         $form->bind($request);
@@ -135,6 +140,7 @@ class StatusController extends Controller
      */
     public function editAction($id)
     {
+        throw new ServiceUnavailableHttpException('Not available yet.');
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IDCISimpleScheduleBundle:Status')->find($id);
 
@@ -161,6 +167,7 @@ class StatusController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        throw new ServiceUnavailableHttpException('Not available yet.');
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IDCISimpleScheduleBundle:Status')->find($id);
 
@@ -201,6 +208,7 @@ class StatusController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        throw new ServiceUnavailableHttpException('Not available yet.');
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -234,6 +242,7 @@ class StatusController extends Controller
      */
     public function deleteFormAction($id)
     {
+        throw new ServiceUnavailableHttpException('Not available yet.');
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IDCISimpleScheduleBundle:Status')->find($id);
 
@@ -251,6 +260,7 @@ class StatusController extends Controller
 
     private function createDeleteForm($id)
     {
+        throw new ServiceUnavailableHttpException('Not available yet.');
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
             ->getForm()
