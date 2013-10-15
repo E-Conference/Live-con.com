@@ -21,7 +21,7 @@ function Sidebar(){
 
           //set sidebar droppable
           $sidebar.droppable({
-            over: function( event, ui ) {  
+            over: function( event, ui ) {
                 if( $(ui.draggable).hasClass("fc-event")) {
                     var event = dragged[1];
                     // console.log("dropped into sidebar",event);
@@ -30,7 +30,7 @@ function Sidebar(){
                     $sidebarTmp.show() ;
                 }
             },
-            out: function( event, ui ) { 
+            out: function( event, ui ) {
                 if($(ui.draggable).hasClass("fc-event")) {
                     $(this).css("border","solid 1px #ccc"); 
                     $sidebarTmp.hide();
@@ -44,7 +44,7 @@ function Sidebar(){
 
                 // console.log("end Drag to sidebar") ;
 
-                var event = dragged[1];
+                var event = Events[dragged[1].id];
                 $(self).trigger("dropped",[event]);
               }
             }
