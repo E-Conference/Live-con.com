@@ -353,7 +353,7 @@ class CalendarEntityRepository extends EntityRepository
             $qb
                 ->leftJoin('cer.roles', 'ro')
                 ->leftJoin('ro.type', 'rot')
-                ->andWhere('rot.libelle = :role_type')
+                ->andWhere('rot.name = :role_type')
                 ->setParameter('role_type',$params['role_type']);
             ;
         }
