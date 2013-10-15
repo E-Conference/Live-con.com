@@ -33,6 +33,11 @@ security:
             pattern:   ^/$
             anonymous: true # On autorise les anonymes sur ce pare-feu
 
+        public_apps:
+            # Cette expression régulière permet de prendre /login (mais pas /login_check !)
+            pattern:   ^/MobileApplicationPublic/
+            anonymous: true # On autorise les anonymes sur ce pare-feu
+
         api:
             pattern:   ^/api/
             anonymous: true 

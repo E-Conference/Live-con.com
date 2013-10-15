@@ -54,4 +54,13 @@ class ApiController extends Controller
 
         return $response;
     }
+
+
+     /**
+     * Needed to get api url for the mobile app DONT REMOVE !!
+     * @Route("/")
+     */
+    public function homeApiAction()
+    {
+    }
 }
