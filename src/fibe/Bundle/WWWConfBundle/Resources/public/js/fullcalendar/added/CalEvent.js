@@ -5,11 +5,11 @@ var CalEvent = function(event){
     } 
 } 
 
-CalEvent.prototype.render = function () {  
+CalEvent.prototype.render = function (dontDelete) {  
     this.formatDate();
 
     // render the event on the calendar
-    // $calendar.fullCalendar('removeEvents', this.id); 
+    if(dontDelete === true) $calendar.fullCalendar('removeEvents', this.id); 
     EventCollection.eventsToRender.push(this["id"]);
     $calendar.fullCalendar('renderEvent', this); 
 
