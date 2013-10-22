@@ -113,45 +113,88 @@ class databaseCommand extends ContainerAwareCommand
 
 
         //categories
-        $category = new Category(); 
-        $category->setName("KeynoteEvent")
-                 ->setColor("#afcbe0");
-        $em->persist($category);
-
-        $category = new Category(); 
-        $category->setName("PanelEvent")
-                 ->setColor("#e7431e");
-        $em->persist($category);
-
-        $category = new Category(); 
-        $category->setName("ConferenceEvent")
-                 ->setColor("#b0ca0f");
-        $em->persist($category);
-
-        $category = new Category(); 
-        $category->setName("WorkshopEvent")
-                 ->setColor("#e1cc25");
-        $em->persist($category);
-
-        $category = new Category(); 
-        $category->setName("SessionEvent")
-                 ->setColor("#8F00FF");
-        $em->persist($category);
+        //TODO : color 
         
-        $category = new Category(); 
-        $category->setName("BreakEvent")
+
+        // non academic
+        $SocialEvent = new Category(); 
+        $SocialEvent->setName("SocialEvent")
                  ->setColor("#00a2e0");
-        $em->persist($category);
+        $em->persist($SocialEvent);
+        
+        $MealEvent = new Category(); 
+        $MealEvent->setName("MealEvent")
+                 ->setColor("#00a2e0");
+        $em->persist($MealEvent);
+        
+        $BreakEvent = new Category(); 
+        $BreakEvent->setName("BreakEvent")
+                 ->setColor("#00a2e0");
+        $em->persist($BreakEvent);
 
-        $category = new Category(); 
-        $category->setName("TalkEvent")
+        $NonAcademicEvent = new Category();
+        $NonAcademicEvent->setName("NonAcademicEvent")
+                 ->setColor("#A6FF88")
+                 ->addChild($BreakEvent)
+                 ->addChild($MealEvent)
+                 ->addChild($SocialEvent);
+        $em->persist($NonAcademicEvent);
+
+        // academic
+
+        $KeynoteEvent = new Category();
+        $KeynoteEvent->setName("KeynoteEvent")
+                 ->setColor("#afcbe0");
+        $em->persist($KeynoteEvent);
+
+        $TrackEvent = new Category();
+        $TrackEvent->setName("TrackEvent")
+                 ->setColor("#afcbe0");
+        $em->persist($TrackEvent);
+
+        $PanelEvent = new Category(); 
+        $PanelEvent->setName("PanelEvent")
+                 ->setColor("#e7431e");
+        $em->persist($PanelEvent);
+
+        $ConferenceEvent = new Category(); 
+        $ConferenceEvent->setName("ConferenceEvent")
+                 ->setColor("#b0ca0f");
+        $em->persist($ConferenceEvent);
+
+        $WorkshopEvent = new Category(); 
+        $WorkshopEvent->setName("WorkshopEvent")
+                 ->setColor("#EBD94E");
+        $em->persist($WorkshopEvent);
+
+        $SessionEvent = new Category(); 
+        $SessionEvent->setName("SessionEvent")
+                 ->setColor("#8F00FF");
+        $em->persist($SessionEvent);
+
+        $TalkEvent = new Category(); 
+        $TalkEvent->setName("TalkEvent")
                  ->setColor("#FF5A45");
-        $em->persist($category);
+        $em->persist($TalkEvent);
 
-        $category = new Category(); 
-        $category->setName("OrganisedEvent")
-                 ->setColor("#0EFF74");
-        $em->persist($category);
+        $AcademicEvent = new Category();
+        $AcademicEvent->setName("AcademicEvent")
+                      ->setColor("#57A5C9")
+                     ->addChild($ConferenceEvent)
+                     ->addChild($TrackEvent)
+                     ->addChild($SessionEvent)
+                     ->addChild($TalkEvent)
+                     ->addChild($PanelEvent)
+                     ->addChild($WorkshopEvent);
+        $em->persist($AcademicEvent);
+
+        //root category is OrganisedEvent
+        $OrganisedEvent = new Category(); 
+        $OrganisedEvent->setName("OrganisedEvent")
+                 ->setColor("#0EFF74")
+                 ->addChild($AcademicEvent)
+                 ->addChild($NonAcademicEvent);
+        $em->persist($OrganisedEvent);
         /*
 
             INSERT INTO `idci_schedule_category` (`id`, `parent_id`, `name`, `slug`, `description`, `color`, `level`, `tree`) VALUES

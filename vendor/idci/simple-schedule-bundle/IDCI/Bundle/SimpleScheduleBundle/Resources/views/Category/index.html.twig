@@ -26,6 +26,7 @@
                     <th>Color</th>
                     <th>Name</th>
                     <th>Slug</th>
+                    <th>Tree</th> 
                     <th colspan="3">{% trans %}Actions{% endtrans %}</th>
                 </tr>
             </thead>
@@ -39,6 +40,7 @@
                     </td>
                     <td>{{ entity.name }}</td>
                     <td>{{ entity.slug }}</td>
+                    <td>{{ entity.tree }}</td> 
                     <td>
                         <a class="btn btn-block btn-default" href="{{ path('schedule_category_show', { 'id': entity.id }) }}" title="Show category"><i class="icon-eye-open"></i></a>
                     </td>
