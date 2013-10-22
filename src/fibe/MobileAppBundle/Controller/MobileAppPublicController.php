@@ -24,8 +24,10 @@ class MobileAppPublicController extends Controller
     	$em = $this->getDoctrine()->getManager();
     	$conference = $em->getRepository('fibeWWWConfBundle:WwwConf')->find($id);
     	$mobile_app_config = $conference->getAppConfig();
-        
+        $apiUri = $this->get('router')->generate('idci_exporter_api_homeapi');
+
 		return array(
+            'api_uri' => $apiUri,
 		    'mobile_app_config' => $mobile_app_config,
             'conference' => $conference,
         );

@@ -21,8 +21,8 @@ class LocationType extends AbstractType
             ->add('name','text')
             ->add('capacity')
             ->add('description')
-          
-
+            ->add('latitude')
+            ->add('longitude')
         ;
     }
 

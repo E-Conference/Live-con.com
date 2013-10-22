@@ -121,14 +121,6 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						},
 					]
 				},  
-			    "qrScan" : {
-					"hash" : "qrcScan",
-					"view" : "qrcScan",
-					"graphView" : "no",
-					"title": "Qr-code scanner",
-					"commands" : [ 
-					]
-				}, 
 				"Proceedings-search-by-speaker" : { 
 					"hash" : "search/by-speaker/*uri",
 					"view" : "",
@@ -229,15 +221,19 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						}
 					]
 				},
-				"Speaker" : {
-					"hash" : "speaker/:name",
-					"view" : "speaker",
+				"Person" : {
+					"hash" : "person/:name/*uri",
+					"view" : "person",
 					"graphView" : "no",
-					"title": "Speaker",
+					"title": "Person",
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getSpeaker",
+							"name" : "getPerson",
+						},
+						{
+							"datasource" : "GoogleDataSource",
+							"name" : "getAuthorPersonalPage",
 						},
 						{
 							"datasource" : "eventDatasource",
@@ -247,7 +243,13 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 							"datasource" : "eventDatasource",
 							"name" : "getEventByChairName",
 						},
+						{
+							"datasource" : "DblpDatasource",
+							"name" : "getAuthorPublications",
+						}
+
 					]
+					
 				},
 				"Theme" : {
 					"hash" : "theme/:name",

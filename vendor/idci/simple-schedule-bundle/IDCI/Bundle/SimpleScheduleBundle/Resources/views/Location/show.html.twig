@@ -20,9 +20,23 @@
                 <th>Name</th>
                 <td>{{ entity.name }}</td>
             </tr>
+
             <tr>
                 <th>Description</th>
                 <td>{{ entity.description }}</td>
+            </tr>
+
+             <tr>
+                <th>Capacity</th>
+                <td>{{ entity.capacity }}</td>
+            </tr>
+
+            <tr>
+                <th>Equipments</th>
+                <td> {% for equipment in entity.getEquipments() %}
+                        <i class="icon-{{ equipment.icon }}"></i>
+                    {% endfor %}
+                <td>
             </tr>
             <tr>
                 <th>Latitude</th>
@@ -32,13 +46,7 @@
                 <th>Longitude</th>
                 <td>{{ entity.longitude }}</td>
             </tr>
-             <tr>
-                <th>Equipments</th>
-                <td> {% for equipment in entity.getEquipments() %}
-                        <i class="icon-{{ equipment.icon }}"></i>
-                    {% endfor %}
-                <td>
-            </tr>
+           
         </tbody>
     </table>
 

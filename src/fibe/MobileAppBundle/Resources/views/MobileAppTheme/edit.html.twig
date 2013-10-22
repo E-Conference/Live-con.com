@@ -2,31 +2,31 @@
 	<form action="{{ path('mobileAppTheme_update_style',  { 'id': mobile_app_config.id }) }}" method="post" {{ form_enctype(mobile_app_form) }}>
 		<input type="hidden" name="_method" value="PUT" />
 		<div id='headerStyle'>
-		<h1>Header</h1>
+		<h4>Header</h1>
 		{{ form_row(mobile_app_form.BGColorHeader) }}
 		{{ form_row(mobile_app_form.TitleColorHeader) }}
 		</div>
 
 		<div id='navBarStyle'>
-		<h1>NavBar</h1>
+		<h4>NavBar</h1>
 		{{ form_row(mobile_app_form.BGColorNavBar) }}
 		{{ form_row(mobile_app_form.TitleColorNavBar) }}
 		</div>
 
 		<div id='contentStyle'>
-		<h1>Content</h1>
+		<h4>Content</h1>
 		{{ form_row(mobile_app_form.BGColorContent) }}
 		{{ form_row(mobile_app_form.TitleColorContent) }}
 		</div>
 
 		<div id='buttonStyle'>
-		<h1>Buttons</h1>
+		<h4>Buttons</h1>
 		{{ form_row(mobile_app_form.BGColorButton) }}
 		{{ form_row(mobile_app_form.TitleColorButton) }}
 		</div>
 
 		<div id='footerrStyle'>
-		<h1>Footer</h1>
+		<h4>Footer</h1>
 		{{ form_row(mobile_app_form.BGColorFooter) }}
 		{{ form_row(mobile_app_form.TitleColorFooter) }}
 		</div>

@@ -15,8 +15,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		getAuthorPublications : {
 			dataType : "XML",
 			method : "GET",
+			serviceUri : "",
 			getQuery : function(parameters){ 
-				var authorName = parameters.name.split("_").join(" ");
 					
 				var prefix =  '  PREFIX akt:  <http://www.aktors.org/ontology/portal#>   ';  
 									
@@ -39,7 +39,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					JSONToken.publiUri =   $(this).find("[name = publiUri]").text();			
 					JSONfile[i] = JSONToken;
 				});
-				StorageManager.pushCommandToStorage(currentUri,"getAuthorPublications",JSONfile);
+				//StorageManager.pushCommandToStorage(currentUri,"getAuthorPublications",JSONfile);
 				return JSONfile;
 			},
 			
@@ -65,6 +65,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		getExternPublicationAuthors : {
 			dataType : "XML",
 			method : "GET",
+			serviceUri : "",
 			getQuery : function(parameters){ 
 				
 				var prefix =  '  PREFIX akt:  <http://www.aktors.org/ontology/portal#>   ';  
@@ -85,7 +86,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					JSONToken.authorUri =   $(this).find("[name = authorUri]").text();			
 					JSONfile[i] = JSONToken;
 				});
-				StorageManager.pushCommandToStorage(currentUri,"getExternPublicationAuthors",JSONfile);
+				//StorageManager.pushCommandToStorage(currentUri,"getExternPublicationAuthors",JSONfile);
 				return JSONfile;	
 			},
 			
@@ -95,7 +96,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 							parameters.contentEl.append('<h2>Authors</h2>');
 							$.each(parameters.JSONdata, function(i,auhtor){
-								ViewAdapterText.appendButton(parameters.contentEl,'#author/'+Encoder.encode(auhtor.authorName)+'/'+Encoder.encode(auhtor.authorUri),auhtor.authorName,{tiny : true});
+								ViewAdapterText.appendButton(parameters.contentEl,'#person/'+Encoder.encode(auhtor.authorName)+'/'+Encoder.encode(auhtor.authorUri),auhtor.authorName,{tiny : true});
 							});
 						}
 					}
@@ -107,6 +108,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		getExternPublicationInfo : {
 			dataType : "XML",
 			method : "GET",
+			serviceUri : "",
 			getQuery : function(parameters){ 
 				var prefix =    ' PREFIX akt:  <http://www.aktors.org/ontology/portal#>               '+ 
 								' PREFIX akts: <http://www.aktors.org/ontology/support#>       '; 
