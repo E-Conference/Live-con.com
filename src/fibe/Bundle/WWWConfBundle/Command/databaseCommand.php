@@ -44,27 +44,19 @@ class databaseCommand extends ContainerAwareCommand
         $status->setValue('CANCELLED')
                ->setDiscr('CANCELLED'); 
         $em->persist($status);
-
-        // conf
-       /* $conf = new WwwConf(); 
-        $conf->setConfName("swc:Chair");
-        $em->persist($conf); */
+ 
 
         //RoleType
         $roleType = new RoleType(); 
-        $roleType->setName("swc:Delegate");
+        $roleType->setName("Delegate");
         $em->persist($roleType);
 
         $roleType = new RoleType(); 
-        $roleType->setName("swc:Chair");
+        $roleType->setName("Chair");
         $em->persist($roleType);
 
         $roleType = new RoleType(); 
-        $roleType->setName("swc:Presenter");
-        $em->persist($roleType);
-
-         $roleType = new RoleType(); 
-        $roleType->setName("swc:Presenter");
+        $roleType->setName("Presenter");
         $em->persist($roleType);
 
         //Social Service 
