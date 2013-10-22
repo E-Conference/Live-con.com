@@ -17,6 +17,7 @@ define(['jquery', 'underscore', 'encoder', 'view/ViewAdapter', 'view/ViewAdapter
 		getAuthorPersonalPage : {
 			dataType : "JSONP",
 			method : "GET",
+			serviceUri : "",
 			getQuery : function(parameters){ 
 				var searchValue = parameters.name;
 				var  ajaxData = { q : searchValue, v : "1.0" };
@@ -27,7 +28,7 @@ define(['jquery', 'underscore', 'encoder', 'view/ViewAdapter', 'view/ViewAdapter
 				var JSONToken  = {};
 				JSONToken.authorHomepage  = dataJSON.responseData.results[0].url;
 				JSONfile[0] = JSONToken;
-				StorageManager.pushCommandToStorage(currentUri,"getAuthorPersonalPage",JSONfile);		
+				//StorageManager.pushCommandToStorage(currentUri,"getAuthorPersonalPage",JSONfile);		
 				return JSONfile;
 			},
 			

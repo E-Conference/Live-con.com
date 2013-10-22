@@ -30,32 +30,27 @@ class Theme
     private $id;
 	
     
-    /**
+   /**
     *   Name
     *   @ORM\Column(type="string", name="name")
     */
     private $name;
 
-     /**
+    /**
      * confEvents
      * Events related to a theme
      *
      * @ORM\ManyToMany(targetEntity="ConfEvent", mappedBy="themes", cascade={"persist"})
      */
-    private $confEvents;
+    private $events;
 
-     /**
+    /**
      *  Themes associated to this conference
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="themes", cascade={"persist"})
      * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
      *
      */
     protected $conference;
-
-    
-
-
-   
 
     /**
      * Constructor
@@ -152,5 +147,38 @@ class Theme
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Add events
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events
+     * @return Theme
+     */
+    public function addEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events)
+    {
+        $this->events[] = $events;
+    
+        return $this;
+    }
+
+    /**
+     * Remove events
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events
+     */
+    public function removeEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events)
+    {
+        $this->events->removeElement($events);
+    }
+
+    /**
+     * Get events
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEvents()
+    {
+        return $this->events;
     }
 }

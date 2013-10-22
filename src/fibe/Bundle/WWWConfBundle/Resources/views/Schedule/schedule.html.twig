@@ -187,9 +187,9 @@
 
       // get first day
       var firstDay = moment('5000-10-10');
-      {% if currentConf.confEvents|length > 0 %}
-          if(moment('{{currentConf.confEvents[0].startAt|date("Y-m-d")}}').isBefore(firstDay)){
-              firstDay = moment('{{currentConf.confEvents[0].startAt|date("Y-m-d")}}');
+      {% if currentConf.events|length > 0 %}
+          if(moment('{{currentConf.events[0].startAt|date("Y-m-d")}}').isBefore(firstDay)){
+              firstDay = moment('{{currentConf.events[0].startAt|date("Y-m-d")}}');
           } 
       {% endif %} 
       if(firstDay.isSame(moment('5000-10-10'))) firstDay = moment(); 

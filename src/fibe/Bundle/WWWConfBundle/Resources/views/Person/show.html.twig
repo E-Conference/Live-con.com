@@ -12,112 +12,32 @@
                 <td>{{ entity.id }}</td>
             </tr>
             <tr>
-                <th>First name</th>
-                <td>{{ entity.firstName }}</td>
-            </tr>
-            <tr>
-                <th>Last name</th>
-                <td>{{ entity.lastName }}</td>
-            </tr>
-            <tr>
                 <th>Name</th>
                 <td>{{ entity.name }}</td>
             </tr>
             <tr>
-                <th>Description</th>
-                <td>{{ entity.description }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ entity.email }}</td>
-            </tr>
-            <tr>
-                <th>Twitter</th>
-                <td>{{ entity.twitter }}</td>
-            </tr>
-            <tr>
-                <th>Homepage</th>
-                <td>{{ entity.homepage }}</td>
-            </tr>
-            <tr>
-                <th>Schedule access</th>
-                <td>{{ entity.flagschedule }}</td>
-            </tr>
-            <tr>
-                <th>Schedule Admin</th>
-                <td>{{ entity.flagscheduleadmin }}</td>
-            </tr>
-            <tr>
-                <th>Guest Data access</th>
-                <td>{{ entity.flagdata }}</td>
-            </tr>
-            <tr>
-                <th>Guest Data Admin</th>
-                <td>{{ entity.flagdataadmin }}</td>
-            </tr>
-            <tr>
-                <th>Agent</th>
-                <td>{{ entity.agent }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ entity.title }}</td>
-            </tr>
-            <tr>
-                <th>Image</th>
-                <td>{{ entity.image }}</td>
-            </tr>
-            <tr>
-                <th>Depiction</th>
-                <td>{{ entity.depiction }}</td>
-            </tr> 
-            <tr>
-                <th>Givenname</th>
-                <td>{{ entity.givenName }}</td>
-            </tr>
-            <tr>
-                <th>Based_near</th>
-                <td>{{ entity.basednear }}</td>
-            </tr>
-            <tr>
-                <th>Knows</th>
-                <td>{{ entity.knows }}</td>
+                <th>Family name</th>
+                <td>{{ entity.familyName }}</td>
             </tr>
             <tr>
                 <th>Age</th>
                 <td>{{ entity.age }}</td>
             </tr>
             <tr>
-                <th>Made</th>
-                <td>{{ entity.made }}</td>
-            </tr>
-            <tr>
-                <th>Primary_topic</th>
-                <td>{{ entity.primarytopic }}</td>
-            </tr>
-            <tr>
-                <th>Project</th>
-                <td>{{ entity.project }}</td>
+                <th>Email</th>
+                <td>{{ entity.email }}</td>
             </tr>
             <tr>
                 <th>Organization</th>
-                <td>{{ entity.organization }}</td>
+                <td>{{ entity.organizations.name }}</td>
             </tr>
             <tr>
-                <th>Group</th>
-                <td>{{ entity.group }}</td>
+                <th>Photo</th>
+                <td><img src="{{ entity.img }} " height="10%" width="10%"></td>
             </tr>
             <tr>
-                <th>Member</th>
-                <td>{{ entity.member }}</td>
-            </tr>
-            <tr>
-                <th>Document</th>
-                <td>{{ entity.document }}</td>
-            </tr>
-            <tr>
-                <th>Image</th>
-                <td>{{ entity.image }}</td>
+                <th>Page</th>
+                <td>{{ entity.page }}</td>
             </tr>
         </tbody>
     </table>

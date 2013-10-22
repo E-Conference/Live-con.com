@@ -27,17 +27,42 @@ class Person
     protected $id;
 
     /**
-     *  
-     * @ORM\OneToMany(targetEntity="Role",  mappedBy="person")
-     * 
+     * name
+     * A name for some thing. Name of the person 
+     * / ! \  auto built with the concatenation of first and last name
+     * @ORM\Column(type="string", name="name")
      */
-    private $roles;
+    protected $name;
+
+    /**
+     * familyName
+     *
+     *
+     * @ORM\Column(type="string", nullable=true,  name="familyName")
+     */
+    protected $familyName;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="name")
+     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
+     */
+    // protected $knows;
+
+
+    /**
+     * age
+     *
+     *
+     * @ORM\Column(type="integer", nullable=true,  name="age")
+     */
+    protected $age;
 
     /**
      * Paper
      * Paper made by this person
      *   
-     * @ORM\ManyToMany(targetEntity="Paper",   mappedBy="persons", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Paper",  mappedBy="authors", cascade={"persist"})
      */
     private $papers;
 
@@ -49,14 +74,43 @@ class Person
      */
     private $organizations;
 
-     /**
-     *  Person associated to this conference
+    /**
+     * img
+     *
+     * @ORM\Column(type="string", nullable=true,  name="img")
+     */
+    protected $img;
+
+    /**
+     * openId
+     *
+     *
+     * @ORM\Column(type="string", nullable=true,  name="openId")
+     */
+    protected $openId;
+
+    /**
+     *  
+     * @ORM\OneToMany(targetEntity="Role",  mappedBy="person")
+     * 
+     */
+    private $roles;
+
+   /**
+     *  Themes associated to this conference
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="persons", cascade={"persist"})
      * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
      *
      */
     protected $conference;
-    
+
+   /**
+     * nick
+     *
+     *
+     * @ORM\Column(type="string", nullable=true,  name="nick")
+     */
+    protected $nick;
 
     /**
      * email
@@ -66,261 +120,47 @@ class Person
      */
     protected $email;
 
-
-    /**
-     * created
+     /**
+     * emailSha1
      *
-     * This property specifies the date and time that the calendar
-     * information was created by the calendar user agent in the calendar
-     * store.
      *
-     * @ORM\Column(type="datetime", name="created_at")
+     * @ORM\Column(type="string", nullable=true,  name="emailSha1")
      */
-    protected $created_at;
-	
+    protected $emailSha1;
 
     /**
-     * agent
+     * page
+     * person's homepage url 
      *
-     * An agent (eg. person, group, software or physical artifact)
-     *
-     * @ORM\Column(type="string", nullable=true, name="agent")
+     * @ORM\Column(type="string", length=255, nullable=true, name="page")
      */
-    protected $agent;
+     protected $page;
 
+   
     /**
-     * name
-     * A name for some thing. Name of the person 
-     * / ! \  auto built with the concatenation of first and last name
-     * @ORM\Column(type="string", name="name")
-     */
-    protected $name;
-
-    /**
-     * firstName
-     * A name for some thing. Name of the person 
-     * @ORM\Column(type="string", name="firstName")
-     */
-    protected $firstName;
-
-    /**
-     * lastName
-     *. lastName - The last name of some person. 
-     *
-     * @ORM\Column(type="string", length=255, name="lastName")
-     */
-     protected $lastName;
-
-    /**
-     * description
-     *. something about the person
-     *
-     * @ORM\Column(type="string", length=2048, nullable=true, name="description")
-     */
-     protected $description;
-
-    /**
-     * homepage
-     *. person's homepage 
-     *
-     * @ORM\Column(type="string", length=255, nullable=true, name="homepage")
-     */
-     protected $homepage;
-
-    /**
-     * twitter
-     *. person's twitter 
-     *
-     * @ORM\Column(type="string", length=255, nullable=true, name="twitter")
-     */
-     protected $twitter;
-
-    /**
-     * title
-     *
-    * Title (Mr, Mrs, Ms, Dr. etc) 
-     *
-     * @ORM\Column(type="string", length=10, nullable=true,name="title")
-     */
-    protected $title; 
-
-    /**
-     * country
+     *  
+     * @ORM\OneToMany(targetEntity="SocialServiceAccount",  mappedBy="owner")
      * 
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    protected $country; 
-
-    /**
-     * depiction
-     *
-     * depiction - A depiction of some thing. 
-     * Status:  testing
-     * Domain:  having this property implies being a Thing
-     * Range:   every value of this property is a Image
-     *
-     * @ORM\Column(type="string", length=255, nullable=true, name="depiction")
-     */
-     protected $depiction;
-
-    /**
-     * givenName
-     *
-     * Given name - The given name of some person. 
-     *
-     * @ORM\Column(type="string", length=255, nullable=true, name="givenName")
-     */
-     protected $givenName;
-
-    /**
-     * based_near
-     *
-     * Ibased near - A location that something is based near, for some broadly human notion of near.
-     *
-     * @ORM\Column(type="string", length=255, nullable=true, name="based_near")
-     */
-     protected $based_near;
-
-    /**
-     * knows
-     *
-     * knows - A person known by this person (indicating some level of reciprocated interaction between the parties). 
-     *
-     * @ORM\Column(type="string", length=255, nullable=true, name="knows")
-     */
-     protected $knows;
-
-    /**
-     * age
-     *
-     * age - The age in years of some agent. 
-     *
-     * @ORM\Column(type="string", nullable=true, length=255, name="age")
-     */
-    protected $age ;
-
-    /**
-     * made
-     * 
-     * made - Something that was made by this agent. 
-     *
-     * @ORM\Column(type="string", nullable=true, length=255, name="made")
-     */
-    protected $made;
-	
-	 /**
-     * primary_topic
-     * 
-     * primary topic - The primary topic of some page or document. 
-     *
-     * @ORM\Column(type="string", nullable=true, length=255, name="primary_topic")
-     */
-    protected $primary_topic;
-
-    /**
-     * project
-     *
-     * Project - A project (a collective endeavour of some kind). 
-     *
-     *  @ORM\Column(type="string", nullable=true, length=255, name="project")
-     */
-     protected $project;
-
-    /**
-     * organization
-     * Organization - An organization
-	* @ORM\Column(type="string", nullable=true, length=255, name="organization")
-     */
-    protected $organization;
-
-    /**
-     * group
-     *
-     * Group - A class of Agents. 
-	* @ORM\Column(type="string", nullable=true, length=255, name="_group")
-     */
-    protected $_group;
-
-    /**
-     * member
-     *
-     * member - Indicates a member of a Group 
-     *  @ORM\Column(type="string", nullable=true, length=255, name="member")
-     */
-     protected $member;
-
-    /**
-     * document
-     *
-     * Document - A document.
-	* @ORM\Column(type="string", nullable=true, length=255, name="document")
-     */
-     protected $document;
-
-    /**
-     * image
-     *
-     * Image - An image. 
-	* Status:	testing
-	* Properties include:	thumbnail depicts
-	* Used with:	thumbnail depiction img
-	* Subclass Of	Document
-	* The class Image is a sub-class of Document corresponding to those documents which are images.
-	* Digital images (such as JPEG, PNG, GIF bitmaps, SVG diagrams etc.) are examples of Image.
-	*@ORM\Column(type="string", nullable=true, length=255, name="image")
-     */
-
-    protected $image;
-
-
-
-    /**
-     * @ORM\Column(type="string", length=128, unique=true)
-     */
-    protected $slug;
+    protected $accounts;
     
-
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->role = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->paper = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->organizations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->papers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->organization = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->accounts = new \Doctrine\Common\Collections\ArrayCollection();
     }
-     
 
-
-    /**
-     * onCreation
-     *
-     * @ORM\PrePersist()
-     */
-    public function onCreation()
+     public function __toString() 
     {
-        $now = new \DateTime('now');
+        return $this->name." ".$this->familyName;
 
-        $this->setCreatedAt($now);
-    } 
-
-
-
-    /**
-     * Slugify
-     */ 
-    private function concatName(){
-        $this->setName($this->getFirstName() . " " . $this->getLastName());
-        $this->slugify();
     }
-    public function slugify()
-    {
-        $id = $this->getId();
-        if(!$id) $id = rand (0,9999999999);
-        $this->setSlug($id . "-" .StringTools::slugify($this->getName()));
-    }
- 
+    
     /**
      * Get id
      *
@@ -329,76 +169,6 @@ class Person
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set created_at
-     *
-     * @param \DateTime $createdAt
-     * @return Person
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->created_at = $createdAt;
-    
-        return $this;
-    }
-
-    /**
-     * Get created_at
-     *
-     * @return \DateTime 
-     */
-    public function getCreatedAt()
-    {
-        return $this->created_at;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     * @return Person
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-    
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string 
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-    
-
-    /**
-     * Set agent
-     *
-     * @param string $agent
-     * @return Person
-     */
-    public function setAgent($agent)
-    {
-        $this->agent = $agent;
-    
-        return $this;
-    }
-
-    /**
-     * Get agent
-     *
-     * @return string 
-     */
-    public function getAgent()
-    {
-        return $this->agent;
     }
 
     /**
@@ -425,265 +195,32 @@ class Person
     }
 
     /**
-     * Set title
+     * Set familyName
      *
-     * @param string $title
+     * @param string $familyName
      * @return Person
      */
-    public function setTitle($title)
+    public function setFamilyName($familyName)
     {
-        $this->title = $title;
+        $this->familyName = $familyName;
     
         return $this;
     }
 
     /**
-     * Get title
+     * Get familyName
      *
      * @return string 
      */
-    public function getTitle()
+    public function getFamilyName()
     {
-        return $this->title;
-    } 
-
-    /**
-     * Set country
-     *
-     * @param string $country
-     * @return Person
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-    
-        return $this;
-    }
-
-    /**
-     * Get country
-     *
-     * @return string 
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    } 
-
-    /**
-     * Set depiction
-     *
-     * @param string $depiction
-     * @return Person
-     */
-    public function setDepiction($depiction)
-    {
-        $this->depiction = $depiction;
-    
-        return $this;
-    }
-
-    /**
-     * Get depiction
-     *
-     * @return string 
-     */
-    public function getDepiction()
-    {
-        return $this->depiction;
-    }
-
-    /**
-     * Set firstName
-     *
-     * @param string $firstName
-     * @return Person
-     */
-    public function setFirstName($firstName)
-    {
-        $this->firstName = $firstName;
-        $this->concatName();
-    
-        return $this;
-    }
-
-    /**
-     * Get firstName
-     *
-     * @return string 
-     */
-    public function getFirstName()
-    {
-        return $this->firstName;
-    }
-
-
-    /**
-     * Set lastName
-     *
-     * @param string $lastName
-     * @return Person
-     */
-    public function setLastName($lastName)
-    {
-        $this->lastName = $lastName;
-        $this->concatName();
-    
-        return $this;
-    }
-
-    /**
-     * Get lastName
-     *
-     * @return string 
-     */
-    public function getLastName()
-    {
-        return $this->lastName;
-    }
-
-    /**
-     * Set description
-     *
-     * @param string $description
-     * @return Person
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string 
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * Set twitter
-     *
-     * @param string $twitter
-     * @return Person
-     */
-    public function setTwitter($twitter)
-    {
-        $this->twitter = $twitter;
-    
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string 
-     */
-    public function getTwitter()
-    {
-        return $this->twitter;
-    }
-
-    /**
-     * Set homepage
-     *
-     * @param string $homepage
-     * @return Person
-     */
-    public function setHomepage($homepage)
-    {
-        $this->homepage = $homepage;
-    
-        return $this;
-    }
-
-    /**
-     * Get description
-     *
-     * @return string 
-     */
-    public function getHomepage()
-    {
-        return $this->homepage;
-    }
-
-    /**
-     * Set givenName
-     *
-     * @param string $givenName
-     * @return Person
-     */
-    public function setGivenName($givenName)
-    {
-        $this->givenName = $givenName;
-    
-        return $this;
-    }
-
-    /**
-     * Get givenName
-     *
-     * @return string 
-     */
-    public function getGivenName()
-    {
-        return $this->givenName;
-    }
-
-    /**
-     * Set based_near
-     *
-     * @param string $basedNear
-     * @return Person
-     */
-    public function setBasedNear($basedNear)
-    {
-        $this->based_near = $basedNear;
-    
-        return $this;
-    }
-
-    /**
-     * Get based_near
-     *
-     * @return string 
-     */
-    public function getBasedNear()
-    {
-        return $this->based_near;
-    }
-
-    /**
-     * Set knows
-     *
-     * @param string $knows
-     * @return Person
-     */
-    public function setKnows($knows)
-    {
-        $this->knows = $knows;
-    
-        return $this;
-    }
-
-    /**
-     * Get knows
-     *
-     * @return string 
-     */
-    public function getKnows()
-    {
-        return $this->knows;
+        return $this->familyName;
     }
 
     /**
      * Set age
      *
-     * @param string $age
+     * @param integer $age
      * @return Person
      */
     public function setAge($age)
@@ -696,7 +233,7 @@ class Person
     /**
      * Get age
      *
-     * @return string 
+     * @return integer 
      */
     public function getAge()
     {
@@ -704,338 +241,242 @@ class Person
     }
 
     /**
-     * Set made
+     * Set img
      *
-     * @param string $made
+     * @param string $img
      * @return Person
      */
-    public function setMade($made)
+    public function setImg($img)
     {
-        $this->made = $made;
+        $this->img = $img;
     
         return $this;
     }
 
     /**
-     * Get made
+     * Get img
      *
      * @return string 
      */
-    public function getMade()
+    public function getImg()
     {
-        return $this->made;
+        return $this->img;
     }
 
     /**
-     * Set primary_topic
+     * Set openId
      *
-     * @param string $primaryTopic
+     * @param string $openId
      * @return Person
      */
-    public function setPrimaryTopic($primaryTopic)
+    public function setOpenId($openId)
     {
-        $this->primary_topic = $primaryTopic;
+        $this->openId = $openId;
     
         return $this;
     }
 
     /**
-     * Get primary_topic
+     * Get openId
      *
      * @return string 
      */
-    public function getPrimaryTopic()
+    public function getOpenId()
     {
-        return $this->primary_topic;
+        return $this->openId;
     }
 
     /**
-     * Set project
+     * Set nick
      *
-     * @param string $project
+     * @param string $nick
      * @return Person
      */
-    public function setProject($project)
+    public function setNick($nick)
     {
-        $this->project = $project;
+        $this->nick = $nick;
     
         return $this;
     }
 
     /**
-     * Get project
+     * Get nick
      *
      * @return string 
      */
-    public function getProject()
+    public function getNick()
     {
-        return $this->project;
+        return $this->nick;
     }
 
     /**
-     * Set organization
+     * Set email
      *
-     * @param string $organization
+     * @param string $email
      * @return Person
      */
-    public function setOrganization($organization)
+    public function setEmail($email)
     {
-        $this->organization = $organization;
+        $this->email = $email;
     
         return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string 
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set emailSha1
+     *
+     * @param string $emailSha1
+     * @return Person
+     */
+    public function setEmailSha1($emailSha1)
+    {
+        $this->emailSha1 = $emailSha1;
+    
+        return $this;
+    }
+
+    /**
+     * Get emailSha1
+     *
+     * @return string 
+     */
+    public function getEmailSha1()
+    {
+        return $this->emailSha1;
+    }
+
+    /**
+     * Set page
+     *
+     * @param string $page
+     * @return Person
+     */
+    public function setPage($page)
+    {
+        $this->page = $page;
+    
+        return $this;
+    }
+
+    /**
+     * Get page
+     *
+     * @return string 
+     */
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    /**
+     * Add papers
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Paper $papers
+     * @return Person
+     */
+    public function addPaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $papers)
+    {
+        $this->papers[] = $papers;
+    
+        return $this;
+    }
+
+    /**
+     * Remove papers
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Paper $papers
+     */
+    public function removePaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $papers)
+    {
+        $this->papers->removeElement($papers);
+    }
+
+    /**
+     * Get papers
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPapers()
+    {
+        return $this->papers;
+    }
+
+    /**
+     * Add organization
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Organization $organization
+     * @return Person
+     */
+    public function addOrganization(\fibe\Bundle\WWWConfBundle\Entity\Organization $organization)
+    {
+        $this->organization[] = $organization;
+    
+        return $this;
+    }
+
+    /**
+     * Remove organization
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Organization $organization
+     */
+    public function removeOrganization(\fibe\Bundle\WWWConfBundle\Entity\Organization $organization)
+    {
+        $this->organization->removeElement($organization);
     }
 
     /**
      * Get organization
      *
-     * @return string 
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getOrganization()
     {
         return $this->organization;
     }
 
+   
+
     /**
-     * Set _group
+     * Add roles
      *
-     * @param string $group
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $roles
      * @return Person
      */
-    public function set_group($group)
+    public function addRole(\fibe\Bundle\WWWConfBundle\Entity\Role $roles)
     {
-        $this->_group = $group;
+        $this->roles[] = $roles;
     
         return $this;
     }
 
     /**
-     * Get _group
+     * Remove roles
      *
-     * @return string 
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $roles
      */
-    public function get_group()
+    public function removeRole(\fibe\Bundle\WWWConfBundle\Entity\Role $roles)
     {
-        return $this->_group;
+        $this->roles->removeElement($roles);
     }
 
     /**
-     * Set member
-     *
-     * @param string $member
-     * @return Person
-     */
-    public function setMember($member)
-    {
-        $this->member = $member;
-    
-        return $this;
-    }
-
-    /**
-     * Get member
-     *
-     * @return string 
-     */
-    public function getMember()
-    {
-        return $this->member;
-    }
-
-    /**
-     * Set document
-     *
-     * @param string $document
-     * @return Person
-     */
-    public function setDocument($document)
-    {
-        $this->document = $document;
-    
-        return $this;
-    }
-
-    /**
-     * Get document
-     *
-     * @return string 
-     */
-    public function getDocument()
-    {
-        return $this->document;
-    }
-
-    /**
-     * Set image
-     *
-     * @param string $image
-     * @return Person
-     */
-    public function setImage($image)
-    {
-        $this->image = $image;
-    
-        return $this;
-    }
-
-    /**
-     * Get image
-     *
-     * @return string 
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     * Add role
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $role
-     * @return Person
-     */
-    public function addRole(\fibe\Bundle\WWWConfBundle\Entity\Role $role)
-    {
-        $this->role[] = $role;
-    
-        return $this;
-    }
-
-    /**
-     * Remove role
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $role
-     */
-    public function removeRole(\fibe\Bundle\WWWConfBundle\Entity\Role $role)
-    {
-        $this->role->removeElement($role);
-    }
-
-    /**
-     * Get role
+     * Get roles
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
     public function getRoles()
     {
         return $this->roles;
-    }
-
-    /**
-     * Add paper
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Paper $paper
-     * @return Person
-     */
-    public function addPaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $paper)
-    {
-        $this->papers[] = $paper;
-    
-        return $this;
-    }
-
-    /**
-     * Remove paper
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Paper $paper
-     */
-    public function removePaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $paper)
-    {
-        $this->papers->removeElement($paper);
-    }
-
-    /**
-     * Get paper
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getPaper()
-    {
-        return $this->papers;
-    }
-
-    /**
-     * Add organizations
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Organization $organizations
-     * @return Person
-     */
-    public function addOrganization(\fibe\Bundle\WWWConfBundle\Entity\Organization $organizations)
-    {
-        $this->organizations[] = $organizations;
-    
-        return $this;
-    }
-
-    /**
-     * Remove organizations
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Organization $organizations
-     */
-    public function removeOrganization(\fibe\Bundle\WWWConfBundle\Entity\Organization $organizations)
-    {
-        $this->organizations->removeElement($organizations);
-    }
-
-    /**
-     * Get organizations
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getOrganizations()
-    {
-        return $this->organizations;
-    }
-
-    public function __toString()
-    { 
-        return $this->name;
-    }
-
-    /**
-     * Set _group
-     *
-     * @param string $group
-     * @return Person
-     */
-    public function setGroup($group)
-    {
-        $this->_group = $group;
-    
-        return $this;
-    }
-
-    /**
-     * Get _group
-     *
-     * @return string 
-     */
-    public function getGroup()
-    {
-        return $this->_group;
-    }
-    
-
-    /**
-     * Set slug
-     *
-     * @param string $slug
-     * @return Category
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-    
-        return $this;
-    }
-
-    /**
-     * Get slug
-     *
-     * @return string 
-     */
-    public function getSlug()
-    {
-        return $this->slug;
     }
 
     /**
@@ -1059,5 +500,48 @@ class Person
     public function getConference()
     {
         return $this->conference;
+    }
+
+    /**
+     * Add accounts
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\SocialServiceAccount $accounts
+     * @return Person
+     */
+    public function addAccount(\fibe\Bundle\WWWConfBundle\Entity\SocialServiceAccount $accounts)
+    {
+        $this->accounts[] = $accounts;
+    
+        return $this;
+    }
+
+    /**
+     * Remove accounts
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\SocialServiceAccount $accounts
+     */
+    public function removeAccount(\fibe\Bundle\WWWConfBundle\Entity\SocialServiceAccount $accounts)
+    {
+        $this->accounts->removeElement($accounts);
+    }
+
+    /**
+     * Get accounts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAccounts()
+    {
+        return $this->accounts;
+    }
+
+    /**
+     * Get organizations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOrganizations()
+    {
+        return $this->organizations;
     }
 }

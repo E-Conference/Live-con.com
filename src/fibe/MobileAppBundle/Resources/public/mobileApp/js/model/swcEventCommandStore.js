@@ -17,7 +17,6 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    method : "GET", 
 		    serviceUri : "schedule_event.jsonp?",
 		    getQuery : function(parameters){	
-		    	debugger;
 			  var conferenceUri = parameters.conferenceUri;
 		      var ajaxData = { id_person : 6} ;
 		      return ajaxData; 
@@ -25,7 +24,6 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    },
 		    
 		    ModelCallBack : function(dataXML,conferenceUri,datasourceUri, currentUri){
-		    	debugger;
 				var JSONfile = {};
 				$(dataXML).each(function(i){  
 					var JSONToken = {};
@@ -38,7 +36,6 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					console.log(JSONfile);
 				//StorageManager.pushCommandToStorage(currentUri,"getConferenceMainTrackEvent",JSONfile);
 				return JSONfile;
-				
 			},
 				
 			ViewCallBack : function(parameters){
@@ -95,8 +92,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
 							ViewAdapterText.appendListImage(parameters.JSONdata,
-													 {baseHref:'#speaker/',
-													  hrefCllbck:function(str){return Encoder.encode(str["speakerSlug"])},
+													 {baseHref:'#person/',
+													  hrefCllbck:function(str){return Encoder.encode(str["speakerName"])+"/"+Encoder.encode(str["speakerSlug"])},
 													  },
 													 "speakerName",
 													 "speakerImg",
@@ -108,28 +105,28 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 			}
 		},
 
-		getSpeaker : {
+		getPerson : {
 		    dataType : "JSONP",
 		    method : "GET", 
 		    serviceUri : "schedule_person.jsonp?",
 		    getQuery : function(parameters){	
 			  var conferenceUri = parameters.conferenceUri;
-		      var ajaxData = { slug : parameters.name} ;
+		      var ajaxData = { slug : parameters.uri} ;
 		      return ajaxData; 
 		    },
 		    
 		    ModelCallBack : function(dataXML,conferenceUri,datasourceUri, currentUri){
 				var JSONToken = {};
-				JSONToken.speakerName =  dataXML[0].name || "";
-				JSONToken.speakerDesc =  dataXML[0].description || "";
-				JSONToken.speakerHomepage =  dataXML[0].homepage || "";
-				JSONToken.speakerImg =  dataXML[0].image || "";
-				JSONToken.speakerTwitter =  dataXML[0].twitter || "";
-				JSONToken.speakerId =  dataXML[0].id || "";
-				JSONToken.speakerSlug =  dataXML[0].slug || "";
-				
-
-					console.log(JSONToken);
+				if(_.size(dataXML) > 0 ){
+					JSONToken.speakerName =  dataXML[0].name || "";
+					JSONToken.speakerDesc =  dataXML[0].description || "";
+					JSONToken.speakerHomepage =  dataXML[0].homepage || "";
+					JSONToken.speakerImg =  dataXML[0].image || "";
+					JSONToken.speakerTwitter =  dataXML[0].twitter || "";
+					JSONToken.speakerId =  dataXML[0].id || "";
+					JSONToken.speakerSlug =  dataXML[0].slug || "";
+				}
+				console.log(JSONToken);
 				//StorageManager.pushCommandToStorage(currentUri,"getSpeaker",JSONToken);
 				return JSONToken;
 			},
@@ -701,11 +698,11 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    },
 		    
 		    ModelCallBack : function(dataXML,conferenceUri,datasourceUri, currentUri){
-				  var JSONfile = {}; 
-				  dataXML=dataXML[0];
-				  if(!dataXML)return JSONfile;
-				  
-				  console.log(dataXML);
+			 	var JSONfile = {}; 
+			    if(_.size(dataXML) > 0 ){
+				 	dataXML=dataXML[0];
+				 
+				  	console.log(dataXML);
 					JSONfile.eventLabel = (dataXML.name?dataXML.name:"");
 					JSONfile.eventDescription =  (dataXML.description?dataXML.description:"");
 					JSONfile.eventAbstract =  (dataXML.comment?dataXML.comment:""); 
@@ -714,9 +711,9 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					JSONfile.eventEnd = (dataXML.end_at!= '1980-01-01 00:00'?dataXML.end_at:"");
 					JSONfile.eventLocationName =  (dataXML.location.name?dataXML.location.name:"") ;
 					JSONfile.eventThemes =  (dataXML.themes?dataXML.themes:"") ;
-					
-				 // StorageManager.pushCommandToStorage(currentUri,"getEvent",JSONfile);
-				  return JSONfile;
+				}
+				// StorageManager.pushCommandToStorage(currentUri,"getEvent",JSONfile);
+				return JSONfile;
 				
 			}, 
 
@@ -937,7 +934,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 							parameters.contentEl.append($('<h2>Speaker(s)</h2>')); 
 							$.each(parameters.JSONdata, function(i,speaker){
-								ViewAdapterText.appendButton(parameters.contentEl,'#speaker/'+Encoder.encode(speaker.speakerSlug),speaker.speakerName,{tiny : 'true'});
+								ViewAdapterText.appendButton(parameters.contentEl,'#person/'+Encoder.encode(speaker.speakerSlug),speaker.speakerName,{tiny : 'true'});
 							});
 						}
 					}
@@ -980,7 +977,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 							parameters.contentEl.append($('<h2>Chair(s)</h2>')); 
 							ViewAdapterText.appendList(parameters.JSONdata,
-													 {baseHref:'#speaker/',
+													 {baseHref:'#person/',
 													  hrefCllbck:function(str){return Encoder.encode(str["speakerSlug"])},
 													  },
 													 "speakerName",

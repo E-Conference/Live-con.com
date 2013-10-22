@@ -31,7 +31,7 @@
                     <th>Schedule Admin</th>
                     <th>Acces Data Paper</th>
                     <th>Data Paper Admin</th>
-                    <th>Organization</th>
+                    <th>Organizations</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -45,7 +45,10 @@
                     <td>{% if entity.flagscheduleadmin %}<i class="icon-user"></i>{% endif %}</td>
                     <td>{{ entity.flagdata }}</td>
                     <td>{% if entity.flagdataadmin %}<i class="icon-user"></i>{% endif %}</td>
-                    <td>{{ entity.organization }}</td>
+                    <td> {% for organization in entity.organizations  %}
+                            <li>{{ organization.name|e }}</li>
+                         {% endfor %}
+                    </td>
                     <td>
                         <a class="btn btn-default" href="{{ path('schedule_person_show', { 'id': entity.id }) }}">
                             <i class="icon-eye-open"></i>
