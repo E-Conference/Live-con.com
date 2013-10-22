@@ -25,11 +25,34 @@ class Paper
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    private $id;
 
+    /**
+     * title
+     *
+     *
+     * @ORM\Column(type="string", name="title")
+     */
+    private $title;
+
+    /**
+     * abstract
+     *
+     *
+     * @ORM\Column(type="text", name="abstract")
+     */
+    private $abstract;
+
+    /**
+     * url
+     *
+     *
+     * @ORM\Column(type="string", nullable=true, name="url")
+     */
+    private $url;
 
      /**
-     * autho
+     * authors
      * Persons related to an event 
      *   
      * @ORM\ManyToMany(targetEntity="Person", inversedBy="papers", cascade={"persist"})
@@ -37,24 +60,36 @@ class Paper
      *     joinColumns={@ORM\JoinColumn(name="paper_id", referencedColumnName="id", onDelete="Cascade")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="Cascade")})
      */
-    private $persons;
+    protected $authors;
 
-     /**
+   
+    /**
+     * publisher
+     *
+     *
+     * @ORM\Column(type="string", nullable=true, name="publisher")
+     */
+    private $publisher;
+
+    /**
+     * publishDate
+     *
+     *
+     * @ORM\Column(type="string", nullable=true, name="publishDate")
+     */
+    private $publishDate;
+
+
+    /**
+     * subject(keywords) 
+     *
      * @ORM\ManyToMany(targetEntity="Keyword", inversedBy="papers", cascade={"persist"})
      * @ORM\JoinTable(name="subject",
      *     joinColumns={@ORM\JoinColumn(name="paper_id", referencedColumnName="id", onDelete="Cascade")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="keyword_id", referencedColumnName="id", onDelete="Cascade")})
      */
-    private $keywords;
+    protected $subject;
 	
-    /**
-     * type
-     *
-     *
-     * @ORM\Column(type="string", nullable=true, name="type")
-     */
-    protected $type;
-
 
      /**
      * confEvents
@@ -62,16 +97,9 @@ class Paper
      *
      * @ORM\ManyToMany(targetEntity="ConfEvent", mappedBy="papers", cascade={"persist"})
      */
-    private $confEvents;
+    protected $events;
 
-     /**
-     * label
-     *
-     *
-     * @ORM\Column(type="string", nullable=true,  name="label")
-     */
-    protected $label;
-	
+   
 	/**
      *  Conference associated to this paper
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="papers", cascade={"persist"})
@@ -80,55 +108,15 @@ class Paper
      */
     protected $conference;
 
-    /**
-     * title
-     *
-     *
-     * @ORM\Column(type="string", name="title")
-     */
-    protected $title;
-
-
-    /**
-     * abstract
-     *
-     *
-     * @ORM\Column(type="text", name="abstract")
-     */
-    protected $abstract;
-
-    /**
-     * month
-     *
-     *
-     * @ORM\Column(type="string", nullable=true,   name="month")
-     */
-    protected $month;
-
-     /**
-     * year
-     *
-     *
-     * @ORM\Column(type="string", nullable=true, name="year")
-     */
-    protected $year;
-
-     /**
-     * url_pdf
-     *
-     *
-     * @ORM\Column(type="string", nullable=true, name="url_pdf")
-     */
-    protected $url_pdf;
-
-
+  
     /**
      * Constructor
      */
     public function __construct()
-    { 
-        $this->keywords = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->confEvents = new \Doctrine\Common\Collections\ArrayCollection();
+    {
+        $this->authors = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->subject = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->events = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**
@@ -139,52 +127,6 @@ class Paper
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set type
-     *
-     * @param string $type
-     * @return Paper
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    
-        return $this;
-    }
-
-    /**
-     * Get type
-     *
-     * @return string 
-     */
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    /**
-     * Set label
-     *
-     * @param string $label
-     * @return Paper
-     */
-    public function setLabel($label)
-    {
-        $this->label = $label;
-    
-        return $this;
-    }
-
-    /**
-     * Get label
-     *
-     * @return string 
-     */
-    public function getLabel()
-    {
-        return $this->label;
     }
 
     /**
@@ -234,194 +176,180 @@ class Paper
     }
 
     /**
-     * Set month
+     * Set url
      *
-     * @param string $month
+     * @param string $url
      * @return Paper
      */
-    public function setMonth($month)
+    public function setUrl($url)
     {
-        $this->month = $month;
+        $this->url = $url;
     
         return $this;
     }
 
     /**
-     * Get month
+     * Get url
      *
      * @return string 
      */
-    public function getMonth()
+    public function getUrl()
     {
-        return $this->month;
+        return $this->url;
     }
 
     /**
-     * Set year
+     * Set publisher
      *
-     * @param string $year
+     * @param string $publisher
      * @return Paper
      */
-    public function setYear($year)
+    public function setPublisher($publisher)
     {
-        $this->year = $year;
+        $this->publisher = $publisher;
     
         return $this;
     }
 
     /**
-     * Get year
+     * Get publisher
      *
      * @return string 
      */
-    public function getYear()
+    public function getPublisher()
     {
-        return $this->year;
+        return $this->publisher;
     }
 
     /**
-     * Set url_pdf
+     * Set publishDate
      *
-     * @param string $urlPdf
+     * @param string $publishDate
      * @return Paper
      */
-    public function setUrlPdf($urlPdf)
+    public function setPublishDate($publishDate)
     {
-        $this->url_pdf = $urlPdf;
+        $this->publishDate = $publishDate;
     
         return $this;
     }
 
     /**
-     * Get url_pdf
+     * Get publishDate
      *
      * @return string 
      */
-    public function getUrlPdf()
+    public function getPublishDate()
     {
-        return $this->url_pdf;
+        return $this->publishDate;
     }
 
     /**
-     * Add author
+     * Add authors
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Author $author
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Person $authors
      * @return Paper
      */
-    public function addAuthor(\fibe\Bundle\WWWConfBundle\Entity\Person $author)
+    public function addAuthor(\fibe\Bundle\WWWConfBundle\Entity\Person $authors)
     {
-        $this->persons[] = $author;
+        $this->authors[] = $authors;
     
         return $this;
     }
 
     /**
-     * Remove author
+     * Remove authors
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Author $author
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Person $authors
      */
-    public function removeAuthor(\fibe\Bundle\WWWConfBundle\Entity\Person $author)
+    public function removeAuthor(\fibe\Bundle\WWWConfBundle\Entity\Person $authors)
     {
-        $this->persons->removeElement($author);
+        $this->authors->removeElement($authors);
     }
 
     /**
-     * Get author
+     * Get authors
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getAuthor()
+    public function getAuthors()
     {
-        return $this->persons;
+        return $this->authors;
     }
 
     /**
-     * Add keywords
+     * Add subject
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Keyword $keywords
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Keyword $subject
      * @return Paper
      */
-    public function addKeyword(\fibe\Bundle\WWWConfBundle\Entity\Keyword $keywords)
+    public function addSubject(\fibe\Bundle\WWWConfBundle\Entity\Keyword $subject)
     {
-        $this->keywords[] = $keywords;
+        $this->subject[] = $subject;
     
         return $this;
     }
 
     /**
-     * Remove keywords
+     * Remove subject
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Keyword $keywords
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Keyword $subject
      */
-    public function removeKeyword(\fibe\Bundle\WWWConfBundle\Entity\Keyword $keywords)
+    public function removeSubject(\fibe\Bundle\WWWConfBundle\Entity\Keyword $subject)
     {
-        $this->keywords->removeElement($keywords);
+        $this->subject->removeElement($subject);
     }
 
     /**
-     * Get keywords
+     * Get subject
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getKeywords()
+    public function getSubject()
     {
-        return $this->keywords;
+        return $this->subject;
     }
 
     /**
-     * Get keywords
+     * Add events
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $keywords
+     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events
      * @return Paper
      */
-    public function setKeywords($keywords)
+    public function addEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events)
     {
-        $this->keywords = $keywords;
-    
-        return $this;
-    }
-
-    
-    /**
-     * Add confEvents
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $confEvents
-     * @return Paper
-     */
-    public function addConfEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $confEvents)
-    {
-        $this->confEvents[] = $confEvents;
+        $this->events[] = $events;
     
         return $this;
     }
 
     /**
-     * Remove confEvents
+     * Remove events
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $confEvents
+     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events
      */
-    public function removeConfEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $confEvents)
+    public function removeEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events)
     {
-        $this->confEvents->removeElement($confEvents);
+        $this->events->removeElement($events);
     }
 
     /**
-     * Get confEvents
+     * Get events
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getConfEvents()
+    public function getEvents()
     {
-        return $this->confEvents;
+        return $this->events;
     }
 
     /**
      * Set conference
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\wwwConf $conference
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
      * @return Paper
      */
-    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\wwwConf $conference = null)
+    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference = null)
     {
         $this->conference = $conference;
     
@@ -431,7 +359,7 @@ class Paper
     /**
      * Get conference
      *
-     * @return \fibe\Bundle\WWWConfBundle\Entity\wwwConf 
+     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
      */
     public function getConference()
     {

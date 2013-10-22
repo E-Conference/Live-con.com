@@ -29,7 +29,14 @@ class WwwConf
     *
     * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\ConfEvent", mappedBy="conference",cascade={"persist", "remove"})
     */
-    private $confEvents;
+    private $events;
+
+    /**
+    * roles
+    *
+    * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Role", mappedBy="conference",cascade={"persist", "remove"})
+    */
+    private $roles;
 
     /**
     * locations
@@ -122,6 +129,10 @@ class WwwConf
         return $this->id;
     } 
     
+    public function getConfName()
+    {
+        return ($this->mainConfEvent ? $this->mainConfEvent->getSummary() : "");
+    }
 
     /**
      * confEvents
@@ -170,23 +181,6 @@ class WwwConf
     }
     
     
-    
-    
-    public function setConfName($ConfName)
-    {
-        $this->confName = $ConfName;
-    
-        return $this;
-    } 
-    
-    public function getConfName()
-    {
-        return $this->confName;
-    }
-    
-    
-
-
     /**
      * confEvents
      */
@@ -479,5 +473,71 @@ class WwwConf
     public function getMainConfEvent()
     {
         return $this->mainConfEvent;
+    }
+
+    /**
+     * Add events
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events
+     * @return WwwConf
+     */
+    public function addEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events)
+    {
+        $this->events[] = $events;
+    
+        return $this;
+    }
+
+    /**
+     * Remove events
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events
+     */
+    public function removeEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events)
+    {
+        $this->events->removeElement($events);
+    }
+
+    /**
+     * Get events
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
+    /**
+     * Add roles
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $roles
+     * @return WwwConf
+     */
+    public function addRole(\fibe\Bundle\WWWConfBundle\Entity\Role $roles)
+    {
+        $this->roles[] = $roles;
+    
+        return $this;
+    }
+
+    /**
+     * Remove roles
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $roles
+     */
+    public function removeRole(\fibe\Bundle\WWWConfBundle\Entity\Role $roles)
+    {
+        $this->roles->removeElement($roles);
+    }
+
+    /**
+     * Get roles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRoles()
+    {
+        return $this->roles;
     }
 }

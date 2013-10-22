@@ -13,6 +13,7 @@ use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 use fibe\Bundle\WWWConfBundle\Entity\RoleType;
 use fibe\Bundle\WWWConfBundle\Entity\Equipment;
 use fibe\Bundle\WWWConfBundle\Entity\Theme;
+use fibe\Bundle\WWWConfBundle\Entity\SocialService;
 
 class databaseCommand extends ContainerAwareCommand
 {
@@ -45,19 +46,39 @@ class databaseCommand extends ContainerAwareCommand
         $em->persist($status);
 
         // conf
-        $conf = new WwwConf(); 
-        $conf->setConfName("Conference");
-        $em->persist($conf);
+       /* $conf = new WwwConf(); 
+        $conf->setConfName("swc:Chair");
+        $em->persist($conf); */
 
         //RoleType
         $roleType = new RoleType(); 
-        $roleType->setName("Speaker");
+        $roleType->setName("swc:Delegate");
         $em->persist($roleType);
 
         $roleType = new RoleType(); 
-        $roleType->setName("Chair");
+        $roleType->setName("swc:Chair");
         $em->persist($roleType);
 
+        $roleType = new RoleType(); 
+        $roleType->setName("swc:Presenter");
+        $em->persist($roleType);
+
+         $roleType = new RoleType(); 
+        $roleType->setName("swc:Presenter");
+        $em->persist($roleType);
+
+        //Social Service 
+        $socialService = new SocialService(); 
+        $socialService->setName("Facebook");
+        $em->persist($socialService);
+
+        $socialService = new SocialService(); 
+        $socialService->setName("Twitter");
+        $em->persist($socialService);
+
+        $socialService = new SocialService(); 
+        $socialService->setName("LinkedIn");
+        $em->persist($socialService);
 
         //Equipments
         $equipment = new Equipment(); 
@@ -91,7 +112,7 @@ class databaseCommand extends ContainerAwareCommand
         $em->persist($equipment);
 
         //Theme 
-        $theme = new Theme(); 
+       /* $theme = new Theme(); 
         $theme->setName("Business");
         $em->persist($theme);
 
@@ -109,7 +130,7 @@ class databaseCommand extends ContainerAwareCommand
 
         $theme = new Theme(); 
         $theme->setName("Tech");
-        $em->persist($theme);
+        $em->persist($theme);*/
 
 
         //categories

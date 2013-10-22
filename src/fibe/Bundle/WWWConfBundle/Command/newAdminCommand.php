@@ -73,7 +73,6 @@ EOT
         $em = $this->getContainer()->get('doctrine')->getManager('default');
         //Create the default conference
         $defaultConference = new WwwConf();
-        $defaultConference->setConfName("Conference");
         $em->persist($defaultConference);
 
         //Create new App config for the conference
@@ -83,7 +82,7 @@ EOT
         $categorie = $em->getRepository('IDCISimpleScheduleBundle:Category')->findOneBySlug("conferenceevent");
         //Main conf event 
         $mainConfEvent = new ConfEvent();
-        $mainConfEvent->setSummary("Conference Event");
+        $mainConfEvent->setSummary("Conference");
         $mainConfEvent->setStartAt( new \DateTime('now'));
         $mainConfEvent->setEndAt( new \DateTime('now'));
         $mainConfEvent->addCategorie($categorie);

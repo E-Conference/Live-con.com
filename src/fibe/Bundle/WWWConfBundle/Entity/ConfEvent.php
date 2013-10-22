@@ -21,16 +21,23 @@ class ConfEvent extends Event
 {
     
     /**
-     * conference
+     * slidePresentation
+     * Url to slides presentation     
      *
-     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="confEvents", cascade={"persist"})
-     * @ORM\JoinColumn(name="conference_id", referencedColumnName="id", nullable=false)
+     * @ORM\Column(type="string", nullable=true,  name="slidePresentation")
      */
-    private $conference
-;
+    protected $slidePresentation;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Paper", inversedBy="confEvents", cascade={"persist"})
+     * conference
+     *
+     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="events", cascade={"persist"})
+     * @ORM\JoinColumn(name="conference_id", referencedColumnName="id", nullable=false)
+     */
+    private $conference;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Paper", inversedBy="events", cascade={"persist"})
      * @ORM\JoinTable(name="confEvent_paper",
      *     joinColumns={@ORM\JoinColumn(name="confEvent_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="paper_id", referencedColumnName="id")})
@@ -38,13 +45,12 @@ class ConfEvent extends Event
     private $papers;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Theme", inversedBy="confEvents", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Theme", inversedBy="events", cascade={"persist"})
      * @ORM\JoinTable(name="theme_confEvent",
      *     joinColumns={@ORM\JoinColumn(name="confEvent_id", referencedColumnName="id")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="theme_id", referencedColumnName="id")})
      */
     private $themes;
-
 
 
     /**
@@ -63,66 +69,96 @@ class ConfEvent extends Event
      *   
      * @ORM\Column(name="is_allday", type="boolean")
      * 
-     */
-    private $isAllDay ;
-
-    /**
+     *
+     *private $isAllDay ;
+     *
+     *
      * computeIsAllDay
      *
      * @ORM\PrePersist() 
-     */
-    public function computeIsAllDay()
-    {
-         
+     * 
+     * public function computeIsAllDay()
+     * {
+     *     
+     *
+     *        $start = $this->getStartAt();
+     *       $end = $this->getEndAt(); 
+     *      $this->setIsAllDay($start->format('d')!=$end->format('d')); 
+     *
+     *   }
+     **/
 
-         $start = $this->getStartAt();
-         $end = $this->getEndAt(); 
-         $this->setIsAllDay($start->format('d')!=$end->format('d')); 
-
-    }
-
-
+   
+    
+   
+   
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->papers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->themes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->xProperties = new \Doctrine\Common\Collections\ArrayCollection();
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
+    
     /**
-     * Set isAllDay
-     * 
+     * Set slidePresentation
+     *
+     * @param string $slidePresentation
      * @return ConfEvent
      */
-    public function setIsAllDay($isAllDay)
+    public function setSlidePresentation($slidePresentation)
     {
-        $this->isAllDay = $isAllDay;
+        $this->slidePresentation = $slidePresentation;
     
         return $this;
     }
 
     /**
-     * Get isAllDay
+     * Get slidePresentation
      *
-     * @return boolean
+     * @return string 
      */
-    public function getIsAllDay()
+    public function getSlidePresentation()
     {
-        return $this->isAllDay;
+        return $this->slidePresentation;
     }
-     
+
+    
+    /**
+     * Set url
+     *
+     * @param string $url
+     * @return ConfEvent
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    
+        return $this;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string 
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+   
     /**
      * Set conference
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
      * @return ConfEvent
      */
-    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference = null)
+    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference)
     {
         $this->conference = $conference;
     
@@ -173,39 +209,6 @@ class ConfEvent extends Event
     }
 
     /**
-     * Add role
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $role
-     * @return ConfEvent
-     */
-    public function addRole(\fibe\Bundle\WWWConfBundle\Entity\Role $role)
-    {
-        $this->roles[] = $role;
-    
-        return $this;
-    }
-
-    /**
-     * Remove role
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $role
-     */
-    public function removeRole(\fibe\Bundle\WWWConfBundle\Entity\Role $role)
-    {
-        $this->roles->removeElement($role);
-    }
-
-    /**
-     * Get role
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getRoles()
-    {
-        return $this->roles;
-    }
- 
-     /**
      * Add themes
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\Theme $themes
@@ -237,6 +240,39 @@ class ConfEvent extends Event
     {
         return $this->themes;
     }
- 
+
+    /**
+     * Add roles
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $roles
+     * @return ConfEvent
+     */
+    public function addRole(\fibe\Bundle\WWWConfBundle\Entity\Role $roles)
+    {
+        $this->roles[] = $roles;
+    
+        return $this;
+    }
+
+    /**
+     * Remove roles
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $roles
+     */
+    public function removeRole(\fibe\Bundle\WWWConfBundle\Entity\Role $roles)
+    {
+        $this->roles->removeElement($roles);
+    }
+
+    /**
+     * Get roles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+
     
 }

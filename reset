@@ -5,5 +5,4 @@ sudo php app/console assets:install web
 sudo php app/console wwwconf:database:init
 sudo php app/console livecon:admin:create admin admin@admin.fr admin
 sudo php app/console fos:user:promote admin ROLE_ADMIN
-sudo chmod -R 777 app/cache
-sudo chmod -R 777 app/logs
+

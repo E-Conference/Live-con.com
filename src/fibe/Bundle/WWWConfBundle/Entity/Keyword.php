@@ -27,7 +27,6 @@ class Keyword
     /**
      * name
      *
-     *
      * @ORM\Column(type="string", name="name")
      */
     protected $name;
@@ -35,11 +34,11 @@ class Keyword
     /**
      * Papers related to thise keyword
      *
-     * @ORM\ManyToMany(targetEntity="Paper", mappedBy="keywords", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Paper", mappedBy="subject", cascade={"persist"})
      */
     private $papers;
 
-     /**
+    /**
      *  Themes associated to this conference
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="keywords", cascade={"persist"})
      * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
@@ -55,6 +54,12 @@ class Keyword
     public function __construct()
     {
         $this->papers = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+     public function __toString() 
+    {
+        return $this->name;
+
     }
     
     /**
