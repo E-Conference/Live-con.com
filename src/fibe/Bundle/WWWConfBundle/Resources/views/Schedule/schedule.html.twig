@@ -197,7 +197,7 @@
 
 
       /*-----------------------------------------------------------------------------------------------------*/
-      /*------------------------------- render json array from datasource -----------------------------------*/
+      /*------------------------------- render events from json datasource -----------------------------------*/
       /*-----------------------------------------------------------------------------------------------------*/
 
       // empty fullcalendar events and populate it with new
@@ -224,15 +224,13 @@
             // console.log(events[i].categories);
             if(events[i].categories.length > 0 && events[i].categories[0].color)
               events[i]["background-color"] = events[i].categories[0].color;
-            
-            var diff =moment(events[i]["start"]).diff(events[i]["end"]);
-            events[i]["instant"] = (diff  === 0 ) || (diff  === 1 ); 
+             
+
             EventCollection.eventsToRender.push(events[i]["id"]);
 
             var event = new CalEvent(events[i]); 
-            Events[events[i]["id"]] = event; 
 
-            if(event["instant"]){
+            if(event.isInstant()){
               instant_events.push(Events[events[i]["id"]]); 
             }else{ 
                 calendar_events.push(Events[events[i]["id"]]); 
@@ -336,12 +334,12 @@
                 var title = $(this).find("#name").val(); 
                 if (title) { 
                     var tmp = {
-                        title: title,
-                        parent: {id:""},
-                        children: [],
-                        start: start,
-                        end: moment(start).isSame(moment(end)) ? moment(start).add("hours",1).format() : end,
-                        allDay: allDay
+                        title    : title,
+                        parent   : {id:""},
+                        children : [],
+                        start    : start,
+                        end      : moment(start).isSame(moment(end)) ? moment(start).add("hours",1).format() : end,
+                        allDay   : allDay
                     }; 
                     console.log(tmp)
                     $.post(
@@ -352,7 +350,7 @@
                                 var ev = new CalEvent(tmp);
                                 ev.id=response.id;
                                 Events[ev.id] = ev;
-                                ev.render($calendar);
+                                ev.render();
                                 // $calendar.fullCalendar('renderEvent',ev); // 3rd arg make the event "stick"
                             },
                             'json'
@@ -371,11 +369,10 @@
               setTimeout(function(){ //bug... event isn't yet updated 
                     event.updateParentDate();
                     event.updateChildrenDate();
-                    event.render(true);
+                    // event.render();
                     event.persist(); 
               },1);//bug... event isn't yet updated 
           }, 
-          droppable: true, // this allows things to be dropped onto the calendar !!!
           eventDrop : function(event){ //drop from calendar
             EventCollection.eventsToRender.push(event["id"]);
               event.persist(); 
@@ -390,36 +387,37 @@
               },repositionTimeout);
                   
           }, 
+          droppable: true, // allows things to be dropped into the calendar
           drop: function(date, allDay) { //drop from sidebar
           
-              // retrieve the dropped element's stored Event Object
-              var originalEventObject = dragged[1];
-              
-              // we need to copy it, so that multiple events don't have a reference to the same object
-              var copiedEventObject = $.extend({}, originalEventObject);
-              
-              // assign it the date that was reported 
-              copiedEventObject.allDay = allDay;
-              copiedEventObject['start'] = date;
+              // retrieve the dropped element's stored Event Object 
+              var event = $.extend({},dragged[1]);
+              console.log("dropped from sidebar", event);
+              event.elem.remove();
+              delete event.elem;
+              event.allDay = allDay;
+              event['start'] = date;
+              var e = new CalEvent(event); 
+              console.log("dropped from sidebar", e);
+              // assign it the date that was reported
+               
+              // e['end'] = moment(date).add("hours",1).format();
 
-              copiedEventObject.SetRecurDate();
-              copiedEventObject.deleteParent();
+              e.SetRecurDate();
+              e.deleteParent();
               
-              copiedEventObject.persist();
-              copiedEventObject.render($calendar);
+              e.persist();
+              e.render();
 
-              // render the event on the calendar 
-              console.log(copiedEventObject);
-              Events[copiedEventObject.id] = copiedEventObject;
-              
-              $(this).remove();  
+              // render the event on the calendar  
+              // Events[event.id] = event;
+                
           },
           eventDragStart: function( event, jsEvent, ui, view ) { 
               dragged = [ ui.helper[0], event ];
               setTimeout(function(){ //bug... event isn't yet updated 
                 dragChildren(event, jsEvent, ui, view);
-              },1);//bug... event isn't yet updated 
-              
+              },1);//bug... event isn't yet updated
           },
           eventDragStop: function( event, jsEvent, ui, view ) {  
               dragged = [ ui.helper[0], event ]; 
@@ -436,10 +434,11 @@
       /*------------------------------------- initialize sidebar ----------------------------------------*/
       /*-------------------------------------------------------------------------------------------------*/
       
-      var sidebar = new Sidebar('#external-events');
-      $(sidebar).on("dropped",function(ev,event){  
+      var sidebar = new Sidebar('#external-events')
+      //dropped on the sidebar;
+      $(sidebar).on("dropped",function(ev,calEvent){  
           console.log("dropped",event)
-          event = Events[event.id];
+          var event = Events[calEvent.id];
           event.deleteParent();
 
           //set as sidebar draggable element  and then affect children 
@@ -463,7 +462,7 @@
               child.persist();
           });
           // updateEventArray();
-      }).on("drag",function(ev,event){
+      }).on("drag",function(ev,event){ 
           dragChildren(event);
       }); 
 
@@ -527,11 +526,11 @@
               // toppestParent = EventCollection.getToppestEventsToRender();
               toppestParent = EventCollection.getToppestParent();
 
-          console.log("this.eventsToRender : ",EventCollection.eventsToRender);
+          console.log("toppest parent : ",toppestParent);
           if(!toppestParent)return;
           // console.log("toppestParent",toppestParent);
-          positionBlock(toppestParent,colWidth,2);  
-           
+          positionBlock(toppestParent,colWidth,2);
+
 
           positionned=[];
           function positionBlock(events,colWidth,parentZindex,parentPos,parent){ 
@@ -766,7 +765,7 @@
                
               childEvent['start']  = moment(childEvent['start']).subtract(diff);
               childEvent['end']  = moment(childEvent['end']).subtract(diff);
-              childEvent.render($calendar);
+              childEvent.render();
               childEvent.persist();
           };
           setTimeout(doWork, 1);
@@ -780,11 +779,11 @@
             //event dropped out of parent
             console.log(" #### moved out ####"); 
             event.deleteParent(); 
-            event.render($calendar);
+            event.render();
 
           }else{
             event.updateParentDate();
-             event.render($calendar);
+             event.render();
           }
         } 
       } 
@@ -823,7 +822,7 @@
           storeinHistory = false;
           for (var i in Events){
             var event = Events[i]; 
-            if(events[i]["instant"]){
+            if(events[i].isInstant()){
               instant_events.push(event);
             }else{ 
                 $calendar.fullCalendar( 'renderEvent',event);

@@ -1,28 +1,49 @@
 
-var CalEvent = function(event){
-    for (var i in event){
-        this[i] = event[i];
-    } 
-} 
+var CalEvent = function(event){ 
+
+    console.log("building CalEvent from" , event)
+    this["id"]     = event.id; 
+    this["title"]  = event.name || event.title; 
+    this["start"]  = event.start || event.start_at;
+    this["end"]    = event.end || event.end_at; 
+    this["allDay"] = event.is_allday==="true";
+    this["parent"] = event.parent;
+    this["children"] = event.children;
+    this["categories"] = event.categories;
+
+    if(event.categories && event.categories[0] && event.categories[0].color)
+      this["color"] = event.categories[0].color;
+
+    if(event.categories.length > 0 && event.categories[0].color)
+      this["background-color"] = event.categories[0].color;
+     
+    Events[this["id"]] = this; 
+
+    // for (var i in event){
+    //     this[i] = event[i];
+    // } 
+};
 
 CalEvent.prototype.render = function (dontDelete) {  
     this.formatDate();
 
     // render the event on the calendar
-    if(dontDelete === true) $calendar.fullCalendar('removeEvents', this.id); 
-    EventCollection.eventsToRender.push(this["id"]);
-    $calendar.fullCalendar('renderEvent', this); 
+    // console.log("event.render("+this.id+")");
+    // console.log($calendar.fullCalendar('clientEvents', this.title));
 
+    $calendar.fullCalendar('removeEvents', this.id); 
+    // EventCollection.eventsToRender.push(this["id"]); 
+    $calendar.fullCalendar('renderEvent', this); 
 };
 
 CalEvent.prototype.persist = function(){ 
     var toSend = {
-      parent : this['parent'],
-      id  : this['id'],
-      allDay  : this['allDay'],
+      parent: this['parent'],
+      id    : this['id'],
+      allDay: this['allDay'],
       title : this['title'],
-      parent  : this['parent'],
-      end : this['end'],
+      parent: this['parent'],
+      end   : this['end'],
       start : this['start']
     } 
     $.post(
@@ -75,7 +96,7 @@ CalEvent.prototype.updateParentDate = function(){
         parent.render();
         parent.persist(); 
     }
-}
+};
 
 // when resized, affect recursively child date
 CalEvent.prototype.updateChildrenDate = function(){
@@ -122,7 +143,7 @@ CalEvent.prototype.updateChildrenDate = function(){
           } 
         }
     }
-}
+};
 
 
 /**
@@ -146,8 +167,7 @@ CalEvent.prototype.SetRecurDate = function(){
         lastMoment = lastMoment.add("hours",1);
       } 
     lastMoment = lastMoment.add("minutes",30);
-    this['end']  = lastMoment.format(); 
-    this.deleteParent();
+    this['end']  = lastMoment.format();  
    
   
       function setRecurChildDate(child){ 
@@ -172,8 +192,7 @@ CalEvent.prototype.SetRecurDate = function(){
         child.render();
         child.persist();
       } 
-} 
-
+};
 
 // remove relation with old parent if exists
 // and update relation with new parent (render event but dont persist changes to db)
@@ -270,7 +289,7 @@ CalEvent.prototype.getPopoverContent = function(){
               <li><b>speakers : </b>"+speakers+"\
               </li>\
             </ul>"
-}
+};
 
 
 /*--------------------------------------------------------------------------------------------------*/
@@ -289,7 +308,7 @@ CalEvent.prototype.isOutOf = function(event,same){
     if(same ===true) rtn = rtn || moment(this['end']).isSame(event['start'])
                                || moment(this['start']).isSame(event['end'])
     return  rtn;
-}
+};
 CalEvent.prototype.isInsideOf = function(event){
     return (moment(this['start']).isAfter(event['start']) &&
             moment(this['end']).isBefore(event['end'])
@@ -299,7 +318,7 @@ CalEvent.prototype.isInsideOf = function(event){
 CalEvent.prototype.isInstant = function(){
     var diff =moment(this["start"]).diff(this["end"]);
     return (diff  === 0 ) || (diff  === 1 );   
-}
+};
 
 CalEvent.prototype.formatDate = function () {  
     this['start'] = moment(this['start']).format();
