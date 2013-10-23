@@ -15,6 +15,7 @@ class WwwConfType extends AbstractType
     {
         $this->user = $user;
     }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder

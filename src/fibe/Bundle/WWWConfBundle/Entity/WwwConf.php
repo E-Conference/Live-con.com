@@ -508,6 +508,8 @@ class WwwConf
         return $this->events;
     }
 
+
+
     /**
      * Add roles
      *

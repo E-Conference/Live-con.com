@@ -6,15 +6,27 @@
     <div class="row center">
     <h1>RoleType creation</h1>
 
+    <div class="row">
+     <div class="col-lg-5"></div>
+          <div class="col-lg-2 btn-group">
+              <a type="button" href="{{ path('schedule_roletype') }}" class="btn btn-warning">
+                    <i class="icon-th-list"></i>
+              </a>
+          </div>    
+     </div> 
+
     <form action="{{ path('schedule_roletype_create') }}" method="post" {{ form_enctype(form) }}>
+      <div class="row">
+           <div class="col-lg-2"></div>
+           <div class="col-lg-4">
         {{ form_widget(form) }}
-        <p>
-            <button class="btn btn-primary"  type="submit"><i class="icon-plus"></i> Create</button>
-        </p>
+           {{ form_errors(form) }}
+        </br>
+       <button type="submit" class="btn btn-block btn-success">
+                        <i class="icon-ok"></i>
+              </button>
+        </div>
     </form>
-    <a class="btn btn-warning" href="{{ path('schedule_roletype') }}">
-            <i class="icon-th-list"></i> List
-    </a>
     </div>
 </div>
 {% endblock %}

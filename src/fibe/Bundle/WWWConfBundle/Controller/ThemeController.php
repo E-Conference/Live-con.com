@@ -160,7 +160,7 @@ class ThemeController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('schedule_theme_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('schedule_theme'));
         }
 
         return array(

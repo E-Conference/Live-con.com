@@ -34,7 +34,7 @@ class Keyword
     /**
      * Papers related to thise keyword
      *
-     * @ORM\ManyToMany(targetEntity="Paper", mappedBy="subject", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Paper", mappedBy="subjects", cascade={"persist"})
      */
     private $papers;
 

@@ -31,20 +31,14 @@ class Person
      * A name for some thing. Name of the person 
      * / ! \  auto built with the concatenation of first and last name
      * @ORM\Column(type="string", name="name")
+     * @Assert\NotBlank(message ="Please give a name")
      */
     protected $name;
 
     /**
-     * firstName
-     * 
-     * @ORM\Column(type="string", name="first_name")
-     */
-    protected $firstName;
-
-    /**
      * familyName 
-     *
-     * @ORM\Column(type="string", nullable=true,  name="family_name")
+     * @Assert\NotBlank(message ="Please give a family name")
+     * @ORM\Column(type="string", nullable=true,  name="familyName")
      */
     protected $familyName;
 
@@ -141,16 +135,6 @@ class Person
      * @ORM\Column(type="string", length=255, nullable=true, name="page")
      */
      protected $page;
-
-    /**
-     * based_near
-     * person's based_near (location)
-     * used with ocs to store country
-     *
-     * @ORM\Column(type="string", length=255, nullable=true, name="based_near")
-     */
-     protected $based_near;
-
    
     /**
      *  
@@ -185,7 +169,7 @@ class Person
      */
     public function computeName()
     {
-        $this->setName($this->firstName." ".$this->familyName);
+        $this->setName($this->name." ".$this->familyName);
     }
     
     /**
@@ -206,7 +190,7 @@ class Person
      * @param string $name
      * @return Person
      */
-    private function setName($name)
+    public function setName($name)
     {
         $this->name = $name;
     
@@ -246,29 +230,7 @@ class Person
         return $this->familyName;
     }
 
-    /**
-     * Set firstName
-     *
-     * @param string $firstName
-     * @return Person
-     */
-    public function setFirstName($firstName)
-    {
-        $this->firstName = $firstName;
-    
-        return $this;
-    }
-
-    /**
-     * Get firstName
-     *
-     * @return string 
-     */
-    public function getFirstName()
-    {
-        return $this->firstName;
-    }
-
+  
     /**
      * Set age
      *
@@ -494,7 +456,7 @@ class Person
      */
     public function addOrganization(\fibe\Bundle\WWWConfBundle\Entity\Organization $organization)
     {
-        $this->organization[] = $organization;
+        $this->organizations[] = $organization;
     
         return $this;
     }
@@ -506,7 +468,7 @@ class Person
      */
     public function removeOrganization(\fibe\Bundle\WWWConfBundle\Entity\Organization $organization)
     {
-        $this->organization->removeElement($organization);
+        $this->organizations->removeElement($organization);
     }
 
     /**
@@ -514,12 +476,20 @@ class Person
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getOrganization()
+    public function getOrganizations()
     {
-        return $this->organization;
+        return $this->organizations;
     }
 
-   
+      /**
+     * Get organization
+     *
+     * @param \Doctrine\Common\Collections\Collection $organizations
+     */
+    public function setOrganizations( $organizations)
+    {
+        return $this->organizations = $organizations;
+    }
 
     /**
      * Add roles
@@ -610,13 +580,5 @@ class Person
         return $this->accounts;
     }
 
-    /**
-     * Get organizations
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getOrganizations()
-    {
-        return $this->organizations;
-    }
+   
 }

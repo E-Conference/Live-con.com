@@ -5,15 +5,17 @@
         <i class='icon-{{ equipment.icon }} icon-2x'></i>
         <i id='{{equipment.id}}' class='icon-remove delete_equipment'></i>
    </button>
+
  {% endfor %}
      
-
- <!-- Select box equipment -->             
+ </br> 
+ <!-- Select box equipment -->            
 <select id="equipment_list" class="form-control">
         {% for equipment in equipments %}
             <option value="{{ equipment.id }}">{{ equipment.label }}</option>
         {% endfor %}
-</select>        
+</select>   
+<br>     
 <button class="btn btn-small btn-info" id="add_equipment">
     <i class="icon-plus"></i>
 </button>

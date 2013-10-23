@@ -6,21 +6,29 @@
 
 <div class="container">
     <div class="row center">
-    <div class="page-header">
       <h1>{% trans %}Location creation{% endtrans %}</h1>
-    </div>
+
+  <div class="row">
+     <div class="col-lg-5"></div>
+          <div class="col-lg-2 btn-group">
+              <a type="button" href="{{ path('schedule_event') }}" class="btn btn-warning">
+                    <i class="icon-th-list"></i>
+              </a>
+          </div>    
+  </div> 
+
 
     <form action="{{ path('schedule_location_create') }}" method="post" {{ form_enctype(form) }}>
+      <div class="row">
+           <div class="col-lg-2"></div>
+           <div class="col-lg-4">
         {{ form_widget(form) }}
-        <div class="row-fluid">
-                <div class="col-lg-9"></div>
-                <div class="col-lg-2">
-                      <button type="submit" class="btn btn-default"><i class="icon-ok"></i></button>
-                      <a class="btn btn-warning" href="{{ path('schedule_location') }}">
-                        <i class="icon-th-list"></i>
-                    </a>
-                </div>
-            </div>
+        </br>
+        <button type="submit" class="btn btn-block btn-success">
+                        <i class="icon-ok"></i>
+              </button>
+        </div>
+        
     </form>
   </div>
 </div>

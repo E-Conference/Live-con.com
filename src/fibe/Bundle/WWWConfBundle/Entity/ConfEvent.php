@@ -71,7 +71,6 @@ class ConfEvent extends Event
      * @ORM\Column(name="is_allday", type="boolean")
      */
      private $isAllDay ;
-      
      
     /**
      * Constructor

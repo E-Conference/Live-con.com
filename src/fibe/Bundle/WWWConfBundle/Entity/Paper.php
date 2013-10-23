@@ -88,7 +88,7 @@ class Paper
      *     joinColumns={@ORM\JoinColumn(name="paper_id", referencedColumnName="id", onDelete="Cascade")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="keyword_id", referencedColumnName="id", onDelete="Cascade")})
      */
-    protected $subject;
+    protected $subjects;
 	
 
      /**
@@ -285,7 +285,7 @@ class Paper
      */
     public function addSubject(\fibe\Bundle\WWWConfBundle\Entity\Keyword $subject)
     {
-        $this->subject[] = $subject;
+        $this->subjects[] = $subject;
     
         return $this;
     }
@@ -297,7 +297,7 @@ class Paper
      */
     public function removeSubject(\fibe\Bundle\WWWConfBundle\Entity\Keyword $subject)
     {
-        $this->subject->removeElement($subject);
+        $this->subjects->removeElement($subject);
     }
 
     /**
@@ -305,9 +305,9 @@ class Paper
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getSubject()
+    public function getSubjects()
     {
-        return $this->subject;
+        return $this->subjects;
     }
 
     /**

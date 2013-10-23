@@ -40,20 +40,14 @@
                 <td>{{ entity.abstract }}</td>
                 <td>{{ entity.publishDate }}</td>
                 <td>{{ entity.url }}</td>
-                <td> {% for keyword in entity.subject  %}
+                <td> {% for keyword in entity.subjects  %}
                           <li>  {{ keyword.name|e }}</li>
                          {% endfor %}
                 </td>
                 <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('schedule_paper_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('schedule_paper_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
+                    <a class="btn btn-large btn-default" href="{{ path('schedule_paper_show', { 'id': entity.id }) }}"><i class="icon-eye-open"></i></a> 
+                    <a class="btn btn-large btn-warning" href="{{ path('schedule_paper_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
+                </td> 
             </tr>
         {% endfor %}
         </tbody>

@@ -1,10 +1,10 @@
 {
-     "id": "{{ paper.id }}",
-     "title": "{{ paper.title }}",
-     "abstract": "{{ paper.abstract }}",
-     "publishDate": "{{ paper.publishDate }}" , 
-     "url": "{{ paper.url }}" ,       
-     "publisher": "{{ paper.publisher }}" , 
+     "id": "{{ entity.id }}",
+     "title": "{{ entity.title }}",
+     "abstract": "{{ entity.abstract }}",
+     "publishDate": "{{ entity.publishDate }}" , 
+     "url": "{{ entity.url }}" ,       
+     "publisher": "{{ entity.publisher }}" , 
      "subject":
             [
             {% for keyword in entity.subject %}
@@ -24,6 +24,6 @@
                 ,{ "id": "{{ author.id }}", "name": "{{ author.name }}"}
                 {% endif %}
             {% endfor %}
-            ],
+            ]
          
 }

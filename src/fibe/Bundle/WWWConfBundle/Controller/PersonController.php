@@ -45,7 +45,7 @@ class PersonController extends Controller
     public function createAction(Request $request)
     {
         $entity  = new Person();
-        $form = $this->createForm(new PersonType(), $entity);
+        $form = $this->createForm(new PersonType($this->getUser()), $entity);
         $form->bind($request);
 
         if ($form->isValid()) {
@@ -72,7 +72,7 @@ class PersonController extends Controller
     public function newAction()
     {
         $entity = new Person();
-        $form   = $this->createForm(new PersonType(), $entity);
+        $form   = $this->createForm(new PersonType($this->getUser()), $entity);
 
         return $this->render('fibeWWWConfBundle:Person:new.html.twig', array(
             'entity' => $entity,
@@ -117,7 +117,7 @@ class PersonController extends Controller
             throw $this->createNotFoundException('Unable to find Person entity.');
         }
 
-        $editForm = $this->createForm(new PersonType(), $entity);
+        $editForm = $this->createForm(new PersonType($this->getUser()), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('fibeWWWConfBundle:Person:edit.html.twig', array(
@@ -142,7 +142,7 @@ class PersonController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new PersonType(), $entity);
+        $editForm = $this->createForm(new PersonType($this->getUser()), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {

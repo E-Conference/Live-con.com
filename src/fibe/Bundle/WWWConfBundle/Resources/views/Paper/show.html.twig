@@ -5,63 +5,78 @@
 <div class="container">
     <div class="row center">
     <h1>Paper</h1>
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-6">
+            <h2> {{ entity.title }}</h2>
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ entity.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Title</th>
+                        <td>{{ entity.title }}</td>
+                    </tr>
+                    <tr>
+                        <th>Abstract</th>
+                        <td>{{ entity.abstract }}</td>
+                    </tr>
+                    <tr>
+                        <th>Publish Date</th>
+                        <td>{{ entity.publishDate }}</td>
+                    </tr>
+                    <tr>
+                        <th>Publisher</th>
+                        <td>{{ entity.publisher }}</td>
+                    </tr>
+                    <tr>
+                        <th>Url</th>
+                        <td>{{ entity.url}}</td>
+                    </tr>
+                    <tr>
+                        <th>Subjects</th>
+                        <td> 
+                             {% for keyword in entity.subjects %}
+                                <li>{{ keyword.name|e }}</li>
+                             {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Authors</th>
+                        <td>
+                             {% for author in entity.authors %}
+                                <li>{{ author.computeName()|e }}</li>
+                             {% endfor %}
+                        </td>
+                    </tr>
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Type</th>
-                <td>{{ entity.type }}</td>
-            </tr>
-            <tr>
-                <th>Label</th>
-                <td>{{ entity.label }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ entity.title }}</td>
-            </tr>
-            <tr>
-                <th>Abstract</th>
-                <td>{{ entity.abstract }}</td>
-            </tr>
-            <tr>
-                <th>Month</th>
-                <td>{{ entity.month }}</td>
-            </tr>
-            <tr>
-                <th>Year</th>
-                <td>{{ entity.year }}</td>
-            </tr>
-            <tr>
-                <th>Url_pdf</th>
-                <td>{{ entity.urlpdf }}</td>
-            </tr>
-        </tbody>
-    </table>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('schedule_paper') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('schedule_paper_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>
-        <form action="{{ path('schedule_paper_delete', { 'id': entity.id }) }}" method="post">
-            <input type="hidden" name="_method" value="DELETE" />
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
-    </li>
-</ul>
-</div>
-</div>
+
+                    
+                </tbody>
+            </table>
+           </div>
+        </div>
+        <div class="row">
+             <div class="col-lg-6"></div>
+                  <div class="col-lg-2 btn-group">
+                      <a type="button" href="{{ path('schedule_paper') }}" class="btn btn-warning">
+                            <i class="icon-th-list"></i>
+                      </a>
+                       <a href="{{ path('schedule_paper_edit', { 'id': entity.id }) }}" class="btn btn-success">
+                             <i class="icon-pencil"></i>
+                       </a>
+                       <form action="{{ path('schedule_paper_delete', { 'id': entity.id }) }}" method="post">
+                          <input type="hidden" name="_method" value="DELETE" />
+                            {{ form_widget(delete_form) }}
+                        <button type="submit" class="btn btn-danger">
+                            <i class="icon-remove"></i>
+                        </button>
+                      </form> 
+                  </div>    
+            </div>
+        </div>
+    </div> 
 {% endblock %}
