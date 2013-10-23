@@ -21,9 +21,10 @@ class RoleType extends AbstractType
             ->add('person', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Person',
                 'label'   => 'Person',
-                'choices'=> $this->user->getCurrentConf()->getPersons()->toArray()
+                'choices'=> $this->user->getCurrentConf()->getPersons()->toArray(),
+                'required' => true
             ))
-            ->add('type')
+            ->add('type',null,array('required' => true))
       
         ;
     }

@@ -46,9 +46,10 @@ class ConfEventType extends EventType
              ->add('parent', 'entity', array(
                 'class' => 'IDCISimpleScheduleBundle:Event',
                 'label'   => 'Parent',
-                'choices'=> $this->user->getCurrentConf()->getEvents()->toArray(),
-                'multiple'  => true
-            ))                   
+                'choices'=> $this->user->getCurrentConf()->getEvents()->toArray()
+                
+            ))
+        ;                   
             
  
         ;
