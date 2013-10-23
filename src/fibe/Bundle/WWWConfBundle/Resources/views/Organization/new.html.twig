@@ -1,0 +1,35 @@
+{% extends 'fibeWWWConfBundle::base.html.twig' %}
+
+{% block body %}
+{{ parent() }}
+
+<div class="container">
+   <div class="row center">
+    <h1>Organization creation</h1>
+
+    <div class="row">
+     <div class="col-lg-5"></div>
+          <div class="col-lg-2 btn-group">
+              <a type="button" href="{{ path('schedule_organization_index') }}" class="btn btn-warning">
+                    <i class="icon-th-list"></i>
+              </a>
+          </div>    
+     </div> 
+
+
+    <form action="{{ path('schedule_organization_create') }}" method="post" {{ form_enctype(form) }}>
+      <div class="row">
+           <div class="col-lg-2"></div>
+           <div class="col-lg-4">
+             {{ form_widget(form) }}
+             {{ form_errors(form) }}
+             </br>
+       <button type="submit" class="btn btn-block btn-success">
+                        <i class="icon-ok"></i>
+              </button>
+        </div>
+    </form>
+
+    </div>
+</div>
+{% endblock %}
