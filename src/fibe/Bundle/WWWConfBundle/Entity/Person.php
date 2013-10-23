@@ -42,6 +42,12 @@ class Person
      */
     protected $familyName;
 
+    /**
+     * firstName 
+     * @Assert\NotBlank(message ="Please give a first name")
+     * @ORM\Column(type="string", nullable=true,  name="firstName")
+     */
+    protected $firstName;
 
     /**
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="name")
@@ -104,13 +110,6 @@ class Person
      */
     protected $conference;
 
-   /**
-     * nick
-     *
-     *
-     * @ORM\Column(type="string", nullable=true,  name="nick")
-     */
-    protected $nick;
 
     /**
      * email
@@ -230,6 +229,30 @@ class Person
         return $this->familyName;
     }
 
+
+    /**
+     * Set firstName
+     *
+     * @param string $firstName
+     * @return Person
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+    
+        return $this;
+    }
+
+    /**
+     * Get firstName
+     *
+     * @return string 
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
   
     /**
      * Set age
@@ -300,28 +323,6 @@ class Person
         return $this->openId;
     }
 
-    /**
-     * Set nick
-     *
-     * @param string $nick
-     * @return Person
-     */
-    public function setNick($nick)
-    {
-        $this->nick = $nick;
-    
-        return $this;
-    }
-
-    /**
-     * Get nick
-     *
-     * @return string 
-     */
-    public function getNick()
-    {
-        return $this->nick;
-    }
 
     /**
      * Set email
