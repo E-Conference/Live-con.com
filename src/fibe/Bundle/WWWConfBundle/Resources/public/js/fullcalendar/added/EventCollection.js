@@ -73,36 +73,36 @@ var EventCollection = {
      * get Toppest Events in the eventsToRender array
      * @return {[CalEvent]} 
      */
-    getToppestEventsToRender : function (){
+    // getToppestEventsToRender : function (){
 
-        var toppestParent = []; 
+    //     var toppestParent = []; 
 
-          // get toppest parent 
-        for (var i in this.eventsToRender){
-            var event = Events[this.eventsToRender[i]];
-            var isSidebar =false;
-            var breakWhile=false;
-            while(breakWhile===false){ 
-              // console.log(event);
-              var parent = EventCollection.find(event.parent.id);  
-              if(!parent || !parent.elem){ 
-                breakWhile = true;
-              }else {
-                event = parent;
-              }
-              isSidebar = $(event.elem).hasClass("external-event");
+    //       // get toppest parent 
+    //     for (var i in this.eventsToRender){
+    //         var event = Events[this.eventsToRender[i]];
+    //         var isSidebar =false;
+    //         var breakWhile=false;
+    //         while(breakWhile===false){ 
+    //           // console.log(event);
+    //           var parent = EventCollection.find(event.parent.id);  
+    //           if(!parent || !parent.elem){ 
+    //             breakWhile = true;
+    //           }else {
+    //             event = parent;
+    //           }
+    //           isSidebar = $(event.elem).hasClass("external-event");
 
-            }
+    //         }
 
-            //toppest parent
-            if(isSidebar || event.isInstant() || $.inArray(event, toppestParent)!==-1 ){
-              // console.log("event "+event.id+" already toppest") ;
-              continue;
-            }
-            toppestParent.push(event); 
-        }
-        return toppestParent;
-    },
+    //         //toppest parent
+    //         if(isSidebar || event.isInstant() || $.inArray(event, toppestParent)!==-1 ){
+    //           // console.log("event "+event.id+" already toppest") ;
+    //           continue;
+    //         }
+    //         toppestParent.push(event); 
+    //     }
+    //     return toppestParent;
+    // },
 
 
     getToppestParent : function (){
@@ -112,8 +112,7 @@ var EventCollection = {
         for (var i in Events){
             var event = Events[i];
             var breakWhile=false;
-            while(breakWhile===false){ 
-              // console.log(event);
+            while(breakWhile===false){  
               var parent = EventCollection.find(event.parent.id);  
               if(!parent || !parent.elem){ 
                 breakWhile = true;

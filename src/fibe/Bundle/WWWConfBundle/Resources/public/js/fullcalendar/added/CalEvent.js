@@ -1,21 +1,21 @@
 
-var CalEvent = function(event){ 
+var CalEvent = function(event){
 
     console.log("building CalEvent from" , event)
-    this["id"]     = event.id; 
-    this["title"]  = event.name || event.title; 
-    this["start"]  = event.start || event.start_at;
-    this["end"]    = event.end || event.end_at; 
-    this["allDay"] = event.is_allday==="true";
-    this["parent"] = event.parent;
-    this["children"] = event.children;
-    this["categories"] = event.categories;
+    this["id"]         = event.id; 
+    this["title"]      = event.name || event.title; 
+    this["start"]      = event.start || event.start_at;
+    this["end"]        = event.end || event.end_at; 
+    this["allDay"]     = event.is_allday==="true";
+    this["parent"]     = event.parent;
+    this["children"]   = event.children;
+    this["categories"] = event.categories || [];
 
-    if(event.categories && event.categories[0] && event.categories[0].color)
-      this["color"] = event.categories[0].color;
+    if( this && this.color)
+      this["color"] = this.color;
 
-    if(event.categories.length > 0 && event.categories[0].color)
-      this["background-color"] = event.categories[0].color;
+    if(this.length > 0 && this.color)
+      this["background-color"] = this.color;
      
     Events[this["id"]] = this; 
 
@@ -24,16 +24,41 @@ var CalEvent = function(event){
     // } 
 };
 
-CalEvent.prototype.render = function (dontDelete) {  
-    this.formatDate();
-
+CalEvent.prototype.render = function (){
+    renderedEvent = this;
+    renderedEvent.formatDate();
     // render the event on the calendar
-    // console.log("event.render("+this.id+")");
-    // console.log($calendar.fullCalendar('clientEvents', this.title));
+    if($calendar.fullCalendar('clientEvents',this.id).length <1){
+      // alert("new calEvent for "+ this.id)
+      
+      renderedEvent = new CalEvent(this);
+      $calendar.fullCalendar('renderEvent', renderedEvent);
+    }else{
+      $calendar.fullCalendar('removeEvents', renderedEvent.id);
+      // EventCollection.eventsToRender.push(this["id"]);
+      $calendar.fullCalendar('renderEvent', Events[renderedEvent.id]);
+    }
 
-    $calendar.fullCalendar('removeEvents', this.id); 
-    // EventCollection.eventsToRender.push(this["id"]); 
-    $calendar.fullCalendar('renderEvent', this); 
+    //sometimes, event isn't rendered ....
+    if($calendar.fullCalendar('clientEvents',this.id).length <1){
+      // alert("new calEvent for "+ this.id)
+      renderedEvent = new CalEvent(this);
+      $calendar.fullCalendar('renderEvent',renderedEvent);
+    }
+    // var e = this;
+    //       function doWork() { 
+    //         console.log(e);
+    //           alert("new calEvent for "+ e.id)
+    //           renderedEvent = new CalEvent(e);
+    //           $calendar.fullCalendar('renderEvent', renderedEvent ); 
+    //       };
+    //       setTimeout(doWork, 50);
+ 
+
+    console.log("event.render("+renderedEvent.id+")");
+    console.log($calendar.fullCalendar('clientEvents'));
+    console.log("client event :",$calendar.fullCalendar('clientEvents',renderedEvent.id));
+    return renderedEvent;
 };
 
 CalEvent.prototype.persist = function(){ 
@@ -50,7 +75,7 @@ CalEvent.prototype.persist = function(){
       op.quickUpdateUrl,
       toSend,
       function(doc) {   
-              bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well updated"); 
+        bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well updated"); 
       },
       'json'
     );
@@ -160,6 +185,7 @@ CalEvent.prototype.SetRecurDate = function(){
     this['end']  = lastMoment.format(); 
     if(!this.subChildren ||  children.length > 0) {
       for(var i in children){
+        children[i].elem.remove();
         setRecurChildDate(children[i]); 
       } 
     }else{
@@ -187,7 +213,7 @@ CalEvent.prototype.SetRecurDate = function(){
         lastMoment = lastMoment.add("minutes",30);
 
         child['end']  = moment(lastMoment).format();    
-        child.elem.remove();  
+        // child.elem.remove();  
 
         child.render();
         child.persist();
@@ -256,7 +282,7 @@ CalEvent.prototype.hasChild = function (){
  * @return {html string} (to be appended to bootstrap popover )
  */
 CalEvent.prototype.getPopoverContent = function(){
-    var categories = "no categories"
+    var categories = "no categories";
     if(this.categories && this.categories[0] && this.categories[0].name!==""){
         categories = "<ul>";
         for (var i=0;i<this.categories.length;i++){

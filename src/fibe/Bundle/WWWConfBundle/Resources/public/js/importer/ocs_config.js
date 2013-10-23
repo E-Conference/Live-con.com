@@ -37,6 +37,7 @@ var ocsConfig = {
                 setter : 'setBased_near',
             },
             'organization-id' : {
+                multiple : true,
                 setter : 'addOrganization',
                 format : function(node){ 
                     var key = $(node).text(); 

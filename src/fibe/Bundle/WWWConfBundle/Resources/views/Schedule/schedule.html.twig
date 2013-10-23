@@ -172,7 +172,7 @@
         quickDeleteUrl: DATA_FEED_URL + "?method=remove",
         data          : {}
     }; 
-    alert(op.getOrderedUrl)
+
     $(document).ready(function() {    
 
       //init $ vars
@@ -212,22 +212,7 @@
           var i = 0;
           //non-blocking loop
           function doWork() {
-
-            events[i]["title"]  = events[i].name; 
-            events[i]["start"]  = events[i].start_at;
-            events[i]["end"]    = events[i].end_at; 
-            events[i]["allDay"] = events[i].is_allday==="true";
-            if(events[i].categories && events[i].categories[0] && events[i].categories[0].color)
-              events[i]["color"] = events[i].categories[0].color;
-
-            delete events[i]["url"];
-            // console.log(events[i].categories);
-            if(events[i].categories.length > 0 && events[i].categories[0].color)
-              events[i]["background-color"] = events[i].categories[0].color;
-             
-
-            EventCollection.eventsToRender.push(events[i]["id"]);
-
+ 
             var event = new CalEvent(events[i]); 
 
             if(event.isInstant()){
@@ -240,12 +225,13 @@
           
             i++; 
 
+            //last iteration  
             if (!events[i]) {
-              //last iteration  
+
+              //populate sidebar
               sidebar.setInstantEvents(instant_events); 
 
-              fetched = true;
-              console.log(calendar_events);
+              fetched = true; 
               $calendar.fullCalendar('refetchEvents');
 
             }else if (stopRender!==true){ 
@@ -374,7 +360,7 @@
               },1);//bug... event isn't yet updated 
           }, 
           eventDrop : function(event){ //drop from calendar
-            EventCollection.eventsToRender.push(event["id"]);
+            // EventCollection.eventsToRender.push(event["id"]);
               event.persist(); 
           }, 
           eventAfterAllRender: function( view ) { 
@@ -391,23 +377,24 @@
           drop: function(date, allDay) { //drop from sidebar
           
               // retrieve the dropped element's stored Event Object 
-              var event = $.extend({},dragged[1]);
-              console.log("dropped from sidebar", event);
+              var event = Events[dragged[1].id]; 
+              // var event = $.extend({},dragged[1]); 
+              dragged[1].elem.remove();
               event.elem.remove();
-              delete event.elem;
+              // delete event.elem;
               event.allDay = allDay;
               event['start'] = date;
-              var e = new CalEvent(event); 
-              console.log("dropped from sidebar", e);
+              // event = new CalEvent(event); 
+              console.log("dropped from sidebar", event);
               // assign it the date that was reported
-               
+              
               // e['end'] = moment(date).add("hours",1).format();
 
-              e.SetRecurDate();
-              e.deleteParent();
+              event.SetRecurDate();
+              // event.deleteParent();
               
-              e.persist();
-              e.render();
+              event.persist();
+              event.render();
 
               // render the event on the calendar  
               // Events[event.id] = event;
@@ -467,20 +454,20 @@
       }); 
 
       /*-------------------------------------------------------------------------------------------------*/
-      /*------------------------------------- update function -------------------------------------------*/ 
+      /*------------------------------------- update function -------------------------------------------*/
       /*-------------------------------------------------------------------------------------------------*/
 
       /**
        * function triggered after all events have been rendered 
        */
       function updateEventArray(){ 
-          var calendarEvents = $calendar.fullCalendar('clientEvents'); //loop only on calendar events 
+          var calendarEvents = $calendar.fullCalendar('clientEvents'); //loop only on calendar events
 
           for (var i in calendarEvents){
             var calendarEvent = calendarEvents[i];
             if(Events[calendarEvent.id]){
               Events[calendarEvent.id] = calendarEvent;
-              // console.log(calendarEvent.id+"_###found in calendar",Events[calendarEvent.id]) ;
+              // console.log(calendarEvent.id+"_###found in calendar",Events[calendarEvent.id]);
             } 
           }
 
@@ -495,13 +482,13 @@
             Events[id]['elem'] = $(this);
           });
           console.log("###event array updated###");
-          console.log("changed events :",EventCollection.eventsToRender);
+          // console.log("changed events :",EventCollection.eventsToRender);
           // console.log(Events) 
 
           //if we render from history, dont store the state
           if(!History.isRenderingStateFromHistory()){
               History.storeState(Events);
-          } 
+          }
       }
 
 
@@ -582,7 +569,7 @@
   
 
                 if(!element.data("is-ui-initted")){
-                    console.log("initting : ",event.id);
+                    console.log("positionning : ",event.id);
                   
                     element.data("is-ui-initted",true); 
 
@@ -632,7 +619,7 @@
                                 event.updateParentDate();
                                 draggedEvent.persist(); 
                               });  
-                            },50)
+                            },1)
                             
                           }
                         }
@@ -653,7 +640,7 @@
                                     return "left";
                                   return "bottom";
                                 },
-                                title : "<b>"+event.title+"</b>",
+                                title : ' <b><span class="muted">#'+event.id+'</span> '+event.title+'</b>',
                                 content : event.getPopoverContent(),
                     }).hover(function(){
                               //enter
@@ -691,7 +678,7 @@
 
               }
           } 
-        EventCollection.eventsToRender=[];
+        // EventCollection.eventsToRender=[];
       }
 
       
@@ -719,9 +706,9 @@
         children = EventCollection.getChildren(event,{concat:true}); 
         draggedStart = moment(event['start']); 
 
-        $.each(children,function(i,child){ 
-          $(child.elem).fadeTo(200, 0.5);
-        });
+        // $.each(children,function(i,child){ 
+        //   $(child.elem).fadeTo(200, 0.5);
+        // });
         // console.log("lol ",children);
 
         //update helper
@@ -760,13 +747,12 @@
           //non-blocking loop
           function doWork() {
                   
-              // console.log("#draggin child : ",child );
-              var childEvent = child ;
+              // console.log("#draggin child : ",child ); 
                
-              childEvent['start']  = moment(childEvent['start']).subtract(diff);
-              childEvent['end']  = moment(childEvent['end']).subtract(diff);
-              childEvent.render();
-              childEvent.persist();
+              child['start']  = moment(child['start']).subtract(diff);
+              child['end']  = moment(child['end']).subtract(diff);
+              child.render();
+              child.persist();
           };
           setTimeout(doWork, 1);
    
@@ -782,8 +768,9 @@
             event.render();
 
           }else{
+            //still inside but may need a parent update (to properly contains child)
             event.updateParentDate();
-             event.render();
+            event.render();
           }
         } 
       } 
