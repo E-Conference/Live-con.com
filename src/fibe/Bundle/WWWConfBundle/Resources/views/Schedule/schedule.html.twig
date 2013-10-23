@@ -165,14 +165,14 @@
     //path
     var DATA_FEED_URL = "{{ path('schedule_view_event_get') }}";
     var op = {  
-        getOrderedUrl     : "{{ path('exporter_api', { 'entity_reference': 'schedule_event','_format': 'json' }) }}",
+        getOrderedUrl     : "{{ path('exporter_api', { 'entity_reference': 'schedule_event','_format': 'json' }) }}?conference_id={{currentConf.id}}",
         updateUrl     : "{{ path('schedule_view_event_edit') }}", //event modal form
         quickAddUrl   : DATA_FEED_URL + "?method=add", 
         quickUpdateUrl: DATA_FEED_URL + "?method=update",
         quickDeleteUrl: DATA_FEED_URL + "?method=remove",
         data          : {}
     }; 
-
+    alert(op.getOrderedUrl)
     $(document).ready(function() {    
 
       //init $ vars
@@ -322,7 +322,7 @@
               }); 
               bootstrapAlert("info","edit <b>"+(calEvent['title'] || calEvent['name'])+"</b> request sent","Info : ","<i class='icon-spinner icon-spin'></i>");  
           },
-          selectable: true, 
+          selectable: true,
           selectHelper: true,
           select: function(start, end, allDay) { //new event
               $modalNewEvent.modal("show")
@@ -330,9 +330,9 @@
                                 $(this).find("#name").focus();
                             });
 
-              $modalNewEvent.find("form").off("submit").submit(function(e){ 
-                var title = $(this).find("#name").val(); 
-                if (title) { 
+              $modalNewEvent.find("form").off("submit").submit(function(e){
+                var title = $(this).find("#name").val();
+                if (title) {
                     var tmp = {
                         title    : title,
                         parent   : {id:""},
