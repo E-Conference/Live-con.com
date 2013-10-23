@@ -73,7 +73,19 @@
     {% for xproperty in entity.xProperties %}
         {% if loop.first %} {% else %},{% endif %}{ "id": "{{ xproperty.id }}","xNamespace": "{{ xproperty.xNamespace }}","xKey": "{{ xproperty.xKey }}","xValue": "{{ xproperty.xValue }}" }
     {% endfor %}
+    ],
+
+     "papers":
+    [
+    {% for paper in entity.papers %}
+        {% if loop.first %}
+        { "id": "{{ paper.id }}","title": "{{ paper.title }}"}
+        {% else %}
+        ,{ "id": "{{ paper.id }}","title": "{{ paper.title }}"}
+        {% endif %}
+    {% endfor %}
     ]
     {% endspaceless %}
+ 
     
 }

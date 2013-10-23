@@ -2,7 +2,7 @@ idci_exporter:
     api_route: "/api/{entity_reference}.{_format}"
     entities:
         schedule_event:
-            class: "IDCI\\Bundle\\SimpleScheduleBundle\\Entity\\WwwConf"
+            class: "IDCI\\Bundle\\SimpleScheduleBundle\\Entity\\Event"
             formats:
                 jsonp:
                     transformer:
@@ -40,3 +40,5 @@ idci_exporter:
                         options:
 #                            template_path:
                             template_name_format: "export.json.twig"
+
+        
