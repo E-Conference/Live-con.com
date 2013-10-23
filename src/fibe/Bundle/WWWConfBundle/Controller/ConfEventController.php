@@ -51,7 +51,7 @@ class ConfEventController extends Controller
     public function createAction(Request $request)
     {
         $entity  = new ConfEvent();
-        $form = $this->createForm(new ConfEventType(), $entity);
+        $form = $this->createForm(new ConfEventType($this->getUser()), $entity);
         $form->bind($request);
 
         if ($form->isValid()) {
@@ -90,7 +90,7 @@ class ConfEventController extends Controller
     public function newAction()
     {
         $entity = new ConfEvent();
-        $form   = $this->createForm(new ConfEventType(), $entity);
+        $form   = $this->createForm(new ConfEventType($this->getUser()), $entity);
 
         return $this->render('fibeWWWConfBundle:ConfEvent:new.html.twig', array(
             'entity' => $entity,
@@ -136,7 +136,7 @@ class ConfEventController extends Controller
         }
 
         $role = new Role();
-        $roleForm = $this->createForm(new RoleType(), $role);
+        $roleForm = $this->createForm(new RoleType($this->getUser()), $role);
         $editForm = $this->createForm(new ConfEventType($this->getUser()), $entity);
 
         $papersForSelect = $this->getUser()->getCurrentConf()->getPapers()->toArray();
@@ -188,7 +188,7 @@ class ConfEventController extends Controller
             throw $this->createNotFoundException('Unable to find ConfEvent entity.');
         }
  
-        $form = $this->createForm(new ConfEventType(), $entity);
+        $form = $this->createForm(new ConfEventType($this->getUser()), $entity);
         $form->bind($request);
 
         if ($form->isValid()) {

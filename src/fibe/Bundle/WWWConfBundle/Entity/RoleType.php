@@ -29,7 +29,7 @@ class RoleType
      * name
      *
      *
-     * @ORM\Column(type="string", name="name")
+     * @ORM\Column(type="string", name="name", nullable=false)
      */
     protected $name;
 

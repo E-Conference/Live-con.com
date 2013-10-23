@@ -49,7 +49,7 @@ idci_exporter:
                         options:
 #                            template_path:
                             template_name_format: "export.json.twig"
-        schedule_event:
+        schedule_paper:
             class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Paper"
             formats:
                 jsonp:

@@ -4,7 +4,7 @@
 {{ parent() }}
 <div class="container">
     <div class="row center">
-     <h1>ConfEvent</h1>
+     <h1>Event</h1>
       <div class="row">
             <div class="col-lg-1"></div>
             <div class="col-lg-6">
@@ -15,22 +15,23 @@
                             <th>Id</th>
                             <td>{{ entity.id }}</td>
                         </tr>
-                        <tr>
-                            <th>Createdat</th>
-                            <td>{{ entity.createdAt|date('Y-m-d H:i:s') }}</td>
+                         <tr>
+                            <th>Summary</th>
+                            <td>{{ entity.summary }}</td>
                         </tr>
                         <tr>
                             <th>Startat</th>
                             <td>{{ entity.startAt|date('Y-m-d H:i:s') }}</td>
                         </tr>
                         <tr>
-                            <th>Lastmodifiedat</th>
-                            <td>{{ entity.lastModifiedAt|date('Y-m-d H:i:s') }}</td>
+                            <th>Endat</th>
+                            <td>{{ entity.endAt|date('Y-m-d H:i:s') }}</td>
                         </tr>
-                        <tr>
-                            <th>Summary</th>
-                            <td>{{ entity.summary }}</td>
+                         <tr>
+                            <th>Location</th>
+                            <td>{{ entity.location.name }}</td>
                         </tr>
+                       
                         <tr>
                             <th>Description</th>
                             <td>{{ entity.description }}</td>
@@ -44,6 +45,18 @@
                             <td>{{ entity.url }}</td>
                         </tr>
                         <tr>
+                            <th>Parent</th>
+                            <td>{{ entity.parent.summary }}</td>
+                        </tr>
+                         <tr>
+                            <th>Createdat</th>
+                            <td>{{ entity.createdAt|date('Y-m-d H:i:s') }}</td>
+                        </tr>
+                        <tr>
+                            <th>Lastmodifiedat</th>
+                            <td>{{ entity.lastModifiedAt|date('Y-m-d H:i:s') }}</td>
+                        </tr>
+                       <!-- <tr>
                             <th>Organizer</th>
                             <td>{{ entity.organizer }}</td>
                         </tr>
@@ -82,24 +95,21 @@
                         <tr>
                             <th>Istransparent</th>
                             <td>{{ entity.isTransparent }}</td>
-                        </tr>
-                        <tr>
-                            <th>Endat</th>
-                            <td>{{ entity.endAt|date('Y-m-d H:i:s') }}</td>
-                        </tr>
+                        </tr>-->
+                        
                     </tbody>
                 </table>
             </div>
         </div>
 
-         <div class="row">
+      <div class="row">
          <div class="col-lg-6"></div>
               <div class="col-lg-2 btn-group">
                   <a type="button" href="{{ path('schedule_event') }}" class="btn btn-warning">
                         <i class="icon-th-list"></i>
                   </a>
                    <a href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}" class="btn btn-success">
-                         <i class="icon-edit"></i>
+                         <i class="icon-pencil"></i>
                    </a>
                    <form action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
                       <input type="hidden" name="_method" value="DELETE" />
@@ -109,10 +119,12 @@
                     </button>
                   </form> 
               </div>    
-        </div>     </br>
+        </div>     
+        </br>
 
-    <h2>Event Relation</h2>
+   
       <div class="row">
+       <h2>Event Relations</h2>
            <div class="col-lg-1"></div>
            <div class="col-lg-8">
                 <h3>Themes</h3></br>

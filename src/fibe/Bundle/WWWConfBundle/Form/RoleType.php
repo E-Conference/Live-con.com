@@ -8,10 +8,21 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class RoleType extends AbstractType
 {
+     private $user;
+
+    public function __construct($user)
+    {
+        $this->user = $user;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('person')
+            ->add('person', 'entity', array(
+                'class' => 'fibeWWWConfBundle:Person',
+                'label'   => 'Person',
+                'choices'=> $this->user->getCurrentConf()->getPersons()->toArray()
+            ))
             ->add('type')
       
         ;

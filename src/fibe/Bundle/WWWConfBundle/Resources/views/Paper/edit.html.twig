@@ -5,39 +5,35 @@
 <div class="container">
     <div class="row center">
     <h1>Paper edit</h1>
+     <div class="row">
+         <div class="col-lg-5"></div>
+              <div class="col-lg-2 btn-group">
+                  <a type="button" href="{{ path('schedule_paper') }}" class="btn btn-warning">
+                        <i class="icon-th-list"></i>
+                  </a>
+                   <form action="{{ path('schedule_paper_delete', { 'id': entity.id }) }}" method="post">
+                      <input type="hidden" name="_method" value="DELETE" />
+                        {{ form_widget(delete_form) }}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="icon-remove"></i>
+                    </button>
+                  </form> 
+              </div>    
+        </div>     
 
     <form action="{{ path('schedule_paper_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
         <input type="hidden" name="_method" value="PUT" />
-         <div class="row-fluid">
-           <div class="col-lg-2"></div>
-           <div class="col-lg-4">
-                {{ form_widget(edit_form) }}
-                <div class="row-fluid">
-                        <div class="col-lg-9"></div>
-                        <div class="col-lg-1 btn-group">
-                            <button type="submit" class="btn btn-small btn-default">
-                                <i class="icon-ok"></i>
-                            </button>
-                        </div>
-                </div>    
-            </div> 
-        </div>
-    </form>
-  <div class="row">
-     <div class="col-lg-8"></div>
-          <div class="col-lg-2 btn-group">
-              <a type="button" href="{{ path('schedule_paper') }}" class="btn btn-warning">
-                    <i class="icon-th-list"></i>
-              </a>
-               <form action="{{ path('schedule_paper_delete', { 'id': entity.id }) }}" method="post">
-                  <input type="hidden" name="_method" value="DELETE" />
-                    {{ form_widget(delete_form) }}
-                <button type="submit" class="btn btn-danger">
-                    <i class="icon-remove"></i>
-                </button>
-              </form> 
-          </div>    
-    </div>  
+            <div class="row">
+               <div class="col-lg-2"></div>
+               <div class="col-lg-4">
+                 {{ form_widget(edit_form) }}
+                 {{ form_errors(edit_form) }}
+                 </br>
+                  <button type="submit" class="btn btn-block btn-success">
+                            <i class="icon-ok"></i>
+                  </button>
+            </div>
+        </form>
+    </div>
 </div>
-</div>   
 {% endblock %}

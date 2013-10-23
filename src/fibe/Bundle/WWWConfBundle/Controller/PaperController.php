@@ -43,7 +43,7 @@ class PaperController extends Controller
     public function createAction(Request $request)
     {
         $entity  = new Paper();
-        $form = $this->createForm(new PaperType(), $entity);
+        $form = $this->createForm(new PaperType($this->getUser()), $entity);
         $form->bind($request);
 
         if ($form->isValid()) {
@@ -70,7 +70,7 @@ class PaperController extends Controller
     public function newAction()
     {
         $entity = new Paper();
-        $form   = $this->createForm(new PaperType(), $entity);
+        $form   = $this->createForm(new PaperType($this->getUser()), $entity);
 
         return $this->render('fibeWWWConfBundle:Paper:new.html.twig', array(
             'entity' => $entity,
@@ -115,7 +115,7 @@ class PaperController extends Controller
             throw $this->createNotFoundException('Unable to find Paper entity.');
         }
 
-        $editForm = $this->createForm(new PaperType(), $entity);
+        $editForm = $this->createForm(new PaperType($this->getUser()), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('fibeWWWConfBundle:Paper:edit.html.twig', array(
@@ -140,7 +140,7 @@ class PaperController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new PaperType(), $entity);
+        $editForm = $this->createForm(new PaperType($this->getUser()), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {

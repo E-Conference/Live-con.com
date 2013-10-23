@@ -4,59 +4,75 @@
 
 {{ parent() }}
 
+
 <div class="container">
     <div class="row center">
     <div class="page-header">
       <h1>Location</h1>
     </div>
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-6">
+            <h2> {{ entity.name }}</h2>
+        <table class="table table-hover">
+            <tbody>
+                <tr>
+                    <th>Id</th>
+                    <td>{{ entity.id }}</td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <td>{{ entity.name }}</td>
+                </tr>
 
-    <table class="table table-hover record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ entity.name }}</td>
-            </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ entity.description }}</td>
+                </tr>
 
-            <tr>
-                <th>Description</th>
-                <td>{{ entity.description }}</td>
-            </tr>
+                 <tr>
+                    <th>Capacity</th>
+                    <td>{{ entity.capacity }}</td>
+                </tr>
 
-             <tr>
-                <th>Capacity</th>
-                <td>{{ entity.capacity }}</td>
-            </tr>
-
-            <tr>
-                <th>Equipments</th>
-                <td> {% for equipment in entity.getEquipments() %}
-                        <i class="icon-{{ equipment.icon }}"></i>
-                    {% endfor %}
-                <td>
-            </tr>
-            <tr>
-                <th>Latitude</th>
-                <td>{{ entity.latitude }}</td>
-            </tr>
-            <tr>
-                <th>Longitude</th>
-                <td>{{ entity.longitude }}</td>
-            </tr>
-           
-        </tbody>
-    </table>
-
-            <a class="btn btn-success" href="{{ path('schedule_location') }}">
-               <i class="icon-list"></i>
-            </a>
-       
-            <a class="btn btn-warning" href="{{ path('schedule_location_edit', { 'id': entity.id }) }}">
-               <i class="icon-edit"></i>
-            </a>
+                <tr>
+                    <th>Equipments</th>
+                    <td> {% for equipment in entity.getEquipments() %}
+                            <i class="icon-{{ equipment.icon }}"></i>
+                        {% endfor %}
+                    <td>
+                </tr>
+                <tr>
+                    <th>Latitude</th>
+                    <td>{{ entity.latitude }}</td>
+                </tr>
+                <tr>
+                    <th>Longitude</th>
+                    <td>{{ entity.longitude }}</td>
+                </tr>
+               
+            </tbody>
+        </table>
     </div>
-</div>
+  </div>
+
+   <div class="row">
+         <div class="col-lg-6"></div>
+              <div class="col-lg-2 btn-group">
+                  <a type="button" href="{{ path('schedule_location') }}" class="btn btn-warning">
+                        <i class="icon-th-list"></i>
+                  </a>
+                   <a href="{{ path('schedule_location_edit', { 'id': entity.id }) }}" class="btn btn-success">
+                         <i class="icon-pencil"></i>
+                   </a>
+                   <form action="{{ path('schedule_location_delete', { 'id': entity.id }) }}" method="post">
+                      <input type="hidden" name="_method" value="DELETE" />
+                        {{ form_widget(delete_form) }}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="icon-remove"></i>
+                    </button>
+                  </form> 
+              </div>    
+        </div>
+</div>     
     {% endblock body %}

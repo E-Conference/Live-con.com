@@ -76,9 +76,11 @@ class LocationController extends Controller
             throw $this->createNotFoundException('Unable to find Location entity.');
         }
  
+        $deleteForm = $this->createDeleteForm($id);
 
         return array(
             'entity'      => $entity, 
+            'delete_form' => $deleteForm->createView(), 
         );
     }
 
@@ -301,7 +303,7 @@ class LocationController extends Controller
     
     /**
      * Display Location deleteForm.
-     *
+     * 
      * @Template()
      */
     public function deleteFormAction($id)

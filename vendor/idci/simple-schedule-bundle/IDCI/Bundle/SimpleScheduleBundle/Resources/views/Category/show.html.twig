@@ -9,8 +9,11 @@
         <div class="page-header">
           <h1>Category</h1>
         </div>
-
-        <table class="table table-hover record_properties">
+    <div class="row">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-6">
+        <h2> {{ entity.name }}</h2>
+        <table class="table table-hover">
             <tbody>
                 <tr>
                     <th>Id</th>
@@ -45,9 +48,16 @@
                 </tr> #}
             </tbody>
         </table>
-                <a class="btn btn-warning" href="{{ path('schedule_category') }}">
-                     <i class="icon-list"></i>
-                </a>
+    </div>
+  </div>
+    <div class="row">
+         <div class="col-lg-6"></div>
+              <div class="col-lg-2 btn-group">
+                  <a type="button" href="{{ path('schedule_category') }}" class="btn btn-warning">
+                        <i class="icon-th-list"></i>
+                  </a>
+              </div>    
+        </div>
     </div>
 </div> 
 {% endblock body %}

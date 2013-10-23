@@ -87,10 +87,7 @@ class ConfEvent extends Event
 
       }
      
-    public function setIsAllDay($isallday)
-    {
-        $this->isAllDay = $isallday;
-    }
+    
      
     /**
      * Constructor

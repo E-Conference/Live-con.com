@@ -8,6 +8,13 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class PaperType extends AbstractType
 {
+    private $user;
+
+    public function __construct($user)
+    {
+        $this->user = $user;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -15,10 +22,12 @@ class PaperType extends AbstractType
             ->add('abstract')
             ->add('publishDate')
             ->add('url')
-            ->add('subject', 'choice', array(
+            ->add('subject', 'entity', array(
+                'class' => 'fibeWWWConfBundle:Keyword',
                 'label'   => 'Subjects',
-                'choices' => $this->user->getCurrentConf()->getKeywords()->toArray()
-            ));   
+                'choices'=> $this->user->getCurrentConf()->getKeywords()->toArray(),
+                'multiple'  => true
+            ))    
         ;
     }
 

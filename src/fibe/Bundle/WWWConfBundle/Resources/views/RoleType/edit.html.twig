@@ -6,23 +6,35 @@
     <div class="row center">
     <h1>RoleType edit</h1>
 
+     <div class="row">
+         <div class="col-lg-5"></div>
+              <div class="col-lg-2 btn-group">
+                  <a type="button" href="{{ path('schedule_roletype') }}" class="btn btn-warning">
+                        <i class="icon-th-list"></i>
+                  </a>
+                   <form action="{{ path('schedule_roletype_delete', { 'id': entity.id }) }}" method="post">
+                      <input type="hidden" name="_method" value="DELETE" />
+                        {{ form_widget(delete_form) }}
+                    <button type="submit" class="btn btn-danger">
+                        <i class="icon-remove"></i>
+                    </button>
+                  </form> 
+              </div>    
+        </div>     
+
     <form action="{{ path('schedule_roletype_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
         <input type="hidden" name="_method" value="PUT" />
+        <div class="row">
+               <div class="col-lg-2"></div>
+               <div class="col-lg-4">
         {{ form_widget(edit_form) }}
-        <p>
-            <button class="btn btn-primary" type="submit"> <i class="icon-edit"></i> Save</button>
-        </p>
-    </form>
-    <a class="btn btn-warning" href="{{ path('schedule_roletype') }}">
-        <i class="icon-th-list"></i> List
-    </a>
-    <form action="{{ path('schedule_roletype_delete', { 'id': entity.id }) }}" method="post">
-        <input type="hidden" name="_method" value="DELETE" />
-        {{ form_widget(delete_form) }}
-        <button class="btn btn-danger" type="submit">
-            <i class="icon-trash"></i> Delete
-        </button>
-    </form> 
+         </br>
+                  <button type="submit" class="btn btn-block btn-success">
+                            <i class="icon-ok"></i>
+                  </button>
+            </div>
+        </form>
+    
     </div>
 </div>
 {% endblock %}
