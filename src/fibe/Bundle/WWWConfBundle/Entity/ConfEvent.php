@@ -76,6 +76,7 @@ class ConfEvent extends Event
      * computeIsAllDay
      *
      * @ORM\PrePersist() 
+     * @ORM\PreUpdate() 
      */
       public function computeIsAllDay()
       {
