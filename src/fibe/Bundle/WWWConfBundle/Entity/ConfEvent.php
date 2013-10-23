@@ -71,22 +71,7 @@ class ConfEvent extends Event
      * @ORM\Column(name="is_allday", type="boolean")
      */
      private $isAllDay ;
-     
-     /**
-     * computeIsAllDay
-     *
-     * @ORM\PrePersist() 
-     * @ORM\PreUpdate() 
-     */
-      public function computeIsAllDay()
-      {
-          
-     
-        $start = $this->getStartAt();
-        $end = $this->getEndAt(); 
-        $this->setIsAllDay($start->format('d')!=$end->format('d')); 
-
-      } 
+      
      
     /**
      * Constructor
