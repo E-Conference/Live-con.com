@@ -27,7 +27,6 @@ class PaperController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $conf = $this->getUser()->getCurrentConf();
-        //$entities = $em->getRepository('fibeWWWConfBundle:Paper')->findAll();
         $entities = $conf->getPapers();
 
 
@@ -53,7 +52,7 @@ class PaperController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('schedule_paper_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('schedule_paper', array('id' => $entity->getId())));
         }
 
         return $this->render('fibeWWWConfBundle:Paper:new.html.twig', array(
@@ -148,7 +147,7 @@ class PaperController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('schedule_paper_show', array('id' => $id)));
+            return $this->redirect($this->generateUrl('schedule_paper', array('id' => $id)));
         }
 
         return $this->render('fibeWWWConfBundle:Paper:edit.html.twig', array(

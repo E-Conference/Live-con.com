@@ -6,10 +6,19 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use IDCI\Bundle\SimpleScheduleBundle\Form\EventType;
+use IDCI\Bundle\SimpleScheduleBundle\Entity\Location;
  
 
 class ConfEventType extends EventType
 {
+   private $user;
+
+    public function __construct($user)
+    {
+        $this->user = $user;
+    }
+
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
@@ -27,7 +36,17 @@ class ConfEventType extends EventType
                 'widget' =>'single_text',
                 'format' =>'dd/MM/yyyy HH:mm', 
              
-            ))                          
+            ))    
+
+            ->add('location', 'choice', array(
+                'label'   => 'Location',
+                'choices' => $this->user->getCurrentConf()->getLocations()->toArray()
+            ))
+
+            ->add('parent', 'choice', array(
+                'label'   => 'Parent',
+                'choices' => $this->user->getCurrentConf()->getEvents()->toArray()
+            ))                     
             
  
         ;

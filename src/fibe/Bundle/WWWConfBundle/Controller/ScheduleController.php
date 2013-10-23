@@ -59,8 +59,10 @@ class ScheduleController extends Controller
         $em = $this->getDoctrine();
         $conf =$this->getUser()->getCurrentConf();
         $categories = $em->getRepository('IDCISimpleScheduleBundle:Category')->getOrdered();
-        $locations = $em->getRepository('IDCISimpleScheduleBundle:Location')->findAll();
-        $themes = $em->getRepository('fibeWWWConfBundle:Theme')->findAll();
+        //$locations = $em->getRepository('IDCISimpleScheduleBundle:Location')->findAll();
+        $locations = $this->getUser()->getCurrentConf()->getLocations();
+        //$themes = $em->getRepository('fibeWWWConfBundle:Theme')->findAll();
+        $themes = $this->getUser()->getCurrentConf()->getThemes();
 
         return array(
                 'currentConf' => $conf,
@@ -89,9 +91,7 @@ class ScheduleController extends Controller
         $JSONArray = array();
         if( $methodParam=="add" )
         {
-            $conf = $this->getDoctrine()
-                         ->getRepository('fibeWWWConfBundle:WwwConf')
-                         ->find(1); 
+                $conf =$this->getUser()->getCurrentConf();
                 
                 $event= new Event(); 
                 $event->setEndAt(new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()))); 
@@ -152,8 +152,7 @@ class ScheduleController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id);
           
-        $conf = $em->getRepository('fibeWWWConfBundle:WwwConf')
-                    ->find(1); 
+        $conf = $this->getUser()->getCurrentConf();
          
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ConfEvent entity.');
@@ -161,7 +160,7 @@ class ScheduleController extends Controller
 
         $role = new Role();
         $roleForm = $this->createForm(new RoleType(), $role);
-        $editForm = $this->createForm(new ConfEventType(), $entity);
+        $editForm = $this->createForm(new ConfEventType($this->getUser()), $entity);
        
          $form_paper = $this->createFormBuilder($entity)
 

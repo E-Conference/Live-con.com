@@ -1,0 +1,29 @@
+{
+     "id": "{{ paper.id }}",
+     "title": "{{ paper.title }}",
+     "abstract": "{{ paper.abstract }}",
+     "publishDate": "{{ paper.publishDate }}" , 
+     "url": "{{ paper.url }}" ,       
+     "publisher": "{{ paper.publisher }}" , 
+     "subject":
+            [
+            {% for keyword in entity.subject %}
+                {% if loop.first %}
+                { "id": "{{ keyword.id }}", "name": "{{ keyword.name }}"}
+                {% else %}
+                ,{ "id": "{{ keyword.id }}", "name": "{{ keyword.name }}"}
+                {% endif %}
+            {% endfor %}
+            ],
+     "authors":
+            [
+            {% for author in entity.authors %}
+                {% if loop.first %}
+                { "id": "{{ author.id }}", "name": "{{ author.name }}"}
+                {% else %}
+                ,{ "id": "{{ author.id }}", "name": "{{ author.name }}"}
+                {% endif %}
+            {% endfor %}
+            ],
+         
+}

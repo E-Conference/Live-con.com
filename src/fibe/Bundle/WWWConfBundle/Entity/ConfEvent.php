@@ -32,7 +32,7 @@ class ConfEvent extends Event
      * conference
      *
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="events", cascade={"persist"})
-     * @ORM\JoinColumn(name="conference_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
      */
     private $conference;
 
@@ -70,7 +70,6 @@ class ConfEvent extends Event
      *   
      * @ORM\Column(name="is_allday", type="boolean")
      */
-     
      private $isAllDay ;
      
      /**
@@ -88,11 +87,11 @@ class ConfEvent extends Event
 
       }
      
-
-   
-    
-   
-   
+    public function setIsAllDay($isallday)
+    {
+        $this->isAllDay = $isallday;
+    }
+     
     /**
      * Constructor
      */

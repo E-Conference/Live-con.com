@@ -92,6 +92,11 @@ class Location
         return $this->getName();
     }
 
+    static public function getLocationsForSelect()
+    {
+       return $this->getUser()->getCurrentConf()->getLocations();
+    }
+
     /**
      * getGeo
      *
