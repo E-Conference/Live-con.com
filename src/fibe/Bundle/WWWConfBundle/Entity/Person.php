@@ -30,8 +30,7 @@ class Person
      * name
      * A name for some thing. Name of the person 
      * / ! \  auto built with the concatenation of first and last name
-     * @ORM\Column(type="string", name="name")
-     * @Assert\NotBlank(message ="Please give a name")
+     * @ORM\Column(type="string", name="name") 
      */
     protected $name;
 
@@ -155,7 +154,7 @@ class Person
 
      public function __toString() 
     {
-        return $this->name." ".$this->familyName;
+        return $this->name;
 
     }
 
@@ -168,7 +167,7 @@ class Person
      */
     public function computeName()
     {
-        $this->setName($this->name." ".$this->familyName);
+        $this->setName($this->firstName." ".$this->familyName);
     }
     
     /**
@@ -183,7 +182,7 @@ class Person
 
     /**
      * Set name
-     *
+     *  / \
      * / ! \  auto built with the concatenation of first and last name
      *
      * @param string $name
