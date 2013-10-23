@@ -127,6 +127,7 @@ class ScheduleController extends Controller
             $event->setParent( $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['parent']['id']) );
             $event->setSummary( $postData['title'] );
             $event->setIsAllDay($postData['allDay']=="true") ;
+            
             $em->persist($event);
             $em->flush();
             $JSONArray['IsSuccess'] = true;
