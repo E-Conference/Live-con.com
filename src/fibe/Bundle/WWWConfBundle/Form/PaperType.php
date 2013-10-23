@@ -28,7 +28,14 @@ class PaperType extends AbstractType
                 'choices'=> $this->user->getCurrentConf()->getKeywords()->toArray(),
                 'multiple'  => true,
                 'required' => false
-            ))    
+            ))
+            ->add('authors', 'entity', array(
+                'class' => 'fibeWWWConfBundle:Person',
+                'label'   => 'Authors',
+                'choices'=> $this->user->getCurrentConf()->getPersons()->toArray(),
+                'multiple'  => true,
+                'required' => false
+            ))     
         ;
     }
 

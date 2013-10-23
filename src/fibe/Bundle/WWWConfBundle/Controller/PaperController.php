@@ -13,13 +13,13 @@ use fibe\Bundle\WWWConfBundle\Form\PaperType;
 
 /**
  * Paper controller.
- *
+ * @Route("/paper")
  */
 class PaperController extends Controller
 {
     /**
      * Lists all Paper entities.
-     * @Route("/paper", name="schedule_paper")
+     * @Route("/", name="schedule_paper")
      * @Template()
      */
     public function indexAction()

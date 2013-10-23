@@ -13,14 +13,14 @@ use fibe\Bundle\WWWConfBundle\Form\OrganizationType;
 /**
  * Organization controller.
  *
- * 
+ * @Route("/organization")
  */
 class OrganizationController extends Controller
 {
     /**
      * Lists all Organization entities.
      *
-     * @Route("/organization", name="schedule_organization_index")
+     * @Route("/", name="schedule_organization_index")
      * @Method("GET")
      * @Template()
      */
