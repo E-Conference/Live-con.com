@@ -28,13 +28,13 @@ var ocsConfig = {
                 setter : 'setFirstName',
             },
             'lastname' : {
-                setter : 'setLastName'
+                setter : 'setFamilyName'
             },
             'email' : {
                 setter : 'setEmail'
             },
             'country' : {
-                setter : 'setCountry',
+                setter : 'setBased_near',
             },
             'organization-id' : {
                 setter : 'addOrganization',
@@ -119,7 +119,7 @@ var ocsConfig = {
             'keywords' : {
                 wrapped : true,
                 multiple : true,
-                setter : 'addKeyword',
+                setter : 'addSubject',
                 format : function(node){ 
                     var keywordName = $(node).text();
                     var index = getKeywordIdFromName(keywordName);
@@ -154,10 +154,10 @@ var ocsConfig = {
         wrapped : true,
         label : {
             'name' : {
-                setter : 'setname',
+                setter : 'setName',
             },
             'country' : {
-                setter : 'setCountry',
+                setter : 'setBased_near',
             },
         }
 
