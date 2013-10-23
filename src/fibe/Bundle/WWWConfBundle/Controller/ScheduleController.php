@@ -73,7 +73,7 @@ class ScheduleController extends Controller
   
  
 /**
- *   return all events contained in the given date week
+ *   add & update
  * @Route("/getEvents", name="schedule_view_event_get")
  */
     public function getEventsAction(Request $request)
