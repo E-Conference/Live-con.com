@@ -65,6 +65,7 @@ abstract class CalendarEntityType extends AbstractType
             ->add('comment')
             ->add('organizer')
             ->add('contacts')
+            
         ;
     }
 

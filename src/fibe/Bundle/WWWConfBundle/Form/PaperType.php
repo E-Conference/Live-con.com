@@ -15,7 +15,10 @@ class PaperType extends AbstractType
             ->add('abstract')
             ->add('publishDate')
             ->add('url')
-            ->add('subject')
+            ->add('subject', 'choice', array(
+                'label'   => 'Subjects',
+                'choices' => $this->user->getCurrentConf()->getKeywords()->toArray()
+            ));   
         ;
     }
 

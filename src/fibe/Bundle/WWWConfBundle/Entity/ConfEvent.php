@@ -32,7 +32,7 @@ class ConfEvent extends Event
      * conference
      *
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="events", cascade={"persist"})
-     * @ORM\JoinColumn(name="conference_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="wwwConf_id", referencedColumnName="id")
      */
     private $conference;
 
@@ -69,29 +69,31 @@ class ConfEvent extends Event
      *   
      * @ORM\Column(name="is_allday", type="boolean")
      * 
-     *
-     *private $isAllDay ;
-     *
-     *
-     * computeIsAllDay
-     *
-     * @ORM\PrePersist() 
-     * 
-     * public function computeIsAllDay()
-     * {
-     *     
-     *
-     *        $start = $this->getStartAt();
-     *       $end = $this->getEndAt(); 
-     *      $this->setIsAllDay($start->format('d')!=$end->format('d')); 
-     *
-     *   }
+     */
+     private $isAllDay ;
+     
+     /**
+      * computeIsAllDay
+      *
+      * @ORM\PrePersist() 
+      * 
+      *
      **/
 
-   
-    
-   
-   
+      public function computeIsAllDay()
+     {    
+     
+           $start = $this->getStartAt();
+           $end = $this->getEndAt(); 
+           $this->setIsAllDay($start->format('d')!=$end->format('d')); 
+     
+    }
+
+    public function setIsAllDay($isallday)
+    {
+        $this->isAllDay = $isallday;
+    }
+     
     /**
      * Constructor
      */

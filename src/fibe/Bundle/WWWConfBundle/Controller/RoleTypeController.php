@@ -53,7 +53,7 @@ class RoleTypeController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('schedule_roletype_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('schedule_roletype'));
         }
 
         return array(
@@ -157,7 +157,7 @@ class RoleTypeController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('schedule_roletype_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('schedule_roletype'));
         }
 
         return array(

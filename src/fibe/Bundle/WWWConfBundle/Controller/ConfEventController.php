@@ -37,7 +37,7 @@ class ConfEventController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $this->getUser()->getCurrentConf()->getConfEvents();
+        $entities = $this->getUser()->getCurrentConf()->getEvents();
 
         return $this->render('fibeWWWConfBundle:ConfEvent:index.html.twig', array(
             'entities' => $entities,
@@ -63,15 +63,15 @@ class ConfEventController extends Controller
             $em->persist($entity); 
             $em->flush();
 
-            $xprop= new XProperty(); 
+       /*   $xprop= new XProperty(); 
             $xprop->setXNamespace("event_uri"); 
             $xprop->setXKey(rand(0,999999));
             $xprop->setXValue("http://dataconf-event/" . $entity->getId());  
-            $xprop->setCalendarEntity($entity);
+            $xprop->setCalendarEntity($entity); 
             
             $em->persist($xprop); 
 
-            $em->flush();
+            $em->flush(); */
 
             return $this->redirect($this->generateUrl('schedule_confevent_show', array('id' => $entity->getId())));
         }
@@ -85,6 +85,7 @@ class ConfEventController extends Controller
     /**
      * Displays a form to create a new ConfEvent entity.
      * @Route("/new",name="schedule_confevent_new") 
+     * @Template()
      */
     public function newAction()
     {
@@ -136,23 +137,27 @@ class ConfEventController extends Controller
 
         $role = new Role();
         $roleForm = $this->createForm(new RoleType(), $role);
-        $editForm = $this->createForm(new ConfEventType(), $entity);
+        $editForm = $this->createForm(new ConfEventType($this->getUser()), $entity);
 
+        $papersForSelect = $this->getUser()->getCurrentConf()->getPapers()->toArray();
         $form_paper = $this->createFormBuilder($entity)
             ->add('papers', 'entity', array(
                       'class'    => 'fibeWWWConfBundle:Paper',
                       'property' => 'title',
                       'required' => false,
                       'multiple' => false,
+                      'choices'=> $papersForSelect,
                       'label'    => "Select paper"))
             ->getForm();
 
+         $themesForSelect = $this->getUser()->getCurrentConf()->getThemes()->toArray();
          $form_theme = $this->createFormBuilder($entity)
             ->add('themes', 'entity', array(
                   'class'    => 'fibeWWWConfBundle:Theme',
                   'required' => false,
                   'property' => 'name',
                   'multiple' => false,
+                  'choices'=> $themesForSelect,
                   'label'    => "Select theme" ))
             ->getForm();
 
