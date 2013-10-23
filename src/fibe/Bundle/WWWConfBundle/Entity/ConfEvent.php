@@ -65,30 +65,28 @@ class ConfEvent extends Event
 
     /**
      *  
-     * Is an all day event ?
+     * Is an all day event 
+     * Used for ui representation in the calendar view
      *   
      * @ORM\Column(name="is_allday", type="boolean")
-     * 
      */
      private $isAllDay ;
      
      /**
-      * computeIsAllDay
-      *
-      * @ORM\PrePersist() 
-      * 
-      *
-     **/
-
+     * computeIsAllDay
+     *
+     * @ORM\PrePersist() 
+     */
       public function computeIsAllDay()
-     {    
+      {
+          
      
-           $start = $this->getStartAt();
-           $end = $this->getEndAt(); 
-           $this->setIsAllDay($start->format('d')!=$end->format('d')); 
-     
-    }
+        $start = $this->getStartAt();
+        $end = $this->getEndAt(); 
+        $this->setIsAllDay($start->format('d')!=$end->format('d')); 
 
+      }
+     
     public function setIsAllDay($isallday)
     {
         $this->isAllDay = $isallday;
@@ -274,6 +272,30 @@ class ConfEvent extends Event
     public function getRoles()
     {
         return $this->roles;
+    }
+
+    
+    /**
+     * Set isAllDay
+     *
+     * @param string $isAllDay
+     * @return ConfEvent
+     */
+    public function setIsAllDay($isAllDay)
+    {
+        $this->isAllDay = $isAllDay;
+    
+        return $this;
+    }
+
+    /**
+     * Get isAllDay
+     *
+     * @return string 
+     */
+    public function getIsAllDay()
+    {
+        return $this->isAllDay;
     }
 
     

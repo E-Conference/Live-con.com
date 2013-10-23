@@ -16,7 +16,7 @@ var rdfConfig = {
                 setter : 'setFirstName',
             },
             'foaf:lastName' : {
-                setter : 'setLastName'
+                setter : 'setFamilyName'
             },
             'foaf:name' : {
                 setter : 'setName'

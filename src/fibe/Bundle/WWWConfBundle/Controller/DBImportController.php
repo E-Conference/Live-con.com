@@ -110,7 +110,7 @@ class DBImportController extends Controller
                 $current = $organizations[$i];  
                 $existsTest = $this->getDoctrine()
                                    ->getRepository('fibeWWWConfBundle:Organization')
-                                   ->findOneBy(array('name' => $current['setname']));
+                                   ->findOneBy(array('name' => $current['setName']));
                 if($existsTest!=null){
                   array_push($organizationEntities,$existsTest);
                   continue; //skip existing category
@@ -163,7 +163,7 @@ class DBImportController extends Controller
                 }
                 $entity= new Paper();
                 foreach ($current as $setter => $value) { 
-                    if($setter=="addKeyword"){
+                    if($setter=="addSubject"){
                         //addKeyword is an array of index
                         
                         $j=0;
@@ -209,7 +209,7 @@ class DBImportController extends Controller
                 $current = $themes[$i];  
                 $existsTest = $this->getDoctrine()
                                    ->getRepository('fibeWWWConfBundle:Theme')
-                                   ->findOneBy(array('name' => $current['setname']));
+                                   ->findOneBy(array('name' => $current['setName']));
                 if($existsTest!=null){
                   array_push($themeEntities,$existsTest); 
                   continue; //skip existing category

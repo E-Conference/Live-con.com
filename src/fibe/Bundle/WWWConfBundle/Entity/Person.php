@@ -35,10 +35,16 @@ class Person
     protected $name;
 
     /**
-     * familyName
+     * firstName
+     * 
+     * @ORM\Column(type="string", name="first_name")
+     */
+    protected $firstName;
+
+    /**
+     * familyName 
      *
-     *
-     * @ORM\Column(type="string", nullable=true,  name="familyName")
+     * @ORM\Column(type="string", nullable=true,  name="family_name")
      */
     protected $familyName;
 
@@ -136,6 +142,15 @@ class Person
      */
      protected $page;
 
+    /**
+     * based_near
+     * person's based_near (location)
+     * used with ocs to store country
+     *
+     * @ORM\Column(type="string", length=255, nullable=true, name="based_near")
+     */
+     protected $based_near;
+
    
     /**
      *  
@@ -160,6 +175,18 @@ class Person
         return $this->name." ".$this->familyName;
 
     }
+
+
+    /**
+     * onCreation
+     *
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function computeName()
+    {
+        $this->setName($this->firstName." ".$this->familyName);
+    }
     
     /**
      * Get id
@@ -174,10 +201,12 @@ class Person
     /**
      * Set name
      *
+     * / ! \  auto built with the concatenation of first and last name
+     *
      * @param string $name
      * @return Person
      */
-    public function setName($name)
+    private function setName($name)
     {
         $this->name = $name;
     
@@ -215,6 +244,29 @@ class Person
     public function getFamilyName()
     {
         return $this->familyName;
+    }
+
+    /**
+     * Set firstName
+     *
+     * @param string $firstName
+     * @return Person
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+    
+        return $this;
+    }
+
+    /**
+     * Get firstName
+     *
+     * @return string 
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
     }
 
     /**
@@ -376,6 +428,29 @@ class Person
     public function getPage()
     {
         return $this->page;
+    }
+
+    /**
+     * Set based_near
+     *
+     * @param string $based_near
+     * @return Person
+     */
+    public function setBased_near($based_near)
+    {
+        $this->based_near = $based_near;
+    
+        return $this;
+    }
+
+    /**
+     * Get based_near
+     *
+     * @return string 
+     */
+    public function getBased_near()
+    {
+        return $this->based_near;
     }
 
     /**

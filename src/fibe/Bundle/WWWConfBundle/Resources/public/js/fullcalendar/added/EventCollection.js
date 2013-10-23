@@ -111,7 +111,6 @@ var EventCollection = {
           // get toppest parent 
         for (var i in Events){
             var event = Events[i];
-            var isSidebar =false;
             var breakWhile=false;
             while(breakWhile===false){ 
               // console.log(event);
@@ -121,13 +120,16 @@ var EventCollection = {
               }else {
                 event = parent;
               }
-              isSidebar = $(event.elem).hasClass("external-event");
 
             }
 
             //toppest parent
-            if(isSidebar || event.isInstant() || $.inArray(event, toppestParent)!==-1 ){
-              // console.log("event "+event.id+" already toppest") ;
+            if( $.inArray(event, toppestParent)!==-1 ){
+              console.log("event "+event.id+" already toppest") ;
+              continue;
+            }
+            if( event.isInstant() ){
+              console.log("event "+event.id+" instant") ;
               continue;
             }
             toppestParent.push(event); 
