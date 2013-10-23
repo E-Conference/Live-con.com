@@ -31,7 +31,7 @@ class ConferenceController extends Controller
     {
       $em = $this->getDoctrine()->getManager();       
       $wwwConf = $this->getUser()->getCurrentConf();
-      $form = $this->createForm(new WwwConfType(), $wwwConf);
+      $form = $this->createForm(new WwwConfType($this->getUser()), $wwwConf);
       
       $request = $this->get('request');
       if ($request->getMethod() == 'POST') {

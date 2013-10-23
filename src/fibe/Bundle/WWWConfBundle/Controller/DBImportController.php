@@ -237,7 +237,8 @@ class DBImportController extends Controller
         
         //////////////////////  categories  ////////////////////// 
         if(isset($JSONFile['categories'])){
-            $entities = $JSONFile['categories']; 
+            $entities = $JSONFile['categories'];
+            $j=0;
             for($i=0;$i<count($entities);$i++){
                 $current = $entities[$i]; 
                 $existsTest = $this->getDoctrine()
@@ -253,7 +254,7 @@ class DBImportController extends Controller
                     call_user_func_array(array($entity, $setter), array($value)); 
                 }
                 $entity->setConference(  $wwwConf );
-                $entity->setColor($colorArray[$i]);
+                $entity->setColor($colorArray[$j++]); //colorless categories
                 $em->persist($entity);
                 array_push($categoryEntities,$entity); 
             }  
