@@ -253,7 +253,7 @@ class DBImportController extends Controller
                     //if($setter!="setStartAt" && $setter!="setEndAt")echo "Event->".$setter."(".$value.");\n"; 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 }
-                $entity->setConference(  $wwwConf );
+                // $entity->setConference(  $wwwConf );
                 $entity->setColor($colorArray[$j++]); //colorless categories
                 $em->persist($entity);
                 array_push($categoryEntities,$entity); 
