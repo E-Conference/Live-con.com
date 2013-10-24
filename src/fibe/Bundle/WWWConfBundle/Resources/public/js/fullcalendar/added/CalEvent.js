@@ -15,8 +15,8 @@ var CalEvent = function(event){
     this["children"]   = event.children;
     this["categories"] = event.categories || [];
 
-    if( event.categories && event.categories.length > 0 && event.categories[0].color > 0)
-      this["color"] = event.color;
+    if( event.categories && event.categories.length > 0 && event.categories[0].color)
+      this["color"] = event.categories[0].color;
 
     if(this.length > 0 && this.color)
       this["background-color"] = this.color;
@@ -44,7 +44,7 @@ CalEvent.prototype.render = function (){
       $calendar.fullCalendar('renderEvent', Events[renderedEvent.id]);
     }
 
-    //sometimes, event isn't rendered ....
+    //sometimes, event isn't rendered .... so we create a new CalEvent
     if($calendar.fullCalendar('clientEvents',this.id).length <1){
       // alert("new calEvent for "+ this.id)
       renderedEvent = new CalEvent(this);

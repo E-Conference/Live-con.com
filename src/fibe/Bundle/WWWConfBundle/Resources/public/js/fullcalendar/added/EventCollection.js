@@ -110,30 +110,58 @@ var EventCollection = {
 
           // get toppest parent 
         for (var i in Events){
+
             var event = Events[i];
-            var breakWhile=false;
-            while(breakWhile===false){  
-              var parent = EventCollection.find(event.parent.id);  
-              if(!parent || !parent.elem){ 
-                breakWhile = true;
-              }else {
-                event = parent;
-              }
-
-            }
-
-            //toppest parent
-            if( $.inArray(event, toppestParent)!==-1 ){
-              console.log("event "+event.id+" already toppest") ;
+            if(this.find(event.parent.id,{noSidebar:true}) ){ 
               continue;
             }
-            if( event.isInstant() ){
-              console.log("event "+event.id+" instant") ;
-              continue;
-            }
+            
+            // var breakWhile=false;
+            // while(breakWhile===false){  
+            //   var parent = EventCollection.find(event.parent.id);  
+            //   if(!parent || !parent.elem){ 
+            //     breakWhile = true;
+            //   }else {
+            //     event = parent;
+            //   }
+
+            // }
+
+            // //toppest parent
+            // if( $.inArray(event, toppestParent)!==-1 ){
+            //   console.log("event "+event.id+" already toppest") ;
+            //   continue;
+            // }
+            // if( event.isInstant() ){
+            //   console.log("event "+event.id+" instant") ;
+            //   continue;
+            // }
+
+
             toppestParent.push(event); 
         }
         return toppestParent;
+    },
+
+    getBroCountRange : function(brothers){
+      var rtnArray = {};
+      var done = {};
+      for (var i in brothers){
+        var curBro = brothers[i];
+        
+        var count = 0,
+            range = 0;
+        for (var j in brothers){
+          var bro = brothers[j];
+          if(!curBro.isOutOf(bro,true)) {
+            count++;
+            if(done[bro.id])range++; 
+          } 
+        }
+        rtnArray[curBro.id] = {count:count,range:range};
+        done[curBro.id] = true;
+      }
+      return rtnArray;
     },
 
 

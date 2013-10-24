@@ -143,7 +143,7 @@ var rdfConfig = {
                 action : function(node){
                     var themeName = $(node).text(); 
                     if(getThemeIdFromName(themeName)=== -1 ){
-                        themes.push({setname:str_format(themeName)});  
+                        themes.push({setName:str_format(themeName)});  
                     }
                 }
             },
