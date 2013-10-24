@@ -15,7 +15,7 @@ use fibe\Bundle\WWWConfBundle\Entity\Equipment;
 use fibe\Bundle\WWWConfBundle\Entity\Theme;
 use fibe\Bundle\WWWConfBundle\Entity\SocialService;
 
-class databaseCommand extends ContainerAwareCommand
+class databaseInitCommand extends ContainerAwareCommand
 {
     protected function configure()
     {

@@ -25,12 +25,14 @@ class ConferenceController extends Controller
 {
 /**
  * @Route("/edit", name="schedule_conference_edit")
+ * 
  * @Template()
  */
     public function editAction(Request $request)
     {
       $em = $this->getDoctrine()->getManager();       
       $wwwConf = $this->getUser()->getCurrentConf();
+
       $form = $this->createForm(new WwwConfType($this->getUser()), $wwwConf);
       
       $request = $this->get('request');
@@ -38,7 +40,7 @@ class ConferenceController extends Controller
         $form->bind($request);
      
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager(); 
+            $em = $this->getDoctrine()->getManager();
             $em->persist($wwwConf);
             $em->flush();
 
@@ -53,11 +55,51 @@ class ConferenceController extends Controller
                 'Submition error, please try again.'
             );
         }
-      } 
+      }
       return array(
           'wwwConf' => $wwwConf,
           'form' => $form->createView()
       );
     }
+/**
+ * @Route("/{id}/empty", name="schedule_conference_empty") 
+ * @Template()
+ */
+    public function emptyAction(Request $request)
+    {
+      $em = $this->getDoctrine()->getManager();       
+      $wwwConf = $this->getUser()->getCurrentConf();
+
+      //TODO CSRF TOKEN
+
+      // $form = $this->createForm(new WwwConfType($this->getUser()), $wwwConf);
       
+      // $request = $this->get('request');
+      // if ($request->getMethod() == 'POST') {
+      //   $form->bind($request);
+     
+      //   if ($form->isValid()) {
+      //       $em = $this->getDoctrine()->getManager();
+      //       $em->persist($wwwConf);
+      //       $em->flush();
+
+      //       $this->container->get('session')->getFlashBag()->add(
+      //           'success',
+      //           'The conference has been successfully updated'
+      //       );
+      //   }else{
+            
+
+
+      //       $this->container->get('session')->getFlashBag()->add(
+      //           'error',
+      //           'Submition error, please try again.'
+      //       );
+      //   }
+      // }
+      // return array(
+      //     'wwwConf' => $wwwConf,
+      //     'form' => $form->createView()
+      // );
+    }
 }

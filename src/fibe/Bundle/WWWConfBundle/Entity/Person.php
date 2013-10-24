@@ -54,6 +54,13 @@ class Person
      */
     // protected $knows;
 
+    /**
+     * description
+     *
+     * @ORM\Column(type="string", length=1024, nullable=true, name="description")
+     */
+     protected $description;
+
 
     /**
      * age
@@ -136,7 +143,7 @@ class Person
    
     /**
      *  
-     * @ORM\OneToMany(targetEntity="SocialServiceAccount",  mappedBy="owner")
+     * @ORM\OneToMany(targetEntity="SocialServiceAccount",  mappedBy="owner", cascade={"persist", "remove"})
      * 
      */
     protected $accounts;
@@ -250,6 +257,30 @@ class Person
     public function getFirstName()
     {
         return $this->firstName;
+    }
+
+  
+    /**
+     * Set description
+     *
+     * @param integer $description
+     * @return Person
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return integer 
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
   

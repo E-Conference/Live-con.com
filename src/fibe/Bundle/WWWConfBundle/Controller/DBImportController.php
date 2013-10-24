@@ -15,6 +15,8 @@ use fibe\Bundle\WWWConfBundle\Entity\Organization;
 use fibe\Bundle\WWWConfBundle\Entity\Paper;
 use fibe\Bundle\WWWConfBundle\Entity\Role;
 use fibe\Bundle\WWWConfBundle\Entity\RoleType;
+use fibe\Bundle\WWWConfBundle\Entity\SocialService;
+use fibe\Bundle\WWWConfBundle\Entity\SocialServiceAccount;
 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Category;
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Location; 
@@ -148,6 +150,16 @@ class DBImportController extends Controller
                             $j++;
                         }  
                         $value=$organizationEntities[$value[0]];  
+                    }
+                    if($setter == "setTwitter"){
+                        $ss = $this->getDoctrine()
+                                   ->getRepository('fibeWWWConfBundle:SocialService')
+                                   ->findOneBy(array('name' => 'Twitter'));
+                        $ssa = new SocialServiceAccount();
+                        $ssa->setAccountName($value)
+                            ->setSocialService($ss);
+                        $value = $ssa;
+                        $setter = 'addAccount';
                     }
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 

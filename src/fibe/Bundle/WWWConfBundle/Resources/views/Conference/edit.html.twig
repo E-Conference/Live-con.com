@@ -130,10 +130,11 @@
         $(document).ready(function(){
              
             initializeMap();
-            $('#confNameForm').hide();
-            $('#showConfForm').click(function(){
-                $('#confNameForm').show();
-                $(this).hide();
+            $('#confNameForm').toggle();
+            $('#showConfForm').toggle(function(){
+                $('#confNameForm').toggle(); 
+            },function(){
+                $('#confNameForm').toggle(); 
             });
           
                 

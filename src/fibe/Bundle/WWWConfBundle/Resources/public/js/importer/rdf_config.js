@@ -23,10 +23,10 @@ var rdfConfig = {
             },
             'foaf:img' : {
                 escape : false,
-                setter : 'setImage'
+                setter : 'setImg'
             },
             'foaf:homepage' : {
-                setter : 'setHomepage'
+                setter : 'setPage'
             },
             'foaf:twitter' : {
                 setter : 'setTwitter'
