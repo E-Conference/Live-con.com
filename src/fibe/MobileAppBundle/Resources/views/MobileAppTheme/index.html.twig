@@ -18,7 +18,7 @@
           <a href="{{path('mobileAppPublic_index', { 'id': conference.id })}}" ><i class="icon-eye-open icon-4x"></i></a>
       </div>
        <div>
-        <form action="{{ path('mobileAppTheme_update_conference', { 'id': conference.id })}}" method="post">
+        <form action="{{ path('mobileAppTheme_update_conference', { 'id': conference.id })}}" method="post" {{ form_enctype(conference_form) }}>
             {{ form_widget(conference_form)}}
             <button type="submit" class="btn btn-success"><i class="icon-edit"></i></button>
         </form>
