@@ -426,7 +426,8 @@ class DBImportController extends Controller
             }
         }
          
-        
+        $mainConfEvent->setParent(null);
+        $em->persist($mainConfEvent);
          
         $em->flush();  
 
