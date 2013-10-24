@@ -5,6 +5,7 @@
 {{ parent() }}
  
 <div class="container">
+  <div class="row center">
     <div>
         <header class="subhead" id="overview">
             <div class="page-header">
@@ -12,13 +13,21 @@
                   </div>
         </header>
         <form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(formEdit) }} method="POST" class="fos_user_profile_edit">
+        <div class="row">
+           <div class="col-lg-2"></div>
+           <div class="col-lg-4">
             {{ form_widget(formEdit) }}
-            <div>
-                <button class="btn btn-success" type="submit" > 
+            </div>
+        </div></br>
+         <div class="row"> 
+           <div class="col-lg-2"></div>
+            <div class="col-lg-4">  
+                <button class="btn btn-success btn-block" type="submit" > 
                     <i class="icon-ok icon-white"></i>
-                    {{ 'submit'|trans }}
+                    {#{{ 'submit'|trans }}#}
                 </button>
             </div>
+        </div>
         </form>
     </div>
     <div>
@@ -28,15 +37,24 @@
                   </div>
         </header>
         <form action="{{ path('fos_user_change_password') }}" {{ form_enctype(formPwd) }} method="POST" class="fos_user_change_password">
+        <div class="row">
+           <div class="col-lg-2"></div>
+           <div class="col-lg-4">
             {{ form_widget(formPwd) }}
-            <div>
-                <button class="btn btn-success" type="submit" > 
+             </div>
+        </div></br>
+         <div class="row"> 
+           <div class="col-lg-2"></div>
+            <div class="col-lg-4">  
+                <button class="btn btn-success  btn-block" type="submit" > 
                     <i class="icon-ok icon-white"></i>
-                    {{ 'submit'|trans }}
+                    {#{{ 'submit'|trans }}#}
                 </button>
             </div>
+        </div>
         </form>
     </div>
+  </div>
 </div>
 {% endblock body %}
 

@@ -7,13 +7,17 @@
 
 {% trans_default_domain 'FOSUserBundle' %}
 <div class="container">
+ <div class="row center">
     <header class="subhead" id="overview">
         <div class="page-header">
             <h1>Register a manager</h1>
         </div>
     </header>
     <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="form-horizontal" > 
-        <p>
+
+      <div class="row">
+           <div class="col-lg-2"></div>
+           <div class="col-lg-4">
             <div class="control-group">
                 <label class="control-label" >
                     {{ form_label(form.username) }}
@@ -62,15 +66,24 @@
             <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
                 {{ form_rest(form  )}}
             </div> 
-		</p>
-		<div class="control-group">
-	        <div class="controls">
-            <button type="submit" class="btn btn-success">
-            	<i class="icon-plus icon-white"></i> Register user
-        	</button>
+		</div>
         </div>
-     
+        </br>
+         <div class="row"> 
+            <div class="col-lg-5"></div>
+            <div class="col-lg-4">  
+               <div class="control-group">
+                    <div class="controls">
+                    <button type="submit" class="btn btn-success">
+                        <i class="icon-plus icon-white"></i> Register user
+                    </button>
+                </div>
+            </div>
+        </div>
+		</br>
+      </br>
 	</form>
+ </div>
 <div>
 {% endblock body %}
 

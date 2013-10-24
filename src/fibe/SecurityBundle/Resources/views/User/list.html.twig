@@ -7,6 +7,7 @@
 
 {% trans_default_domain 'FOSUserBundle' %}
 <div class="container">
+  <div class="row center">
     <header class="subhead" id="overview">
         <div class="page-header">
             <h1>Manage user</h1>
@@ -87,9 +88,10 @@
         {% endfor %}
         </tbody>
     </table>
-    <a class="btn btn-success" href="{{ path('fos_user_registration_register') }}">
+    <a class="btn btn-info" href="{{ path('fos_user_registration_register') }}">
         <i class="icon-plus icon-white"> </i> Create a new user
     </a>
+  </div>
 <div>
 {% endblock body %}
 

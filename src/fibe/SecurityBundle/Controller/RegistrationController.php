@@ -56,12 +56,12 @@ class RegistrationController extends ContainerAware
                 //     $user->addRole('ROLE_ADMIN');
                 // }
  
-                $conf = $user->getConferences()->first(); 
-                $user->setCurrentConf($conf);
-
-                $em = $this->getContainer()->get('doctrine')->getManager('default');
+               
+               // $conf =  $this->container->get('security.context')->getUser()->getCurrentConf();
+                //$user->setCurrentConf($conf);
+              /*  $em = $this->getContainer()->get('doctrine')->getManager('default');
                 $em->persist($user);
-                $em->flush();
+                $em->flush(); */
 
 
                 $userManager->updateUser($user);

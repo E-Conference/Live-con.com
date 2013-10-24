@@ -6,7 +6,6 @@
 <div class="container">
     <div class="row center">
     <h1>Event edit</h1>
-
     <div class="row">
      <div class="col-lg-9"></div>
           <div class="col-lg-2 btn-group">
@@ -34,9 +33,8 @@
                   {{ form_row(edit_form.endAt) }}
                   {{ form_row(edit_form.description) }} 
                   {{ form_row(edit_form.url) }} 
-              </div>
-              <div class="col-lg-4">
-                   
+            </div>
+            <div class="col-lg-4">
                   {{ form_row(edit_form.comment) }}
                   {{ form_row(edit_form.organizer) }}
                   {{ form_row(edit_form.contacts) }}
@@ -67,7 +65,11 @@
             <div class="row">
                <div class="col-lg-2"></div>
                <div class="col-lg-8">
-               <h1>Themes</h1>
+                <h1>Themes</h1>
+                 <a  class="btn btn-link btn-small help"  data-toggle="popover" title="Add theme to the event" data-content="For add a theme to the event, select it in the  select field.">
+                       <i class="icon-question"></i>
+                  </a>    
+                 
                 <div id="themes_related_list">
                   {% include "fibeWWWConfBundle:ConfEvent:themeRelation.html.twig" %}
                 </div>
@@ -81,6 +83,10 @@
                <div class="col-lg-2"></div>
                <div class="col-lg-8">
                 <h1>Papers Relation</h1>
+                 <a  class="btn btn-link btn-small help" data-toggle="popover" title="Add paper to the event" data-content="For add a paper to the event, select it in the select field.">
+                       <i class="icon-question"></i>
+                    </a>
+                
                  <div id="paper_related_list">
                     {% include "fibeWWWConfBundle:ConfEvent:paperRelation.html.twig" %}
                 </div>
@@ -94,6 +100,9 @@
                <div class="col-lg-2"></div>
                <div class="col-lg-8">
                   <h1>Persons Relation</h1>
+                  <a  class="btn btn-link btn-small help" data-toggle="popover" title="Add a person to the event" data-content='For add a person to the event, select it in the select field and the role of this person for the event. Then, click on "add person".'>
+                       <i class="icon-question"></i>
+                  </a>
                 <div id="person_related_list"> 
                     {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
                 </div>
@@ -101,6 +110,7 @@
             <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
                  {{ form_widget(role_form) }}
                  {{ form_errors(role_form) }}
+                 </br>
                   <button id="role_form_submit"class="btn btn-info" type="button" onclick="addPerson()">
                     <i class="icon-plus"></i> add Person
                 </button>
@@ -163,14 +173,11 @@
           return false;
          };
        
-
+$(document).ready(function() {
+     $('.help').popover({ 'trigger': 'click', 'placement':'bottom'});
+   
+  
+});
 </script>
-<!-- Add a red star to label label of required field -->
-  <script type="text/javascript" >
-        $(document).ready(function(){
 
-            $('label[class="required"]').append("<i style='color:#C00000  '>*</i>");
-
-        });
-    </script> 
 {% endblock javascripts %}

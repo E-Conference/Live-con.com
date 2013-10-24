@@ -34,7 +34,8 @@ class UserController extends Controller
         }
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('fibeSecurityBundle:User')->findAll();
+        //$entities = $em->getRepository('fibeSecurityBundle:User')->findAll();
+        $entities = $this->getUser()->getCurrentConf()->getConfManagers();
         $delete_forms= array();
         $update_forms= array();
 
