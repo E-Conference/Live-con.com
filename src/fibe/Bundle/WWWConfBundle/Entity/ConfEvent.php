@@ -84,6 +84,18 @@ class ConfEvent extends Event
         $this->xProperties = new \Doctrine\Common\Collections\ArrayCollection();
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+    /** computeIsAllDay
+     *
+     * this is only computed on creation for the importer
+     *  @ORM\PrePersist() 
+     */
+    public function computeIsAllDay()
+    {      
+        $start = $this->getStartAt();
+        $end = $this->getEndAt(); 
+        $this->setIsAllDay($start->format('d')!=$end->format('d'));
+    }
     
     /**
      * Set slidePresentation

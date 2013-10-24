@@ -10,48 +10,77 @@
       <div class="row">
          <div class="row-fluid">
             <div class='col-lg-8'>
-              <iframe style="height:700px;width:100%;" src="{{path('mobileAppPublic_index', { 'id': conference.id })}}"/></iframe>
+              <iframe style="height:500px;width:100%;" src="{{path('mobileAppPublic_index', { 'id': conference.id })}}"/></iframe>
             </div>
             
           </div>
           {% include "fibeMobileAppBundle:MobileAppTheme:edit.html.twig" %}
-          <a href="{{path('mobileAppPublic_index', { 'id': conference.id })}}" ><i class="icon-eye-open icon-4x"></i></a>
+        
       </div>
-       <div>
+       <div class="well">
         <form action="{{ path('mobileAppTheme_update_conference', { 'id': conference.id })}}" method="post" {{ form_enctype(conference_form) }}>
-            {{ form_widget(conference_form)}}
-            <button type="submit" class="btn btn-success"><i class="icon-edit"></i></button>
+          <div class="row">
+            <div class="col-lg-6">
+               <h1> Conference settings</h1> 
+
+            </div>
+          </div>
+           <div class="row">
+              <div class="col-lg-4">
+                   {{ form_widget(conference_form) }}
+                 <!--    {{ form_row(conference_form.acronym) }}
+                    {{ form_row(conference_form.mainConfEvent.url) }}
+                    {{ form_row(conference_form.logo) }} -->
+                     <button type="submit" class="btn btn-success"><i class="icon-edit"></i></button>
+               </div>
+                <div class="col-lg-4">
+                  <div class='logo' style="width:300px; height: 200px">
+                    <div class="logo-choice"  style="width:300px; height: 200px">
+                        <img src="{{ asset('uploads/')}}{{conference.logoPath}}" style="width:auto; height: 100%">
+                    </div>
+                 </div>
+               </div>
+                  <div class="col-lg-3">
+                  <div id="palette"> 
+                    <button type="submit" id="generateTheme" class="btn btn-success"><i class="fa fa-magic"></i>Generate theme</button>
+                  </div>
+                </div>
+          </div>
         </form>
       </div>
 
-       <div class='logo' style="width:300px; height: 200px">
-          <div class="logo-choice"  style="width:300px; height: 200px">
-              <img src="{{ asset('uploads/')}}{{conference.logoPath}}" style="width:auto; height: 100%">
-          </div>
-       </div>
-       <div id="palette">
-       </div>
+     
     </div> 
 </div>    
 
 {% endblock body %}
 
 {% block javascripts %}
-  <script type="text/javascript" src="{{ asset('js/jscolor/jscolor.js')}}"></script>
+  <script type="text/javascript" src="{{ asset('js/spectrum/spectrum.js')}}"></script>
   <script type="text/javascript" src="{{ asset('js/colorThief.js')}}"></script>
+
+
    <script type="text/javascript">
   $( document ).ready(function() {
+
+    $("#generateTheme").click(function(){
+        generateTheme();
+    })
+
+
       var image = new Image();
-      image.src = "{{ asset('uploads/')}}{{conference.logoPath}}"
+      image.src = "{{ asset('uploads/')}}{{conference.logoPath}}";
       var colorThief = new ColorThief();
-      var palette = colorThief.getPalette(image, 8);
-      $("#color1").val(palette[0])
+      var palette = colorThief.getPalette(image, 6);
+      var paletteTab = [];
+
       $.each(palette, function(i, colorRow){
-          var newColorBox = $("<input class='color'/>");
-          
-          newColorBox.val(colorToHex(colorRow[0], colorRow[1], colorRow[2]));
-          $("#palette").append(newColorBox);
+          var colorText = colorToHex(colorRow[0], colorRow[1], colorRow[2]);
+          var newColorBox = $("<input class='color form-control' value='"+colorText+"'/>");
+          $("#palette").prepend(newColorBox);
+          paletteTab.push(colorText);
       })
+
 
 
       function colorToHex(redCol, greenCol, blueCol) {
@@ -59,7 +88,45 @@
           var rgb = blueCol | (greenCol << 8) | (redCol << 16);
           return '#' + rgb.toString(16);
       };
+
+      $(".color").spectrum({
+        flat: false,
+        showInput: true,
+        showInitial: true,
+        showAlpha: false,
+        disabled: false,
+        localStorageKey: "color",
+        showPalette: true,
+        showPaletteOnly: false,
+        showSelectionPalette: false,
+        clickoutFiresChange: false,
+        cancelText: "cancelText",
+        chooseText: "choose",
+        className: "colorpicker",
+        preferredFormat: "hex",
+        maxSelectionSize: 12,
+        palette: [paletteTab],
+        selectionPalette: paletteTab
+    });
   });
+
+  function generateTheme(){
+    var palette = $(".color").spectrum("option","palette")[0];
+    var tabRandomised = [];
+    for(i=0; i<6; i++){
+      tabRandomised.push(Math.floor((Math.random()*5)+1));
+    }
+    $(".BGColorHeader").spectrum("set", palette[tabRandomised[0]]);
+    $(".TitleColorHeader").spectrum("set", palette["black"]);
+    $(".BGColorNavBar").spectrum("set", palette[tabRandomised[1]]);
+    $(".TitleColorNavBar").spectrum("set", palette["black"]);
+    $(".BGColorContent").spectrum("set", palette[tabRandomised[3]]);
+    $(".TitleColorContent").spectrum("set", palette["black"]);
+    $(".BGColorButton").spectrum("set", palette[tabRandomised[4]]);
+    $(".TitleColorButton").spectrum("set", palette["black"]);
+    $(".BGColorFooter").spectrum("set", palette[tabRandomised[5]]);
+    $(".TitleColorFooter").spectrum("set", palette["black"]);
+  }
   </script>
 {% endblock%}
 

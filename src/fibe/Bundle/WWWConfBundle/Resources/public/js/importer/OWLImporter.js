@@ -1,6 +1,7 @@
 
 
-var events,
+var conference,
+    events,
     locations,
     xproperties,
     relations,
@@ -29,6 +30,7 @@ function run(url,callback,fallback){
                 if(fallback!=undefined)fallback("Empty response"); 
                 return;
             } 
+
             var confName ;
             events        = [],
             locations     = [],
@@ -48,8 +50,7 @@ function run(url,callback,fallback){
             //map of   Uri (string) ,Object 
 
 
-            //format config
-
+            //custom config (default : rdf)
             var formatConfig = { 
                 'ocs': ocsConfig,
             }
@@ -78,8 +79,8 @@ function run(url,callback,fallback){
                 mappingConfig.action(rootNode);
             } 
             //////////////////////////////////////////////////////////////////////////
-            ///////////////////////  first round for locations  //////////////////////
-            ////////////rootNode////////////////////////////////////////////////////////////// 
+            /////////////////////////////// locations  ///////////////////////////////
+            ////////////////////////////////////////////////////////////////////////// 
             console.log(rootNode)
             rootNode.children().each(function(index,node){ 
                     var n = getNodeName(node); 
@@ -261,6 +262,7 @@ function run(url,callback,fallback){
                 delete locations[i]["uri"];
             }
             var dataArray={}; 
+            dataArray['conference']=conference;  
             dataArray['locations']=locations;  
             dataArray['categories']=categories;
             dataArray['persons']=persons;   
@@ -292,7 +294,7 @@ function run(url,callback,fallback){
 
 
 
-/**  function add() parse config files
+/**  function add() : process node given the config file 
  *
  * @param {array} addArray      the array to populate
  * @param {object} mapping      mapping object (defined in config files)
@@ -323,6 +325,7 @@ function add(addArray,mapping,node,arg){
                 
                 if(mapping.label[this.nodeName].setter){
                     var nodeName = this.nodeName;
+
                     //unwrapped if needed
                     if(mapping.label[this.nodeName].wrapped === true){
                         $(this).children().each(function(){ 

@@ -13,10 +13,12 @@ var ocsConfig = {
         return $(node).attr("id");
     },
     action : function(documentRootNode){
-        var confName = $(documentRootNode).children("name").text();
-        var acronym = $(documentRootNode).children("acronym").text();
-        var description = $(documentRootNode).children("description").text();
-        var homepage = $(documentRootNode).children("homepage").text();
+        conference = { 
+            setSummary    : $(documentRootNode).children("name").text(),
+            setAcronym    : $(documentRootNode).children("acronym").text(),
+            setDescription: $(documentRootNode).children("description").text(),
+            setUrl        : $(documentRootNode).children("homepage").text(),
+        }
         //TODO save that
     },
     personMapping : {

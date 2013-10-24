@@ -15,6 +15,8 @@ use fibe\Bundle\WWWConfBundle\Entity\Organization;
 use fibe\Bundle\WWWConfBundle\Entity\Paper;
 use fibe\Bundle\WWWConfBundle\Entity\Role;
 use fibe\Bundle\WWWConfBundle\Entity\RoleType;
+use fibe\Bundle\WWWConfBundle\Entity\SocialService;
+use fibe\Bundle\WWWConfBundle\Entity\SocialServiceAccount;
 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Category;
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Location; 
@@ -35,26 +37,39 @@ class DBImportController extends Controller
   
       
     public function importAction(Request $request)
-    {  
-        // $JSONFile = $request->request->get('dataArray');          
+    {      
         $JSONFile = json_decode($request->request->get('dataArray'),true); 
         
         $em = $this->getDoctrine()->getManager(); 
         $entity=null;
-        $eventEntities= array();
-        $personEntities= array(); 
-        $locationEntities= array();
-        $categoryEntities= array();
-        $themeEntities= array();
-        $organizationEntities= array();
-        $keywordEntities= array();
-        $proceedingEntities= array();
         $wwwConf =  $this->getUser()->getCurrentConf();
+        $mainConfEvent = $wwwConf->getMainConfEvent();
+
+        $eventEntities        = array();
+        $personEntities       = array(); 
+        $locationEntities     = array();
+        $categoryEntities     = array();
+        $themeEntities        = array();
+        $organizationEntities = array();
+        $keywordEntities      = array();
+        $proceedingEntities   = array();
 
         //categories color.
         $colorArray = array('lime', 'red', 'blue', 'orange', 'gold', 'coral', 'crimson', 'aquamarine', 'darkOrchid', 'forestGreen', 'peru','purple' ,'seaGreen'  );
         
+        ////////////////////// conference //////////////////////
+        if(isset($JSONFile['conference'])){
+            $conference = $JSONFile['conference'];
+            foreach ($conference as $setter => $value) {
 
+                if($setter=="setAcronym"){
+                    $entity = $wwwConf;
+                }else{
+                    $entity = $mainConfEvent;
+                }
+                call_user_func_array(array($entity, $setter), array($value)); 
+            }
+        }
         
         
         //////////////////////  keywords  ////////////////////// 
@@ -148,6 +163,16 @@ class DBImportController extends Controller
                             $j++;
                         }  
                         $value=$organizationEntities[$value[0]];  
+                    }
+                    if($setter == "setTwitter"){
+                        $ss = $this->getDoctrine()
+                                   ->getRepository('fibeWWWConfBundle:SocialService')
+                                   ->findOneBy(array('name' => 'Twitter'));
+                        $ssa = new SocialServiceAccount();
+                        $ssa->setAccountName($value)
+                            ->setSocialService($ss);
+                        $value = $ssa;
+                        $setter = 'addAccount';
                     }
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
@@ -272,6 +297,14 @@ class DBImportController extends Controller
                         $date= explode(' ', $value); 
                         $value=new \DateTime($date[0], new \DateTimeZone(date_default_timezone_get()));
                     }
+
+                    if($setter=="mainConferenceEvent"){ 
+                        $wwwConf->setMainConfEvent($entity);
+                        $em->remove($mainConfEvent);
+                        $mainConfEvent = $entity;
+                        $em->persist($wwwConf);
+                        continue;
+                    }
                     
                     if($setter=="setLocation"){
                         $value=$locationEntities[$value];
@@ -355,11 +388,16 @@ class DBImportController extends Controller
             for($i=0;$i<count($entities);$i++){
                 $entity= $eventEntities[$i];
                 $current = $entities[$i];
+                $hasParent = false;
                 foreach ($current as $setter => $value) {
                     if($setter=="setParent"){ 
+                        $hasParent = true;
                         $value=$eventEntities[$value]; 
                         call_user_func_array(array($entity, $setter), array($value));  
                     }  
+                }
+                if(!$hasParent){
+                    $entity->setParent($mainConfEvent);
                 }
                 $entity->setConference(  $wwwConf  );
                 $em->persist($entity);
@@ -388,7 +426,8 @@ class DBImportController extends Controller
             }
         }
          
-        
+        $mainConfEvent->setParent(null);
+        $em->persist($mainConfEvent);
          
         $em->flush();  
 

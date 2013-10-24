@@ -21,48 +21,59 @@
                             <li> {{ wwwConf.themes|length }} themes </li>
                             <li> {{ wwwConf.confManagers|length }} confManagers </li>
                         </ul>
+                        <a  id="showConfForm"  class="btn btn-warning btn-create">
+                             <i class="icon-edit"></i> Edit conference
+                        </a>
                     </div>
                     <div class="col-lg-6">
-                        <a  id="showConfForm"  class="btn btn-warning btn-create">
-                             <i class="icon-edit"></i>
-                        </a>
-                        <form id="confNameForm"  class="input-append" method="POST" action="">
-                              
-                                 {{ form_widget(form) }} 
-                                 {{ form_errors(form) }}   
+
+                        <div id="map" style="height:300px"></div>
+                    </div>
+                </div> 
+                <div id="conference-edit" class="row ">
+                    <div class="col-lg-6">
+                        <h3 class="text-info">Conference info  </h3>
+                        <form class="input-append" method="POST" action="" {{ form_enctype(form) }} >
+                                {{ form_widget(form) }} 
+                                {{ form_errors(form) }}   
                                 <button type="submit" class="btn btn-block btn-success">
                                     <i class="icon-ok"></i> 
                                 </button> 
 
                             <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(form) }}</div>  
                         </form> 
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-            
-        
 
-        <div class="container col-lg-6" >
-            <form id="EventImportForm"  class="input-append">
-                <label for="EventImport">
-                    <h3 class="text-success">Import Events from file  </h3>
-                    <h5 class="text-info">Please, provide a OWL/RDF file</h5>
-                    <h5 class="muted"><i>(such as : http://data.semanticweb.org/conference/eswc/2013/complete)</i></h5>
-                </label>
-                
-                <div class="input-group">
-                    <input id="EventImport" class="form-control" name="EventImport" value="../../../../datasets/ICANN2013.xml" type="text"/>
-                    <span class="input-group-btn">
-                        <button type="submit"class="btn btn-default">
-                            Process import <i class="icon-arrow-right"></i> 
-                        </button>
-                    </span>
-                </div><!-- /input-group --> 
-            </form>
-        </div>
-        <div id="map" style="height:300px"></div>
+                    </div>
+                    <div class="col-lg-6">
+                        <h3 class="text-info">Import a Conference from file  </h3>
+                        <form id="EventImportForm"  class="input-append">
+                            <label for="EventImport"> 
+                                Available input format are : 
+                                    <span class="badge badge-success" ><i class="icon-ok" ></i>  RDF</span>
+                                    <span class="badge badge-success"><i class="icon-ok" ></i>  OWL</span>
+                                    <span class="badge badge-success"><i class="icon-ok" ></i>  OCS</span> 
+
+                            </label>
+                            
+                            <div class="input-group">
+                                <input id="EventImport" class="form-control" name="EventImport" value="../../../../datasets/ICANN2013.xml" type="text"/>
+                                <span class="input-group-btn">
+                                    <button type="submit"class="btn btn-default">
+                                        Process import <i class="icon-arrow-right"></i> 
+                                    </button>
+                                </span>
+                            </div><!-- /input-group --> 
+                        </form> 
+
+                        <h3 class="text-info">Action</h3>
+                        <a  class="empty-conf btn btn-danger btn-xs" href="{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}"> 
+                            <i class="icon-trash"></i> Empty conference
+                        </a>
+
+                    </div>
+                </div><!-- #conference-edit -->    
+            </div>
+        </div> 
     </div>
 
 </div>
@@ -71,7 +82,7 @@
 {%  block stylesheets %}
 {{ parent() }}
     <style type="text/css">
-        #confNameForm > *{
+        #conference-edit > *{
             margin-top:1.5em;
             margin-bottom:0.35em;
         }
@@ -130,16 +141,32 @@
         $(document).ready(function(){
              
             initializeMap();
-            $('#confNameForm').hide();
-            $('#showConfForm').click(function(){
-                $('#confNameForm').show();
-                $(this).hide();
-            });
-          
-                
-        /////////  init multiple Symf conf forms  END    /////////
-        /////////  init multiple Symf conf forms  END    /////////
-        /////////  init multiple Symf conf forms  END    /////////
+
+            /*********       show / hide edit mode          **********/
+            $('#conference-edit').hide();  
+            //toggle with 2 functions is deprecated in jquery v8 and suppressed in v10
+           function showForm() { 
+                $('#conference-edit').toggle({duration : 400}); 
+                $(this).html('<i class="icon-arrow-left" ></i> Hide edit mode');
+                $(this).one("click", hideForm);
+            }
+            function hideForm() { 
+                $('#conference-edit').toggle({duration : 400});
+                $(this).html('<i class="icon-edit"></i> Edit conference');
+                $(this).one("click", showForm);
+            }
+            $("#showConfForm").one("click", showForm);
+
+            /*********       confirm empty          **********/
+            $('.empty-conf').click(function(){
+                return "Empty !" === prompt('\n\t/ ! \\ ACTION NOT CANCELABLE / ! \\\n\nIn order to confirm,\ntype "Empty !" ( with an exclamation mark)\nif you really want to empty the conference.',
+                                            "Empty ?");
+            }) 
+
+
+            /////////  init multiple Symf conf forms  END    /////////
+            /////////  init multiple Symf conf forms  END    /////////
+            /////////  init multiple Symf conf forms  END    /////////
              
             var confOwlUriInput = $('#EventImport' );
             //var confUriInput    = $('#fibe_bundle_wwwconfbundle_wwwconftype_confUri' );
@@ -161,7 +188,7 @@
             // confOwlUriInput.before(confOwlUriHelper) 
             // $('#SWCLinkForm label').remove();
             confOwlUriInput.change(function(){
-                    $(this).parent().removeClass('has-warning');
+                $(this).parent().removeClass('has-warning');
             });
             $('#EventImportForm').submit(function(event) {
                 event.preventDefault(); 
@@ -211,7 +238,7 @@
                                 if(dataArray!=undefined){
                                     var msg = "<ul>";
                                     for (var i in dataArray){
-                                        if(dataArray[i].length >0)
+                                        if(dataArray[i] && dataArray[i].length >0)
                                             msg +="<li>"+dataArray[i].length +" "+i+" added !</li>"
                                     }
                                     msg += "</ul>";

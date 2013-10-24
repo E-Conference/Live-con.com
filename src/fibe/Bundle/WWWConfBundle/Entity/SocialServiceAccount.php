@@ -54,18 +54,6 @@ class SocialServiceAccount
     protected $socialService;
 
 
-     /**
-     *  Themes associated to this conference
-     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="themes", cascade={"persist"})
-     * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
-     *
-     */
-    protected $conference;
-
-    
-
-
-
     /**
      * Get id
      *
@@ -143,28 +131,5 @@ class SocialServiceAccount
     public function getSocialService()
     {
         return $this->socialService;
-    }
-
-    /**
-     * Set conference
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
-     * @return SocialServiceAccount
-     */
-    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference = null)
-    {
-        $this->conference = $conference;
-    
-        return $this;
-    }
-
-    /**
-     * Get conference
-     *
-     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
-     */
-    public function getConference()
-    {
-        return $this->conference;
     }
 }

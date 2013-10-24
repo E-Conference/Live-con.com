@@ -61,15 +61,7 @@ class Role
      * @ORM\ManyToOne(targetEntity="RoleType", inversedBy="roles")
      * @Assert\NotBlank(message="You have to choose an type")
      */
-    private $type;
-
-    /**
-     *  Themes associated to this conference
-     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="roles", cascade={"persist"})
-     * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
-     *
-     */
-    protected $conference;
+    private $type; 
 
 
 
@@ -150,28 +142,5 @@ class Role
     public function getType()
     {
         return $this->type;
-    }
-
-    /**
-     * Set conference
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
-     * @return Role
-     */
-    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference = null)
-    {
-        $this->conference = $conference;
-    
-        return $this;
-    }
-
-    /**
-     * Get conference
-     *
-     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
-     */
-    public function getConference()
-    {
-        return $this->conference;
     }
 }
