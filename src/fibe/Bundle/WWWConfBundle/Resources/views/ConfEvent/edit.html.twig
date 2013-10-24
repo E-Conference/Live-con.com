@@ -101,12 +101,12 @@
             <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
                  {{ form_widget(role_form) }}
                  {{ form_errors(role_form) }}
-                 </form>
-                 </br>
-                <button id="role_form_submit"class="btn btn-info" type="button">
+                  <button id="role_form_submit"class="btn btn-info" type="button" onclick="addPerson()">
                     <i class="icon-plus"></i> add Person
                 </button>
-            </form>
+                 </form>
+                 </br>
+               
           </div>
         </div>
       </br>
@@ -121,7 +121,7 @@
 
    
    //listen for the form beeing submitted
-   $("select[id='form_papers']").change(function(){
+   $("#form_papers").change(function(){
       //get the url for the form
       var id_paper= $(this).val();
   
@@ -135,7 +135,7 @@
        });
 
     //listen for the form beeing submitted
-   $("select[id='form_themes']").change(function(){
+   $("#form_themes").change(function(){
       //get the url for the form
       var id_theme= $(this).val();
   
@@ -148,18 +148,29 @@
             }, "html");    
        });
 
-     $("#role_form_submit").click(function(){
-      //get the url for the form
-      var id_person = $('#fibe_bundle_wwwconfbundle_roletype_person').val();
-      var id_type = $('#fibe_bundle_wwwconfbundle_roletype_type').val();
-      //start send the post request
-       $.post("{{path('schedule_confevent_addPerson')}}",               
-               {id_person : id_person, id_type:id_type, id: "{{entity.id }}"} , 
-            function(response){
-                   $('#person_related_list').html(response);
-                
-            }, "html");    
-       });
+     function addPerson(){
+        //get the url for the form
+        var id_person = $('#fibe_bundle_wwwconfbundle_roletype_person').val();
+        var id_type = $('#fibe_bundle_wwwconfbundle_roletype_type').val();
+
+        //start send the post request
+         $.post("{{path('schedule_confevent_addPerson')}}",               
+                 {id_person : id_person, id_type:id_type, id: "{{entity.id }}"} , 
+              function(response){
+                     $('#person_related_list').html(response);
+                  
+              }, "html");    
+          return false;
+         };
+       
 
 </script>
+<!-- Add a red star to label label of required field -->
+  <script type="text/javascript" >
+        $(document).ready(function(){
+
+            $('label[class="required"]').append("<i style='color:#C00000  '>*</i>");
+
+        });
+    </script> 
 {% endblock javascripts %}

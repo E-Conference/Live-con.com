@@ -72,7 +72,7 @@
       require(['config', 'tpl'], function(configuration, tpl){
         configuration.datasources.eventDatasource.uri = "{{ api_uri }}";
         configuration.conference.name = {{ conference.acronym |json_encode|raw }};
-        configuration.conference.logoUri = {{ conference.logo |json_encode|raw }};
+        configuration.conference.logoUri = "{{ asset('uploads/')}}{{conference.logoPath}}";
         configuration.routes.Home.title = {{ conference.acronym |json_encode|raw }};
         tpl.uri = "{{ asset('bundles/fibemobileapp/mobileApp/templates/') }}";
       });
@@ -115,54 +115,54 @@
 
         /**********************   Header ************************/
         #header {
-          background: #{{ mobile_app_config.BGColorHeader}} !important;
-          color: #{{ mobile_app_config.TitleColorHeader}} !important;
+          background: {{ mobile_app_config.BGColorHeader}} !important;
+          color: {{ mobile_app_config.TitleColorHeader}} !important;
         }
 
         #header * {
-          background: #{{ mobile_app_config.BGColorHeader}} !important;
-          color: #{{ mobile_app_config.TitleColorHeader}} !important;
+          background: {{ mobile_app_config.BGColorHeader}} !important;
+          color: {{ mobile_app_config.TitleColorHeader}} !important;
         }
 
         /**********************   Navbar ************************/
         #navBar{
-          background: #{{ mobile_app_config.BGColorNavBar}} !important;
+          background: {{ mobile_app_config.BGColorNavBar}} !important;
         }
 
         #navBar *{
-          background: #{{ mobile_app_config.BGColorNavBar}} !important;
-          color: #{{ mobile_app_config.TitleColorNavBar}} !important;
+          background: {{ mobile_app_config.BGColorNavBar}} !important;
+          color: {{ mobile_app_config.TitleColorNavBar}} !important;
         }
 
         /**********************   Content ************************/
         .page{
-          background: #{{ mobile_app_config.BGColorContent}} !important;
+          background: {{ mobile_app_config.BGColorContent}} !important;
           text-shadow : none !important;
           text-decoration : none !important;
         }
 
         .content h1,h2,h3,h4{
-          color: #{{ mobile_app_config.TitleColorContent}} !important;
+          color: {{ mobile_app_config.TitleColorContent}} !important;
         }
 
         /**********************   Footer ************************/
         #footer{
-          background: #{{ mobile_app_config.BGColorFooter}} !important;
+          background: {{ mobile_app_config.BGColorFooter}} !important;
         }
 
         #footer *{
-          background: #{{ mobile_app_config.BGColorFooter}} !important;
-          color: #{{ mobile_app_config.TitleColorFooter}} !important;
+          background: {{ mobile_app_config.BGColorFooter}} !important;
+          color: {{ mobile_app_config.TitleColorFooter}} !important;
         }
 
         /**********************   Buttons ************************/
         .button{
-          background: #{{ mobile_app_config.BGColorButton}} !important;
+          background: {{ mobile_app_config.BGColorButton}} !important;
           border: none !important;
         }
 
         .button *{
-          color: #{{ mobile_app_config.TitleColorButton}} !important;
+          color: {{ mobile_app_config.TitleColorButton}} !important;
         }
 
 

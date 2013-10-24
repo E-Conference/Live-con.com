@@ -26,7 +26,9 @@ class ConfEventType extends EventType
             // ->add('conference', null, array(
             //                         'required'  => true,
             //                         'label'     => 'Belongs to conf'
-            // ))     
+            // ))  
+             ->add('summary','text',array('required' => true))
+             ->add('categories',null,array('required' => false)) 
              ->add('startAt', 'datetime', array(  
                 'widget' =>'single_text',
                 'format' =>'dd/MM/yyyy HH:mm', 
@@ -41,13 +43,14 @@ class ConfEventType extends EventType
             ->add('location', 'entity', array(
                 'class' => 'IDCISimpleScheduleBundle:Location',
                 'label'   => 'Location',
-                'choices'=> $this->user->getCurrentConf()->getLocations()->toArray()
+                'choices'=> $this->user->getCurrentConf()->getLocations()->toArray(),
+                'required' => false,
             ))
              ->add('parent', 'entity', array(
                 'class' => 'IDCISimpleScheduleBundle:Event',
                 'label'   => 'Parent',
-                'choices'=> $this->user->getCurrentConf()->getEvents()->toArray()
-                
+                'choices'=> $this->user->getCurrentConf()->getEvents()->toArray(),
+                'required' => false,
             ))
         ;                   
             

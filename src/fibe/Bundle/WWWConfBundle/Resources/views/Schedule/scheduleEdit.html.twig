@@ -1,9 +1,6 @@
 
-
-{% extends 'fibeWWWConfBundle::base.html.twig' %}
-
 {% block body %}
-{{ parent() }}
+
 
 <div class="container">
     <div class="row center">
@@ -100,15 +97,16 @@
                     {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
                 </div>
 
-            <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
-                 {{ form_widget(role_form) }}
-                 {{ form_errors(role_form) }}
-                 </form>
-                 </br>
-                <button id="role_form_submit"class="btn btn-info" type="button">
+                <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
+                     {{ form_widget(role_form) }}
+                     {{ form_errors(role_form) }}
+                      </br>
+                <button id="role_form_submit"class="btn btn-info" type="submit">
                     <i class="icon-plus"></i> add Person
                 </button>
-            </form>
+                </form>
+                
+      
           </div>
         </div>
       </br>
@@ -198,4 +196,4 @@
 </script>
 {% endblock javascripts %}
 
-{% endblock %}
+

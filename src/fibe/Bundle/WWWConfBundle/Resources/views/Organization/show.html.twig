@@ -30,6 +30,13 @@
                     <th>Country</th>
                     <td>{{ entity.country }}</td>
                 </tr>
+                 <tr>
+                    <th>Members</th>
+                    <td> {% for person in entity.members %}
+                           <li>{{ person.name }}</li>
+                         {% endfor %}
+                    </td>
+                </tr>
                     </tbody>
                 </table>
            </div>

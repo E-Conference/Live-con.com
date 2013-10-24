@@ -31,6 +31,8 @@
 		{{ form_row(mobile_app_form.TitleColorFooter) }}
 		</div>
 		<button type="submit" class="btn btn-success"><i class="icon-edit"></i></button>
+		<button  class="btn btn-infos"><a href="{{path('mobileAppPublic_index', { 'id': conference.id })}}" ><i class="icon-eye-open icon"></i></a></button>
+		
 		<div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
                 {{ form_rest(mobile_app_form)}}
             </div>

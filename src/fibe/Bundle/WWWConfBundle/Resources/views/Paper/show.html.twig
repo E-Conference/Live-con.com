@@ -47,7 +47,7 @@
                         <th>Authors</th>
                         <td>
                              {% for author in entity.authors %}
-                                <li>{{ author.computeName()|e }}</li>
+                                <li>{{ author.name|e }}</li>
                              {% endfor %}
                         </td>
                     </tr>
