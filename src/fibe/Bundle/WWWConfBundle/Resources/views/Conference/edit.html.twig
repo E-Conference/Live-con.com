@@ -26,10 +26,9 @@
                         <a  id="showConfForm"  class="btn btn-warning btn-create">
                              <i class="icon-edit"></i>
                         </a>
-                        <form id="confNameForm"  class="input-append" method="POST" action="">
-                              
-                                 {{ form_widget(form) }} 
-                                 {{ form_errors(form) }}   
+                        <form id="confNameForm"  class="input-append" method="POST" action="" {{ form_enctype(form) }} >
+                                {{ form_widget(form) }} 
+                                {{ form_errors(form) }}   
                                 <button type="submit" class="btn btn-block btn-success">
                                     <i class="icon-ok"></i> 
                                 </button> 

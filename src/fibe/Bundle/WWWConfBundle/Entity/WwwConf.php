@@ -2,6 +2,7 @@
 
 namespace fibe\Bundle\WWWConfBundle\Entity;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -96,13 +97,18 @@ class WwwConf
     */
     private $appConfig;
 
-    /**
-    * @var string
-    *
-    * @ORM\Column(name="logo", type="string", length=255,nullable=true)
-    */
+
+     /**
+     * @var UploadedFile
+     * @Assert\File(maxSize="6000000")
+     */
     private $logo;
 
+     /**
+     * @var String
+     * @ORM\Column(name="logoPath", type="string", length=255,nullable=true)
+     */
+    private $logoPath;
 
     /**
     * @var string
@@ -150,19 +156,32 @@ class WwwConf
         $this->confManagers->removeElement($confManager);
     }
     
+
+
     public function getConfManagers()
     {
         return $this->confManagers;
     }
     
 
-    public function setLogo($Logo)
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setLogo(UploadedFile $logo = null)
     {
-        $this->logo = $Logo;
+        $this->logo = $logo;
     
         return $this;
     } 
     
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
     public function getLogo()
     {
         return $this->logo;
@@ -179,6 +198,19 @@ class WwwConf
     {
         return $this->acronym;
     }
+
+
+    public function setLogoPath($logoPath)
+    {
+        $this->logoPath = $logoPath;
+        return $this;
+    } 
+    
+    public function LogoPath()
+    {
+        return $this->logoPath;
+    }
+    
     
     
     /**
@@ -541,5 +573,40 @@ class WwwConf
     public function getRoles()
     {
         return $this->roles;
+    }
+
+    public function uploadLogo()
+    {
+        // the file property can be empty if the field is not required
+        if (null === $this->getLogo() ){
+            return;
+        }
+
+
+
+        // générer un nom aléatoire et essayer de deviner l'extension (plus sécurisé)
+        $extension = $this->getLogo()->guessExtension();
+        if (!$extension) {
+            // l'extension n'a pas été trouvée
+            $extension = 'bin';
+        }
+        $name = $this->getId().'.'.$extension;
+        $this->getLogo()->move($this->getUploadRootDir(),$name );
+        $this->setLogoPath($name);
+    }
+
+    protected function getUploadRootDir()
+    {
+        // the absolute directory path where uploaded
+        // documents should be saved
+        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+    }
+
+
+    protected function getUploadDir()
+    {
+        // get rid of the __DIR__ so it doesn't screw up
+        // when displaying uploaded doc/image in the view.
+        return 'uploads/';
     }
 }
