@@ -104,6 +104,12 @@ class WwwConf
      */
     private $logo;
 
+     /**
+     * @var String
+     * @ORM\Column(name="logoPath", type="string", length=255,nullable=true)
+     */
+    private $logoPath;
+
     /**
     * @var string
     *
@@ -192,6 +198,19 @@ class WwwConf
     {
         return $this->acronym;
     }
+
+
+    public function setLogoPath($logoPath)
+    {
+        $this->logoPath = $logoPath;
+        return $this;
+    } 
+    
+    public function LogoPath()
+    {
+        return $this->logoPath;
+    }
+    
     
     
     /**
@@ -571,8 +590,9 @@ class WwwConf
             // l'extension n'a pas été trouvée
             $extension = 'bin';
         }
-        $this->getLogo()->move($this->getUploadRootDir(), rand(1, 99999).'.'.$extension);
-
+        $name = $this->getId().'.'.$extension;
+        $this->getLogo()->move($this->getUploadRootDir(),$name );
+        $this->setLogoPath($name);
     }
 
     protected function getUploadRootDir()
@@ -587,6 +607,6 @@ class WwwConf
     {
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
-        return 'uploads/logo';
+        return 'uploads/';
     }
 }
