@@ -51,3 +51,8 @@ option
 
 	margin-top: 8% !important;
 }
+
+.badge-success{
+	/*background-color: #47a447;*/
+	background-color: #5cb85c;
+}

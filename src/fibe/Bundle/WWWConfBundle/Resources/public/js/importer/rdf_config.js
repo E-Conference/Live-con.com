@@ -212,11 +212,13 @@ var rdfConfig = {
 
             var catId = getCategoryIdFromName(catName);
             if(catId==undefined){ 
-              var category= {}; 
-              category['setName']=catName;
-              if(catName == "ConferenceEvent") confName = event['setSummary'];
-              categories.push(category);
-              catId = categories.length-1;
+                var category= {}; 
+                category['setName']=catName;
+                if(catName == "ConferenceEvent") {
+                    event['mainConferenceEvent']=true;
+                }
+                categories.push(category);
+                catId = categories.length-1;
             }
             event['addCategorie']=catId;
             
@@ -227,6 +229,9 @@ var rdfConfig = {
             xproperty['setXNamespace']="event_uri";
             xproperty['setXValue']=$(node).attr('rdf:about');
             xproperties.push(xproperty);
+
+            //don't store the original event
+            return false;
         }, 
     },
  

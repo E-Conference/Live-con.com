@@ -29,53 +29,49 @@
 
                         <div id="map" style="height:300px"></div>
                     </div>
-                </div>
-                <div class="row">
- 
-                        <div id="conference-edit" >
-                            <div class="col-lg-6">
-                                <h3 class="text-info">Conference info  </h3>
-                                <form class="input-append" method="POST" action="" {{ form_enctype(form) }} >
-                                        {{ form_widget(form) }} 
-                                        {{ form_errors(form) }}   
-                                        <button type="submit" class="btn btn-block btn-success">
-                                            <i class="icon-ok"></i> 
-                                        </button> 
+                </div> 
+                <div id="conference-edit" class="row ">
+                    <div class="col-lg-6">
+                        <h3 class="text-info">Conference info  </h3>
+                        <form class="input-append" method="POST" action="" {{ form_enctype(form) }} >
+                                {{ form_widget(form) }} 
+                                {{ form_errors(form) }}   
+                                <button type="submit" class="btn btn-block btn-success">
+                                    <i class="icon-ok"></i> 
+                                </button> 
 
-                                    <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(form) }}</div>  
-                                </form> 
-     
-                            </div>
-                            <div class="col-lg-6">
-                                <h3 class="text-info">Import a Conference from file  </h3>
-                                <form id="EventImportForm"  class="input-append">
-                                    <label for="EventImport"> 
-                                        Available input format are : 
-                                            <span class="badge">RDF</span>
-                                            <span class="badge">OWL</span>
-                                            <span class="badge">OCS</span> 
-                                    </label>
-                                    
-                                    <div class="input-group">
-                                        <input id="EventImport" class="form-control" name="EventImport" value="../../../../datasets/ICANN2013.xml" type="text"/>
-                                        <span class="input-group-btn">
-                                            <button type="submit"class="btn btn-default">
-                                                Process import <i class="icon-arrow-right"></i> 
-                                            </button>
-                                        </span>
-                                    </div><!-- /input-group --> 
-                                </form> 
+                            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(form) }}</div>  
+                        </form> 
 
-                                <h3 class="text-info">Action</h3>
-                                <a  class="empty-conf btn btn-danger btn-xs" href="{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}"> 
-                                    <i class="icon-trash"></i> Empty conference
-                                </a>
+                    </div>
+                    <div class="col-lg-6">
+                        <h3 class="text-info">Import a Conference from file  </h3>
+                        <form id="EventImportForm"  class="input-append">
+                            <label for="EventImport"> 
+                                Available input format are : 
+                                    <span class="badge badge-success" ><i class="icon-ok" ></i>  RDF</span>
+                                    <span class="badge badge-success"><i class="icon-ok" ></i>  OWL</span>
+                                    <span class="badge badge-success"><i class="icon-ok" ></i>  OCS</span> 
 
-                            </div>
-                        </div><!-- #conference-edit -->  
+                            </label>
+                            
+                            <div class="input-group">
+                                <input id="EventImport" class="form-control" name="EventImport" value="../../../../datasets/ICANN2013.xml" type="text"/>
+                                <span class="input-group-btn">
+                                    <button type="submit"class="btn btn-default">
+                                        Process import <i class="icon-arrow-right"></i> 
+                                    </button>
+                                </span>
+                            </div><!-- /input-group --> 
+                        </form> 
 
-                </div>
-                
+                        <h3 class="text-info">Action</h3>
+                        <a  class="empty-conf btn btn-danger btn-xs" href="{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}"> 
+                            <i class="icon-trash"></i> Empty conference
+                        </a>
+
+                    </div>
+                </div><!-- #conference-edit -->    
             </div>
         </div> 
     </div>
@@ -242,7 +238,7 @@
                                 if(dataArray!=undefined){
                                     var msg = "<ul>";
                                     for (var i in dataArray){
-                                        if(dataArray[i].length >0)
+                                        if(dataArray[i] && dataArray[i].length >0)
                                             msg +="<li>"+dataArray[i].length +" "+i+" added !</li>"
                                     }
                                     msg += "</ul>";
