@@ -30,8 +30,7 @@ class Person
      * name
      * A name for some thing. Name of the person 
      * / ! \  auto built with the concatenation of first and last name
-     * @ORM\Column(type="string", name="name")
-     * @Assert\NotBlank(message ="Please give a name")
+     * @ORM\Column(type="string", name="name") 
      */
     protected $name;
 
@@ -42,6 +41,12 @@ class Person
      */
     protected $familyName;
 
+    /**
+     * firstName 
+     * @Assert\NotBlank(message ="Please give a first name")
+     * @ORM\Column(type="string", nullable=true,  name="firstName")
+     */
+    protected $firstName;
 
     /**
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="name")
@@ -104,13 +109,6 @@ class Person
      */
     protected $conference;
 
-   /**
-     * nick
-     *
-     *
-     * @ORM\Column(type="string", nullable=true,  name="nick")
-     */
-    protected $nick;
 
     /**
      * email
@@ -156,7 +154,7 @@ class Person
 
      public function __toString() 
     {
-        return $this->name." ".$this->familyName;
+        return $this->name;
 
     }
 
@@ -169,7 +167,7 @@ class Person
      */
     public function computeName()
     {
-        $this->setName($this->name." ".$this->familyName);
+        $this->setName($this->firstName." ".$this->familyName);
     }
     
     /**
@@ -184,7 +182,7 @@ class Person
 
     /**
      * Set name
-     *
+     *  / \
      * / ! \  auto built with the concatenation of first and last name
      *
      * @param string $name
@@ -228,6 +226,30 @@ class Person
     public function getFamilyName()
     {
         return $this->familyName;
+    }
+
+
+    /**
+     * Set firstName
+     *
+     * @param string $firstName
+     * @return Person
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+    
+        return $this;
+    }
+
+    /**
+     * Get firstName
+     *
+     * @return string 
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
     }
 
   
@@ -300,28 +322,6 @@ class Person
         return $this->openId;
     }
 
-    /**
-     * Set nick
-     *
-     * @param string $nick
-     * @return Person
-     */
-    public function setNick($nick)
-    {
-        $this->nick = $nick;
-    
-        return $this;
-    }
-
-    /**
-     * Get nick
-     *
-     * @return string 
-     */
-    public function getNick()
-    {
-        return $this->nick;
-    }
 
     /**
      * Set email
