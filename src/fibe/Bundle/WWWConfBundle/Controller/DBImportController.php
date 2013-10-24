@@ -56,7 +56,20 @@ class DBImportController extends Controller
         //categories color.
         $colorArray = array('lime', 'red', 'blue', 'orange', 'gold', 'coral', 'crimson', 'aquamarine', 'darkOrchid', 'forestGreen', 'peru','purple' ,'seaGreen'  );
         
+        ////////////////////// conference //////////////////////
+        if(isset($JSONFile['keywords'])){
+            $conference = $JSONFile['conference'];
+            $mainConfEvent = $wwwConf->getMainConfEvent();
+            foreach ($conference as $setter => $value) {
 
+                if($setter=="setAcronym"){
+                    $entity = $wwwConf;
+                }else{
+                    $entity = $mainConfEvent;
+                }
+                call_user_func_array(array($entity, $setter), array($value)); 
+            }
+        }
         
         
         //////////////////////  keywords  ////////////////////// 
