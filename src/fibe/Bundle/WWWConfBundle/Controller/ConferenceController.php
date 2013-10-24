@@ -59,5 +59,27 @@ class ConferenceController extends Controller
           'form' => $form->createView()
       );
     }
+
+  /**
+ * @Route("/downloadLogo", name="schedule_conference_logo_download")
+ * @Template()
+ */
+   /* public function download1Action($id=null)
+   {
+      $em = $this->getDoctrine()->getEntityManager();
+      $doc = $em->find('MonBundle:Document',$id);
+      $fichier = $doc->getPath();
+ 
+      $response = new Response();
+        $response->setStatusCode(200);
+        $response->headers->set('Content-Type', "application/$format"); 
+        $response->headers->set('Content-Disposition', sprintf('attachment;filename="%s"', $fichier, $format)); 
+        $response->setCharset('UTF-8');
+ 
+        // prints the HTTP headers followed by the content
+        $response->send();
+        return $response;
+ 
+  }*/
       
 }

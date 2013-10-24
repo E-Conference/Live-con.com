@@ -18,7 +18,7 @@
           <a href="{{path('mobileAppPublic_index', { 'id': conference.id })}}" ><i class="icon-eye-open icon-4x"></i></a>
       </div>
        <div>
-        <form action="{{ path('mobileAppTheme_update_conference', { 'id': conference.id })}}" method="post">
+        <form action="{{ path('mobileAppTheme_update_conference', { 'id': conference.id })}}" method="post" {{ form_enctype(conference_form) }}>
             {{ form_widget(conference_form)}}
             <button type="submit" class="btn btn-success"><i class="icon-edit"></i></button>
         </form>
@@ -26,8 +26,10 @@
 
        <div class='logo' style="width:300px; height: 200px">
           <div class="logo-choice"  style="width:300px; height: 200px">
-              <img src="{{ conference.logo}}" style="width:auto; height: 100%">
+              <img src="{{ asset('uploads/')}}{{conference.logoPath}}" style="width:auto; height: 100%">
           </div>
+       </div>
+       <div id="palette">
        </div>
     </div> 
 </div>    
@@ -36,8 +38,27 @@
 
 {% block javascripts %}
   <script type="text/javascript" src="{{ asset('js/jscolor/jscolor.js')}}"></script>
+  <script type="text/javascript" src="{{ asset('js/colorThief.js')}}"></script>
    <script type="text/javascript">
   $( document ).ready(function() {
+      var image = new Image();
+      image.src = "{{ asset('uploads/')}}{{conference.logoPath}}"
+      var colorThief = new ColorThief();
+      var palette = colorThief.getPalette(image, 8);
+      $("#color1").val(palette[0])
+      $.each(palette, function(i, colorRow){
+          var newColorBox = $("<input class='color'/>");
+          
+          newColorBox.val(colorToHex(colorRow[0], colorRow[1], colorRow[2]));
+          $("#palette").append(newColorBox);
+      })
+
+
+      function colorToHex(redCol, greenCol, blueCol) {
+          
+          var rgb = blueCol | (greenCol << 8) | (redCol << 16);
+          return '#' + rgb.toString(16);
+      };
   });
   </script>
 {% endblock%}

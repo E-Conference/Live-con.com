@@ -15,6 +15,7 @@ use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 
 use fibe\Bundle\WWWConfBundle\Form\WwwConfType;
 use fibe\Bundle\WWWConfBundle\Form\MobileAppConfigType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * Mobile app controller.
  *
@@ -34,7 +35,7 @@ class MobileAppThemeController extends Controller
         $mobile_app_form = $this->createForm(new MobileAppConfigType(), $mobile_app_config);
 
         $conference = $this->getUser()->getCurrentConf();
-        $conference_form = $this->createForm(new WwwConfType(), $conference);
+        $conference_form = $this->createForm(new WwwConfType($this->getUser()), $conference);
 
 		return $this->render('fibeMobileAppBundle:MobileAppTheme:index.html.twig', array(
             'mobile_app_form' => $mobile_app_form->createView(),
@@ -80,15 +81,17 @@ class MobileAppThemeController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('fibeWWWConfBundle:WwwConf')->find($id);
 
+       
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find conference entity.');
         }
 
-        $editForm = $this->createForm(new WwwConfType(), $entity);
+        $editForm = $this->createForm(new WwwConfType($this->getUser()), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
+            $entity->uploadLogo();
             $em->flush();
            // $this->clearCache();
         }
