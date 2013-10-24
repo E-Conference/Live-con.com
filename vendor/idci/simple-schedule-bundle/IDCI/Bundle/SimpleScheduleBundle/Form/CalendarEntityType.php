@@ -29,7 +29,9 @@ abstract class CalendarEntityType extends AbstractType
 
         $builder
             ->add('summary')
-            ->add('categories')
+            ->add('parent', null, array('required' => false))
+            ->add('categories', null, array('required' => false))
+            ->add('location', null, array('required' => false))
             ->add('startAt', 'datetime', array(  
                 'widget' =>'single_text',
                 'format' =>'dd/MM/yyyy HH:mm', 

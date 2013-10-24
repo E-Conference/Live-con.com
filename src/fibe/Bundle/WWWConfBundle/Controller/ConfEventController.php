@@ -344,6 +344,7 @@ class ConfEventController extends Controller
         $role->setPerson($person);
         $role->setType($type);
         $role->setEvent($entity);
+        $role->setConference($this->getUser()->getCurrentConf());
         $em->persist($role);
         
         //Add paper to the confEvent

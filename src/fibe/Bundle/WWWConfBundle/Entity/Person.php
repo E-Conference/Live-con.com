@@ -481,15 +481,6 @@ class Person
         return $this->organizations;
     }
 
-      /**
-     * Get organization
-     *
-     * @param \Doctrine\Common\Collections\Collection $organizations
-     */
-    public function setOrganizations( $organizations)
-    {
-        return $this->organizations = $organizations;
-    }
 
     /**
      * Add roles

@@ -18,10 +18,10 @@ class PaperType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', 'text', array('label' => "Title *"))
-            ->add('abstract', 'text', array('label' => "Abstract", 'required' => false))
+            ->add('title')
+            ->add('abstract', 'text', array( 'required' => false))
             ->add('publishDate')
-            ->add('url', 'text', array('label' => "Url *"))
+            ->add('url')
             ->add('subjects', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Keyword',
                 'label'   => 'Subjects',

@@ -74,6 +74,7 @@ class Organization
         $this->members = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
     public function __toString(){
         return $this->name;
     }
@@ -160,12 +161,12 @@ class Organization
     /**
      * Add members
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Person $members
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Person $member
      * @return Organization
      */
-    public function addMember(\fibe\Bundle\WWWConfBundle\Entity\Person $members)
+    public function addMember(\fibe\Bundle\WWWConfBundle\Entity\Person $member)
     {
-        $this->members[] = $members;
+        $this->members[] = $member;
     
         return $this;
     }
@@ -175,9 +176,9 @@ class Organization
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\Person $members
      */
-    public function removeMember(\fibe\Bundle\WWWConfBundle\Entity\Person $members)
+    public function removeMember(\fibe\Bundle\WWWConfBundle\Entity\Person $member)
     {
-        $this->members->removeElement($members);
+        $this->members->removeElement($member);
     }
 
     /**

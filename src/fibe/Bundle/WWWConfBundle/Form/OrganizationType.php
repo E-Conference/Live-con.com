@@ -14,7 +14,7 @@ class OrganizationType extends AbstractType
             ->add('name')
             ->add('page')
             ->add('country')
-            ->add('members')
+            ->add('members',null,array('required' => false))
         ;
     }
 
