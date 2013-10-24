@@ -39,6 +39,13 @@
                         </td>
                     </tr>
                     <tr>
+                        <th>Social Accounts</th>
+                        <td> {% for account in entity.accounts %}
+                              <li>{{ account.socialService.name|e }} : {{ account.accountName|e }} </li>
+                              {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
                         <th>Photo</th>
                         <td><img src="{{ entity.img }} " height="10%" width="20%"></td>
                     </tr>
