@@ -17,6 +17,12 @@
                 background-image: url("{{ asset('img/bg_texture2.jpg') }}"); 
                 background-position: initial initial; background-repeat: initial initial;
             }
+            
+            /* select 2 required msg*/
+            .select2-offscreen, .select2-offscreen:focus { 
+                left: auto !important;
+                top: auto !important;
+            }
          </style>
         {% endblock %}
         <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>

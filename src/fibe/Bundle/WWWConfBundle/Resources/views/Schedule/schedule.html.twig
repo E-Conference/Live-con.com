@@ -355,7 +355,7 @@
               setTimeout(function(){ //bug... event isn't yet updated 
                     event.updateParentDate();
                     event.updateChildrenDate();
-                    // event.render();
+                    event.render();
                     event.persist(); 
               },1);//bug... event isn't yet updated 
           }, 
@@ -377,9 +377,8 @@
           drop: function(date, allDay) { //drop from sidebar
           
               // retrieve the dropped element's stored Event Object 
-              var event = Events[dragged[1].id]; 
-              // var event = $.extend({},dragged[1]); 
-              dragged[1].elem.remove();
+              var event = dragged[1]; 
+              // var event = $.extend({},dragged[1]);  
               event.elem.remove();
               // delete event.elem;
               event.allDay = allDay;
@@ -392,12 +391,12 @@
 
               event.SetRecurDate();
               // event.deleteParent();
+              Events[event.id] = event;
               
               event.persist();
               event.render();
 
               // render the event on the calendar  
-              // Events[event.id] = event;
                 
           },
           eventDragStart: function( event, jsEvent, ui, view ) { 
@@ -472,12 +471,7 @@
           }
 
           $(".fc-event-draggable:visible").each(function(i){ 
-            var id = parseInt($(this).find(".fc-event-id").text());
-            //TODO
-            //TODO
-            //TODO
-            //TODO
-            //TODO
+            var id = parseInt($(this).find(".fc-event-id").text()); 
             //$.inArray()
             Events[id]['elem'] = $(this);
           });
@@ -575,26 +569,72 @@
 
                     //action on hovered by another dragging event  
                     element.data("border-color",element.css("border-color"))
-                              .data("prop",getProp(element)); 
-                    var overBorderColor = "green";
+                           // .data("background-color",element.css("background-color"))
+                           .data("prop",getProp(element));
+                    var overBackgroundColor = "green";
+                    var shortestDragOverEvent = null;
+                    var lastShortestDragOverEvent = null;
                     element.droppable({
                         over: function( ev, ui ) {
-                          if ( $(ui.draggable).hasClass("fc-event") ){
-                            $(this).css("border-color",overBorderColor); 
+                          if ( $(ui.draggable).hasClass("fc-event") ){ 
+                            var event = EventCollection.getEventByDiv($(this));
+                            var draggedEvent = dragged[1];
+                            if(draggedEvent.parent.id === event.id){
+                              // already sub-event
+                              return;
+                            }
+
+                            //check if it's going to do a loop in the tree
+                            if(event.isChild(draggedEvent)){
+                              return;
+                            }
+                            if(!shortestDragOverEvent ) shortestDragOverEvent = event;
+
+                            if(shortestDragOverEvent.duration() >= event.duration()){
+                              shortestDragOverEvent.elem.css({"outline":"0px dashed green"});
+                              lastShortestDragOverEvent = shortestDragOverEvent;
+                              shortestDragOverEvent = event;
+                              $(this).css({"outline":"3px dashed green"});
+                            }
+                            // $(this).animate({"background-color":overBackgroundColor},{queue:false});
+                            
                           }
                         },
                         out: function( ev, ui ) { 
                           if ( $(ui.draggable).hasClass("fc-event") ){
-                          $(this).animate({"border-color":$(this).data("border-color")},{queue:false}) 
+                            // $(this).animate({"background-color":$(this).data("background-color")},{queue:false});
+                            $(this).css({"outline":"0px dashed green"});
+                            var event = EventCollection.getEventByDiv($(this)); 
+                            if(lastShortestDragOverEvent && lastShortestDragOverEvent.id === event.id){  
+                              // console.log (lastShortestDragOverEvent.title +" was lastShortest")
+                              // console.log (" Shortest is" + shortestDragOverEvent.title)
+                              lastShortestDragOverEvent = null;
+                              // if(shortestDragOverEvent.elem) shortestDragOverEvent.elem.css({"outline":"3px dashed green"});
+                            }
+                            if(shortestDragOverEvent && shortestDragOverEvent.id === event.id){ 
+                              // console.log (shortestDragOverEvent.title +" was shortest")
+                              // console.log (" lastShortest is" + lastShortestDragOverEvent.title)
+                              shortestDragOverEvent = lastShortestDragOverEvent;
+                              lastShortestDragOverEvent = null;
+                              if(shortestDragOverEvent) shortestDragOverEvent.elem.css({"outline":"3px dashed green"});
+                            }
                           }
                         },
                         drop: function( ev, ui ) { 
                           if ( $(ui.draggable).hasClass("fc-event") ){ 
-                          $(this).animate({"border-color":$(this).data("border-color")},{queue:false}) 
+                            // $(this).animate({"background-color":$(this).data("background-color")},{queue:false});
+                            $(this).css({"outline":"0px dashed green"});
+                            
                             var event = EventCollection.getEventByDiv($(this));
+                            if(shortestDragOverEvent && shortestDragOverEvent.id === event.id){
+                              shortestDragOverEvent = null;
+                              lastShortestDragOverEvent= null;
+                            }else{
+                              return;
+                            }
+
                             var draggedEvent = dragged[1];
-                            if(draggedEvent.parent.id 
-                              === event.id){
+                            if(draggedEvent.parent.id === event.id){
                               // already sub-event
                               return;
                             }

@@ -6,13 +6,17 @@ var CalEvent = function(event){
     this["title"]      = event.name || event.title; 
     this["start"]      = event.start || event.start_at;
     this["end"]        = event.end || event.end_at; 
-    this["allDay"]     = event.is_allday==="true";
+    this["allDay"]     = (event.allDay === true || event.allDay === false) ?  
+                                event.allDay : 
+                                event.is_allday ? 
+                                        event.is_allday ==="true" : 
+                                        event.allDay ==="true" ;
     this["parent"]     = event.parent;
     this["children"]   = event.children;
     this["categories"] = event.categories || [];
 
-    if( this && this.color)
-      this["color"] = this.color;
+    if( event.categories && event.categories.length > 0 && event.categories[0].color > 0)
+      this["color"] = event.color;
 
     if(this.length > 0 && this.color)
       this["background-color"] = this.color;
@@ -25,13 +29,14 @@ var CalEvent = function(event){
 };
 
 CalEvent.prototype.render = function (){
+    // alert("render "+this.id+" "+this.allDay)
+
     renderedEvent = this;
     renderedEvent.formatDate();
     // render the event on the calendar
     if($calendar.fullCalendar('clientEvents',this.id).length <1){
-      // alert("new calEvent for "+ this.id)
-      
-      renderedEvent = new CalEvent(this);
+      // alert("new calEvent for "+ this.id) 
+      renderedEvent = new CalEvent(this); 
       $calendar.fullCalendar('renderEvent', renderedEvent);
     }else{
       $calendar.fullCalendar('removeEvents', renderedEvent.id);
@@ -54,9 +59,10 @@ CalEvent.prototype.render = function (){
     //       };
     //       setTimeout(doWork, 50);
  
+    console.log("client events :",$calendar.fullCalendar('clientEvents'));
+    console.log("Events :",Events);
 
     console.log("event.render("+renderedEvent.id+")");
-    console.log($calendar.fullCalendar('clientEvents'));
     console.log("client event :",$calendar.fullCalendar('clientEvents',renderedEvent.id));
     return renderedEvent;
 };
@@ -349,4 +355,8 @@ CalEvent.prototype.isInstant = function(){
 CalEvent.prototype.formatDate = function () {  
     this['start'] = moment(this['start']).format();
     this['end'] = moment(this['end']).format();
+};
+
+CalEvent.prototype.duration = function () {  
+    return moment(this.end).diff(this.start);
 };

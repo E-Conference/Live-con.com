@@ -7,11 +7,10 @@ function Sidebar(){
         this.setSidebarEvent = setSidebarEvent; 
  
         var eventHtml =  "<div class='external-event fc-event-draggable'></div>";
-        var $sidebarTmp = $(eventHtml).prependTo($sidebar).hide();
-
+        var $sidebarTmp = $(eventHtml);
         function setInstantEvents(instant_events){
           $sidebar.html("");  
-          
+          $sidebarTmp.prependTo($sidebar).hide(); 
           //set sidebar bubble draggable
           for (var i in instant_events){ 
             // if(!isInstant(instant_events[i])) continue;

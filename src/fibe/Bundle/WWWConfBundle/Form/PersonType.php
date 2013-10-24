@@ -19,14 +19,14 @@ class PersonType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text', array('label' => "Name *"))
+            ->add('firstName', 'text', array('label' => "First name *"))
             ->add('familyName', 'text', array('label' => "Family Name *"))
             ->add('email','text', array('required' => false))
             ->add('age', 'text', array('required' => false))
             ->add('page', 'text', array('required' => false))
             ->add('img', 'text', array('required' => false))
             ->add('openId', 'text', array('required' => false))
-            ->add('nick', 'text', array('required' => false))
+            // ->add('nick', 'text', array('required' => false))
             ->add('organizations', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Organization',
                 'label'   => 'Organizations',

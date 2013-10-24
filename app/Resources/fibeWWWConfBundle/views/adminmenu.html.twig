@@ -103,6 +103,22 @@
           </ul>
         </li>
 
+         <!-- Organizations dropdown -->
+        <li><a href ="{{ path('schedule_organization_index') }}" title="manage schedule"> Organizations</a></li>
+        <li class="dropdown">
+          <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
+            
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li> 
+              <a style="padding-right:5px;"   href="{{ path('schedule_organization_index') }}"  >
+                <i class="icon-th-list"></i> List
+              </a>
+            </li>
+          </ul>
+        </li> 
+
 
         <!-- <li><a href ="{{ path('schedule_status') }}" title="Status">Status</a></li> -->
        <!--  <li><a href ="{{ path('schedule_location') }}" title="Location">Location</a></li>
