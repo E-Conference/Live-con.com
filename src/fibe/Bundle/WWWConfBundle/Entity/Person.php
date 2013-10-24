@@ -103,7 +103,8 @@ class Person
 
     /**
      *  
-     * @ORM\OneToMany(targetEntity="Role",  mappedBy="person")
+     * @ORM\OneToMany(targetEntity="Role",  mappedBy="person",cascade={"remove"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * 
      */
     private $roles;

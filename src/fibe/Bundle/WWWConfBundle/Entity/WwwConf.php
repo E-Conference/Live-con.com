@@ -26,18 +26,11 @@ class WwwConf
     private $id;
 
     /**
-    * confEvents
+    * events
     *
     * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\ConfEvent", mappedBy="conference",cascade={"persist", "remove"})
     */
     private $events;
-
-    /**
-    * roles
-    *
-    * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Role", mappedBy="conference",cascade={"persist", "remove"})
-    */
-    private $roles;
 
     /**
     * locations
@@ -141,7 +134,7 @@ class WwwConf
     }
 
     /**
-     * confEvents
+     * ConfManager
      */
      
     public function addConfManager(\fibe\SecurityBundle\Entity\User $confManager = null)
@@ -211,59 +204,13 @@ class WwwConf
         return $this->logoPath;
     }
     
-    
-    
-    /**
-     * confEvents
-     */
-     
-    public function addConfEvents(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $confEvent)
-    {
-        $this->confEvents[] = $confEvent;
-    
-        return $this;
-    }
-    
-    public function removeConfEvents(\IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity $confEvent)
-    {
-        $this->confEvents->removeElement($confEvent);
-    }
-    
-    public function getConfEvents()
-    {
-        return $this->confEvents;
-    }
-    
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->confEvents = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->events = new \Doctrine\Common\Collections\ArrayCollection();
         $this->confManagers = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
-     * Add confEvents
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $confEvents
-     * @return WwwConf
-     */
-    public function addConfEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $confEvents)
-    {
-        $this->confEvents[] = $confEvents;
-    
-        return $this;
-    }
-
-    /**
-     * Remove confEvents
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $confEvents
-     */
-    public function removeConfEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $confEvents)
-    {
-        $this->confEvents->removeElement($confEvents);
     }
 
     /**
@@ -538,41 +485,6 @@ class WwwConf
     public function getEvents()
     {
         return $this->events;
-    }
-
-
-
-    /**
-     * Add roles
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $roles
-     * @return WwwConf
-     */
-    public function addRole(\fibe\Bundle\WWWConfBundle\Entity\Role $roles)
-    {
-        $this->roles[] = $roles;
-    
-        return $this;
-    }
-
-    /**
-     * Remove roles
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $roles
-     */
-    public function removeRole(\fibe\Bundle\WWWConfBundle\Entity\Role $roles)
-    {
-        $this->roles->removeElement($roles);
-    }
-
-    /**
-     * Get roles
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getRoles()
-    {
-        return $this->roles;
     }
 
     public function uploadLogo()
