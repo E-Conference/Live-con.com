@@ -129,7 +129,7 @@
 {{ parent() }}
 <script type="text/javascript">
 
-   
+   $(document).ready(function() {
    //listen for the form beeing submitted
    $("#form_papers").change(function(){
       //get the url for the form
@@ -173,7 +173,7 @@
           return false;
          };
        
-$(document).ready(function() {
+
      $('.help').popover({ 'trigger': 'click', 'placement':'bottom'});
    
   

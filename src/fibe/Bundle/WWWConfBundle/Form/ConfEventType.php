@@ -44,12 +44,14 @@ class ConfEventType extends EventType
                 'class' => 'IDCISimpleScheduleBundle:Location',
                 'label'   => 'Location',
                 'choices'=> $this->user->getCurrentConf()->getLocations()->toArray(),
+                'empty_data'  => null,
                 'required' => false,
             ))
              ->add('parent', 'entity', array(
                 'class' => 'IDCISimpleScheduleBundle:Event',
                 'label'   => 'Parent',
                 'choices'=> $this->user->getCurrentConf()->getEvents()->toArray(),
+                'empty_data'  => null,
                 'required' => false,
             ))
         ;                   

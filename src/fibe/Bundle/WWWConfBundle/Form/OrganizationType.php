@@ -8,13 +8,27 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class OrganizationType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    private $user;
+
+    public function __construct($user)
+    {
+        $this->user = $user;
+    }
+
+
+   public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name')
             ->add('page')
             ->add('country')
-            ->add('members',null,array('required' => false))
+            ->add('members', 'entity', array(
+                'class' => 'fibeWWWConfBundle:Person',
+                'label'   => 'Person',
+                'multiple' => true,
+                'choices'=> $this->user->getCurrentConf()->getPersons()->toArray(),
+                'required' => false
+            ))
         ;
     }
 

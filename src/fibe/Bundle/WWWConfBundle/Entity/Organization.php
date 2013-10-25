@@ -55,7 +55,7 @@ class Organization
      *     joinColumns={@ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="Cascade")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="Cascade")})
      */
-    private $members;
+    protected $members;
 
     /**
      *  Themes associated to this conference

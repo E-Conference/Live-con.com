@@ -46,7 +46,7 @@ class OrganizationController extends Controller
     public function createAction(Request $request)
     {
         $entity  = new Organization();
-        $form = $this->createForm(new OrganizationType(), $entity);
+        $form = $this->createForm(new OrganizationType($this->getUser()), $entity);
         $form->bind($request);
 
         if ($form->isValid()) {
@@ -74,7 +74,7 @@ class OrganizationController extends Controller
     public function newAction()
     {
         $entity = new Organization();
-        $form   = $this->createForm(new OrganizationType(), $entity);
+        $form   = $this->createForm(new OrganizationType($this->getUser()), $entity);
 
         return array(
             'entity' => $entity,
@@ -124,7 +124,7 @@ class OrganizationController extends Controller
             throw $this->createNotFoundException('Unable to find Organization entity.');
         }
 
-        $editForm = $this->createForm(new OrganizationType(), $entity);
+        $editForm = $this->createForm(new OrganizationType($this->getUser()), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -152,7 +152,7 @@ class OrganizationController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new OrganizationType(), $entity);
+        $editForm = $this->createForm(new OrganizationType($this->getUser()), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
