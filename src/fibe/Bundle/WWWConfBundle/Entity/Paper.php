@@ -37,9 +37,9 @@ class Paper
 
     /**
      * abstract
+     * events in datasets may don't have abstract
      *
-     *
-     * @ORM\Column(type="text", name="abstract")
+     * @ORM\Column(type="text", name="abstract", nullable=true)
      */
     private $abstract;
 

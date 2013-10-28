@@ -12,6 +12,18 @@ var ocsConfig = {
     getNodeKey : function(node){
         return $(node).attr("id");
     },
+    getNodeName : function(node){
+        return node.nodeName;
+    },
+    getParseItemOrder : function(){
+        return {
+            "locationMapping" : locations,
+            "organizationMapping" : organizations,
+            "personMapping" : persons,
+            "proceedingMapping" : proceedings,
+            "eventMapping" : events
+        };
+    },
     action : function(documentRootNode){
         conference = { 
             setSummary    : $(documentRootNode).children("name").text(),

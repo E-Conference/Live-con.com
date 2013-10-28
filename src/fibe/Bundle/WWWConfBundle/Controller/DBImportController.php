@@ -149,21 +149,8 @@ class DBImportController extends Controller
                 $current = $entities[$i];   
 
                 $entity= new Person();
-                foreach ($current as $setter => $value) {
-                    //if($setter!="setStartAt" && $setter!="setEndAt")echo "Event->".$setter."(".$value.");\n"; 
-                    if($setter=="addOrganization"){
-                        
-                        $j=0;
-                        foreach ($value as $organization) {
-                            if($j!=0){
-                                $val=$organizationEntities[$organization];
+                foreach ($current as $setter => $value) { 
 
-                                call_user_func_array(array($entity, $setter), array($val));
-                            }
-                            $j++;
-                        }  
-                        $value=$organizationEntities[$value[0]];  
-                    }
                     if($setter == "setTwitter"){
                         $ss = $this->getDoctrine()
                                    ->getRepository('fibeWWWConfBundle:SocialService')
@@ -174,7 +161,16 @@ class DBImportController extends Controller
                         $value = $ssa;
                         $setter = 'addAccount';
                     }
-                    call_user_func_array(array($entity, $setter), array($value)); 
+                    if(is_array($value)){
+                        switch ($setter) {
+                            case 'addOrganization':
+                                $entityArray = $organizationEntities;
+                            break;  
+                        } 
+                        $this->doArray($entityArray,$entity, $setter,$value);
+                    }else{
+                        call_user_func_array(array($entity, $setter), array($value)); 
+                    } 
                 } 
                 
                 $entity->setConference(  $wwwConf );
@@ -197,38 +193,21 @@ class DBImportController extends Controller
                   continue; //skip existing category
                 }
                 $entity= new Paper();
-                foreach ($current as $setter => $value) { 
-                    if($setter=="addSubject"){
-                        //addKeyword is an array of index
-                        
-                        $j=0;
-                        foreach ($value as $keyword) {
-                            if($j!=0){
-                                $val=$keywordEntities[$keyword];
-
-                                call_user_func_array(array($entity, $setter), array($val));
-                            }
-                            $j++;
+                foreach ($current as $setter => $value) {  
+                    if(is_array($value)){
+                        switch ($setter) {
+                            case 'addSubject':
+                                $entityArray = $keywordEntities;
+                            break; 
+                            case 'addAuthor':
+                                $entityArray = $personEntities;
+                            break; 
                         } 
-                        $value=$keywordEntities[$value[0]];  
+                        $this->doArray($entityArray,$entity, $setter,$value);
+                    }else{
+                        call_user_func_array(array($entity, $setter), array($value)); 
                     }
 
-                    if($setter=="addAuthor"){
-                        //addAuthor is an array of index
-                        
-                        $j=0;
-                        foreach ($value as $persons) {
-                            if($j!=0){
-                                $val=$personEntities[$persons];
-
-                                call_user_func_array(array($entity, $setter), array($val));
-                            }
-                            $j++;
-                        } 
-                        $value=$personEntities[$value[0]];  
-                    }
-
-                    call_user_func_array(array($entity, $setter), array($value)); 
                 } 
                 $entity->setConference(  $wwwConf );
                 $em->persist($entity); 
@@ -312,39 +291,7 @@ class DBImportController extends Controller
                     
                     if($setter=="addCategorie"){
                         $value=$categoryEntities[$value];
-                    }
-                    
-                    if($setter=="addChair"){
-                        $j=0;
-
-                        //retrieve Chair roletype
-                        $chairRoleType = $this->getDoctrine()
-                                           ->getRepository('fibeWWWConfBundle:RoleType')
-                                           ->findOneBy(array('name' => 'Chair'));
-                        if($chairRoleType==null){
-                            $chairRoleType = new RoleType();
-                            $chairRoleType->setName("Chair");
-                            $em->persist($chairRoleType);
-                        }
-
-
-                        $setter = "addRole";
-                        foreach ($value as $chair) {
-                            if($j!=0){
-                                $person=$personEntities[$chair];
-                                $val = new Role();
-                                $val->setType($chairRoleType);
-                                $val->setPerson($person);
-
-                                call_user_func_array(array($entity, $setter), array($val));
-                            }
-                            $j++;
-                        }  
-                        $person=$personEntities[$value[0]];
-                        $value = new Role();
-                        $value->setType($chairRoleType);
-                        $value->setPerson($person);
-                    }
+                    } 
                     
                     if($setter=="addPaper"){
                         $j=0;
@@ -358,26 +305,55 @@ class DBImportController extends Controller
                         } 
                         $value=$proceedingEntities[$value[0]];   
                     }
-                    
-                    if($setter=="addTheme"){
-                        $j=0;
-                        foreach ($value as $theme) {
-                            if($j!=0){
-                                $val=$themeEntities[$theme];
+                     
 
-                                call_user_func_array(array($entity, $setter), array($val));
-                            }
-                            $j++;
-                        } 
-                        $value=$themeEntities[$value[0]];  
-                        
-                    }
-                    
                     if($setter=="setParent"){  
                         // $current["addChild"] = $entities[$value];
-                    } else{
+                    }else if(is_array($value)){
+                        switch ($setter) {
+                            case 'addTheme':
+                                $entityArray = $themeEntities;
+                            break; 
+                            case 'addPaper':
+                                $entityArray = $proceedingEntities;
+                            break;  
+                        } 
+                        if($setter=="addChair"){
+                            $j=0;
+
+                            //retrieve Chair roletype
+                            $chairRoleType = $this->getDoctrine()
+                                               ->getRepository('fibeWWWConfBundle:RoleType')
+                                               ->findOneBy(array('name' => 'Chair'));
+                            if($chairRoleType==null){
+                                $chairRoleType = new RoleType();
+                                $chairRoleType->setName("Chair");
+                                $em->persist($chairRoleType);
+                            }
+
+
+                            $setter = "addRole";
+                            foreach ($value as $chair) {
+                                if($j!=0){
+                                    $person=$personEntities[$chair];
+                                    $val = new Role();
+                                    $val->setType($chairRoleType);
+                                    $val->setPerson($person);
+
+                                    call_user_func_array(array($entity, $setter), array($val));
+                                }
+                                $j++;
+                            }  
+                            $person=$personEntities[$value[0]];
+                            $value = new Role();
+                            $value->setType($chairRoleType);
+                            $value->setPerson($person);
+                        }else{
+                            $this->doArray($entityArray,$entity, $setter,$value); 
+                        }
+                    } else {
                         call_user_func_array(array($entity, $setter), array($value)); 
-                    }
+                    } 
                 }
                 $entity->setConference(  $wwwConf );
                 $em->persist($entity); 
@@ -433,5 +409,12 @@ class DBImportController extends Controller
 
         return new Response("ok");
     } 
-    
+
+    private function doArray($entityArray, $entity, $setter, $valArray){ 
+        foreach ($valArray as $e) { 
+
+            $val=$entityArray[$e]; 
+            call_user_func_array(array($entity, $setter), array($val));
+        } 
+    }    
 } 

@@ -1,17 +1,68 @@
 
-
+/**
+ *      rdf/owl importer config for OWLImporter.js
+ */
 
 
 var rdfConfig = {
-    getRootNode : function(documentRootNode){   
+    isRDF : false,
+    getRootNode : function(documentRootNode){
+        rdfConfig.isRDF = $(documentRootNode).children()[0].nodeName === "rdf:RDF";
         return $(documentRootNode).children();
     },
-    getNodeKey : function(node){
+    getNodeKey : function(node){ 
         return $(node).attr("rdf:about");
+    },
+    getNodeName : function(node){
+        var uri=[];
+        $(node).children().each(function(){ 
+            if(this.nodeName.indexOf("rdf:type")!== -1 ){
+                if($(this).attr('rdf:resource').indexOf("#")!== -1 ){ 
+                    uri.push($(this).attr('rdf:resource').split('#')[1]); 
+                }
+                else{
+                    var nodeName = $(this).attr('rdf:resource').split('/'); 
+                    uri.push(nodeName[nodeName.length-1]);  
+                }
+            } 
+        }); 
+        if($.inArray('KeynoteTalk', uri) > -1 || node.nodeName.indexOf('KeynoteTalk')>-1)
+        {   
+            return 'KeynoteEvent';
+        }
+        else if(uri.length==1)
+        {
+            return uri[0];
+        }
+        else if(uri.length==0) //rdf
+        { 
+            return node.nodeName;
+        }
+        return undefined;
+    },
+    getParseItemOrder : function(){
+        return {
+            "locationMapping" : locations,
+            "organizationMapping" : organizations,
+            "personMapping" : persons,
+            "proceedingMapping" : proceedings,
+            "eventMapping" : events
+        };
     },
     personMapping : {
         nodeName : 'Person',
         label : {
+
+            //some dataset use rdfs:label instead of foaf ontology
+            'rdfs:label' : {
+                setter : 'setFirstName',
+                format : function(node){  
+                    return $(node).text().split(" ")[0];
+                },
+                action : function(node,person){
+                    person["setFamilyName"] =$(node).text().split(" ")[1] || "";
+                }
+            },
             'foaf:firstName' : {
                 setter : 'setFirstName',
             },
@@ -33,6 +84,18 @@ var rdfConfig = {
             },
             'foaf:description' : {
                 setter : 'setDescription'
+            }, 
+            'swrc:affiliation' : {
+                multiple : true,
+                setter : 'addOrganization',
+                format : function(node){ 
+                    var key = $(node).text() || $(node).attr("rdf:resource"); 
+                    if(objectMap[key])
+                        return $.inArray(objectMap[key], organizations);
+                    else {
+                        console.warn("organization : "+key+" can't be found");
+                    }  
+                },
             },
         }
     },
@@ -51,6 +114,49 @@ var rdfConfig = {
 
     proceedingMapping : {
         nodeName : 'InProceedings',
+
+        label : {
+            'dc:title' : {
+                setter : 'setTitle',
+            },
+            'rdfs:label' : {
+                setter : 'setTitle',
+            },
+            'swrc:abstract': {
+                setter : 'setAbstract',
+            }, 
+            //keywords entity are created directly here (or retrieved)
+            //then we register the correct index
+            'dc:subject' : {
+                multiple : true,
+                setter : 'addSubject',
+                format : function(node){ 
+                    var keywordName = $(node).text() || $(node).attr("rdf:resource");
+                    var index = getKeywordIdFromName(keywordName);
+                    return index !== -1 ? index : false ;
+                },
+                action : function(node){
+                    var keywordName = $(node).text() || $(node).attr("rdf:resource");  
+                    if(getKeywordIdFromName(keywordName)=== -1 ){
+                        keywords.push({'setName':str_format(keywordName)});  
+                    }
+                }
+            },
+            //authors are retrieved from their id in the objectMap .
+            'dc:creator' : {
+                multiple : true,
+                setter : 'addAuthor',
+                format : function(node){ 
+                    var key = $(node).text() || $(node).attr("rdf:resource"); 
+                    if(objectMap[key])
+                        return $.inArray(objectMap[key], persons);
+                    else {
+                        console.warn("author : "+key+" can't be found");
+                    }  
+                }, 
+            }
+        },
+        /*
         overide : function(addArray,mapping,node){  
             var eventUri;
             $(node).children().each(function()
@@ -81,7 +187,7 @@ var rdfConfig = {
                 });
                 xproperties.push(xproperty);
             } 
-        }
+        }*/
     },
 
     eventMapping : {
@@ -137,11 +243,11 @@ var rdfConfig = {
                 multiple: true,
                 setter : 'addTheme',
                 format : function(node){ 
-                    var themeName = $(node).text(); 
+                    var themeName = $(node).text() || $(node).attr("rdf:resource"); 
                     return getThemeIdFromName(themeName);
                 },
                 action : function(node){
-                    var themeName = $(node).text(); 
+                    var themeName = $(node).text() || $(node).attr("rdf:resource"); 
                     if(getThemeIdFromName(themeName)=== -1 ){
                         themes.push({setName:str_format(themeName)});  
                     }
@@ -195,14 +301,14 @@ var rdfConfig = {
         action : function(node,event){
               // EVENT CAT
             var catName = node.nodeName.split("swc:").join("").split("event:").join("");
-            if(catName=="NamedIndividual")catName= getNodeName(node);
+            if(catName=="NamedIndividual")catName= rdfConfig.getNodeName(node);
             var tmp=catName;
             if(tmp.split("Event").join("")!="")
             {
                 catName=tmp;
             }else //OWL fix
             {
-                catName = getNodeName(node).split("swc:").join("").split("event:").join("") ;
+                catName = rdfConfig.getNodeName(node).split("swc:").join("").split("event:").join("") ;
                 tmp=catName;
                 if(tmp.split("Event").join("")!="")
                 {
@@ -270,12 +376,20 @@ var rdfConfig = {
                       
                     }
                 }  
-            }); 
+            });
         }
     },
     organizationMapping : {
-
-    },
+        nodeName : 'Organization',
+        label : {
+            'rdfs:label' : {
+                setter : 'setName'
+            },
+            'foaf:name' : {
+                setter : 'setName'
+            }, 
+        }
+    }, 
 
 }
  

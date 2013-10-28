@@ -57,7 +57,7 @@
                             </label>
                             
                             <div class="input-group">
-                                <input id="EventImport" required="required" class="form-control" name="EventImport" value="../../../../datasets/ICANN2013.xml" type="text"/>
+                                <input id="EventImport" required="required" class="form-control" name="EventImport" value="../../../../datasets/ESWC2012.rdf" type="text"/>
                                 <span class="input-group-btn">
                                     <button type="submit"class="btn btn-default">
                                         Process import <i class="icon-arrow-right"></i> 
@@ -128,13 +128,16 @@
             // create the tile layer with correct attribution
             var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
             var osmAttrib='Map data © OpenStreetMap contributors';
-            var osm = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 15, attribution: osmAttrib});       
-
-            // start the map in South-East England
+            var osm = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 15, attribution: osmAttrib});  
+            map.addLayer(osm);     
+ 
+        {% if (location.latitude is not empty) and (location.longitude is not empty) %} 
             map.setView(new L.LatLng({{location.latitude}}, {{location.longitude}}),13);
-            map.addLayer(osm);
             marker = L.marker([{{location.latitude}}, {{location.longitude}}]).addTo(map);
-            
+        {% else %}
+            map.setView(new L.LatLng(40,10),1);
+
+        {% endif %}
         }
         var marker;
         var map;
@@ -150,7 +153,8 @@
                 $(this).html('<i class="icon-arrow-left" ></i> Hide edit mode');
                 $(this).one("click", hideForm);
                 map.on('click', function(e){
-                   map.removeLayer(marker);
+                   if(marker)map.removeLayer(marker);
+                   console.log(e.latlng)
                    marker = new L.marker(e.latlng).addTo(map); 
                    //UPDATE FIELDS
                    $('#fibe_bundle_wwwconfbundle_wwwconftype_mainConfEvent_location_latitude').val(e.latlng.lat);
@@ -185,7 +189,7 @@
                 bootstrapAlert("info",' file found, trying to import...',"Info : ","<i class='icon-spinner icon-spin'></i>");
                 run(confOwlUriInput.val(),function(dataArray)
                 { 
-                    bootstrapAlert("info",' '+getMsgUl(dataArray)+' sending to the server...',"Info : ","<i class='icon-spinner icon-spin'></i>");
+                    bootstrapAlert("info",' '+getMsgUl(dataArray,"found")+' sending to the server...',"Info : ","<i class='icon-spinner icon-spin'></i>");
                     var data = {dataArray:JSON.stringify(dataArray)};
 
                     $.ajax({ //DBimport
@@ -194,14 +198,17 @@
                         url: "{{ path('schedule_admin_DBimport') }}",
                         data: data,
                         success:function(a,b,c)
-                        {  
-                            bootstrapAlert("success",' '+getMsgUl(dataArray)+'Please refresh this page to see the differences.');
-                            confOwlUriInput.parent().addClass('has-success'); 
+                        {
+                            bootstrapAlert("success",' '+getMsgUl(dataArray,"added")+'Please refresh this page to find out imported items.');
+                            confOwlUriInput.parent().addClass('has-success');
                         },
                         error:function(a,b,c)
-                        {  
-                                bootstrapAlert("warning",'import failed because : '+c); 
-                                confOwlUriInput.parent().addClass('has-warning');  
+                        {
+                            bootstrapAlert("warning",'import failed because : '+c);
+                            console.log(a)
+                            console.log(b)
+                            console.log(c)
+                            confOwlUriInput.parent().addClass('has-warning');  
                         },
                     });
                     
@@ -214,11 +221,11 @@
               return false;
             });  
          }); 
-        function getMsgUl(dataArray){
+        function getMsgUl(dataArray,endString){
             var msg = "<ul>";
             for (var i in dataArray) 
                 if(dataArray[i] && dataArray[i].length >0)
-                    msg +="<li>"+dataArray[i].length +" "+i+" added !</li>"
+                    msg +="<li>"+dataArray[i].length +" "+i+" "+endString+" !</li>"
 
             return msg + "</ul>";
         }

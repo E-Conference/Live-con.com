@@ -22,6 +22,7 @@ function run(url,callback,fallback){
     $.ajax({
         url: completeConfRdfURL,   
         cache:false,
+        dataType:"xml",
         success:function(completeConfRdf){
              
             console.log(completeConfRdf);
@@ -57,9 +58,7 @@ function run(url,callback,fallback){
 
  
             //check format (default : rdf)
-            var format = undefined;   
-
-
+            var format = undefined;    
             for (var i in formatConfig){
                 if(formatConfig[i].checkFormat(completeConfRdf) === true){
                     console.log("format found ! :" + i);
@@ -68,88 +67,53 @@ function run(url,callback,fallback){
             } 
 
             //set format and config 
-            var rootNode = format !== undefined ? formatConfig[format].getRootNode(completeConfRdf) : rdfConfig.getRootNode(completeConfRdf);
-            mappingConfig =  format !== undefined ? formatConfig[format] : rdfConfig;
+            mappingConfig =  format !== undefined 
+                                    ? formatConfig[format] 
+                                    : rdfConfig;
+
+            var rootNode = mappingConfig.getRootNode(completeConfRdf);
+            var parseItemOrder =  mappingConfig.getParseItemOrder();
+            console.log(rootNode)
 
             //////////////////////////////////////////////////////////////////////////
             ///////////////////////////  pre processing  /////////////////////////////
-            ////////////////////////////////////////////////////////////////////////// 
-
+            //////////////////////////////////////////////////////////////////////////  
             if(mappingConfig.action!==undefined){
                 mappingConfig.action(rootNode);
-            } 
+            }
+
+
+
             //////////////////////////////////////////////////////////////////////////
-            /////////////////////////////// locations  ///////////////////////////////
-            ////////////////////////////////////////////////////////////////////////// 
-            console.log(rootNode)
-            rootNode.children().each(function(index,node){ 
-                    var n = getNodeName(node); 
-                    if(n && n.indexOf(mappingConfig.locationMapping.nodeName)!= -1){  
-                        add(locations,mappingConfig.locationMapping,this); 
-                    }
-            }); 
+            ///////////////////////////  items Processing  ///////////////////////////
+            //////////////////////////////////////////////////////////////////////////
  
-            //////////////////////////////////////////////////////////////////////////
-            ////////////////////////////  Organization  //////////////////////////////
-            //////////////////////////////////////////////////////////////////////////
-             
-            rootNode.children().each(function(index,node){ 
-                    var n = getNodeName(node); 
-                    if(n && n.indexOf(mappingConfig.organizationMapping.nodeName)!= -1){  
-                        add(organizations,mappingConfig.organizationMapping,this); 
+            for (var i in parseItemOrder){ 
+                var itemMapping = mappingConfig[i];
+                var addArray = parseItemOrder[i];
+                rootNode.children().each(function(index,node){
+                    var n = mappingConfig.getNodeName(node);
+                    if(n && n.indexOf(itemMapping.nodeName)!= -1){
+                        add(addArray,itemMapping,this); 
                     }
-            });
-         
-            //////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////  Person  //////////////////////////////
-            //////////////////////////////////////////////////////////////////////////
-             
-            rootNode.children().each(function(index,node){ 
-                    var n = getNodeName(node); 
-                    if(n && n.indexOf(mappingConfig.personMapping.nodeName)!= -1){  
-                        add(persons,mappingConfig.personMapping,this); 
-                    }
-            });
+                }); 
+            }
 
-
-            //////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////  publication  ////////////////////////////
-            //////////////////////////////////////////////////////////////////////////
-            
-            rootNode.children().each(function(index,node){ 
-                    var n = getNodeName(node); 
-                    if(n && n.indexOf(mappingConfig.proceedingMapping.nodeName)!= -1){  
-                        add(proceedings,mappingConfig.proceedingMapping,this);  
-                    }
-            }); 
- 
-            //////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////  Event  //////////////////////////////
-            //////////////////////////////////////////////////////////////////////////
-            
-            rootNode.children().each(function(index,node){
-                    var n = getNodeName(node); 
-                    if(n && n.indexOf(mappingConfig.eventMapping.nodeName)!= -1){
-                        add(events,mappingConfig.eventMapping,this); 
-
-                    }
-            });  
-            
             //////////////////////////////////////////////////////////////////////////
             /////////////////////////////  relationships  ////////////////////////////
             //////////////////////////////////////////////////////////////////////////
             
             var j=0;
             rootNode.children().each(function(index,node){ 
-                    var n = getNodeName(node); 
-                    if(n && n.indexOf(mappingConfig.relationMapping.nodeName)!= -1){  
-                        add(relations,mappingConfig.relationMapping,this,{eventId:j});  
-                        j++;
+                var n = mappingConfig.getNodeName(node); 
+                if(n && n.indexOf(mappingConfig.relationMapping.nodeName)!= -1){  
+                    add(relations,mappingConfig.relationMapping,this,{eventId:j});  
+                    j++;
                 }
             });
             // $(completeConfRdf).children().children().each(function(index,node){ 
             //     if( node.nodeName=="NamedIndividual" ) {
-            //         var n = getNodeName(node);
+            //         var n = mappingConfig.getNodeName(node);
             //         if(n && n.indexOf("Event")!= -1){
             //             // j is supposed to be the event index inside the events array
             //             addRelation(node,j);
@@ -162,7 +126,7 @@ function run(url,callback,fallback){
             // $(completeConfRdf).children().children().each(function(index,node){ 
             //     if( node.nodeName=="NamedIndividual" ) 
             //     {
-            //         var n = getNodeName(node);
+            //         var n = mappingConfig.getNodeName(node);
             //         if(n && n.indexOf("InProceedings")!= -1)
             //         {   
             //             var eventUri;
@@ -288,7 +252,7 @@ function run(url,callback,fallback){
             console.log(c)
             if(fallback)fallback('Request failed giving this error <b>"'+c+'"</b> ');
        }
-   });
+   }); // end ajax
 } // end run()
 
 
@@ -336,7 +300,7 @@ function add(addArray,mapping,node,arg){
                     }
                 }
             }else{ 
-                console.warn("no mapping for : "+node.nodeName+"/"+ this.nodeName);
+                console.log("/ ! \\ no mapping for : "+node.nodeName+"/"+ this.nodeName);
             }
         });
              
@@ -587,34 +551,7 @@ function getChildrenDate(childIndexArr){
         
         return undefined;
 }
-
-function getNodeName(node){
-    var uri=[]; 
-    $(node).children().each(function(){ 
-        if(this.nodeName.indexOf("rdf:type")!== -1 ){
-            if($(this).attr('rdf:resource').indexOf("#")!== -1 ){ 
-                uri.push($(this).attr('rdf:resource').split('#')[1]); 
-            }else{
-                var nodeName = $(this).attr('rdf:resource').split('/'); 
-                uri.push(nodeName[nodeName.length-1]);  
-            }
-        } 
-    });
-    if(uri.length==1)
-    {
-        return uri[0];
-    }
-    else if(uri.length==0)
-    {
-        return node.nodeName;
-    }
-    else if($.inArray('KeynoteTalk', uri) > -1)
-    { 
-        return 'KeynoteEvent';
-    }
-    return undefined;
-        
-}
+ 
 
 function str_format(string){
     // return string ;
