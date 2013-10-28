@@ -73,10 +73,33 @@ EOT
         $em = $this->getContainer()->get('doctrine')->getManager('default');
         //Create the default conference
         $defaultConference = new WwwConf();
+        $defaultConference->setLogoPath("livecon.png");
+        $defaultConference->setAcronym("My conference");
         $em->persist($defaultConference);
 
         //Create new App config for the conference
         $defaultAppConfig = new MobileAppConfig();
+
+        //header color
+        $defaultAppConfig->setBGColorHeader("#e7f0f2");
+        $defaultAppConfig->setTitleColorHeader("#000000");
+        //navBar color
+        $defaultAppConfig->setBGColorNavBar("#305c6b");
+        $defaultAppConfig->setTitleColorNavBar("#f3f6f6");
+        //content color
+        $defaultAppConfig->setBGColorContent("#f3f6f6");
+        $defaultAppConfig->setTitleColorContent("#8c949c");
+        //buttons color 
+        $defaultAppConfig->setBGColorButton("#f3f6f6");
+        $defaultAppConfig->setTitleColorButton("#000000");
+        //footer color
+        $defaultAppConfig->setBGColorfooter("#305c6b");
+        $defaultAppConfig->setTitleColorFooter("#f3f6f6");
+        $defaultAppConfig->setIsPublished(true);
+       
+       
+
+
         $em->persist($defaultAppConfig);
 
         $categorie = $em->getRepository('IDCISimpleScheduleBundle:Category')->findOneBySlug("conferenceevent");

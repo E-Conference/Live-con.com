@@ -34,8 +34,8 @@
                      <button type="submit" class="btn btn-success"><i class="icon-edit"></i></button>
                </div>
                 <div class="col-lg-4">
-                  <div class='logo' style="width:300px; height: 200px">
-                    <div class="logo-choice"  style="width:300px; height: 200px">
+                  <div class='logo' style="width:300px; height: 100px">
+                    <div class="logo-choice"  style="width:300px; height: 100px">
                         <img src="{{ asset('uploads/')}}{{conference.logoPath}}" style="width:auto; height: 100%">
                     </div>
                  </div>
@@ -98,7 +98,7 @@
         localStorageKey: "color",
         showPalette: true,
         showPaletteOnly: false,
-        showSelectionPalette: false,
+        showSelectionPalette: true,
         clickoutFiresChange: false,
         cancelText: "cancelText",
         chooseText: "choose",
@@ -106,7 +106,7 @@
         preferredFormat: "hex",
         maxSelectionSize: 12,
         palette: [paletteTab],
-        selectionPalette: paletteTab
+        selectionPalette: paletteTab || []
     });
   });
 
@@ -120,11 +120,11 @@
     $(".TitleColorHeader").spectrum("set", palette["black"]);
     $(".BGColorNavBar").spectrum("set", palette[tabRandomised[1]]);
     $(".TitleColorNavBar").spectrum("set", palette["black"]);
-    $(".BGColorContent").spectrum("set", palette[tabRandomised[3]]);
+    $(".BGColorContent").spectrum("set", "#f3f6f6");
     $(".TitleColorContent").spectrum("set", palette["black"]);
     $(".BGColorButton").spectrum("set", palette[tabRandomised[4]]);
     $(".TitleColorButton").spectrum("set", palette["black"]);
-    $(".BGColorFooter").spectrum("set", palette[tabRandomised[5]]);
+    $(".BGColorFooter").spectrum("set", palette[tabRandomised[1]]);
     $(".TitleColorFooter").spectrum("set", palette["black"]);
   }
   </script>
