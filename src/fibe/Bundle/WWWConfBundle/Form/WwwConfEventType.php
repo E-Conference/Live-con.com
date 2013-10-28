@@ -17,7 +17,10 @@ class WwwConfEventType extends ConfEventType
             ->remove('endAt')                          
             ->remove('categories')                          
             ->remove('location')                          
-            ->remove('parent')                          
+            ->remove('parent')  
+            ->add('location', new LocationLatLngType(),array(
+                                        'label' => 'Conference location (click on the map)',
+                                        'attr'  => array('class'   => 'well')))                         
             
  
         ;

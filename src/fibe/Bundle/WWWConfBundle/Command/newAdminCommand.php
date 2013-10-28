@@ -12,6 +12,8 @@ use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
 use fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig;
 
+use IDCI\Bundle\SimpleScheduleBundle\Entity\Location;
+
 use FOS\UserBundle\Model\User;
 
 class newAdminCommand extends ContainerAwareCommand
@@ -80,7 +82,8 @@ EOT
         $em->persist($defaultAppConfig);
 
         $categorie = $em->getRepository('IDCISimpleScheduleBundle:Category')->findOneBySlug("conferenceevent");
-        //Main conf event 
+        
+        //Main conf event  
         $mainConfEvent = new ConfEvent();
         $mainConfEvent->setSummary("Conference");
         $mainConfEvent->setStartAt( new \DateTime('now'));
@@ -88,6 +91,13 @@ EOT
         $mainConfEvent->addCategorie($categorie);
         $mainConfEvent->setSummary("Conference Event");
         $mainConfEvent->setConference($defaultConference);
+
+        // conference location
+        $mainConfEventLocation = new Location();
+        $mainConfEventLocation->setName("Conference's location");
+        $mainConfEventLocation->addLocationAwareCalendarEntitie($mainConfEvent);
+        $em->persist($mainConfEventLocation);
+ 
         $em->persist($mainConfEvent);
 
         //Linking app config to conference

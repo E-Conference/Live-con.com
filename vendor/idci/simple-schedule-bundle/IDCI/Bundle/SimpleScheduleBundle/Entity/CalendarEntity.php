@@ -285,7 +285,7 @@ class CalendarEntity
     /**
      * location
      *
-     * @ORM\ManyToOne(targetEntity="IDCI\Bundle\SimpleScheduleBundle\Entity\Location", inversedBy="calendarEntities")
+     * @ORM\ManyToOne(targetEntity="IDCI\Bundle\SimpleScheduleBundle\Entity\Location", inversedBy="calendarEntities",cascade={"persist"})
      * @ORM\JoinColumn(name="location_id", referencedColumnName="id", onDelete="Set Null")
      */
     protected $location;
