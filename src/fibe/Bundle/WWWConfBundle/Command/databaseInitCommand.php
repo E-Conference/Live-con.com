@@ -21,7 +21,7 @@ class databaseInitCommand extends ContainerAwareCommand
     {
         $this
             ->setName('wwwconf:database:init')
-            ->setDescription('Insert data for a conference management')
+            ->setDescription('Insert data for conference managment')
         ;
     }
 
@@ -146,13 +146,14 @@ class databaseInitCommand extends ContainerAwareCommand
         //               ->setParent($OrganisedEvent);
         // $em->persist($AcademicEvent);
 
-        // $SocialEvent = new Category(); 
-        // $SocialEvent->setName("SocialEvent")
-        //             ->setColor("#00a2e0")
-        //             ->setParent($NonAcademicEvent);
-        // $em->persist($SocialEvent);
-        
         // non academic
+        $SocialEvent = new Category(); 
+        $SocialEvent->setName("SocialEvent")
+                    ->setColor("#B186D7")
+                    // ->setParent($NonAcademicEvent)
+                    ;
+        $em->persist($SocialEvent);
+         
         $MealEvent = new Category(); 
         $MealEvent->setName("MealEvent")
                   ->setColor("#00a2e0")
@@ -218,22 +219,10 @@ class databaseInitCommand extends ContainerAwareCommand
                   ;
         $em->persist($TalkEvent);
 
-        /*
-
-            INSERT INTO `idci_schedule_category` (`id`, `parent_id`, `name`, `slug`, `description`, `color`, `level`, `tree`) VALUES
-            (2, NULL, 'ConferenceEvent', 'conferenceevent', NULL, 'lime', 0, NULL),
-            (3, NULL, 'KeynoteEvent', 'keynoteevent', NULL, 'red', 0, NULL),
-            (4, NULL, 'PanelEvent', 'panelevent', NULL, 'blue', 0, NULL),
-            (5, NULL, 'SessionEvent', 'sessionevent', NULL, 'orange', 0, NULL),
-            (6, NULL, 'TalkEvent', 'talkevent', NULL, 'gold', 0, NULL),
-            (7, NULL, 'TrackEvent', 'trackevent', NULL, 'coral', 0, NULL),
-            (8, NULL, 'TutorialEvent', 'tutorialevent', NULL, 'crimson', 0, NULL),
-            (*, NULL, 'WorkshopEvent', 'workshopevent', NULL, 'aquamarine', 0, NULL);
-        */
 
 
         $em->flush();
 
-        $output->writeln("row inserted successfully");
+        $output->writeln("rows inserted successfully");
     }
 }

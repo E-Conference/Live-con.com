@@ -14,6 +14,7 @@ use IDCI\Bundle\SimpleScheduleBundle\Form\XPropertyType;
 use IDCI\Bundle\SimpleScheduleBundle\Form\EventType;
 use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty; 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Event; 
+use IDCI\Bundle\SimpleScheduleBundle\Entity\Location; 
 
 use Symfony\Component\Security\Core\Exception\AccessDeniedException; 
 
@@ -33,6 +34,9 @@ class ConferenceController extends Controller
     {
       $em = $this->getDoctrine()->getManager();       
       $wwwConf = $this->getUser()->getCurrentConf();
+
+      //main conf event MUST have a location
+      $mainConfEvent = $wwwConf->getMainConfEvent(); 
 
       $form = $this->createForm(new WwwConfType($this->getUser()), $wwwConf);
       
@@ -58,8 +62,9 @@ class ConferenceController extends Controller
         }
       }
       return array(
-          'wwwConf' => $wwwConf,
-          'form' => $form->createView()
+          'location' => $mainConfEvent->getLocation(),
+          'wwwConf'  => $wwwConf,
+          'form'     => $form->createView()
       );
     }
 /**
