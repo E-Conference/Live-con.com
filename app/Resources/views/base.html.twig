@@ -2,7 +2,8 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}{% endblock %} - Seamposium</title>
+        {% block meta %}{% endblock %}
+        <title>{% block title %}{% endblock %}</title>
 
         <link rel="stylesheet" type="text/css" href="{{ asset('bootstrap/css/bootstrap.min.css') }}" /> 
         <link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}"> 
