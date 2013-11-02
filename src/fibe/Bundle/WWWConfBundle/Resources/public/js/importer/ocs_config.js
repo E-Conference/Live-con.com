@@ -31,7 +31,6 @@ var ocsConfig = {
             setDescription: $(documentRootNode).children("description").text(),
             setUrl        : $(documentRootNode).children("homepage").text(),
         }
-        //TODO save that
     },
     personMapping : {
         //nodes are wrapped in a collection node

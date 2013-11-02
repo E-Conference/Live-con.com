@@ -1,7 +1,7 @@
 
 var CalEvent = function(event){
 
-    console.log("building CalEvent from" , event)
+
     this["id"]         = event.id; 
     this["title"]      = event.name || event.title; 
     this["start"]      = event.start || event.start_at;
@@ -11,6 +11,13 @@ var CalEvent = function(event){
                                 event.is_allday ? 
                                         event.is_allday ==="true" : 
                                         event.allDay ==="true" ;
+    this["is_mainconfevent"]     = (event.is_mainconfevent === true || event.is_mainconfevent === false) ?  
+                                event.is_mainconfevent : 
+                                event.is_mainconfevent ==="true" ;
+    if(this["is_mainconfevent"]){
+      mainConfEvent = this;
+      this["editable"] = false
+    };
     this["parent"]     = event.parent;
     this["children"]   = event.children;
     this["categories"] = event.categories || [];
@@ -21,6 +28,7 @@ var CalEvent = function(event){
     if(this.length > 0 && this.color)
       this["background-color"] = this.color;
      
+    console.log("new CalEvent" , this)
     Events[this["id"]] = this; 
 
     // for (var i in event){
@@ -50,6 +58,8 @@ CalEvent.prototype.render = function (){
       renderedEvent = new CalEvent(this);
       $calendar.fullCalendar('renderEvent',renderedEvent);
     }
+
+
     // var e = this;
     //       function doWork() { 
     //         console.log(e);
@@ -59,15 +69,15 @@ CalEvent.prototype.render = function (){
     //       };
     //       setTimeout(doWork, 50);
  
-    console.log("client events :",$calendar.fullCalendar('clientEvents'));
-    console.log("Events :",Events);
+    // console.log("client events :",$calendar.fullCalendar('clientEvents'));
+    // console.log("Events :",Events);
 
-    console.log("event.render("+renderedEvent.id+")");
-    console.log("client event :",$calendar.fullCalendar('clientEvents',renderedEvent.id));
+    // console.log("event.render("+renderedEvent.id+")");
+    // console.log("client event :",$calendar.fullCalendar('clientEvents',renderedEvent.id));
     return renderedEvent;
 };
 
-CalEvent.prototype.persist = function(){ 
+CalEvent.prototype.persist = function(add){ 
     var toSend = {
       parent: this['parent'],
       id    : this['id'],
@@ -78,10 +88,10 @@ CalEvent.prototype.persist = function(){
       start : this['start']
     } 
     $.post(
-      op.quickUpdateUrl,
+      add ? op.quickAddUrl : op.quickUpdateUrl,
       toSend,
       function(doc) {   
-        bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well updated"); 
+        bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well "+ add ? "added" : "updated"); 
       },
       'json'
     );
@@ -104,7 +114,29 @@ CalEvent.prototype.updateParentDate = function(){
         
         var parent = EventCollection.find(event.parent.id,{noSidebar:true});
 
-        if(!parent || event.isInsideOf(parent))return;  
+        if(!parent)return;  
+
+        //make main conf get a special treatment
+        //to make it fit to its children date
+        if(parent.is_mainconfevent){
+          
+          var minDate = moment("5000-10-10"),
+              maxDate = moment("1990-10-10");
+
+          var children = EventCollection.getChildren(parent, {concat:true,onlyEvent:true}); 
+          for(var i in children){
+            var child = children[i];
+            if(minDate.isAfter(child.start)) minDate = moment(child.start);
+            if(maxDate.isBefore(child.end))  maxDate = moment(child.end); 
+
+          }
+          if(!minDate.isSame(moment("5000-10-10"))) parent.start = minDate.format();
+          if(!maxDate.isSame(moment("1990-10-10"))) parent.end = maxDate.format();
+          
+          parent.render();
+        }
+ 
+        if(event.isInsideOf(parent))return;  
 
         //event is out of parent
         console.log("isOutOfParent");  
@@ -123,6 +155,9 @@ CalEvent.prototype.updateParentDate = function(){
 
           event['start'] = moment(event['end']).subtract(Eduration).format();
         } 
+
+        
+
         updateParentDate(parent); 
         parent.render();
         parent.persist(); 
@@ -257,6 +292,7 @@ CalEvent.prototype.deleteParent = function (){
     for( var i in parent.children){
       if(parent.children[i].id === this.id && this.id !== ""){ 
         delete parent.children[i];
+
         return;
       }
     } 

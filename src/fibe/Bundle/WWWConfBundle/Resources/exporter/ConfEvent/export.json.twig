@@ -6,6 +6,7 @@
     "start_at"         : "{{ entity.startAt | date('Y-m-d H:i') }}",
     "is_transparent"   : "{{ entity.isTransparent }}",
     "is_allday"        : "{% if entity.isAllDay == true %}true{% elseif entity.isAllDay == false %}false{% endif %}",
+    "is_mainconfevent" : "{% if entity.isMainConfEvent == true %}true{% elseif entity.isMainConfEvent == false %}false{% endif %}",
     "resources"        : "{{ entity.resources }}",
     "duration"         : "{{ entity.duration }}",
     "last_modified_at" : "{{ entity.lastModifiedAt | date('Y-m-d H:i') }}",

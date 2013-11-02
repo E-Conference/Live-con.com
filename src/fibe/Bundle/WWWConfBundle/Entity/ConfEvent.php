@@ -71,6 +71,15 @@ class ConfEvent extends Event
      * @ORM\Column(name="is_allday", type="boolean")
      */
      private $isAllDay ;
+
+
+    /**
+     *  
+     * Is a main conf event ?
+     *   
+     * @ORM\Column(name="is_mainConfEvent", type="boolean")
+     */
+     private $isMainConfEvent = false;
      
     /**
      * Constructor
@@ -288,6 +297,30 @@ class ConfEvent extends Event
     public function getIsAllDay()
     {
         return $this->isAllDay;
+    }
+
+    
+    /**
+     * Set isMainConfEvent
+     *
+     * @param string $isMainConfEvent
+     * @return ConfEvent
+     */
+    public function setIsMainConfEvent($isMainConfEvent)
+    {
+        $this->isMainConfEvent = $isMainConfEvent;
+    
+        return $this;
+    }
+
+    /**
+     * Get isMainConfEvent
+     *
+     * @return string 
+     */
+    public function getIsMainConfEvent()
+    {
+        return $this->isMainConfEvent;
     }
 
     

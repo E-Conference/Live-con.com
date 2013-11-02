@@ -108,9 +108,11 @@ EOT
         
         //Main conf event  
         $mainConfEvent = new ConfEvent();
-        $mainConfEvent->setSummary("Conference");
+        $mainConfEvent->setIsMainConfEvent(true);
+        $mainConfEvent->setSummary("Conference"); 
         $mainConfEvent->setStartAt( new \DateTime('now'));
-        $mainConfEvent->setEndAt( new \DateTime('now'));
+        $end = new \DateTime('now');
+        $mainConfEvent->setEndAt( $end->add(new \DateInterval('P2D')));
         $mainConfEvent->addCategorie($categorie);
         $mainConfEvent->setSummary("Conference Event");
         $mainConfEvent->setConference($defaultConference);

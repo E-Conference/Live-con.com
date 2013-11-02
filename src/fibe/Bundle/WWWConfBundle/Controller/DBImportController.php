@@ -279,6 +279,7 @@ class DBImportController extends Controller
 
                     if($setter=="mainConferenceEvent"){ 
                         $wwwConf->setMainConfEvent($entity);
+                        $entity->setIsMainConfEvent(true);
                         $em->remove($mainConfEvent);
                         $mainConfEvent = $entity;
                         $em->persist($wwwConf);

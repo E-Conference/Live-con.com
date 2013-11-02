@@ -105,61 +105,72 @@ var EventCollection = {
     // },
 
 
-    getToppestParent : function (){
+    getToppestParent : function (view){
         var toppestParent = []; 
 
-          // get toppest parent 
-        for (var i in Events){
+        $(view.getSlotContainer()).find(".fc-event").each(function(){
+          var e = EventCollection.getEventByDiv($(this));
+          parent = Events[e.parent.id];
+          if(parent.is_mainconfevent){
+            toppestParent.push(e); 
+          }
+        }); 
+        //   // get toppest parent 
+        // for (var i in Events){
 
-            var event = Events[i];
-            if(this.find(event.parent.id,{noSidebar:true}) ){ 
-              continue;
-            }
+        //     var event = Events[i];
+        //     if(this.find(event.parent.id,{noSidebar:true}) ){ 
+        //       continue;
+        //     }
             
-            // var breakWhile=false;
-            // while(breakWhile===false){  
-            //   var parent = EventCollection.find(event.parent.id);  
-            //   if(!parent || !parent.elem){ 
-            //     breakWhile = true;
-            //   }else {
-            //     event = parent;
-            //   }
+        //     // var breakWhile=false;
+        //     // while(breakWhile===false){  
+        //     //   var parent = EventCollection.find(event.parent.id);  
+        //     //   if(!parent || !parent.elem){ 
+        //     //     breakWhile = true;
+        //     //   }else {
+        //     //     event = parent;
+        //     //   }
 
-            // }
+        //     // }
 
-            // //toppest parent
-            // if( $.inArray(event, toppestParent)!==-1 ){
-            //   console.log("event "+event.id+" already toppest") ;
-            //   continue;
-            // }
-            // if( event.isInstant() ){
-            //   console.log("event "+event.id+" instant") ;
-            //   continue;
-            // }
+        //     // //toppest parent
+        //     // if( $.inArray(event, toppestParent)!==-1 ){
+        //     //   console.log("event "+event.id+" already toppest") ;
+        //     //   continue;
+        //     // }
+        //     // if( event.isInstant() ){
+        //     //   console.log("event "+event.id+" instant") ;
+        //     //   continue;
+        //     // }
 
 
-            toppestParent.push(event); 
-        }
+        //     toppestParent.push(event); 
+        // }
         return toppestParent;
     },
 
     getBroCountRange : function(brothers){
-      var rtnArray = {};
-      var done = {};
+      var rtnArray = {}; 
       for (var i in brothers){
         var curBro = brothers[i];
         
-        var count = 0,
-            range = 0;
+        var count   = 0,
+            range   = 1,
+            minLeft = undefined;
         for (var j in brothers){
           var bro = brothers[j];
           if(!curBro.isOutOf(bro,true)) {
             count++;
-            if(done[bro.id])range++; 
+            if(rtnArray[bro.id]){
+              minLeft = Math.min(Events[bro.id].elem.position().left,Events[curBro.id].elem.position().left); 
+              rtnArray[bro.id].minLeft = minLeft; 
+
+              range++;
+            }
           } 
         }
-        rtnArray[curBro.id] = {count:count,range:range};
-        done[curBro.id] = true;
+        rtnArray[curBro.id] = {count:count,range:range,minLeft:minLeft}; 
       }
       return rtnArray;
     },
