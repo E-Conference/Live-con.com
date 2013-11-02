@@ -14,7 +14,7 @@
 <div id="sidebar">  
   <div class="checkbox">
     <label>
-      <input id="reposition" type="checkbox" checked="checked"> Reposition parent/child <small>(<i>alpha</i>)</small>
+      <input id="reposition" type="checkbox"> Reposition parent/child <small>(<i>alpha</i>)</small>
     </label>
   </div> 
   <div class="history hide">
@@ -372,7 +372,7 @@
               //avoid repeating this function 10 times...
               clearTimeout(repositionTimeout);
               repositionTimeout=setTimeout(function(){   
-                  
+                  if(!mainConfEvent)return;
                   updateEventArray();
 
               if(view.name !== "month")reposition(view); 
@@ -505,90 +505,98 @@
       function reposition(view){
 
           var repositionTimeout,
-              eventMargin  = 3,
+              eventMargin  = 4,
               popoverWidth = 276,
-              colWidth     = view.getColWidth(); 
+              colWidth     = view.getColWidth(),
+              startScript ; 
 
               // toppestParent = EventCollection.getToppestEventsToRender();
+              
               toppestParent = EventCollection.getToppestParent(view);
 
           console.log("toppest parent : ",toppestParent);
           if(!toppestParent)return;
           // console.log("toppestParent",toppestParent);
-          positionBlock(toppestParent,colWidth,2);
+          
+          stylizeBlock(toppestParent); 
 
+          if($('#reposition').is(':checked')){ 
 
+                  setTimeout(function(){ 
+                    positionBlock(toppestParent,colWidth,2);
+                  },1)
+          }
           function positionBlock(events,colWidth,parentZindex,parentPos,parent){ 
                   
                   // console.log(" ######positionBlocks######");
                   
-                  colWidth -=eventMargin;
-
+                  colWidth -=eventMargin; 
                   var broCountRange = EventCollection.getBroCountRange(events)
-                  console.log("##getBroCountRange## ",broCountRange); 
+                  console.log("##getBroCountRange## ",broCountRange);  
 
 
                   for (var i in events){
+
                     var event = events[i]; 
                     console.log("positionning : ",event.id);
                     var element = event.elem; 
                     if(!element)  continue; //event is in another view
                         
                     var elemProp = getProp(element); 
+                    var newColWidth;
 
+                    // repositionning (width and Xpos) 
+                    //positionning event to be over the parent
+                    var count   = broCountRange[event.id].count,
+                        range   = broCountRange[event.id].range,
+                        left = broCountRange[event.id].minLeft;
+                    console.log("event "+event.id+" has "+count+" bros. range = "+range+" minLeft = "+left);
 
-                    //repositionning (width and Xpos)
-                    if($('#reposition').is(':checked')){ 
-                        //positionning event to be over the parent
-                        // if(parentPos){
-                        //     element.css("left",parentPos.x+eventMargin/2); 
-                        //   if(moment(parent.start).isSame(moment(event.start))){
-                        //     element.css("top",elemProp.y+eventMargin/2+5); 
-                        //     element.css("height",elemProp.h-eventMargin/2-5);
-                        //   }
-                        //   if(moment(parent.end).isSame(moment(event.end))){
-                        //     // element.css("top",elemProp.y+eventMargin/2); 
-                        //     element.css("height",elemProp.h-eventMargin/2-5);
-                        //   } 
-                        // }
-                        
-                        var count   = broCountRange[event.id].count,
-                            range   = broCountRange[event.id].range,
-                            minLeft = broCountRange[event.id].minLeft;
-                        console.log("event "+event.id+" has "+count+" bros. range = "+range+" minLeft = "+minLeft);
+                    //width
+                    newColWidth = colWidth/(count)-(count)*eventMargin/2;
+                    element.width(newColWidth);
 
-                        //width
-                        var newColWidth = colWidth/(count)-(count)*eventMargin;
-                        element.width(newColWidth); 
-
-
-                        //left margin for events to be not placed beneath
-                        //
-                        //cancel the original left margin
-                        // if(minLeft)element.css("left",minLeft); 
-
-                        //calculate new margin
-                        var leftMargin ;
-
-                        leftMargin += (range*(newColWidth+(50*eventMargin)));
-                        console.log("leftMargin : ",leftMargin);
-
-                        leftMargin += (range*(newColWidth+(50*eventMargin)));
-                        console.log("leftMargin : ",leftMargin);
-
-                        console.log("newColWidth : ",newColWidth,"left : ",leftMargin);
-
-                        console.log("POSITION"+event.id, event)
-                        // element.css("margin-left",leftMargin); 
-
-                        //z-index 
-                        element.css('z-index',parentZindex+1) 
+                     
+                    //left margin for events to respect hierarchy
+                    
+                    if(parentPos){
+                      left = parentPos.x+eventMargin/2;
+                      if(moment(parent.start).isSame(moment(event.start))){
+                        element.css("top",elemProp.y+eventMargin/2+5); 
+                        element.css("height",elemProp.h-eventMargin/2-5);
+                      }
+                      if(moment(parent.end).isSame(moment(event.end))){
+                        // element.css("top",elemProp.y+eventMargin/2); 
+                        element.css("height",elemProp.h-eventMargin/2-5);
+                      } 
                     } 
-                    // end repositionning (width and Xpos)
-       
-                    // styling (opacity, hover, drag, drop)
 
-                   
+                    left += (range*(newColWidth+eventMargin)); 
+                    if(left)element.css("left",left); 
+                    console.log(left)  
+
+                    //z-index 
+                    element.css('z-index',parentZindex+1)  
+                    // end repositionning (width and Xpos)
+                    
+                    var children = EventCollection.getChildren(event,{concat:false,onlyEvent:true});
+                    // console.log("elem",children)
+                    if(children.length>0){
+                      elemProp = getProp(element);
+                      positionBlock(children,newColWidth,parentZindex+1,elemProp,event);
+                    }
+                  }
+       
+          }
+          function stylizeBlock(events){ 
+
+                    /*****************  styling (opacity, hover, drag, drop) ********************/
+                 
+                for (var i in events){
+                    var event = events[i]; 
+                    console.log("positionning : ",event.id);
+                    var element = event.elem; 
+                    if(!element)  continue; //event is in another view
 
                     //action on hovered by another dragging event  
                     element.data("border-color",element.css("border-color"))
@@ -665,7 +673,7 @@
                             //check if it's going to do a loop in the tree
                             if(event.isChild(draggedEvent)){
                               bootstrapAlert("stop");
-                              bootstrapAlert("warning","cannot set event <b>"+event.title+"</b> as child of <b>"+draggedEvent.title+"</b> because this is going to do a loop in the event tree","Circular reference : "); 
+                              bootstrapAlert("info","cannot set event <b>"+event.title+"</b> as child of <b>"+draggedEvent.title+"</b> because this is going to do a loop in the event tree","Circular reference : "); 
                         
                               return;
                             } 
@@ -690,7 +698,8 @@
                     }); //end droppable
     
                     //action on hover (children opacity and bootstrap popover)
-                    element.popover({
+                    element
+                        .popover({
                                 trigger : 'hover',
                                 html : true,
                                 placement : function( context,source){
@@ -706,7 +715,8 @@
                                 },
                                 title : ' <b><span class="muted">#'+event.id+'</span> '+event.title+'</b>',
                                 content : event.getPopoverContent(),
-                    }).hover(function(){
+                        })
+                        .hover(function(){
                               //enter
                               $(this).animate({"border-color":"#3F3F3F"},{queue:false});
 
@@ -726,7 +736,7 @@
                                 if(!curChildDiv)continue;
                                 curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
                               }
-                    }); 
+                    });  
 
                     // end styling (opacity, hover, drag, drop)
                     
@@ -736,7 +746,7 @@
                     // 
                     if(children.length>0){
                       elemProp = getProp(element);
-                      positionBlock(children,newColWidth,parentZindex+1,elemProp,event);
+                      stylizeBlock(children);
 
                     }
 
@@ -744,7 +754,7 @@
                
           // EventCollection.eventsToRender=[]; 
             
-          };
+          }; 
       }
 
       
@@ -829,8 +839,7 @@
           // return if not in callendar view  
           if(event.isOutOf(parent,true)){
             //event dropped out of parent
-            console.log(" #### moved out ####"); 
-            event.deleteParent(); 
+            console.log(" #### moved out ####");  
             event.setParent(mainConfEvent);
             event.updateParentDate();
             event.render();

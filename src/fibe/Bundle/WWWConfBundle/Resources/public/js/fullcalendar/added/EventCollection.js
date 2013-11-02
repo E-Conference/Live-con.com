@@ -108,13 +108,23 @@ var EventCollection = {
     getToppestParent : function (view){
         var toppestParent = []; 
 
-        $(view.getSlotContainer()).find(".fc-event").each(function(){
-          var e = EventCollection.getEventByDiv($(this));
-          parent = Events[e.parent.id];
-          if(parent.is_mainconfevent){
-            toppestParent.push(e); 
-          }
-        }); 
+        return EventCollection.getChildren(mainConfEvent, {concat:true,recursive:false,onlyEvent:true}); 
+
+        // $(view.getSlotContainer()).find(".fc-event").each(function(){
+        //   var e = EventCollection.getEventByDiv($(this));
+        //   parent = Events[e.parent.id];
+        //   if(parent){
+        //     if(parent.is_mainconfevent){
+        //       toppestParent.push(e); 
+        //     }
+        //   }else{
+        //     alert("no parent for "+e.id+":"+e.title+"\n setting "+mainConfEvent.title+" as new parent");
+
+        //     e.setParent(mainConfEvent);
+        //     e.updateParentDate();
+        //     e.persist();
+        //   }
+        // }); 
         //   // get toppest parent 
         // for (var i in Events){
 
@@ -151,27 +161,37 @@ var EventCollection = {
     },
 
     getBroCountRange : function(brothers){
+          startScript = moment()
       var rtnArray = {}; 
       for (var i in brothers){
         var curBro = brothers[i];
         
-        var count   = 0,
-            range   = 1,
-            minLeft = undefined;
+
+
+
+
+        var count   = 0
+            ,range   = 0
+            ,minLeft = Events[curBro.id].elem.position().left
+            ;
         for (var j in brothers){
           var bro = brothers[j];
           if(!curBro.isOutOf(bro,true)) {
             count++;
             if(rtnArray[bro.id]){
-              minLeft = Math.min(Events[bro.id].elem.position().left,Events[curBro.id].elem.position().left); 
-              rtnArray[bro.id].minLeft = minLeft; 
+              minLeft = Math.min(minLeft,rtnArray[bro.id].minLeft); 
+              rtnArray[bro.id].minLeft = minLeft;
 
               range++;
             }
           } 
         }
-        rtnArray[curBro.id] = {count:count,range:range,minLeft:minLeft}; 
+        rtnArray[curBro.id] = {count:count,range:range
+          ,minLeft:minLeft
+        }; 
+
       }
+        console.log(moment().diff(startScript)+" to getBroCountRange")
       return rtnArray;
     },
 

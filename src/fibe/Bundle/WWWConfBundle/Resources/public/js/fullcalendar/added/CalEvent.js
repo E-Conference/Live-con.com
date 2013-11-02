@@ -88,10 +88,11 @@ CalEvent.prototype.persist = function(add){
       start : this['start']
     } 
     $.post(
-      add ? op.quickAddUrl : op.quickUpdateUrl,
+      add=== true ? op.quickAddUrl : op.quickUpdateUrl,
       toSend,
       function(doc) {   
-        bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well "+ add ? "added" : "updated"); 
+        bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well "+ (add=== true ? "added" : "updated"));
+        console.log(toSend.id+" "+(add=== true ? "added" : "updated"))
       },
       'json'
     );
@@ -132,7 +133,7 @@ CalEvent.prototype.updateParentDate = function(){
           }
           if(!minDate.isSame(moment("5000-10-10"))) parent.start = minDate.format();
           if(!maxDate.isSame(moment("1990-10-10"))) parent.end = maxDate.format();
-          
+
           parent.render();
         }
  
