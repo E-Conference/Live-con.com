@@ -1,124 +1,225 @@
 {% extends 'fibeHomePageBundle::base.html.twig' %}
 
-{% block title %}Dashboard - seamposium{% endblock title %}
+{% block title %}Livecon UPGRATE YOUR CONFERENCE{% endblock title %}
 {% block body %}
 
 
-{% include "fibeHomePageBundle::navbar.html.twig" %}
-
-<div class="row center">
-		<div id="carousel" class="carousel slide">
-		  <!-- Indicators -->
-			  <ol class="carousel-indicators">
-			    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-			    <li data-target="#myCarousel" data-slide-to="1"></li>
-			    <li data-target="#myCarousel" data-slide-to="2"></li>
-			  </ol>
-			  <div class="carousel-inner">
-			    <div class="item active">
-			      <img src="{{ asset('img/screenshot-eswc.png')}}">
-			      <div class="container">
-			        <div class="carousel-caption">
-			          <h1>Bootstrap 3 Carousel Layout</h1>
-			          <p>This is an example layout with carousel that uses the Bootstrap 3 styles.
-			          <a title="Bootstrap 3" href="http://getbootstrap.com" class="">Bootstrap 3 RC 1 is now available!</a></p>
-			          <p><a class="btn btn-large btn-primary" href="#">Sign up today</a>
-			        </p></div>
-			      </div>
-			    </div>
-			    <div class="item">
-			      <img src="{{ asset('img/screenshot_iswc2012.png')}}">
-			      <div class="container">
-			        <div class="carousel-caption">
-			          <h1>Changes to the Grid</h1>
-			          <p>Bootstrap 3 still features a 12-column grid, but many of the CSS class names have completely changed.</p>
-			          <p><a class="btn btn-large btn-primary" href="#">Learn more</a></p>
-			        </div>
-			      </div>
-			    </div>
-			    <div class="item">
-			      <img src="http://placehold.it/1500X500">
-			      <div class="container">
-			        <div class="carousel-caption">
-			          <h1>Percentage-based sizing</h1>
-			          <p>With "mobile-first" there is now only one percentage-based grid.</p>
-			          <p><a class="btn btn-large btn-primary" href="#">Browse gallery</a></p>
-			        </div>
-			      </div>
-			    </div>
-			  </div>
-			  <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
-			  <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
-		</div><!-- /.carousel -->
-    <div class="row">
-    	<div class="col-1">
-			<div class="parallelogramRight">
-				<div btn-group-vertical>
-					<button type="button" class="btn btn-default btn-lg btn-menu">dsfsdff</button>
-					<button type="button" class="btn btn-default btn-lg btn-menu">dsfsdff</button>
-					<button type="button" class="btn btn-default btn-lg btn-menu">dsfsdff</button>
-					<button type="button" class="btn btn-default btn-lg btn-menu">dsfsdff</button>
+		<div id="header">
+			<div class="container_12">
+				<div class="grid_3"><a href="#entete" title="Livecon UPGRATE YOUR CONFERENCE"><img src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon" /></a></div>
+				<div class="grid_9" id="menu">
+					<ul>
+						<li><a href="#overview" title="Overview The Livecon Solution">Overview</a></li>
+						<li><a href="#app" title="The LiveCon App">Demo</a></li>
+						<li><a href="#getstarted" title="Get Started the Livecon Solution">Get Started</a></li>
+						<li><a href="#team" title="The Livecon Team">The Team</a></li>
+						<li><a href="#contact" title="Contact Livecon Team">Contact</a></li>
+						<li><a href="{{ path('login') }}" title="Login">Login</a></li>
+					</ul>
 				</div>
-			</div>
-			<div class="parallelogramRight">
-				<div btn-group-vertical>
-					<button type="button" class="btn btn-default btn-lg btn-menu">dsfsdff</button>
-					<button type="button" class="btn btn-default btn-lg btn-menu">dsfsdff</button>
-					<button type="button" class="btn btn-default btn-lg btn-menu">dsfsdff</button>
-					<button type="button" class="btn btn-default btn-lg btn-menu">dsfsdff</button>
-				</div>
-			</div>
-			<div class="parallelogramRight">
-				<div btn-group-vertical>
-					<button type="button" class="btn btn-default btn-lg btn-menu">dsfsdff</button>
-					<button type="button" class="btn btn-default btn-lg btn-menu">dsfsdff</button>
-					<button type="button" class="btn btn-default btn-lg btn-menu">dsfsdff</button>
-					<button type="button" class="btn btn-default btn-lg btn-menu">dsfsdff</button>
-				</div>
-			</div>
-		</div>
-    	<div class ="col-10 col-md-6">
-	      <div class="jumbotron">
-	            <h1>Welcome to seamposium</h1>
-	            <p>Organize your conference, boost it with an app</p>
-	            <div class="row-fluid">
-	                <div class="col-lg-3">
-	                     <div class="btn-group"> 
-	                        <a href="{{ path('schedule_index') }}" role="button" class="btn btn-info btn-large">
-	                          <span class="icon-calendar"></span>Manage your schedule
-	                        </a>
-	                    </div>
-	                </div>
-
-	                <div class="col-lg-3">
-	                     <div class="btn-group"> 
-	                        <a href="{{ path('mobileAppTheme_index') }}" role="button" class="btn btn-warning btn-large">
-	                          <span class="icon-calendar"></span>Manage your mobile applciation
-	                        </a>
-	                    </div>
-	                </div>
-
-		             <div class="col-lg-3">
-		                 <div class="btn-group"> 
-		                    <a href="{{ path('userData_index') }}" role="button" class="btn btn-success btn-large">
-		                      <span class="icon-calendar"></span>Manage user data
-		                    </a>
-		                </div>
-		            </div>
-	            </div>
-	      </div>
-	    </div>
-	     <div class="col-1 ">
-			<div class="parallelogramLeft">
 
 			</div>
 		</div>
-	</div>
 
-</div>    
+		<div id="entete">
+			<div class="container_12">
+				<div class="grid_5 omega">
+					<h1><span class="logoname"><b>Live</b>con</span> upgrade your conference</h1>
+					<h2>Be efficient with simple tools, be reactive.</h2>
+					<p><span class="logoname"><b>Live</b>con</span> is a free conference management system based on smart and innovating tools.<br/>It carry you through your event organization to make the most of your time. It enhances  your attendees experience with a mobile friendly application deployed for you.</p>
+					<a href="#overview"><div class="btn grid_4 alpha omega">Why should i choose <span class="logoname"><b>Live</b>con</span> ?</div></a>
+				</div>
+			</div>
+		</div>
+
+		<div id="overview">
+			<div class="container_12">
+				<h1>Overview <span class="logoname"><b>Live</b>con</span></h1>
+				<a href="#before">
+				<div class="grid_4 alpha omega">
+					<h2>Before<br/>Conference</h2>
+					<div class="clearfix">
+					<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/import.png') }}" /></div>
+					<div class="grid_3"><p>Start from scratch or import your OCS data.</p></div>
+					</div>
+					<div class="clearfix">
+					<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/custom.png') }}" /></div>
+					<div class="grid_3"><p>Customize your mobile application as you wish.</p></div>
+					</div>
+				</div>
+				</a>
+				<a href="#during">
+				<div class="grid_4 alpha omega">
+					<h2>During<br/>Conference</h2>
+					<div class="clearfix">
+					<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/schedule.png') }}" /></div>
+					<div class="grid_3"><p>Keep your schedule up to date.</p></div>
+					</div>
+					<div class="clearfix">
+					<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/reloaded.png') }}" /></div>
+					<div class="grid_3"><p>Let the application broadcast the changes for you.</p></div>
+					</div>
+				</div>
+				</a>
+				<a href="#after">
+				<div class="grid_4 alpha omega">
+					<h2>After<br/>Conference</h2>
+					<div class="clearfix">
+					<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/publish.png') }}" /></div>
+					<div class="grid_3"><p>Open your data to the Web 3.0 and increase your conference visibility thanks to a SPARQL endpoint.</p></div>
+					</div>
+					<div class="clearfix">
+					<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/like.png') }}" /></div>
+					<div class="grid_3"><p>Let people find what they liked using the app.</p></div>
+					</div>
+				</div>
+				</a>
+			</div>
+		</div>
+
+		<div id="before">
+			<div class="container_12">
+				<h1>Before Conference</h1>
+				<div class="illustration"></div>
+				<div id="overview01" class="clearfix">
+					<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/import.png') }}" /></div>
+					<div class="number grid_1">1.</div>
+					<div class="grid_3"><h3>Start from scratch or import your OCS data.</h3></div>
+				</div>
+				<div class="explain grid_4 clearfix">
+					<p><span class="logoname"><b>Live</b>con</span>  provide  you an import fonctionnality, which let you start from your OCS data or from scratch. Your live conference is a set of sub event following a web standard hierarchy that can managed thanks to a visual calendar by specifying :<br/>
+					<b>Who :</b> The actors involved in each of your event and their roles (chair, speaker…).<br/>
+					<b>What :</b> The papers presented associated with their authors, a main theme and a format (talk, panel, session, workshop, tutorial, break….).<br/>
+					<b>Where :</b>  The room where the events take place.<br/>
+					<b>When :</b> The date when the events take place.<br/><br/>
+					Your mobile application is already available, customize it as you wish!</p>
+				</div>
+				<div id="overview02" class="clearfix">
+					<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/custom.png') }}" /></div>
+					<div class="number grid_1">2.</div>
+					<div class="grid_3"><h3>Customize your mobile application as you wish.</h3></div>
+				</div>
+			</div>
+		</div>
+
+		<div id="during">
+			<div class="container_12">
+				<h1>During Conference</h1>
+				<div class="grid_5 alpha omega">
+					<div id="overview03" class="clearfix">
+						<div class="clearfix">
+						<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/schedule.png') }}" /></div>
+						<div class="number grid_1">3.</div>
+						<div class="grid_3"><h3>Keep your schedule up to date.</h3></div>
+						</div>
+						<div class="grid_3 push_2"><p>Planning changes? Speaker late?<br/>
+							Change your schedule easily with a user friendly  interface.<br/>
+							Plan speaker to a different event, move an event to an another room…</p>
+						</div>
+					</div>
+					<div id="overview04" class="clearfix">
+						<div class="clearfix">
+						<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/reloaded.png') }}" /></div>
+						<div class="number grid_1">4.</div>
+						<div class="grid_3"><h3>Let the application broadcast the changes<br/>for you.</h3></div>
+						</div>
+						<div class="grid_3 push_2"><p>Thanks to your web application, all your changes will be broadcasted to your attendees that can consult the planning, the authors list, and everything that compose your conference directly from their smartphones.</p></div>
+					</div>
+				</div>
+				<div class="grid_7"><img src="{{ asset('bundles/fibehomepage/img/illustration/during.png') }}" /></div>
+			</div>
+		</div>
+
+		<div id="after">
+			<div class="container_12">
+				<h1>After Conference</h1>
+				<div class="grid_6"><img src="{{ asset('bundles/fibehomepage/img/illustration/after.png') }}" /></div>
+				<div class="grid_6">
+					<div id="overview05" class="clearfix">
+						<div class="clearfix">
+						<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/publish.png') }}" /></div>
+						<div class="number grid_1">5.</div>
+						<div class="grid_4 omega"><h3>Open your data to the Web 3.0 and increase your conference visibility thanks to a SPARQL endpoint.</h3></div>
+						</div>
+						<div class="grid_4 push_2 omega"><p>By allowing people to have a Sparql access to your data, you can spread your conference name and expect even more attendees for your next event!</p></div>
+					</div>
+					<div id="overview06" class="clearfix">
+						<div class="clearfix">
+						<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/like.png') }}" /></div>
+						<div class="number grid_1">6.</div>
+						<div class="grid_4 omega"><h3>Let people find what they liked using the app.</h3></div>
+						</div>
+						<div class="grid_4 push_2 omega"><p>The application will remain available as long as you wish representing an amasing overview of what makes your conference a major actor of the domains it deals with.</p></div>
+					</div>
+				</div>
+				<div></div>
+			</div>
+		</div>
+
+		<div id="app">
+			<div class="container_12">
+				<h1>The <span class="logoname"><b>Live</b>con</span> App</h1>
+				<div id="app01" class="grid_5">
+					<iframe src="http://dataconf.liris.cnrs.fr/eswc2013/"></iframe>
+				</div>
+				<div id="app02" class="grid_5">
+					<iframe src="http://dataconf.liris.cnrs.fr/www2012/"></iframe>
+				</div>
+			</div>
+		</div>
+
+		<div id="getstarted">
+			<div class="container_12">
+				<h1>Get Started</h1>
+				<div class="grid_8 push_2 suffix_2">
+					<div class="grid_3 alpha"><img src="{{ asset('bundles/fibehomepage/img/illustration/getstarted.png') }}" /></div>
+					<div class="grid_5 omega"><p>To get started you have to request an account directly from the form. We will personnaly take care of providing you an account on our service within 24h. You can start managing your conference and customize your web application. <br/><br/>During your organisation process, we  will be alway available to support you.</p></div>
+				</div>
+				<a href="#contact"><div class="btn grid_4 push_4 alpha omega">Start the <span class="logoname"><b>Live</b>con</span> solution</div></a>
+			</div>
+		</div>
+
+		<div id="team">
+			<div class="container_12">
+				<h1>The Team</h1>
+			</div>
+		</div>
+
+		<div id="contact">
+			<div class="container_12">
+				<h1>Contact The Team</h1>
+			</div>
+		</div>
+
+		<div id="footer">
+
+		</div>
+
+
+
+
+
   
 {% endblock body %}
 
+{% block javascripts %}
+	<!--[if lt IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+	
+		<!-- JavaScript -->		
+		
+		<script type="text/javascript">
+			$(function(){
 
+				// Scroll to
+				$('body').plusAnchor({
+			        easing: 'easeInOutExpo',
+			        speed:  1000,
+			        offsetTop: -70
+			    });
+			});
+		</script>
+{% endblock%}
 
 

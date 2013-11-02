@@ -17,32 +17,31 @@
           {% include "fibeMobileAppBundle:MobileAppTheme:edit.html.twig" %}
         
       </div>
-       <div class="well">
+       <div>
         <form action="{{ path('mobileAppTheme_update_conference', { 'id': conference.id })}}" method="post" {{ form_enctype(conference_form) }}>
-          <div class="row">
-            <div class="col-lg-6">
-               <h1> Conference settings</h1> 
-
-            </div>
-          </div>
            <div class="row">
-              <div class="col-lg-4">
-                   {{ form_widget(conference_form) }}
-                 <!--    {{ form_row(conference_form.acronym) }}
+              <div class="col-lg-4 well">
+                    <h1> Conference settings</h1> 
+                    {{ form_row(conference_form.mainConfEvent.summary) }}
+                    {{ form_row(conference_form.acronym) }}
                     {{ form_row(conference_form.mainConfEvent.url) }}
-                    {{ form_row(conference_form.logo) }} -->
+                    {{ form_row(conference_form.logo) }}
+                    {{ form_errors(conference_form) }}
                      <button type="submit" class="btn btn-success"><i class="icon-edit"></i></button>
+                    <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(conference_form) }}</div> 
                </div>
-                <div class="col-lg-4">
+              <div class="col-lg-4 well">
+                  <h1>Logo</h1>
                   <div class='logo' style="width:300px; height: 100px">
                     <div class="logo-choice"  style="width:300px; height: 100px">
                         <img src="{{ asset('uploads/')}}{{conference.logoPath}}" style="width:auto; height: 100%">
                     </div>
                  </div>
                </div>
-                  <div class="col-lg-3">
+                <div class="col-lg-4 well">
+                  <h1>Color board</h1> 
                   <div id="palette"> 
-                    <button type="submit" id="generateTheme" class="btn btn-success"><i class="fa fa-magic"></i>Generate theme</button>
+                    <a href="#" id="generateTheme" class="btn btn-success"><i class="fa fa-magic"></i>Generate theme</a>
                   </div>
                 </div>
           </div>

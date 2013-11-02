@@ -83,7 +83,7 @@ EOT
         $defaultAppConfig = new MobileAppConfig();
 
         //header color
-        $defaultAppConfig->setBGColorHeader("#e7f0f2");
+        $defaultAppConfig->setBGColorHeader("#f2f2f2");
         $defaultAppConfig->setTitleColorHeader("#000000");
         //navBar color
         $defaultAppConfig->setBGColorNavBar("#305c6b");
