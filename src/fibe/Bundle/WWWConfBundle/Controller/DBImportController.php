@@ -69,6 +69,7 @@ class DBImportController extends Controller
                 }
                 call_user_func_array(array($entity, $setter), array($value)); 
             }
+            $conference = null;
         }
         
         
@@ -93,6 +94,7 @@ class DBImportController extends Controller
                 $em->persist($entity); 
                 array_push($keywordEntities,$entity); 
             }  
+            $keywords = null;
         }   
         
         //////////////////////  locations  ////////////////////// 
@@ -116,6 +118,7 @@ class DBImportController extends Controller
                 $em->persist($entity); 
                 array_push($locationEntities,$entity); 
             }  
+            $locations = null;
         }   
         
         //////////////////////  organizations  //////////////////////
@@ -140,6 +143,7 @@ class DBImportController extends Controller
                 $em->persist($entity); 
                 array_push($organizationEntities,$entity); 
             }  
+            $organizations = null;
         }     
         
         //////////////////////  persons  ////////////////////// 
@@ -177,6 +181,7 @@ class DBImportController extends Controller
                 $em->persist($entity); 
                 array_push($personEntities,$entity);  
             }  
+            $entities = null;
         }    
         
         
@@ -213,6 +218,7 @@ class DBImportController extends Controller
                 $em->persist($entity); 
                 array_push($proceedingEntities,$entity); 
             }  
+            $proceedings = null;
         }   
         
         
@@ -236,6 +242,7 @@ class DBImportController extends Controller
                 $em->persist($entity); 
                 array_push($themeEntities,$entity); 
             }  
+            $themes = null;
         }     
         
         
@@ -262,6 +269,7 @@ class DBImportController extends Controller
                 $em->persist($entity);
                 array_push($categoryEntities,$entity); 
             }  
+            $entities = null;
         }
         
         //////////////////////  events  //////////////////////
@@ -379,6 +387,7 @@ class DBImportController extends Controller
                 $entity->setConference(  $wwwConf  );
                 $em->persist($entity);
             }
+            $entities = null;
         }
 
         //echo implode(",\t",$eventEntities)  ;

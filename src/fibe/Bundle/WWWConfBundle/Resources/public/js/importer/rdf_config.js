@@ -15,6 +15,7 @@ var rdfConfig = {
     },
     getNodeName : function(node){
         var uri=[];
+        var rtn;
         $(node).children().each(function(){ 
             if(this.nodeName.indexOf("rdf:type")!== -1 ){
                 if($(this).attr('rdf:resource').indexOf("#")!== -1 ){ 
@@ -28,17 +29,17 @@ var rdfConfig = {
         }); 
         if($.inArray('KeynoteTalk', uri) > -1 || node.nodeName.indexOf('KeynoteTalk')>-1)
         {   
-            return 'KeynoteEvent';
+            rtn = 'KeynoteEvent';
         }
         else if(uri.length==1)
         {
-            return uri[0];
+            rtn = uri[0];
         }
         else if(uri.length==0) //rdf
         { 
-            return node.nodeName;
-        }
-        return undefined;
+            rtn = node.nodeName;
+        } 
+        return rtn;
     },
     getParseItemOrder : function(){
         return {
@@ -235,7 +236,7 @@ var rdfConfig = {
                     var xproperty= {}; 
                     xproperty['setCalendarEntity']=events.length;
                     xproperty['setXNamespace']="publication_uri";
-                    xproperty['setXValue']=$(node).attr('rdf:resource');
+                    xproperty['setXValue']=$(node).text() || $(node).attr('rdf:resource');
                     xproperties.push(xproperty);
                 }
             },
@@ -256,7 +257,7 @@ var rdfConfig = {
             'swc:hasLocation' : {
                 setter : 'setLocation',
                 format : function(node){ 
-                    var key = $(node).attr('rdf:resource');
+                    var key = $(node).text() || $(node).attr('rdf:resource');
                     if(objectMap[key])
                         locationName = objectMap[key]['setName'];
                     else {
@@ -266,7 +267,7 @@ var rdfConfig = {
                     return getLocationIdFromName(locationName);
                 },
                 action : function(node){
-                    var key = $(node).attr('rdf:resource');
+                    var key = $(node).text() || $(node).attr('rdf:resource');
                     if(objectMap[key])
                         locationName = objectMap[key]['setName'];
                     else {
@@ -281,7 +282,7 @@ var rdfConfig = {
             'icaltzd:location' : {
                 setter : 'setLocation',
                 format : function(node){ 
-                    var key = $(node).attr('rdf:resource');
+                    var key = $(node).text() || $(node).attr('rdf:resource');
                     if(objectMap[key])
                         locationName = objectMap[key]['setName'];
                     else {
@@ -294,39 +295,42 @@ var rdfConfig = {
             'foaf:homepage' : {
                 setter : 'setUrl',
                 format : function(node){ 
-                    return $(node).attr('rdf:resource');
+                    return $(node).text() || $(node).attr('rdf:resource');
                 }, 
             },
         },
         action : function(node,event){
               // EVENT CAT
             var catName = node.nodeName.split("swc:").join("").split("event:").join("");
-            if(catName=="NamedIndividual")catName= rdfConfig.getNodeName(node);
+            if(catName=="NamedIndividual" || catName=="rdf:Description")catName= rdfConfig.getNodeName(node);
             var tmp=catName;
-            if(tmp.split("Event").join("")!="")
+            tmp=tmp.split("Event").join(""); 
+            if(tmp.split("Event").join("")!="" && tmp != catName)
             {
                 catName=tmp;
             }else //OWL fix
             {
-                catName = rdfConfig.getNodeName(node).split("swc:").join("").split("event:").join("") ;
+                catName = rdfConfig.getNodeName(node).split("swc:").join("").split("event:").join("") ; 
                 tmp=catName;
                 if(tmp.split("Event").join("")!="")
                 {
-                    catName=tmp; 
+                    catName=tmp;  
                 }
             }  //OWL fix
 
-            var catId = getCategoryIdFromName(catName);
-            if(catId==undefined){ 
-                var category= {}; 
-                category['setName']=catName;
-                if(catName == "ConferenceEvent") {
-                    event['mainConferenceEvent']=true;
+            if(catName.indexOf("Event") !== -1){
+                var catId = getCategoryIdFromName(catName);
+                if(catId==undefined){ 
+                    var category= {}; 
+                    category['setName']=catName;
+                    if(catName == "ConferenceEvent") {
+                        event['mainConferenceEvent']=true;
+                    }
+                    categories.push(category);
+                    catId = categories.length-1;
                 }
-                categories.push(category);
-                catId = categories.length-1;
+                event['addCategorie']=catId;
             }
-            event['addCategorie']=catId;
             
             
               // EVENT store URI
