@@ -50,10 +50,7 @@ class Organization
     protected $country;
 
      /**
-     * @ORM\ManyToMany(targetEntity="Person", inversedBy="organizations", cascade={"persist"})
-     * @ORM\JoinTable(name="member",
-     *     joinColumns={@ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="Cascade")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="Cascade")})
+     * @ORM\ManyToMany(targetEntity="Person",   mappedBy="members", cascade={"persist"})
      */
     protected $members;
 

@@ -155,7 +155,21 @@ var rdfConfig = {
                         console.warn("author : "+key+" can't be found");
                     }  
                 }, 
-            }
+            },
+            'foaf:maker' : {
+                multiple : true,
+                setter : 'addAuthor',
+                format : function(node){ 
+                    var key = $(node).text() || $(node).attr("rdf:resource"); 
+                    if(objectMap[key]){
+                        return $.inArray(objectMap[key], persons);
+                    }else {
+                        console.warn("author : "+key+" can't be found");
+                    }  
+                }, 
+            },
+
+
         },
         /*
         overide : function(addArray,mapping,node){  
@@ -300,23 +314,23 @@ var rdfConfig = {
             },
         },
         action : function(node,event){
-              // EVENT CAT
-            var catName = node.nodeName.split("swc:").join("").split("event:").join("");
-            if(catName=="NamedIndividual" || catName=="rdf:Description")catName= rdfConfig.getNodeName(node);
-            var tmp=catName;
-            tmp=tmp.split("Event").join(""); 
-            if(tmp.split("Event").join("")!="" && tmp != catName)
-            {
-                catName=tmp;
-            }else //OWL fix
-            {
-                catName = rdfConfig.getNodeName(node).split("swc:").join("").split("event:").join("") ; 
-                tmp=catName;
-                if(tmp.split("Event").join("")!="")
-                {
-                    catName=tmp;  
-                }
-            }  //OWL fix
+
+            //TODO refactore that
+            //TODO refactore that
+            //TODO refactore that
+
+              // EVENT CAT 
+            var catName,
+                tmp;
+
+            tmp = node.nodeName.split("swc:").join("").split("event:").join("");
+            if(testCatName(tmp))catName = tmp;
+
+            catName = rdfConfig.getNodeName(node);
+            if(testCatName(tmp))catName = tmp;
+
+            catName = rdfConfig.getNodeName(node).split("swc:").join("").split("event:").join("");
+            if(testCatName(tmp))catName = tmp;
 
             if(catName.indexOf("Event") !== -1){
                 var catId = getCategoryIdFromName(catName);
@@ -342,6 +356,10 @@ var rdfConfig = {
 
             //don't store the original event
             return false;
+
+            function testCatName(catName){
+                return (catName.indexOf("Event") !== -1 && catName !== "Event")
+            }
         }, 
     },
  

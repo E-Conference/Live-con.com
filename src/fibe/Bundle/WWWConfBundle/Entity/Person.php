@@ -50,7 +50,6 @@ class Person
 
     /**
      * based_near 
-     * @Assert\NotBlank(message ="Please give an origin")
      * @ORM\Column(type="string", nullable=true,  name="based_near")
      */
     protected $based_near;
@@ -87,9 +86,12 @@ class Person
 
     /**
      * Organizations
-     * Organizations where the person is member
+     * Organizations where the organization is member
      *
-     * @ORM\ManyToMany(targetEntity="Organization",   mappedBy="members", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Organization", inversedBy="organizations", cascade={"persist"})
+     * @ORM\JoinTable(name="member",
+     *     joinColumns={@ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="Cascade")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="Cascade")})
      */
     private $organizations;
 
@@ -110,7 +112,7 @@ class Person
 
     /**
      *  
-     * @ORM\OneToMany(targetEntity="Role",  mappedBy="person",cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Role",  mappedBy="person",cascade={"persist","remove"})
      * @ORM\JoinColumn(onDelete="CASCADE")
      * 
      */

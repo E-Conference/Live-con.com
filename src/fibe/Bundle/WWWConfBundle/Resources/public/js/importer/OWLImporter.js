@@ -580,12 +580,13 @@ function str_format(string){
         // return unescape(encodeURIComponent(string));  
 
     // console.log("format:",string)
-    return string.split(/(\r\n|\n|\r)/gm).join(" ")//line break
-                 .split(/\s+/g).join(" ")//spaces
-                 .split(/\x26/).join("%26")//spaces
-                 .split(/\x3D/).join("%3D")// & caract
-                 .split(/\ue00E9/).join("e")// & caract
-                 ;
+    return string
+                // .split(/(\r\n|\n|\r)/gm).join(" ")//line break
+                // .split(/\s+/g).join(" ")//spaces
+                // .split(/\x26/).join("%26")//spaces
+                // .split(/\x3D/).join("%3D")// & caract
+                // .split(/\ue00E9/).join("e")// & caract
+                // ;
     // return string.replace(/(\r\n|\n|\r)/gm," ")//line break
     //              .replace(/\s+/g," ")//spaces
     //              .split(/\x26/).join("%26")//spaces

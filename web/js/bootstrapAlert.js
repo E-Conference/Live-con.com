@@ -8,7 +8,8 @@ function bootstrapAlert(type,msg,title,icon){
     if(type== "stop"){
       clearTimeout(bootstrapAlertTimeout); 
       // $bootstrapAlert.animate({'opacity': 0 }, {queue: false, duration: 1500});
-      $bootstrapAlert.fadeOut(1500);
+      $bootstrapAlert.stop().fadeOut(1500)
+                     
       return;
     } 
     var config = {
@@ -43,9 +44,7 @@ function bootstrapAlert(type,msg,title,icon){
                    .html('<button type="button" class="close" data-dismiss="alert">&times;</button><strong> '+title+' </strong>'+msg)  
                    .prepend($(icon).addClass("icon-2x").css("margin-right","0.5em"));
 
-    if(!$bootstrapAlert.is(":visible"))
-        // $bootstrapAlert.hide().animate({'opacity': 1 }, {queue: false});
-        $bootstrapAlert.hide().fadeIn('fast');
+    $bootstrapAlert.stop().hide().fadeIn('fast');
     clearTimeout(bootstrapAlertTimeout);
     bootstrapAlertTimeout=setTimeout(function(){
             // $bootstrapAlert.animate({'opacity': 0 }, {queue: false, duration: 1500});

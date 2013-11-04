@@ -80,6 +80,8 @@ class ScheduleController extends Controller
  */
     public function getEventsAction(Request $request)
     {
+
+        //TODO secure that (injection & csrf)
     
         $em = $this->getDoctrine()->getManager();
     
@@ -117,7 +119,7 @@ class ScheduleController extends Controller
                 $JSONArray['Msg'] = "add success"; 
         }else if( $methodParam=="update")
         { 
-                
+            
             $event = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['id']);
             $startAt = new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get()));
             $endAt =new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()));

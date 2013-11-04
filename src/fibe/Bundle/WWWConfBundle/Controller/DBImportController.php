@@ -156,9 +156,11 @@ class DBImportController extends Controller
                 foreach ($current as $setter => $value) { 
 
                     if($setter == "setTwitter"){
+                        //get twitter entity
                         $ss = $this->getDoctrine()
                                    ->getRepository('fibeWWWConfBundle:SocialService')
                                    ->findOneBy(array('name' => 'Twitter'));
+                        //create account     
                         $ssa = new SocialServiceAccount();
                         $ssa->setAccountName($value)
                             ->setSocialService($ss);

@@ -70,23 +70,26 @@ var EventCollection = {
     },
     
     fitMainConfEvent : function (){
-      if(!mainConfEvent)return;
+        if(!mainConfEvent)return;
+        var oldStartDate = moment(this.start).format();
+        var oldEndDate = moment(this.end).format();
+        var minDate = moment("5000-10-10"),
+                maxDate = moment("1990-10-10");
 
-      var minDate = moment("5000-10-10"),
-              maxDate = moment("1990-10-10");
+        var children = EventCollection.getChildren(mainConfEvent, {concat:true,onlyEvent:true,noSidebar : true}); 
+        for(var i in children){
+          var child = children[i];
+          if(minDate.isAfter(child.start)) minDate = moment(child.start);
+          if(maxDate.isBefore(child.end))  maxDate = moment(child.end); 
 
-          var children = EventCollection.getChildren(mainConfEvent, {concat:true,onlyEvent:true,noSidebar : true}); 
-          for(var i in children){
-            var child = children[i];
-            if(minDate.isAfter(child.start)) minDate = moment(child.start);
-            if(maxDate.isBefore(child.end))  maxDate = moment(child.end); 
+        }
+        if(!minDate.isSame(moment("5000-10-10"))) mainConfEvent.start = minDate.format();
+        if(!maxDate.isSame(moment("1990-10-10"))) mainConfEvent.end = maxDate.format();
 
-          }
-          if(!minDate.isSame(moment("5000-10-10"))) mainConfEvent.start = minDate.format();
-          if(!maxDate.isSame(moment("1990-10-10"))) mainConfEvent.end = maxDate.format();
-
-          mainConfEvent.render();
-          mainConfEvent.persist();
+        if(oldStartDate !== mainConfEvent.start || oldEndDate !== mainConfEvent.end){
+            mainConfEvent.render();
+            mainConfEvent.persist(); 
+        } 
     },
 
     /**
