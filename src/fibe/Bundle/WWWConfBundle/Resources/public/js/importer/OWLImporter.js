@@ -14,6 +14,9 @@ var conference,
     organizations,
     relations;
 
+var notImportedLog,
+    importedLog;
+
 var mappingConfig,
     objectMap;
 
@@ -33,18 +36,20 @@ function run(url,callback,fallback){
             } 
 
             var confName ;
-            events        = [],
-            locations     = [],
-            xproperties   = [],
-            relations     = [],
-            categories    = [],
-            proceedings   = [],
-            persons       = [],
-            themes        = [],
-            proceedings   = [],
-            keywords      = [],
-            organizations = [],
-            objectMap     = {};
+            events         = [],
+            locations      = [],
+            xproperties    = [],
+            relations      = [],
+            categories     = [],
+            proceedings    = [],
+            persons        = [],
+            themes         = [],
+            proceedings    = [],
+            keywords       = [],
+            organizations  = [],
+            notImportedLog = {},
+            importedLog    = {},
+            objectMap      = {};
             
             var defaultDate='now';
 
@@ -94,7 +99,7 @@ function run(url,callback,fallback){
                 rootNode.children().each(function(index,node){
                     var n = mappingConfig.getNodeName(node);
                     if(n && n.indexOf(itemMapping.nodeName)!= -1){
-                        add(addArray,itemMapping,this); 
+                        add(addArray,itemMapping,this,{name:n}); 
                     }
                 }); 
             }
@@ -107,7 +112,7 @@ function run(url,callback,fallback){
             rootNode.children().each(function(index,node){ 
                 var n = mappingConfig.getNodeName(node); 
                 if(n && n.indexOf(mappingConfig.relationMapping.nodeName)!= -1){  
-                    add(relations,mappingConfig.relationMapping,this,{eventId:j});  
+                    add(relations,mappingConfig.relationMapping,this,{name:n,eventId:j});  
                     j++;
                 }
             });
@@ -244,6 +249,14 @@ function run(url,callback,fallback){
                 return;
             }
             if(callback!=undefined)callback(dataArray,confName);   
+
+            //log not imported properties
+
+            console.log("Imported properties : ");
+            console.log(importedLog);
+
+            console.log("not imported properties : ");
+            console.log(notImportedLog);
        },
        //get import file ajax fallback
        error:function(a,b,c){
@@ -293,14 +306,16 @@ function add(addArray,mapping,node,arg){
                     //unwrapped if needed
                     if(mapping.label[this.nodeName].wrapped === true){
                         $(this).children().each(function(){ 
-                            set(mapping,nodeName,this); 
+                            set(mapping,nodeName,this,arg); 
                         });
                     }else{
-                        set(mapping,nodeName,this); 
+                        set(mapping,nodeName,this,arg); 
                     }
                 }
             }else{ 
-                console.log("/ ! \\ no mapping for : "+node.nodeName+"/"+ this.nodeName);
+                var mappingLake = arg.name+"/"+ this.nodeName;
+                if(!notImportedLog[mappingLake])
+                    notImportedLog[mappingLake] = undefined
             }
         });
              
@@ -312,8 +327,10 @@ function add(addArray,mapping,node,arg){
             addArray.push( rtnArray );
         }
 
-        function set(mapping,nodeName,node){
-            console.log("set : "+nodeName+", "+node.nodeName);
+        function set(mapping,nodeName,node,arg){
+            var mappingStr = arg.name+"/"+ nodeName;
+            if(!importedLog[mappingStr])
+                importedLog[mappingStr] = undefined
             var val = node.textContent;
                 
             // pre processing
@@ -340,6 +357,7 @@ function add(addArray,mapping,node,arg){
 
 // GET THE INDEX OF A CATEGORY GIVEN BY ITS NAME
 function getCategoryIdFromName(name){
+    name = str_format(name);
 
     for (var i=0;i<categories.length;i++){
         //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
@@ -351,7 +369,7 @@ function getCategoryIdFromName(name){
 }
 
 // GET THE INDEX OF A LOCATION GIVEN ITS URI
-function getLocationIdFromUri(uri){
+function getLocationIdFromUri(uri){ 
 
     for (var i=0;i<locations.length;i++){
         //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
@@ -363,9 +381,10 @@ function getLocationIdFromUri(uri){
 } 
 
 function getLocationIdFromName(locationName){
-    
+    locationName = str_format(locationName);
     for (var i=0;i<locations.length;i++){
         //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
+        // alert(locationName+" == "+locations[i]['setName']+"\n"+(locations[i]['setName']==locationName ?"true":"false"));
         if(locations[i]['setName']==locationName){
             return i; 
         }
@@ -374,6 +393,7 @@ function getLocationIdFromName(locationName){
 }
 
 function getThemeIdFromName(themeName){
+    themeName = str_format(themeName);
     
     for (var i=0;i<themes.length;i++){
         //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
@@ -385,6 +405,7 @@ function getThemeIdFromName(themeName){
 }
 
 function getKeywordIdFromName(keywordName,debug){
+    keywordName = str_format(keywordName);
     
     for (var i=0;i<keywords.length;i++){
         //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
