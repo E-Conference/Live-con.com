@@ -49,6 +49,13 @@ class Person
     protected $firstName;
 
     /**
+     * based_near 
+     * @Assert\NotBlank(message ="Please give an origin")
+     * @ORM\Column(type="string", nullable=true,  name="based_near")
+     */
+    protected $based_near;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Person", inversedBy="name")
      * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
