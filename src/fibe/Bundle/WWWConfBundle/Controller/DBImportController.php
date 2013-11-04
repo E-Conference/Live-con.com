@@ -421,8 +421,7 @@ class DBImportController extends Controller
  
 
         foreach ($confEvents as $event) {
-            if(!$event->getParent()){
-            echo "crotte";
+            if(!$event->getParent() && $event != $mainConfEvent){
                 $event->setParent($mainConfEvent);
                 $em->persist($event);
             }

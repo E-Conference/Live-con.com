@@ -398,9 +398,12 @@
               event.SetRecurDate();
               // event.deleteParent();
               Events[event.id] = event;
-              
+
+              event.setParent(mainConfEvent);
+              event.updateParentDate();
               event.persist();
               event.render();
+
 
               // render the event on the calendar  
                 
@@ -432,6 +435,7 @@
           console.log("dropped",event)
           var event = Events[calEvent.id];
           event.deleteParent();
+          EventCollection.fitMainConfEvent();
 
           //set as sidebar draggable element  and then affect children 
           sidebar.setSidebarEvent(event);
@@ -521,7 +525,7 @@
           stylizeBlock(toppestParent); 
 
           if($('#reposition').is(':checked')){ 
-
+            //non-blocking
                   setTimeout(function(){ 
                     positionBlock(toppestParent,colWidth,2);
                   },1)
@@ -538,7 +542,7 @@
                   for (var i in events){
 
                     var event = events[i]; 
-                    console.log("positionning : ",event.id);
+                    // console.log("positionning : ",event.id);
                     var element = event.elem; 
                     if(!element)  continue; //event is in another view
                         
@@ -819,18 +823,14 @@
 
         //apply to children 
         $.each(children,function(i,child){
-
-          //non-blocking loop
-          function doWork() {
+ 
                   
               // console.log("#draggin child : ",child ); 
                
               child['start']  = moment(child['start']).subtract(diff);
               child['end']  = moment(child['end']).subtract(diff);
               child.render();
-              child.persist();
-          };
-          setTimeout(doWork, 1);
+              child.persist(); 
    
         }); 
         //apply to parent

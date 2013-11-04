@@ -120,21 +120,7 @@ CalEvent.prototype.updateParentDate = function(){
         //make main conf get a special treatment
         //to make it fit to its children date
         if(parent.is_mainconfevent){
-          
-          var minDate = moment("5000-10-10"),
-              maxDate = moment("1990-10-10");
-
-          var children = EventCollection.getChildren(parent, {concat:true,onlyEvent:true}); 
-          for(var i in children){
-            var child = children[i];
-            if(minDate.isAfter(child.start)) minDate = moment(child.start);
-            if(maxDate.isBefore(child.end))  maxDate = moment(child.end); 
-
-          }
-          if(!minDate.isSame(moment("5000-10-10"))) parent.start = minDate.format();
-          if(!maxDate.isSame(moment("1990-10-10"))) parent.end = maxDate.format();
-
-          parent.render();
+          EventCollection.fitMainConfEvent();
         }
  
         if(event.isInsideOf(parent))return;  

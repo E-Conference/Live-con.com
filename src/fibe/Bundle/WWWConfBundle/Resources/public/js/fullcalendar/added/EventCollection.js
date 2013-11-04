@@ -32,7 +32,7 @@ var EventCollection = {
     }, 
         /** 
          * @param parent        :  db model event
-         * @param op            : concat : ( boolean ) if true : dont preserve the tree nature of the relation (just concat children/subchildren/subsu... them)
+         * @param op            : concat : ( boolean ) if true : dont preserve the tree nature of the relation (just concat children/subchildren/subsu...)
          *                        noSidebar(default false),
          *                        recursive(default true) get only direct children
          * return children      : [{event:event,element:$element}, ... ]
@@ -46,8 +46,8 @@ var EventCollection = {
 
           // console.log("getChildren",parent)
           $.each(parent.children,function(i,childId){
-            if( !parent.children.hasOwnProperty( i ) ) return;
-
+            if( !parent.children.hasOwnProperty( i )  ) return;
+            if( childId === parent.id)parent.deleteParent();
             var child = EventCollection.find(childId.id,op);
             if( !child) return;
             // console.log("child",child);
@@ -67,6 +67,26 @@ var EventCollection = {
 
           }); 
           return children; 
+    },
+    
+    fitMainConfEvent : function (){
+      if(!mainConfEvent)return;
+
+      var minDate = moment("5000-10-10"),
+              maxDate = moment("1990-10-10");
+
+          var children = EventCollection.getChildren(mainConfEvent, {concat:true,onlyEvent:true,noSidebar : true}); 
+          for(var i in children){
+            var child = children[i];
+            if(minDate.isAfter(child.start)) minDate = moment(child.start);
+            if(maxDate.isBefore(child.end))  maxDate = moment(child.end); 
+
+          }
+          if(!minDate.isSame(moment("5000-10-10"))) mainConfEvent.start = minDate.format();
+          if(!maxDate.isSame(moment("1990-10-10"))) mainConfEvent.end = maxDate.format();
+
+          mainConfEvent.render();
+          mainConfEvent.persist();
     },
 
     /**
@@ -108,7 +128,7 @@ var EventCollection = {
     getToppestParent : function (view){
         var toppestParent = []; 
 
-        return EventCollection.getChildren(mainConfEvent, {concat:true,recursive:false,onlyEvent:true}); 
+        return EventCollection.getChildren(mainConfEvent, {concat:true,recursive:false,onlyEvent:true,noSidebar:true}); 
 
         // $(view.getSlotContainer()).find(".fc-event").each(function(){
         //   var e = EventCollection.getEventByDiv($(this));
@@ -159,16 +179,12 @@ var EventCollection = {
         // }
         return toppestParent;
     },
-
+    
     getBroCountRange : function(brothers){
           startScript = moment()
       var rtnArray = {}; 
       for (var i in brothers){
-        var curBro = brothers[i];
-        
-
-
-
+        var curBro = brothers[i]; 
 
         var count   = 0
             ,range   = 0
@@ -191,7 +207,7 @@ var EventCollection = {
         }; 
 
       }
-        console.log(moment().diff(startScript)+" to getBroCountRange")
+        console.debug(moment().diff(startScript)+" to getBroCountRange")
       return rtnArray;
     },
 
