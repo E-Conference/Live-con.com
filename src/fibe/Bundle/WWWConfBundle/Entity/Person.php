@@ -88,7 +88,7 @@ class Person
      * Organizations
      * Organizations where the organization is member
      *
-     * @ORM\ManyToMany(targetEntity="Organization", inversedBy="organizations", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Organization", inversedBy="members", cascade={"persist"})
      * @ORM\JoinTable(name="member",
      *     joinColumns={@ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="Cascade")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="Cascade")})
