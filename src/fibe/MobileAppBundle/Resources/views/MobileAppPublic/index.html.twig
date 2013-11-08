@@ -6,6 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{ asset('bundles/fibemobileapp/mobileApp/css/jquery.mobile-1.3.0.min.css') }}" />
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <script  src="{{ asset('bundles/fibemobileapp/mobileApp/js/lib/require.js') }}"></script>
     <script>
 
@@ -72,6 +73,8 @@
       require(['config', 'tpl'], function(configuration, tpl){
         configuration.datasources.eventDatasource.uri = "{{ api_uri }}";
         configuration.conference.name = {{ conference.acronym |json_encode|raw }};
+        configuration.conference.acronym = {{ conference.acronym |json_encode|raw }};
+        configuration.conference.id = {{ conference.id |json_encode|raw }};
         configuration.conference.logoUri = "{{ asset('uploads/')}}{{conference.logoPath}}";
         configuration.routes.Home.title = {{ conference.acronym |json_encode|raw }};
         tpl.uri = "{{ asset('bundles/fibemobileapp/mobileApp/templates/') }}";
