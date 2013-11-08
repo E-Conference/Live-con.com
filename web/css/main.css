@@ -1,35 +1,42 @@
+/*-------------------------------------------------------------------------------------
+--------------------------------------GLOBAL-----------------------------------------
+-------------------------------------------------------------------------------------*/
+body{
+	min-width:750px;
+}
 
+
+
+/*-------------------------------------------------------------------------------------
+--------------------------------------NAVBAR-----------------------------------------
+-------------------------------------------------------------------------------------*/
 .navbar{
 	background-color : #f2f2f2;
+	border-bottom : 2px solid #19313b;
+	margin-bottom : 30px;
 }
+
+.nav{
+	margin-top:15px;
+}
+
+
+/*-------------------------------------------------------------------------------------
+--------------------------------------CONTENT-----------------------------------------
+-------------------------------------------------------------------------------------*/
 .center{
 	/*min-height : 1000px;*/
 
 	padding: 1.5em 1.5em 10.5em;
 	margin-bottom: 1.5em;
-
-
-	border: solid 2px #333333;
+	min-height : 800px;
+	border: solid 2px #19313b;
 	background-color: #eeeeee;
 	-webkit-border-radius: 18px;
 	-moz-border-radius: 18px;
 	border-radius: 18px;
 }
 
-footer {
-	margin-top: 0px;
-	text-align: center;
-	border-top: 1px solid #e5e5e5;
-	height : 50px;
-	background: #ffffff; /* Old browsers */
-	background: -moz-linear-gradient(top, #ffffff 0%, #e1e1e1 51%, #f6f6f6 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(51%,#e1e1e1), color-stop(100%,#f6f6f6)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #ffffff 0%,#e1e1e1 51%,#f6f6f6 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #ffffff 0%,#e1e1e1 51%,#f6f6f6 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #ffffff 0%,#e1e1e1 51%,#f6f6f6 100%); /* IE10+ */
-	background: linear-gradient(to bottom, #ffffff 0%,#e1e1e1 51%,#f6f6f6 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 ); /* IE6-9 */
-}
 
 /*.form-control
 {
@@ -58,4 +65,22 @@ option
 .badge-success{
 	/*background-color: #47a447;*/
 	background-color: #5cb85c;
+}
+
+
+/*-------------------------------------------------------------------------------------
+--------------------------------------FOOTER-----------------------------------------
+-------------------------------------------------------------------------------------*/
+footer {
+	border-top : 2px solid #f2f2f2;
+	font-family: QuickSandBold, sans-serif;
+	margin-top: 30px;
+	background:#19313b;
+	padding-top: 30px;
+	color:#f2f2f2 ;
+}
+
+footer a {
+	color:#f2f2f2 ;
+
 }

@@ -1,10 +1,12 @@
 .navbar { 
-      margin-bottom: 0; 
+      
     }
     #calendar {  
-        width  : 80%; 
+        width  : 100%; 
         margin : 0;
         padding: 1em;
+        background: #f2f2f2;
+        border : solid 2px #19313b;
         float  : left
     }
 
@@ -13,9 +15,10 @@
     #sidebar {   
         padding   : 1em 0.5em;
         /*height  : 100%; */
-        width     : 20%;
+        width     : 100%;
         padding   : 0 10px; 
-        background: #eee;
+        background: #f2f2f2;
+        border    : solid 2px #19313b;
         z-index   : 1;
         float     : right;
     }
@@ -48,6 +51,9 @@
         margin-bottom : 1em;
         position      : relative; 
         z-index       : 2; 
+        max-height    : 600px ;
+        min-height        : 600px ;
+        overflow      : scroll;
         /*overflow-y    :    auto;*/
         height        : 100%;  /*sidebar h4 height*/
         min-height    : 15em;
