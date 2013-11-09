@@ -273,6 +273,16 @@ class DBImportController extends Controller
             }  
             $entities = null;
         }
+
+
+        //retrieve Chair roletype
+        $chairRoleType = $this->getDoctrine()
+                           ->getRepository('fibeWWWConfBundle:RoleType')
+                           ->findOneBy(array('name' => 'Chair'));
+        //retrieve Presenter roletype
+        $presenterRoleType = $this->getDoctrine()
+                           ->getRepository('fibeWWWConfBundle:RoleType')
+                           ->findOneBy(array('name' => 'Presenter'));
         
         //////////////////////  events  //////////////////////
         if(isset($JSONFile['events'])){
@@ -330,36 +340,27 @@ class DBImportController extends Controller
                             break;  
                         } 
                         if($setter=="addChair"){
-                            $j=0;
-
-                            //retrieve Chair roletype
-                            $chairRoleType = $this->getDoctrine()
-                                               ->getRepository('fibeWWWConfBundle:RoleType')
-                                               ->findOneBy(array('name' => 'Chair'));
-                            if($chairRoleType==null){
-                                $chairRoleType = new RoleType();
-                                $chairRoleType->setName("Chair");
-                                $em->persist($chairRoleType);
-                            }
-
 
                             $setter = "addRole";
-                            foreach ($value as $chair) {
-                                if($j!=0){
-                                    $person=$personEntities[$chair];
+                            foreach ($value as $chair) { 
                                     $val = new Role();
                                     $val->setType($chairRoleType);
-                                    $val->setPerson($person);
-
-                                    call_user_func_array(array($entity, $setter), array($val));
-                                }
-                                $j++;
+                                    $val->setPerson($personEntities[$chair]);
+                                    $val->setEvent($entity);
+                                    $entity->addRole($val);
+ 
                             }  
-                            $person=$personEntities[$value[0]];
-                            $value = new Role();
-                            $value->setType($chairRoleType);
-                            $value->setPerson($person);
-                        }else{
+                        }else if($setter=="addPresenter"){
+
+                            $setter = "addRole";
+                            foreach ($value as $presenter) {  
+                                    $val = new Role();
+                                    $val->setType($presenterRoleType);
+                                    $val->setPerson($personEntities[$presenter]);
+                                    $val->setEvent($entity);
+                                    $entity->addRole($val);
+                            }   
+                        }else {
                             $this->doArray($entityArray,$entity, $setter,$value); 
                         }
                     } else {

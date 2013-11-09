@@ -47,7 +47,9 @@ var rdfConfig = {
             "organizationMapping" : organizations,
             "personMapping" : persons,
             "proceedingMapping" : proceedings,
-            "eventMapping" : events
+            "eventMapping" : events,
+            "presenterMapping" : roles,
+            "chairMapping" : roles,
         };
     },
     personMapping : {
@@ -362,7 +364,53 @@ var rdfConfig = {
             }
         }, 
     },
- 
+    presenterMapping : {
+        nodeName : 'Presenter', 
+        overide : function(node){
+
+            var event ;
+            $(node).children().each(function(){
+                if(this.nodeName=="swc:isRoleAt"){  
+                    event = objectMap[$(this).attr("rdf:resource")]
+                } 
+            });
+            if(event){
+                event['addPresenter'] = [];
+                $(node).children().each(function(){
+                    if(this.nodeName=="swc:heldBy"){ 
+                        var person = $(this).attr("rdf:resource"); 
+                        if(objectMap[person]){
+                            event['addPresenter'].push( $.inArray(objectMap[person], persons)); 
+                        }
+                    } 
+                }); 
+            }
+        }
+    },
+    chairMapping : {
+        nodeName : 'Chair', 
+        overide : function(node){
+
+            var event ;
+            $(node).children().each(function(){
+                if(this.nodeName=="swc:isRoleAt"){  
+                    event = objectMap[$(this).attr("rdf:resource")]
+                } 
+            });
+            if(event){
+                event['addChair'] = [];
+                $(node).children().each(function(){
+                    if(this.nodeName=="swc:heldBy"){ 
+                        var person = $(this).attr("rdf:resource"); 
+                        if(objectMap[person]){
+                            event['addChair'].push( $.inArray(objectMap[person], persons)); 
+                        }
+                    } 
+                }); 
+            }
+        }
+    },
+
     relationMapping : {
         nodeName : 'Event',
         overide : function(node){ 

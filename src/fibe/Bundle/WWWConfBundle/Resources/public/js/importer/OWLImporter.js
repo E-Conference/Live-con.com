@@ -12,7 +12,8 @@ var conference,
     proceedings,
     keywords,
     organizations,
-    relations;
+    relations,
+    roles;
 
 var notImportedLog,
     importedLog;
@@ -47,6 +48,7 @@ function run(url,callback,fallback){
             proceedings    = [],
             keywords       = [],
             organizations  = [],
+            roles          = [],
             conference     = {},
             notImportedLog = {},
             importedLog    = {},
@@ -250,13 +252,14 @@ function run(url,callback,fallback){
             dataArray['categories']=categories;
             dataArray['persons']=persons;   
             dataArray['themes']=themes;   
-            dataArray['events']=events;
+            dataArray['events']=events; 
             // dataArray['xproperties']=xproperties; 
             dataArray['keywords']=keywords; 
             dataArray['proceedings']=proceedings; 
             dataArray['organizations']=organizations; 
             console.log('---------finished---------' );
             console.log(dataArray);
+            console.log(roles)
 
             var empty = true;
             for (var i in dataArray){
@@ -301,7 +304,7 @@ function add(addArray,mapping,node,arg){
 
     //to override this method, write an "overide : function(){...}" in the mapping file of the function. 
     if(mapping.overide!==undefined){
-        return mapping.overide(node,arg);
+        return mapping.overide(node,addArray,arg);
     }
     //unwrapped if needed
     if(mapping.wrapped===true){ 
@@ -342,7 +345,7 @@ function add(addArray,mapping,node,arg){
             mapping.action(node,rtnArray); 
         }
         if(Object.size(rtnArray) > 0){
-            objectMap[key] = rtnArray;
+            objectMap[key] = rtnArray; 
             addArray.push( rtnArray );
         }
 
