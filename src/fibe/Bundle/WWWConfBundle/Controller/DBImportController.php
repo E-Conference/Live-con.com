@@ -381,12 +381,12 @@ class DBImportController extends Controller
                         $hasParent = true;
                         $value=$eventEntities[$value]; 
                         call_user_func_array(array($entity, $setter), array($value));  
-                    }  
+                    }
                 }
                 if(!$hasParent){
                     $entity->setParent($mainConfEvent);
                 }
-                $entity->setConference(  $wwwConf  );
+                $entity->setConference($wwwConf);
                 $em->persist($entity);
             }
             $entities = null;
@@ -395,40 +395,40 @@ class DBImportController extends Controller
         //echo implode(",\t",$eventEntities)  ;
         //////////////////////  x prop  //////////////////////
         //echo "xproperties->\n";
-        if(isset($JSONFile['xproperties'])){
-            $xproperties = $JSONFile['xproperties']; 
-            for($i=0;$i<count($xproperties);$i++){
-                $current = $xproperties[$i];
-                $entity= new XProperty();
-                foreach ($current as $setter => $value) { 
-                    if($setter=="setCalendarEntity"){
+        // if(isset($JSONFile['xproperties'])){
+        //     $xproperties = $JSONFile['xproperties']; 
+        //     for($i=0;$i<count($xproperties);$i++){
+        //         $current = $xproperties[$i];
+        //         $entity= new XProperty();
+        //         foreach ($current as $setter => $value) { 
+        //             if($setter=="setCalendarEntity"){
                     
-                        //echo "XProperty->->".$eventEntities[strval($value)]."->".$value.");\n";
-                        $value=$eventEntities[$value]; 
-                    } 
-                    //echo "XProperty->".$setter."(".$value.");\n";
-                    call_user_func_array(array($entity, $setter), array($value)); 
-                }
-                if(!$entity->getXKey())$entity->setXKey(rand (0,9999999999));
-                $em->persist($entity);
-            }
-        }
+        //                 //echo "XProperty->->".$eventEntities[strval($value)]."->".$value.");\n";
+        //                 $value=$eventEntities[$value]; 
+        //             } 
+        //             //echo "XProperty->".$setter."(".$value.");\n";
+        //             call_user_func_array(array($entity, $setter), array($value)); 
+        //         }
+        //         if(!$entity->getXKey())$entity->setXKey(rand (0,9999999999));
+        //         $em->persist($entity);
+        //     }
+        // }
          
         $mainConfEvent->setParent(null);
         $em->persist($mainConfEvent);
 
         //finally, make sure every events are at least child of the main conf event
         
-        $confEvents = $wwwConf->getEvents();
- 
-
-        foreach ($confEvents as $event) {
-            if(!$event->getParent() && $event != $mainConfEvent){
-                $event->setParent($mainConfEvent);
-                $em->persist($event);
-            }
-        }
-
+        // $confEvents = $wwwConf->getEvents(); 
+        // foreach ($confEvents as $event) {
+        //     if(!$event->getParent()){
+        //         $event->setParent($mainConfEvent);
+        //         $em->persist($event);
+        //     }
+        // }
+        // $mainConfEvent->setParent(null);
+        // $em->persist($mainConfEvent);
+        
         $em->flush();
 
         return new Response("ok");

@@ -247,11 +247,11 @@ var rdfConfig = {
             },
             'swc:hasRelatedDocument' : { 
                 action : function(node){
-                    var xproperty= {}; 
-                    xproperty['setCalendarEntity']=events.length;
-                    xproperty['setXNamespace']="publication_uri";
-                    xproperty['setXValue']=$(node).text() || $(node).attr('rdf:resource');
-                    xproperties.push(xproperty);
+                    // var xproperty= {}; 
+                    // xproperty['setCalendarEntity']=events.length;
+                    // xproperty['setXNamespace']="publication_uri";
+                    // xproperty['setXValue']=$(node).text() || $(node).attr('rdf:resource');
+                    // xproperties.push(xproperty);
                 }
             },
             'dc:subject' : {
@@ -319,17 +319,17 @@ var rdfConfig = {
             //TODO refactore that
             //TODO refactore that
 
-              // EVENT CAT 
+            // EVENT CAT 
             var catName,
                 tmp;
-
+            //different ways to get the category name 
             tmp = node.nodeName.split("swc:").join("").split("event:").join("");
             if(testCatName(tmp))catName = tmp;
 
-            catName = rdfConfig.getNodeName(node);
+            tmp = rdfConfig.getNodeName(node);
             if(testCatName(tmp))catName = tmp;
 
-            catName = rdfConfig.getNodeName(node).split("swc:").join("").split("event:").join("");
+            tmp = rdfConfig.getNodeName(node).split("swc:").join("").split("event:").join("");
             if(testCatName(tmp))catName = tmp;
 
             if(catName.indexOf("Event") !== -1){
@@ -347,7 +347,7 @@ var rdfConfig = {
             }
             
             
-              // EVENT store URI
+            // store uri to get the event back in the relation loop
             var xproperty= {}; 
             xproperty['setCalendarEntity']=events.length;
             xproperty['setXNamespace']="event_uri";
@@ -364,41 +364,55 @@ var rdfConfig = {
     },
  
     relationMapping : {
-        overide : function(event,currentEventId){ 
+        nodeName : 'Event',
+        overide : function(node){ 
+            var event = objectMap[rdfConfig.getNodeKey(node)];
             var found=false;
-            $(event).children().each(function(){
-                if(this.nodeName=="swc:isSubEventOf"||this.nodeName=="swc:isSuperEventOf"){ 
-                    var relatedToEventId=getEventIdFromURI($(this).attr('rdf:resource'));
-                    if(relatedToEventId!=undefined && events[relatedToEventId]!=undefined ){
-                    
-                        var relationId = getRelationIdFromCalendarEntityId(currentEventId,relatedToEventId);
-                        if(!relations[relationId]){
-                            var relationType = this.nodeName.indexOf("swc:isSubEventOf")!== -1?"PARENT":"CHILD";
-                            events[currentEventId]['setParent'] = parseInt(relatedToEventId);
-                            var relation= {}; 
-                            relation['setCalendarEntity']=parseInt(relatedToEventId); 
-                            relation['setRelationType']=relationType;
-                            relation['setRelatedTo']=parseInt(currentEventId);
-                            //console.log("----------   PUSHED    -----------");
-                            //console.log(relation);
-                            relations.push(relation);
-    
-                            var relationType = (relationType=="PARENT"?"CHILD":"PARENT");
-                            var relation= {};
-                            relation['setCalendarEntity']=parseInt(currentEventId);
-                            relation['setRelationType']=relationType;
-                            relation['setRelatedTo']=parseInt(relatedToEventId);
-                            //console.log(relation);
-                            relations.push(relation); 
-                            found=true;
-                        } 
-                    }else{
-                      //console.log( event['setSummary']+", "+$(this).attr('rdf:resource'));
-                      //console.log("Unknown parent");
-                      
-                    }
-                }  
+            $(node).children().each(function(){
+                if(this.nodeName=="swc:isSubEventOf"){ 
+                    var relatedToEventId=getEventIdFromURI($(this).attr('rdf:resource'))
+                    if(relatedToEventId){
+                        event['setParent']= relatedToEventId;
+                    } 
+                } 
             });
+            console.log(event);
+            // console.log("event",event,"currentEventId",currentEventId)
+            // alert("hehe")
+            // var found=false;
+            // $(event).children().each(function(){
+            //     if(this.nodeName=="swc:isSubEventOf"||this.nodeName=="swc:isSuperEventOf"){ 
+            //         var relatedToEventId=getEventIdFromURI($(this).attr('rdf:resource'));
+            //         if(relatedToEventId!=undefined && events[relatedToEventId]!=undefined ){
+                    
+            //             var relationId = getRelationIdFromCalendarEntityId(currentEventId,relatedToEventId);
+            //             if(!relations[relationId]){
+            //                 var relationType = this.nodeName.indexOf("swc:isSubEventOf")!== -1?"PARENT":"CHILD";
+            //                 events[currentEventId]['setParent'] = parseInt(relatedToEventId);
+            //                 var relation= {}; 
+            //                 relation['setCalendarEntity']=parseInt(relatedToEventId); 
+            //                 relation['setRelationType']=relationType;
+            //                 relation['setRelatedTo']=parseInt(currentEventId);
+            //                 //console.log("----------   PUSHED    -----------");
+            //                 //console.log(relation);
+            //                 relations.push(relation);
+    
+            //                 var relationType = (relationType=="PARENT"?"CHILD":"PARENT");
+            //                 var relation= {};
+            //                 relation['setCalendarEntity']=parseInt(currentEventId);
+            //                 relation['setRelationType']=relationType;
+            //                 relation['setRelatedTo']=parseInt(relatedToEventId);
+            //                 //console.log(relation);
+            //                 relations.push(relation); 
+            //                 found=true;
+            //             } 
+            //         }else{
+            //           //console.log( event['setSummary']+", "+$(this).attr('rdf:resource'));
+            //           //console.log("Unknown parent");
+                      
+            //         }
+            //     }  
+            // });
         }
     },
     organizationMapping : {
