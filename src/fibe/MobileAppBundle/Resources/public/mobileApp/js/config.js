@@ -163,8 +163,20 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						} 
 					]
 				},
+				"Events" : {
+					"hash" : "events",
+					"view" : "events",
+					"graphView" : "no",
+					"title": "Events",
+					"commands" : [
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getAllEvents",
+						} 
+					]
+				},
 				"Event" : { 
-					"hash" : "event/*uri",
+					"hash" : "event/:name/*uri",
 					"view" : "event",
 					"graphView" : "no",
 					"title": "Search in event",
@@ -172,31 +184,7 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						{
 							"datasource" : "eventDatasource",
 							"name" : "getEvent",
-						},
-						{
-							"datasource" : "eventDatasource",
-							"name" : "getSessionSubEvent",
-						
-						},
-						{
-							"datasource" : "eventDatasource",
-							"name" : "getTrackSubEvent",
-						
-						},
-						{
-							"datasource" : "eventDatasource",
-							"name" : "getEventPublications",
-						},
-						{
-							"datasource" : "eventDatasource",
-							"name" : "getSpeakersFromEventUri",
-						},
-						{
-							"datasource" : "eventDatasource",
-							"name" : "getChairsFromEventUri",
-						},
-						
-						
+						}						
 					]
 				},
 				"Publication" : { 

@@ -17,41 +17,34 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    method : "GET", 
 		    serviceUri : "schedule_event.jsonp?",
 		    getQuery : function(parameters){	
-			  var conferenceUri = parameters.conferenceUri;
-		      var ajaxData = { id_person : 6} ;
-		      return ajaxData; 
-			     
+		      var ajaxData = {conference_id : parameters.conference.id} ;
+		      return ajaxData;     
 		    },
 		    
-		    ModelCallBack : function(dataXML,conferenceUri,datasourceUri, currentUri){
+		    ModelCallBack : function(dataJSON,conferenceUri,datasourceUri, currentUri){
 				var JSONfile = {};
-				$(dataXML).each(function(i){  
+				$.each(dataJSON,function(i){  
 					var JSONToken = {};
-					JSONToken.eventLabel =  this.name
-					for(var j=0;j<this.xproperties.length;j++){
-					  if(this.xproperties[j].xNamespace=='event_uri')JSONToken.eventUri =  this.xproperties[j].xValue;
-					}
+					JSONToken.id = this.id || null;
+					JSONToken.name = this.name || null;
 					JSONfile[i] = JSONToken;
 				});
-					console.log(JSONfile);
-				//StorageManager.pushCommandToStorage(currentUri,"getConferenceMainTrackEvent",JSONfile);
+				console.log(JSONfile);
+				//StorageManager.pushCommandToStorage(currentUri,"getAllEvents",JSONfile);
 				return JSONfile;
 			},
 				
 			ViewCallBack : function(parameters){
-				//Reasoner.getMoreSpecificKeywords();
 				if(parameters.JSONdata != null){
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
-							
-							parameters.contentEl.append('<h2>Browse conference tracks</h2>'); 
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#event/',
-													  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])},
 													  },
-													 "eventLabel",
+													 "name",
 													 parameters.contentEl,
-													 {type:"Node",labelCllbck:function(str){return "Track : "+str["eventLabel"];}});
+													 {type:"Node",labelCllbck:function(str){return "event : "+str["name"];}});
 						}
 					}
 				} 
@@ -1058,7 +1051,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    getQuery : function(parameters){	
 		    
 			    var conferenceUri = parameters.conferenceUri;
-		      var ajaxData = { "xproperty_namespace" : "event_uri","xproperty_value" : parameters.uri} ; 
+		      var ajaxData = { conference : parameters.conference.id, id : parameters.uri} ; 
 		      return ajaxData; 
 			      
 		    },
@@ -1066,17 +1059,20 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    ModelCallBack : function(dataXML,conferenceUri,datasourceUri, currentUri){
 			 	var JSONfile = {}; 
 			    if(_.size(dataXML) > 0 ){
+			    	debugger;
 				 	dataXML=dataXML[0];
-				 
 				  	console.log(dataXML);
-					JSONfile.eventLabel = (dataXML.name?dataXML.name:"");
-					JSONfile.eventDescription =  (dataXML.description?dataXML.description:"");
-					JSONfile.eventAbstract =  (dataXML.comment?dataXML.comment:""); 
-					JSONfile.eventHomepage =  (dataXML.url?dataXML.url:""); 
-					JSONfile.eventStart = (dataXML.start_at!= '1980-01-01 00:00'?dataXML.start_at:"");
-					JSONfile.eventEnd = (dataXML.end_at!= '1980-01-01 00:00'?dataXML.end_at:"");
-					JSONfile.eventLocationName =  (dataXML.location.name?dataXML.location.name:"") ;
-					JSONfile.eventThemes =  (dataXML.themes?dataXML.themes:"") ;
+					JSONfile.eventLabel = dataXML.name || null;
+					JSONfile.eventId = dataXML.id || null;
+					JSONfile.eventDescription =  dataXML.description || null;
+					JSONfile.eventAbstract =  dataXML.comment || null;
+					JSONfile.eventHomepage =  dataXML.url|| null;
+					JSONfile.eventStart = (dataXML.start_at!= '1980-01-01 00:00'?dataXML.start_at:null);
+					JSONfile.eventEnd = (dataXML.end_at!= '1980-01-01 00:00'?dataXML.end_at:null);
+					JSONfile.eventLocationName =  dataXML.location.name  || null;
+					JSONfile.eventThemes =  (dataXML.themes?dataXML.themes:null) ;
+					JSONfile.eventChildren =  (dataXML.children?dataXML.children:null) ;
+
 				}
 				// StorageManager.pushCommandToStorage(currentUri,"getEvent",JSONfile);
 				return JSONfile;
@@ -1094,15 +1090,6 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					if(_.size(eventInfo) > 0 ){
 						if(parameters.mode == "text"){
 									  
-							var eventLabel  = eventInfo.eventLabel;				
-							var eventLocation  = eventInfo.eventLocation;
-							var eventHomepage  = eventInfo.eventHomepage;
-							var eventDescription  = eventInfo.eventDescription;
-							var eventAbstract  = eventInfo.eventAbstract;							
-							var locationName  = eventInfo.eventLocationName;	
-							var eventStart  = eventInfo.eventStart;	
-							var eventEnd  = eventInfo.eventEnd;
-							var eventThemes  = eventInfo.eventThemes;	
 							var eventStartICS  = moment(eventInfo.eventStart,"YYY-MM-DD HH:mm:ss").format("YYYYMMDDTHHmmss");	
 							var eventEndICS  = moment(eventInfo.eventEnd ,"YYY-MM-DD HH:mm:ss").format("YYYYMMDDTHHmmss");	
 
@@ -1136,30 +1123,30 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 									"END:VEVENT\n"+
 									"END:VCALENDAR";
 							var isDefined = false;	
-							if(eventDescription != ""){ 
+							if(eventInfo.eventDescription){ 
 								parameters.contentEl.append($('<h2>Description</h2>')); 
-								parameters.contentEl.append($('<p>'+eventDescription+'</p>'));   
+								parameters.contentEl.append($('<p>'+eventInfo.eventDescription+'</p>'));   
 							}
-							if(eventAbstract != ""){ 
+							if(eventInfo.eventAbstract){ 
 								parameters.contentEl.append($('<h2>Abstract</h2>')); 
-								parameters.contentEl.append($('<p>'+eventAbstract+'</p>'));   
+								parameters.contentEl.append($('<p>'+eventInfo.eventAbstract+'</p>'));   
 							}
-							if(eventHomepage != ""){ 
+							if(eventInfo.eventHomepage){ 
 								parameters.contentEl.append($('<h2>Homepage</h2>')); 
-								parameters.contentEl.append($('<a href="'+eventHomepage+'">'+eventHomepage+'</p>'));   
+								parameters.contentEl.append($('<a href="'+eventInfo.eventHomepage+'">'+eventInfo.eventHomepage+'</p>'));   
 							}
-							if(eventStart != ""){ 
-								parameters.contentEl.append($('<h2>Starts at :  <span class="inline">'+moment(eventStart).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));
+							if(eventInfo.eventStart){ 
+								parameters.contentEl.append($('<h2>Starts at :  <span class="inline">'+moment(eventInfo.eventStart).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));
 								isDefined = true;
 							}
-							if(eventEnd != ""){
-								parameters.contentEl.append($('<h2>Ends at : <span class="inline">'+moment(eventEnd).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));  
+							if(eventInfo.eventEnd){
+								parameters.contentEl.append($('<h2>Ends at : <span class="inline">'+moment(eventInfo.eventEnd).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));  
 							} 
-							if(locationName != ""){ 
-								parameters.contentEl.append($('<h2>Location : <a href="#schedule/'+Encoder.encode(locationName)+'" data-role="button" data-icon="search" data-inline="true">'+locationName+'</a></h2>'));
+							if(eventInfo.locationName){ 
+								parameters.contentEl.append($('<h2>Location : <a href="#schedule/'+Encoder.encode(eventInfo.locationName)+'" data-role="button" data-icon="search" data-inline="true">'+locationName+'</a></h2>'));
 							}
-							if(eventLabel !=""){ 
-								$("[data-role = page]").find("#DataConf").html(eventLabel);
+							if(eventInfo.eventLabel){ 
+								$("[data-role = page]").find("#DataConf").html(eventInfo.eventLabel);
 							}
 							
 							if(isDefined){
@@ -1171,44 +1158,19 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								parameters.contentEl.append(icsButton);
 							}
 
-							if(eventThemes != ""){
+							if(eventInfo.eventThemes){
 								parameters.contentEl.append('<h2>Themes</h2>'); 
 								$.each(eventThemes, function(i,theme){
-									ViewAdapterText.appendButton(parameters.contentEl,'#theme/'+Encoder.encode(theme.name),theme.name,{tiny : 'true'});
+									ViewAdapterText.appendButton(parameters.contentEl,'#theme/'+Encoder.encode(theme.name)+"/"+Encoder.encode(theme.id),theme.name,{tiny : 'true'});
 								});
 							}
-						}else{
-							
-							 
-							var eventLabel  = eventInfo.eventLabel;				
-							var eventLocation  = eventInfo.eventLocation;
-							var eventDescription  = eventInfo.eventDescription;
-							var eventAbstract  = eventInfo.eventAbstract;							
-							var locationName  = eventInfo.eventLocationName;	
-							var eventStart  = eventInfo.eventStart;	
-							var eventEnd  = eventInfo.eventEnd;
-						
-							if(eventDescription != ""){ 
-								ViewAdapterGraph.addLeaf("Description :"+eventDescription);
+
+							if(eventInfo.eventChildren){
+								parameters.contentEl.append('<h2>Sub events</h2>'); 
+								$.each(eventInfo.eventChildren, function(i,theme){
+									ViewAdapterText.appendButton(parameters.contentEl,'#event/'+Encoder.encode(theme.name)+"/"+Encoder.encode(theme.id),theme.name,{tiny : 'true'});
+								});
 							}
-							if(eventAbstract != ""){ 
-								ViewAdapterGraph.addLeaf("Abstract :"+eventAbstract);
-							}
-							if(eventStart != ""){ 
-								alert("pop");
-								ViewAdapterGraph.addLeaf("Starts at :"+moment(eventStart).format('MMMM Do YYYY, h:mm:ss a'));
-							}
-							if(eventEnd != ""){
-								ViewAdapterGraph.addLeaf("Ends at :"+moment(eventEnd).format('MMMM Do YYYY, h:mm:ss a'));
-							} 
-							if(locationName != ""){ 
-								ViewAdapterGraph.addLeaf("Location :"+locationName);
-							}
-							if(eventLabel !=""){ 
-								ViewAdapterGraph.addLeaf("Label :"+eventLabel);
-								$("[data-role = page]").find("#DataConf").html(eventLabel);
-							}
-							
 						}
 					}
 					
@@ -1566,7 +1528,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				if(parameters.uri != "null"){
 					var  ajaxData = {"location_name" : parameters.uri};
 				}else{
-					var  ajaxData = {"all" : parameters.uri};
+					var  ajaxData = {conference : parameters.conference.id};
 				}
 				return ajaxData;
 			},
