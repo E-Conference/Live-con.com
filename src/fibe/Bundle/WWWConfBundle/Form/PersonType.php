@@ -34,6 +34,13 @@ class PersonType extends AbstractType
                 'required' => false,
                 'multiple'  => true
             ))
+            ->add('papers', 'entity', array(
+                'class' => 'fibeWWWConfBundle:Paper',
+                'label'   => 'Papers',
+                'choices'=> $this->user->getCurrentConf()->getPapers()->toArray(),
+                'required' => false,
+                'multiple'  => true
+            ))
            
         ;
     }

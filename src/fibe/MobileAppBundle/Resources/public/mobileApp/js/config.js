@@ -15,9 +15,13 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 	function(SWDFCommandStore, DBLPCommandStore, DDGoCommandStore, GoogleCommandStore, swcEventCommandStore, DPCommandStore) {
 		
 		var AppConfig = {
+			"app" : {
+				"liveconLogo" : "livecon.png"
+			},
 			//Defnition of the conference
 			"conference" : {
 				"id": "1",
+				"eventId": "1",
 				"name": "Livecon",
 				"acronym": "Livecon",
 				"logoUri": "css/images/banniereTranspBlend.png",
@@ -227,6 +231,28 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 					]
 				},
+
+				"Publications" : { 
+					"hash" : "publications",
+					"view" : "publications",
+					"graphView" : "no",
+					"title": "Publication",
+					"commands" : [
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getAllPublications",
+						}
+					]
+				},
+
+				"OrganizationSearch" : {
+					"hash" : "search/organization",
+					"view" : "organizationSearch",
+					"graphView" : "no",
+					"title": "Search an organization",
+					"commands" : [
+					]
+				},
 				"Persons" : {
 					"hash" : "persons",
 					"view" : "persons",
@@ -250,16 +276,16 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 							"name" : "getPerson",
 						},
 						{
+							"datasource" : "eventDatasource",
+							"name" : "getPublicationsByAuthorId",
+						},
+						{
 							"datasource" : "GoogleDataSource",
 							"name" : "getAuthorPersonalPage",
 						},
 						{
 							"datasource" : "eventDatasource",
 							"name" : "getEventBySpeakerName",
-						},
-						{
-							"datasource" : "eventDatasource",
-							"name" : "getPublicationsByAuthorId",
 						},
 						{
 							"datasource" : "eventDatasource",

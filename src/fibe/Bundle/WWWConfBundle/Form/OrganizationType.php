@@ -22,13 +22,13 @@ class OrganizationType extends AbstractType
             ->add('name')
             ->add('page')
             ->add('country')
-            // ->add('members', 'entity', array(
-            //     'class' => 'fibeWWWConfBundle:Person',
-            //     'label'   => 'Person',
-            //     'multiple' => true,
-            //     'choices'=> $this->user->getCurrentConf()->getPersons()->toArray(),
-            //     'required' => false
-            // ))
+            ->add('members', 'entity', array(
+                'class' => 'fibeWWWConfBundle:Person',
+                'label'   => 'Person',
+                'multiple' => true,
+                'choices'=> $this->user->getCurrentConf()->getPersons()->toArray(),
+                'required' => false
+            ))
         ;
     }
 

@@ -103,6 +103,45 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 			}
 		},
 
+		getAllPublications : {
+		    dataType : "JSONP",
+		    method : "GET", 
+		    serviceUri : "schedule_paper.jsonp?",
+		    getQuery : function(parameters){	
+		      var ajaxData = {conference_id : parameters.conference.id} ;
+		      return ajaxData; 
+		    },
+		    
+		    ModelCallBack : function(dataXML,conferenceUri,datasourceUri, currentUri){
+				var JSONfile = {};
+				$.each(dataXML,function(i){  
+					var JSONToken = {};
+					JSONToken.id =  this.id || "";
+					JSONToken.title =  this.title || "";					
+					JSONfile[i] = JSONToken;
+				});
+				console.log(JSONfile);
+				//StorageManager.pushCommandToStorage(currentUri,"getAllPublications",JSONfile);
+				return JSONfile;
+			},
+				
+			ViewCallBack : function(parameters){
+				if(parameters.JSONdata != null){
+					if(_.size(parameters.JSONdata) > 0 ){
+						if(parameters.mode == "text"){
+							ViewAdapterText.appendList(parameters.JSONdata,
+													 {baseHref:'#publication/',
+													  hrefCllbck:function(str){return Encoder.encode(str["title"])+"/"+Encoder.encode(str["id"])},
+													  },
+													 "title",
+													 parameters.contentEl,
+													 {type:"Node",labelCllbck:function(str){return "paper : "+str["id"];}});
+						}
+					}
+				} 
+			}
+		},
+
 		getAllOrganizations : {
 		    dataType : "JSONP",
 		    method : "GET", 
@@ -247,7 +286,6 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								parameters.contentEl.append($('<a href='+parameters.JSONdata.twitter+'>'+parameters.JSONdata.twitter+'</a>'));    
 							}
 							if(parameters.JSONdata.roles) {
-								debugger;
 								for(var roleType in parameters.JSONdata.roles){
 									parameters.JSONdata.roles[roleType];
 									parameters.contentEl.append($('<h2>'+roleType+' at </h2>'));
@@ -268,6 +306,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				} 
 			}
 		},
+
 
 		getOrganization : {
 		    dataType : "JSONP",
@@ -463,6 +502,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 
 					JSONfile[i] = JSONToken;
 				});
+
 				console.log(JSONfile);
 				//StorageManager.pushCommandToStorage(currentUri,"getConferenceMainTrackEvent",JSONfile);
 				return JSONfile;
@@ -952,7 +992,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    getQuery : function(parameters){	
 		    
 			  var conference = parameters.conference;
-		      var ajaxData = { id : conference.id };
+		      var ajaxData = { id : conference.eventId };
 		      return ajaxData; 
 			     
 		    },
@@ -1635,6 +1675,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 			              }
 				        } 
 					  }
+					  parameters.contentEl.append('<h2>Schedule</h2>'); 
 					  parameters.contentEl.append(content);
 					}
 				}

@@ -72,9 +72,13 @@
       //Configurations
       require(['config', 'tpl'], function(configuration, tpl){
         configuration.datasources.eventDatasource.uri = "{{ api_uri }}";
+
+        configuration.app.liveconLogo = "{{ asset('img/liveconApp.png') }}";
+
         configuration.conference.name = {{ conference.acronym |json_encode|raw }};
         configuration.conference.acronym = {{ conference.acronym |json_encode|raw }};
         configuration.conference.id = {{ conference.id |json_encode|raw }};
+        configuration.conference.eventId = {{ conference.mainConfEvent.id |json_encode|raw }};
         configuration.conference.logoUri = "{{ asset('uploads/')}}{{conference.logoPath}}";
         configuration.routes.Home.title = {{ conference.acronym |json_encode|raw }};
         tpl.uri = "{{ asset('bundles/fibemobileapp/mobileApp/templates/') }}";
@@ -151,6 +155,7 @@
         /**********************   Footer ************************/
         #footer{
           background: {{ mobile_app_config.BGColorFooter}} !important;
+          height: 50px;
         }
 
         #footer *{
@@ -169,18 +174,18 @@
         }
 
 
-        #logoContainer{
+        .logoContainer{
           float:left;
           height : 42px;
           width: 50px;
         }
 
-        #logoContainer a {
+        .logoContainer a {
           height : 100%;
           width : 100%;
         }
 
-        #logoContainer img {
+        .logoContainer img {
           height : 100%;
           width : auto;
         }
