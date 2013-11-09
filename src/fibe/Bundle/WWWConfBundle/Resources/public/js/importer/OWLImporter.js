@@ -12,7 +12,8 @@ var conference,
     proceedings,
     keywords,
     organizations,
-    relations;
+    relations,
+    roles;
 
 var notImportedLog,
     importedLog;
@@ -47,16 +48,15 @@ function run(url,callback,fallback){
             proceedings    = [],
             keywords       = [],
             organizations  = [],
+            roles          = [],
+            conference     = {},
             notImportedLog = {},
             importedLog    = {},
             objectMap      = {};
             
             var defaultDate='now';
 
-            //map of   Uri (string) ,Object 
-
-
-            //custom config (default : rdf)
+            //add custom config here (default : rdf)
             var formatConfig = { 
                 'ocs': ocsConfig,
             }
@@ -170,20 +170,36 @@ function run(url,callback,fallback){
             //////////////////////////////////////////////////////////////////////////
             ///////////////////////////// startAt less  //////////////////////////////
             //////////////////////////////////////////////////////////////////////////
-             for(var i=0;i<events.length;i++){
-                if(events[i]['setStartAt']!=undefined){
+            
+            // setRecursiveDates();
+            //allDay events
+            for(var i=0;i<events.length;i++){
+                var event = events[i];
+                if(event['setStartAt']!=undefined){
                     
-                    if(moment(events[i]['setStartAt']).dayOfYear() != moment(events[i]['setEndAt']).dayOfYear()){
-                        events[i]['setStartAt'] = moment(events[i]['setStartAt']).hour(0).minute(0).second(0).millisecond(0).format('YYYY-MM-DDTHH:mm:ss Z');
-                        events[i]['setEndAt'] = moment(events[i]['setEndAt']).hour(0).minute(0).second(0).millisecond(0).add('d', 1).format('YYYY-MM-DDTHH:mm:ss Z');
+                    //allDay events
+                    if(moment(event['setStartAt']).dayOfYear() != moment(event['setEndAt']).dayOfYear()){
+                        event['setStartAt'] = moment(event['setStartAt']).hour(0).minute(0).second(0).millisecond(0).format('YYYY-MM-DDTHH:mm:ss Z');
+                        event['setEndAt'] = moment(event['setEndAt']).hour(0).minute(0).second(0).millisecond(0).add('d', 1).format('YYYY-MM-DDTHH:mm:ss Z');
                     }
-                    events[i]['setStartAt']= events[i]['setStartAt'] ;
-                    events[i]['setEndAt']=events[i]['setEndAt'] ;
-                }else{
-                    
-                    //startat less get the 'now' date
-                    delete events[i]['setParent'];
-                    events[i]['setEndAt'] = events[i]['setStartAt'] = defaultDate;
+
+                }
+                // else
+                // {
+                //     event['setEndAt'] = event['setStartAt'] = defaultDate;
+                // } 
+                else{
+                    //try to get children date
+                    var childrenDate = getChildrenDate(i);
+                    if(childrenDate)
+                    {
+                        event['setEndAt']   = childrenDate.end; 
+                        event['setStartAt'] = childrenDate.start; 
+                    }else
+                    {
+                        delete event['setParent'];
+                        event['setEndAt'] = event['setStartAt'] = defaultDate;
+                    } 
                 }
             }
             
@@ -236,18 +252,24 @@ function run(url,callback,fallback){
             dataArray['categories']=categories;
             dataArray['persons']=persons;   
             dataArray['themes']=themes;   
-            dataArray['events']=events;
-            dataArray['xproperties']=xproperties; 
+            dataArray['events']=events; 
+            // dataArray['xproperties']=xproperties; 
             dataArray['keywords']=keywords; 
             dataArray['proceedings']=proceedings; 
             dataArray['organizations']=organizations; 
             console.log('---------finished---------' );
-            console.log(dataArray); 
-            if(events.length<1 && xproperties.length<1 && relations.length<1 && locations.length<1 && persons.length<1&& themes.length<1)
-            {
-                if(fallback!=undefined)fallback("bad format"); 
+            console.log(dataArray);
+            console.log(roles)
+
+            var empty = true;
+            for (var i in dataArray){
+                if(empty == true && dataArray[i] && dataArray[i].length>0)empty = false;
+            }
+            if(empty == true){
+                if(fallback!=undefined)fallback("nothing found... please check your file !"); 
                 return;
             }
+
             if(callback!=undefined)callback(dataArray,confName);   
 
             //log not imported properties
@@ -282,7 +304,7 @@ function add(addArray,mapping,node,arg){
 
     //to override this method, write an "overide : function(){...}" in the mapping file of the function. 
     if(mapping.overide!==undefined){
-        return mapping.overide(node,arg);
+        return mapping.overide(node,addArray,arg);
     }
     //unwrapped if needed
     if(mapping.wrapped===true){ 
@@ -323,7 +345,7 @@ function add(addArray,mapping,node,arg){
             mapping.action(node,rtnArray); 
         }
         if(Object.size(rtnArray) > 0){
-            objectMap[key] = rtnArray;
+            objectMap[key] = rtnArray; 
             addArray.push( rtnArray );
         }
 
@@ -355,7 +377,7 @@ function add(addArray,mapping,node,arg){
     }
 }
 
-// GET THE INDEX OF A CATEGORY GIVEN BY ITS NAME
+// utils function to get arrays index
 function getCategoryIdFromName(name){
     name = str_format(name);
 
@@ -368,7 +390,6 @@ function getCategoryIdFromName(name){
     return undefined;
 }
 
-// GET THE INDEX OF A LOCATION GIVEN ITS URI
 function getLocationIdFromUri(uri){ 
 
     for (var i=0;i<locations.length;i++){
@@ -421,7 +442,6 @@ function getKeywordIdFromName(keywordName,debug){
     return -1;
 }
 
-// GET THE INDEX OF AN EVENT GIVEN ITS URI
 function getEventIdFromURI(uri,show){
 
     for (var i=0;i<xproperties.length;i++){
@@ -434,42 +454,40 @@ function getEventIdFromURI(uri,show){
     return undefined;
 }
 
-// GET THE INDEX OF AN EVENT GIVEN ITS CHILD INDEX
-function getParentIndex(eventIndex){
-    for(var i=0;i<relations.length;i++){
-         if(relations[i]['setRelatedTo'] == eventIndex  && relations[i]['setRelationType'].indexOf("PARENT")!=-1 ){
-            return relations[i]['setCalendarEntity'];
-         }
-    }
-    // console.log("event "+ eventIndex +" has no parent");
-    // console.log(events[eventIndex]);
-    return undefined;
-}
+// function getParentIndex(eventIndex){
+//     for(var i=0;i<relations.length;i++){
+//          if(relations[i]['setRelatedTo'] == eventIndex  && relations[i]['setRelationType'].indexOf("PARENT")!=-1 ){
+//             return relations[i]['setCalendarEntity'];
+//          }
+//     }
+//     // console.log("event "+ eventIndex +" has no parent");
+//     // console.log(events[eventIndex]);
+//     return undefined;
+// }
  
 
-// GET THE INDEX OF AN EVENT GIVEN ITS PARENT INDEX
-function getChildIndex(eventIndex){
-    var rtrnArray=[];
-    for(var i=0;i<relations.length;i++){  
-         if(relations[i]['setRelatedTo'] == eventIndex  && relations[i]['setRelationType'].indexOf("CHILD")!=-1 ){ 
-            rtrnArray.push( relations[i]['setCalendarEntity']);
-         }
-    } 
-    return rtrnArray.length==0 ? undefined : rtrnArray;
-}
+// function getChildIndex(eventIndex){
+//     var rtrnArray=[];
+//     for(var i=0;i<relations.length;i++){  
+//          if(relations[i]['setRelatedTo'] == eventIndex  && relations[i]['setRelationType'].indexOf("CHILD")!=-1 ){ 
+//             rtrnArray.push( relations[i]['setCalendarEntity']);
+//          }
+//     } 
+//     return rtrnArray.length==0 ? undefined : rtrnArray;
+// }
  
 
 
-function getRelationIdFromCalendarEntityId(eventId,relatedToEventId){
-    for(var i=0;i<relations.length;i++){  
+// function getRelationIdFromCalendarEntityId(eventId,relatedToEventId){
+//     for(var i=0;i<relations.length;i++){  
          
-         if(relations[i]['setCalendarEntity'] === eventId && relations[i]['setRelatedTo'] === relatedToEventId){  
-            return i;
-         }
-    } 
-    return undefined;
+//          if(relations[i]['setCalendarEntity'] === eventId && relations[i]['setRelatedTo'] === relatedToEventId){  
+//             return i;
+//          }
+//     } 
+//     return undefined;
     
-}
+// } 
 /*
 function getTrackEventFromInProceedingsUri(ProceedingsUri){
     
@@ -489,89 +507,168 @@ function getTrackEventFromInProceedingsUri(ProceedingsUri){
 
 // GET RECURSIVELY PARENT PROP
 
-function getParentProp(eventIndex,parentProp)
-{ 
-    //ctn++;
-    if(ctn>maxCllStck)
-        return undefined;
+// function getParentProp(eventIndex,parentProp)
+// { 
+//     //ctn++;
+//     if(ctn>maxCllStck)
+//         return undefined;
     
-    var parentIndex=getParentIndex(eventIndex); 
+//     var parentIndex=getParentIndex(eventIndex); 
     
-    if( parentIndex == undefined )
-        return undefined;
+//     if( parentIndex == undefined )
+//         return undefined;
     
-    // console.log("getParentProp(eventIndex,parentProp)");
-    // console.log(eventIndex);
-    // console.log(parentProp);
-    // console.log(events[parentIndex][parentProp]);
-    if( events[parentIndex][parentProp])
-        return events[parentIndex][parentProp];
+//     // console.log("getParentProp(eventIndex,parentProp)");
+//     // console.log(eventIndex);
+//     // console.log(parentProp);
+//     // console.log(events[parentIndex][parentProp]);
+//     if( events[parentIndex][parentProp])
+//         return events[parentIndex][parentProp];
         
-    return getParentProp(parentIndex,parentProp);
+//     return getParentProp(parentIndex,parentProp);
+// }
+
+
+function setRecursiveDates(){
+
+
+    var done = [];
+    for(var i=0;i<events.length;i++)
+    {
+        var event = events[i]; 
+        var parentId = event.setParent;
+        if(parentId && $.inArray( parentId, done ) ){
+            var parent = events[parentId];
+            if(!parent.mainConferenceEvent)
+            {
+                var childrenDate = getChildrenDate(parentId); 
+                parent["setStartAt"] = childrenDate.start;
+                parent["setEndAt"] = childrenDate.end; 
+            }
+        }
+    }
+
+    // var lowestChildren = getLowestChildren();
+    // console.log(lowestChildren);
+    // var done = [];
+    // for(var i=0;i<lowestChildren.length;i++)
+    // {
+    //     var event = lowestChildren[i]; 
+    //     var parentId = event.setParent;
+    //     if(parentId && $.inArray( parentId, done ) ){
+    //         var parent = events[parentId];
+    //         if(!parent.mainConferenceEvent)
+    //         {
+    //             var childrenDate = getChildrenDate(parentId); 
+    //             parent["setStartAt"] = childrenDate.start;
+    //             parent["setEndAt"] = childrenDate.end;
+    //             done.push(parentId);
+    //         }
+    //     }
+    // }
 }
 
+function getLowestChildren(){
 
-// GET RECURSIVELY CHILD PROP
-
-function getChildDate(eventIndex){
-    //ctn++;
-    if(ctn>maxCllStck)
-        return undefined;
-    
-    var childIndexArr=getChildIndex(eventIndex);
-    
-    if( !childIndexArr )
-        return undefined;
-    
-    var start = moment('5010-10-20'); 
-    var end = moment(defaultDate);
-    for (var i=0;i<childIndexArr.length;i++){
-    
-        var childId = childIndexArr[i];
-        if( events[childId]['setStartAt'] && moment(events[childId]['setStartAt']).isBefore(start)){
-          start = events[childId]['setStartAt'];
-        }
-        if( events[childId]['setEndAt'] && moment(events[childId]['setEndAt']).isAfter(end)){
-          end = events[childId]['setEndAt'];
-        }
-          
+    var rtn = [];
+    for(var i=0;i<events.length;i++)
+    {
+        var event = events[i];
+        var children = getChildren(i);
+        if(children.length == 0)
+        { 
+            rtn.push(event)
+        } 
     }
-    if(!moment(start).isSame('5010-10-20') && !moment(end).isSame(defaultDate)){
-      return {start:start,end:end};
+    return rtn;
+}
+
+function getChildren(eventIndex)
+{
+    var rtn = [];
+    for (var i in events)
+    {
+        var child = events[i];
+        if(child.setParent == eventIndex)
+        { 
+            rtn.push({event:child,id:i});
+        } 
+    }
+    return rtn;
+}
+
+function getChildrenDate(eventIndex)
+{
+    var start = moment('5010-10-20'); 
+    var end   = moment('1900-10-20');
+    for (var i in events)
+    {
+        var child = events[i];
+        if(child.setParent == eventIndex)
+        { 
+            if( child['setStartAt'] && moment(child['setStartAt']).isBefore(start)){
+              start = moment(child['setStartAt']);
+            }
+            if( child['setEndAt'] && moment(child['setEndAt']).isAfter(end)){
+              end = moment(child['setEndAt']);
+            }
+        } 
+    }
+    if(start.isSame(moment('5010-10-20')) || end.isSame(moment('1900-10-20')) )return undefined;
+    return {start:start.format(),end:end.format()}
+}
+// function getChildDate(eventIndex){ 
+
+//     var childIndexArr=getChildIndex(eventIndex);
+    
+//     if( !childIndexArr )
+//         return undefined;
+    
+//     var start = moment('5010-10-20'); 
+//     var end = moment(defaultDate);
+//     for (var i=0;i<childIndexArr.length;i++){
+    
+//         var childId = childIndexArr[i];
+//         if( events[childId]['setStartAt'] && moment(events[childId]['setStartAt']).isBefore(start)){
+//           start = events[childId]['setStartAt'];
+//         }
+//         if( events[childId]['setEndAt'] && moment(events[childId]['setEndAt']).isAfter(end)){
+//           end = events[childId]['setEndAt'];
+//         }
+          
+//     }
+//     if(!moment(start).isSame('5010-10-20') && !moment(end).isSame(defaultDate)){
+//       return {start:start,end:end};
        
     
-    }
+//     }
     
-    return getChildrenDate(childIndexArr);
-}
+//     return getChildrenDate(childIndexArr);
+// }
 
-function getChildrenDate(childIndexArr){ 
-    //ctn++;
-    if(ctn>maxCllStck)
-        return undefined;
-         
-    var start = moment('5010-10-20'); 
-    var end = moment(defaultDate);
-    for (var i=0;i<childIndexArr.length;i++){ 
+// function getChildrenDate(childIndexArr){  
+//     var start = moment('5010-10-20'); 
+//     var end = moment(defaultDate);
+//     for (var i=0;i<childIndexArr.length;i++){ 
     
-        var childId = childIndexArr[i];
-        var date = getChildDate(childId);
+//         var childId = childIndexArr[i];
+//         var date = getChildDate(childId);
         
-        if( date.start && moment(date.start).isBefore(start)){
-          start = date.start;
-        }
-        if( date.end && moment(date.end).isAfter(end)){
-          end = date.end;
-        }
+//         if( date.start && moment(date.start).isBefore(start)){
+//           start = date.start;
+//         }
+//         if( date.end && moment(date.end).isAfter(end)){
+//           end = date.end;
+//         }
           
-    }
+//     }
     
-    if(!moment(start).isSame('5010-10-20') && !moment(end).isSame(defaultDate)){
-      return {start:start,end:end};
-    } 
+//     if(!moment(start).isSame('5010-10-20') && !moment(end).isSame(defaultDate)){
+//       return {start:start,end:end};
+//     } 
         
-        return undefined;
-}
+//         return undefined;
+// }
  
 
 function str_format(string){

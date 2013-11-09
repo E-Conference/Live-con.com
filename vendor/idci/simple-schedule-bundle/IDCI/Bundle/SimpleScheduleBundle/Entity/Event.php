@@ -64,15 +64,17 @@ class Event extends LocationAwareCalendarEntity
         
         if($this->getEndAt()) {
             $this->setDuration($this->getEndAt()->diff($this->getStartAt())->format('P%aDT%HH%IM%SS')); 
-        }else if($this->getDuration()) 
-        {
-        } else 
+        }else 
         {
             $endAt = clone $this->getStartAt();
-            $endAt->modify(sprintf(
-                '+ %d minutes',
-                self::durationInTime($this->getDuration(), 'minute')
-            ));
+            if($this->getDuration()) 
+            {
+                $endAt->modify(sprintf(
+                    '+ %d minutes',
+                    self::durationInTime($this->getDuration(), 'minute')
+                ));
+            }
+            
             $this->setEndAt($endAt);
         }
     }

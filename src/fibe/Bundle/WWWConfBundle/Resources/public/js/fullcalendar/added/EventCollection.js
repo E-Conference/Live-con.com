@@ -32,7 +32,7 @@ var EventCollection = {
     }, 
         /** 
          * @param parent        :  db model event
-         * @param op            : concat : ( boolean ) if true : dont preserve the tree nature of the relation (just concat children/subchildren/subsu...)
+         * @param op            : concat : ( boolean default : false ) if true : dont preserve the tree nature of the relation (just concat children/subchildren/subsu...)
          *                        noSidebar(default false),
          *                        recursive(default true) get only direct children
          * return children      : [{event:event,element:$element}, ... ]
@@ -184,8 +184,9 @@ var EventCollection = {
     },
     
     getBroCountRange : function(brothers){
-          startScript = moment()
-      var rtnArray = {}; 
+      var startScript = moment()
+
+      var rtnArray = {};
       for (var i in brothers){
         var curBro = brothers[i]; 
 

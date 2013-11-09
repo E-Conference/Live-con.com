@@ -273,6 +273,16 @@ class DBImportController extends Controller
             }  
             $entities = null;
         }
+
+
+        //retrieve Chair roletype
+        $chairRoleType = $this->getDoctrine()
+                           ->getRepository('fibeWWWConfBundle:RoleType')
+                           ->findOneBy(array('name' => 'Chair'));
+        //retrieve Presenter roletype
+        $presenterRoleType = $this->getDoctrine()
+                           ->getRepository('fibeWWWConfBundle:RoleType')
+                           ->findOneBy(array('name' => 'Presenter'));
         
         //////////////////////  events  //////////////////////
         if(isset($JSONFile['events'])){
@@ -330,36 +340,27 @@ class DBImportController extends Controller
                             break;  
                         } 
                         if($setter=="addChair"){
-                            $j=0;
-
-                            //retrieve Chair roletype
-                            $chairRoleType = $this->getDoctrine()
-                                               ->getRepository('fibeWWWConfBundle:RoleType')
-                                               ->findOneBy(array('name' => 'Chair'));
-                            if($chairRoleType==null){
-                                $chairRoleType = new RoleType();
-                                $chairRoleType->setName("Chair");
-                                $em->persist($chairRoleType);
-                            }
-
 
                             $setter = "addRole";
-                            foreach ($value as $chair) {
-                                if($j!=0){
-                                    $person=$personEntities[$chair];
+                            foreach ($value as $chair) { 
                                     $val = new Role();
                                     $val->setType($chairRoleType);
-                                    $val->setPerson($person);
-
-                                    call_user_func_array(array($entity, $setter), array($val));
-                                }
-                                $j++;
+                                    $val->setPerson($personEntities[$chair]);
+                                    $val->setEvent($entity);
+                                    $entity->addRole($val);
+ 
                             }  
-                            $person=$personEntities[$value[0]];
-                            $value = new Role();
-                            $value->setType($chairRoleType);
-                            $value->setPerson($person);
-                        }else{
+                        }else if($setter=="addPresenter"){
+
+                            $setter = "addRole";
+                            foreach ($value as $presenter) {  
+                                    $val = new Role();
+                                    $val->setType($presenterRoleType);
+                                    $val->setPerson($personEntities[$presenter]);
+                                    $val->setEvent($entity);
+                                    $entity->addRole($val);
+                            }   
+                        }else {
                             $this->doArray($entityArray,$entity, $setter,$value); 
                         }
                     } else {
@@ -381,12 +382,12 @@ class DBImportController extends Controller
                         $hasParent = true;
                         $value=$eventEntities[$value]; 
                         call_user_func_array(array($entity, $setter), array($value));  
-                    }  
+                    }
                 }
                 if(!$hasParent){
                     $entity->setParent($mainConfEvent);
                 }
-                $entity->setConference(  $wwwConf  );
+                $entity->setConference($wwwConf);
                 $em->persist($entity);
             }
             $entities = null;
@@ -395,40 +396,40 @@ class DBImportController extends Controller
         //echo implode(",\t",$eventEntities)  ;
         //////////////////////  x prop  //////////////////////
         //echo "xproperties->\n";
-        if(isset($JSONFile['xproperties'])){
-            $xproperties = $JSONFile['xproperties']; 
-            for($i=0;$i<count($xproperties);$i++){
-                $current = $xproperties[$i];
-                $entity= new XProperty();
-                foreach ($current as $setter => $value) { 
-                    if($setter=="setCalendarEntity"){
+        // if(isset($JSONFile['xproperties'])){
+        //     $xproperties = $JSONFile['xproperties']; 
+        //     for($i=0;$i<count($xproperties);$i++){
+        //         $current = $xproperties[$i];
+        //         $entity= new XProperty();
+        //         foreach ($current as $setter => $value) { 
+        //             if($setter=="setCalendarEntity"){
                     
-                        //echo "XProperty->->".$eventEntities[strval($value)]."->".$value.");\n";
-                        $value=$eventEntities[$value]; 
-                    } 
-                    //echo "XProperty->".$setter."(".$value.");\n";
-                    call_user_func_array(array($entity, $setter), array($value)); 
-                }
-                if(!$entity->getXKey())$entity->setXKey(rand (0,9999999999));
-                $em->persist($entity);
-            }
-        }
+        //                 //echo "XProperty->->".$eventEntities[strval($value)]."->".$value.");\n";
+        //                 $value=$eventEntities[$value]; 
+        //             } 
+        //             //echo "XProperty->".$setter."(".$value.");\n";
+        //             call_user_func_array(array($entity, $setter), array($value)); 
+        //         }
+        //         if(!$entity->getXKey())$entity->setXKey(rand (0,9999999999));
+        //         $em->persist($entity);
+        //     }
+        // }
          
         $mainConfEvent->setParent(null);
         $em->persist($mainConfEvent);
 
         //finally, make sure every events are at least child of the main conf event
         
-        $confEvents = $wwwConf->getEvents();
- 
-
-        foreach ($confEvents as $event) {
-            if(!$event->getParent() && $event != $mainConfEvent){
-                $event->setParent($mainConfEvent);
-                $em->persist($event);
-            }
-        }
-
+        // $confEvents = $wwwConf->getEvents(); 
+        // foreach ($confEvents as $event) {
+        //     if(!$event->getParent()){
+        //         $event->setParent($mainConfEvent);
+        //         $em->persist($event);
+        //     }
+        // }
+        // $mainConfEvent->setParent(null);
+        // $em->persist($mainConfEvent);
+        
         $em->flush();
 
         return new Response("ok");
