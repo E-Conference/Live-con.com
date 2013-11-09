@@ -17,10 +17,12 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 		var AppConfig = {
 			//Defnition of the conference
 			"conference" : {
-				"name": "BLEND",
+				"id": "1",
+				"name": "Livecon",
+				"acronym": "Livecon",
 				"logoUri": "css/images/banniereTranspBlend.png",
 				"website": "http://www.blendconference.com/",
-				"baseUri": "http://www.blendconference.com/",
+				"baseUri": "http://www.blendconference.com/"
 			},
 			
 			//Defnition of the datasources 
@@ -31,35 +33,35 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 				"SemanticWebConferenceDatasource" : {
 					"uri" : "http://poster.www2012.org/endpoint/eswc2013/sparql/",
 					"crossDomainMode" : "CORS",
-					"commands" : SWDFCommandStore, 
+					"commands" : SWDFCommandStore
 				},
 				
 				"DblpDatasource" : {
 					"uri" : "http://dblp.rkbexplorer.com/sparql/",
 					"crossDomainMode" : "CORS",
-					"commands" : DBLPCommandStore,
+					"commands" : DBLPCommandStore
 				},
 
 				"DuckDuckGoDatasource" : {   
 					"uri" : "http://api.duckduckgo.com/",
 					"crossDomainMode" : "JSONP",
-					"commands" : DDGoCommandStore,
+					"commands" : DDGoCommandStore
 				},
 				
 				"GoogleDataSource" : {   
 					"uri" : "https://ajax.googleapis.com/ajax/services/search/web",
 					"crossDomainMode" : "JSONP",
-					"commands" : GoogleCommandStore,
+					"commands" : GoogleCommandStore
 				},
 				"eventDatasource" : {
 					"uri" : "http://dataconf.liris.cnrs.fr/simpleschedule-blend/web/api/",
 					"crossDomainMode" : "JSONP",
-					"commands" : swcEventCommandStore,
+					"commands" : swcEventCommandStore
 				},
 				"DataPaperDatasource" : {
 					"uri" : "http://dataconf.liris.cnrs.fr:5984/datapaper/_design/public/_view/by_type",
 					"crossDomainMode" : "JSONP",
-					"commands" : DPCommandStore, 
+					"commands" : DPCommandStore
 				}
 			}, 
 			//Declaration of all the routes to be used by the router
@@ -76,9 +78,9 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [ 
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getConferencePanel",
-						},
-						{
+							"name" : "getConferenceEvent",
+						}
+						/*{
 							"datasource" : "eventDatasource",
 							"name" : "getConferenceTalk",
 						},
@@ -93,7 +95,7 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						{
 							"datasource" : "eventDatasource",
 							"name" : "getConferenceSpecialEvent",
-						}
+						}*/
 						
 					]
 				}, 
@@ -121,15 +123,15 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						},
 					]
 				},  
-				"Proceedings-search-by-speaker" : { 
-					"hash" : "search/by-speaker/*uri",
-					"view" : "",
+				"person-by-role" : { 
+					"hash" : "person-by-role/:name/*uri",
+					"view" : "person-by-role",
 					"graphView" : "no",
-					"title": "Search by speaker",
+					"title": "Search a person by role",
 					"commands" : [
 					    {
 							"datasource" : "eventDatasource",
-							"name" : "getAllSpeakers",
+							"name" : "getPersonByRole",
 						} 
 					]
 				},
@@ -194,31 +196,47 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					]
 				},
 				"Publication" : { 
-					"hash" : "publication/*uri",
+					"hash" : "publication/:name/*uri",
 					"view" : "publication",
 					"graphView" : "no",
 					"title": "Publication",
 					"commands" : [
 						{
-							"datasource" : "SemanticWebConferenceDatasource",
-							"name" : "getPublicationInfo",
+							"datasource" : "eventDatasource",
+							"name" : "getPublication",
 						},
 						{
 							"datasource" : "DataPaperDatasource",
 							"name" : "getDataPaperRessource",
-						},
-						{
-							"datasource" : "SemanticWebConferenceDatasource",
-							"name" : "getPublicationAuthor",
-						},	
-						{
-							"datasource" : "SemanticWebConferenceDatasource",
-							"name" : "getPublicationKeywords",
-						},
+						}
+					]
+				},
+				"PersonSearch" : {
+					"hash" : "search/person",
+					"view" : "personSearch",
+					"graphView" : "no",
+					"title": "search a person",
+					"commands" : [
+					]
+				},
+				"PublicationSearch" : {
+					"hash" : "search/publication",
+					"view" : "publicationSearch",
+					"graphView" : "no",
+					"title": "Search a publication",
+					"commands" : [
+					]
+				},
+				"Persons" : {
+					"hash" : "persons",
+					"view" : "persons",
+					"graphView" : "no",
+					"title": "Persons",
+					"commands" : [
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getEventRelatedPublication",
-						}
+							"name" : "getAllPersons",
+						} 
 					]
 				},
 				"Person" : {
@@ -241,6 +259,10 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						},
 						{
 							"datasource" : "eventDatasource",
+							"name" : "getPublicationsByAuthorId",
+						},
+						{
+							"datasource" : "eventDatasource",
 							"name" : "getEventByChairName",
 						},
 						{
@@ -251,6 +273,44 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					]
 					
 				},
+				"Organizations" : {
+					"hash" : "organizations",
+					"view" : "organizations",
+					"graphView" : "no",
+					"title": "Organizations",
+					"commands" : [
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getAllOrganizations",
+						} 
+					]
+				},
+				"Roles" : {
+					"hash" : "roles",
+					"view" : "roles",
+					"graphView" : "no",
+					"title": "Roles",
+					"commands" : [
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getAllRoles",
+						} 
+					]
+				},
+
+				"Countries" : {
+					"hash" : "countries",
+					"view" : "countries",
+					"graphView" : "no",
+					"title": "Countries",
+					"commands" : [
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getAllCountries",
+						} 
+					]
+				},
+				
 				"Theme" : {
 					"hash" : "theme/:name",
 					"view" : "theme",
@@ -314,7 +374,7 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 							"name" : "getResultOrganization",
 						},
 						{
-							"datasource" : "SemanticWebConferenceDatasource",
+							"datasource" : "eventDatasource",
 							"name" : "getOrganization",
 						}
 					]

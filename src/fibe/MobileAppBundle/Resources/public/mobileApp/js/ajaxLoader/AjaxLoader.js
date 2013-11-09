@@ -47,9 +47,9 @@ define(['jquery','jqueryMobile'], function($, jqueryMobile){
 				cache: false,
 				dataType: command.dataType,
 				data: data,	
-				success: _.bind(function(data){data = command.ModelCallBack(data, conference.baseUri,datasource.uri,currentUri,name);
+				success: _.bind(function(data){data = command.ModelCallBack(data, conference, datasource.uri,currentUri,name);
 										jqueryMobile.loading( 'hide' );
-										command.ViewCallBack({JSONdata : data, contentEl : contentEl,name : name, mode : this.viewAdapter.mode});
+										command.ViewCallBack({JSONdata : data, contentEl : contentEl,name : name, mode : this.viewAdapter.mode, conference : conference});
 										this.viewAdapter.generateJQMobileElement();
 										
 										},this),

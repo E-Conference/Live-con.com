@@ -39,6 +39,116 @@ class PaperRepository extends EntityRepository
         return $papers;
     }
 
+    /**
+     * getOrderedQueryBuilder
+     *
+     * @return QueryBuilder
+     */
+    public function getOrderedQueryBuilder()
+    {
+        $qb = $this->createQueryBuilder('loc');
+        $qb->orderBy('loc.title', 'ASC');
+
+        return $qb;
+    }
+
+    /**
+     * getOrderedQuery
+     *
+     * @return Query
+     */
+    public function getOrderedQuery()
+    {
+        $qb = $this->getOrderedQueryBuilder();
+
+        return is_null($qb) ? $qb : $qb->getQuery();
+    }
+
+    /**
+     * getOrdered
+     *
+     * @return DoctrineCollection
+     */
+    public function getOrdered()
+    {
+        $q = $this->getOrderedQuery();
+
+        return is_null($q) ? array() : $q->getResult();
+    }
+
+    /**
+     * extractQueryBuilder
+     *
+     * @param array $params
+     * @return QueryBuilder
+     */
+    public function extractQueryBuilder($params)
+    {
+        $qb = $this->getOrderedQueryBuilder();
+
+        if(isset($params['id'])) {
+            $qb
+                ->andWhere('loc.id = :id')
+                ->setParameter('id', $params['id'])
+            ;
+        }
+
+        if(isset($params['ids'])) {
+            $qb
+                ->andWhere($qb->expr()->in('loc.id', $params['ids']))
+            ;
+        }
+
+        if(isset($params['title'])) {
+            $qb
+                ->andWhere('loc.title = :title')
+                ->setParameter('title', $params['title'])
+            ;
+        }
+
+        if(isset($params['author_id'])) {
+            $qb
+                ->leftJoin('loc.authors', 'au')
+                ->andWhere('au.id = :author_id')
+                ->setParameter('author_id', $params['author_id'])
+            ;
+        }
+
+        if(isset($params['conference_id'])) {
+            $qb
+                ->andWhere('loc.conference = :conference_id')
+                ->setParameter('conference_id', $params['conference_id'])
+            ;
+        }
+ 
+        return $qb;
+    }
+
+    /**
+     * extractQuery
+     *
+     * @param array $params
+     * @return Query
+     */
+    public function extractQuery($params)
+    {
+        $qb = $this->extractQueryBuilder($params);
+
+        return is_null($qb) ? $qb : $qb->getQuery();
+    }
+
+    /**
+     * extract
+     *
+     * @param array $params
+     * @return DoctrineCollection
+     */
+    public function extract($params)
+    {
+        $q = $this->extractQuery($params);
+
+        return is_null($q) ? array() : $q->getResult();
+    }
 
 
     

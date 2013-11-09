@@ -131,6 +131,22 @@ class PersonRepository extends EntityRepository
                 ->setParameter('role_type',$params['role_type']);
             ;
         }
+
+        if(isset($params['role_type_id'])) {
+            $qb
+                ->leftJoin('loc.roles', 'rol')
+                ->leftJoin('rol.type', 'rolt')
+                ->andWhere('rolt.id = :role_type_id')
+                ->setParameter('role_type_id',$params['role_type_id']);
+            ;
+        }
+
+        if(isset($params['conference_id'])) {
+            $qb
+                ->andWhere('loc.conference = :conference_id')
+                ->setParameter('conference_id', $params['conference_id'])
+            ;
+        }
  
         return $qb;
     }

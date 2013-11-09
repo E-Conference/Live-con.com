@@ -158,7 +158,14 @@
             }, "html");    
        });
 
-     function addPerson(){
+    
+       
+
+     $('.help').popover({ 'trigger': 'click', 'placement':'bottom'});
+   
+  
+  });
+    function addPerson(){
         //get the url for the form
         var id_person = $('#fibe_bundle_wwwconfbundle_roletype_person').val();
         var id_type = $('#fibe_bundle_wwwconfbundle_roletype_type').val();
@@ -171,13 +178,7 @@
                   
               }, "html");    
           return false;
-         };
-       
-
-     $('.help').popover({ 'trigger': 'click', 'placement':'bottom'});
-   
-  
-});
+    };
 </script>
 
 {% endblock javascripts %}
