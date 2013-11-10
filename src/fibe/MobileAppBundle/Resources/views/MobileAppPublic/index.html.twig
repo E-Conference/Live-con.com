@@ -188,42 +188,26 @@
           color: {{ mobile_app_config.TitleColorFooter}} !important;
         }
 
-        /**********************   Buttons ************************/
-        .button{
-          background: {{ mobile_app_config.BGColorButton}} !important;
-          border: none !important;
-        }
+
 
         .button *{
-          color: {{ mobile_app_config.TitleColorButton}} !important;
-        }
-
-
-        .ui-btn-inner{
-          padding-top : .35em!important;
-          padding-bottom : .3em!important;
           
         }
+
+        .ui-li-divider{
+          background: {{ mobile_app_config.BGColorButton}} !important;
+        }
+
+        .content .ui-btn{
+          background: {{ mobile_app_config.BGColorButton}} !important;
+          color: {{ mobile_app_config.TitleColorButton}} !important;
+          border: 1px solid {{ mobile_app_config.TitleColorContent}} !important;
+        }
+
 
         //Special buttons
         a .swtich{
           background : #9fc3db!important;
-        }
-
-
-        .ui-btn-text{
-          padding-top : 0em!important;
-          padding-bottom : 0em!important;
-        }
-
-        .ui-li{
-          padding-top : 0em!important;
-          padding-bottom : 0em!important;
-
-        }
-        .ui-listview-filter{
-          margin-top: 0px;
-
         }
 
 
