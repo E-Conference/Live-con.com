@@ -43,10 +43,10 @@
         {% if loop.first %} {% else %},{% endif %}{ "id": "{{ child.id }}", "name": "{{ child.getSummary() }}"}
     {% endfor %}
     ],
-    "themes":
+    "topics":
     [
-    {% for theme in entity.themes %}
-        {% if loop.first %} {% else %},{% endif %}{ "id": "{{ theme.id }}", "name": "{{ theme.getname() }}"}
+    {% for topic in entity.topics %}
+        {% if loop.first %} {% else %},{% endif %}{ "id": "{{ topic.id }}", "name": "{{ topic.getname() }}"}
     {% endfor %}
     ],
     "categories":

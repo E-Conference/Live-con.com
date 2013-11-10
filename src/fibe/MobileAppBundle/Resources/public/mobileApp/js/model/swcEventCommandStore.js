@@ -571,7 +571,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		getAllTheme : {
 		    dataType : "JSONP",
 		    method : "GET", 
-		    serviceUri : "schedule_theme.jsonp?",
+		    serviceUri : "schedule_topic.jsonp?",
 		    getQuery : function(parameters){	
 			  var conferenceUri = parameters.conferenceUri;
 		      var ajaxData = { } ;

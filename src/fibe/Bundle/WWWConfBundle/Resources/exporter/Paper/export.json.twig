@@ -7,11 +7,11 @@
      "publisher": "{{ entity.publisher }}" , 
      "subject":
             [
-            {% for keyword in entity.subject %}
+            {% for topic in entity.subject %}
                 {% if loop.first %}
-                { "id": "{{ keyword.id }}", "name": "{{ keyword.name }}"}
+                { "id": "{{ topic.id }}", "name": "{{ topic.name }}"}
                 {% else %}
-                ,{ "id": "{{ keyword.id }}", "name": "{{ keyword.name }}"}
+                ,{ "id": "{{ topic.id }}", "name": "{{ topic.name }}"}
                 {% endif %}
             {% endfor %}
             ],

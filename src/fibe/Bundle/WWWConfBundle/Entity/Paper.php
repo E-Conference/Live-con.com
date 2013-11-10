@@ -81,14 +81,14 @@ class Paper
 
 
     /**
-     * subject(keywords) 
+     * topic(topics) 
      *
-     * @ORM\ManyToMany(targetEntity="Keyword", inversedBy="papers", cascade={"persist"})
-     * @ORM\JoinTable(name="subject",
+     * @ORM\ManyToMany(targetEntity="Topic", inversedBy="papers", cascade={"persist"})
+     * @ORM\JoinTable(name="paper_topic",
      *     joinColumns={@ORM\JoinColumn(name="paper_id", referencedColumnName="id", onDelete="Cascade")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="keyword_id", referencedColumnName="id", onDelete="Cascade")})
+     *     inverseJoinColumns={@ORM\JoinColumn(name="topic_id", referencedColumnName="id", onDelete="Cascade")})
      */
-    protected $subjects;
+    protected $topics;
 	
 
      /**
@@ -115,7 +115,7 @@ class Paper
     public function __construct()
     {
         $this->authors = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->subject = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->topic = new \Doctrine\Common\Collections\ArrayCollection();
         $this->events = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
@@ -278,36 +278,36 @@ class Paper
     }
 
     /**
-     * Add subject
+     * Add topic
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Keyword $subject
+     * @param \fibe\Bundle\WWWConfBundle\Entity\topic $topic
      * @return Paper
      */
-    public function addSubject(\fibe\Bundle\WWWConfBundle\Entity\Keyword $subject)
+    public function addTopic(\fibe\Bundle\WWWConfBundle\Entity\topic $topic)
     {
-        $this->subjects[] = $subject;
+        $this->topics[] = $topic;
     
         return $this;
     }
 
     /**
-     * Remove subject
+     * Remove topic
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Keyword $subject
+     * @param \fibe\Bundle\WWWConfBundle\Entity\topic $topic
      */
-    public function removeSubject(\fibe\Bundle\WWWConfBundle\Entity\Keyword $subject)
+    public function removeTopic(\fibe\Bundle\WWWConfBundle\Entity\topic $topic)
     {
-        $this->subjects->removeElement($subject);
+        $this->topics->removeElement($topic);
     }
 
     /**
-     * Get subject
+     * Get topic
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getSubjects()
+    public function getTopics()
     {
-        return $this->subjects;
+        return $this->topics;
     }
 
     /**

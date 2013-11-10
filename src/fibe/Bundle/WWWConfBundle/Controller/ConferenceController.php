@@ -91,11 +91,11 @@ class ConferenceController extends Controller
 
       /*****   process    ****/
 
-      //  themes
-      $themes = $conference->getThemes();
-      foreach ($themes as $theme) {
-        $conference->removeTheme($theme);
-        $em->remove($theme);
+      //  topics
+      $topics = $conference->getTopics();
+      foreach ($topics as $topic) {
+        $conference->removeTopic($topic);
+        $em->remove($topic);
       }
 
       //  organizations
@@ -105,11 +105,11 @@ class ConferenceController extends Controller
         $em->remove($organization);
       }
 
-      //  keywords
-      $keywords = $conference->getKeywords();
-      foreach ($keywords as $keyword) {
-        $conference->removeKeyword($keyword);
-        $em->remove($keyword);
+      //  topics
+      $topics = $conference->getTopics();
+      foreach ($topics as $topic) {
+        $conference->removetopic($topic);
+        $em->remove($topic);
       }
 
       //  papers

@@ -54,25 +54,18 @@ class WwwConf
     private $persons;
 
     /**
-    * Keywords
-    *
-    * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Keyword", mappedBy="conference",cascade={"persist", "remove"})
-    */
-    private $keywords;
-
-    /**
-    * Keywords
+    * Topics
     *
     * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Organization", mappedBy="conference",cascade={"persist", "remove"})
     */
     private $organizations;
 
     /**
-    * Themes
+    * Topics
     *
-    * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Theme", mappedBy="conference",cascade={"persist", "remove"})
+    * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Topic", mappedBy="conference",cascade={"persist", "remove"})
     */
-    private $themes;
+    private $topics;
 
     /**
     * confManager
@@ -313,39 +306,6 @@ class WwwConf
     }
 
     /**
-     * Add themes
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Theme $themes
-     * @return WwwConf
-     */
-    public function addTheme(\fibe\Bundle\WWWConfBundle\Entity\Theme $themes)
-    {
-        $this->themes[] = $themes;
-    
-        return $this;
-    }
-
-    /**
-     * Remove themes
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Theme $themes
-     */
-    public function removeTheme(\fibe\Bundle\WWWConfBundle\Entity\Theme $themes)
-    {
-        $this->themes->removeElement($themes);
-    }
-
-    /**
-     * Get themes
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getThemes()
-    {
-        return $this->themes;
-    }
-
-    /**
      * Add app config
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig $AppConfig
@@ -366,36 +326,36 @@ class WwwConf
     
 
     /**
-     * Add keywords
+     * Add topics
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Keyword $keywords
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Topic $topics
      * @return WwwConf
      */
-    public function addKeyword(\fibe\Bundle\WWWConfBundle\Entity\Keyword $keywords)
+    public function addTopic(\fibe\Bundle\WWWConfBundle\Entity\Topic $topics)
     {
-        $this->keywords[] = $keywords;
+        $this->topics[] = $topics;
     
         return $this;
     }
 
     /**
-     * Remove keywords
+     * Remove topics
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Keyword $keywords
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Topic $topics
      */
-    public function removeKeyword(\fibe\Bundle\WWWConfBundle\Entity\Keyword $keywords)
+    public function removeTopic(\fibe\Bundle\WWWConfBundle\Entity\Topic $topics)
     {
-        $this->keywords->removeElement($keywords);
+        $this->topics->removeElement($topics);
     }
 
     /**
-     * Get keywords
+     * Get topics
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getKeywords()
+    public function getTopics()
     {
-        return $this->keywords;
+        return $this->topics;
     }
 
     /**

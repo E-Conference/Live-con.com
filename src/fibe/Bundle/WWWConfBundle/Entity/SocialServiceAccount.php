@@ -12,8 +12,7 @@ use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 
 
 
-/**
- * Define the themes for confEvent
+/** 
  *
  *
  *  @ORM\Table(name="socialServiceAccount")

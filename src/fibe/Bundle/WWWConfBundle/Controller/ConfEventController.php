@@ -11,9 +11,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
 use fibe\Bundle\WWWConfBundle\Form\ConfEventType;
 use fibe\Bundle\WWWConfBundle\Entity\Role;
-use fibe\Bundle\WWWConfBundle\Entity\Theme;
+use fibe\Bundle\WWWConfBundle\Entity\Topic;
 use fibe\Bundle\WWWConfBundle\Form\RoleType as RoleType;
-use fibe\Bundle\WWWConfBundle\Form\ThemeType as ThemeType;
+use fibe\Bundle\WWWConfBundle\Form\TopicType as TopicType;
 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;  
 
@@ -153,15 +153,14 @@ class ConfEventController extends Controller
                       'label'    => "Select paper"))
             ->getForm();
 
-         $themesForSelect = $this->getUser()->getCurrentConf()->getThemes()->toArray();
-         $form_theme = $this->createFormBuilder($entity)
-            ->add('themes', 'entity', array(
-                  'class'    => 'fibeWWWConfBundle:Theme',
+         $topicsForSelect = $this->getUser()->getCurrentConf()->getTopics()->toArray();
+         $form_topic = $this->createFormBuilder($entity)
+            ->add('topics', 'entity', array(
+                  'class'    => 'fibeWWWConfBundle:Topic',
                   'required' => false,
                   'property' => 'name',
                   'multiple' => false,
-                  'choices'=> $themesForSelect,
-                  'label'    => "Select theme" ))
+                  'label'    => "Select topic" ))
             ->getForm();
 
         $deleteForm = $this->createDeleteForm($id);
@@ -172,7 +171,7 @@ class ConfEventController extends Controller
             'role_form'    => $roleForm->createView(),
             'delete_form' => $deleteForm->createView(),
             'paper_form' => $form_paper->createView(),
-            'theme_form' => $form_theme->createView(),
+            'topic_form' => $form_topic->createView(),
         ));
     }
 
@@ -211,56 +210,56 @@ class ConfEventController extends Controller
 
 
        /**
-     * Add theme to a confEvent
-     *  @Route("/addTheme", name="schedule_confevent_addTheme")
+     * Add topic to a confEvent
+     *  @Route("/addTopic", name="schedule_confevent_addTopic")
      *  @Method("POST")
      *  
      */
-    public function addThemeAction(Request $request)
+    public function addTopicAction(Request $request)
     {
-        $id_theme = $request->request->get('id_theme');
+        $id_topic = $request->request->get('id_topic');
         $id_entity = $request->request->get('id_entity');
            
          $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id_entity);
-        $theme =  $em->getRepository('fibeWWWConfBundle:Theme')->find($id_theme);
+        $topic =  $em->getRepository('fibeWWWConfBundle:Topic')->find($id_topic);
 
         //Add paper to the confEvent
-        $entity->addTheme($theme);
+        $entity->addTopic($topic);
         //Sauvegarde des données
         $em->persist($entity);
         $em->flush();
 
-        return $this->render('fibeWWWConfBundle:ConfEvent:themeRelation.html.twig', array(
+        return $this->render('fibeWWWConfBundle:ConfEvent:topicRelation.html.twig', array(
             'entity'  => $entity,
         ));
     }
 
 
      /**
-     * Delete theme of a confEvent
-     *  @Route("/deleteTheme", name="schedule_confevent_deleteTheme")
+     * Delete topic of a confEvent
+     *  @Route("/deleteTopic", name="schedule_confevent_deleteTopic")
      *  @Method("POST")
      *  
      */
-    public function deleteThemeAction(Request $request)
+    public function deleteTopicAction(Request $request)
     {
-        $id_theme = $request->request->get('id_theme');
+        $id_topic = $request->request->get('id_topic');
         $id_entity = $request->request->get('id_entity');
            
          $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id_entity);
-        $theme =  $em->getRepository('fibeWWWConfBundle:Theme')->find($id_theme);
+        $topic =  $em->getRepository('fibeWWWConfBundle:Topic')->find($id_topic);
 
         //Add paper to the confEvent
-        $entity->removeTheme($theme);
+        $entity->removeTopic($topic);
         //Sauvegarde des données
         $em->persist($entity);
         $em->flush();
 
-        return $this->render('fibeWWWConfBundle:ConfEvent:themeRelation.html.twig', array(
+        return $this->render('fibeWWWConfBundle:ConfEvent:topicRelation.html.twig', array(
             'entity'  => $entity,
         ));
     }

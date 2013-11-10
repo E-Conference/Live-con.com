@@ -128,21 +128,21 @@ var ocsConfig = {
             'abstract': {
                 setter : 'setAbstract',
             }, 
-            //keywords entity are created directly here (or retrieved)
+            //topics entity are created directly here (or retrieved)
             //then we register the correct index
-            'keywords' : {
+            'topics' : {
                 wrapped : true,
                 multiple : true,
-                setter : 'addSubject',
+                setter : 'addTopic',
                 format : function(node){ 
-                    var keywordName = $(node).text();
-                    var index = getKeywordIdFromName(keywordName);
+                    var topicName = $(node).text();
+                    var index = gettopicIdFromName(topicName);
                     return index !== -1 ? index : false ;
                 },
                 action : function(node){
-                    var keywordName = $(node).text();  
-                    if(getKeywordIdFromName(keywordName)=== -1 ){
-                        keywords.push({'setName':str_format(keywordName)});  
+                    var topicName = $(node).text();  
+                    if(gettopicIdFromName(topicName)=== -1 ){
+                        topics.push({'setName':str_format(topicName)});  
                     }
                 }
             },

@@ -12,7 +12,7 @@ use IDCI\Bundle\SimpleScheduleBundle\Entity\Category;
 use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 use fibe\Bundle\WWWConfBundle\Entity\RoleType;
 use fibe\Bundle\WWWConfBundle\Entity\Equipment;
-use fibe\Bundle\WWWConfBundle\Entity\Theme;
+use fibe\Bundle\WWWConfBundle\Entity\Topic;
 use fibe\Bundle\WWWConfBundle\Entity\SocialService;
 
 class databaseInitCommand extends ContainerAwareCommand
@@ -103,26 +103,26 @@ class databaseInitCommand extends ContainerAwareCommand
                   ->setIcon("microphone");
         $em->persist($equipment);
 
-        //Theme 
-       /* $theme = new Theme(); 
-        $theme->setName("Business");
-        $em->persist($theme);
+        //Topic 
+       /* $topic = new Topic(); 
+        $topic->setName("Business");
+        $em->persist($topic);
 
-        $theme = new Theme(); 
-        $theme->setName("Design");
-        $em->persist($theme);
+        $topic = new Topic(); 
+        $topic->setName("Design");
+        $em->persist($topic);
 
-        $theme = new Theme(); 
-        $theme->setName("Marketing");
-        $em->persist($theme);
+        $topic = new Topic(); 
+        $topic->setName("Marketing");
+        $em->persist($topic);
 
-        $theme = new Theme(); 
-        $theme->setName("Recherche");
-        $em->persist($theme);
+        $topic = new Topic(); 
+        $topic->setName("Recherche");
+        $em->persist($topic);
 
-        $theme = new Theme(); 
-        $theme->setName("Tech");
-        $em->persist($theme);*/
+        $topic = new Topic(); 
+        $topic->setName("Tech");
+        $em->persist($topic);*/
 
 
         //categories

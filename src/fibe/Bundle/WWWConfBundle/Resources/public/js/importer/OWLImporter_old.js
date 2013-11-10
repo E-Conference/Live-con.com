@@ -39,7 +39,7 @@
             var categories= [];
             var proceedings= [];
             var persons= [];
-            var themes= [];
+            var topics= [];
             var confName ;
             
             var defaultDate='now';
@@ -139,15 +139,15 @@
                     },
                     'dc:subject' : {
                         multiple: true,
-                        setter : 'addTheme',
+                        setter : 'addTopic',
                         format : function(node){ 
-                            var themeName = $(node).text(); 
-                            return getThemeIdFromName(themeName);
+                            var topicName = $(node).text(); 
+                            return getTopicIdFromName(topicName);
                         },
                         action : function(node){
-                            var themeName = $(node).text(); 
-                            if(getThemeIdFromName(themeName)=== -1 ){
-                                themes.push({setname:format(themeName)});  
+                            var topicName = $(node).text(); 
+                            if(getTopicIdFromName(topicName)=== -1 ){
+                                topics.push({setname:format(topicName)});  
                             }
                         }
                     },
@@ -516,11 +516,11 @@
                 return -1;
             }
             
-            function getThemeIdFromName(themeName){
+            function getTopicIdFromName(topicName){
                 
-                for (var i=0;i<themes.length;i++){
+                for (var i=0;i<topics.length;i++){
                     //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
-                    if(themes[i]['setname']==themeName){
+                    if(topics[i]['setname']==topicName){
                         return i; 
                     }
                 }
@@ -692,12 +692,12 @@
                 dataArray['locations']=locations;  
                 dataArray['categories']=categories;
                 dataArray['persons']=persons;   
-                dataArray['themes']=themes;   
+                dataArray['topics']=topics;   
                 dataArray['events']=events;
                 dataArray['xproperties']=xproperties; 
                 console.log('---------finished---------' );
                 console.log(dataArray); 
-                if(events.length<1 && xproperties.length<1 && relations.length<1 && locations.length<1 && persons.length<1&& themes.length<1)
+                if(events.length<1 && xproperties.length<1 && relations.length<1 && locations.length<1 && persons.length<1&& topics.length<1)
                 {
                     if(fallback!=undefined)fallback("bad format"); 
                     return;
