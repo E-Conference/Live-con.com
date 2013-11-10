@@ -28,7 +28,7 @@ class MobileAppWwwConfType extends AbstractType
             ->add('logo', 'file',  array('required' => false, 
                                         'label'     => 'Logo',
                                         'attr'  => array('placeholder'   => 'logoPath')))
-            ->add('mainConfEvent', new WwwConfEventType($this->user),array(
+            ->add('mainConfEvent', new MobileAppWwwConfEventType($this->user),array(
                                         'label' => 'Conference event',
                                         'attr'  => array('class'   => 'well'))) 
         ;

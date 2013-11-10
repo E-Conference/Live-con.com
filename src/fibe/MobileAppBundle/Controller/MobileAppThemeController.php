@@ -87,8 +87,8 @@ class MobileAppThemeController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find conference entity.');
         }
-
-        $editForm = $this->createForm(new WwwConfType($this->getUser()), $entity);
+ 
+        $editForm = $this->createForm(new MobileAppWwwConfType($this->getUser()), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
