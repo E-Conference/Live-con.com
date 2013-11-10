@@ -15,9 +15,13 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 	function(SWDFCommandStore, DBLPCommandStore, DDGoCommandStore, GoogleCommandStore, swcEventCommandStore, DPCommandStore) {
 		
 		var AppConfig = {
+			"app" : {
+				"liveconLogo" : "livecon.png"
+			},
 			//Defnition of the conference
 			"conference" : {
 				"id": "1",
+				"eventId": "1",
 				"name": "Livecon",
 				"acronym": "Livecon",
 				"logoUri": "css/images/banniereTranspBlend.png",
@@ -159,8 +163,20 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						} 
 					]
 				},
+				"Events" : {
+					"hash" : "events",
+					"view" : "events",
+					"graphView" : "no",
+					"title": "Events",
+					"commands" : [
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getAllEvents",
+						} 
+					]
+				},
 				"Event" : { 
-					"hash" : "event/*uri",
+					"hash" : "event/:name/*uri",
 					"view" : "event",
 					"graphView" : "no",
 					"title": "Search in event",
@@ -168,31 +184,19 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						{
 							"datasource" : "eventDatasource",
 							"name" : "getEvent",
-						},
-						{
+						}						
+					]
+				},
+				"Event-by-category" : { 
+					"hash" : "event-by-category/:name/*uri",
+					"view" : "event-by-category",
+					"graphView" : "no",
+					"title": "Search an event by category",
+					"commands" : [
+					    {
 							"datasource" : "eventDatasource",
-							"name" : "getSessionSubEvent",
-						
-						},
-						{
-							"datasource" : "eventDatasource",
-							"name" : "getTrackSubEvent",
-						
-						},
-						{
-							"datasource" : "eventDatasource",
-							"name" : "getEventPublications",
-						},
-						{
-							"datasource" : "eventDatasource",
-							"name" : "getSpeakersFromEventUri",
-						},
-						{
-							"datasource" : "eventDatasource",
-							"name" : "getChairsFromEventUri",
-						},
-						
-						
+							"name" : "getEventByCategory",
+						} 
 					]
 				},
 				"Publication" : { 
@@ -211,6 +215,14 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						}
 					]
 				},
+				"EventSearch" : {
+					"hash" : "search/event",
+					"view" : "eventSearch",
+					"graphView" : "no",
+					"title": "Search an event",
+					"commands" : [
+					]
+				},
 				"PersonSearch" : {
 					"hash" : "search/person",
 					"view" : "personSearch",
@@ -224,6 +236,28 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"view" : "publicationSearch",
 					"graphView" : "no",
 					"title": "Search a publication",
+					"commands" : [
+					]
+				},
+
+				"Publications" : { 
+					"hash" : "publications",
+					"view" : "publications",
+					"graphView" : "no",
+					"title": "Publication",
+					"commands" : [
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getAllPublications",
+						}
+					]
+				},
+
+				"OrganizationSearch" : {
+					"hash" : "search/organization",
+					"view" : "organizationSearch",
+					"graphView" : "no",
+					"title": "Search an organization",
 					"commands" : [
 					]
 				},
@@ -246,24 +280,16 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"title": "Person",
 					"commands" : [
 						{
-							"datasource" : "eventDatasource",
-							"name" : "getPerson",
-						},
-						{
 							"datasource" : "GoogleDataSource",
 							"name" : "getAuthorPersonalPage",
 						},
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getEventBySpeakerName",
+							"name" : "getPerson",
 						},
 						{
 							"datasource" : "eventDatasource",
 							"name" : "getPublicationsByAuthorId",
-						},
-						{
-							"datasource" : "eventDatasource",
-							"name" : "getEventByChairName",
 						},
 						{
 							"datasource" : "DblpDatasource",
@@ -321,6 +347,18 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 							"datasource" : "eventDatasource",
 							"name" : "getEventbyTheme",
 						},
+					]
+				},
+				"Categories" : {
+					"hash" : "categories",
+					"view" : "categories",
+					"graphView" : "no",
+					"title": "Categories",
+					"commands" : [
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getAllCategories",
+						} 
 					]
 				},
 				"Category" : {

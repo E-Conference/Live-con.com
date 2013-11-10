@@ -365,4 +365,8 @@ class Paper
     {
         return $this->conference;
     }
+
+    public function __toString(){
+        return $this->title;
+    }
 }

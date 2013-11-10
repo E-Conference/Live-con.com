@@ -2,5 +2,16 @@
     "id"          : "{{ entity.id }}",
     "name"          : "{{ entity.name }}",
     "page"       : "{{ entity.page }}",
-    "country"  :  "{{ entity.country }}"
+    "country"  :  "{{ entity.country }}",
+    "members":
+            [
+            {% for member in entity.bouze %}
+                {% if loop.first %}
+                { "id": "{{ member.id }}", "name": "{{ member.name() }}"}
+                {% else %}
+                ,{ "id": "{{ member.id }}", "name": "{{ member.name() }}"}
+                {% endif %}
+            {% endfor %}
+            ] 
+
 } 

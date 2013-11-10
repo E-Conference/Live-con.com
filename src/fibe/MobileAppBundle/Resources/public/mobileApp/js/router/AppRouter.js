@@ -87,7 +87,7 @@ define(['backbone', 'jquery', 'config', 'encoder', 'localStorage/localStorageMan
 								doRequest = false;
 								console.log("CAll : "+commandItem.name+" ON Storage");
 								//Informations already exists so we directly call the command callBack view to render them 
-								currentCommand.ViewCallBack({JSONdata : JSONdata[commandItem.name], contentEl : currentPage.find("#"+commandItem.name), name : name, mode : ViewAdapter.mode});
+								currentCommand.ViewCallBack({JSONdata : JSONdata[commandItem.name], contentEl : currentPage.find("#"+commandItem.name), name : name, mode : ViewAdapter.mode, conference : self.conference});
 								
 							}
 						}
