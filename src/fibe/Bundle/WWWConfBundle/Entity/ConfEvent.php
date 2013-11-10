@@ -45,12 +45,12 @@ class ConfEvent extends Event
     private $papers;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Theme", inversedBy="events", cascade={"persist"})
-     * @ORM\JoinTable(name="theme_confEvent",
+     * @ORM\ManyToMany(targetEntity="Topic", inversedBy="events", cascade={"persist"})
+     * @ORM\JoinTable(name="confEvent_topic",
      *     joinColumns={@ORM\JoinColumn(name="confEvent_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="theme_id", referencedColumnName="id")})
+     *     inverseJoinColumns={@ORM\JoinColumn(name="topic_id", referencedColumnName="id")})
      */
-    private $themes;
+    private $topics;
 
 
     /**
@@ -87,7 +87,7 @@ class ConfEvent extends Event
     public function __construct()
     {
         $this->papers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->themes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->topics = new \Doctrine\Common\Collections\ArrayCollection();
         $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->xProperties = new \Doctrine\Common\Collections\ArrayCollection();
@@ -210,36 +210,36 @@ class ConfEvent extends Event
     }
 
     /**
-     * Add themes
+     * Add topics
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Theme $themes
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Topic $topics
      * @return ConfEvent
      */
-    public function addTheme(\fibe\Bundle\WWWConfBundle\Entity\Theme $themes)
+    public function addTopic(\fibe\Bundle\WWWConfBundle\Entity\Topic $topics)
     {
-        $this->themes[] = $themes;
+        $this->topics[] = $topics;
     
         return $this;
     }
 
     /**
-     * Remove themes
+     * Remove topics
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Theme $themes
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Topic $topics
      */
-    public function removeTheme(\fibe\Bundle\WWWConfBundle\Entity\Theme $themes)
+    public function removeTopic(\fibe\Bundle\WWWConfBundle\Entity\Topic $topics)
     {
-        $this->themes->removeElement($themes);
+        $this->topics->removeElement($topics);
     }
 
     /**
-     * Get themes
+     * Get topics
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getThemes()
+    public function getTopics()
     {
-        return $this->themes;
+        return $this->topics;
     }
 
     /**

@@ -20,8 +20,8 @@ idci_exporter:
 #                            template_path:
                             template_name_format: "export.json.twig"
 
-        schedule_theme:
-            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Theme"
+        schedule_topic:
+            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Topic"
             formats:
                 jsonp:
                     transformer:

@@ -38,8 +38,8 @@
                     <tr>
                         <th>Subjects</th>
                         <td> 
-                             {% for keyword in entity.subjects %}
-                                <li>{{ keyword.name|e }}</li>
+                             {% for topic in entity.topics %}
+                                <li>{{ topic.name }}</li>
                              {% endfor %}
                         </td>
                     </tr>

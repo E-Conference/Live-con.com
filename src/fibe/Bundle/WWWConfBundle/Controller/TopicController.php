@@ -7,30 +7,26 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use fibe\Bundle\WWWConfBundle\Entity\Theme;
-use fibe\Bundle\WWWConfBundle\Form\ThemeType;
+use fibe\Bundle\WWWConfBundle\Entity\Topic;
+use fibe\Bundle\WWWConfBundle\Form\TopicType;
 
 /**
- * Theme controller.
+ * Topic controller.
  *
- * @Route("/theme")
+ * @Route("/topic")
  */
-class ThemeController extends Controller
+class TopicController extends Controller
 {
     /**
-     * Lists all Theme entities.
+     * Lists all Topic entities.
      *
-     * @Route("/", name="schedule_theme")
+     * @Route("/", name="schedule_topic")
      * @Method("GET")
      * @Template()
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        //$entities = $em->getRepository('fibeWWWConfBundle:Theme')->findAll();
-        $currentConf = $this->getUser()->getCurrentConf();
-        $entities = $currentConf->getThemes();
+        $entities = $this->getUser()->getCurrentConf()->getTopics();
 
         return array(
             'entities' => $entities,
@@ -38,16 +34,16 @@ class ThemeController extends Controller
     }
 
     /**
-     * Creates a new Theme entity.
+     * Creates a new Topic entity.
      *
-     * @Route("/", name="schedule_theme_create")
+     * @Route("/", name="schedule_topic_create")
      * @Method("POST")
-     * @Template("fibeWWWConfBundle:Theme:new.html.twig")
+     * @Template("fibeWWWConfBundle:Topic:new.html.twig")
      */
     public function createAction(Request $request)
     {
-        $entity  = new Theme();
-        $form = $this->createForm(new ThemeType(), $entity);
+        $entity  = new Topic();
+        $form = $this->createForm(new TopicType(), $entity);
         $form->bind($request);
 
         if ($form->isValid()) {
@@ -56,7 +52,7 @@ class ThemeController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('schedule_theme_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('schedule_topic_show', array('id' => $entity->getId())));
         }
 
         return array(
@@ -66,16 +62,16 @@ class ThemeController extends Controller
     }
 
     /**
-     * Displays a form to create a new Theme entity.
+     * Displays a form to create a new Topic entity.
      *
-     * @Route("/new", name="schedule_theme_new")
+     * @Route("/new", name="schedule_topic_new")
      * @Method("GET")
      * @Template()
      */
     public function newAction()
     {
-        $entity = new Theme();
-        $form   = $this->createForm(new ThemeType(), $entity);
+        $entity = new Topic();
+        $form   = $this->createForm(new TopicType(), $entity);
 
         return array(
             'entity' => $entity,
@@ -84,9 +80,9 @@ class ThemeController extends Controller
     }
 
     /**
-     * Finds and displays a Theme entity.
+     * Finds and displays a Topic entity.
      *
-     * @Route("/{id}", name="schedule_theme_show")
+     * @Route("/{id}", name="schedule_topic_show")
      * @Method("GET")
      * @Template()
      */
@@ -94,10 +90,10 @@ class ThemeController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('fibeWWWConfBundle:Theme')->find($id);
+        $entity = $em->getRepository('fibeWWWConfBundle:Topic')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Theme entity.');
+            throw $this->createNotFoundException('Unable to find Topic entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -109,9 +105,9 @@ class ThemeController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing Theme entity.
+     * Displays a form to edit an existing Topic entity.
      *
-     * @Route("/{id}/edit", name="schedule_theme_edit")
+     * @Route("/{id}/edit", name="schedule_topic_edit")
      * @Method("GET")
      * @Template()
      */
@@ -119,13 +115,13 @@ class ThemeController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('fibeWWWConfBundle:Theme')->find($id);
+        $entity = $em->getRepository('fibeWWWConfBundle:Topic')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Theme entity.');
+            throw $this->createNotFoundException('Unable to find Topic entity.');
         }
 
-        $editForm = $this->createForm(new ThemeType(), $entity);
+        $editForm = $this->createForm(new TopicType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -136,31 +132,31 @@ class ThemeController extends Controller
     }
 
     /**
-     * Edits an existing Theme entity.
+     * Edits an existing Topic entity.
      *
-     * @Route("/{id}", name="schedule_theme_update")
+     * @Route("/{id}", name="schedule_topic_update")
      * @Method("PUT")
-     * @Template("fibeWWWConfBundle:Theme:edit.html.twig")
+     * @Template("fibeWWWConfBundle:Topic:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('fibeWWWConfBundle:Theme')->find($id);
+        $entity = $em->getRepository('fibeWWWConfBundle:Topic')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Theme entity.');
+            throw $this->createNotFoundException('Unable to find Topic entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new ThemeType(), $entity);
+        $editForm = $this->createForm(new TopicType(), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('schedule_theme'));
+            return $this->redirect($this->generateUrl('schedule_topic_show', array('id' => $id)));
         }
 
         return array(
@@ -171,9 +167,9 @@ class ThemeController extends Controller
     }
 
     /**
-     * Deletes a Theme entity.
+     * Deletes a Topic entity.
      *
-     * @Route("/{id}", name="schedule_theme_delete")
+     * @Route("/{id}", name="schedule_topic_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -183,21 +179,21 @@ class ThemeController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('fibeWWWConfBundle:Theme')->find($id);
+            $entity = $em->getRepository('fibeWWWConfBundle:Topic')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Theme entity.');
+                throw $this->createNotFoundException('Unable to find Topic entity.');
             }
 
             $em->remove($entity);
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('schedule_theme'));
+        return $this->redirect($this->generateUrl('schedule_topic'));
     }
 
     /**
-     * Creates a form to delete a Theme entity by id.
+     * Creates a form to delete a Topic entity by id.
      *
      * @param mixed $id The entity id
      *

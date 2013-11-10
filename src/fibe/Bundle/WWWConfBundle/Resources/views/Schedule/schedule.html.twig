@@ -44,11 +44,11 @@
             </select>  
           </div> 
 
-          <h4>Filter by theme</h4>
+          <h4>Filter by topic</h4>
           <div class="filter">
-            <select multiple class="form-control" data-filter="theme_ids">
-              {% for theme in themes %}
-                <option value="{{theme.id}}">{{theme.name}}</option>
+            <select multiple class="form-control" data-filter="topic_ids">
+              {% for topic in topics %}
+                <option value="{{topic.id}}">{{topic.name}}</option>
               {% endfor %}
             </select>  
           </div>
@@ -139,7 +139,7 @@
   {{ parent() }}
  
     <!--
-    <link rel='stylesheet' type='text/css' href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/start/jquery-ui.css' />
+    <link rel='stylesheet' type='text/css' href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/topics/start/jquery-ui.css' />
     --> 
 
 <link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.css') }}" rel='stylesheet' />

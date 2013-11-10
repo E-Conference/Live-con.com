@@ -5,7 +5,7 @@ namespace fibe\Bundle\WWWConfBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * This entity define a keyword
+ * This entity define a topic
  *
  *  @ORM\Table(name="mobileAppConfig")
  *  @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\MobileAppConfigRepository")

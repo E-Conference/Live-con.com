@@ -591,6 +591,49 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 			}
 		},
 
+
+		getAllTheme : {
+		    dataType : "JSONP",
+		    method : "GET", 
+		    serviceUri : "schedule_topic.jsonp?",
+		    getQuery : function(parameters){	
+			  var conferenceUri = parameters.conferenceUri;
+		      var ajaxData = { } ;
+		      return ajaxData; 
+		    },
+		    
+		    ModelCallBack : function(dataXML,conferenceUri,datasourceUri, currentUri){
+				var JSONfile = {};
+				$.each(dataXML,function(i){  
+					var JSONToken = {};
+					JSONToken.themename =  this.name || "";
+					JSONfile[i] = JSONToken;
+				});
+					console.log(JSONfile);
+				//StorageManager.pushCommandToStorage(currentUri,"getConferenceMainTrackEvent",JSONfile);
+				return JSONfile;
+			},
+				
+			ViewCallBack : function(parameters){
+				//Reasoner.getMoreSpecificKeywords();
+				if(parameters.JSONdata != null){
+					if(_.size(parameters.JSONdata) > 0 ){
+						if(parameters.mode == "text"){
+							parameters.contentEl.append('<h2>Themes</h2>'); 
+							ViewAdapterText.appendList(parameters.JSONdata,
+													 {baseHref:'#theme/',
+													  hrefCllbck:function(str){return Encoder.encode(str["themename"])},
+													  },
+													 "themename",
+													 parameters.contentEl,
+													 {type:"Node",labelCllbck:function(str){return "Track : "+str["themename"];}});
+						}
+
+					}
+				} 
+			}
+		},
+
 		getEventbyTheme : {
 		    dataType : "JSONP",
 		    method : "GET", 

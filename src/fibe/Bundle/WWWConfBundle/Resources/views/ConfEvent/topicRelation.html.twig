@@ -1,0 +1,42 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th>Relation Id</th>
+            <th>Topic</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for topic in entity.getTopics() %} 
+            <tr> 
+                <td>{{ topic.id }}</td>
+                <td>{{ topic.name }}</td>
+                <td>
+                     <a id="{{topic.id}}" class="btn btn-danger delete_topic" data-toggle="tooltip" title="Remove this Topic from the list"><i class="icon-trash"></i>
+                     </a>
+                </td>
+                 
+            </tr> 
+        {% endfor %}
+    </tbody>
+
+   
+</table>
+
+{% block javascripts %}
+<script type="text/javascript">
+
+$(".delete_topic").click(function(){
+
+      var id_topic = $(this).attr('id');
+      //start send the post request
+       $.post("{{path('schedule_confevent_deleteTopic')}}",               
+               {id_topic : id_topic, id_entity: "{{ entity.id }}"} , 
+            function(response){
+                   $('#topics_related_list').html(response);
+            }, "html");    
+       });
+
+</script>
+{% endblock javascripts %}

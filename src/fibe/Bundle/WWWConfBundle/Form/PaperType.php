@@ -22,10 +22,10 @@ class PaperType extends AbstractType
             ->add('abstract', 'text', array( 'required' => true))
             ->add('publishDate')
             ->add('url')
-            ->add('subjects', 'entity', array(
-                'class' => 'fibeWWWConfBundle:Keyword',
+            ->add('topics', 'entity', array(
+                'class' => 'fibeWWWConfBundle:Topic',
                 'label'   => 'Subjects',
-                'choices'=> $this->user->getCurrentConf()->getKeywords()->toArray(),
+                'choices'=> $this->user->getCurrentConf()->getTopics()->toArray(),
                 'multiple'  => true,
                 'required' => false
             ))

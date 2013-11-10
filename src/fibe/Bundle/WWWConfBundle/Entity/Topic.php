@@ -7,14 +7,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
- * This entity define a keyword
+ * This entity define a topic
  *
- *  @ORM\Table(name="keyword")
- *  @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\KeywordRepository")
+ *  @ORM\Table(name="topic")
+ *  @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\TopicRepository")
  *
  */
 
-class Keyword
+class Topic
 {
 
     /**
@@ -32,15 +32,22 @@ class Keyword
     protected $name;
 
     /**
-     * Papers related to thise keyword
+     * Papers related to thise topic
      *
-     * @ORM\ManyToMany(targetEntity="Paper", mappedBy="subjects", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Paper", mappedBy="topics", cascade={"persist"})
      */
     private $papers;
 
     /**
-     *  Themes associated to this conference
-     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="keywords", cascade={"persist"})
+     * events related to this topic
+     *
+     * @ORM\ManyToMany(targetEntity="ConfEvent", mappedBy="topics", cascade={"persist"})
+     */
+    private $events;
+
+    /**
+     *  Topics associated to this conference
+     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="topics", cascade={"persist"})
      * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
      *
      */
@@ -77,7 +84,7 @@ class Keyword
      * Add papers
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\Paper $papers
-     * @return Keyword
+     * @return Topic
      */
     public function addPaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $papers)
     {
@@ -106,11 +113,45 @@ class Keyword
         return $this->papers;
     }
 
+    
+    /**
+     * Add events
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Event $events
+     * @return Topic
+     */
+    public function addEvent(\fibe\Bundle\WWWConfBundle\Entity\Event $events)
+    {
+        $this->events[] = $events;
+    
+        return $this;
+    }
+
+    /**
+     * Remove events
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Event $events
+     */
+    public function removeEvent(\fibe\Bundle\WWWConfBundle\Entity\Event $events)
+    {
+        $this->events->removeElement($events);
+    }
+
+    /**
+     * Get events
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getEvents()
+    {
+        return $this->events;
+    }
+
     /**
      * Set name
      *
      * @param string $name
-     * @return Keyword
+     * @return Topic
      */
     public function setName($name)
     {
@@ -133,7 +174,7 @@ class Keyword
      * Set conference
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
-     * @return Keyword
+     * @return Topic
      */
     public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference = null)
     {

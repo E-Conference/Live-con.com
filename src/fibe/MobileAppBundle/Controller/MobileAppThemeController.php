@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig;
 use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 
+use fibe\MobileAppBundle\Form\MobileAppWwwConfType;
 use fibe\Bundle\WWWConfBundle\Form\WwwConfType;
 use fibe\Bundle\WWWConfBundle\Form\MobileAppConfigType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -35,7 +36,8 @@ class MobileAppThemeController extends Controller
         $mobile_app_form = $this->createForm(new MobileAppConfigType(), $mobile_app_config);
 
         $conference = $this->getUser()->getCurrentConf();
-        $conference_form = $this->createForm(new WwwConfType($this->getUser()), $conference);
+        $conference_form = $this->createForm(new MobileAppWwwConfType($this->getUser()), $conference);
+        // $conference_form = $this->createForm(new WwwConfType($this->getUser()), $conference); 
 
 		return $this->render('fibeMobileAppBundle:MobileAppTheme:index.html.twig', array(
             'mobile_app_form' => $mobile_app_form->createView(),

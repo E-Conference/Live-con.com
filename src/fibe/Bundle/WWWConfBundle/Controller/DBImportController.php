@@ -9,8 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event; 
 use fibe\Bundle\WWWConfBundle\Entity\Person; 
-use fibe\Bundle\WWWConfBundle\Entity\Theme;
-use fibe\Bundle\WWWConfBundle\Entity\Keyword;
+use fibe\Bundle\WWWConfBundle\Entity\Topic; 
 use fibe\Bundle\WWWConfBundle\Entity\Organization;
 use fibe\Bundle\WWWConfBundle\Entity\Paper;
 use fibe\Bundle\WWWConfBundle\Entity\Role;
@@ -49,9 +48,9 @@ class DBImportController extends Controller
         $personEntities       = array(); 
         $locationEntities     = array();
         $categoryEntities     = array();
-        $themeEntities        = array();
+        $topicEntities        = array();
         $organizationEntities = array();
-        $keywordEntities      = array();
+        $topicEntities      = array();
         $proceedingEntities   = array();
 
         //categories color.
@@ -73,28 +72,28 @@ class DBImportController extends Controller
         }
         
         
-        //////////////////////  keywords  ////////////////////// 
-        if(isset($JSONFile['keywords'])){
-            $keywords = $JSONFile['keywords'];
-            for($i=0;$i<count($keywords);$i++){
-                $current = $keywords[$i];  
+        //////////////////////  topics  ////////////////////// 
+        if(isset($JSONFile['topics'])){
+            $topics = $JSONFile['topics'];
+            for($i=0;$i<count($topics);$i++){
+                $current = $topics[$i];  
                 $existsTest = $this->getDoctrine()
-                                   ->getRepository('fibeWWWConfBundle:Keyword')
+                                   ->getRepository('fibeWWWConfBundle:topic')
                                    ->findOneBy(array('name' => $current['setName']));
                 if($existsTest!=null){
-                  array_push($keywordEntities,$existsTest); 
+                  array_push($topicEntities,$existsTest); 
                   continue; //skip existing category
                 }
-                $entity= new Keyword();
+                $entity= new topic();
                 foreach ($current as $setter => $value) {
 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
                 $entity->setConference(  $wwwConf );
                 $em->persist($entity); 
-                array_push($keywordEntities,$entity); 
+                array_push($topicEntities,$entity); 
             }  
-            $keywords = null;
+            $topics = null;
         }   
         
         //////////////////////  locations  ////////////////////// 
@@ -203,8 +202,8 @@ class DBImportController extends Controller
                 foreach ($current as $setter => $value) {  
                     if(is_array($value)){
                         switch ($setter) {
-                            case 'addSubject':
-                                $entityArray = $keywordEntities;
+                            case 'addTopic':
+                                $entityArray = $topicEntities;
                             break; 
                             case 'addAuthor':
                                 $entityArray = $personEntities;
@@ -224,27 +223,27 @@ class DBImportController extends Controller
         }   
         
         
-        //////////////////////  themes  //////////////////////
-        if(isset($JSONFile['themes'])){
-            $themes = $JSONFile['themes'];
-            for($i=0;$i<count($themes);$i++){
-                $current = $themes[$i];  
+        //////////////////////  topics  //////////////////////
+        if(isset($JSONFile['topics'])){
+            $topics = $JSONFile['topics'];
+            for($i=0;$i<count($topics);$i++){
+                $current = $topics[$i];  
                 $existsTest = $this->getDoctrine()
-                                   ->getRepository('fibeWWWConfBundle:Theme')
+                                   ->getRepository('fibeWWWConfBundle:Topic')
                                    ->findOneBy(array('name' => $current['setName']));
                 if($existsTest!=null){
-                  array_push($themeEntities,$existsTest); 
+                  array_push($topicEntities,$existsTest); 
                   continue; //skip existing category
                 }
-                $entity= new Theme();
+                $entity= new Topic();
                 foreach ($current as $setter => $value) { 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
                 $entity->setConference(  $wwwConf );
                 $em->persist($entity); 
-                array_push($themeEntities,$entity); 
+                array_push($topicEntities,$entity); 
             }  
-            $themes = null;
+            $topics = null;
         }     
         
         
@@ -332,8 +331,8 @@ class DBImportController extends Controller
                         // $current["addChild"] = $entities[$value];
                     }else if(is_array($value)){
                         switch ($setter) {
-                            case 'addTheme':
-                                $entityArray = $themeEntities;
+                            case 'addTopic':
+                                $entityArray = $topicEntities;
                             break; 
                             case 'addPaper':
                                 $entityArray = $proceedingEntities;
