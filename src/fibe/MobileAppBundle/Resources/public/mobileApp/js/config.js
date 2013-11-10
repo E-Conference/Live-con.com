@@ -187,6 +187,18 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						}						
 					]
 				},
+				"Event-by-category" : { 
+					"hash" : "event-by-category/:name/*uri",
+					"view" : "event-by-category",
+					"graphView" : "no",
+					"title": "Search an event by category",
+					"commands" : [
+					    {
+							"datasource" : "eventDatasource",
+							"name" : "getEventByCategory",
+						} 
+					]
+				},
 				"Publication" : { 
 					"hash" : "publication/:name/*uri",
 					"view" : "publication",
@@ -201,6 +213,14 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 							"datasource" : "DataPaperDatasource",
 							"name" : "getDataPaperRessource",
 						}
+					]
+				},
+				"EventSearch" : {
+					"hash" : "search/event",
+					"view" : "eventSearch",
+					"graphView" : "no",
+					"title": "Search an event",
+					"commands" : [
 					]
 				},
 				"PersonSearch" : {
@@ -260,24 +280,16 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"title": "Person",
 					"commands" : [
 						{
+							"datasource" : "GoogleDataSource",
+							"name" : "getAuthorPersonalPage",
+						},
+						{
 							"datasource" : "eventDatasource",
 							"name" : "getPerson",
 						},
 						{
 							"datasource" : "eventDatasource",
 							"name" : "getPublicationsByAuthorId",
-						},
-						{
-							"datasource" : "GoogleDataSource",
-							"name" : "getAuthorPersonalPage",
-						},
-						{
-							"datasource" : "eventDatasource",
-							"name" : "getEventBySpeakerName",
-						},
-						{
-							"datasource" : "eventDatasource",
-							"name" : "getEventByChairName",
 						},
 						{
 							"datasource" : "DblpDatasource",
@@ -335,6 +347,18 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 							"datasource" : "eventDatasource",
 							"name" : "getEventbyTheme",
 						},
+					]
+				},
+				"Categories" : {
+					"hash" : "categories",
+					"view" : "categories",
+					"graphView" : "no",
+					"title": "Categories",
+					"commands" : [
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getAllCategories",
+						} 
 					]
 				},
 				"Category" : {

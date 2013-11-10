@@ -19,6 +19,7 @@ define(['jquery', 'underscore', 'tpl'], function($, _, tpl){
 		
 			this.headerTpl = _.template(tpl.get("header"));
 			this.navBarTpl = _.template(tpl.get("navBar"));
+			this.settingsPanelTpl = _.template(tpl.get("settingsPanel"));
 			
 			this.templateName = options.templateName;
 			
@@ -36,6 +37,10 @@ define(['jquery', 'underscore', 'tpl'], function($, _, tpl){
 			$(this.el).append(this.navBarTpl());
 			$(this.el).append(this.contentTpl({conference : this.model}));
 			$(this.el).append(this.footerTpl({conference : this.model}));
+			$(this.el).append(this.settingsPanelTpl({conference : this.model}));
+			
+			
+			
 		}
 	});
 	return AbstractView;
