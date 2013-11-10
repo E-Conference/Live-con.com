@@ -1,9 +1,9 @@
 {
      "id": "{{ entity.id }}",
-     "title": "{{ entity.title }}",
-     "abstract": "{{ entity.abstract }}",
+     "title": "{% autoescape 'js' %}{{ entity.title }}{% endautoescape %}",
+     "abstract": "{% autoescape 'js' %}{{ entity.abstract }}{% endautoescape %}",
      "publishDate": "{{ entity.publishDate }}" , 
-     "url": "{{ entity.url }}" ,       
+     "url": "{% autoescape 'js' %}{{ entity.url }}{% endautoescape %}" ,       
      "publisher": "{{ entity.publisher }}" , 
      "subject":
             [
