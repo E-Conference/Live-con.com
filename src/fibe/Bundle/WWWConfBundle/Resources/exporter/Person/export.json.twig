@@ -1,17 +1,16 @@
 {
     "id"          : "{{ entity.id }}",
-    "email"       : "{{ entity.email }}",
+    "email"       : "{% autoescape 'js' %}{{ entity.email }}{% endautoescape %}",
     "created_at"  : "{{ entity.createdAt | date('Y-m-d H:i') }}",
     "agent"       : "{{ entity.agent  }}",
-    "title"       : "{{ entity.title  }}",
-    "first_name"  : "{{ entity.firstName }}",
-    "last_name"   : "{{ entity.lastName }}",
-    "name"        : "{{ entity.name }}",
-    "given_name"  : "{{ entity.givenName }}",
+    "title"       : "{% autoescape 'js' %}{{ entity.title  }}{% endautoescape %}",
+    "first_name"  : "{% autoescape 'js' %}{{ entity.firstName }}{% endautoescape %}",
+    "last_name"   : "{% autoescape 'js' %}{{ entity.lastName }}{% endautoescape %}",
+    "name"        : "{% autoescape 'js' %}{{ entity.name }}{% endautoescape %}",
+    "given_name"  : "{% autoescape 'js' %}{{ entity.givenName }}{% endautoescape %}",
     "slug"        : "{{ entity.slug }}",
-    "description" : "{{ entity.description }}",
-    "homepage"    : "{{ entity.homepage }}",
-    "twitter"     : "{{ entity.twitter }}",
+    "description" : "{% autoescape 'js' %}{{ entity.description }}{% endautoescape %}",
+    "homepage"    : "{% autoescape 'js' %}{{ entity.homepage }}{% endautoescape %}",
     "based_near"  : "{{ entity.based_near }}",
     "image"       : "{{ entity.image }}",
     {% spaceless %}
@@ -24,7 +23,7 @@
             "type": "{{ role.type.name }}", 
             "event": {
                 "id"  : "{{ role.event.id }}",
-                "name": "{{ role.event.summary }}"
+                "name": "{% autoescape 'js' %}{{ role.event.summary }}{% endautoescape %}"
             }
         }
     {% endfor %}

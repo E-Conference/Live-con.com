@@ -1029,7 +1029,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					      
 					      var startTime = moment(startAt).format('h:mm a');
 					      
-	              currentUl.append("<li  data-theme='a' data-role='list-divider' >\
+	              currentUl.append("<li data-role='list-divider' >\
 	                                    starts at "+startTime+"\
 	                                </li>");
 	                                

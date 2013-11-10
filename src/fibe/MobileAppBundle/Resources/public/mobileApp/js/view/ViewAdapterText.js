@@ -41,7 +41,7 @@ define(['jquery'], function($){
 			}
 			var currentRank=0,counter=1;
 
-			var ulContainer = $('<ul  id="SearchByAuthorUl" data-role="listview"'+ 
+			var ulContainer = $('<ul data-role="listview"'+ 
 							 (option.autodividers ? 'data-autodividers="true"':'')+
 							  (isfilter?'data-filter="true" ':'')+
 							  'data-shadow="false"'+
@@ -54,7 +54,7 @@ define(['jquery'], function($){
 				
 				//show
 				if(currentLabel != remainder){ 
-					var a = $('<a href='+currentHref+' '+(isfilter?' ':'data-corners="true" data-role="button" data-iconpos="right" data-icon="arrow-r" data-mini="true" data-shadow="false"')+'>'+currentLabel+'</a>');
+					var a = $('<a href='+currentHref+' '+(isfilter?' ':'data-corners="true" data-role="button" class="button" data-iconpos="right" data-icon="arrow-r" data-mini="true" data-shadow="false"')+'>'+currentLabel+'</a>');
 					var li = $('<li></li>');
 					if(isfilter){
 						ulContainer.append(li.append(a));
@@ -90,7 +90,7 @@ define(['jquery'], function($){
 			
 			$.each(dataList, function(i,currentData){
 				
-				var a = $('<li data-inline="true"> <a href="'+href.baseHref+href.hrefCllbck(currentData)+'" >'+currentData[labelProperty]+'</a></li>');
+				var a = $('<li data-inline="true" class="button"> <a href="'+href.baseHref+href.hrefCllbck(currentData)+'" >'+currentData[labelProperty]+'</a></li>');
 				list.append(a);
 			
 			});
@@ -134,7 +134,7 @@ define(['jquery'], function($){
 					}
 						a.append(img);
 					
-					var li = $('<li></li>');
+					var li = $('<li class="button"></li>');
 					if(isfilter){
 						ulContainer.append(li.append(a));
 					}else{
@@ -168,7 +168,7 @@ define(['jquery'], function($){
 			if(!href)return;
 			if(!option)var option={}
 			var newButton = 
-				$(  '<a href="'+href+'" data-role="button" ' +
+				$(  '<a href="'+href+'" class="button" data-role="button" ' +
 					(option.tiny  ? 'data-inline="true"'              : 'data-icon="arrow-r" data-iconpos="right"') +
 					(option.theme ? 'data-theme="'+option.theme+'"'   : '') +
 					(option.color ? 'style="float:'+option.color+';"' : '') +

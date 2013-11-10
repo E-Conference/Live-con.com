@@ -1,7 +1,7 @@
 {
-    "id"          : "{{ entity.id }}",
-    "name"          : "{{ entity.name }}",
-    "page"       : "{{ entity.page }}",
+    "id"       : "{{ entity.id }}",
+    "name"     : "{% autoescape 'js' %}{{ entity.name }}{% endautoescape %}",
+    "page"     : "{% autoescape 'js' %}{{ entity.page }}{% endautoescape %}",
     "country"  :  "{{ entity.country }}",
     "members":
             [
