@@ -920,11 +920,10 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 									ViewAdapterText.appendButton(parameters.contentEl,'#event/'+Encoder.encode(theme.name)+"/"+Encoder.encode(theme.id),theme.name,{tiny : 'true'});
 								});
 							}
-
 							if(eventInfo.eventPapers &&  eventInfo.eventPapers.length>0){
-								parameters.contentEl.append('<h2>Related document</h2>'); 
-								$.each(eventInfo.eventChildren, function(i,paper){
-									ViewAdapterText.appendButton(parameters.contentEl,'#publication/'+Encoder.encode(theme.name)+"/"+Encoder.encode(theme.id),theme.name,{tiny : 'true'});
+								parameters.contentEl.append('<h2>Related documents</h2>'); 
+								$.each(eventInfo.eventPapers, function(i,paper){
+									ViewAdapterText.appendButton(parameters.contentEl,'#publication/'+Encoder.encode(paper.title)+"/"+Encoder.encode(paper.id),paper.title,{tiny : 'true'});
 								});
 							}
 						}
