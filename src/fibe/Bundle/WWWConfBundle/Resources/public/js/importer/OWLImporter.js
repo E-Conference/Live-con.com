@@ -8,9 +8,9 @@ var conference,
     categories,
     proceedings,
     persons,
-    themes,
+    topics,
     proceedings,
-    keywords,
+    topics,
     organizations,
     relations,
     roles;
@@ -44,9 +44,9 @@ function run(url,callback,fallback){
             categories     = [],
             proceedings    = [],
             persons        = [],
-            themes         = [],
+            topics         = [],
             proceedings    = [],
-            keywords       = [],
+            topics       = [],
             organizations  = [],
             roles          = [],
             conference     = {},
@@ -251,10 +251,10 @@ function run(url,callback,fallback){
             dataArray['locations']=locations;  
             dataArray['categories']=categories;
             dataArray['persons']=persons;   
-            dataArray['themes']=themes;   
+            dataArray['topics']=topics;   
             dataArray['events']=events; 
             // dataArray['xproperties']=xproperties; 
-            dataArray['keywords']=keywords; 
+            dataArray['topics']=topics; 
             dataArray['proceedings']=proceedings; 
             dataArray['organizations']=organizations; 
             console.log('---------finished---------' );
@@ -413,31 +413,31 @@ function getLocationIdFromName(locationName){
     return -1;
 }
 
-function getThemeIdFromName(themeName){
-    themeName = str_format(themeName);
+function getTopicIdFromName(topicName){
+    topicName = str_format(topicName);
     
-    for (var i=0;i<themes.length;i++){
+    for (var i=0;i<topics.length;i++){
         //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
-        if(themes[i]['setName']==themeName){
+        if(topics[i]['setName']==topicName){
             return i; 
         }
     }
     return -1;
 }
 
-function getKeywordIdFromName(keywordName,debug){
-    keywordName = str_format(keywordName);
+function getTopicIdFromName(topicName,debug){
+    topicName = str_format(topicName);
     
-    for (var i=0;i<keywords.length;i++){
+    for (var i=0;i<topics.length;i++){
         //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
-        if(keywords[i]['setName']==keywordName){
+        if(topics[i]['setName']==topicName){
             return i; 
         }
     }
     if (debug){
 
-        console.log(keywords);
-        alert("keyword "+keywordName+" not found");
+        console.log(topics);
+        alert("topic "+topicName+" not found");
     }
     return -1;
 }

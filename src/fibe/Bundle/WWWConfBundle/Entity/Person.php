@@ -119,7 +119,7 @@ class Person
     private $roles;
 
    /**
-     *  Themes associated to this conference
+     *  Topics associated to this conference
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="persons", cascade={"persist"})
      * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
      *

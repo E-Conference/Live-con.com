@@ -15,6 +15,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		getResultOrganization : {
 			dataType : "JSONP",
 			method : "GET",
+			serviceUri : "",
 			getQuery : function(parameters){ 
 				var authorName = parameters.name.split("_").join(" ");
 				var  ajaxData = { q : authorName, format : "json",pretty : 1, no_redirect : 1  , output : "json"};
@@ -33,7 +34,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				}
 				JSONfile[0] = JSONToken;
 			
-				StorageManager.pushCommandToStorage(currentUri,"getResultOrganization",JSONfile);
+			//	StorageManager.pushCommandToStorage(currentUri,"getResultOrganization",JSONfile);
 				return JSONfile;									
 			},
 			

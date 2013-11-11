@@ -319,13 +319,13 @@ CalEvent.prototype.getPopoverContent = function(){
         }
         categories += "</ul>";
     }
-    var themes = "no themes"
-    if(this.themes && this.themes[0] && this.themes[0].name!==""){
-        themes = "<ul>";
-        for (var i=0;i<this.themes.length;i++){
-            themes += "<li>"+this.themes[i].name+"</li>";
+    var topics = "no topics"
+    if(this.topics && this.topics[0] && this.topics[0].name!==""){
+        topics = "<ul>";
+        for (var i=0;i<this.topics.length;i++){
+            topics += "<li>"+this.topics[i].name+"</li>";
         }
-        themes += "</ul>";
+        topics += "</ul>";
     }
     var speakers = "no speakers"
     if(this.roles && this.roles[0] && this.roles[0].id!==""){
@@ -340,7 +340,7 @@ CalEvent.prototype.getPopoverContent = function(){
               <li><b>location : </b>"+((this.location && this.location.name && this.location.name!=="" && this.location.name) || "no location")+"</li>\
               <li class='description'><b>description : </b>"+(this.description || "no description")+"</li>\
               <li><b>categories : </b>"+categories+"\
-              <li><b>themes : </b>"+themes+"\
+              <li><b>topics : </b>"+topics+"\
               <li><b>speakers : </b>"+speakers+"\
               </li>\
             </ul>"

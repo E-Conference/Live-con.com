@@ -128,20 +128,20 @@ var rdfConfig = {
             'swrc:abstract': {
                 setter : 'setAbstract',
             }, 
-            //keywords entity are created directly here (or retrieved)
+            //topics entity are created directly here (or retrieved)
             //then we register the correct index
             'dc:subject' : {
                 multiple : true,
-                setter : 'addSubject',
+                setter : 'addTopic',
                 format : function(node){ 
-                    var keywordName = $(node).text() || $(node).attr("rdf:resource");
-                    var index = getKeywordIdFromName(keywordName);
+                    var topicName = $(node).text() || $(node).attr("rdf:resource");
+                    var index = getTopicIdFromName(topicName);
                     return index !== -1 ? index : false ;
                 },
                 action : function(node){
-                    var keywordName = $(node).text() || $(node).attr("rdf:resource");  
-                    if(getKeywordIdFromName(keywordName)=== -1 ){
-                        keywords.push({'setName':str_format(keywordName)});  
+                    var topicName = $(node).text() || $(node).attr("rdf:resource");  
+                    if(getTopicIdFromName(topicName)=== -1 ){
+                        topics.push({'setName':str_format(topicName)});  
                     }
                 }
             },
@@ -258,15 +258,15 @@ var rdfConfig = {
             },
             'dc:subject' : {
                 multiple: true,
-                setter : 'addTheme',
+                setter : 'addTopic',
                 format : function(node){ 
-                    var themeName = $(node).text() || $(node).attr("rdf:resource"); 
-                    return getThemeIdFromName(themeName);
+                    var topicName = $(node).text() || $(node).attr("rdf:resource"); 
+                    return getTopicIdFromName(topicName);
                 },
                 action : function(node){
-                    var themeName = $(node).text() || $(node).attr("rdf:resource"); 
-                    if(getThemeIdFromName(themeName)=== -1 ){
-                        themes.push({setName:str_format(themeName)});  
+                    var topicName = $(node).text() || $(node).attr("rdf:resource"); 
+                    if(getTopicIdFromName(topicName)=== -1 ){
+                        topics.push({setName:str_format(topicName)});  
                     }
                 }
             },

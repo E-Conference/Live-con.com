@@ -61,14 +61,14 @@ class ScheduleController extends Controller
         $categories = $em->getRepository('IDCISimpleScheduleBundle:Category')->getOrdered();
         //$locations = $em->getRepository('IDCISimpleScheduleBundle:Location')->findAll();
         $locations = $this->getUser()->getCurrentConf()->getLocations();
-        //$themes = $em->getRepository('fibeWWWConfBundle:Theme')->findAll();
-        $themes = $this->getUser()->getCurrentConf()->getThemes();
+        //$topics = $em->getRepository('fibeWWWConfBundle:Topic')->findAll();
+        $topics = $this->getUser()->getCurrentConf()->getTopics();
 
         return array(
                 'currentConf' => $conf,
                 'categories'  => $categories,
                 'locations'  => $locations,
-                'themes'   => $themes
+                'topics'   => $topics
             );     
     
 }
@@ -174,9 +174,9 @@ class ScheduleController extends Controller
                       'multiple' => false))
             ->getForm();
 
-         $form_theme = $this->createFormBuilder($entity)
-            ->add('themes', 'entity', array(
-                  'class'    => 'fibeWWWConfBundle:Theme',
+         $form_topic = $this->createFormBuilder($entity)
+            ->add('topics', 'entity', array(
+                  'class'    => 'fibeWWWConfBundle:Topic',
                   'required' => false,
                   'property' => 'name',
                   'multiple' => false))
@@ -189,7 +189,7 @@ class ScheduleController extends Controller
             'edit_form'  => $editForm->createView(),
             'role_form'  => $roleForm->createView(),
             'paper_form' => $form_paper->createView(),
-            'theme_form' => $form_theme->createView(),
+            'topic_form' => $form_topic->createView(),
             'delete_form' => $deleteForm->createView()
         ));
 

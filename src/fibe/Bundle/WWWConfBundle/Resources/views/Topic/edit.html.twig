@@ -1,0 +1,45 @@
+{% extends 'fibeWWWConfBundle::base.html.twig' %}
+
+{% block body %}
+{{ parent() }}
+
+<div class="container">
+    <div class="row center">
+    <h1>Topic edit</h1>
+
+    <div class="row">
+     <div class="col-lg-9"></div>
+          <div class="col-lg-2 btn-group">
+              <a type="button" href="{{ path('schedule_topic') }}" class="btn btn-warning">
+                    <i class="icon-th-list"></i>
+              </a>
+               <form action="{{ path('schedule_topic_delete', { 'id': entity.id }) }}" method="post">
+                  <input type="hidden" name="_method" value="DELETE" />
+                    {{ form_widget(delete_form) }}
+                <button type="submit" class="btn btn-danger">
+                    <i class="icon-remove"></i>
+                </button>
+              </form> 
+          </div>    
+    </div>     
+        <div class="row"> 
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4">  
+                <form action="{{ path('schedule_topic_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+                    <input type="hidden" name="_method" value="PUT" />
+                    {{ form_widget(edit_form) }} 
+                     
+                <br/>
+                 <button type="submit" class="btn btn-block btn-success">
+                          <i class="icon-ok"></i>
+                </button>
+                </form>
+            </div>
+        </div>
+    
+  </div>
+</div>
+
+
+
+{% endblock %}

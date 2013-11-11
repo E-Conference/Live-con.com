@@ -66,11 +66,11 @@
             <div class="row">
                <div class="col-lg-2"></div>
                <div class="col-lg-8">
-               <h1>Themes</h1>
-                <div id="themes_related_list">
-                  {% include "fibeWWWConfBundle:ConfEvent:themeRelation.html.twig" %}
+               <h1>Topics</h1>
+                <div id="topics_related_list">
+                  {% include "fibeWWWConfBundle:ConfEvent:topicRelation.html.twig" %}
                 </div>
-                 {{ form_widget(theme_form) }}    
+                 {{ form_widget(topic_form) }}    
               </div>  
             </div> 
          
@@ -166,15 +166,15 @@
          });
 
       //listen for the form beeing submitted
-     $("select[id='form_themes']").change(function(){
+     $("select[id='form_topics']").change(function(){
         //get the url for the form
-        var id_theme= $(this).val();
+        var id_topic= $(this).val();
     
         //start send the post request
-         $.post('{{path("schedule_confevent_addTheme") }}',               
-                  {id_entity : '{{entity.id}}', id_theme: id_theme}, 
+         $.post('{{path("schedule_confevent_addTopic") }}',               
+                  {id_entity : '{{entity.id}}', id_topic: id_topic}, 
               function(response){
-                     $('#themes_related_list').html(response);
+                     $('#topics_related_list').html(response);
                   
               }, "html");    
          });

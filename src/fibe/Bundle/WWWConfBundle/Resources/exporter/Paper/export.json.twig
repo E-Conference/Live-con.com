@@ -1,17 +1,17 @@
 {
      "id": "{{ entity.id }}",
-     "title": "{{ entity.title }}",
-     "abstract": "{{ entity.abstract }}",
+     "title": "{% autoescape 'js' %}{{ entity.title }}{% endautoescape %}",
+     "abstract": "{% autoescape 'js' %}{{ entity.abstract }}{% endautoescape %}",
      "publishDate": "{{ entity.publishDate }}" , 
-     "url": "{{ entity.url }}" ,       
+     "url": "{% autoescape 'js' %}{{ entity.url }}{% endautoescape %}" ,       
      "publisher": "{{ entity.publisher }}" , 
      "subject":
             [
-            {% for keyword in entity.subject %}
+            {% for topic in entity.subject %}
                 {% if loop.first %}
-                { "id": "{{ keyword.id }}", "name": "{{ keyword.name }}"}
+                { "id": "{{ topic.id }}", "name": "{{ topic.name }}"}
                 {% else %}
-                ,{ "id": "{{ keyword.id }}", "name": "{{ keyword.name }}"}
+                ,{ "id": "{{ topic.id }}", "name": "{{ topic.name }}"}
                 {% endif %}
             {% endfor %}
             ],

@@ -591,6 +591,49 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 			}
 		},
 
+
+		getAllTheme : {
+		    dataType : "JSONP",
+		    method : "GET", 
+		    serviceUri : "schedule_topic.jsonp?",
+		    getQuery : function(parameters){	
+			  var conferenceUri = parameters.conferenceUri;
+		      var ajaxData = { } ;
+		      return ajaxData; 
+		    },
+		    
+		    ModelCallBack : function(dataXML,conferenceUri,datasourceUri, currentUri){
+				var JSONfile = {};
+				$.each(dataXML,function(i){  
+					var JSONToken = {};
+					JSONToken.themename =  this.name || "";
+					JSONfile[i] = JSONToken;
+				});
+					console.log(JSONfile);
+				//StorageManager.pushCommandToStorage(currentUri,"getConferenceMainTrackEvent",JSONfile);
+				return JSONfile;
+			},
+				
+			ViewCallBack : function(parameters){
+				//Reasoner.getMoreSpecificKeywords();
+				if(parameters.JSONdata != null){
+					if(_.size(parameters.JSONdata) > 0 ){
+						if(parameters.mode == "text"){
+							parameters.contentEl.append('<h2>Themes</h2>'); 
+							ViewAdapterText.appendList(parameters.JSONdata,
+													 {baseHref:'#theme/',
+													  hrefCllbck:function(str){return Encoder.encode(str["themename"])},
+													  },
+													 "themename",
+													 parameters.contentEl,
+													 {type:"Node",labelCllbck:function(str){return "Track : "+str["themename"];}});
+						}
+
+					}
+				} 
+			}
+		},
+
 		getEventbyTheme : {
 		    dataType : "JSONP",
 		    method : "GET", 
@@ -877,11 +920,10 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 									ViewAdapterText.appendButton(parameters.contentEl,'#event/'+Encoder.encode(theme.name)+"/"+Encoder.encode(theme.id),theme.name,{tiny : 'true'});
 								});
 							}
-
 							if(eventInfo.eventPapers &&  eventInfo.eventPapers.length>0){
-								parameters.contentEl.append('<h2>Related document</h2>'); 
-								$.each(eventInfo.eventChildren, function(i,paper){
-									ViewAdapterText.appendButton(parameters.contentEl,'#publication/'+Encoder.encode(theme.name)+"/"+Encoder.encode(theme.id),theme.name,{tiny : 'true'});
+								parameters.contentEl.append('<h2>Related documents</h2>'); 
+								$.each(eventInfo.eventPapers, function(i,paper){
+									ViewAdapterText.appendButton(parameters.contentEl,'#publication/'+Encoder.encode(paper.title)+"/"+Encoder.encode(paper.id),paper.title,{tiny : 'true'});
 								});
 							}
 						}
@@ -986,7 +1028,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					      
 					      var startTime = moment(startAt).format('h:mm a');
 					      
-	              currentUl.append("<li  data-theme='a' data-role='list-divider' >\
+	              currentUl.append("<li data-role='list-divider' >\
 	                                    starts at "+startTime+"\
 	                                </li>");
 	                                
