@@ -5,13 +5,13 @@
      "publishDate": "{{ entity.publishDate }}" , 
      "url": "{% autoescape 'js' %}{{ entity.url }}{% endautoescape %}" ,       
      "publisher": "{{ entity.publisher }}" , 
-     "subject":
+     "topics":
             [
-            {% for topic in entity.subject %}
+            {% for topic in entity.topics %}
                 {% if loop.first %}
-                { "id": "{{ topic.id }}", "name": "{{ topic.name }}"}
+                { "id": "{{ topic.id }}", "name": "{% autoescape 'js' %}{{ topic.name }}{% endautoescape %}"}
                 {% else %}
-                ,{ "id": "{{ topic.id }}", "name": "{{ topic.name }}"}
+                ,{ "id": "{{ topic.id }}", "name": "{% autoescape 'js' %}{{ topic.name }}{% endautoescape %}"}
                 {% endif %}
             {% endfor %}
             ],
@@ -19,9 +19,9 @@
             [
             {% for author in entity.authors %}
                 {% if loop.first %}
-                { "id": "{{ author.id }}", "name": "{{ author.name }}"}
+                { "id": "{{ author.id }}", "name": "{% autoescape 'js' %}{{ author.name }}{% endautoescape %}"}
                 {% else %}
-                ,{ "id": "{{ author.id }}", "name": "{{ author.name }}"}
+                ,{ "id": "{{ author.id }}", "name": "{% autoescape 'js' %}{{ author.name }}{% endautoescape %}"}
                 {% endif %}
             {% endfor %}
             ]
