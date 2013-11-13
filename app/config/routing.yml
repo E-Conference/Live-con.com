@@ -22,6 +22,10 @@ fibe_www_conf:
     resource: "@fibeWWWConfBundle/Controller/"
     prefix:   /schedule
 
+fibe_data:
+    resource: "@DataBundle/Controller/"
+    prefix:   /data
+
 fibe_security_www_conf:
     resource: "@fibeSecurityBundle/Controller/"
     type:     annotation 

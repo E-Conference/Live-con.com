@@ -104,7 +104,7 @@ EOT
 
         $em->persist($defaultAppConfig);
 
-        $categorie = $em->getRepository('IDCISimpleScheduleBundle:Category')->findOneBySlug("conferenceevent");
+        $categorie = $em->getRepository('IDCISimpleScheduleBundle:Category')->findOneByName("ConferenceEvent");
         
         //Main conf event  
         $mainConfEvent = new ConfEvent();
