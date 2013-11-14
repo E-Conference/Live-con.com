@@ -83,13 +83,13 @@ class DBImportController extends Controller
             for($i=0;$i<count($topics);$i++){
                 $current = $topics[$i];  
                 $existsTest = $this->getDoctrine()
-                                   ->getRepository('fibeWWWConfBundle:topic')
+                                   ->getRepository('fibeWWWConfBundle:Topic')
                                    ->findOneBy(array('name' => $current['setName']));
                 if($existsTest!=null){
                   array_push($topicEntities,$existsTest); 
                   continue; //skip existing topic
                 }
-                $entity= new topic();
+                $entity= new Topic();
                 foreach ($current as $setter => $value) {
 
                     call_user_func_array(array($entity, $setter), array($value)); 
@@ -185,7 +185,7 @@ class DBImportController extends Controller
                 
                 $entity->setConference(  $wwwConf );
                 $em->persist($entity); 
-                array_push($personEntities,$entity);  
+                array_push($personEntities,$entity);
             }  
             $entities = null;
         }    

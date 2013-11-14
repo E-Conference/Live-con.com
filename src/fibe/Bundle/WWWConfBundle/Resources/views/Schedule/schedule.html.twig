@@ -363,6 +363,7 @@
           },
           eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
               setTimeout(function(){ //bug... event isn't yet updated 
+                    EventCollection.eventsToRender.push(event["id"]);
                     event.updateParentDate();
                     event.updateChildrenDate();
                     event.render();
@@ -370,7 +371,7 @@
               },1);//bug... event isn't yet updated 
           }, 
           eventDrop : function(event){ //drop from calendar
-            // EventCollection.eventsToRender.push(event["id"]);
+              EventCollection.eventsToRender.push(event["id"]);
               event.persist(); 
           }, 
           eventAfterAllRender: function( view ) { 
@@ -380,7 +381,9 @@
                   if(!mainConfEvent)return;
                   updateEventArray();
 
-              if(view.name !== "month")reposition(view); 
+                  if(view.name !== "month")reposition(view); 
+                  console.log("eventsToRender",EventCollection.eventsToRender);
+                  EventCollection.eventsToRender=[]; 
               },repositionTimeout);
                   
           }, 
@@ -492,7 +495,7 @@
             if(Events[id])Events[id]['elem'] = $(this);
           });
           console.log("###event array updated###",Events);
-          // console.log("changed events :",EventCollection.eventsToRender);
+          console.log("changed events :",EventCollection.eventsToRender);
           // console.log(Events) 
 
           //if we render from history, dont store the state
@@ -519,9 +522,7 @@
               popoverWidth = 276,
               colWidth     = view.getColWidth(),
               startScript ; 
-
-              // toppestParent = EventCollection.getToppestEventsToRender();
-              
+ 
               toppestParent = EventCollection.getToppestParent(view);
 
           console.log("toppest parent : ",toppestParent);
@@ -773,7 +774,6 @@
 
                   }
                
-          // EventCollection.eventsToRender=[]; 
             
           }; 
       }

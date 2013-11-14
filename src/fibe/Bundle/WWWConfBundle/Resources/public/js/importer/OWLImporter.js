@@ -10,7 +10,6 @@ var conference,
     persons,
     topics,
     proceedings,
-    topics,
     organizations,
     relations,
     roles;
@@ -20,6 +19,8 @@ var notImportedLog,
 
 var mappingConfig,
     objectMap;
+
+var defaultDate = 'now';
 
 function run(url,callback,fallback){ 
     var completeConfRdfURL =  url;    
@@ -46,15 +47,13 @@ function run(url,callback,fallback){
             persons        = [],
             topics         = [],
             proceedings    = [],
-            topics       = [],
             organizations  = [],
             roles          = [],
             conference     = {},
             notImportedLog = {},
             importedLog    = {},
             objectMap      = {};
-            
-            var defaultDate='now';
+             
 
             //add custom config here (default : rdf)
             var formatConfig = { 
@@ -199,7 +198,8 @@ function run(url,callback,fallback){
                     {
                         delete event['setParent'];
                         event['setEndAt'] = event['setStartAt'] = defaultDate;
-                    } 
+
+                    }
                 }
             }
             
@@ -254,7 +254,6 @@ function run(url,callback,fallback){
             dataArray['topics']=topics;   
             dataArray['events']=events; 
             // dataArray['xproperties']=xproperties; 
-            dataArray['topics']=topics; 
             dataArray['proceedings']=proceedings; 
             dataArray['organizations']=organizations; 
             console.log('---------finished---------' );
@@ -421,23 +420,6 @@ function getTopicIdFromName(topicName){
         if(topics[i]['setName']==topicName){
             return i; 
         }
-    }
-    return -1;
-}
-
-function getTopicIdFromName(topicName,debug){
-    topicName = str_format(topicName);
-    
-    for (var i=0;i<topics.length;i++){
-        //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
-        if(topics[i]['setName']==topicName){
-            return i; 
-        }
-    }
-    if (debug){
-
-        console.log(topics);
-        alert("topic "+topicName+" not found");
     }
     return -1;
 }

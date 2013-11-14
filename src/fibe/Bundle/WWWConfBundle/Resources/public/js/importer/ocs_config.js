@@ -130,18 +130,18 @@ var ocsConfig = {
             }, 
             //topics entity are created directly here (or retrieved)
             //then we register the correct index
-            'topics' : {
+            'keywords' : {
                 wrapped : true,
                 multiple : true,
                 setter : 'addTopic',
                 format : function(node){ 
                     var topicName = $(node).text();
-                    var index = gettopicIdFromName(topicName);
+                    var index = getTopicIdFromName(topicName);
                     return index !== -1 ? index : false ;
                 },
                 action : function(node){
                     var topicName = $(node).text();  
-                    if(gettopicIdFromName(topicName)=== -1 ){
+                    if(getTopicIdFromName(topicName)=== -1 ){
                         topics.push({'setName':str_format(topicName)});  
                     }
                 }
