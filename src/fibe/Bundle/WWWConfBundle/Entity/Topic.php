@@ -5,12 +5,15 @@ namespace fibe\Bundle\WWWConfBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
+
 
 /**
  * This entity define a topic
  *
  *  @ORM\Table(name="topic")
  *  @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\TopicRepository")
+ *  @ORM\HasLifecycleCallbacks
  *
  */
 
@@ -52,6 +55,11 @@ class Topic
      *
      */
     protected $conference;
+
+    /**
+     * @ORM\Column(type="string", length=128, nullable=true)
+     */
+    protected $slug;
         
 
 
@@ -67,6 +75,49 @@ class Topic
     {
         return $this->name;
 
+    }
+
+    /**
+     * Slugify
+     * 
+     */
+    public function slugify()
+    {
+        $this->setSlug(StringTools::slugify($this->getId().$this->getName()));
+    }
+
+    /**
+     * onUpdate
+     *
+     * @ORM\PostPersist()
+     * @ORM\PreUpdate()
+     */
+    public function onUpdate()
+    {
+        $this->slugify();
+    }
+
+     /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return ConfEvent
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
     
     /**

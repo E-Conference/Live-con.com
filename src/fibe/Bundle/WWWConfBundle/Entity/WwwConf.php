@@ -7,12 +7,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use fibe\SecurityBundle\Entity\User;
+use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
 
 /**
  * WwwConf
  *
  * @ORM\Entity
  * @ORM\Table(name="conference") 
+ * @ORM\HasLifecycleCallbacks
  */
 class WwwConf
 {
@@ -109,12 +111,62 @@ class WwwConf
      **/
      private $mainConfEvent; 
 
+      /**
+     * @ORM\Column(type="string", length=128, nullable=true)
+     */
+    protected $slug;
+
     
     public function __toString() 
     {
         return ($this->mainConfEvent ? $this->mainConfEvent->getSummary() : "");
 
     }
+
+    /**
+     * Slugify
+     * 
+     */
+    public function slugify()
+    {
+        $this->setSlug(StringTools::slugify($this->getId().$this->getConfName()));
+        
+    }
+
+    /**
+     * onUpdate
+     *
+     * @ORM\PostPersist()
+     * @ORM\PreUpdate()
+     */
+    public function onUpdate()
+    {
+        $this->slugify();
+    }
+
+     /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return ConfEvent
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
     
     public function getId()
     {

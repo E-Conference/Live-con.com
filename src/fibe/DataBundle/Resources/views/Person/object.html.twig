@@ -1,7 +1,5 @@
-{% extends 'fibeWWWConfBundle::base.html.twig' %}
-
 {% block body %}
-{{ parent() }}
+
 <div class="container">
     <div class="row center">
     <h1>Person</h1>
@@ -34,22 +32,8 @@
                     <tr>
                         <th>Organization</th>
                         <td> {% for organization in entity.organizations %}
-                              <li>
-                                <a href="{{ path('schedule_organization_show', { 'id': organization.id }) }}">
-                                   {{ organization.name|e }}
-                                </a>
-                              </li>
-                              {% endfor %}
-                        </td>
-                    </tr>
-                     <tr>
-                        <th>Papers</th>
-                        <td> {% for paper in entity.papers %}
-                              <li>
-                                <a href="{{ path('schedule_paper_show', { 'id': paper.id }) }}">
-                                    {{ paper.title|e }}
-                                </a>
-                              </li>
+                              <a href="{{ path('object', { 'slug': organization.slug, 'object': 'Organization' }) }}">
+                            {{ organization.name|e }}</a>
                               {% endfor %}
                         </td>
                     </tr>
@@ -73,25 +57,4 @@
         </div>
     </div>
 
-   <div class="row">
-         <div class="col-lg-6"></div>
-              <div class="col-lg-2 btn-group">
-                  <a type="button" href="{{ path('schedule_person_index') }}" class="btn btn-warning">
-                        <i class="icon-th-list"></i>
-                  </a>
-                   <a href="{{ path('schedule_person_edit', { 'id': entity.id }) }}" class="btn btn-success">
-                         <i class="icon-pencil"></i>
-                   </a>
-                   <form action="{{ path('schedule_person_delete', { 'id': entity.id }) }}" method="post">
-                      <input type="hidden" name="_method" value="DELETE" />
-                        {{ form_widget(delete_form) }}
-                    <button type="submit" class="btn btn-danger">
-                        <i class="icon-remove"></i>
-                    </button>
-                  </form> 
-              </div>    
-        </div>
-  </div>
-</div> 
-    
-{% endblock %}
+  {% endblock body %}  

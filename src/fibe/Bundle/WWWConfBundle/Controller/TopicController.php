@@ -10,6 +10,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use fibe\Bundle\WWWConfBundle\Entity\Topic;
 use fibe\Bundle\WWWConfBundle\Form\TopicType;
 
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Pagerfanta;
+use Pagerfanta\Exception\NotValidCurrentPageException;
+
 /**
  * Topic controller.
  *
@@ -24,12 +28,22 @@ class TopicController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $entities = $this->getUser()->getCurrentConf()->getTopics();
+        $entities = $this->getUser()->getCurrentConf()->getTopics()->toArray();
+
+        $adapter = new ArrayAdapter($entities);
+        $pager = new PagerFanta($adapter);
+        $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
+
+        try {
+            $pager->setCurrentPage($request->query->get('page', 1));
+        } catch (NotValidCurrentPageException $e) {
+            throw new NotFoundHttpException();
+        }
 
         return array(
-            'entities' => $entities,
+            'pager' => $pager,
         );
     }
 
@@ -170,7 +184,7 @@ class TopicController extends Controller
      * Deletes a Topic entity.
      *
      * @Route("/{id}", name="schedule_topic_delete")
-     * @Method("DELETE")
+     * @Method({"POST", "DELETE"})
      */
     public function deleteAction(Request $request, $id)
     {

@@ -5,31 +5,55 @@ namespace fibe\DataBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
+/**
+     * @Route("/")
+     * 
+     */
 class DataController extends Controller
 {
     /**
-     * @Route("/persons")
-     * @Template()
+     * @Route("/{object}", name="list")
+     * 
      */
-    public function personListAction()
+    public function listAction($object)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $currentConf = $this->getUser()->getCurrentConf();
-        $entities = $currentConf->getPersons();
+        $repo = $em->getRepository('fibeWWWConfBundle:'.$object);
 
-        return $this->render('DataBundle:Default:index.html.twig', array(
+        if(!$repo){
+            $repo = $em->getRepository('IDCISimpleScheduleBundle:'.$object);
+        }
+        
+        $entities = $repo->findAll();
+
+         return $this->render('DataBundle:'.$object.':list.html.twig', array(
             'entities' => $entities,
         ));
     }
 
     /**
-     * @Route("/person/{id}")
+     * @Route("/{object}/{slug}", name="object")
      * @Template()
      */
-    public function personAction($id)
+    public function objectAction($object,$slug)
     {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $repo = $em->getRepository('fibeWWWConfBundle:'.$object);
+
+         if(!$repo){
+            $repo = $em->getRepository('IDCISimpleScheduleBundle:'.$object);
+        }
+
+         $entity = $repo->findOneBySlug($slug);
+
+        return $this->render('fibeDataBundle:'.$object.':object.html.twig', array(
+            'entity' => $entity,
+        ));
     }
 
+   
+    
 }

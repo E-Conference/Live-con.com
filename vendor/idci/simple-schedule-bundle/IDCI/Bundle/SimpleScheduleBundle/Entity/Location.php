@@ -14,9 +14,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 use fibe\Bundle\WWWConfBundle\Entity\Equipment;
 use fibe\Bundle\WWWConfBundle\Entity\wwwConf;
 
+use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
+
 /**
  * @ORM\Table(name="location", options={"collate"="utf8_general_ci", "charset"="utf8"})
  * @ORM\Entity(repositoryClass="IDCI\Bundle\SimpleScheduleBundle\Repository\LocationRepository")
+ *  @ORM\HasLifecycleCallbacks
  */
 class Location
 {
@@ -75,6 +78,11 @@ class Location
      */
     protected $conference;
 
+     /**
+     * @ORM\Column(type="string", length=128,nullable=true)
+     */
+    protected $slug;
+
     /**
      * Constructor
      */
@@ -91,6 +99,49 @@ class Location
     {
         return $this->getName();
     }
+
+    /**
+     * Slugify
+     */
+    public function slugify()
+    {
+        $this->setSlug(StringTools::slugify($this->getId().$this->getName()));
+    }
+
+    /**
+     * onUpdate
+     *
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function onUpdate()
+    {
+        $this->slugify();
+    }
+
+     /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return ConfEvent
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
 
     static public function getLocationsForSelect()
     {

@@ -19,7 +19,7 @@ class AuthorRepository extends EntityRepository
 {
 
 
-    public function getRelatedObject($entity = null,$type)
+   /* public function getRelatedObject($entity = null,$type)
     {
         
      
@@ -46,7 +46,7 @@ class AuthorRepository extends EntityRepository
         	$query = $qb->getQuery();
         	$papers = $query->execute();
         return $papers;
-    }
+    }*/
 
     
 }

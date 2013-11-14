@@ -33,7 +33,7 @@
             </tr>
         </thead>
         <tbody>
-        {% for entity in entities %}
+        {% for entity in pager.currentPageResults %}
             <tr>
                 <td><a href="{{ path('schedule_paper_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                 <td>{{ entity.title }}</td>
@@ -52,6 +52,9 @@
         {% endfor %}
         </tbody>
     </table>
+    <p>
+        {{ pagerfanta(pager, 'twitter_bootstrap') }}
+    </p>
 </div>
 </div>
     {% endblock %}

@@ -11,6 +11,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use fibe\Bundle\WWWConfBundle\Entity\Paper;
 use fibe\Bundle\WWWConfBundle\Form\PaperType;
 
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Pagerfanta;
+use Pagerfanta\Exception\NotValidCurrentPageException;
+
 /**
  * Paper controller.
  * @Route("/paper")
@@ -22,17 +26,26 @@ class PaperController extends Controller
      * @Route("/", name="schedule_paper")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $conf = $this->getUser()->getCurrentConf();
-        $entities = $conf->getPapers();
+        $entities = $conf->getPapers()->toArray();
 
+        $adapter = new ArrayAdapter($entities);
+        $pager = new PagerFanta($adapter);
+        $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
 
-        return $this->render('fibeWWWConfBundle:Paper:index.html.twig', array(
-            'entities' => $entities,
-        ));
+        try {
+            $pager->setCurrentPage($request->query->get('page', 1));
+        } catch (NotValidCurrentPageException $e) {
+            throw new NotFoundHttpException();
+        }
+
+        return array(
+            'pager' => $pager,
+        );
     }
 
     /**
@@ -160,7 +173,7 @@ class PaperController extends Controller
     /**
      * Deletes a Paper entity.
      * @Route("/{id}/delete", name="schedule_paper_delete")
-     * @Method("POST")
+     * @Method({"POST", "DELETE"})
      */
     public function deleteAction(Request $request, $id)
     {

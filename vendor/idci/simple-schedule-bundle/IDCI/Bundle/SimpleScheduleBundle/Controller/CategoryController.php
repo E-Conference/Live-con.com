@@ -205,7 +205,7 @@ class CategoryController extends Controller
      * Deletes a Category entity.
      *
      * @Route("/{id}/delete", name="schedule_category_delete")
-     * @Method("POST")
+     * @Method({"POST", "DELETE"})
      */
     public function deleteAction(Request $request, $id)
     {

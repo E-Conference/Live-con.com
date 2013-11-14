@@ -33,15 +33,25 @@ class ConfEventController extends Controller
      * Lists all ConfEvent entities.
      * @Route(name="schedule_confevent")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $this->getUser()->getCurrentConf()->getEvents();
+        $entities = $this->getUser()->getCurrentConf()->getEvents()->toArray();
 
-        return $this->render('fibeWWWConfBundle:ConfEvent:index.html.twig', array(
-            'entities' => $entities,
-        ));
+        $adapter = new ArrayAdapter($entities);
+        $pager = new PagerFanta($adapter);
+        $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
+
+        try {
+            $pager->setCurrentPage($request->query->get('page', 1));
+        } catch (NotValidCurrentPageException $e) {
+            throw new NotFoundHttpException();
+        }
+
+        return array(
+            'pager' => $pager,
+        );
     }
 
     /**

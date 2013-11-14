@@ -41,6 +41,9 @@ security:
         api:
             pattern:   ^/api/
             anonymous: true 
+        data:
+            pattern:   ^/data/
+            anonymous: true 
 
 
         main:

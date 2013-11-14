@@ -7,20 +7,22 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use fibe\Bundle\WWWConfBundle\Entity\wwwConf;
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
+use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
 
 /**
  * This entity define a paper of a conference
  *
  *
- *   @ORM\Table(name="paper")
+ *  @ORM\Table(name="paper")
  *  @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\PaperRepository")
+ *  @ORM\HasLifecycleCallbacks
  *
  */
 
 class Paper
 {
 
-    /**
+     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -55,7 +57,7 @@ class Paper
      * authors
      * Persons related to an event 
      *   
-     * @ORM\ManyToMany(targetEntity="Person", inversedBy="papers", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Person", inversedBy="papers", cascade={"persist", "merge"})
      * @ORM\JoinTable(
      *     joinColumns={@ORM\JoinColumn(name="paper_id", referencedColumnName="id", onDelete="Cascade")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="Cascade")})
@@ -89,7 +91,7 @@ class Paper
      *     inverseJoinColumns={@ORM\JoinColumn(name="topic_id", referencedColumnName="id", onDelete="Cascade")})
      */
     protected $topics;
-	
+    
 
      /**
      * confEvents
@@ -100,13 +102,18 @@ class Paper
     protected $events;
 
    
-	/**
+    /**
      *  Conference associated to this paper
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="papers", cascade={"persist"})
      * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
      *
      */
     protected $conference;
+
+     /**
+     * @ORM\Column(type="string", length=128, nullable=true)
+     */
+    protected $slug;
 
   
     /**
@@ -118,7 +125,57 @@ class Paper
         $this->topic = new \Doctrine\Common\Collections\ArrayCollection();
         $this->events = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+     public function __toString(){
+        return $this->title;
+    }
+
+     /**
+     * Slugify
+     * 
+     */
+    public function slugify()
+    {
+        $this->setSlug(StringTools::slugify($this->getId().$this->getTitle()));
+    }
+
+    /**
+     * onUpdate
+     *
+     * @ORM\PostPersist()
+     * @ORM\PreUpdate()
+     */
+    public function onUpdate()
+    {
+        $this->slugify();
+    }
+
+     /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return ConfEvent
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
     
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+
+   
+
     /**
      * Get id
      *
@@ -278,30 +335,30 @@ class Paper
     }
 
     /**
-     * Add topic
+     * Add topics
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\topic $topic
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Topic $topics
      * @return Paper
      */
-    public function addTopic(\fibe\Bundle\WWWConfBundle\Entity\topic $topic)
+    public function addTopic(\fibe\Bundle\WWWConfBundle\Entity\Topic $topics)
     {
-        $this->topics[] = $topic;
+        $this->topics[] = $topics;
     
         return $this;
     }
 
     /**
-     * Remove topic
+     * Remove topics
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\topic $topic
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Topic $topics
      */
-    public function removeTopic(\fibe\Bundle\WWWConfBundle\Entity\topic $topic)
+    public function removeTopic(\fibe\Bundle\WWWConfBundle\Entity\Topic $topics)
     {
-        $this->topics->removeElement($topic);
+        $this->topics->removeElement($topics);
     }
 
     /**
-     * Get topic
+     * Get topics
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
@@ -364,9 +421,5 @@ class Paper
     public function getConference()
     {
         return $this->conference;
-    }
-
-    public function __toString(){
-        return $this->title;
     }
 }

@@ -1,0 +1,30 @@
+{% extends 'fibeWWWConfBundle::base.html.twig' %}
+
+{% block body %}
+{{ parent() }}
+<div class="container">
+    <div class="row center">
+    <h1>Topic</h1>
+        <ul>
+          <li> {{ entity.name }}</li>
+          <li><a href="{{ path('object', { 'slug': entity.conference.slug, 'object': 'WWWConf' }) }}">{{ entity.conference.getConfName() }}</a></li>
+          <li>  {{ entity.papers|length }} Papers
+              <ul>
+                   {% for paper in entity.papers %}
+                       <li><a href="{{ path('object', { 'slug': paper.slug, 'object': 'Paper' }) }}">{{ paper.title }}</a></li>
+                   {% endfor %}
+             </ul>
+          </li>
+           <li>  {{ entity.events|length }} Events
+              <ul>
+                   {% for event in entity.events %}
+                       <li><a href="{{ path('object', { 'slug': event.slug, 'object': 'ConfEvent' }) }}">{{ event.summary }}</a></li>
+                   {% endfor %}
+             </ul>
+          </li>
+          <li> {{ entity.location.name }}</li>
+        </ul> 
+  </div>
+</div> 
+    
+{% endblock %}

@@ -5,13 +5,14 @@ namespace fibe\Bundle\WWWConfBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
+use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
 /**
  * This entity define a role for a person in an event
  *
  *
  *  @ORM\Table(name="organization")
  *  @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\OrganizationRepository")
+ *  @ORM\HasLifecycleCallbacks
  *
  */
 
@@ -24,7 +25,7 @@ class Organization
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-	
+    
     /**
      * name
      *
@@ -50,7 +51,7 @@ class Organization
     protected $country;
 
      /**
-     * @ORM\ManyToMany(targetEntity="Person",   mappedBy="organizations", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Person",  mappedBy="organizations", cascade={"persist","merge"})
      */
     protected $members;
 
@@ -62,6 +63,11 @@ class Organization
      */
     protected $conference;
 
+	
+    /**
+     * @ORM\Column(type="string", length=128, nullable=true)
+     */
+    protected $slug;
 
     /**
      * Constructor
@@ -75,7 +81,52 @@ class Organization
     public function __toString(){
         return $this->name;
     }
+
+    /**
+     * Slugify
+     * 
+     */
+    public function slugify()
+    {
+        $this->setSlug(StringTools::slugify($this->getId().$this->getName()));
+    }
+
+    /**
+     * onUpdate
+     *
+     * @ORM\PostPersist()
+     * @ORM\PreUpdate()
+     */
+    public function onUpdate()
+    {
+        $this->slugify();
+    }
+
+     /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return ConfEvent
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
     
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+   
+
     /**
      * Get id
      *
@@ -138,7 +189,7 @@ class Organization
      * @param string $country
      * @return Organization
      */
-    public function setBased_near($country)
+    public function setCountry($country)
     {
         $this->country = $country;
     
@@ -158,13 +209,12 @@ class Organization
     /**
      * Add members
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Person $member
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Person $members
      * @return Organization
      */
-    public function addMember(\fibe\Bundle\WWWConfBundle\Entity\Person $member)
+    public function addMember(\fibe\Bundle\WWWConfBundle\Entity\Person $members)
     {
-        $this->members[] = $member;
-    
+        $this->members[] = $members;
         return $this;
     }
 
@@ -173,10 +223,11 @@ class Organization
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\Person $members
      */
-    public function removeMember(\fibe\Bundle\WWWConfBundle\Entity\Person $member)
+    public function removeMember(\fibe\Bundle\WWWConfBundle\Entity\Person $members)
     {
-        $this->members->removeElement($member);
+        $this->members->removeElement($members);
     }
+
 
     /**
      * Get members
