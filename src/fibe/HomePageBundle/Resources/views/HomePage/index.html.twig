@@ -1,6 +1,26 @@
-{% extends 'fibeHomePageBundle::base.html.twig' %}
 
-{% block title %}Livecon UPGRATE YOUR CONFERENCE{% endblock title %}
+
+{% block head %}
+	{% block meta %}
+	 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+	 	<link rel="shortcut icon" href="{{ asset('bundles/fibehomepage/img/favicon.ico') }}" type="image/vnd.microsoft.icon">
+	 	<title>Livecon UPGRATE YOUR CONFERENCE</title>
+		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ asset('bundles/fibehomepage/img/ios_icon.jpg') }}" />
+	{% endblock meta %}
+
+
+	{% block stylesheets %}
+	  <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibehomepage/css/homepage.css') }}" /> 
+	  <!-- reset -->
+		<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/reset.css') }}" />
+		<!-- grid system 16 -->
+		<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/960_12_col.css') }}" />
+
+		<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/style.css') }}" />
+	{% endblock %}
+
+{% endblock %}
+
 {% block body %}
 
 
@@ -12,7 +32,6 @@
 						<li><a href="#overview" title="Overview The Livecon Solution">Overview</a></li>
 						<li><a href="#app" title="The LiveCon App">Demo</a></li>
 						<li><a href="#getstarted" title="Get Started the Livecon Solution">Get Started</a></li>
-						<li><a href="#team" title="The Livecon Team">The Team</a></li>
 						<li><a href="#contact" title="Contact Livecon Team">Contact</a></li>
 						<li><a href="{{ path('login') }}" title="Login">Login</a></li>
 					</ul>
@@ -34,46 +53,59 @@
 
 		<div id="overview">
 			<div class="container_12">
-				<h1>Overview <span class="logoname"><b>Live</b>con</span></h1>
-				<a href="#before">
-				<div class="grid_4 alpha omega">
-					<h2>Before<br/>Conference</h2>
-					<div class="clearfix">
-					<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/import.png') }}" /></div>
-					<div class="grid_3"><p>Start from scratch or import your OCS data.</p></div>
+				<h1>Overview</h1>
+				<hr/>
+				<div id="t_before" class="clearfix">
+					<a href="#before" title="Before Conference">
+					<div class="grid_6">
+						<h2>Before Conference</h2>
 					</div>
-					<div class="clearfix">
-					<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/custom.png') }}" /></div>
-					<div class="grid_3"><p>Customize your mobile application as you wish.</p></div>
+					<div class="grid_6 alpha elements">
+						<div class="element element01">
+							<img src="{{ asset('bundles/fibehomepage/img/picto/import.png') }}" />
+							<p>Start from scratch or import your OCS data.</p>
+						</div>
+						<div class="element element02">
+							<img src="{{ asset('bundles/fibehomepage/img/picto/custom.png') }}" />
+							<p>Customize your mobile application as you wish.</p>
+						</div>
 					</div>
+					</a>
 				</div>
-				</a>
-				<a href="#during">
-				<div class="grid_4 alpha omega">
-					<h2>During<br/>Conference</h2>
-					<div class="clearfix">
-					<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/schedule.png') }}" /></div>
-					<div class="grid_3"><p>Keep your schedule up to date.</p></div>
+				<div id="t_during" class="clearfix">
+					<a href="#during" title="During Conference">
+					<div class="grid_6">
+						<h2>During Conference</h2>
 					</div>
-					<div class="clearfix">
-					<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/reloaded.png') }}" /></div>
-					<div class="grid_3"><p>Let the application broadcast the changes for you.</p></div>
+					<div class="grid_6 alpha elements">
+						<div class="element element01">
+							<img src="{{ asset('bundles/fibehomepage/img/picto/schedule.png') }}" />
+							<p>Keep your schedule up to date.</p>
+						</div>
+						<div class="element element02">
+							<img src="{{ asset('bundles/fibehomepage/img/picto/reloaded.png') }}" />
+							<p>Let the application broadcast the changes for you.</p>
+						</div>
 					</div>
+					</a>
 				</div>
-				</a>
-				<a href="#after">
-				<div class="grid_4 alpha omega">
-					<h2>After<br/>Conference</h2>
-					<div class="clearfix">
-					<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/publish.png') }}" /></div>
-					<div class="grid_3"><p>Open your data to the Web 3.0 and increase your conference visibility thanks to a SPARQL endpoint.</p></div>
+				<div id="t_after" class="clearfix">
+					<a href="#after" title="After Conference">
+					<div class="grid_6">
+						<h2>After Conference</h2>
 					</div>
-					<div class="clearfix">
-					<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/like.png') }}" /></div>
-					<div class="grid_3"><p>Let people find what they liked using the app.</p></div>
+					<div class="grid_6 alpha elements">
+						<div class="element element01">
+							<img src="{{ asset('bundles/fibehomepage/img/picto/publish.png') }}" />
+							<p>Open your data to the Web 3.0 and increase your conference visibility.</p>
+						</div>
+						<div class="element element02">
+							<img src="{{ asset('bundles/fibehomepage/img/picto/like.png') }}" />
+							<p>Let people find what they liked using the app.</p>
+						</div>
 					</div>
+					</a>
 				</div>
-				</a>
 			</div>
 		</div>
 
@@ -134,14 +166,14 @@
 			<div class="container_12">
 				<h1>After Conference</h1>
 				<div class="grid_6"><img src="{{ asset('bundles/fibehomepage/img/illustration/after.png') }}" /></div>
-				<div class="grid_6">
+				<div class="grid_6 overview_after">
 					<div id="overview05" class="clearfix">
 						<div class="clearfix">
 						<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/publish.png') }}" /></div>
 						<div class="number grid_1">5.</div>
-						<div class="grid_4 omega"><h3>Open your data to the Web 3.0 and increase your conference visibility thanks to a SPARQL endpoint.</h3></div>
+						<div class="grid_4 omega"><h3>Open your data to the Web 3.0 and increase your conference visibility.</h3></div>
 						</div>
-						<div class="grid_4 push_2 omega"><p>By allowing people to have a Sparql access to your data, you can spread your conference name and expect even more attendees for your next event!</p></div>
+						<div class="grid_4 push_2 omega"><p>By allowing people to have a SPARQL access to your metadata, you participate to the development of the web and the open knowledge expansion. Expect your data to be reused in other system, spreading them all over the web.</p></div>
 					</div>
 					<div id="overview06" class="clearfix">
 						<div class="clearfix">
@@ -149,10 +181,9 @@
 						<div class="number grid_1">6.</div>
 						<div class="grid_4 omega"><h3>Let people find what they liked using the app.</h3></div>
 						</div>
-						<div class="grid_4 push_2 omega"><p>The application will remain available as long as you wish representing an amasing overview of what makes your conference a major actor of the domains it deals with.</p></div>
+						<div class="grid_4 push_2 omega"><p>The application will remain available as long as you wish representing an amazing overview of what makes your conference a major actor of the domains it deals with.</p></div>
 					</div>
 				</div>
-				<div></div>
 			</div>
 		</div>
 
@@ -160,10 +191,10 @@
 			<div class="container_12">
 				<h1>The <span class="logoname"><b>Live</b>con</span> App</h1>
 				<div id="app01" class="grid_5">
-					<iframe src="http://dataconf.liris.cnrs.fr/eswc2013/"></iframe>
+					<iframe src="http://dataconf.liris.cnrs.fr/eswc2013/" width="315" height="560"></iframe>
 				</div>
 				<div id="app02" class="grid_5">
-					<iframe src="http://dataconf.liris.cnrs.fr/www2012/"></iframe>
+					<iframe src="http://dataconf.liris.cnrs.fr/www2012/" width="315" height="560"></iframe>
 				</div>
 			</div>
 		</div>
@@ -179,21 +210,86 @@
 			</div>
 		</div>
 
-		<div id="team">
-			<div class="container_12">
-				<h1>The Team</h1>
-			</div>
-		</div>
-
 		<div id="contact">
 			<div class="container_12">
-				<h1>Contact The Team</h1>
+				<h1>Contact us</h1>
+				<div id="contactWrapper">
+					<form action="" method="post"  id="contactform" class="contact">
+						<input type="hidden" name="_method" value="post" />
+						<div class="grid_5">
+							<div class="stage">
+								<label for="name"><p>First Name : <em>*</em></p></label>
+								<input type="text" name="nom" id="nom" value="" class="nom" />
+							</div>
+							<div class="stage">
+								<label for="name"><p>Last Name : <em>*</em></p></label>
+								<input type="text" name="prenom" id="prenom" class="prenom" />
+							</div>
+
+							<div class="stage">
+								<label for="email"><p>Email : <em>*</em></p></label>
+								<input type="email" name="email" id="email" class="email" />
+							</div>
+						</div>
+						<div class="grid_6 push_1">
+							<div class="stage">
+								<label for="name"><p>Conference name : <em>*</em></p></label>
+								<input type="text" name="confname" id="confname" class="confname" />
+							</div>
+
+							<div class="stage">
+								<label for="message"><p>Message : <em>*</em></p></label>
+								<textarea rows="8" name="message" id="message" class="message"></textarea>
+							</div>
+												
+							<p class="requiredNote"><em>*</em> Denotes a required field.</p>
+							
+							<input type="button" value="Send Message" id="submitButton" class="btn submit" title="Click here to submit your message!" />
+							<p class="disclaimer"></p>
+							<p id="callback">callback</p>
+						</div>
+					</form>
+					
+				</div>
 			</div>
 		</div>
 
 		<div id="footer">
-
+			<div class="container_12">
+				<div class="grid_6">
+					<h3>Created by</h3>
+					<ul>
+						<li><p>Fiona LE PEUTREC<p></li>
+						<li><p>Florian BACLE</p></li>
+						<li><p>Benoît DURANT DE LA PASTELLIERE</p></li>
+					</ul>
+					<a href="http://thibaud-lentheric.com" title="Thibaud LENTHERIC Portfolio" target="_blank">
+					<h3 class="design">Design by</h3>
+						<p class="design">Thibaud LENTHERIC</p>
+					</a>
+				</div>
+				<div class="grid_2">
+					<a href="http://www.live-con.com/login" title="Back Office Access">
+						<img src="{{ asset('bundles/fibehomepage/img/picto/backoffice.png') }}" />
+						<h4>Back Office Access</h4>
+					</a>
+				</div>
+				<div class="grid_2">
+					<a href="https://github.com/E-Conference/" title="GitHub Project" target="_blank">
+						<img src="{{ asset('bundles/fibehomepage/img/picto/github.png') }}" />
+						<h4>GitHub Project</h4>
+					</a>
+				</div>
+				<div class="grid_2">
+					<a href="http://twitter.com/Livecon" title="Livecon on Twitter" target="_blank">
+						<img src="{{ asset('bundles/fibehomepage/img/picto/twitter.png') }}" />
+						<h4><span class="logoname"><b>Live</b>con</span> on Twitter</h4>
+					</a>
+				</div>
+				<div class="grid_6" id="version"><p>Live-con · v1.0 | licensed under</p></div>
+			</div>
 		</div>
+
 
 
 
@@ -202,24 +298,87 @@
   
 {% endblock body %}
 
-{% block javascripts %}
-	<!--[if lt IE 9]>
-		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-		<![endif]-->
-	
-		<!-- JavaScript -->		
-		
-		<script type="text/javascript">
-			$(function(){
+	{% block javascripts %}
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 
-				// Scroll to
-				$('body').plusAnchor({
-			        easing: 'easeInOutExpo',
-			        speed:  1000,
-			        offsetTop: -70
-			    });
+		<script type="text/javascript" src="{{ asset('bundles/fibehomepage/js/jquery.easing.1.3.js') }}"></script>
+		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>	
+		<script type="text/javascript" src="{{ asset('bundles/fibehomepage/js/greensock/TweenMax.min.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('bundles/fibehomepage/js/jquery.superscrollorama.js') }}"></script>
+		<script type="text/javascript" src="{{ asset('bundles/fibehomepage/js/jquery.plusanchor.js') }}"></script>
+
+		<!--[if lt IE 9]>
+			<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+			<![endif]-->
+		<script type="text/javascript">
+			$(function() {
+
+					// Scroll to
+					$('body').plusAnchor({
+				        easing: 'easeInOutExpo',
+				        speed:  1000,
+				        offsetTop: -70
+				    });
+
+				   
+				   
+				var controller = $.superscrollorama();
+				
+				controller.addTween('#t_before .elements', 
+					TweenMax.from($('#t_before h2'), .3, {css:{paddingRight:200,opacity:0},ease:Cubic.easeoUt}),0,-75);
+				controller.addTween('#t_before .elements', 
+					TweenMax.from($('#t_before .element01'), .3, {css:{left:200,opacity:0},ease:Cubic.easeoUt}),0,-75);	
+				controller.addTween('#t_before .elements', 
+					TweenMax.from($('#t_before .element02'), .45, {css:{left:200,opacity:0},ease:Cubic.easeoUt}),0,-75);		
+
+				
+				controller.addTween('#t_during .elements', 
+					TweenMax.from($('#t_during h2'), .3, {css:{paddingRight:200,opacity:0},ease:Cubic.easeoUt}),0,-75);
+				controller.addTween('#t_during .elements', 
+					TweenMax.from($('#t_during .element01'), .3, {css:{left:200,opacity:0},ease:Cubic.easeoUt}),0,-75);	
+				controller.addTween('#t_during .elements', 
+					TweenMax.from($('#t_during .element02'), .45, {css:{left:200,opacity:0},ease:Cubic.easeoUt}),0,-75);		
+
+				
+				controller.addTween('#t_after .elements', 
+					TweenMax.from($('#t_after h2'), .3, {css:{paddingRight:200,opacity:0},ease:Cubic.easeoUt}),0,-75);
+				controller.addTween('#t_after .elements', 
+					TweenMax.from($('#t_after .element01'), .3, {css:{left:200,opacity:0},ease:Cubic.easeoUt}),0,-75);	
+				controller.addTween('#t_after .elements', 
+					TweenMax.from($('#t_after .element02'), .45, {css:{left:200,opacity:0},ease:Cubic.easeoUt}),0,-75);
+
+
+
+
+				controller.addTween('#overview01', 
+					TweenMax.from($('#overview01'), .45, {css:{marginLeft:520,opacity:0},ease:Cubic.easeoUt}),0,-100);		
+
+				controller.addTween('#overview02', 
+					TweenMax.from($('#overview02'), .45, {css:{marginLeft:420,top:580,opacity:0},ease:Cubic.easeoUt}),0,-250);		
+
+
+				controller.addTween('#overview03', 
+					TweenMax.from($('#overview03'), .45, {css:{marginLeft:-200,opacity:0},ease:Cubic.easeoUt}),0,-100);		
+
+				controller.addTween('#overview04', 
+					TweenMax.from($('#overview04'), .45, {css:{marginLeft:200,opacity:0},ease:Cubic.easeoUt}),0,-100);		
+
+
+				controller.addTween('#after', 
+					TweenMax.from($('#overview05'), .45, {css:{left:-200,top:100,opacity:0},ease:Cubic.easeoUt}),0,100);		
+
+				controller.addTween('#overview05', 
+					TweenMax.from($('#overview06'), .45, {css:{left:-200,top:100,opacity:0},ease:Cubic.easeoUt}),0,-75);		
+
+
+				controller.addTween('#app', 
+					TweenMax.from($('#app01'), .45, {css:{left:-200,opacity:0},ease:Cubic.easeoUt}),0,150);		
+
+				controller.addTween('#app', 
+					TweenMax.from($('#app02'), .45, {css:{right:-200,opacity:0},ease:Cubic.easeoUt}),0,150);		
+
+
 			});
 		</script>
-{% endblock%}
 
-
+	{% endblock javascripts %}
