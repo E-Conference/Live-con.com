@@ -17,7 +17,7 @@
       <div id="sidebar">  
         <div class="checkbox">
           <label>
-            <input id="reposition" type="checkbox"> Reposition parent/child <small>(<i>alpha</i>)</small>
+            <input id="reposition" checked="checked" type="checkbox"> Reposition parent/child <small>(<i>alpha</i>)</small>
           </label>
         </div> 
         <div class="history hide">
@@ -206,8 +206,7 @@
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------- render events from json datasource -----------------------------------*/
       /*-----------------------------------------------------------------------------------------------------*/
-
-      // empty fullcalendar events and populate it with new
+ 
       var fetched = false;
       var calendar_events   = []; 
       function renderEvents(events,callback){
@@ -220,7 +219,7 @@
           //non-blocking loop
           function doWork() {
  
-            var event = new CalEvent(events[i]); 
+            var event = new CalEvent(events[i]);  
 
             if(event.isInstant()){
               instant_events.push(Events[events[i]["id"]]); 
@@ -344,7 +343,7 @@
                                 bootstrapAlert("success","event <b>"+tmp['title']+"</b> has been well added");
                                 tmp.id =response.id;
                                 var ev = new CalEvent(tmp);  
-                                Events[ev.id] = ev;
+                                Events[ev.id] = ev; 
                                 ev.setParent(mainConfEvent);
                                 ev.updateParentDate();
                                 ev.render();
@@ -482,16 +481,17 @@
             var calendarEvent = calendarEvents[i];
             if(Events[calendarEvent.id]){
               Events[calendarEvent.id] = calendarEvent;
+
               // console.log(calendarEvent.id+"_###found in calendar",Events[calendarEvent.id]);
             } 
           }
 
-          $(".fc-event-draggable:visible").each(function(i){ 
+          $(".fc-event-draggable").each(function(i){ 
             var id = parseInt($(this).find(".fc-event-id").text()); 
             //$.inArray()
             if(Events[id])Events[id]['elem'] = $(this);
           });
-          console.log("###event array updated###");
+          console.log("###event array updated###",Events);
           // console.log("changed events :",EventCollection.eventsToRender);
           // console.log(Events) 
 
@@ -533,15 +533,24 @@
           if($('#reposition').is(':checked')){ 
             //non-blocking
                   setTimeout(function(){ 
-                    positionBlock(toppestParent,colWidth,2);
+                    positionBlock(toppestParent,colWidth-eventMargin,2);
                   },1)
           }
           function positionBlock(events,colWidth,parentZindex,parentPos,parent){ 
                   
                   // console.log(" ######positionBlocks######");
                   
-                  colWidth -=eventMargin; 
-                  var broCountRange = EventCollection.getBroCountRange(events)
+                  colWidth -=eventMargin/2; 
+                  var broCountRange;
+                  try
+                    {
+                      broCountRange = EventCollection.getBroCountRange(events)
+                    }
+                  catch(err)
+                    {
+                    // events aren't in the dom...
+                    return;
+                    }
                   console.log("##getBroCountRange## ",broCountRange);  
 
 
@@ -559,11 +568,11 @@
                     //positionning event to be over the parent
                     var count   = broCountRange[event.id].count,
                         range   = broCountRange[event.id].range,
-                        left = broCountRange[event.id].minLeft;
+                        left    = broCountRange[event.id].minLeft;
                     console.log("event "+event.id+" has "+count+" bros. range = "+range+" minLeft = "+left);
 
                     //width
-                    newColWidth = colWidth/(count)-(count)*eventMargin/2;
+                    newColWidth = colWidth/(count)-eventMargin;
                     element.width(newColWidth);
 
                      
