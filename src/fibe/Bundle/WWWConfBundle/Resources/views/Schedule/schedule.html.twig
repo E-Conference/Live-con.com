@@ -486,7 +486,7 @@
             } 
           }
 
-          $(".fc-event-draggable").each(function(i){ 
+          $(".fc-event").each(function(i){ 
             var id = parseInt($(this).find(".fc-event-id").text()); 
             //$.inArray()
             if(Events[id])Events[id]['elem'] = $(this);
@@ -511,7 +511,7 @@
        *  just after to the fullcalendar "all event render" function
        */
  
-      var repositionTimeout = 10;
+      var repositionTimeout = 20;
       function reposition(view){
 
           var repositionTimeout,
@@ -528,7 +528,7 @@
           if(!toppestParent)return;
           // console.log("toppestParent",toppestParent);
           
-          stylizeBlock(toppestParent); 
+          stylizeBlock([mainConfEvent]); 
 
           if($('#reposition').is(':checked')){ 
             //non-blocking
@@ -543,14 +543,15 @@
                   colWidth -=eventMargin/2; 
                   var broCountRange;
                   try
-                    {
+                  {
                       broCountRange = EventCollection.getBroCountRange(events)
-                    }
+                  }
                   catch(err)
-                    {
-                    // events aren't in the dom...
-                    return;
-                    }
+                  {
+                      // events aren't in the dom...
+                      return;
+                  }
+
                   console.log("##getBroCountRange## ",broCountRange);  
 
 
@@ -573,22 +574,21 @@
 
                     //width
                     newColWidth = colWidth/(count)-eventMargin;
-                    element.width(newColWidth);
 
                      
-                    //left margin for events to respect hierarchy
-                    
+                    //place child into his parent
                     if(parentPos){
                       left = parentPos.x+eventMargin/2;
+                      newColWidth = newColWidth+eventMargin/2;
                       if(moment(parent.start).isSame(moment(event.start))){
-                        element.css("top",elemProp.y+eventMargin/2+5); 
-                        element.css("height",elemProp.h-eventMargin/2-5);
+                        element.css("top",elemProp.y+eventMargin); 
+                        element.css("height",elemProp.h-eventMargin*2);
                       }
-                      if(moment(parent.end).isSame(moment(event.end))){
-                        // element.css("top",elemProp.y+eventMargin/2); 
-                        element.css("height",elemProp.h-eventMargin/2-5);
+                      if(moment(parent.end).isSame(moment(event.end))){ 
+                        element.css("height",elemProp.h-eventMargin);
                       } 
                     } 
+                    element.width(newColWidth);
 
                     left += (range*(newColWidth+eventMargin)); 
                     if(left)element.css("left",left); 
@@ -608,7 +608,7 @@
        
           }
           function stylizeBlock(events){ 
-
+                console.log("stylizeBlocks : ",events);
                     /*****************  styling (opacity, hover, drag, drop) ********************/
                  
                 for (var i in events){
@@ -716,8 +716,8 @@
                         }
                     }); //end droppable
     
-                    //action on hover (children opacity and bootstrap popover)
                     element
+                              /*************** popover *****************/
                         .popover({
                                 trigger : 'hover',
                                 html : true,
@@ -735,6 +735,7 @@
                                 title : ' <b><span class="muted">#'+event.id+'</span> '+event.title+'</b>',
                                 content : event.getPopoverContent(),
                         })
+                              /*************** hover : change border color  *****************/
                         .hover(function(){
                               //enter
                               $(this).animate({"border-color":"#3F3F3F"},{queue:false});
@@ -762,7 +763,8 @@
  
                     var children = EventCollection.getChildren(event,{concat:false,onlyEvent:true});
                     // console.log("elem",children)
-                    // 
+                    
+                    
                     if(children.length>0){
                       elemProp = getProp(element);
                       stylizeBlock(children);

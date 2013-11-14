@@ -207,9 +207,70 @@ class ConfEventController extends Controller
     
     }
 
+    /**
+     * Deletes a ConfEvent entity.
+     * @Route("/{id}/delete", name="schedule_confevent_delete")
+     * @Method({"DELETE","POST"})
+     */
+    public function deleteAction(Request $request, $id)
+    {
+        $form = $this->createDeleteForm($id);
+        $form->bind($request);
 
+        if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id);
 
-       /**
+            if (!$entity) {
+                throw $this->createNotFoundException('Unable to find ConfEvent entity.');
+            }
+
+            $children = $entity->getChildren();
+            $mainConfEvent = $this->getUser()->getCurrentConf()->getMainConfEvent();
+            echo ($mainConfEvent->getSummary()+" ==  "+$entity->getSummary());
+            echo ($mainConfEvent == $entity);
+            if($mainConfEvent == $entity){
+                $this->container->get('session')->getFlashBag()->add(
+                     'error',
+                     'Sorry, you cannot delete the Conference Event'
+                     );
+                return $this->redirect($this->generateUrl('schedule_event'));
+            }
+            foreach($children as $child)
+            {
+                $child->setParent($mainConfEvent);
+                $em->persist($child);
+            }
+            $this->container->get('session')->getFlashBag()->add(
+                     'success',
+                     'Event successfully deleted ! \n Its children have been set as children of the conference'
+                     );
+
+            $em->remove($entity);
+            $em->flush();
+        }
+
+        return $this->redirect($this->generateUrl('schedule_event'));
+    }
+
+    /**
+     * Creates a form to delete a ConfEvent entity by id.
+     *
+     * @param mixed $id The entity id
+     *
+     * @return Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder(array('id' => $id))
+            ->add('id', 'hidden')
+            ->getForm()
+        ;
+    }
+
+    /*************************************** topics *****************************************************/
+
+    /**
      * Add topic to a confEvent
      *  @Route("/addTopic", name="schedule_confevent_addTopic")
      *  @Method("POST")
@@ -265,6 +326,7 @@ class ConfEventController extends Controller
     }
 
 
+    /*************************************** papers *****************************************************/
 
      /**
      * Add paper to the confEvent
@@ -319,6 +381,8 @@ class ConfEventController extends Controller
             'entity'  => $entity,
         ));
     }
+
+    /*************************************** person *****************************************************/
 
      /**
      * Add person to the confEvent
@@ -383,45 +447,5 @@ class ConfEventController extends Controller
         return $this->render('fibeWWWConfBundle:ConfEvent:personRelation.html.twig', array(
             'entity'  => $entity,
         ));
-    }
-
-    /**
-     * Deletes a ConfEvent entity.
-     * @Route("/{id}/delete", name="schedule_confevent_delete")
-     * @Method({"DELETE","POST"})
-     */
-    public function deleteAction(Request $request, $id)
-    {
-        $form = $this->createDeleteForm($id);
-        $form->bind($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find ConfEvent entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('schedule_event'));
-    }
-
-    /**
-     * Creates a form to delete a ConfEvent entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
-        ;
     }
 }

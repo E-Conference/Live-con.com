@@ -27,13 +27,14 @@ var EventCollection = {
           if(id==="" || !id)return ;
           if(!op)op={}; 
           var event = Events[id];
-          if(!Events[id] || (op.noSidebar ===true && Events[id].isInstant()))return; 
+          if(!Events[id] || (op.noSidebar ===true && Events[id].isInstant()) || (op.noAllDay === true && Events[id].allDay ))return; 
           return event; 
     }, 
         /** 
          * @param parent        :  db model event
          * @param op            : concat : ( boolean default : false ) if true : dont preserve the tree nature of the relation (just concat children/subchildren/subsu...)
          *                        noSidebar(default false),
+         *                        noAllDay(default false),
          *                        recursive(default true) get only direct children
          * return children      : [{event:event,element:$element}, ... ]
          * events               : db modele events
@@ -128,11 +129,21 @@ var EventCollection = {
     // },
 
 
-    getToppestParent : function (view){
+    getToppestParent : function (view){ 
         var toppestParent = []; 
 
-        return EventCollection.getChildren(mainConfEvent, {concat:true,recursive:false,onlyEvent:true,noSidebar:true}); 
+        var tmp =  EventCollection.getChildren(mainConfEvent, {concat:true,recursive:false,onlyEvent:true,noSidebar:true});
 
+        //ignore allday events
+        for(var i in tmp){
+          var event = tmp[i];
+          if(event.allDay){
+            toppestParent = toppestParent.concat(EventCollection.getToppestNonAllDayChildren(event)); 
+          }else{
+            toppestParent.push(event);
+          }
+        }
+        return toppestParent;
         // $(view.getSlotContainer()).find(".fc-event").each(function(){
         //   var e = EventCollection.getEventByDiv($(this));
         //   parent = Events[e.parent.id];
@@ -181,6 +192,24 @@ var EventCollection = {
         //     toppestParent.push(event); 
         // }
         return toppestParent;
+    },
+
+    getToppestNonAllDayChildren : function(parent)
+    {
+        var toppestNonAllDayChildren = []; 
+        var tmp = EventCollection.getChildren(parent, {concat:true,recursive:false,onlyEvent:true,noSidebar:true});
+        for(var i in tmp){
+          var event = tmp[i];
+          if(event.allDay){
+            toppestNonAllDayChildren = toppestNonAllDayChildren.concat(EventCollection.getToppestNonAllDayChildren(event));
+
+          }else{
+            // alert(event.id+" "+ event.title+"were child of "+parent.id+" "+parent.title+" and was added");
+            toppestNonAllDayChildren.push(event);
+          }
+        }
+
+        return toppestNonAllDayChildren;
     },
     
     getBroCountRange : function(brothers){

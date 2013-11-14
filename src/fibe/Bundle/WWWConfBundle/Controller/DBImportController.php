@@ -55,8 +55,9 @@ class DBImportController extends Controller
 
 
         $defaultCategory = $this->getDoctrine()
-                                   ->getRepository('fibeWWWConfBundle:topic')
+                                   ->getRepository('IDCISimpleScheduleBundle:Category')
                                    ->findOneBy(array('name' => 'TalkEvent'));
+
         //categories color.
         $colorArray = array('lime', 'red', 'blue', 'orange', 'gold', 'coral', 'crimson', 'aquamarine', 'darkOrchid', 'forestGreen', 'peru','purple' ,'seaGreen'  );
         
@@ -83,10 +84,10 @@ class DBImportController extends Controller
                 $current = $topics[$i];  
                 $existsTest = $this->getDoctrine()
                                    ->getRepository('fibeWWWConfBundle:topic')
-                                   ->findOneBy(array('name' => $defaultCategory));
+                                   ->findOneBy(array('name' => $current['setName']));
                 if($existsTest!=null){
                   array_push($topicEntities,$existsTest); 
-                  continue; //skip existing category
+                  continue; //skip existing topic
                 }
                 $entity= new topic();
                 foreach ($current as $setter => $value) {
@@ -110,7 +111,7 @@ class DBImportController extends Controller
                                    ->findOneBy(array('name' => $current['setName']));
                 if($existsTest!=null){
                   array_push($locationEntities,$existsTest); 
-                  continue; //skip existing category
+                  continue; //skip existing location
                 }
                 $entity= new Location();
                 foreach ($current as $setter => $value) {
@@ -134,7 +135,7 @@ class DBImportController extends Controller
                                    ->findOneBy(array('name' => $current['setName']));
                 if($existsTest!=null){
                   array_push($organizationEntities,$existsTest);
-                  continue; //skip existing category
+                  continue; //skip existing organization
                 }
 
                 $entity= new Organization();
@@ -200,7 +201,7 @@ class DBImportController extends Controller
                                    ->findOneBy(array('title' => $current['setTitle']));
                 if($existsTest!=null){
                   array_push($proceedingEntities,$existsTest); 
-                  continue; //skip existing category
+                  continue; //skip existing paper
                 }
                 $entity= new Paper();
                 foreach ($current as $setter => $value) {  
@@ -227,30 +228,6 @@ class DBImportController extends Controller
         }   
         
         
-        //////////////////////  topics  //////////////////////
-        if(isset($JSONFile['topics'])){
-            $topics = $JSONFile['topics'];
-            for($i=0;$i<count($topics);$i++){
-                $current = $topics[$i];  
-                $existsTest = $this->getDoctrine()
-                                   ->getRepository('fibeWWWConfBundle:Topic')
-                                   ->findOneBy(array('name' => $current['setName']));
-                if($existsTest!=null){
-                  array_push($topicEntities,$existsTest); 
-                  continue; //skip existing category
-                }
-                $entity= new Topic();
-                foreach ($current as $setter => $value) { 
-                    call_user_func_array(array($entity, $setter), array($value)); 
-                } 
-                $entity->setConference(  $wwwConf );
-                $em->persist($entity); 
-                array_push($topicEntities,$entity); 
-            }  
-            $topics = null;
-        }     
-        
-        
         //////////////////////  categories  ////////////////////// 
         if(isset($JSONFile['categories'])){
             $entities = $JSONFile['categories'];
@@ -261,19 +238,19 @@ class DBImportController extends Controller
                                    ->getRepository('IDCISimpleScheduleBundle:Category')
                                    ->findOneBy(array('name' => $current['setName']));
                 if($existsTest!=null){
-                  array_push($categoryEntities,$existsTest); 
-                  continue; //skip existing category
-                }
-                $entity= new Category();
-                foreach ($current as $setter => $value) {
-                    //if($setter!="setStartAt" && $setter!="setEndAt")echo "Event->".$setter."(".$value.");\n"; 
-                    call_user_func_array(array($entity, $setter), array($value)); 
-                }
-                // $entity->setConference(  $wwwConf );
-                $entity->setColor($colorArray[$j++]); //colorless categories
-                $em->persist($entity);
-                array_push($categoryEntities,$entity); 
+                    array_push($categoryEntities,$existsTest); 
+                    continue; //skip existing category
+                }else{
+                    array_push($categoryEntities,$defaultCategory);  
+                }    
+                echo $current['setName']. " don't exists<br/>";
+
+                
+
             }  
+            for ($i=0; $i < count($categoryEntities); $i++) { 
+                echo $i. " " . $categoryEntities[$i]->getName()."<br/>";
+            } 
             $entities = null;
         }
 
@@ -286,6 +263,7 @@ class DBImportController extends Controller
         $presenterRoleType = $this->getDoctrine()
                            ->getRepository('fibeWWWConfBundle:RoleType')
                            ->findOneBy(array('name' => 'Presenter'));
+
         
         //////////////////////  events  //////////////////////
         if(isset($JSONFile['events'])){
@@ -295,10 +273,7 @@ class DBImportController extends Controller
                 $current = $entities[$i]; 
                 foreach ($current as $setter => $value) {
 
-                    if($setter=="setStartAt" || $setter=="setEndAt"){
-                        $date= explode(' ', $value); 
-                        $value=new \DateTime($date[0], new \DateTimeZone(date_default_timezone_get()));
-                    }
+                    if($setter=="setParent")continue;
 
                     if($setter=="mainConferenceEvent"){ 
                         $wwwConf->setMainConfEvent($entity);
@@ -308,14 +283,24 @@ class DBImportController extends Controller
                         $em->persist($wwwConf);
                         continue;
                     }
+
+                    if($setter=="setStartAt" || $setter=="setEndAt"){
+                        $date= explode(' ', $value); 
+                        $value=new \DateTime($date[0], new \DateTimeZone(date_default_timezone_get()));
+                    }
                     
                     if($setter=="setLocation"){
                         $value=$locationEntities[$value];
                     }
                     
                     if($setter=="addCategorie"){
-                        $value=$categoryEntities[$value];
-                    } 
+                        if(count($categoryEntities) <= $value){
+                            echo count($categoryEntities)." ".$value." ".$entity->getSummary()."<br/>";
+                            $value = $defaultCategory;
+                        }else{
+                            $value=$categoryEntities[$value];
+                        }
+                    }
                     
                     if($setter=="addPaper"){
                         $j=0;
@@ -331,9 +316,7 @@ class DBImportController extends Controller
                     }
                      
 
-                    if($setter=="setParent"){  
-                        // $current["addChild"] = $entities[$value];
-                    }else if(is_array($value)){
+                    if(is_array($value)){
                         switch ($setter) {
                             case 'addTopic':
                                 $entityArray = $topicEntities;

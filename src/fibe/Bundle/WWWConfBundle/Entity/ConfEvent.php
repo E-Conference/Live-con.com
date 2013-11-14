@@ -57,7 +57,7 @@ class ConfEvent extends Event
      * roles
      * Persons related to an event 
      *  
-     * @ORM\OneToMany(targetEntity="Role", mappedBy="event",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Role", mappedBy="event",cascade={"persist","remove"})
      * @ORM\JoinColumn( onDelete="CASCADE")
      */
     private $roles;
