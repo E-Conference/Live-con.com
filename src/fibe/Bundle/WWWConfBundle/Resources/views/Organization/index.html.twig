@@ -9,20 +9,23 @@
     <div class="row center">
         <div class="page-header">
             <div class="row">
+
                 <div class="col-lg-3">
                     <h1>{% trans %}Organization{% endtrans %}</h1>
                 </div>
                 <div class="col-lg-4">
-                    <a class="btn btn-info btn-create" href="{{ path('schedule_organization_new') }}">
+                    <a class="btn btn-info btn-create"  href="{{ path('schedule_organization_new') }}">
                          <i class="icon-plus"></i>
                     </a>
                 </div>
             </div>
         </div>
 
-   
+   <a type="button" title="documentationTest" href="{{ path('documentation', { 'anchor': 'second' }) }}" class="btn btn-warning">
+                    <i class="icon-question"></i>
+              </a>
 
-    <table class="records_listb table table-hover">
+    <table class=" table table-hover">
         <thead>
             <tr>
                 <th>Id</th>

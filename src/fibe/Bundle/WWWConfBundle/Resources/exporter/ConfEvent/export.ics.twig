@@ -1,9 +1,18 @@
 {% autoescape false %}
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//hacksw/handcal//NONSGML v1.0//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:live-con.com
+X-WR-TIMEZONE:Europe/Paris
+
+
 BEGIN:VEVENT
 UID:{{ entity.id }}
-DTSTAMP:{{ entity.createdAt | date('Y-m-d H:i') }}
-DTSTART:{{ entity.startAt | date('Y-m-d H:i') }}
-DTEND:{{ entity.endAt | date('Y-m-d H:i') }}
+DTSTAMP:{{ entity.createdAt | date('Ymd\\THis') }}
+DTSTART;TZID=Europe/Paris:{{ entity.startAt | date('Ymd\\THis') }}
+DTEND;TZID=Europe/Paris:{{ entity.endAt | date('Ymd\\THis') }}
 SUMMARY:{{ entity.summary }}
 TRANSP:{{ entity.isTransparent }}
 CLASS:{{ entity.classification }}
@@ -15,7 +24,7 @@ CONTACT:{{ entity.contacts }}
 URL:{{ entity.url }}
 DESCRIPTION:{{ entity.description }}
 COMMENT:{{ entity.comment }}
-LAST-MODIFIED:{{ entity.lastModifiedAt | date('Y-m-d H:i') }}
+LAST-MODIFIED:{{ entity.lastModifiedAt |date('Ymd\\THis') }}
 RESOURCES:{{ entity.resources }}
 SEQUENCE:{{ entity.revisionSequence }}
 EXDATE:{{ entity.excludedDates }}
@@ -24,4 +33,36 @@ LOCATION:{{ entity.location }}
 CATEGORIES:{% for category in entity.categories %}{% if loop.first %}{{ category }}{% else %},{{ category }}{% endif %}{% endfor %}
 RRULE: {{ entity.includedRule }}
 END:VEVENT
+
+{% for child in entity.children %}
+BEGIN:VEVENT
+UID:{{ child.id }}
+DTSTAMP:{{ child.createdAt | date('Ymd\\THis') }}
+DTSTART;TZID=Europe/Paris:{{ child.startAt | date('Ymd\\THis') }}
+DTEND;TZID=Europe/Paris:{{ child.endAt | date('Ymd\\THis') }}
+SUMMARY:{{ child.summary }}
+TRANSP:{{ child.isTransparent }}
+CLASS:{{ child.classification }}
+ORGANIZER:{{ child.organizer }}
+EXDATE:{{ child.excludedDates }}
+DURATION:{{ child.duration }}
+ATTENDEE:{{ child.attendees }}
+CONTACT:{{ child.contacts }}
+URL:{{ child.url }}
+DESCRIPTION:{{ child.description }}
+COMMENT:{{ child.comment }}
+LAST-MODIFIED:{{ child.lastModifiedAt | date('Ymd\\THis') }}
+RESOURCES:{{ child.resources }}
+SEQUENCE:{{ child.revisionSequence }}
+EXDATE:{{ child.excludedDates }}
+RDATE:{{ child.includedDates }}
+LOCATION:{{ child.location }}
+CATEGORIES:{% for category in child.categories %}{% if loop.first %}{{ category }}{% else %},{{ category }}{% endif %}{% endfor %}
+RRULE: {{ child.includedRule }}
+END:VEVENT
+{% endfor %}
+
+
+END:VCALENDAR
+
 {% endautoescape %}

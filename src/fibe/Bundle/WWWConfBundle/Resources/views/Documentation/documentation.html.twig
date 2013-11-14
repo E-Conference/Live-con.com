@@ -1,0 +1,68 @@
+{% extends 'fibeWWWConfBundle::base.html.twig' %}
+
+{% block title %}fibeWWWConfBundle:Documentation:documentation{% endblock %}
+
+{% block body %}
+
+
+
+{{ parent() }}
+<div class="container">
+    <div class="row center">
+    <h1>Documentation</h1>
+   <div id="first">
+      Technical writers and corporate communicators are professionals whose field and work is documentation. Ideally, technical writers have a background in both the subject matter and also in writing and managing content (information architecture). Technical writers more commonly collaborate with subject matter experts (SMEs), such as engineers, medical professionals, or other types of clients to define and then create content (documentation) that meets the user's needs. Corporate communications includes other types of written documentation that is required for most companies.
+
+      Specializing documentation[edit]
+      Marketing Communications (MarCom): MarCom writers endeavor to convey the company's value proposition through a variety of print, electronic, and social media. This area of corporate writing is often engaged in responding to proposals.
+      Technical Communication (TechCom): Technical writers document a company's project or service. Technical publication include user guides, installation manuals, and troubleshooting/repair/replace procedures.
+      Legal Writing: This type of documentation is often prepared by attorneys or paralegals who could be in private practice or retained as corporate council.
+      Compliance documentation: This type of documentation codifies Standard Operating Procedures (SOPs), for any regulatory compliance needs, as for safety approval, taxation, financing, technical approval, etc.
+    </div>
+    <div id="third">
+      Technical writers and corporate communicators are professionals whose field and work is documentation. Ideally, technical writers have a background in both the subject matter and also in writing and managing content (information architecture). Technical writers more commonly collaborate with subject matter experts (SMEs), such as engineers, medical professionals, or other types of clients to define and then create content (documentation) that meets the user's needs. Corporate communications includes other types of written documentation that is required for most companies.
+
+      Specializing documentation[edit]
+      Marketing Communications (MarCom): MarCom writers endeavor to convey the company's value proposition through a variety of print, electronic, and social media. This area of corporate writing is often engaged in responding to proposals.
+      Technical Communication (TechCom): Technical writers document a company's project or service. Technical publication include user guides, installation manuals, and troubleshooting/repair/replace procedures.
+      Legal Writing: This type of documentation is often prepared by attorneys or paralegals who could be in private practice or retained as corporate council.
+      Compliance documentation: This type of documentation codifies Standard Operating Procedures (SOPs), for any regulatory compliance needs, as for safety approval, taxation, financing, technical approval, etc.
+    </div>
+    <div id="fourth">
+      Technical writers and corporate communicators are professionals whose field and work is documentation. Ideally, technical writers have a background in both the subject matter and also in writing and managing content (information architecture). Technical writers more commonly collaborate with subject matter experts (SMEs), such as engineers, medical professionals, or other types of clients to define and then create content (documentation) that meets the user's needs. Corporate communications includes other types of written documentation that is required for most companies.
+
+      Specializing documentation[edit]
+      Marketing Communications (MarCom): MarCom writers endeavor to convey the company's value proposition through a variety of print, electronic, and social media. This area of corporate writing is often engaged in responding to proposals.
+      Technical Communication (TechCom): Technical writers document a company's project or service. Technical publication include user guides, installation manuals, and troubleshooting/repair/replace procedures.
+      Legal Writing: This type of documentation is often prepared by attorneys or paralegals who could be in private practice or retained as corporate council.
+      Compliance documentation: This type of documentation codifies Standard Operating Procedures (SOPs), for any regulatory compliance needs, as for safety approval, taxation, financing, technical approval, etc.
+    </div>
+   <div id="second">
+   <h1>Second</h1>
+     Tools for documenting software[edit]
+      There are many types of software and applications used to create documentation.
+
+      SOFTWARE DOCUMENTATION FOLDER (SDF)
+
+      A common type of software document written by software engineers in the simulation industry is the SDF. When developing software for a simulator, which can range from embedded avionics devices to 3D terrain databases by way of full motion control systems, the engineer keeps a notebook detailing the development "the build" of the project or module. The document can be a wiki page, MS word document or other environment. They should contain a requirements section, an interface section to detail the communication interface of the software. Often a notes section is used to detail the proof of concept, and then track errors and enhancements. Finally, a testing section to document how the software was tested. This documents conformance to the client's requirements. The result is a detailed description of how the software is designed, how to build and install the software on the target device, and any known defects and work-arounds. This build document enables future developers and maintainers to come up to speed on the software in a timely manner, and also provides a roadmap to modifying code or searching for bugs.
+
+
+
+     
+   </div>
+
+{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script type="text/javascript">
+
+   $(document).ready(function() {
+   	console.log("{{anchor}}");
+   	var anchor = $("#{{anchor}}");
+   		//anchor.scrollLeft();
+   		$('html,body').animate({scrollTop: anchor.offset().top},'slow');
+  
+    });
+</script>
+
+{% endblock javascripts %}

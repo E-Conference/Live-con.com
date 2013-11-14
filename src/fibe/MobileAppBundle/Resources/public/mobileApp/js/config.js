@@ -83,7 +83,7 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						{
 							"datasource" : "eventDatasource",
 							"name" : "getConferenceEvent",
-						}
+						},
 						/*{
 							"datasource" : "eventDatasource",
 							"name" : "getConferenceTalk",
@@ -111,8 +111,12 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 						    "datasource" : "eventDatasource",
-						    "name" : "getConferenceSchedule",
+						    "name" : "getConferenceSchedule"
 						},
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getConferenceScheduleIcs"
+						}
 					]
 				},
 				"WhatsNext" : {
@@ -183,7 +187,11 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getEvent",
+							"name" : "getEvent"	
+						},
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getEventIcs"
 						}						
 					]
 				},
@@ -337,15 +345,27 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					]
 				},
 				
-				"Theme" : {
-					"hash" : "theme/:name",
-					"view" : "theme",
+				"Topics" : {
+					"hash" : "topics",
+					"view" : "topics",
 					"graphView" : "no",
-					"title": "Theme",
+					"title": "Topics",
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getEventbyTheme",
+							"name" : "getAllTopics",
+						},
+					]
+				},
+				"Topic" : {
+					"hash" : "topic/:name/*uri",
+					"view" : "topic",
+					"graphView" : "no",
+					"title": "Topic",
+					"commands" : [
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getTopic",
 						},
 					]
 				},
@@ -386,18 +406,6 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						{
 							"datasource" : "DblpDatasource",
 							"name" : "getExternPublicationAuthors",
-						}
-					]
-				},
-				"Keyword" : {
-					"hash" : "keyword/*uri",
-					"view" : "keyword",
-					"graphView" : "no",
-					"title": "Keyword",
-					"commands" : [
-					    {
-							"datasource" : "SemanticWebConferenceDatasource",
-							"name" : "getPublicationsByKeyword",
 						}
 					]
 				},
