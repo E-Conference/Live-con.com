@@ -114,6 +114,14 @@ class PaperRepository extends EntityRepository
             ;
         }
 
+         if(isset($params['topic_id'])) {
+            $qb
+                ->leftJoin('loc.topics', 'top')
+                ->andWhere('top.id = :topic_id')
+                ->setParameter('topic_id', $params['topic_id'])
+            ;
+        }
+
         if(isset($params['conference_id'])) {
             $qb
                 ->andWhere('loc.conference = :conference_id')

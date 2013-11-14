@@ -40,7 +40,7 @@ CalEvent.prototype.render = function (){
     // alert("render "+this.id+" "+this.allDay)
 
     renderedEvent = this;
-    renderedEvent.formatDate();
+    renderedEvent.formatDate(); 
     // render the event on the calendar
     if($calendar.fullCalendar('clientEvents',this.id).length <1){
       // alert("new calEvent for "+ this.id) 
@@ -58,6 +58,8 @@ CalEvent.prototype.render = function (){
       renderedEvent = new CalEvent(this);
       $calendar.fullCalendar('renderEvent',renderedEvent);
     }
+
+
 
 
     // var e = this;
@@ -87,6 +89,7 @@ CalEvent.prototype.persist = function(add){
       end   : this['end'],
       start : this['start']
     } 
+    console.debug("persisting",this)
     $.post(
       add=== true ? op.quickAddUrl : op.quickUpdateUrl,
       toSend,

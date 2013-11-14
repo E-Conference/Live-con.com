@@ -50,9 +50,13 @@ class DBImportController extends Controller
         $categoryEntities     = array();
         $topicEntities        = array();
         $organizationEntities = array();
-        $topicEntities      = array();
+        $topicEntities        = array();
         $proceedingEntities   = array();
 
+
+        $defaultCategory = $this->getDoctrine()
+                                   ->getRepository('fibeWWWConfBundle:topic')
+                                   ->findOneBy(array('name' => 'TalkEvent'));
         //categories color.
         $colorArray = array('lime', 'red', 'blue', 'orange', 'gold', 'coral', 'crimson', 'aquamarine', 'darkOrchid', 'forestGreen', 'peru','purple' ,'seaGreen'  );
         
@@ -79,7 +83,7 @@ class DBImportController extends Controller
                 $current = $topics[$i];  
                 $existsTest = $this->getDoctrine()
                                    ->getRepository('fibeWWWConfBundle:topic')
-                                   ->findOneBy(array('name' => $current['setName']));
+                                   ->findOneBy(array('name' => $defaultCategory));
                 if($existsTest!=null){
                   array_push($topicEntities,$existsTest); 
                   continue; //skip existing category

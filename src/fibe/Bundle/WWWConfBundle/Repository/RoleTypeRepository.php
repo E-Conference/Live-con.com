@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class RoleTypeRepository extends EntityRepository
 {
 
-		 /**
+    /**
      * getOrderedQueryBuilder
      *
      * @return QueryBuilder

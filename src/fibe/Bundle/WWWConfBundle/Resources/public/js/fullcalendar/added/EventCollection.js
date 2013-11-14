@@ -185,30 +185,77 @@ var EventCollection = {
     
     getBroCountRange : function(brothers){
       var startScript = moment()
-
+      var minLeft;
       var rtnArray = {};
+      var done     = [];
+      var remaining = jQuery.extend({},brothers);
+      var bro;
+      var curBro;
+      var baseCount;
       for (var i in brothers){
-        var curBro = brothers[i]; 
+        curBro = brothers[i]; 
+        console.log("curBro",curBro.id)
+        //create rtn object for curBro
+        if(!rtnArray[curBro.id])rtnArray[curBro.id] = {count:1,range:0,minLeft:Events[curBro.id].elem.position().left};
 
-        var count   = 0
-            ,range   = 0
-            ,minLeft = Events[curBro.id].elem.position().left
-            ;
-        for (var j in brothers){
-          var bro = brothers[j];
-          if(!curBro.isOutOf(bro,true)) {
-            count++;
-            if(rtnArray[bro.id]){
-              minLeft = Math.min(minLeft,rtnArray[bro.id].minLeft); 
-              rtnArray[bro.id].minLeft = minLeft;
+        baseCount = rtnArray[curBro.id].count;
 
-              range++;
-            }
-          } 
+        for (var j in remaining){
+          bro = remaining[j]; 
+
+          //ensure the bro is not himself
+          if(curBro.id===bro.id )continue;
+
+          //ensure the bro has never been read 
+          // if($.inArray(bro.id, done)!==-1)continue;
+
+          //ensure the bro is a real bro
+          if(curBro.isOutOf(bro,true))continue;
+
+          console.log("curBro ",curBro.id," discovering ",bro.id) 
+
+          minLeft = Math.min(rtnArray[curBro.id].minLeft,Events[bro.id].elem.position().left); 
+          
+          //update self properties
+          rtnArray[curBro.id].minLeft = minLeft;
+          rtnArray[curBro.id]["count"]++; 
+
+          //register bro as bro of curBro
+          rtnArray[bro.id] = {count:baseCount+1,range:rtnArray[curBro.id]["range"]+1,minLeft:minLeft}; 
+
+          //the bro has been read
+          // if( $.inArray(bro.id, done)=== -1)
+          // {
+          //   //the bro has been read and is a real bro of curBro
+          //   if($.inArray(bro.id, rtnArray[curBro.id].brosId)!==-1){
+          //     //do nothing 
+          //   }
+          //   //the bro has been read and was out of curBro
+          //   else
+          //   {
+          //     //do nothing 
+          //   }
+
+          // }
+          
+          //old alorithme
+          // if(!curBro.isOutOf(bro,true))
+          // {
+          //   if(!rtnArray[bro.id])rtnArray[bro.id] = {count:0,range:0,minLeft:Events[bro.id].elem.position().left}; 
+          //   rtnArray[curBro.id]["count"]++;
+          //   rtnArray[bro.id]["count"]++;
+
+          //   minLeft = Math.min(rtnArray[curBro.id].minLeft,rtnArray[bro.id].minLeft); 
+          //   rtnArray[bro.id].minLeft = minLeft;
+          //   rtnArray[curBro.id].minLeft = minLeft;
+
+          //   range++; 
+
+          // } 
         }
-        rtnArray[curBro.id] = {count:count,range:range
-          ,minLeft:minLeft
-        }; 
+        console.log(remaining)
+        delete remaining[i]
+        // done.push(curBro.id);
 
       }
         console.debug(moment().diff(startScript)+" to getBroCountRange")

@@ -178,6 +178,11 @@
           color: {{ mobile_app_config.TitleColorContent}} !important;
         }
 
+        .ui-li-divider{
+          background: {{ mobile_app_config.BGColorNavBar}} !important;
+          color: {{ mobile_app_config.TitleColorNavBar}} !important;
+        }
+
         /**********************   Footer ************************/
         #footer{
           background: {{ mobile_app_config.BGColorFooter}} !important;
@@ -192,10 +197,6 @@
 
         .button *{
           
-        }
-
-        .ui-li-divider{
-          background: {{ mobile_app_config.BGColorButton}} !important;
         }
 
         .content .ui-btn{
@@ -243,13 +244,24 @@
 
 
         /********************* Panel *******************/
-        #settings {
+        #settingsPanel {
             width: 200px;
             border: 1px solid #000;
             border-right: none;
             background: rgba(0,0,0,.5);
             margin: -1px 0;
+            color: {{ mobile_app_config.BGColorNavBar}};
         }
+
+        #bonusPanel {
+            width: 200px;
+            border: 1px solid #000;
+            border-right: none;
+            background: rgba(0,0,0,.5);
+            margin: -1px 0;
+            color: {{ mobile_app_config.BGColorNavBar}};
+        }
+
     </style>
   </head>
   <body>
