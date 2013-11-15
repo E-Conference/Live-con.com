@@ -386,6 +386,11 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						
 					}
 
+					JSONToken.organizations = [];
+					for(var j=0;j<dataXML[0].organizations.length;j++){
+					  	JSONToken.organizations[j]=  dataXML[0].organizations[j];
+					}
+
 				}
 				console.log(JSONToken);
 				StorageManager.pushCommandToStorage(currentUri,"getPerson",JSONToken);
@@ -431,6 +436,13 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								parameters.contentEl.append($('<a href='+parameters.JSONdata.twitter+'>'+parameters.JSONdata.twitter+'</a>'));    
 							}
 
+							if(_.size(parameters.JSONdata.organizations) > 0 ){
+								parameters.contentEl.append($('<h2>Organizations</h2>'));
+								$.each(parameters.JSONdata.organizations, function(i,organization){
+									ViewAdapterText.appendButton(parameters.contentEl,'#organization/'+Encoder.encode(organization.name)+'/'+Encoder.encode(organization.id), organization.name,{tiny : true});
+								});
+							}
+
 						}
 					}
 				} 
@@ -456,16 +468,10 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					JSONToken.country =  dataXML[0].country || "";
 					JSONToken.id =  dataXML[0].id || "";
 
-				/*	JSONToken.roles = {};
-					var i = 0;
-					for(var j=0;j<dataXML[0].roles.length;j++){
-						var currentRole= dataXML[0].roles[j];
-						if(!JSONToken.roles[currentRole.type]){
-							JSONToken.roles[currentRole.type] = [];
-						}
-						JSONToken.roles[currentRole.type].push(currentRole["event"]);
-						
-					}*/
+					JSONToken.members = [];
+					for(var j=0;j<dataXML[0].members.length;j++){
+					  	JSONToken.members[j]=  dataXML[0].members[j];
+					}
 
 				}
 				console.log(JSONToken);
@@ -490,23 +496,15 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								parameters.contentEl.append($('<h2>Country</h2>'));
 								parameters.contentEl.append($('<p>'+parameters.JSONdata.country+'</p>'));      
 							}
-						/*
-							if(parameters.JSONdata.roles) {
-								debugger;
-								for(var roleType in parameters.JSONdata.roles){
-									parameters.JSONdata.roles[roleType];
-									parameters.contentEl.append($('<h2>'+roleType+' at </h2>'));
-									ViewAdapterText.appendList(parameters.JSONdata.roles[roleType],
-													 {baseHref:'#event/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])},
-													  },
-													 "name",
-													 parameters.contentEl,
-													 {type:"Node",labelCllbck:function(str){return "person : "+str["id"];}});
-								};
-							
-								parameters.contentEl.append($('<a href='+parameters.JSONdata.twitter+'>'+parameters.JSONdata.twitter+'</a>'));    
-							}*/
+
+							if(_.size(parameters.JSONdata.members) > 0 ){
+								parameters.contentEl.append($('<h2>Members</h2>'));
+								$.each(parameters.JSONdata.members, function(i,member){
+									ViewAdapterText.appendButton(parameters.contentEl,'#person/'+Encoder.encode(member.name)+'/'+Encoder.encode(member.id), member.name,{tiny : true});
+								});
+								
+							}
+						
 
 						}
 					}
@@ -1098,7 +1096,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		                         	var LocationHtml= ''; 
 		                          
 		                          	if(parameters.name && parameters.name!="null" && parameters.name!=""){
-		                              LocationHtml = '<p>'+parameters.name+'</p>';
+		                              	LocationHtml = '<p>'+parameters.name+'</p>';
 		                            }else{
 			                             // LocationHtml = '<p>'+bigEvents[eventType][i].locationLabel+'</p>';
 			                              LocationHtml += '<p><a href="#schedule/'+Encoder.encode(bigEvents[eventType][i].locationLabel)+'" data-role="button" data-icon="search" data-inline="true">'+bigEvents[eventType][i].locationLabel+'</a></p>';

@@ -47,7 +47,11 @@
                         <th>Authors</th>
                         <td>
                              {% for author in entity.authors %}
-                                <li>{{ author.name|e }}</li>
+                                <li>
+                                   <a href="{{ path('schedule_person_show', { 'id': author.id }) }}">
+                                     {{ author.name|e }}
+                                    </a>
+                                </li>
                              {% endfor %}
                         </td>
                     </tr>

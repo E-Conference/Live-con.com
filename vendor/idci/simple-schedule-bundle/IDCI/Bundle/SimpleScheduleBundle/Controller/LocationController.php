@@ -271,7 +271,7 @@ class LocationController extends Controller
      * Deletes a Location entity.
      *
      * @Route("/{id}/delete", name="schedule_location_delete")
-     * @Method("POST")
+     * @Method({"POST", "DELETE"})
      */
     public function deleteAction(Request $request, $id)
     {

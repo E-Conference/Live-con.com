@@ -34,7 +34,22 @@
                     <tr>
                         <th>Organization</th>
                         <td> {% for organization in entity.organizations %}
-                              <li>{{ organization.name|e }}</li>
+                              <li>
+                                <a href="{{ path('schedule_organization_show', { 'id': organization.id }) }}">
+                                   {{ organization.name|e }}
+                                </a>
+                              </li>
+                              {% endfor %}
+                        </td>
+                    </tr>
+                     <tr>
+                        <th>Papers</th>
+                        <td> {% for paper in entity.papers %}
+                              <li>
+                                <a href="{{ path('schedule_paper_show', { 'id': paper.id }) }}">
+                                    {{ paper.title|e }}
+                                </a>
+                              </li>
                               {% endfor %}
                         </td>
                     </tr>

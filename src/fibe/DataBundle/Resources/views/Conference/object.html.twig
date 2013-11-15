@@ -1,0 +1,56 @@
+{% block title %}All Conferences{{ parent() }}{% endblock title %}
+{% block body %}
+
+<div class="container">
+    <div class="row center">
+        <div class="page-header">
+            <div class="page-header well">
+                    
+                <div class="row">
+                    <div class="col-lg-4">
+                        <ul>
+                            <li> {{ entity.acronym }}</li>
+                            <li>  {{ entity.papers|length }} Papers
+                                <ul>
+                                     {% for paper in entity.papers %}
+                                         <li><a href="{{ path('object', { 'slug': paper.slug, 'object': 'Paper' }) }}">{{ paper.title }}</a></li>
+                                     {% endfor %}
+                               </ul>
+                            </li>
+                            <li>  {{ entity.persons|length }} Persons
+                                <ul>
+                                     {% for person in entity.persons %}
+                                         <li><a href="{{ path('object', { 'slug': person.slug, 'object': 'Person' }) }}">{{ person.name }}</a></li>
+                                     {% endfor %}
+                               </ul>
+                            </li>
+                            <li>  {{ entity.topics|length }} Topics
+                                <ul>
+                                     {% for topic in entity.topics %}
+                                         <li><a href="{{ path('object', { 'slug': topic.slug, 'object': 'Topic' }) }}">{{ topic.name }}</a></li>
+                                     {% endfor %}
+                               </ul>
+                            </li>
+                             <li>  {{ entity.events|length }} Events
+                                <ul>
+                                     {% for event in entity.events %}
+                                         <li><a href="{{ path('object', { 'slug': event.slug, 'object': 'ConfEvent' }) }}">{{ event.summary }}</a></li>
+                                     {% endfor %}
+                               </ul>
+                            </li>
+                            <li> {{ entity.location.name }}</li>
+                        </ul> 
+                    </div> 
+                </div>      
+            </div> 
+        </div>
+    </div>
+</div>
+{% endblock body %}
+
+
+
+
+
+
+

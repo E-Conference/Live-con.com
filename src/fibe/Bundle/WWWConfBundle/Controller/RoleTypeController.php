@@ -171,7 +171,7 @@ class RoleTypeController extends Controller
      * Deletes a RoleType entity.
      *
      * @Route("/{id}", name="schedule_roletype_delete")
-     * @Method("DELETE")
+     * @Method({"POST", "DELETE"})
      */
     public function deleteAction(Request $request, $id)
     {

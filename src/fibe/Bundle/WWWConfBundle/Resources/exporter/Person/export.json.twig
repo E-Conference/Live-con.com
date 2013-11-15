@@ -29,5 +29,16 @@
     {% endfor %}
     ],
     {% endspaceless %}
-    
+     {% spaceless %}
+     "organizations":
+            [
+            {% for organization in entity.organizations %}
+                {% if loop.first %}
+                { "id": "{{ organization.id }}", "name": "{{ organization.name}}"}
+                {% else %}
+                ,{ "id": "{{ organization.id }}", "name": "{{ organization.name}}"}
+                {% endif %}
+            {% endfor %}
+            ] 
+    {% endspaceless %}
 } 

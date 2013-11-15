@@ -12,6 +12,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 use fibe\Bundle\WWWConfBundle\Entity\Person;
 use fibe\Bundle\WWWConfBundle\Form\PersonType;
 
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Pagerfanta;
+use Pagerfanta\Exception\NotValidCurrentPageException;
+
 /**
  * Person controller.
  * @Route("/person")
@@ -25,16 +29,26 @@ class PersonController extends Controller
      * @Template()
      */
      
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $currentConf = $this->getUser()->getCurrentConf();
-        $entities = $currentConf->getPersons();
+        $entities = $currentConf->getPersons()->toArray();
 
-        return $this->render('fibeWWWConfBundle:Person:index.html.twig', array(
-            'entities' => $entities,
-        ));
+        $adapter = new ArrayAdapter($entities);
+        $pager = new PagerFanta($adapter);
+        $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
+
+        try {
+            $pager->setCurrentPage($request->query->get('page', 1));
+        } catch (NotValidCurrentPageException $e) {
+            throw new NotFoundHttpException();
+        }
+
+        return array(
+            'pager' => $pager,
+        );
     }
 
     /**
@@ -51,6 +65,13 @@ class PersonController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setConference($this->getUser()->getCurrentConf());
+
+            foreach($entity->getPapers() as $paper) { 
+                $paper->addAuthor($entity);
+                //$entity->addMember($person);
+                $em->persist($paper);
+            }
+
             $em->persist($entity);
             $em->flush();
 
@@ -144,9 +165,23 @@ class PersonController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createForm(new PersonType($this->getUser()), $entity);
-        $editForm->bind($request);
+        $papersToRemove = $entity->getPapers();
+        
+        foreach($papersToRemove as $paper) { 
+            $paper->removeAuthor($entity);
+            $entity->removePaper($paper);
+            $em->persist($paper);
+        }
 
+        $editForm->bind($request);
+        $paperToAdd = $entity->getPapers();
         if ($editForm->isValid()) {
+
+            foreach($paperToAdd as $paper) { 
+                $paper->addAuthor($entity);
+                //$entity->addMember($person);
+                $em->persist($paper);
+            }
             $em->persist($entity);
             $em->flush();
 
@@ -163,7 +198,7 @@ class PersonController extends Controller
     /**
      * Deletes a Person entity.
      * @Route("/{id}/delete", name="schedule_person_delete")
-     * @Method("POST")
+     * @Method({"POST", "DELETE"})
      */
     public function deleteAction(Request $request, $id)
     {
@@ -182,7 +217,7 @@ class PersonController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('schedule_person'));
+        return $this->redirect($this->generateUrl('schedule_person_index'));
     }
 
     /**

@@ -9,6 +9,8 @@ use IDCI\Bundle\SimpleScheduleBundle\Entity\Event;
 use fibe\Bundle\WWWConfBundle\Entity\Person;
 use fibe\Bundle\WWWConfBundle\Entity\Paper;
 
+use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
+
 
 /**
  * ConfEvent
@@ -16,6 +18,7 @@ use fibe\Bundle\WWWConfBundle\Entity\Paper;
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity
  * @ORM\Entity(repositoryClass="IDCI\Bundle\SimpleScheduleBundle\Repository\EventRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class ConfEvent extends Event
 {
@@ -80,6 +83,11 @@ class ConfEvent extends Event
      * @ORM\Column(name="is_mainConfEvent", type="boolean")
      */
      private $isMainConfEvent = false;
+
+     /**
+     * @ORM\Column(type="string", length=128, nullable=true)
+     */
+    protected $slug;
      
     /**
      * Constructor
@@ -93,6 +101,50 @@ class ConfEvent extends Event
         $this->xProperties = new \Doctrine\Common\Collections\ArrayCollection();
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+    /**
+     * Slugify
+     * @ORM\PrePersist()
+     */
+    public function slugify()
+    {
+        $this->setSlug(StringTools::slugify($this->getId().$this->getSummary()));
+    }
+
+    /**
+     * onUpdate
+     *
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function onUpdate()
+    {
+        $this->slugify();
+    }
+
+     /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return ConfEvent
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
 
     /** computeIsAllDay
      *

@@ -86,9 +86,9 @@ class Person
 
     /**
      * Organizations
-     * Organizations where the organization is member
+     * 
      *
-     * @ORM\ManyToMany(targetEntity="Organization", inversedBy="members", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Organization", inversedBy="members", cascade={"persist","merge"})
      * @ORM\JoinTable(name="member",
      *     joinColumns={@ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="Cascade")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="Cascade")})
@@ -157,6 +157,11 @@ class Person
      * 
      */
     protected $accounts;
+
+     /**
+     * @ORM\Column(type="string", length=128, nullable=true)
+     */
+    protected $slug;
     
     /**
      * Constructor
@@ -186,7 +191,53 @@ class Person
     {
         $this->setName($this->firstName." ".$this->familyName);
     }
+
+     /**
+     * Slugify
+     * 
+     */
+    public function slugify()
+    {
+        $this->setSlug(StringTools::slugify($this->getId().$this->getName()));
+    }
+
+    /**
+     * onUpdate
+     *
+     * @ORM\PostPersist()
+     * @ORM\PreUpdate()
+     */
+    public function onUpdate()
+    {
+        $this->slugify();
+    }
+
+     /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return ConfEvent
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
     
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    
+   
+
     /**
      * Get id
      *
@@ -199,8 +250,6 @@ class Person
 
     /**
      * Set name
-     *  / \
-     * / ! \  auto built with the concatenation of first and last name
      *
      * @param string $name
      * @return Person
@@ -245,7 +294,6 @@ class Person
         return $this->familyName;
     }
 
-
     /**
      * Set firstName
      *
@@ -269,11 +317,33 @@ class Person
         return $this->firstName;
     }
 
-  
+    /**
+     * Set based_near
+     *
+     * @param string $basedNear
+     * @return Person
+     */
+    public function setBasedNear($basedNear)
+    {
+        $this->based_near = $basedNear;
+    
+        return $this;
+    }
+
+    /**
+     * Get based_near
+     *
+     * @return string 
+     */
+    public function getBasedNear()
+    {
+        return $this->based_near;
+    }
+
     /**
      * Set description
      *
-     * @param integer $description
+     * @param string $description
      * @return Person
      */
     public function setDescription($description)
@@ -286,14 +356,13 @@ class Person
     /**
      * Get description
      *
-     * @return integer 
+     * @return string 
      */
     public function getDescription()
     {
         return $this->description;
     }
 
-  
     /**
      * Set age
      *
@@ -362,7 +431,6 @@ class Person
     {
         return $this->openId;
     }
-
 
     /**
      * Set email
@@ -434,29 +502,6 @@ class Person
     }
 
     /**
-     * Set based_near
-     *
-     * @param string $based_near
-     * @return Person
-     */
-    public function setBased_near($based_near)
-    {
-        $this->based_near = $based_near;
-    
-        return $this;
-    }
-
-    /**
-     * Get based_near
-     *
-     * @return string 
-     */
-    public function getBased_near()
-    {
-        return $this->based_near;
-    }
-
-    /**
      * Add papers
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\Paper $papers
@@ -490,30 +535,30 @@ class Person
     }
 
     /**
-     * Add organization
+     * Add organizations
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Organization $organization
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Organization $organizations
      * @return Person
      */
-    public function addOrganization(\fibe\Bundle\WWWConfBundle\Entity\Organization $organization)
+    public function addOrganization(\fibe\Bundle\WWWConfBundle\Entity\Organization $organizations)
     {
-        $this->organizations[] = $organization;
+        $this->organizations[] = $organizations;
     
         return $this;
     }
 
     /**
-     * Remove organization
+     * Remove organizations
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Organization $organization
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Organization $organizations
      */
-    public function removeOrganization(\fibe\Bundle\WWWConfBundle\Entity\Organization $organization)
+    public function removeOrganization(\fibe\Bundle\WWWConfBundle\Entity\Organization $organizations)
     {
-        $this->organizations->removeElement($organization);
+        $this->organizations->removeElement($organizations);
     }
 
     /**
-     * Get organization
+     * Get organizations
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
@@ -611,6 +656,4 @@ class Person
     {
         return $this->accounts;
     }
-
-   
 }

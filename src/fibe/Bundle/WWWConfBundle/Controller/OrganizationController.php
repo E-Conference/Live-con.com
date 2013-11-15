@@ -10,6 +10,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use fibe\Bundle\WWWConfBundle\Entity\Organization;
 use fibe\Bundle\WWWConfBundle\Form\OrganizationType;
 
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Pagerfanta;
+use Pagerfanta\Exception\NotValidCurrentPageException;
+
 /**
  * Organization controller.
  *
@@ -24,15 +28,25 @@ class OrganizationController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $conf = $this->getUser()->getCurrentConf();
-        $entities = $conf->getOrganizations();
+        $entities = $conf->getOrganizations()->toArray();
+
+        $adapter = new ArrayAdapter($entities);
+        $pager = new PagerFanta($adapter);
+        $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
+
+        try {
+            $pager->setCurrentPage($request->query->get('page', 1));
+        } catch (NotValidCurrentPageException $e) {
+            throw new NotFoundHttpException();
+        }
 
         return array(
-            'entities' => $entities,
+            'pager' => $pager,
         );
     }
 
@@ -52,6 +66,13 @@ class OrganizationController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setConference($this->getUser()->getCurrentConf());
+
+            foreach($entity->getMembers() as $person) { 
+                $person->addOrganization($entity);
+                //$entity->addMember($person);
+                $em->persist($person);
+            }
+
             $em->persist($entity);
             $em->flush();
 
@@ -153,14 +174,31 @@ class OrganizationController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createForm(new OrganizationType($this->getUser()), $entity);
+        $personToRemove = $entity->getMembers();
+       
+        
+        foreach($personToRemove as $person) { 
+            $person->removeOrganization($entity);
+            $entity->removeMember($person);
+            $em->persist($person);
+        }
+        
         $editForm->bind($request);
-
+        $personToAdd = $entity->getMembers();
         if ($editForm->isValid()) {
+    
+            //Add members selected in forms to the current organization thank to the woning sir
+            foreach($personToAdd as $person) { 
+                $person->addOrganization($entity);
+                //$entity->addMember($person);
+                $em->persist($person);
+            }
+
             $em->persist($entity);
             $em->flush();
             return $this->redirect($this->generateUrl('schedule_organization_index'));
 
-            return $this->redirect($this->generateUrl('schedule_organization_edit', array('id' => $id)));
+            //return $this->redirect($this->generateUrl('schedule_organization_edit', array('id' => $id)));
         }
 
         return array(
@@ -174,7 +212,7 @@ class OrganizationController extends Controller
      * Deletes a Organization entity.
      *
      * @Route("/{id}/delete", name="schedule_organization_delete")
-     * @Method("DELETE")
+     * @Method({"POST", "DELETE"})
      */
     public function deleteAction(Request $request, $id)
     {
