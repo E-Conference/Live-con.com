@@ -216,57 +216,89 @@ var EventCollection = {
       var brothers = brothers;
       var minLeft;
       var done     = []; 
-      var remaining = brothers.slice(0);
       var bro;
       var curBro;
-      var baseCount;
-      var rtnArray = EventCollection.rtnArray; 
+      var baseCount; 
 
       // console.log("getBroCountRange : brothers before = ",brothers);
-      if(EventCollection.eventToRender){ 
-
-        // var brothersTmp = brothers.slice(0);
-        var eventToRender = Events[EventCollection.eventToRender.id];  
-        brothers = [];
+      // TODO children
+      // TODO ghost bro
+      if(EventCollection.eventToRender){
         
-        // var brothersTmp = brothers.slice(0);
-        var brothersTmp = EventCollection.getChildren(Events[eventToRender.parent.id], {concat:true,recursive:false,onlyEvent:true,noSidebar : true}); 
+        var brothersTmp = brothers.slice(0);
+        brothers = [];
+        //compute days to render
+        var eventToRender = Events[EventCollection.eventToRender.id]; 
+        var oldDayToRender = {
+          start:moment(EventCollection.eventToRender.oldStart).startOf('day')
+          ,end :moment(EventCollection.eventToRender.oldEnd).endOf('day')
+        };
+        var newDayToRender = {
+          start:moment(eventToRender.start).startOf('day')
+          ,end:moment(eventToRender.end).endOf('day')
+        };
 
-        // alert(moment(eventToRender.start).format())
-        // console.log("#######affecting "+eventToRender.title);
-        console.log("#######affecting "+eventToRender.title);
-        delete rtnArray[eventToRender.id];
-        brothers.push(eventToRender)
         //compute affected events
         for(var i in brothersTmp){
           var e = brothersTmp[i]; 
           // alert(e.title)
           if( e.id == mainConfEvent.id  )continue; 
-          if( e.id == eventToRender.id  )continue; 
-          if(!e.isOutOf(eventToRender) || !e.isOutOf({start:EventCollection.eventToRender.oldStart,end:EventCollection.eventToRender.oldEnd})){
-            console.log("#######affecting "+e.title);
-            delete rtnArray[e.id];
+          // if( e.id == eventToRender.id  )continue; 
+          if(!e.isOutOf(oldDayToRender) || !e.isOutOf(newDayToRender) ){
+            console.log("#######affecting "+e.id);
+            delete EventCollection.rtnArray[e.id];
             brothers.push(e);
           }
         }
-        EventCollection.eventToRender = undefined;
-      }
-      console.log("getBroCountRange : brothers = ",brothers);
-      console.log("rtnArray = ",rtnArray);
-      console.log("----------------------------------------------------");
 
-      for (var i in brothers){
-        curBro = brothers[i];  
+        // EventCollection.eventToRender = undefined; 
+
+
+        // // var brothersTmp = brothers.slice(0);
+        // var eventToRender = Events[EventCollection.eventToRender.id];  
+        // brothers = [];
+        
+        // // var brothersTmp = brothers.slice(0);
+        // var brothersTmp = EventCollection.getChildren(Events[eventToRender.parent.id], {concat:true,recursive:false,onlyEvent:true,noSidebar : true}); 
+
+        // // alert(moment(eventToRender.start).format())
+        // // console.log("#######affecting "+eventToRender.title);
+        // //compute affected events
+        // for(var i in brothersTmp){
+        //   var e = brothersTmp[i]; 
+        //   // alert(e.title)
+        //   if( e.id == mainConfEvent.id  )continue; 
+        //   // if( e.id == eventToRender.id  )continue; 
+        //   if(!e.isOutOf(eventToRender) || !e.isOutOf({start:EventCollection.eventToRender.oldStart,end:EventCollection.eventToRender.oldEnd})){
+        //     console.log("#######affecting "+e.id);
+        //     delete EventCollection.rtnArray[e.id];
+        //     brothers.push(e);
+        //   }
+        // }
+        // // console.log("#######affecting "+eventToRender.id);
+        // // delete EventCollection.rtnArray[eventToRender.id];
+        // // brothers.push(eventToRender)
+        // EventCollection.eventToRender = undefined; 
+      }
+      console.log("----------------------------------------------------");
+      console.log("affected = ",brothers);
+      console.log("remaining = ",remaining);
+      console.log("non affected : ",EventCollection.rtnArray);
+      console.log("----------------------------------------------------");
+      var remaining = brothers.slice(0);
+
+      for (var i in remaining){
+        curBro = remaining[i];  
         // console.log("curBro",curBro.id)
         //create rtn object for curBro
-        if(!rtnArray[curBro.id])rtnArray[curBro.id] = {count:1,range:0,minLeft:Events[curBro.id].elem.position().left};
+        if(!EventCollection.rtnArray[curBro.id])EventCollection.rtnArray[curBro.id] = {count:1,range:0,minLeft:Events[curBro.id].elem.position().left};
 
-        baseCount = rtnArray[curBro.id].count;
+        baseCount = EventCollection.rtnArray[curBro.id].count;
 
         for (var j in remaining){
           bro = remaining[j]; 
 
-          //ensure the bro is not himself
+          //ensure the bro is not itself
           if(curBro.id===bro.id )continue;
 
           //ensure the bro has never been read 
@@ -277,20 +309,20 @@ var EventCollection = {
 
           // console.log("curBro ",curBro.id," discovering ",bro.id) 
 
-          minLeft = Math.min(rtnArray[curBro.id].minLeft,Events[bro.id].elem.position().left); 
+          minLeft = Math.min(EventCollection.rtnArray[curBro.id].minLeft,Events[bro.id].elem.position().left); 
           
           //update self properties
-          rtnArray[curBro.id].minLeft = minLeft;
-          rtnArray[curBro.id]["count"]++; 
+          EventCollection.rtnArray[curBro.id].minLeft = minLeft;
+          EventCollection.rtnArray[curBro.id]["count"]++; 
 
           //register bro as bro of curBro
-          rtnArray[bro.id] = {count:baseCount+1,range:rtnArray[curBro.id]["range"]+1,minLeft:minLeft}; 
+          EventCollection.rtnArray[bro.id] = {count:baseCount+1,range:EventCollection.rtnArray[curBro.id]["range"]+1,minLeft:minLeft}; 
 
           //the bro has been read
           // if( $.inArray(bro.id, done)=== -1)
           // {
           //   //the bro has been read and is a real bro of curBro
-          //   if($.inArray(bro.id, rtnArray[curBro.id].brosId)!==-1){
+          //   if($.inArray(bro.id, EventCollection.rtnArray[curBro.id].brosId)!==-1){
           //     //do nothing 
           //   }
           //   //the bro has been read and was out of curBro
@@ -304,13 +336,13 @@ var EventCollection = {
           //old alorithme
           // if(!curBro.isOutOf(bro,true))
           // {
-          //   if(!rtnArray[bro.id])rtnArray[bro.id] = {count:0,range:0,minLeft:Events[bro.id].elem.position().left}; 
-          //   rtnArray[curBro.id]["count"]++;
-          //   rtnArray[bro.id]["count"]++;
+          //   if(!EventCollection.rtnArray[bro.id])EventCollection.rtnArray[bro.id] = {count:0,range:0,minLeft:Events[bro.id].elem.position().left}; 
+          //   EventCollection.rtnArray[curBro.id]["count"]++;
+          //   EventCollection.rtnArray[bro.id]["count"]++;
 
-          //   minLeft = Math.min(rtnArray[curBro.id].minLeft,rtnArray[bro.id].minLeft); 
-          //   rtnArray[bro.id].minLeft = minLeft;
-          //   rtnArray[curBro.id].minLeft = minLeft;
+          //   minLeft = Math.min(EventCollection.rtnArray[curBro.id].minLeft,EventCollection.rtnArray[bro.id].minLeft); 
+          //   EventCollection.rtnArray[bro.id].minLeft = minLeft;
+          //   EventCollection.rtnArray[curBro.id].minLeft = minLeft;
 
           //   range++; 
 
@@ -321,9 +353,8 @@ var EventCollection = {
         // done.push(curBro.id);
 
       }
-      console.log("bro count range",rtnArray)
-      EventCollection.rtnArray = rtnArray;
-      return rtnArray;
+      console.log("bro count range",EventCollection.rtnArray) 
+      return EventCollection.rtnArray;
     },
 
 

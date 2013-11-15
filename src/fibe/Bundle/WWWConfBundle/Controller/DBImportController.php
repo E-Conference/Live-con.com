@@ -408,15 +408,15 @@ class DBImportController extends Controller
 
         //finally, make sure every events are at least child of the main conf event
         
-        // $confEvents = $wwwConf->getEvents(); 
-        // foreach ($confEvents as $event) {
-        //     if(!$event->getParent()){
-        //         $event->setParent($mainConfEvent);
-        //         $em->persist($event);
-        //     }
-        // }
-        // $mainConfEvent->setParent(null);
-        // $em->persist($mainConfEvent);
+        $confEvents = $wwwConf->getEvents(); 
+        foreach ($confEvents as $event) {
+            if(!$event->getParent()){
+                $event->setParent($mainConfEvent);
+                $em->persist($event);
+            }
+        }
+        $mainConfEvent->setParent(null);
+        $em->persist($mainConfEvent);
         
         $em->flush();
 
