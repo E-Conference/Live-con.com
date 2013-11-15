@@ -346,6 +346,7 @@
                                 Events[ev.id] = ev; 
                                 ev.setParent(mainConfEvent);
                                 ev.updateParentDate();
+                                EventCollection.eventToRender = {id:ev["id"],oldStart:ev.start,oldEnd:ev.end}; 
                                 ev.render();
                                 // $calendar.fullCalendar('renderEvent',ev); // 3rd arg make the event "stick"
                             },
