@@ -114,7 +114,7 @@ class ScheduleController extends Controller
 
                 $em->persist($xprop);  
                 $em->flush();
-
+                
                 $JSONArray['id'] = $event->getId();
                 $JSONArray['IsSuccess'] = true;
                 $JSONArray['Msg'] = "add success"; 

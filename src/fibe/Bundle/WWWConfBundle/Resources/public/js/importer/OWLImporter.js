@@ -174,7 +174,7 @@ function run(url,callback,fallback){
             //allDay events
             for(var i=0;i<events.length;i++){
                 var event = events[i];
-                if(event['setStartAt']!=undefined){
+                if(event['setStartAt']){
                     
                     //allDay events
                     if(moment(event['setStartAt']).dayOfYear() != moment(event['setEndAt']).dayOfYear()){
@@ -197,8 +197,11 @@ function run(url,callback,fallback){
                     }else
                     {
                         delete event['setParent'];
-                        event['setEndAt'] = event['setStartAt'] = defaultDate;
+                        event['setEndAt'] = event['setStartAt'] = defaultDate; 
 
+                        if(event['mainConferenceEvent'] ){
+                            event['setEndAt'] = moment().hour(0).minute(0).second(0).millisecond(0).add('d', 1).format('YYYY-MM-DDTHH:mm:ss Z');
+                        }
                     }
                 }
             }

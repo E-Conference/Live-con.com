@@ -226,10 +226,9 @@ class ConfEventController extends Controller
             }
 
             $children = $entity->getChildren();
-            $mainConfEvent = $this->getUser()->getCurrentConf()->getMainConfEvent();
-            echo ($mainConfEvent->getSummary()+" ==  "+$entity->getSummary());
-            echo ($mainConfEvent == $entity);
-            if($mainConfEvent == $entity){
+            $mainConfEvent = $this->getUser()->getCurrentConf()->getMainConfEvent(); 
+
+            if($mainConfEvent->getId() ==  $entity->getId()){
                 $this->container->get('session')->getFlashBag()->add(
                      'error',
                      'Sorry, you cannot delete the Conference Event'

@@ -243,14 +243,14 @@ class DBImportController extends Controller
                 }else{
                     array_push($categoryEntities,$defaultCategory);  
                 }    
-                echo $current['setName']. " don't exists<br/>";
+                // echo $current['setName']. " don't exists<br/>";
 
                 
 
             }  
-            for ($i=0; $i < count($categoryEntities); $i++) { 
-                echo $i. " " . $categoryEntities[$i]->getName()."<br/>";
-            } 
+            // for ($i=0; $i < count($categoryEntities); $i++) { 
+            //     echo $i. " " . $categoryEntities[$i]->getName()."<br/>";
+            // } 
             $entities = null;
         }
 
@@ -271,18 +271,9 @@ class DBImportController extends Controller
             for($i=0;$i<count($entities);$i++){
                 $entity= new Event();
                 $current = $entities[$i]; 
+                echo" TAMERE " . $setter;
                 foreach ($current as $setter => $value) {
-
-                    if($setter=="setParent")continue;
-
-                    if($setter=="mainConferenceEvent"){ 
-                        $wwwConf->setMainConfEvent($entity);
-                        $entity->setIsMainConfEvent(true);
-                        $em->remove($mainConfEvent);
-                        $mainConfEvent = $entity;
-                        $em->persist($wwwConf);
-                        continue;
-                    }
+                    echo" TAMERE " . $setter;
 
                     if($setter=="setStartAt" || $setter=="setEndAt"){
                         $date= explode(' ', $value); 
@@ -295,7 +286,7 @@ class DBImportController extends Controller
                     
                     if($setter=="addCategorie"){
                         if(count($categoryEntities) <= $value){
-                            echo count($categoryEntities)." ".$value." ".$entity->getSummary()."<br/>";
+                            // echo count($categoryEntities)." ".$value." ".$entity->getSummary()."<br/>";
                             $value = $defaultCategory;
                         }else{
                             $value=$categoryEntities[$value];
@@ -315,6 +306,16 @@ class DBImportController extends Controller
                         $value=$proceedingEntities[$value[0]];   
                     }
                      
+                    if($setter=="setParent"){continue;}
+
+                    if($setter=="mainConferenceEvent"){ 
+                        $wwwConf->setMainConfEvent($entity);
+                        $entity->setIsMainConfEvent(true);
+                        $em->remove($mainConfEvent);
+                        $mainConfEvent = $entity;
+                        continue;
+                    }
+
 
                     if(is_array($value)){
                         switch ($setter) {
@@ -403,6 +404,7 @@ class DBImportController extends Controller
          
         $mainConfEvent->setParent(null);
         $em->persist($mainConfEvent);
+        $em->persist($wwwConf);
 
         //finally, make sure every events are at least child of the main conf event
         

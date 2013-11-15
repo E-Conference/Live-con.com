@@ -6,7 +6,7 @@ function Sidebar(){
         this.setInstantEvents = setInstantEvents; 
         this.setSidebarEvent = setSidebarEvent; 
  
-        var eventHtml =  "<div class='external-event fc-event-draggable'></div>";
+        var eventHtml =  "<div class='external-event fc-event fc-event-draggable'></div>";
         var $sidebarTmp = $(eventHtml);
         function setInstantEvents(instant_events){
           $sidebar.html("");  

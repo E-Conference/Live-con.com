@@ -8,7 +8,7 @@ var EventCollection = {
        * events that need an UI update
        * @type {CalEvent}
        */
-      eventsToRender:[],
+      eventToRender:undefined,
 
 
       /*-----------------------------------------------------------------------------------------------------*/
@@ -132,12 +132,11 @@ var EventCollection = {
     getToppestParent : function (view){ 
         var toppestParent = []; 
 
-        var tmp =  EventCollection.getChildren(mainConfEvent, {concat:true,recursive:false,onlyEvent:true,noSidebar:true});
-
+        var tmp =  EventCollection.getChildren(mainConfEvent, {recursive:false,onlyEvent:true,noSidebar:true}); 
         //ignore allday events
         for(var i in tmp){
           var event = tmp[i];
-          if(event.allDay){
+          if(event.allDay === true){
             toppestParent = toppestParent.concat(EventCollection.getToppestNonAllDayChildren(event)); 
           }else{
             toppestParent.push(event);
@@ -197,7 +196,7 @@ var EventCollection = {
     getToppestNonAllDayChildren : function(parent)
     {
         var toppestNonAllDayChildren = []; 
-        var tmp = EventCollection.getChildren(parent, {concat:true,recursive:false,onlyEvent:true,noSidebar:true});
+        var tmp = EventCollection.getChildren(parent, {recursive:false,onlyEvent:true,noSidebar:true});
         for(var i in tmp){
           var event = tmp[i];
           if(event.allDay){
@@ -211,19 +210,54 @@ var EventCollection = {
 
         return toppestNonAllDayChildren;
     },
-    
-    getBroCountRange : function(brothers){
-      var startScript = moment()
+    rtnArray:{},
+    getBroCountRange : function(brothers){ 
+      if(brothers.length==0)return false;
+      var brothers = brothers;
       var minLeft;
-      var rtnArray = {};
-      var done     = [];
-      var remaining = jQuery.extend({},brothers);
+      var done     = []; 
+      var remaining = brothers.slice(0);
       var bro;
       var curBro;
       var baseCount;
+      var rtnArray = EventCollection.rtnArray; 
+
+      // console.log("getBroCountRange : brothers before = ",brothers);
+      if(EventCollection.eventToRender){ 
+
+        // var brothersTmp = brothers.slice(0);
+        var eventToRender = Events[EventCollection.eventToRender.id];  
+        brothers = [];
+        
+        // var brothersTmp = brothers.slice(0);
+        var brothersTmp = EventCollection.getChildren(Events[eventToRender.parent.id], {concat:true,recursive:false,onlyEvent:true,noSidebar : true}); 
+
+        // alert(moment(eventToRender.start).format())
+        // console.log("#######affecting "+eventToRender.title);
+        console.log("#######affecting "+eventToRender.title);
+        delete rtnArray[eventToRender.id];
+        brothers.push(eventToRender)
+        //compute affected events
+        for(var i in brothersTmp){
+          var e = brothersTmp[i]; 
+          // alert(e.title)
+          if( e.id == mainConfEvent.id  )continue; 
+          if( e.id == eventToRender.id  )continue; 
+          if(!e.isOutOf(eventToRender) || !e.isOutOf({start:EventCollection.eventToRender.oldStart,end:EventCollection.eventToRender.oldEnd})){
+            console.log("#######affecting "+e.title);
+            delete rtnArray[e.id];
+            brothers.push(e);
+          }
+        }
+        EventCollection.eventToRender = undefined;
+      }
+      console.log("getBroCountRange : brothers = ",brothers);
+      console.log("rtnArray = ",rtnArray);
+      console.log("----------------------------------------------------");
+
       for (var i in brothers){
-        curBro = brothers[i]; 
-        console.log("curBro",curBro.id)
+        curBro = brothers[i];  
+        // console.log("curBro",curBro.id)
         //create rtn object for curBro
         if(!rtnArray[curBro.id])rtnArray[curBro.id] = {count:1,range:0,minLeft:Events[curBro.id].elem.position().left};
 
@@ -241,7 +275,7 @@ var EventCollection = {
           //ensure the bro is a real bro
           if(curBro.isOutOf(bro,true))continue;
 
-          console.log("curBro ",curBro.id," discovering ",bro.id) 
+          // console.log("curBro ",curBro.id," discovering ",bro.id) 
 
           minLeft = Math.min(rtnArray[curBro.id].minLeft,Events[bro.id].elem.position().left); 
           
@@ -282,12 +316,13 @@ var EventCollection = {
 
           // } 
         }
-        console.log(remaining)
+        // console.log(remaining)
         delete remaining[i]
         // done.push(curBro.id);
 
       }
-        console.debug(moment().diff(startScript)+" to getBroCountRange")
+      console.log("bro count range",rtnArray)
+      EventCollection.rtnArray = rtnArray;
       return rtnArray;
     },
 

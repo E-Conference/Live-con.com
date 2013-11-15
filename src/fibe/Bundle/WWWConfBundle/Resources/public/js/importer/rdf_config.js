@@ -341,8 +341,7 @@ var rdfConfig = {
                     category['setName']=catName;
                     if(catName == "ConferenceEvent") {
                         event['mainConferenceEvent']=true;
-                        defaultDate = event['setStartAt'];
-                        alert(defaultDate);
+                        defaultDate = event['setStartAt'] || defaultDate;
                     }
                     categories.push(category);
                     catId = categories.length-1;

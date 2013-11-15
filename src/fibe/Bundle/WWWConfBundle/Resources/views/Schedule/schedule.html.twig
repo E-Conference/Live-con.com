@@ -335,7 +335,7 @@
                         end      : moment(start).isSame(moment(end)) ? moment(start).add("hours",1).format() : end,
                         allDay   : allDay
                     }; 
-                    console.log(tmp)
+                    console.log(tmp);
                     $.post(
                             op.quickAddUrl,
                             $.extend( {} , tmp ),
@@ -363,7 +363,11 @@
           },
           eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
               setTimeout(function(){ //bug... event isn't yet updated 
-                    EventCollection.eventsToRender.push(event["id"]);
+                    var oldEnd = moment(event["end"]).subtract({'d':dayDelta,'m':minuteDelta}); 
+                    EventCollection.eventToRender = {id:event["id"],oldStart:event["start"],oldEnd:oldEnd.format()}; 
+
+                    console.log(dayDelta,minuteDelta,event)
+
                     event.updateParentDate();
                     event.updateChildrenDate();
                     event.render();
@@ -371,7 +375,6 @@
               },1);//bug... event isn't yet updated 
           }, 
           eventDrop : function(event){ //drop from calendar
-              EventCollection.eventsToRender.push(event["id"]);
               event.persist(); 
           }, 
           eventAfterAllRender: function( view ) { 
@@ -379,11 +382,11 @@
               clearTimeout(repositionTimeout);
               repositionTimeout=setTimeout(function(){   
                   if(!mainConfEvent)return;
+
                   updateEventArray();
 
                   if(view.name !== "month")reposition(view); 
-                  console.log("eventsToRender",EventCollection.eventsToRender);
-                  EventCollection.eventsToRender=[]; 
+                  console.log("eventToRender",EventCollection.eventToRender); 
               },repositionTimeout);
                   
           }, 
@@ -419,6 +422,7 @@
           eventDragStart: function( event, jsEvent, ui, view ) { 
               dragged = [ ui.helper[0], event ];
               setTimeout(function(){ //bug... event isn't yet updated 
+                EventCollection.eventToRender = {id:event["id"],oldStart:moment(event["start"])._d,oldEnd:moment(event["end"])._d}; 
                 dragChildren(event, jsEvent, ui, view);
               },1);//bug... event isn't yet updated
           },
@@ -495,7 +499,6 @@
             if(Events[id])Events[id]['elem'] = $(this);
           });
           console.log("###event array updated###",Events);
-          console.log("changed events :",EventCollection.eventsToRender);
           // console.log(Events) 
 
           //if we render from history, dont store the state
@@ -525,23 +528,28 @@
  
               toppestParent = EventCollection.getToppestParent(view);
 
-          console.log("toppest parent : ",toppestParent);
+          // console.log("toppest parent : ",toppestParent);
           if(!toppestParent)return;
           // console.log("toppestParent",toppestParent);
           
+          var startScript = moment()
           stylizeBlock([mainConfEvent]); 
+          console.debug(moment().diff(startScript)+" to stylizeBlock")
 
           if($('#reposition').is(':checked')){ 
-            //non-blocking
-                  setTimeout(function(){ 
-                    positionBlock(toppestParent,colWidth-eventMargin,2);
-                  },1)
+              //non-blocking
+              setTimeout(function(){ 
+                  var startScript = moment();
+
+                  positionBlock(toppestParent,colWidth,2);
+                  console.debug(moment().diff(startScript)+" to positionBlock");
+              },1)
           }
           function positionBlock(events,colWidth,parentZindex,parentPos,parent){ 
                   
                   // console.log(" ######positionBlocks######");
                   
-                  colWidth -=eventMargin/2; 
+                  colWidth -=eventMargin; 
                   var broCountRange;
                   try
                   {
@@ -553,7 +561,7 @@
                       return;
                   }
 
-                  console.log("##getBroCountRange## ",broCountRange);  
+                  // console.log("##getBroCountRange## ",broCountRange);  
 
 
                   for (var i in events){
@@ -571,7 +579,7 @@
                     var count   = broCountRange[event.id].count,
                         range   = broCountRange[event.id].range,
                         left    = broCountRange[event.id].minLeft;
-                    console.log("event "+event.id+" has "+count+" bros. range = "+range+" minLeft = "+left);
+                    // console.log("event "+event.id+" has "+count+" bros. range = "+range+" minLeft = "+left);
 
                     //width
                     newColWidth = colWidth/(count)-eventMargin;
@@ -590,10 +598,10 @@
                       } 
                     } 
                     element.width(newColWidth);
-
+                    
                     left += (range*(newColWidth+eventMargin)); 
                     if(left)element.css("left",left); 
-                    console.log(left)  
+                    // console.log(left)  
 
                     //z-index 
                     element.css('z-index',parentZindex+1)  
@@ -609,12 +617,12 @@
        
           }
           function stylizeBlock(events){ 
-                console.log("stylizeBlocks : ",events);
+                // console.log("stylizeBlocks : ",events);
                     /*****************  styling (opacity, hover, drag, drop) ********************/
                  
                 for (var i in events){
                     var event = events[i]; 
-                    console.log("positionning : ",event.id);
+                    // console.log("positionning : ",event.id);
                     var element = event.elem; 
                     if(!element)  continue; //event is in another view
 
