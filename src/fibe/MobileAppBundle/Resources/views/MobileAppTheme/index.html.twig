@@ -66,6 +66,26 @@
         generateTheme();
     })
 
+      var initPalette = ["{{ mobile_app_config.TitleColorHeader}}", "{{ mobile_app_config.BGColorNavBar}}", "{{ mobile_app_config.BGColorContent}}", "{{ mobile_app_config.TitleColorContent}}", "{{ mobile_app_config.BGColorNavBar}}", "{{ mobile_app_config.BGColorFooter}}", " {{ mobile_app_config.TitleColorFooter}}", "{{ mobile_app_config.BGColorButton}}"]
+       $(".color").spectrum({
+        flat: false,
+        showInput: true,
+        showInitial: true,
+        showAlpha: false,
+        disabled: false,
+        localStorageKey: "color",
+        showPalette: true,
+        showPaletteOnly: false,
+        showSelectionPalette: true,
+        clickoutFiresChange: false,
+        cancelText: "cancelText",
+        chooseText: "choose",
+        className: "colorpicker",
+        preferredFormat: "hex",
+        maxSelectionSize: 12,
+        palette: [initPalette],
+        selectionPalette: initPalette || []
+     });
 
       var image = new Image();
       image.src = "{{ asset('uploads/')}}{{conference.logoPath}}";
