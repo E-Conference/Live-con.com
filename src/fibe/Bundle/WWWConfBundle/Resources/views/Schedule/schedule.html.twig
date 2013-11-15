@@ -378,6 +378,10 @@
           eventDrop : function(event){ //drop from calendar
               event.persist(); 
           }, 
+          viewRender : function( view, element ){
+            alert("reset eventToRender")
+            EventCollection.eventToRender = mainConfEvent;
+          },
           eventAfterAllRender: function( view ) { 
               //avoid repeating this function 10 times...
               clearTimeout(repositionTimeout);
@@ -577,6 +581,7 @@
 
                     // repositionning (width and Xpos) 
                     //positionning event to be over the parent
+                    console.log(event.id)
                     var count   = broCountRange[event.id].count,
                         range   = broCountRange[event.id].range,
                         left    = broCountRange[event.id].minLeft;
@@ -887,6 +892,8 @@
         //init filters
         var filter = new initFilter();
         $(filter).on("change", function(ev,key,val) {
+
+            EventCollection.eventToRender = undefined;
             console.log(op.data);
             console.log(val);
             console.log(key);

@@ -279,6 +279,8 @@ var EventCollection = {
         // // delete EventCollection.rtnArray[eventToRender.id];
         // // brothers.push(eventToRender)
         // EventCollection.eventToRender = undefined; 
+      }else{
+        // EventCollection.rtnArray= {};
       }
       console.log("----------------------------------------------------");
       console.log("affected = ",brothers);
@@ -287,8 +289,8 @@ var EventCollection = {
       console.log("----------------------------------------------------");
       var remaining = brothers.slice(0);
 
-      for (var i in remaining){
-        curBro = remaining[i];  
+      for (var i in brothers){
+        curBro = brothers[i];  
         // console.log("curBro",curBro.id)
         //create rtn object for curBro
         if(!EventCollection.rtnArray[curBro.id])EventCollection.rtnArray[curBro.id] = {count:1,range:0,minLeft:Events[curBro.id].elem.position().left};
