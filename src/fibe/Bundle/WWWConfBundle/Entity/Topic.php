@@ -168,10 +168,10 @@ class Topic
     /**
      * Add events
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Event $events
+     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events
      * @return Topic
      */
-    public function addEvent(\fibe\Bundle\WWWConfBundle\Entity\Event $events)
+    public function addEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events)
     {
         $this->events[] = $events;
     
@@ -181,9 +181,9 @@ class Topic
     /**
      * Remove events
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Event $events
+     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events
      */
-    public function removeEvent(\fibe\Bundle\WWWConfBundle\Entity\Event $events)
+    public function removeEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events)
     {
         $this->events->removeElement($events);
     }
