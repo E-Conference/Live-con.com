@@ -39,10 +39,14 @@ class DBImportController extends Controller
     {      
         $JSONFile = json_decode($request->request->get('dataArray'),true); 
         
-        $em = $this->getDoctrine()->getManager(); 
-        $entity=null;
-        $wwwConf =  $this->getUser()->getCurrentConf();
-        $mainConfEvent = $wwwConf->getMainConfEvent();
+        $em = $this->getDoctrine()->getManager();
+
+        $conference =  $this->getUser()->getCurrentConf();
+
+
+        //empty conf  
+        $emptyConf = $this->get('emptyConf');
+        $emptyConf->emptyConf($conference,$em);
 
         $eventEntities        = array();
         $personEntities       = array(); 
@@ -52,9 +56,12 @@ class DBImportController extends Controller
         $organizationEntities = array();
         $topicEntities        = array();
         $proceedingEntities   = array();
+        $entity               = null;
 
 
-        $defaultCategory = $this->getDoctrine()
+        $mainConfEvent = $conference->getMainConfEvent();
+
+        $defaultCategory =    $this->getDoctrine()
                                    ->getRepository('IDCISimpleScheduleBundle:Category')
                                    ->findOneBy(array('name' => 'TalkEvent'));
 
@@ -63,17 +70,17 @@ class DBImportController extends Controller
         
         ////////////////////// conference //////////////////////
         if(isset($JSONFile['conference'])){
-            $conference = $JSONFile['conference'];
-            foreach ($conference as $setter => $value) {
+            $conferenceData = $JSONFile['conference'];
+            foreach ($conferenceData as $setter => $value) {
 
                 if($setter=="setAcronym"){
-                    $entity = $wwwConf;
+                    $entity = $conference;
                 }else{
                     $entity = $mainConfEvent;
                 }
                 call_user_func_array(array($entity, $setter), array($value)); 
             }
-            $conference = null;
+            $conferenceData = null;
         }
         
         
@@ -94,7 +101,7 @@ class DBImportController extends Controller
 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
-                $entity->setConference(  $wwwConf );
+                $entity->setConference(  $conference );
                 $em->persist($entity); 
                 array_push($topicEntities,$entity); 
             }  
@@ -118,7 +125,7 @@ class DBImportController extends Controller
 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
-                $entity->setConference(  $wwwConf );
+                $entity->setConference(  $conference );
                 $em->persist($entity); 
                 array_push($locationEntities,$entity); 
             }  
@@ -143,7 +150,7 @@ class DBImportController extends Controller
 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 }
-                $entity->setConference(  $wwwConf );
+                $entity->setConference(  $conference );
                 $em->persist($entity); 
                 array_push($organizationEntities,$entity); 
             }  
@@ -183,7 +190,7 @@ class DBImportController extends Controller
                     } 
                 } 
                 
-                $entity->setConference(  $wwwConf );
+                $entity->setConference(  $conference );
                 $em->persist($entity); 
                 array_push($personEntities,$entity);
             }  
@@ -220,7 +227,7 @@ class DBImportController extends Controller
                     }
 
                 } 
-                $entity->setConference(  $wwwConf );
+                $entity->setConference(  $conference );
                 $em->persist($entity); 
                 array_push($proceedingEntities,$entity); 
             }  
@@ -270,11 +277,8 @@ class DBImportController extends Controller
             $entities = $JSONFile['events'];
             for($i=0;$i<count($entities);$i++){
                 $entity= new Event();
-                $current = $entities[$i]; 
-                echo" TAMERE " . $setter;
-                foreach ($current as $setter => $value) {
-                    echo" TAMERE " . $setter;
-
+                $current = $entities[$i];  
+                foreach ($current as $setter => $value) { 
                     if($setter=="setStartAt" || $setter=="setEndAt"){
                         $date= explode(' ', $value); 
                         $value=new \DateTime($date[0], new \DateTimeZone(date_default_timezone_get()));
@@ -309,7 +313,7 @@ class DBImportController extends Controller
                     if($setter=="setParent"){continue;}
 
                     if($setter=="mainConferenceEvent"){ 
-                        $wwwConf->setMainConfEvent($entity);
+                        $conference->setMainConfEvent($entity);
                         $entity->setIsMainConfEvent(true);
                         $em->remove($mainConfEvent);
                         $mainConfEvent = $entity;
@@ -354,7 +358,7 @@ class DBImportController extends Controller
                         call_user_func_array(array($entity, $setter), array($value)); 
                     } 
                 }
-                $entity->setConference(  $wwwConf );
+                $entity->setConference(  $conference );
                 $em->persist($entity); 
                 array_push($eventEntities,$entity); 
             }
@@ -374,7 +378,7 @@ class DBImportController extends Controller
                 if(!$hasParent){
                     $entity->setParent($mainConfEvent);
                 }
-                $entity->setConference($wwwConf);
+                $entity->setConference($conference);
                 $em->persist($entity);
             }
             $entities = null;
@@ -404,11 +408,11 @@ class DBImportController extends Controller
          
         $mainConfEvent->setParent(null);
         $em->persist($mainConfEvent);
-        $em->persist($wwwConf);
+        $em->persist($conference);
 
         //finally, make sure every events are at least child of the main conf event
         
-        $confEvents = $wwwConf->getEvents(); 
+        $confEvents = $conference->getEvents(); 
         foreach ($confEvents as $event) {
             if(!$event->getParent()){
                 $event->setParent($mainConfEvent);

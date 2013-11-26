@@ -1,3 +1,7 @@
+# intellij files
+*.iml
+.idea
+
 /src/fibe/MobileAppBundle/Resources/public/DataConf/
 
 reset

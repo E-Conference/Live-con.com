@@ -47,7 +47,7 @@ var ocsConfig = {
                 setter : 'setEmail'
             },
             'country' : {
-                setter : 'setBased_near',
+                setter : 'setCountry',
             },
             'organization-id' : {
                 multiple : true,

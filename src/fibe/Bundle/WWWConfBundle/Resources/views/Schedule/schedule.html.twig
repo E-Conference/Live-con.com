@@ -594,7 +594,7 @@
                     //place child into his parent
                     if(parentPos){
                       left = parentPos.x+eventMargin/2;
-                      newColWidth = newColWidth+eventMargin/2;
+                      newColWidth = newColWidth+eventMargin;
                       if(moment(parent.start).isSame(moment(event.start))){
                         element.css("top",elemProp.y+eventMargin); 
                         element.css("height",elemProp.h-eventMargin*2);

@@ -26,34 +26,33 @@ class ConfEventType extends EventType
             // ->add('conference', null, array(
             //                         'required'  => true,
             //                         'label'     => 'Belongs to conf'
-            // ))  
+            // ))   
              ->add('summary','text',array('required' => true))
              ->add('categories',null,array('required' => false)) 
-             ->add('startAt', 'datetime', array(  
-                'widget' =>'single_text',
-                'format' =>'dd/MM/yyyy HH:mm', 
+            //  ->add('startAt', 'datetime', array(  
+            //     'widget' =>'single_text',
+            //     'format' =>'dd/MM/yyyy HH:mm', 
               
-            ))
-            ->add('endAt', 'datetime', array(  
-                'widget' =>'single_text',
-                'format' =>'dd/MM/yyyy HH:mm', 
+            // ))
+            // ->add('endAt', 'datetime', array(  
+            //     'widget' =>'single_text',
+            //     'format' =>'dd/MM/yyyy HH:mm', 
              
-            ))    
-
+            // ))     
             ->add('location', 'entity', array(
                 'class' => 'IDCISimpleScheduleBundle:Location',
                 'label'   => 'Location',
                 'choices'=> $this->user->getCurrentConf()->getLocations()->toArray(),
                 'empty_data'  => null,
                 'required' => false,
-            ))
-             ->add('parent', 'entity', array(
-                'class' => 'IDCISimpleScheduleBundle:Event',
-                'label'   => 'Parent',
-                'choices'=> $this->user->getCurrentConf()->getEvents()->toArray(),
-                'empty_data'  => null,
-                'required' => false,
-            ))
+            ))  
+            //  ->add('parent', 'entity', array(
+            //     'class' => 'IDCISimpleScheduleBundle:Event',
+            //     'label'   => 'Parent',
+            //     'choices'=> $this->user->getCurrentConf()->getEvents()->toArray(),
+            //     'empty_data'  => null,
+            //     'required' => false,
+            // ))
         ;                   
             
  

@@ -533,4 +533,14 @@ class WwwConf
         // when displaying uploaded doc/image in the view.
         return 'uploads/';
     }
+
+    public function isEmpty(){
+        return  (count($this->events)<=1)
+            and (count($this->locations) == 0)
+            and (count($this->papers)==0)
+            and (count($this->persons)==0)
+            and (count($this->organizations)==0)
+            and (count($this->topics)==0)
+        ;
+    }
 }

@@ -17,8 +17,7 @@
                             <li> {{ wwwConf.locations|length }} locations </li>
                             <li> {{ wwwConf.persons|length }} persons </li>
                             <li> {{ wwwConf.topics|length }} topics </li>
-                            <li> {{ wwwConf.organizations|length }} organizations </li>
-                            <li> {{ wwwConf.topics|length }} topics </li>
+                            <li> {{ wwwConf.organizations|length }} organizations </li> 
                             <li> {{ wwwConf.confManagers|length }} confManagers </li>
                         </ul> 
                     </div>
@@ -53,7 +52,7 @@
                                     <span class="badge badge-success" ><i class="icon-ok" ></i>  RDF</span>
                                     <span class="badge badge-success"><i class="icon-ok" ></i>  OWL</span>
                                     <span class="badge badge-success"><i class="icon-ok" ></i>  OCS</span> 
-
+                                {% if not wwwConf.isEmpty() %}<p class="text-warning"><i class="icon-s"></i>Your conference will be emptied first!</p>{% endif %}
                             </label>
                             
                             <div class="input-group">
@@ -66,10 +65,17 @@
                             </div><!-- /input-group --> 
                         </form> 
 
-                        <h3 class="text-info">Action</h3>
-                        <a  class="empty-conf btn btn-danger btn-xs" href="{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}"> 
+                        <h3 class="text-info">Action</h3> 
+                        <a  class="empty-conf btn btn-danger btn-xs" 
+                            {% if  wwwConf.isEmpty() %}
+                            disabled="disabled" 
+                            {% else %} 
+                            {% endif %}
+                            href="{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}"> 
                             <i class="icon-trash"></i> Empty conference
                         </a>
+                        
+                        
 
                     </div>
                 </div><!-- #conference-edit -->    
@@ -169,49 +175,58 @@
             }
             $("#showConfForm").one("click", showForm);
 
-            /*********       confirm empty          **********/
-            $('.empty-conf').click(function(){
-                return "Empty !" === prompt('\n\t/ ! \\ ACTION NOT CANCELABLE / ! \\\n\nIn order to confirm,\ntype "Empty !" ( with an exclamation mark)\nif you really want to empty the conference.',
-                                            "Empty ?");
-            }) 
 
 
-            /////////  init multiple Symf conf forms  END    /////////
-            /////////  init multiple Symf conf forms  END    /////////
-            /////////  init multiple Symf conf forms  END    /////////
+            /*********       run the importer and send the serialized obj to php   **********/
              
             var confOwlUriInput = $('#EventImport' ); 
             
             var ConfRdfFile; 
 
+
+
+            /*********       confirm empty          **********/
+            $('.empty-conf').click(confirmEmpty); 
+
+            function confirmEmpty(e){
+                return "Empty !" === prompt('\n\t/ ! \\ ACTION NOT CANCELABLE / ! \\\n\nIn order to confirm,\ntype "Empty !" ( with an exclamation mark)\nif you really want to empty the conference.', "Empty ?")
+            }
+
             $('#EventImportForm').submit(function(event) { 
 
                 bootstrapAlert("info",' file found, trying to import...',"Info : ","<i class='icon-spinner icon-spin'></i>");
-                run(confOwlUriInput.val(),function(dataArray)
-                { 
-                    bootstrapAlert("info",' '+getMsgUl(dataArray,"found")+' sending to the server...',"Info : ","<i class='icon-spinner icon-spin'></i>");
-                    var data = {dataArray:JSON.stringify(dataArray)};
 
-                    $.ajax({ //DBimport
-                        type: "POST",
-                        cache: false,  
-                        url: "{{ path('schedule_admin_DBimport') }}",
-                        data: data,
-                        success:function(a,b,c)
-                        {
-                            bootstrapAlert("success",' '+getMsgUl(dataArray,"added")+'Please refresh this page to find out imported items.');
-                            confOwlUriInput.parent().addClass('has-success');
-                        },
-                        error:function(a,b,c)
-                        {
-                            bootstrapAlert("warning",'import failed because : '+c);
-                            console.log(a)
-                            console.log(b)
-                            console.log(c)
-                            confOwlUriInput.parent().addClass('has-warning');  
-                        },
-                    });
+                //launch importer algorithm
+                run(confOwlUriInput.val(),function(dataArray)
+                {
+                    {% if not wwwConf.isEmpty() %}
+                        if(confirmEmpty()){
+                            $.ajax({ //DBimport
+                                type: "GET",
+                                cache: false,  
+                                url: "{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}",
+                                success:function(a,b,c)
+                                {
+                                    bootstrapAlert("success",'conference emptied'); 
+                                    sendSerializedConf(dataArray);
+                                },
+                                error:function(a,b,c)
+                                { 
+                                    console.log("ERROR empting the conf")
+                                    console.log(a)
+                                    console.log(b)
+                                    console.log(c) 
+                                },
+                            });
+                        }else{
+                            return false;
+                        }
+            
+                    {% else %} 
+                        sendSerializedConf(dataArray);
+                    {% endif %} 
                     
+                    //importer fallback
                 },function(msg)
                 {
                     confOwlUriInput.parent().addClass('has-warning');
@@ -219,8 +234,35 @@
                 }); 
  
               return false;
-            });  
+            }); 
+            function sendSerializedConf(dataArray){
+                var data = {dataArray:JSON.stringify(dataArray)};
+                bootstrapAlert("info",' '+getMsgUl(dataArray,"found")+' sending to the server...',"Info : ","<i class='icon-spinner icon-spin'></i>");
+                //DBimport
+                $.ajax({ 
+                    type: "POST",
+                    cache: false,  
+                    url: "{{ path('schedule_admin_DBimport') }}",
+                    data: data,
+                    success:function(a,b,c)
+                    {
+                        bootstrapAlert("success",' '+getMsgUl(dataArray,"added")+'Please refresh this page to find out imported items.');
+                        confOwlUriInput.parent().addClass('has-success');
+                    },
+                    error:function(a,b,c)
+                    {
+                        bootstrapAlert("warning",'import failed because : '+c);
+                        console.log(a)
+                        console.log(b)
+                        console.log(c)
+                        confOwlUriInput.parent().addClass('has-warning');  
+                    },
+                });
+            }
          }); 
+
+        
+ 
         function getMsgUl(dataArray,endString){
             var msg = "<ul>";
             for (var i in dataArray) 

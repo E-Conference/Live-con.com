@@ -60,6 +60,8 @@ class ConfEventController extends Controller
      */
     public function createAction(Request $request)
     {
+        //events are created via the schedule view only
+        return $this->redirect($this->generateUrl('schedule_view'));
         $entity  = new ConfEvent();
 
         $form = $this->createForm(new ConfEventType($this->getUser()), $entity);
@@ -100,7 +102,9 @@ class ConfEventController extends Controller
      * @Template()
      */
     public function newAction()
-    {
+    { 
+        //events are created via the schedule view only
+        return $this->redirect($this->generateUrl('schedule_view'));
         $entity = new ConfEvent();
         $form   = $this->createForm(new ConfEventType($this->getUser()), $entity);
 
