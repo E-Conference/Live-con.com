@@ -7,8 +7,17 @@
 var rdfConfig = {
     isRDF : false,
     getRootNode : function(documentRootNode){
-        rdfConfig.isRDF = $(documentRootNode).children()[0].nodeName === "rdf:RDF";
-        return $(documentRootNode).children();
+        var rootNode = $(documentRootNode).children();
+
+        console.log($(documentRootNode))
+        $(documentRootNode).each(function(){
+            if(this.nodeName.toUpperCase()=== "RDF:RDF"){
+                rdfConfig.isRDF = true;
+                rootNode = $(this);
+            }
+        })
+
+        return rootNode;
     },
     getNodeKey : function(node){ 
         return $(node).attr("rdf:about");
@@ -17,7 +26,7 @@ var rdfConfig = {
         var uri=[];
         var rtn;
         $(node).children().each(function(){ 
-            if(this.nodeName.indexOf("rdf:type")!== -1 ){
+            if(this.localName.indexOf("rdf:type")!== -1 ){
                 if($(this).attr('rdf:resource').indexOf("#")!== -1 ){ 
                     uri.push($(this).attr('rdf:resource').split('#')[1]); 
                 }
@@ -27,7 +36,7 @@ var rdfConfig = {
                 }
             } 
         }); 
-        if($.inArray('KeynoteTalk', uri) > -1 || node.nodeName.indexOf('KeynoteTalk')>-1)
+        if($.inArray('KeynoteTalk', uri) > -1 || node.localName.indexOf('KeynoteTalk')>-1)
         {   
             rtn = 'KeynoteEvent';
         }
@@ -37,7 +46,7 @@ var rdfConfig = {
         }
         else if(uri.length==0) //rdf
         { 
-            rtn = node.nodeName;
+            rtn = node.localName;
         } 
         return rtn;
     },

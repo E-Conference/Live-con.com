@@ -56,7 +56,7 @@
                             </label>
                             
                             <div class="input-group">
-                                <input id="EventImport" required="required" class="form-control" name="EventImport" value="../../../../datasets/ISWC2013.rdf" type="text"/>
+                                <input id="EventImport" method="POST" action="/uploadDataset" class="form-control" name="EventImport" value="Choose your file" type="file"/>
                                 <span class="input-group-btn">
                                     <button type="submit"class="btn btn-default">
                                         Process import <i class="icon-arrow-right"></i> 
@@ -179,7 +179,6 @@
 
             /*********       run the importer and send the serialized obj to php   **********/
              
-            var confOwlUriInput = $('#EventImport' ); 
             
             var ConfRdfFile; 
 
@@ -192,48 +191,58 @@
                 return "Empty !" === prompt('\n\t/ ! \\ ACTION NOT CANCELABLE / ! \\\n\nIn order to confirm,\ntype "Empty !" ( with an exclamation mark)\nif you really want to empty the conference.', "Empty ?")
             }
 
-            $('#EventImportForm').submit(function(event) { 
+            var confOwlUriInput = document.getElementById("EventImport"); 
+            var file = confOwlUriInput.files[0];
+            var dataArray;
+            $(confOwlUriInput).change(function(){
+                var file = this.files[0];
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    run( this.result,function(data){
+                        dataArray = data;
+                    },function(msg)
+                    {
+                        $(confOwlUriInput).parent().addClass('has-warning');
+                        bootstrapAlert("warning", msg || "there was an error importing this file");
+                    });  
+                }
+                reader.readAsText(file); 
+            })
 
+            $('#EventImportForm').submit(function(event) { 
+                if(!dataArray){ 
+                    bootstrapAlert("info",' please, choose a file to import');
+                    return false;
+                }
                 bootstrapAlert("info",' file found, trying to import...',"Info : ","<i class='icon-spinner icon-spin'></i>");
 
-                //launch importer algorithm
-                run(confOwlUriInput.val(),function(dataArray)
-                {
-                    {% if not wwwConf.isEmpty() %}
-                        if(confirmEmpty()){
-                            $.ajax({ //DBimport
-                                type: "GET",
-                                cache: false,  
-                                url: "{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}",
-                                success:function(a,b,c)
-                                {
-                                    bootstrapAlert("success",'conference emptied'); 
-                                    sendSerializedConf(dataArray);
-                                },
-                                error:function(a,b,c)
-                                { 
-                                    console.log("ERROR empting the conf")
-                                    console.log(a)
-                                    console.log(b)
-                                    console.log(c) 
-                                },
-                            });
-                        }else{
-                            return false;
-                        }
-            
-                    {% else %} 
-                        sendSerializedConf(dataArray);
-                    {% endif %} 
-                    
-                    //importer fallback
-                },function(msg)
-                {
-                    confOwlUriInput.parent().addClass('has-warning');
-                    bootstrapAlert("warning", msg || "there was an error importing this file");
-                }); 
- 
-              return false;
+                {% if not wwwConf.isEmpty() %}
+                    if(confirmEmpty()){
+                        $.ajax({ 
+                            type: "GET",
+                            cache: false,  
+                            url: "{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}",
+                            success:function(a,b,c)
+                            {
+                                bootstrapAlert("success",'conference emptied'); 
+                                sendSerializedConf(dataArray);
+                            },
+                            error:function(a,b,c)
+                            { 
+                                console.log("ERROR empting the conf")
+                                console.log(a)
+                                console.log(b)
+                                console.log(c) 
+                            },
+                        });
+                    }else{
+                        return false;
+                    }
+        
+                {% else %} 
+                    sendSerializedConf(dataArray);
+                {% endif %}  
+                return false;
             }); 
             function sendSerializedConf(dataArray){
                 var data = {dataArray:JSON.stringify(dataArray)};

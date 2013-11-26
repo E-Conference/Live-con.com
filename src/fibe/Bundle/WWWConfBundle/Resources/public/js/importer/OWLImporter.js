@@ -22,16 +22,11 @@ var mappingConfig,
 
 var defaultDate = 'now';
 
-function run(url,callback,fallback){ 
-    var completeConfRdfURL =  url;    
-    $.ajax({
-        url: completeConfRdfURL,   
-        cache:false,
-        dataType:"xml",
-        success:function(completeConfRdf){
+function run(file,callback,fallback){ 
+   
              
-            console.log(completeConfRdf);
-            if(completeConfRdf==undefined )
+            console.log(file);
+            if(file==undefined )
             {
                 if(fallback!=undefined)fallback("Empty response"); 
                 return;
@@ -52,8 +47,7 @@ function run(url,callback,fallback){
             conference     = {},
             notImportedLog = {},
             importedLog    = {},
-            objectMap      = {};
-             
+            objectMap      = {}; 
 
             //add custom config here (default : rdf)
             var formatConfig = { 
@@ -64,7 +58,7 @@ function run(url,callback,fallback){
             //check format (default : rdf)
             var format = undefined;    
             for (var i in formatConfig){
-                if(formatConfig[i].checkFormat(completeConfRdf) === true){
+                if(formatConfig[i].checkFormat(file) === true){
                     console.log("format found ! :" + i);
                     format = i;
                 }
@@ -75,7 +69,7 @@ function run(url,callback,fallback){
                                     ? formatConfig[format] 
                                     : rdfConfig;
 
-            var rootNode = mappingConfig.getRootNode(completeConfRdf);
+            var rootNode = mappingConfig.getRootNode(file);
             var parseItemOrder =  mappingConfig.getParseItemOrder();
             console.log(rootNode)
 
@@ -96,8 +90,11 @@ function run(url,callback,fallback){
                 var itemMapping = mappingConfig[i];
                 var addArray = parseItemOrder[i];
                 rootNode.children().each(function(index,node){
-                    var n = mappingConfig.getNodeName(node);
-                    if(n && n.indexOf(itemMapping.nodeName)!= -1){
+                    var n = mappingConfig.getNodeName(node).toUpperCase(); 
+                    console.log(n);
+                    console.log(itemMapping.nodeName);
+
+                    if(n && n.indexOf(itemMapping.nodeName.toUpperCase())!= -1){
                         add(addArray,itemMapping,this,{name:n}); 
                     }
                 }); 
@@ -109,8 +106,8 @@ function run(url,callback,fallback){
             
             var j=0;
             rootNode.children().each(function(index,node){ 
-                var n = mappingConfig.getNodeName(node); 
-                if(n && n.indexOf(mappingConfig.relationMapping.nodeName)!= -1){  
+                var n = mappingConfig.getNodeName(node).toUpperCase(); 
+                if(n && n.indexOf(mappingConfig.relationMapping.nodeName.toUpperCase())!= -1){  
                     add(relations,mappingConfig.relationMapping,this,{name:n,eventId:j});  
                     j++;
                 }
@@ -281,15 +278,8 @@ function run(url,callback,fallback){
 
             console.log("not imported properties : ");
             console.log(notImportedLog);
-       },
-       //get import file ajax fallback
-       error:function(a,b,c){
-            console.log(a)
-            console.log(b)
-            console.log(c)
-            if(fallback)fallback('Request failed giving this error <b>"'+c+'"</b> ');
-       }
-   }); // end ajax
+       
+ 
 } // end run()
 
 
