@@ -57,7 +57,7 @@
                             </label>
                             
                             <div class="input-group">
-                                <input id="EventImport" required="required" class="form-control" name="EventImport" value="../../../../datasets/ISWC2013.rdf" type="text"/>
+                                <input id="EventImport" method="POST" action="/uploadDataset" class="form-control" name="EventImport" value="Choose your file" type="file"/>
                                 <span class="input-group-btn">
                                     <button type="submit"class="btn btn-default">
                                         Process import <i class="icon-arrow-right"></i> 
@@ -180,44 +180,55 @@
             /////////  init multiple Symf conf forms  END    /////////
             /////////  init multiple Symf conf forms  END    /////////
              
-            var confOwlUriInput = $('#EventImport' ); 
+            var confOwlUriInput = document.getElementById("EventImport"); 
+            var file = confOwlUriInput.files[0];
             
             var ConfRdfFile; 
 
             $('#EventImportForm').submit(function(event) { 
-
                 bootstrapAlert("info",' file found, trying to import...',"Info : ","<i class='icon-spinner icon-spin'></i>");
-                run(confOwlUriInput.val(),function(dataArray)
-                { 
-                    bootstrapAlert("info",' '+getMsgUl(dataArray,"found")+' sending to the server...',"Info : ","<i class='icon-spinner icon-spin'></i>");
-                    var data = {dataArray:JSON.stringify(dataArray)};
+                    var confOwlUriInput = document.getElementById("EventImport"); 
+                    var file = confOwlUriInput.files[0];
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        run( reader.result,function(dataArray)
+                        { 
+                           
+                            bootstrapAlert("info",' '+getMsgUl(dataArray,"found")+' sending to the server...',"Info : ","<i class='icon-spinner icon-spin'></i>");
+                            var data = {dataArray:JSON.stringify(dataArray)};
 
-                    $.ajax({ //DBimport
-                        type: "POST",
-                        cache: false,  
-                        url: "{{ path('schedule_admin_DBimport') }}",
-                        data: data,
-                        success:function(a,b,c)
+                            $.ajax({ //DBimport
+                                type: "POST",
+                                cache: false,  
+                                url: "{{ path('schedule_admin_DBimport') }}",
+                                data: data,
+                                success:function(a,b,c)
+                                {
+                                    bootstrapAlert("success",' '+getMsgUl(dataArray,"added")+'Please refresh this page to find out imported items.');
+                                    confOwlUriInput.parent().addClass('has-success');
+                                },
+                                error:function(a,b,c)
+                                {
+                                    bootstrapAlert("warning",'import failed because : '+c);
+                                    console.log(a)
+                                    console.log(b)
+                                    console.log(c)
+                                    confOwlUriInput.parent().addClass('has-warning');  
+                                },
+                            });
+                            
+                        },function(msg)
                         {
-                            bootstrapAlert("success",' '+getMsgUl(dataArray,"added")+'Please refresh this page to find out imported items.');
-                            confOwlUriInput.parent().addClass('has-success');
-                        },
-                        error:function(a,b,c)
-                        {
-                            bootstrapAlert("warning",'import failed because : '+c);
-                            console.log(a)
-                            console.log(b)
-                            console.log(c)
-                            confOwlUriInput.parent().addClass('has-warning');  
-                        },
-                    });
-                    
-                },function(msg)
-                {
-                    confOwlUriInput.parent().addClass('has-warning');
-                    bootstrapAlert("warning", msg || "there was an error importing this file");
-                }); 
+                            $("#EventImport").parent().addClass('has-warning');
+                            bootstrapAlert("warning", msg || "there was an error importing this file");
+                        }); 
  
+                    }
+                    reader.readAsText(file); 
+                       
+             
+ 
+
               return false;
             });  
          }); 
