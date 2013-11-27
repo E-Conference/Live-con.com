@@ -81,9 +81,34 @@
                 </div><!-- #conference-edit -->    
             </div>
         </div> 
-    </div>
-
+    </div> 
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 class="modal-title" id="myModalLabel">Confirm empty</h3>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="modal-body">
+            <h4 class="text-wrning">In order to confirm, type <b>Empty !</b> if you really want to empty the conference.</h4>
+            <div class="input-group input-group-lg"> 
+              <input name="confirmEmptyInput" id="confirmEmptyInput" type="text" class="form-control input-lg" value="Empty ?">
+            </div> 
+          </div>
+          <div class="modal-footer">
+            <a class="btn btn-default" data-dismiss="modal">Close</a>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form> 
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 {% endblock body %}
 
 {%  block stylesheets %}
@@ -185,12 +210,15 @@
 
 
             /*********       confirm empty          **********/
-            $('.empty-conf').click(confirmEmpty); 
+            $('.empty-conf').click(function(){
+                confirmEmpty(function(){
+                    window.location = "{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}";
+                })
+                return false;
+            }); 
 
-            function confirmEmpty(e){
-                return "Empty !" === prompt('\n\t/ ! \\ ACTION NOT CANCELABLE / ! \\\n\nIn order to confirm,\ntype "Empty !" ( with an exclamation mark)\nif you really want to empty the conference.', "Empty ?")
-            }
 
+            //parse file
             var confOwlUriInput = document.getElementById("EventImport"); 
             var file = confOwlUriInput.files[0];
             var dataArray;
@@ -200,6 +228,7 @@
                 reader.onload = function(e) {
                     run( this.result,function(data){
                         dataArray = data;
+                        bootstrapAlert("info",' '+getMsgUl(dataArray,"found"),"Info : ");
                     },function(msg)
                     {
                         $(confOwlUriInput).parent().addClass('has-warning');
@@ -209,45 +238,43 @@
                 reader.readAsText(file); 
             })
 
-            $('#EventImportForm').submit(function(event) { 
+            //send file
+            $('#EventImportForm').submit(function(event) {  
                 if(!dataArray){ 
-                    bootstrapAlert("info",' please, choose a file to import');
+                    bootstrapAlert("info",' please, choose a file to import'); 
                     return false;
                 }
-                bootstrapAlert("info",' file found, trying to import...',"Info : ","<i class='icon-spinner icon-spin'></i>");
 
-                {% if not wwwConf.isEmpty() %}
-                    if(confirmEmpty()){
+                {% if not wwwConf.isEmpty() %} 
+                    confirmEmpty(function(){
+                        bootstrapAlert("info",' emptying the conference...',"Info : ","<i class='icon-spinner icon-spin'></i>");
                         $.ajax({ 
-                            type: "GET",
-                            cache: false,  
-                            url: "{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}",
-                            success:function(a,b,c)
-                            {
-                                bootstrapAlert("success",'conference emptied'); 
-                                sendSerializedConf(dataArray);
-                            },
-                            error:function(a,b,c)
-                            { 
-                                console.log("ERROR empting the conf")
-                                console.log(a)
-                                console.log(b)
-                                console.log(c) 
-                            },
-                        });
-                    }else{
-                        return false;
-                    }
-        
+                                type: "GET",
+                                cache: false,  
+                                url: "{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}",
+                                success:function(a,b,c)
+                                {
+                                    bootstrapAlert("success",'conference emptied'); 
+                                    sendSerializedConf(dataArray);
+                                },
+                                error:function(a,b,c)
+                                { 
+                                    console.log("ERROR empting the conf")
+                                    console.log(a)
+                                    console.log(b)
+                                    console.log(c) 
+                                },
+                            });
+                    }) 
                 {% else %} 
                     sendSerializedConf(dataArray);
-                {% endif %}  
+                {% endif %}
                 return false;
             }); 
             function sendSerializedConf(dataArray){
                 var data = {dataArray:JSON.stringify(dataArray)};
-                bootstrapAlert("info",' '+getMsgUl(dataArray,"found")+' sending to the server...',"Info : ","<i class='icon-spinner icon-spin'></i>");
                 //DBimport
+                bootstrapAlert("info",' sending file...',"Info : ","<i class='icon-spinner icon-spin'></i>");
                 $.ajax({ 
                     type: "POST",
                     cache: false,  
@@ -256,7 +283,7 @@
                     success:function(a,b,c)
                     {
                         bootstrapAlert("success",' '+getMsgUl(dataArray,"added")+'Please refresh this page to find out imported items.');
-                        confOwlUriInput.parent().addClass('has-success');
+                        $(confOwlUriInput).parent().addClass('has-success');
                     },
                     error:function(a,b,c)
                     {
@@ -264,13 +291,30 @@
                         console.log(a)
                         console.log(b)
                         console.log(c)
-                        confOwlUriInput.parent().addClass('has-warning');  
+                        $(confOwlUriInput).parent().addClass('has-warning');  
                     },
                 });
             }
          }); 
 
-        
+    
+        function confirmEmpty(callback){ 
+            $('#confirmModal').modal('show')
+                              .find("form").submit(function(e){ 
+                                    if($('#confirmEmptyInput').val() === "Empty !"){
+                                        callback();
+                                        $('#confirmModal').modal('hide');
+                                        return false;
+                                    }
+                                    else{
+                                        bootstrapAlert("info",' Import cancelled.');
+                                        $('#confirmModal').modal('hide');
+                                        return false;
+                                    }
+                              });
+
+ 
+        }
  
         function getMsgUl(dataArray,endString){
             var msg = "<ul>";

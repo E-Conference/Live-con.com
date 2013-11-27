@@ -334,21 +334,21 @@ var rdfConfig = {
             var catName,
                 tmp;
             //different ways to get the category name 
-            tmp = node.nodeName.split("swc:").join("").split("event:").join("");
+            tmp = node.nodeName.toUpperCase().split("SWC:").join("").split("EVENT:").join("");
             if(testCatName(tmp))catName = tmp;
 
             tmp = rdfConfig.getNodeName(node);
             if(testCatName(tmp))catName = tmp;
 
-            tmp = rdfConfig.getNodeName(node).split("swc:").join("").split("event:").join("");
+            tmp = rdfConfig.getNodeName(node).split("SWC:").join("").split("EVENT:").join("");
             if(testCatName(tmp))catName = tmp;
 
-            if(catName.indexOf("Event") !== -1){
+            if(catName.indexOf("EVENT") !== -1){
                 var catId = getCategoryIdFromName(catName);
                 if(catId==undefined){ 
                     var category= {}; 
                     category['setName']=catName;
-                    if(catName == "ConferenceEvent") {
+                    if(catName == "CONFERENCEEVENT") {
                         event['mainConferenceEvent']=true;
                         defaultDate = event['setStartAt'] || defaultDate;
                     }
@@ -359,7 +359,7 @@ var rdfConfig = {
             }
             
             
-            // store uri to get the event back in the relation loop
+            // store uri via xproperty array to get the event back in the relation loop
             var xproperty= {}; 
             xproperty['setCalendarEntity']=events.length;
             xproperty['setXNamespace']="event_uri";
@@ -370,7 +370,7 @@ var rdfConfig = {
             return false;
 
             function testCatName(catName){
-                return (catName.indexOf("Event") !== -1 && catName !== "Event")
+                return (catName.indexOf("EVENT") !== -1 && catName !== "EVENT")
             }
         }, 
     },

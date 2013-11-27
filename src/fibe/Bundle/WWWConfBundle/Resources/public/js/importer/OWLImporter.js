@@ -312,13 +312,13 @@ function add(addArray,mapping,node,arg){
         var key = mappingConfig.getNodeKey(node);
         console.log("processing : "+key);
         $(node).children().each(function(){ 
-            if(mapping.label[this.nodeName]!== undefined){
+            if(mapping.label[this.localName]!== undefined){
                 
-                if(mapping.label[this.nodeName].setter){
-                    var nodeName = this.nodeName;
+                if(mapping.label[this.localName].setter){
+                    var nodeName = this.localName;
 
                     //unwrapped if needed
-                    if(mapping.label[this.nodeName].wrapped === true){
+                    if(mapping.label[this.localName].wrapped === true){
                         $(this).children().each(function(){ 
                             set(mapping,nodeName,this,arg); 
                         });
@@ -327,7 +327,7 @@ function add(addArray,mapping,node,arg){
                     }
                 }
             }else{ 
-                var mappingLake = arg.name+"/"+ this.nodeName;
+                var mappingLake = arg.name+"/"+ this.localName;
                 if(!notImportedLog[mappingLake])
                     notImportedLog[mappingLake] = undefined
             }
