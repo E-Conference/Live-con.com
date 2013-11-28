@@ -8,10 +8,10 @@ var rdfConfig = {
     isRDF : false,
     getRootNode : function(documentRootNode){
         var rootNode = $(documentRootNode).children();
-
-        console.log($(documentRootNode))
+ 
         $(documentRootNode).each(function(){
             if(this.nodeName.toUpperCase()=== "RDF:RDF"){
+                console.log("input file is RDF");
                 rdfConfig.isRDF = true;
                 rootNode = $(this);
             }
@@ -35,10 +35,18 @@ var rdfConfig = {
                     uri.push(nodeName[nodeName.length-1]);  
                 }
             } 
-        }); 
-        if($.inArray('KeynoteTalk', uri) > -1 || node.localName.indexOf('KeynoteTalk')>-1)
-        {   
-            rtn = 'KeynoteEvent';
+        });
+        // console.log("getNodeName",node.localName)
+        // console.log("uri",uri)
+        for(var i in uri){
+            var lc = uri[i].toLowerCase();
+            if(lc.indexOf('keynotetalk')>-1){
+                rtn = 'KeynoteEvent'; 
+            }
+        } 
+        var lc = node.localName.toLowerCase();
+        if(lc.indexOf('keynotetalk')>-1){
+            rtn = 'KeynoteEvent'; 
         }
         else if(uri.length==1)
         {
@@ -62,7 +70,7 @@ var rdfConfig = {
         };
     },
     personMapping : {
-        nodeName : 'Person',
+        nodeName : 'person',
         label : {
 
             //some dataset use rdfs:label instead of foaf ontology
@@ -113,7 +121,7 @@ var rdfConfig = {
     },
 
     locationMapping : {
-        nodeName : 'MeetingRoomplace',
+        nodeName : 'meetingroomplace',
         label : {
             'rdfs:label' : {
                 setter : 'setName'
@@ -125,7 +133,7 @@ var rdfConfig = {
     },
 
     proceedingMapping : {
-        nodeName : 'InProceedings',
+        nodeName : 'inproceedings',
 
         label : {
             'dc:title' : {
@@ -217,7 +225,7 @@ var rdfConfig = {
     },
 
     eventMapping : {
-        nodeName : 'Event',
+        nodeName : 'event',
         label : {
             'rdfs:label' : {
                 setter : 'setSummary'
@@ -334,21 +342,21 @@ var rdfConfig = {
             var catName,
                 tmp;
             //different ways to get the category name 
-            tmp = node.nodeName.toUpperCase().split("SWC:").join("").split("EVENT:").join("");
+            tmp = node.nodeName.split("swc:").join("").split("event:").join("");
             if(testCatName(tmp))catName = tmp;
 
             tmp = rdfConfig.getNodeName(node);
             if(testCatName(tmp))catName = tmp;
 
-            tmp = rdfConfig.getNodeName(node).split("SWC:").join("").split("EVENT:").join("");
+            tmp = rdfConfig.getNodeName(node).split("swc:").join("").split("event:").join("");
             if(testCatName(tmp))catName = tmp;
-
-            if(catName.indexOf("EVENT") !== -1){
+            if(!catName)console.warn("category not found for "+tmp);
+            if(catName.indexOf("event") !== -1){
                 var catId = getCategoryIdFromName(catName);
                 if(catId==undefined){ 
                     var category= {}; 
                     category['setName']=catName;
-                    if(catName == "CONFERENCEEVENT") {
+                    if(catName == "conferenceevent") {
                         event['mainConferenceEvent']=true;
                         defaultDate = event['setStartAt'] || defaultDate;
                     }
@@ -370,24 +378,25 @@ var rdfConfig = {
             return false;
 
             function testCatName(catName){
-                return (catName.indexOf("EVENT") !== -1 && catName !== "EVENT")
+                var cn = catName.toLowerCase();
+                return (cn.indexOf("event") !== -1 && cn !== "event")
             }
         }, 
     },
     presenterMapping : {
-        nodeName : 'Presenter', 
+        nodeName : 'presenter', 
         overide : function(node){
 
             var event ;
             $(node).children().each(function(){
-                if(this.nodeName=="swc:isRoleAt"){  
+                if(this.nodeName=="swc:isroleat"){  
                     event = objectMap[$(this).attr("rdf:resource")]
                 } 
             });
             if(event){
                 event['addPresenter'] = [];
                 $(node).children().each(function(){
-                    if(this.nodeName=="swc:heldBy"){ 
+                    if(this.nodeName=="swc:heldby"){ 
                         var person = $(this).attr("rdf:resource"); 
                         if(objectMap[person]){
                             event['addPresenter'].push( $.inArray(objectMap[person], persons)); 
@@ -398,19 +407,19 @@ var rdfConfig = {
         }
     },
     chairMapping : {
-        nodeName : 'Chair', 
+        nodeName : 'chair', 
         overide : function(node){
 
             var event ;
             $(node).children().each(function(){
-                if(this.nodeName=="swc:isRoleAt"){  
+                if(this.nodeName=="swc:isroleat"){  
                     event = objectMap[$(this).attr("rdf:resource")]
                 } 
             });
             if(event){
                 event['addChair'] = [];
                 $(node).children().each(function(){
-                    if(this.nodeName=="swc:heldBy"){ 
+                    if(this.nodeName=="swc:heldby"){ 
                         var person = $(this).attr("rdf:resource"); 
                         if(objectMap[person]){
                             event['addChair'].push( $.inArray(objectMap[person], persons)); 
@@ -422,19 +431,19 @@ var rdfConfig = {
     },
 
     relationMapping : {
-        nodeName : 'Event',
+        nodeName : 'event',
         overide : function(node){ 
             var event = objectMap[rdfConfig.getNodeKey(node)];
             var found=false;
             $(node).children().each(function(){
-                if(this.nodeName=="swc:isSubEventOf"){ 
+                if(this.nodeName=="swc:issubeventof"){ 
                     var relatedToEventId=getEventIdFromURI($(this).attr('rdf:resource'))
                     if(relatedToEventId){
                         event['setParent']= relatedToEventId;
                     } 
                 } 
             });
-            console.log(event);
+            // console.log(event);
             // console.log("event",event,"currentEventId",currentEventId)
             // alert("hehe")
             // var found=false;
@@ -474,7 +483,7 @@ var rdfConfig = {
         }
     },
     organizationMapping : {
-        nodeName : 'Organization',
+        nodeName : 'organization',
         label : {
             'rdfs:label' : {
                 setter : 'setName'

@@ -61,6 +61,7 @@ class DBImportController extends Controller
 
         $mainConfEvent = $conference->getMainConfEvent();
 
+
         $defaultCategory =    $this->getDoctrine()
                                    ->getRepository('IDCISimpleScheduleBundle:Category')
                                    ->findOneBy(array('name' => 'TalkEvent'));
@@ -70,8 +71,9 @@ class DBImportController extends Controller
         
         ////////////////////// conference //////////////////////
         if(isset($JSONFile['conference'])){
+
             $conferenceData = $JSONFile['conference'];
-            foreach ($conferenceData as $setter => $value) {
+            foreach ($conferenceData as $setter => $value) { 
 
                 if($setter=="setAcronym"){
                     $entity = $conference;
@@ -277,7 +279,17 @@ class DBImportController extends Controller
             $entities = $JSONFile['events'];
             for($i=0;$i<count($entities);$i++){
                 $entity= new Event();
-                $current = $entities[$i];  
+                $current = $entities[$i];
+                $isMainConfEvent = false;
+                if(isset($current["mainConferenceEvent"])){
+                    $isMainConfEvent = true;
+                    echo "mainConfEvent replaced";
+                    $entity = $mainConfEvent;
+                    // $conference->setMainConfEvent($entity);
+                    // $entity->setIsMainConfEvent(true);
+                    // $em->remove($mainConfEvent);
+                    // $mainConfEvent = $entity;
+                }
                 foreach ($current as $setter => $value) { 
                     if($setter=="setStartAt" || $setter=="setEndAt"){
                         $date= explode(' ', $value); 
@@ -312,11 +324,14 @@ class DBImportController extends Controller
                      
                     if($setter=="setParent"){continue;}
 
-                    if($setter=="mainConferenceEvent"){ 
-                        $conference->setMainConfEvent($entity);
-                        $entity->setIsMainConfEvent(true);
-                        $em->remove($mainConfEvent);
-                        $mainConfEvent = $entity;
+                    if($setter=="mainConferenceEvent"){
+
+                        // echo "mainConfEvent replaced";
+                        // $conference->setMainConfEvent($entity);
+                        // $entity->setIsMainConfEvent(true);
+                        // $conference->removeEvent($mainConfEvent);
+                        // $em->remove($mainConfEvent);
+                        // $mainConfEvent = $entity;
                         continue;
                     }
 

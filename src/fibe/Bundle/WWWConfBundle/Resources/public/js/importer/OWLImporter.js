@@ -25,7 +25,7 @@ var defaultDate = 'now';
 function run(file,callback,fallback){ 
    
              
-            console.log(file);
+            // console.log(file);
             if(file==undefined )
             {
                 if(fallback!=undefined)fallback("Empty response"); 
@@ -71,7 +71,7 @@ function run(file,callback,fallback){
 
             var rootNode = mappingConfig.getRootNode(file);
             var parseItemOrder =  mappingConfig.getParseItemOrder();
-            console.log(rootNode)
+            // console.log(rootNode)
 
             //////////////////////////////////////////////////////////////////////////
             ///////////////////////////  pre processing  /////////////////////////////
@@ -90,11 +90,11 @@ function run(file,callback,fallback){
                 var itemMapping = mappingConfig[i];
                 var addArray = parseItemOrder[i];
                 rootNode.children().each(function(index,node){
-                    var n = mappingConfig.getNodeName(node).toUpperCase(); 
-                    console.log(n);
-                    console.log(itemMapping.nodeName);
+                    var n = mappingConfig.getNodeName(node); 
+                    console.log("parsing : "+n.toLowerCase());
+                    console.log("expecting : "+itemMapping.nodeName);
 
-                    if(n && n.indexOf(itemMapping.nodeName.toUpperCase())!= -1){
+                    if(n && n.toLowerCase().indexOf(itemMapping.nodeName)!= -1){
                         add(addArray,itemMapping,this,{name:n}); 
                     }
                 }); 
@@ -106,8 +106,8 @@ function run(file,callback,fallback){
             
             var j=0;
             rootNode.children().each(function(index,node){ 
-                var n = mappingConfig.getNodeName(node).toUpperCase(); 
-                if(n && n.indexOf(mappingConfig.relationMapping.nodeName.toUpperCase())!= -1){  
+                var n = mappingConfig.getNodeName(node); 
+                if(n && n.indexOf(mappingConfig.relationMapping.nodeName)!= -1){  
                     add(relations,mappingConfig.relationMapping,this,{name:n,eventId:j});  
                     j++;
                 }

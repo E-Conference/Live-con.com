@@ -58,7 +58,7 @@
                             <div class="input-group">
                                 <input id="EventImport" method="POST" action="/uploadDataset" class="form-control" name="EventImport" value="Choose your file" type="file"/>
                                 <span class="input-group-btn">
-                                    <button type="submit"class="btn btn-default">
+                                    <button disabled="disabled" type="submit"class="btn btn-default">
                                         Process import <i class="icon-arrow-right"></i> 
                                     </button>
                                 </span>
@@ -208,7 +208,6 @@
             var ConfRdfFile; 
 
 
-
             /*********       confirm empty          **********/
             $('.empty-conf').click(function(){
                 confirmEmpty(function(){
@@ -229,6 +228,8 @@
                     run( this.result,function(data){
                         dataArray = data;
                         bootstrapAlert("info",' '+getMsgUl(dataArray,"found"),"Info : ");
+                        $('#EventImportForm [disabled="disabled"]').removeAttr("disabled");
+                        $(confOwlUriInput).parent().addClass('has-success');
                     },function(msg)
                     {
                         $(confOwlUriInput).parent().addClass('has-warning');
@@ -238,7 +239,7 @@
                 reader.readAsText(file); 
             })
 
-            //send file
+            //empty conf if needed
             $('#EventImportForm').submit(function(event) {  
                 if(!dataArray){ 
                     bootstrapAlert("info",' please, choose a file to import'); 
@@ -271,6 +272,9 @@
                 {% endif %}
                 return false;
             }); 
+
+
+            //send file
             function sendSerializedConf(dataArray){
                 var data = {dataArray:JSON.stringify(dataArray)};
                 //DBimport
@@ -312,8 +316,6 @@
                                         return false;
                                     }
                               });
-
- 
         }
  
         function getMsgUl(dataArray,endString){
