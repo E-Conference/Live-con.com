@@ -77,7 +77,7 @@ class Event extends LocationAwareCalendarEntity
             
             $this->setEndAt($endAt);
         }else{
-            throw new \Exception("Events need a startAt and a endAt datetime to be persisted", 1); 
+            throw new \Exception("Event ".$this." a startAt datetime to be persisted", 1); 
         }
     }
 

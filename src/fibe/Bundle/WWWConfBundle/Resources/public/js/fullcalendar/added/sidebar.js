@@ -61,13 +61,21 @@ function Sidebar(){
           $event.draggable({
                     zIndex: 999,
                     revert: true,      // will cause the event to go back to its
+                    appendTo: 'body',
+                    containment: 'window',
+                    scroll: false,
+                    helper: 'clone',
                     revertDuration: 0,  //  original position after the drag
-                    start : function (ev,ui){ 
+                    start : function (ev,ui){
+                          $(this).hide();   
                           dragged = [ ui.helper[0], event ];
                           setTimeout(function(){ //bug... event isn't yet updated  
                             $(self).trigger("drag",[event]); 
                           },1);//bug... event isn't yet updated   
-                    }
+                    },
+                    stop: function(){
+                        // $(this).show()
+                    } 
                   }) 
 
           // store the Event Object in the DOM element so we can get to it later

@@ -91,8 +91,8 @@ function run(file,callback,fallback){
                 var addArray = parseItemOrder[i];
                 rootNode.children().each(function(index,node){
                     var n = mappingConfig.getNodeName(node); 
-                    console.log("parsing : "+n.toLowerCase());
-                    console.log("expecting : "+itemMapping.nodeName);
+                    // console.log("parsing : "+n.toLowerCase());
+                    // console.log("expecting : "+itemMapping.nodeName);
 
                     if(n && n.toLowerCase().indexOf(itemMapping.nodeName)!= -1){
                         add(addArray,itemMapping,this,{name:n}); 
@@ -107,7 +107,7 @@ function run(file,callback,fallback){
             var j=0;
             rootNode.children().each(function(index,node){ 
                 var n = mappingConfig.getNodeName(node); 
-                if(n && n.indexOf(mappingConfig.relationMapping.nodeName)!= -1){  
+                if(n && n.toLowerCase().indexOf(mappingConfig.relationMapping.nodeName)!= -1){  
                     add(relations,mappingConfig.relationMapping,this,{name:n,eventId:j});  
                     j++;
                 }
@@ -168,9 +168,12 @@ function run(file,callback,fallback){
             //////////////////////////////////////////////////////////////////////////
             
             // setRecursiveDates();
-            //allDay events
             for(var i=0;i<events.length;i++){
                 var event = events[i];
+            // if(rtnArray.setAcronym){
+            //     console.log("rtnArray",rtnArray)
+            //     alert("lol")
+            // }
                 if(event['setStartAt']){
                     
                     //allDay events
@@ -180,10 +183,7 @@ function run(file,callback,fallback){
                     }
 
                 }
-                // else
-                // {
-                //     event['setEndAt'] = event['setStartAt'] = defaultDate;
-                // } 
+                //if no startAt
                 else{
                     //try to get children date
                     var childrenDate = getChildrenDate(i);
@@ -310,7 +310,7 @@ function add(addArray,mapping,node,arg){
     function process(addArray,mapping,node,arg){
         var rtnArray = {};
         var key = mappingConfig.getNodeKey(node);
-        console.log("processing : "+key);
+        // console.log("processing : "+key);
         $(node).children().each(function(){ 
             if(mapping.label[this.localName]!== undefined){
                 
@@ -333,8 +333,16 @@ function add(addArray,mapping,node,arg){
             }
         });
              
+         //post processing
         if(mapping.action){
-            mapping.action(node,rtnArray); 
+            if(mapping.action(node,rtnArray) === true){
+                //if it was the main conf event
+                // console.log(rtnArray)
+                // alert("main conf event found")
+                objectMap[key] = rtnArray; 
+                conference = rtnArray;
+                return;
+            } 
         }
         if(Object.size(rtnArray) > 0){
             objectMap[key] = rtnArray; 
@@ -360,7 +368,12 @@ function add(addArray,mapping,node,arg){
                 if(!rtnArray[mapping.label[nodeName].setter])
                     rtnArray[mapping.label[nodeName].setter]={};
                 var index = Object.size(rtnArray[mapping.label[nodeName].setter]);
-                rtnArray[mapping.label[nodeName].setter][index] = val;
+                //check if there's no duplicated link
+                var found = false;
+                for ( var i in rtnArray[mapping.label[nodeName].setter]){
+                    if(rtnArray[mapping.label[nodeName].setter][i] == val){console.log(rtnArray);alert("DUPLICATED KEY FOR ");found = true;}
+                }
+                if(!found)rtnArray[mapping.label[nodeName].setter][index] = val;
             }else{
                 rtnArray[mapping.label[nodeName].setter]= val;
             }

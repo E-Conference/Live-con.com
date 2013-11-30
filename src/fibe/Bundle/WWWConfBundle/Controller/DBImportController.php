@@ -19,8 +19,11 @@ use fibe\Bundle\WWWConfBundle\Entity\SocialServiceAccount;
 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Category;
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Location; 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;   
- 
+use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;  
+
+
+use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
+
 
 /**
  * Api controller.
@@ -76,12 +79,24 @@ class DBImportController extends Controller
             foreach ($conferenceData as $setter => $value) { 
 
                 if($setter=="setAcronym"){
-                    $entity = $conference;
-                }else{
+                    //apply to both conference and mainconfevent
+                    $entity = $mainConfEvent; 
+                    call_user_func_array(array($conference, $setter), array($value)); 
+                }elseif($setter=="setLogoPath" ){
+                    //apply to the conference
+                    $entity = $conference; 
+                }else {
+                    //apply to the mainconfevent
                     $entity = $mainConfEvent;
-                }
+                    if($setter=="setStartAt" || $setter=="setEndAt"){
+                        $date= explode(' ', $value); 
+                        $value=new \DateTime($date[0], new \DateTimeZone(date_default_timezone_get()));
+                    }
+                } 
+
                 call_user_func_array(array($entity, $setter), array($value)); 
             }
+            $em->persist($mainConfEvent);
             $conferenceData = null;
         }
         
@@ -242,10 +257,12 @@ class DBImportController extends Controller
             $entities = $JSONFile['categories'];
             $j=0;
             for($i=0;$i<count($entities);$i++){
-                $current = $entities[$i]; 
+                $current = $entities[$i];
+                $catSlug = StringTools::slugify($current['setName']); 
+
                 $existsTest = $this->getDoctrine()
                                    ->getRepository('IDCISimpleScheduleBundle:Category')
-                                   ->findOneBy(array('name' => $current['setName']));
+                                   ->findOneBy(array('slug' => $catSlug));
                 if($existsTest!=null){
                     array_push($categoryEntities,$existsTest); 
                     continue; //skip existing category
@@ -283,9 +300,11 @@ class DBImportController extends Controller
                 $isMainConfEvent = false;
                 if(isset($current["mainConferenceEvent"])){
                     $isMainConfEvent = true;
-                    echo "mainConfEvent replaced";
+                    echo "mainConfEvent FOUND";
+                    var_dump($current);
+                    echo "\n";
                     $entity = $mainConfEvent;
-                    // $conference->setMainConfEvent($entity);
+                    // $conference->setMainConfEvent($entity); 
                     // $entity->setIsMainConfEvent(true);
                     // $em->remove($mainConfEvent);
                     // $mainConfEvent = $entity;
@@ -324,16 +343,16 @@ class DBImportController extends Controller
                      
                     if($setter=="setParent"){continue;}
 
-                    if($setter=="mainConferenceEvent"){
+                    // if($setter=="mainConferenceEvent"){
 
-                        // echo "mainConfEvent replaced";
-                        // $conference->setMainConfEvent($entity);
-                        // $entity->setIsMainConfEvent(true);
-                        // $conference->removeEvent($mainConfEvent);
-                        // $em->remove($mainConfEvent);
-                        // $mainConfEvent = $entity;
-                        continue;
-                    }
+                    //     // echo "mainConfEvent replaced";
+                    //     // $conference->setMainConfEvent($entity);
+                    //     // $entity->setIsMainConfEvent(true);
+                    //     // $conference->removeEvent($mainConfEvent);
+                    //     // $em->remove($mainConfEvent);
+                    //     // $mainConfEvent = $entity;
+                    //     continue;
+                    // }
 
 
                     if(is_array($value)){
@@ -373,6 +392,12 @@ class DBImportController extends Controller
                         call_user_func_array(array($entity, $setter), array($value)); 
                     } 
                 }
+
+                // if($isMainConfEvent){
+                //      echo $entity->getSummary();
+                //      echo date_format($entity->getStartAt(), 'Y-m-d H:i:s');
+                // }
+
                 $entity->setConference(  $conference );
                 $em->persist($entity); 
                 array_push($eventEntities,$entity); 

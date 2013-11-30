@@ -106,8 +106,7 @@ class WwwConf
     private $acronym;
 
     /**
-     * @ORM\OneToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\ConfEvent", cascade={"persist"})
-     * @ORM\JoinColumn(name="event_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\ConfEvent")
      **/
      private $mainConfEvent; 
 

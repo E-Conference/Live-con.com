@@ -40,7 +40,7 @@ class ConferenceController extends Controller
       $mainConfEvent = $wwwConf->getMainConfEvent(); 
 
       $form = $this->createForm(new WwwConfType($this->getUser()), $wwwConf);
-      
+       
       $request = $this->get('request');
       if ($request->getMethod() == 'POST') {
         $form->bind($request);

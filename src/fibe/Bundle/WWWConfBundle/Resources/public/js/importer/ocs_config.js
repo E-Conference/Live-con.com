@@ -44,6 +44,7 @@ var ocsConfig = {
             "eventMapping" : events
         };
     },
+    //preproccessing of the root node which contains the conference informations
     action : function(documentRootNode){
         conference = { 
             setSummary    : $(documentRootNode).children("name").text(),

@@ -2,6 +2,8 @@
 
 namespace fibe\Bundle\WWWConfBundle\Services;
 
+use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event; 
+
 class EmptyConf {
 
     public function emptyConf($conference,$em)
@@ -56,6 +58,22 @@ class EmptyConf {
         $em->remove($person);
       }
 
+      $mainConfEvent = $conference->getMainConfEvent();
+
+      $newMainConfEvent = new Event();
+      $newMainConfEvent->setIsMainConfEvent(true);
+      $newMainConfEvent->setSummary("Conference"); 
+      $newMainConfEvent->setStartAt( new \DateTime('now'));
+      $end = new \DateTime('now');
+      $newMainConfEvent->setEndAt( $end->add(new \DateInterval('P2D'))); 
+      $newMainConfEvent->addCategorie($em->getRepository('IDCISimpleScheduleBundle:Category')->findOneByName("ConferenceEvent"));
+      $newMainConfEvent->setSummary("Conference Event");
+      $newMainConfEvent->setConference($conference);
+      $conference->setMainConfEvent($newMainConfEvent);
+      $em->persist($newMainConfEvent); 
+      $em->remove($mainConfEvent);
+
+      $conference->setAcronym("");
       $em->persist($conference);
       $em->flush();
     }

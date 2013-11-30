@@ -221,22 +221,23 @@
             var confOwlUriInput = document.getElementById("EventImport"); 
             var file = confOwlUriInput.files[0];
             var dataArray;
-            $(confOwlUriInput).change(function(){
-                var file = this.files[0];
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    run( this.result,function(data){
-                        dataArray = data;
-                        bootstrapAlert("info",' '+getMsgUl(dataArray,"found"),"Info : ");
-                        $('#EventImportForm [disabled="disabled"]').removeAttr("disabled");
-                        $(confOwlUriInput).parent().addClass('has-success');
-                    },function(msg)
-                    {
-                        $(confOwlUriInput).parent().addClass('has-warning');
-                        bootstrapAlert("warning", msg || "there was an error importing this file");
-                    });  
-                }
-                reader.readAsText(file); 
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                run( this.result,function(data){
+                    dataArray = data;
+                    bootstrapAlert("info",' '+getMsgUl(dataArray,"found"),"Info : ");
+                    $('#EventImportForm [disabled="disabled"]').removeAttr("disabled");
+                    $(confOwlUriInput).parent().addClass('has-success');
+                },function(msg)
+                {
+                    $(confOwlUriInput).parent().addClass('has-warning');
+                    bootstrapAlert("warning", msg || "there was an error importing this file");
+                });  
+            }
+
+            $(confOwlUriInput).off("change").on("change",function(){
+                reader.readAsText(this.files[0]); 
             })
 
             //empty conf if needed
@@ -255,7 +256,8 @@
                                 url: "{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}",
                                 success:function(a,b,c)
                                 {
-                                    bootstrapAlert("success",'conference emptied'); 
+                                    bootstrapAlert("success",'conference emptied');
+                                    bootstrapAlert("success",' now sending file...',"conference emptied,","<i class='icon-spinner icon-spin'></i>"); 
                                     sendSerializedConf(dataArray);
                                 },
                                 error:function(a,b,c)
@@ -268,6 +270,7 @@
                             });
                     }) 
                 {% else %} 
+                    bootstrapAlert("info",' sending file...',"Info : ","<i class='icon-spinner icon-spin'></i>");
                     sendSerializedConf(dataArray);
                 {% endif %}
                 return false;
@@ -278,7 +281,6 @@
             function sendSerializedConf(dataArray){
                 var data = {dataArray:JSON.stringify(dataArray)};
                 //DBimport
-                bootstrapAlert("info",' sending file...',"Info : ","<i class='icon-spinner icon-spin'></i>");
                 $.ajax({ 
                     type: "POST",
                     cache: false,  
@@ -304,7 +306,7 @@
     
         function confirmEmpty(callback){ 
             $('#confirmModal').modal('show')
-                              .find("form").submit(function(e){ 
+                              .find("form").one("submit",function(e){ 
                                     if($('#confirmEmptyInput').val() === "Empty !"){
                                         callback();
                                         $('#confirmModal').modal('hide');

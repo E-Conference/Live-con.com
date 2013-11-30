@@ -75,10 +75,15 @@ class ConfEvent extends Event
      */
      private $isAllDay ;
 
+     /**
+     * @ORM\Column(type="string", length=128, nullable=true)
+     */
+    protected $acronym;
+ 
 
     /**
      *  
-     * Is a main conf event ?
+     * Is it a main conf event ?
      *   
      * @ORM\Column(name="is_mainConfEvent", type="boolean")
      */
@@ -373,6 +378,29 @@ class ConfEvent extends Event
     public function getIsMainConfEvent()
     {
         return $this->isMainConfEvent;
+    }
+
+     /**
+     * Set acronym
+     *
+     * @param string $acronym
+     * @return ConfEvent
+     */
+    public function setAcronym($acronym)
+    {
+        $this->acronym = $acronym;
+    
+        return $this;
+    }
+
+    /**
+     * Get acronym
+     *
+     * @return string 
+     */
+    public function getAcronym()
+    {
+        return $this->acronym;
     }
 
     

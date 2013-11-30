@@ -28,6 +28,7 @@ class ConfEventType extends EventType
             //                         'label'     => 'Belongs to conf'
             // ))   
              ->add('summary','text',array('required' => true))
+             ->add('acronym')
              ->add('categories',null,array('required' => false)) 
             //  ->add('startAt', 'datetime', array(  
             //     'widget' =>'single_text',

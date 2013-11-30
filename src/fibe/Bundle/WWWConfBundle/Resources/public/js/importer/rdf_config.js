@@ -230,6 +230,17 @@ var rdfConfig = {
             'rdfs:label' : {
                 setter : 'setSummary'
             },
+            //only for conference event
+            'swc:hasacronym' : {
+                setter : 'setAcronym'
+            },
+            //only for conference event
+            'swc:haslogo' : {
+                setter : 'setLogoPath'
+                ,format : function(node){ 
+                    return $(node).attr("rdf:resource");  
+                },
+            },
             'dce:description' : {
                 setter : 'setDescription'
             },
@@ -239,6 +250,9 @@ var rdfConfig = {
             'icaltzd:dtstart' : {
                 setter : 'setStartAt'
             },
+            'icaltzd:dtend' : {
+                setter : 'setEndAt'
+            },
             'ical:dtstart' : {
                 setter : 'setStartAt',
                 format : function(node){ 
@@ -247,11 +261,8 @@ var rdfConfig = {
                         if(this.nodeName !=="ical:date") return;
                         rtn = $(this).text();  
                     });
-                    return rtn || $(node).text();
+                    return moment(rtn || $(node).text()).format();
                 }
-            },
-            'icaltzd:dtend' : {
-                setter : 'setEndAt'
             },
             'ical:dtend' : {
                 setter : 'setEndAt',
@@ -261,7 +272,7 @@ var rdfConfig = {
                         if(this.nodeName !=="ical:date") return;
                         rtn = $(this).text();  
                     });
-                    return rtn || $(node).text();
+                    return moment(rtn || $(node).text()).format();
                 }
             },
             'swc:hasRelatedDocument' : { 
@@ -332,53 +343,56 @@ var rdfConfig = {
                 }, 
             },
         },
+        //post processing
         action : function(node,event){
 
-            //TODO refactore that
-            //TODO refactore that
-            //TODO refactore that
-
             // EVENT CAT 
-            var catName,
-                tmp;
+            var catName
+                ,tmp
+                ,isMainConfEvent = false;
+
             //different ways to get the category name 
-            tmp = node.nodeName.split("swc:").join("").split("event:").join("");
+            tmp = node.nodeName.split("swc:").join("").split("&swc;").join("").split("event:").join("");
             if(testCatName(tmp))catName = tmp;
 
             tmp = rdfConfig.getNodeName(node);
             if(testCatName(tmp))catName = tmp;
 
-            tmp = rdfConfig.getNodeName(node).split("swc:").join("").split("event:").join("");
-            if(testCatName(tmp))catName = tmp;
-            if(!catName)console.warn("category not found for "+tmp);
-            if(catName.indexOf("event") !== -1){
+            tmp = rdfConfig.getNodeName(node).split("&swc;").join("").split("swc:").join("").split("event:").join("");
+            if(testCatName(tmp))catName = tmp; 
+ 
+            if(catName){
                 var catId = getCategoryIdFromName(catName);
                 if(catId==undefined){ 
                     var category= {}; 
                     category['setName']=catName;
-                    if(catName == "conferenceevent") {
-                        event['mainConferenceEvent']=true;
+                    console.log(catName);
+                    if(catName.toLowerCase() == "conferenceevent") {
+                        isMainConfEvent = true;
+                        console.debug("mainconference event is ",event)
                         defaultDate = event['setStartAt'] || defaultDate;
                     }
                     categories.push(category);
                     catId = categories.length-1;
                 }
-                event['addCategorie']=catId;
+                if(!isMainConfEvent)event['addCategorie']=catId;
             }
             
             
             // store uri via xproperty array to get the event back in the relation loop
-            var xproperty= {}; 
-            xproperty['setCalendarEntity']=events.length;
-            xproperty['setXNamespace']="event_uri";
-            xproperty['setXValue']=$(node).attr('rdf:about');
-            xproperties.push(xproperty);
-
+            if(!isMainConfEvent){
+                var xproperty= {}; 
+                xproperty['setCalendarEntity']=events.length;
+                xproperty['setXNamespace']="event_uri";
+                xproperty['setXValue']=$(node).attr('rdf:about');
+                xproperties.push(xproperty);
+            }
             //don't store the original event
-            return false;
+            return isMainConfEvent;
 
             function testCatName(catName){
-                var cn = catName.toLowerCase();
+                var cn = catName.toLowerCase(); 
+
                 return (cn.indexOf("event") !== -1 && cn !== "event")
             }
         }, 
@@ -436,8 +450,10 @@ var rdfConfig = {
             var event = objectMap[rdfConfig.getNodeKey(node)];
             var found=false;
             $(node).children().each(function(){
-                if(this.nodeName=="swc:issubeventof"){ 
+                if(this.nodeName.toLowerCase()=="swc:issubeventof"){ 
                     var relatedToEventId=getEventIdFromURI($(this).attr('rdf:resource'))
+                    console.log($(this).attr('rdf:resource'))
+                    console.log("is at "+relatedToEventId)
                     if(relatedToEventId){
                         event['setParent']= relatedToEventId;
                     } 
