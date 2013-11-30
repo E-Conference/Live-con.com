@@ -47,7 +47,7 @@ class ScheduleController extends Controller
         $conf = $this->getUser()->getCurrentConf();
         return array('currentConf' => $conf);     
     
-}    
+    }    
 
 /**
  *  @Route("/view", name="schedule_view")
@@ -127,16 +127,24 @@ class ScheduleController extends Controller
             
             $event->setStartAt( $startAt );
             $event->setEndAt( $endAt );
-            $event->setParent( $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['parent']['id']) );
+            $event->setParent( $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['parent']['id']));
             $event->setSummary( $postData['title'] );
             $event->setIsAllDay($postData['allDay']=="true") ;
             
             $em->persist($event);
-            $em->flush();
+ 
+
             $JSONArray['IsSuccess'] = true;
-            $JSONArray['Msg'] = "Successfully";
+            $JSONArray['Msg'] = "Success";
         }
-        
+    
+        $mainConfEvent = $this->getUser()->getCurrentConf()->getMainConfEvent();
+        $mainConfEvent->fitChildrenDate();
+        $mainConfEvent->setParent(null);
+        $em->persist($mainConfEvent); 
+        $em->flush();
+        $JSONArray['mainConfEvent'] = array("start"=>$mainConfEvent->getStartAt(),"end"=>$mainConfEvent->getEndAt());
+
         $response = new Response(json_encode($JSONArray));
         $response->headers->set('Content-Type', 'application/json');
         return $response;

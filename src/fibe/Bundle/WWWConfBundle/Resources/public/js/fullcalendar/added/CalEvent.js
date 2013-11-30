@@ -95,9 +95,15 @@ CalEvent.prototype.persist = function(add){
     $.post(
       add=== true ? op.quickAddUrl : op.quickUpdateUrl,
       toSend,
-      function(doc) {   
+      function(response) {  
         bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well "+ (add=== true ? "added" : "updated"));
-        console.log(toSend.id+" "+(add=== true ? "added" : "updated"))
+        console.log(toSend.id+" "+(add=== true ? "added" : "updated"));
+        if(response.mainConfEvent){
+          //get computed mainConfEvent dates
+          mainConfEvent.start = moment(response.mainConfEvent.start.date).format();
+          mainConfEvent.end = moment(response.mainConfEvent.end.date).format();
+          mainConfEvent.render();
+        }
       },
       'json'
     );

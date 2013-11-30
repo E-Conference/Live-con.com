@@ -139,14 +139,14 @@ class CalendarEntityRepository extends EntityRepository
 
         if(isset($params['before'])) {
             $qb
-                ->andWhere('cer.endAt <= :before')
+                ->andWhere('cer.startAt < :before')
                 ->setParameter('before', new \DateTime($params['before']))
             ;
         }
 
         if(isset($params['after'])) {
             $qb
-                ->andWhere('cer.startAt >= :after')
+                ->andWhere('cer.endAt > :after')
                 ->setParameter('after', new \DateTime($params['after']))
             ;
         }

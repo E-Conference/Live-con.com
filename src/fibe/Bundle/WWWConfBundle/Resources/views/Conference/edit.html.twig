@@ -218,8 +218,7 @@
 
 
             //parse file
-            var confOwlUriInput = document.getElementById("EventImport"); 
-            var file = confOwlUriInput.files[0];
+            var confOwlUriInput = document.getElementById("EventImport");  
             var dataArray;
 
             var reader = new FileReader();
@@ -227,7 +226,9 @@
                 run( this.result,function(data){
                     dataArray = data;
                     bootstrapAlert("info",' '+getMsgUl(dataArray,"found"),"Info : ");
-                    $('#EventImportForm [disabled="disabled"]').removeAttr("disabled");
+                    $('#EventImportForm [type="submit"]').removeAttr("disabled")
+                                                         .removeClass("btn-default")
+                                                         .addClass("btn-success");
                     $(confOwlUriInput).parent().addClass('has-success');
                 },function(msg)
                 {
@@ -237,6 +238,12 @@
             }
 
             $(confOwlUriInput).off("change").on("change",function(){
+                $(this).parent().removeClass('has-success');
+                dataArray = undefined;
+                $('#EventImportForm [type="submit"]').attr("disabled","disabled")
+                                                     .removeClass("btn-success")
+                                                     .addClass("btn-default");
+
                 reader.readAsText(this.files[0]); 
             })
 
@@ -288,8 +295,7 @@
                     data: data,
                     success:function(a,b,c)
                     {
-                        bootstrapAlert("success",' '+getMsgUl(dataArray,"added")+'Please refresh this page to find out imported items.');
-                        $(confOwlUriInput).parent().addClass('has-success');
+                        bootstrapAlert("success",' '+getMsgUl(dataArray,"added")+'Please refresh this page to find out imported items.'); 
                     },
                     error:function(a,b,c)
                     {
@@ -321,7 +327,10 @@
         }
  
         function getMsgUl(dataArray,endString){
-            var msg = "<ul>";
+            var msg = "";
+            if(dataArray.conference.setAcronym)msg += dataArray.conference.setAcronym;
+            else if(dataArray.conference.setSummary)msg += dataArray.conference.setSummary;
+            msg += "<ul>"; 
             for (var i in dataArray) 
                 if(dataArray[i] && dataArray[i].length >0)
                     msg +="<li>"+dataArray[i].length +" "+i+" "+endString+" !</li>"

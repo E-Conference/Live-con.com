@@ -58,9 +58,18 @@ function run(file,callback,fallback){
             //check format (default : rdf)
             var format = undefined;    
             for (var i in formatConfig){
-                if(formatConfig[i].checkFormat(file) === true){
-                    console.log("format found ! :" + i);
-                    format = i;
+
+                try
+                {
+                    if(formatConfig[i].checkFormat(file) === true){
+                        console.log("format found ! :" + i);
+                        format = i;
+                    }
+                }
+                catch(err)
+                {
+                    if(fallback!=undefined)fallback("bad format"); 
+                    return;
                 }
             } 
 
@@ -202,6 +211,10 @@ function run(file,callback,fallback){
                     }
                 }
             }
+            if(!conference.setStartAt){
+                conference['setStartAt'] = defaultDate; 
+                conference['setEndAt'] = moment().add('d', 2).format('YYYY-MM-DDTHH:mm:ss Z');;  
+            }
             
             //////////////////////////////////////////////////////////////////////////
             ////////////////////////  INHERIT Child DATE  ///////////////////////////
@@ -248,14 +261,14 @@ function run(file,callback,fallback){
             }
             var dataArray={}; 
             dataArray['conference']=conference;  
-            dataArray['locations']=locations;  
-            dataArray['categories']=categories;
             dataArray['persons']=persons;   
-            dataArray['topics']=topics;   
             dataArray['events']=events; 
-            // dataArray['xproperties']=xproperties; 
             dataArray['proceedings']=proceedings; 
             dataArray['organizations']=organizations; 
+            dataArray['topics']=topics;   
+            dataArray['locations']=locations;  
+            dataArray['categories']=categories;
+            // dataArray['xproperties']=xproperties; 
             console.log('---------finished---------' );
             console.log(dataArray);
             console.log(roles)
@@ -344,6 +357,7 @@ function add(addArray,mapping,node,arg){
                 return;
             } 
         }
+
         if(Object.size(rtnArray) > 0){
             objectMap[key] = rtnArray; 
             addArray.push( rtnArray );
@@ -354,30 +368,47 @@ function add(addArray,mapping,node,arg){
             if(!importedLog[mappingStr])
                 importedLog[mappingStr] = undefined
             var val = node.textContent;
-                
-            // pre processing
-            if(mapping.label[nodeName].action){
-                mapping.label[nodeName].action(node,rtnArray); 
-            }
 
-            if(mapping.label[nodeName].format){   
-                val = mapping.label[nodeName].format(node);
-            }
-            val = mapping.label[nodeName].setter === false ? val : typeof val === 'string' ? str_format(val) : val ;
-            if(mapping.label[nodeName].multiple === true){
-                if(!rtnArray[mapping.label[nodeName].setter])
-                    rtnArray[mapping.label[nodeName].setter]={};
-                var index = Object.size(rtnArray[mapping.label[nodeName].setter]);
-                //check if there's no duplicated link
-                var found = false;
-                for ( var i in rtnArray[mapping.label[nodeName].setter]){
-                    if(rtnArray[mapping.label[nodeName].setter][i] == val){console.log(rtnArray);alert("DUPLICATED KEY FOR ");found = true;}
+            if(mapping.label[nodeName].list){
+                var vals = val.split(mapping.label[nodeName].list.delimiter);
+                for(var i=0;i<vals.length;i++){
+                    console.log(vals[i])
+                    setWithValue(mapping,nodeName,node,arg,vals[i]);
                 }
-                if(!found)rtnArray[mapping.label[nodeName].setter][index] = val;
             }else{
-                rtnArray[mapping.label[nodeName].setter]= val;
+                setWithValue(mapping,nodeName,node,arg,val);    
             }
 
+
+            function setWithValue(mapping,nodeName,node,arg,val){
+
+                // pre processing
+                if(mapping.label[nodeName].action){
+                    mapping.label[nodeName].action(node,rtnArray,val); 
+                }
+
+                if(mapping.label[nodeName].format){   
+                    val = mapping.label[nodeName].format(node,val);
+                }
+                val = mapping.label[nodeName].setter === false ? val : typeof val === 'string' ? str_format(val) : val ;
+                if(mapping.label[nodeName].multiple === true){
+                    //create the object if not found
+                    if(!rtnArray[mapping.label[nodeName].setter])
+                        rtnArray[mapping.label[nodeName].setter]={};
+                    //get index
+                    var index = Object.size(rtnArray[mapping.label[nodeName].setter]);
+
+                    //check if there's no duplicated link
+                    var found = false;
+                    for ( var i in rtnArray[mapping.label[nodeName].setter]){
+                        if(rtnArray[mapping.label[nodeName].setter][i] == val){found = true;}
+                    }
+                    if(!found)rtnArray[mapping.label[nodeName].setter][index] = val;
+                }else{
+                    rtnArray[mapping.label[nodeName].setter]= val;
+                }
+
+            }
         }
     }
 }

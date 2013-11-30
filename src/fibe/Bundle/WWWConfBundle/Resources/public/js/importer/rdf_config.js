@@ -162,6 +162,22 @@ var rdfConfig = {
                     }
                 }
             },
+            'swrc:listkeyword' : {
+                multiple : true,
+                list : {delimiter:", "},
+                setter : 'addTopic',
+                format : function(node,value){ 
+                    var topicName = value;
+                    var index = getTopicIdFromName(topicName);
+                    return index !== -1 ? index : false ;
+                },
+                action : function(node,rtnArray,value){
+                    var topicName = value;  
+                    if(getTopicIdFromName(topicName)=== -1 ){
+                        topics.push({'setName':str_format(topicName)});  
+                    }
+                }
+            },
             //authors are retrieved from their id in the objectMap .
             'dc:creator' : {
                 multiple : true,

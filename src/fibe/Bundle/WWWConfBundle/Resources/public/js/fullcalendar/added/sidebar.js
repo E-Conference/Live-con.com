@@ -23,6 +23,7 @@ function Sidebar(){
             over: function( event, ui ) {
                 if( $(ui.draggable).hasClass("fc-event")) {
                     var event = Events[dragged[1].id];
+                    if(!event)return;
                     // console.log("dropped into sidebar",event);
                     $(this).css("border-color","green"); 
                     sidebarEventHtml($sidebarTmp,event);
@@ -43,7 +44,8 @@ function Sidebar(){
 
                 // console.log("end Drag to sidebar");
 
-                var event = Events[dragged[1].id];
+                var event = Events[dragged[1].id] ;
+                    if(!event)return;
                 $(self).trigger("dropped",[event]);
               }
             }

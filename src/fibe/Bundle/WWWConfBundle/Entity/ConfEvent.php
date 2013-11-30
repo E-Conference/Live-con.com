@@ -125,6 +125,31 @@ class ConfEvent extends Event
     public function onUpdate()
     {
         $this->slugify();
+
+        // if($this->isMainConfEvent){
+        //     foreach ($this->getChildren() as $child) { 
+        //         if($child->getStartAt() < $this->getStartAt())$this->setStartAt($child->getStartAt());
+        //         if($child->getEndAt()   > $this->getEndAt()  )$this->setEndAt(  $child->getEndAt()  );
+        //     }
+        // }
+
+        if($this->isMainConfEvent){
+            $this->fitChildrenDate();
+        } 
+    }
+
+    public function fitChildrenDate(){
+        //ensure main conf event fits its children dates 
+        $earliestStart= new \DateTime('6000-10-10'); 
+        $latestEnd = new \DateTime('1000-10-10'); 
+        foreach ($this->getChildren() as $child) {
+            if($child->getStartAt() < $earliestStart) $earliestStart = $child->getStartAt();
+            if($child->getEndAt() > $latestEnd) $latestEnd = $child->getEndAt();
+        }
+        if($earliestStart == new \DateTime('6000-10-10') ||$latestEnd == new \DateTime('1000-10-10'))return;
+        if($earliestStart == $latestEnd)$latestEnd->add(new \DateInterval('P2D'));
+        $this->setStartAt($earliestStart);
+        $this->setEndAt($latestEnd);
     }
 
      /**

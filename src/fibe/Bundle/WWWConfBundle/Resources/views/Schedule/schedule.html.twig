@@ -211,11 +211,11 @@
       var calendar_events   = []; 
       function renderEvents(events,callback){
           Events = {};
-          $calendar.fullCalendar( 'removeEvents'); 
 
           var instant_events   = [];  
           calendar_events   = []; 
           var i = 0;
+          var orphanChildren= [];
           //non-blocking loop
           function doWork() {
  
@@ -229,23 +229,34 @@
             } 
             if(event.mainconfevent){
               mainConfEvent = event;
+              if(mainConfEvent.parent.id != ""){
+                mainConfEvent.persist();
+              }
+              EventCollection.eventToRender = undefined; 
+            } 
+            if(event.parent.id == ""){
+              orphanChildren.push(event);
             }
           
             i++; 
 
             //last iteration  
             if (!events[i]) {
-
               //populate sidebar
               sidebar.setInstantEvents(instant_events); 
-
               fetched = true; 
+              // $calendar.fullCalendar( 'removeEvents');
+              for(var j=0;j<orphanChildren.length;j++){
+                if(orphanChildren[j] == mainConfEvent)continue;
+                orphanChildren[j].parent.id = mainConfEvent.id;
+                orphanChildren[j].persist();
+                console.log("event "+orphanChildren[j].title+" was orphan, so it's now the child of "+mainConfEvent.title)
+              }
               $calendar.fullCalendar('refetchEvents');
-
             }else if (stopRender!==true){ 
               //the loop goes on
               setTimeout(doWork, 1);
-            }       
+            }
           };
           var stopRender = false;
           $calendar.off("stopRender").on("stopRender",function(){
@@ -280,9 +291,15 @@
                 callback(calendar_events );
                 return;
               }
-              
-              op.data['before']=moment(end).format();
-              op.data['after']=moment(start).format();
+              if(firstDay){ 
+                op.data['before']=firstDay.endOf('week').format();
+                op.data['after']=firstDay.startOf('week').format();
+                firstDay = undefined;
+              }else{
+                op.data['before']=moment(end).endOf('week').format();
+                op.data['after']=moment(start).startOf('week').format();
+                
+              }
               $.get(
                 op.getOrderedUrl,
                 op.data,
@@ -309,7 +326,7 @@
                           // rerender if changed
                       $modalBody.find("#eventForm,#delete-event-form").submit(function(){
                         $modal.off('hidden.bs.modal').on('hidden.bs.modal', function () {
-                          $calendar.fullCalendar( 'refetchEvents' ) 
+                          $calendar.fullCalendar( 'refetchEvents' );
                         })
                       }) 
                   }
@@ -337,20 +354,24 @@
                     }; 
                     console.log(tmp);
                     $.post(
-                            op.quickAddUrl,
-                            $.extend( {} , tmp ),
-                            function(response) {  
-                                bootstrapAlert("success","event <b>"+tmp['title']+"</b> has been well added");
-                                tmp.id =response.id;
-                                var ev = new CalEvent(tmp);  
-                                Events[ev.id] = ev; 
-                                ev.setParent(mainConfEvent);
-                                ev.updateParentDate();
-                                EventCollection.eventToRender = {id:ev["id"],oldStart:ev.start,oldEnd:ev.end}; 
-                                ev.render();
-                                // $calendar.fullCalendar('renderEvent',ev); // 3rd arg make the event "stick"
-                            },
-                            'json'
+                        op.quickAddUrl,
+                        $.extend( {} , tmp ),
+                        function(response) {  
+                            bootstrapAlert("success","event <b>"+tmp['title']+"</b> has been well added");
+                            tmp.id =response.id;
+                            var ev = new CalEvent(tmp);  
+                            Events[ev.id] = ev; 
+                            ev.setParent(mainConfEvent);
+                            ev.updateParentDate();
+                            EventCollection.eventToRender = {id:ev["id"],oldStart:ev.start,oldEnd:ev.end}; 
+                            ev.render();
+                               //get computed mainConfEvent dates
+                              mainConfEvent.start = moment(response.mainConfEvent.start.date).format();
+                              mainConfEvent.end = moment(response.mainConfEvent.end.date).format();
+                              mainConfEvent.render();
+                             // $calendar.fullCalendar('renderEvent',ev); // 3rd arg make the event "stick"
+                        },
+                        'json'
                     );
                     bootstrapAlert("info","add request sent","Info : ","<i class='icon-spinner icon-spin'></i>");
                   $modalNewEvent.modal("hide");
@@ -533,7 +554,7 @@
  
               toppestParent = EventCollection.getToppestParent(view);
 
-          // console.log("toppest parent : ",toppestParent);
+          console.log("toppest parent : ",toppestParent);
           if(!toppestParent)return;
           // console.log("toppestParent",toppestParent);
           
@@ -563,10 +584,11 @@
                   catch(err)
                   {
                       // events aren't in the dom...
+                      
                       return;
                   }
 
-                  // console.log("##getBroCountRange## ",broCountRange);  
+                  console.log("##getBroCountRange## ",broCountRange);  
 
 
                   for (var i in events){
@@ -582,32 +604,37 @@
                     // repositionning (width and Xpos) 
                     //positionning event to be over the parent
                     console.log(event.id)
-                    var count   = broCountRange[event.id].count,
-                        range   = broCountRange[event.id].range,
-                        left    = broCountRange[event.id].minLeft;
-                    // console.log("event "+event.id+" has "+count+" bros. range = "+range+" minLeft = "+left);
+                    // if(broCountRange[event.id]){
 
-                    //width
-                    newColWidth = colWidth/(count)-eventMargin;
+                        var count   = broCountRange[event.id].count,
+                            range   = broCountRange[event.id].range,
+                            left    = broCountRange[event.id].minLeft;
+                        // console.log("event "+event.id+" has "+count+" bros. range = "+range+" minLeft = "+left);
 
-                     
-                    //place child into his parent
-                    if(parentPos){
-                      left = parentPos.x+eventMargin/2;
-                      newColWidth = newColWidth+eventMargin;
-                      if(moment(parent.start).isSame(moment(event.start))){
-                        element.css("top",elemProp.y+eventMargin); 
-                        element.css("height",elemProp.h-eventMargin*2);
-                      }
-                      if(moment(parent.end).isSame(moment(event.end))){ 
-                        element.css("height",elemProp.h-eventMargin);
-                      } 
-                    } 
-                    element.width(newColWidth);
-                    
-                    left += (range*(newColWidth+eventMargin)); 
-                    if(left)element.css("left",left); 
-                    // console.log(left)  
+                        //width
+                        newColWidth = colWidth/(count)-eventMargin;
+
+                         
+                        //place child into his parent
+                        if(parentPos){
+                          left = parentPos.x+eventMargin/2;
+                          newColWidth = newColWidth+eventMargin;
+                          if(moment(parent.start).isSame(moment(event.start))){
+                            element.css("top",elemProp.y+eventMargin); 
+                            element.css("height",elemProp.h-eventMargin*2);
+                          }
+                          if(moment(parent.end).isSame(moment(event.end))){ 
+                            element.css("height",elemProp.h-eventMargin);
+                          } 
+                        } 
+                        element.width(newColWidth);
+                        
+                        left += (range*(newColWidth+eventMargin)); 
+                        if(left)element.css("left",left); 
+                        // console.log(left)  
+                    // }else{
+                    //   console.warn("couldn't have get broCountRange["+event.id+"]");
+                    // }
 
                     //z-index 
                     element.css('z-index',parentZindex+1)  
