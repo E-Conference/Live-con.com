@@ -17,9 +17,11 @@ function Sidebar(){
             var $event = $(eventHtml);
             $event = sidebarDraggable($event,instant_events[i]);
           }
-
+// external-event fc-event               fc-event-draggable                                          ui-draggable                     
+//                fc-event fc-event-vert fc-event-draggable fc-event-start fc-event-end ui-droppable ui-draggable ui-resizable
           //set sidebar droppable
           $sidebar.droppable({
+            accept: ".ui-resizable" ,
             over: function( event, ui ) {
                 if( $(ui.draggable).hasClass("fc-event")) {
                     var event = Events[dragged[1].id];
@@ -64,8 +66,7 @@ function Sidebar(){
                     zIndex: 999,
                     revert: true,      // will cause the event to go back to its
                     appendTo: 'body',
-                    containment: 'window',
-                    scroll: false,
+                    containment: 'window', 
                     helper: 'clone',
                     revertDuration: 0,  //  original position after the drag
                     start : function (ev,ui){
@@ -76,7 +77,7 @@ function Sidebar(){
                           },1);//bug... event isn't yet updated   
                     },
                     stop: function(){
-                        // $(this).show()
+                        $(this).show()
                     } 
                   }) 
 
