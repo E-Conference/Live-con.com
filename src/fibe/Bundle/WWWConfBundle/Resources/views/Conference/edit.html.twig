@@ -311,8 +311,11 @@
 
     
         function confirmEmpty(callback){ 
-            $('#confirmModal').modal('show')
-                              .find("form").one("submit",function(e){ 
+            $('#confirmModal').modal('show');
+            $('#confirmModal').one('shown.bs.modal', function() {
+                $(this).find("input").first().focus();
+            }) 
+            $('#confirmModal').find("form").one("submit",function(e){
                                     if($('#confirmEmptyInput').val() === "Empty !"){
                                         callback();
                                         $('#confirmModal').modal('hide');

@@ -17,7 +17,7 @@
       <div id="sidebar">  
         <div class="checkbox">
           <label>
-            <input id="reposition" checked="checked" type="checkbox"> Reposition parent/child <small>(<i>alpha</i>)</small>
+            <input id="reposition" checked="checked" type="checkbox"> Reposition parent/child <small>(<i>need performance</i>)</small>
           </label>
         </div> 
         <div class="history hide">
@@ -277,7 +277,10 @@
           editable: true,
           year: firstDay.year(), 
           month: firstDay.month(),
-          date: firstDay.date(),
+          date: firstDay.date(), 
+          windowResize: function(view) {
+            EventCollection.eventToRender = mainConfEvent;
+          }, 
           //get events
           events : function(start, end, callback) { 
               var stopRender = false;
@@ -296,8 +299,8 @@
                 op.data['after']=firstDay.startOf('week').format();
                 firstDay = undefined;
               }else{
-                op.data['before']=moment(end).endOf('week').format();
-                op.data['after']=moment(start).startOf('week').format();
+                op.data['before']=moment(end).format();
+                op.data['after']=moment(start).format();
                 
               }
               $.get(
@@ -383,18 +386,18 @@
               $calendar.fullCalendar('unselect');
               
           },
-          eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
-              setTimeout(function(){ //bug... event isn't yet updated 
-                    var oldEnd = moment(event["end"]).subtract({'d':dayDelta,'m':minuteDelta}); 
-                    EventCollection.eventToRender = {id:event["id"],oldStart:event["start"],oldEnd:oldEnd.format()}; 
+          eventResize: function(event,dayDelta,minuteDelta,revertFunc){
+            setTimeout(function(){ //bug... event isn't yet updated
+              var oldEnd = moment(event["end"]).subtract({'d':dayDelta,'m':minuteDelta});
+              EventCollection.eventToRender = {id:event["id"],oldStart:event["start"],oldEnd:oldEnd.format()};
 
-                    console.log(dayDelta,minuteDelta,event)
+              console.log(dayDelta,minuteDelta,event);
 
-                    event.updateParentDate();
-                    event.updateChildrenDate();
-                    event.render();
-                    event.persist(); 
-              },1);//bug... event isn't yet updated 
+              event.updateParentDate();
+              event.updateChildrenDate();
+              event.render();
+              event.persist();
+            },1);//bug... event isn't yet updated 
           }, 
           eventDrop : function(event){ //drop from calendar
               event.persist(); 
@@ -409,7 +412,12 @@
               repositionTimeout=setTimeout(function(){   
                   if(!mainConfEvent)return;
 
+                  console.log("--------------------------------------------------------------");
+                  console.log("--------------------------------------------------------------");
+                  console.log("--------------------------------------------------------------");
+                  var startScript = moment();
                   updateEventArray();
+                  console.debug(moment().diff(startScript)+" to positionBlock");
 
                   if(view.name !== "month")reposition(view); 
                   console.log("eventToRender",EventCollection.eventToRender); 
@@ -543,7 +551,7 @@
        *  just after to the fullcalendar "all event render" function
        */
  
-      var repositionTimeout = 20;
+      var repositionTimeout = 0;
       function reposition(view){
 
           var repositionTimeout,
@@ -603,7 +611,7 @@
 
                     // repositionning (width and Xpos) 
                     //positionning event to be over the parent
-                    console.log(event.id)
+                    // console.log(event.id)
                     // if(broCountRange[event.id]){
 
                         var count   = broCountRange[event.id].count,
@@ -899,7 +907,7 @@
             //event dropped out of parent
             console.log(" #### moved out ####");  
             event.setParent(mainConfEvent);
-            event.updateParentDate();
+            // event.updateParentDate();
             event.render();
           }else{
             //still inside but may need a parent update (to properly contains child)

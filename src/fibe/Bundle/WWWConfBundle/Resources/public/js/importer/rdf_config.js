@@ -382,7 +382,7 @@ var rdfConfig = {
                 if(catId==undefined){ 
                     var category= {}; 
                     category['setName']=catName;
-                    console.log(catName);
+                    // console.log(catName);
                     if(catName.toLowerCase() == "conferenceevent") {
                         isMainConfEvent = true;
                         console.debug("mainconference event is ",event)
@@ -467,9 +467,7 @@ var rdfConfig = {
             var found=false;
             $(node).children().each(function(){
                 if(this.nodeName.toLowerCase()=="swc:issubeventof"){ 
-                    var relatedToEventId=getEventIdFromURI($(this).attr('rdf:resource'))
-                    console.log($(this).attr('rdf:resource'))
-                    console.log("is at "+relatedToEventId)
+                    var relatedToEventId=getEventIdFromURI($(this).attr('rdf:resource')) 
                     if(relatedToEventId){
                         event['setParent']= relatedToEventId;
                     } 

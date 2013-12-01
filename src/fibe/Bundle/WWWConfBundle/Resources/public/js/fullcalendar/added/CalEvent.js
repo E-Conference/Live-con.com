@@ -28,7 +28,7 @@ var CalEvent = function(event){
     if(this.length > 0 && this.color)
       this["background-color"] = this.color;
      
-    console.log("new CalEvent" , this)
+    // console.log("new CalEvent" , this)
     Events[this["id"]] = this; 
 
     // for (var i in event){

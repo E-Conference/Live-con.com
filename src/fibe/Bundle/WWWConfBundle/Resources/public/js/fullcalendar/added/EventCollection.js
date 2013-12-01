@@ -245,7 +245,7 @@ var EventCollection = {
           if( e.id == mainConfEvent.id  )continue; 
           // if( e.id == eventToRender.id  )continue; 
           if(!e.isOutOf(oldDayToRender) || !e.isOutOf(newDayToRender) ){
-            console.log("#######affecting "+e.id);
+            // console.log("#######affecting "+e.id);
             delete EventCollection.rtnArray[e.id];
             brothers.push(e);
           }
@@ -285,7 +285,7 @@ var EventCollection = {
       var remaining = brothers.slice(0);
       console.log("----------------------------------------------------");
       console.log("affected = ",brothers);
-      console.log("remaining = ",remaining);
+      // console.log("remaining = ",remaining);
       console.log("non affected : ",EventCollection.rtnArray);
       console.log("----------------------------------------------------");
 
@@ -355,7 +355,7 @@ var EventCollection = {
         // done.push(curBro.id);
 
       }
-      console.log("bro count range",EventCollection.rtnArray) 
+      // console.log("bro count range",EventCollection.rtnArray) 
       return EventCollection.rtnArray;
     },
 

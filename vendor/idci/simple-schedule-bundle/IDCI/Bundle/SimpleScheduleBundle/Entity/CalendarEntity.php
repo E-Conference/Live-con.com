@@ -252,8 +252,8 @@ class CalendarEntity
     /**
      * status
      *
-     * @ORM\ManyToOne(targetEntity="CalendarEntity", inversedBy="children", cascade={"persist"})
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="CalendarEntity", inversedBy="children", cascade={"persist","detach"})
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
     protected $parent; 
 

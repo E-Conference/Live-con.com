@@ -187,8 +187,8 @@ function run(file,callback,fallback){
                     
                     //allDay events
                     if(moment(event['setStartAt']).dayOfYear() != moment(event['setEndAt']).dayOfYear()){
-                        event['setStartAt'] = moment(event['setStartAt']).hour(0).minute(0).second(0).millisecond(0).format('YYYY-MM-DDTHH:mm:ss Z');
-                        event['setEndAt'] = moment(event['setEndAt']).hour(0).minute(0).second(0).millisecond(0).add('d', 1).format('YYYY-MM-DDTHH:mm:ss Z');
+                        event['setStartAt'] = moment(event['setStartAt']).startOf("day").format('YYYY-MM-DDTHH:mm:ss Z');
+                        event['setEndAt'] = moment(event['setStartAt']).endOf("day").format('YYYY-MM-DDTHH:mm:ss Z');
                     }
 
                 }
@@ -211,10 +211,10 @@ function run(file,callback,fallback){
                     }
                 }
             }
-            if(!conference.setStartAt){
-                conference['setStartAt'] = defaultDate; 
-                conference['setEndAt'] = moment().add('d', 2).format('YYYY-MM-DDTHH:mm:ss Z');;  
-            }
+            // if(!conference.setStartAt){
+            //     conference['setStartAt'] = defaultDate; 
+            //     conference['setEndAt'] = moment().add('d', 2).format('YYYY-MM-DDTHH:mm:ss Z');
+            // }
             
             //////////////////////////////////////////////////////////////////////////
             ////////////////////////  INHERIT Child DATE  ///////////////////////////

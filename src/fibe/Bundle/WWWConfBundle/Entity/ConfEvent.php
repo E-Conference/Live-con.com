@@ -93,6 +93,11 @@ class ConfEvent extends Event
      * @ORM\Column(type="string", length=128, nullable=true)
      */
     protected $slug;
+
+     /**
+     * @ORM\Column(name="is_instant", type="boolean")
+     */
+    protected $isInstant;
      
     /**
      * Constructor
@@ -125,6 +130,7 @@ class ConfEvent extends Event
     public function onUpdate()
     {
         $this->slugify();
+        $this->setIsInstant($this->getEndAt()->format('U') == $this->getStartAt()->format('U'));
 
         // if($this->isMainConfEvent){
         //     foreach ($this->getChildren() as $child) { 
@@ -135,7 +141,8 @@ class ConfEvent extends Event
 
         if($this->isMainConfEvent){
             $this->fitChildrenDate();
-        } 
+            $this->setIsInstant($this->getEndAt()->format('U') == $this->getStartAt()->format('U'));
+        }
     }
 
     public function fitChildrenDate(){
@@ -143,6 +150,7 @@ class ConfEvent extends Event
         $earliestStart= new \DateTime('6000-10-10'); 
         $latestEnd = new \DateTime('1000-10-10'); 
         foreach ($this->getChildren() as $child) {
+            if($child->getIsInstant())continue;
             if($child->getStartAt() < $earliestStart) $earliestStart = $child->getStartAt();
             if($child->getEndAt() > $latestEnd) $latestEnd = $child->getEndAt();
         }
@@ -150,7 +158,7 @@ class ConfEvent extends Event
         if($earliestStart == $latestEnd)$latestEnd->add(new \DateInterval('P2D'));
         $this->setStartAt($earliestStart);
         $this->setEndAt($latestEnd);
-    }
+    } 
 
      /**
      * Set slug
@@ -403,6 +411,30 @@ class ConfEvent extends Event
     public function getIsMainConfEvent()
     {
         return $this->isMainConfEvent;
+    }
+
+    
+    /**
+     * Set isInstant
+     *
+     * @param string $isInstant
+     * @return ConfEvent
+     */
+    public function setIsInstant($isInstant)
+    {
+        $this->isInstant = $isInstant;
+    
+        return $this;
+    }
+
+    /**
+     * Get isInstant
+     *
+     * @return string 
+     */
+    public function getIsInstant()
+    {
+        return $this->isInstant;
     }
 
      /**
