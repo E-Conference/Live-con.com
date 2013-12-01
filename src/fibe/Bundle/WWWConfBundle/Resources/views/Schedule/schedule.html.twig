@@ -223,7 +223,7 @@
             var event = new CalEvent(events[i]);  
  
             calendar_events.push(Events[events[i]["id"]]);  
-                
+
             if(event.mainconfevent){
               mainConfEvent = event;
               if(mainConfEvent.parent.id != ""){
@@ -275,7 +275,7 @@
           month: firstDay.month(),
           date: firstDay.date(), 
           windowResize: function(view) {
-            EventCollection.eventToRender = mainConfEvent;
+              EventCollection.eventToRender = undefined; 
           }, 
           //get events
           events : function(start, end, callback) { 
@@ -405,15 +405,15 @@
           },
           eventAfterAllRender: function( view ) { 
               //avoid repeating this function 10 times...
+              if(!mainConfEvent)return;
               clearTimeout(repositionTimeout);
               repositionTimeout=setTimeout(function(){   
-                  if(!mainConfEvent)return;
-
                   console.log("--------------------------------------------------------------");
                   console.log("--------------------------------------------------------------");
                   console.log("--------------------------------------------------------------");
                   var startScript = moment();
                   updateEventArray();
+
                   console.debug(moment().diff(startScript)+" to positionBlock");
 
                   if(view.name !== "month")reposition(view); 
@@ -427,7 +427,7 @@
               // retrieve the dropped element's stored Event Object 
               var event = dragged[1]; 
               // var event = $.extend({},dragged[1]);  
-              event.elem.remove();
+              if(event.elem)event.elem.remove();
               // delete event.elem;
               event.allDay = allDay;
               event['start'] = date;
@@ -467,46 +467,6 @@
       };
       $calendar.fullCalendar(calendarOption);  
       $calendar.fullCalendar('changeView', "agendaWeek" ); 
-
-      /*-------------------------------------------------------------------------------------------------*/
-      /*------------------------------------- initialize sidebar ----------------------------------------*/
-      /*-------------------------------------------------------------------------------------------------*/
-      
-      var sidebar = new Sidebar('#external-events');
-      sidebar.populate(op.getDatalessUrl);
-
-      //dropped on the sidebar;
-      $(sidebar).on("dropped",function(ev,calEvent){  
-          console.log("dropped",event)
-          var event = Events[calEvent.id];
-          event.deleteParent();
-          EventCollection.fitMainConfEvent();
-
-          //set as sidebar draggable element  and then affect children 
-          sidebar.setSidebarEvent(event);
-
-          //set as instant event 
-          event['end'] = moment(event['start']);
-          event.formatDate();
-          // remove event from calendar 
-          $calendar.fullCalendar('removeEvents',event.id); 
-          event.persist();  
-
-          var children = EventCollection.getChildren(event, {concat:true,onlyEvent:true} ); 
-          $.each(children,function(i,child){
-              sidebar.setSidebarEvent(child); 
-              //set as instant event 
-              child['end'] = moment(child['start']);
-              child.formatDate();
-              // remove event from calendar 
-              $calendar.fullCalendar('removeEvents',child.id);  
-              child.persist();
-          });
-          // updateEventArray();
-      }).on("drag",function(ev,event){ 
-          dragChildren(event);
-      }); 
-
 
       /*-------------------------------------------------------------------------------------------------*/
       /*------------------------------------- update function -------------------------------------------*/
@@ -551,7 +511,7 @@
        *  just after to the fullcalendar "all event render" function
        */
  
-      var repositionTimeout = 0;
+      var repositionTimeout = 10;
       function reposition(view){
 
           var repositionTimeout,
@@ -578,6 +538,8 @@
                   positionBlock(toppestParent,colWidth,2);
                   console.debug(moment().diff(startScript)+" to positionBlock");
               },1)
+          }else{
+            EventCollection.eventToRender = undefined;
           }
           function positionBlock(events,colWidth,parentZindex,parentPos,parent){ 
                   
@@ -825,12 +787,7 @@
                
             
           }; 
-      }
-
-      
-
-
-
+      } 
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------------- position ------------------------------------------------------*/
       /*-----------------------------------------------------------------------------------------------------*/
@@ -864,7 +821,7 @@
           var diff = { 
             x : (draggedProp.x - newdraggedProp.x) , 
             y : (draggedProp.y - newdraggedProp.y)
-          }; 
+          };
           if(diff.x !== 0  || diff.y !== 0 ){
             draggedProp =  newdraggedProp;  
 
@@ -917,6 +874,46 @@
         } 
       } 
 
+
+
+      /*-------------------------------------------------------------------------------------------------*/
+      /*------------------------------------- initialize sidebar ----------------------------------------*/
+      /*-------------------------------------------------------------------------------------------------*/
+      
+      var sidebar = new Sidebar('#external-events');
+      sidebar.populate(op.getDatalessUrl);
+
+      //dropped from calendar to sidebar;
+      $(sidebar).on("dropped",function(ev,calEvent){  
+          console.log("dropped",event)
+          var event = Events[calEvent.id];
+          // event.deleteParent();
+          EventCollection.fitMainConfEvent();
+
+          //set as sidebar draggable element  and then affect children 
+          sidebar.setSidebarEvent(event);
+
+          //set as instant event 
+          event['end'] = moment(event['start']);
+          event.formatDate();
+          // remove event from calendar 
+          $calendar.fullCalendar('removeEvents',event.id); 
+          event.persist();  
+
+          var children = EventCollection.getChildren(event, {concat:true,onlyEvent:true} ); 
+          $.each(children,function(i,child){
+              sidebar.setSidebarEvent(child); 
+              //set as instant event 
+              child['end'] = moment(child['start']);
+              child.formatDate();
+              // remove event from calendar 
+              $calendar.fullCalendar('removeEvents',child.id);  
+              child.persist();
+          });
+          // updateEventArray();
+      }).on("drag",function(ev,event){ 
+          dragChildren(event);
+      }); 
 
 
       /*-----------------------------------------------------------------------------------------------------*/

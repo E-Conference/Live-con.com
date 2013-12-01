@@ -32,6 +32,7 @@ function Sidebar(){
           bootstrapAlert("warning","there was an error during the fetch of events",""); 
         });
         }
+
         function setInstantEvents(instant_events){
           $sidebar.html("");  
           $sidebarTmp.prependTo($sidebar).hide(); 
@@ -45,7 +46,7 @@ function Sidebar(){
 //                fc-event fc-event-vert fc-event-draggable fc-event-start fc-event-end ui-droppable ui-draggable ui-resizable
           //set sidebar droppable
           $sidebar.droppable({
-            accept: ".ui-resizable" ,
+            accept: ".fc-event-start" ,
             over: function( event, ui ) {
                 if( $(ui.draggable).hasClass("fc-event")) {
                     var event = Events[dragged[1].id];
@@ -83,25 +84,25 @@ function Sidebar(){
           // console.log(event);
           sidebarEventHtml ($event,event);
           $event.prepend("<span class='fc-event-id ' style='color:grey;'>"+event.id+"</span>");
-          //set child drag 
-          // delete event['elem'];
+          //set child drag   
+          delete event['elem'];
           // console.log(event);
           $event.draggable({
                     zIndex: 999,
                     revert: true,      // will cause the event to go back to its
+                    revertDuration: 0,  //  original position after the drag
                     appendTo: 'body',
                     containment: 'window', 
                     helper: 'clone',
-                    revertDuration: 0,  //  original position after the drag
                     start : function (ev,ui){
                           $(this).hide();   
                           dragged = [ ui.helper[0], event ];
                           setTimeout(function(){ //bug... event isn't yet updated  
                             $(self).trigger("drag",[event]); 
-                          },1);//bug... event isn't yet updated   
+                          },1);//event isn't yet updated   
                     },
                     stop: function(){
-                        $(this).show()
+                        // $(this).show()
                     } 
                   }) 
 

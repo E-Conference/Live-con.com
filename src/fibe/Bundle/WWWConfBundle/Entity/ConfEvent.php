@@ -155,7 +155,7 @@ class ConfEvent extends Event
             if($child->getEndAt() > $latestEnd) $latestEnd = $child->getEndAt();
         }
         if($earliestStart == new \DateTime('6000-10-10') ||$latestEnd == new \DateTime('1000-10-10'))return;
-        if($earliestStart == $latestEnd)$latestEnd->add(new \DateInterval('P2D'));
+        if($earliestStart == $latestEnd)$latestEnd->add(new \DateInterval('P1D'));
         $this->setStartAt($earliestStart);
         $this->setEndAt($latestEnd);
     } 
