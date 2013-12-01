@@ -173,6 +173,7 @@
     var DATA_FEED_URL = "{{ path('schedule_view_event_get') }}";
     var op = {  
         getOrderedUrl     : "{{ path('exporter_api', { 'entity_reference': 'schedule_event','_format': 'json' }) }}?conference_id={{currentConf.id}}",
+        getDatalessUrl     : "{{ path('exporter_api', { 'entity_reference': 'schedule_event','_format': 'json' }) }}?only_instant=whatever&conference_id={{currentConf.id}}",
         updateUrl     : "{{ path('schedule_view_event_edit') }}", //event modal form
         quickAddUrl   : DATA_FEED_URL + "?method=add", 
         quickUpdateUrl: DATA_FEED_URL + "?method=update",
@@ -220,13 +221,9 @@
           function doWork() {
  
             var event = new CalEvent(events[i]);  
-
-            if(event.isInstant()){
-              instant_events.push(Events[events[i]["id"]]); 
-            }else{ 
-                calendar_events.push(Events[events[i]["id"]]); 
-                // $calendar.fullCalendar( 'renderEvent',event);
-            } 
+ 
+            calendar_events.push(Events[events[i]["id"]]);  
+                
             if(event.mainconfevent){
               mainConfEvent = event;
               if(mainConfEvent.parent.id != ""){
@@ -243,14 +240,13 @@
             //last iteration  
             if (!events[i]) {
               //populate sidebar
-              sidebar.setInstantEvents(instant_events); 
               fetched = true; 
               // $calendar.fullCalendar( 'removeEvents');
               for(var j=0;j<orphanChildren.length;j++){
                 if(orphanChildren[j] == mainConfEvent)continue;
                 orphanChildren[j].parent.id = mainConfEvent.id;
                 orphanChildren[j].persist();
-                console.log("event "+orphanChildren[j].title+" was orphan, so it's now the child of "+mainConfEvent.title)
+                bootstrapAlert("info","event "+orphanChildren[j].title+" was orphan, so it's now the child of "+mainConfEvent.title)
               }
               $calendar.fullCalendar('refetchEvents');
             }else if (stopRender!==true){ 
@@ -294,6 +290,7 @@
                 callback(calendar_events );
                 return;
               }
+              //compute dates to filter
               if(firstDay){ 
                 op.data['before']=firstDay.endOf('week').format();
                 op.data['after']=firstDay.startOf('week').format();
@@ -301,8 +298,8 @@
               }else{
                 op.data['before']=moment(end).format();
                 op.data['after']=moment(start).format();
-                
               }
+              
               $.get(
                 op.getOrderedUrl,
                 op.data,
@@ -475,7 +472,9 @@
       /*------------------------------------- initialize sidebar ----------------------------------------*/
       /*-------------------------------------------------------------------------------------------------*/
       
-      var sidebar = new Sidebar('#external-events')
+      var sidebar = new Sidebar('#external-events');
+      sidebar.populate(op.getDatalessUrl);
+
       //dropped on the sidebar;
       $(sidebar).on("dropped",function(ev,calEvent){  
           console.log("dropped",event)
@@ -507,6 +506,7 @@
       }).on("drag",function(ev,event){ 
           dragChildren(event);
       }); 
+
 
       /*-------------------------------------------------------------------------------------------------*/
       /*------------------------------------- update function -------------------------------------------*/

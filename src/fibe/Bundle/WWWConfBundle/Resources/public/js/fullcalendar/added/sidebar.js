@@ -3,11 +3,35 @@
 function Sidebar(){
 
         var self = this;
+        this.populate = populate; 
         this.setInstantEvents = setInstantEvents; 
         this.setSidebarEvent = setSidebarEvent; 
  
         var eventHtml =  "<div class='external-event fc-event fc-event-draggable'></div>";
         var $sidebarTmp = $(eventHtml);
+
+        function populate(url){ 
+        $.get(
+          url,
+          null,
+          function(events) {  
+              var instant_events = [];
+              for(var i=0;i<events.length;i++){
+
+                var event = new CalEvent(events[i]); 
+                instant_events.push(Events[events[i]["id"]]); 
+              }
+              self.setInstantEvents(instant_events); 
+
+              // if(stopRender===true)return;
+              bootstrapAlert("success",events.length+" dateless events have been well fetched" ); 
+              //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
+          },
+          'json'
+        ).error(function(jqXHR, textStatus, errorThrown) {
+          bootstrapAlert("warning","there was an error during the fetch of events",""); 
+        });
+        }
         function setInstantEvents(instant_events){
           $sidebar.html("");  
           $sidebarTmp.prependTo($sidebar).hide(); 

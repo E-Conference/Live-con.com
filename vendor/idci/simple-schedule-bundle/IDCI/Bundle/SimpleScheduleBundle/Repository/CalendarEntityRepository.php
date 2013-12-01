@@ -124,6 +124,16 @@ class CalendarEntityRepository extends EntityRepository
     {
         $qb = $this->getAllOrderByStartAtQueryBuilder();
 
+        if(isset($params['only_instant'])) {
+            $qb
+                ->andWhere('cer.isInstant = 1')
+            ;
+        }else{
+            $qb
+                ->andWhere('cer.isInstant = 0')
+            ;
+        }
+
         if(isset($params['id'])) {
             $qb
                 ->andWhere('cer.id = :id')
