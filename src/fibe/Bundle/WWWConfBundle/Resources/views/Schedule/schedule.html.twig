@@ -408,9 +408,6 @@
               if(!mainConfEvent)return;
               clearTimeout(repositionTimeout);
               repositionTimeout=setTimeout(function(){   
-                  console.log("--------------------------------------------------------------");
-                  console.log("--------------------------------------------------------------");
-                  console.log("--------------------------------------------------------------");
                   var startScript = moment();
                   updateEventArray();
 
@@ -494,11 +491,7 @@
           });
           console.log("###event array updated###",Events);
           // console.log(Events) 
-
-          //if we render from history, dont store the state
-          // if(!History.isRenderingStateFromHistory()){
-          //     History.storeState(Events);
-          // }
+ 
       }
 
 
@@ -537,6 +530,9 @@
 
                   positionBlock(toppestParent,colWidth,2);
                   console.debug(moment().diff(startScript)+" to positionBlock");
+                  console.log("--------------------------------------------------------------");
+                  console.log("-------------------      rendered       ----------------------");
+                  console.log("--------------------------------------------------------------");
               },1)
           }else{
             EventCollection.eventToRender = undefined;
@@ -558,7 +554,7 @@
                       return;
                   }
 
-                  console.log("##getBroCountRange## ",broCountRange);  
+                  // console.log("##getBroCountRange of "+(events.length==1?events[0].id : "array["+events.length+"]")+"## ",broCountRange);  
 
 
                   for (var i in events){
@@ -787,6 +783,7 @@
                
             
           }; 
+
       } 
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------------- position ------------------------------------------------------*/
@@ -845,17 +842,22 @@
         if(diff===0)return;
 
         //apply to children 
+        
+        var startScript = moment();
         $.each(children,function(i,child){
  
                   
               // console.log("#draggin child : ",child ); 
                
+              var startScript = moment();
               child['start']  = moment(child['start']).subtract(diff);
               child['end']  = moment(child['end']).subtract(diff);
               child.render();
               child.persist(); 
+              console.debug(moment().diff(startScript)+" to affect one child");
    
         }); 
+        console.debug(moment().diff(startScript)+" to affect children");
         //apply to parent
         var parent = EventCollection.find(event.parent.id,{noSidebar:true});
         if(parent){

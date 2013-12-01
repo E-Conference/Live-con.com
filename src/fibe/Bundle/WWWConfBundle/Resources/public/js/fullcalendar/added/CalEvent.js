@@ -81,7 +81,7 @@ CalEvent.prototype.render = function (){
     return renderedEvent;
 };
 
-CalEvent.prototype.persist = function(add){ 
+CalEvent.prototype.persist = function(add){  
     var toSend = {
       parent: this['parent'],
       id    : this['id'],
@@ -90,19 +90,22 @@ CalEvent.prototype.persist = function(add){
       parent: this['parent'],
       end   : this['end'],
       start : this['start']
-    } 
-    console.debug("persisting",this)
+    }  
     $.post(
       add=== true ? op.quickAddUrl : op.quickUpdateUrl,
       toSend,
       function(response) {  
-        bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well "+ (add=== true ? "added" : "updated"));
-        console.log(toSend.id+" "+(add=== true ? "added" : "updated"));
+        bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well "+ (add=== true ? "added" : "updated")); 
+        console.log(toSend.id+" "+(add=== true ? "added" : "updated"),this); 
         if(response.mainConfEvent){
           //get computed mainConfEvent dates
-          mainConfEvent.start = moment(response.mainConfEvent.start.date).format();
-          mainConfEvent.end = moment(response.mainConfEvent.end.date).format();
-          mainConfEvent.render();
+          var newStart = moment(response.mainConfEvent.start.date).startOf("day");
+          var newEnd   = moment(response.mainConfEvent.end.date).endOf("day");  
+          if(moment(mainConfEvent.start).startOf("day") - newStart != 0 || moment(mainConfEvent.end).endOf("day") - newEnd != 0){ 
+            mainConfEvent.start = newStart;
+            mainConfEvent.end = newEnd;
+            mainConfEvent.render();
+          } 
         }
       },
       'json'

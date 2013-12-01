@@ -283,11 +283,10 @@ var EventCollection = {
         // EventCollection.rtnArray= {};
       }
       var remaining = brothers.slice(0);
-      console.log("----------------------------------------------------");
-      console.log("affected = ",brothers);
-      // console.log("remaining = ",remaining);
-      console.log("non affected : ",EventCollection.rtnArray);
-      console.log("----------------------------------------------------");
+      // console.log("----------------------------------------------------");
+      // console.log("affected = ",brothers); 
+      // console.log("non affected : ",EventCollection.rtnArray);
+      // console.log("----------------------------------------------------");
 
       for (var i in brothers){
         curBro = brothers[i];  
