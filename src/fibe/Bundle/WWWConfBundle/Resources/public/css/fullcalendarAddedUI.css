@@ -1,4 +1,6 @@
-    
+    .drag-over-events{
+        outline : 3px dashed green;
+    }    
     .external-event {
         min-width : 230px;
         border-bottom-width: 1px;

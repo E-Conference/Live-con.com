@@ -96,11 +96,12 @@ CalEvent.prototype.persist = function(add){
       toSend,
       function(response) {  
         bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well "+ (add=== true ? "added" : "updated")); 
-        console.log(toSend.id+" "+(add=== true ? "added" : "updated"),this); 
+        console.log(toSend.id+" "+(add=== true ? "added" : "updated"),toSend); 
         if(response.mainConfEvent){
           //get computed mainConfEvent dates
           var newStart = moment(response.mainConfEvent.start.date).startOf("day");
           var newEnd   = moment(response.mainConfEvent.end.date).endOf("day");  
+          //if the main conf event has changed, update it
           if(moment(mainConfEvent.start).startOf("day") - newStart != 0 || moment(mainConfEvent.end).endOf("day") - newEnd != 0){ 
             mainConfEvent.start = newStart;
             mainConfEvent.end = newEnd;

@@ -140,15 +140,16 @@ class ConfEvent extends Event
         // }
 
         if($this->isMainConfEvent){
+            //ensure main conf event fits its children dates 
             $this->fitChildrenDate();
             // $this->setIsInstant($this->getEndAt()->format('U') == $this->getStartAt()->format('U'));
         }
     }
 
+    //ensure main conf event fits its children dates 
     public function fitChildrenDate(){
-        //ensure main conf event fits its children dates 
         $earliestStart= new \DateTime('6000-10-10'); 
-        $latestEnd = new \DateTime('1000-10-10');  
+        $latestEnd = new \DateTime('1000-10-10');
         foreach ($this->getChildren() as $child) {
             if($child->getIsInstant())continue; 
             if($child->getStartAt() < $earliestStart) $earliestStart = $child->getStartAt();
