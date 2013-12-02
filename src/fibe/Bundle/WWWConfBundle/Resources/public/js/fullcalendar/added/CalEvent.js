@@ -96,7 +96,7 @@ CalEvent.prototype.persist = function(add){
       toSend,
       function(response) {  
         bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well "+ (add=== true ? "added" : "updated")); 
-        console.log(toSend.id+" "+(add=== true ? "added" : "updated"),toSend); 
+        console.log(toSend.id+" persisted",toSend); 
         if(response.mainConfEvent){
           //get computed mainConfEvent dates
           var newStart = moment(response.mainConfEvent.start.date).startOf("day");

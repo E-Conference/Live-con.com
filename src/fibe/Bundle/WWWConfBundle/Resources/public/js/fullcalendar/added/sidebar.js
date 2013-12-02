@@ -54,7 +54,7 @@ function Sidebar(){
                     // console.log("dropped into sidebar",event);
                     $(this).css("border-color","green"); 
                     sidebarEventHtml($sidebarTmp,event);
-                    $sidebarTmp.show() ;
+                    $sidebarTmp.show().css("background-color",event.color || rgb(58, 135, 173)) ;
                 }
             },
             out: function( event, ui ) {
@@ -79,8 +79,10 @@ function Sidebar(){
           });
         }
 
-        function sidebarDraggable($event,event){
-          $event.appendTo($sidebar);
+        function sidebarDraggable($event,event,prepend){
+          if(prepend===true)$event.prependTo($sidebar);
+          else $event.appendTo($sidebar);
+          $sidebarTmp.prependTo($sidebar);
           // console.log(event);
           sidebarEventHtml ($event,event);
           $event.prepend("<span class='fc-event-id ' style='color:grey;'>"+event.id+"</span>");
@@ -101,8 +103,13 @@ function Sidebar(){
                             $(self).trigger("drag",[event]); 
                           },1);//event isn't yet updated   
                     },
-                    stop: function(){
-                        // $(this).show()
+                    stop: function(a,b,c){ 
+                      if($(a.target).hasClass("ui-draggable")){
+                        alert("revert")
+                        $(this).show()
+                      }else{
+                        $(a.target).remove()
+                      }
                     } 
                   }) 
 
@@ -111,9 +118,9 @@ function Sidebar(){
         }
 
         
-        function setSidebarEvent(event){
+        function setSidebarEvent(event,prepend){
           var $event = $(eventHtml);
-          var $event = sidebarDraggable($event,event);
+          var $event = sidebarDraggable($event,event,prepend);
         }
 
         function sidebarEventHtml ($event,event){

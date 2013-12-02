@@ -393,10 +393,7 @@
               event.render();
               event.persist();
             },1);//bug... event isn't yet updated 
-          }, 
-          eventDrop : function(event){ //drop from calendar
-              event.persist(); 
-          }, 
+          },  
           viewRender : function( view, element ){
           
             EventCollection.eventToRender = mainConfEvent;
@@ -411,7 +408,7 @@
 
                   console.debug(moment().diff(startScript)+" to positionBlock");
 
-                  if(view.name !== "month")reposition(view); 
+                  reposition(view); 
                   console.log("eventToRender",EventCollection.eventToRender); 
               },repositionTimeout);
                   
@@ -457,6 +454,7 @@
               //save children to db
               setTimeout(function(){ //bug... event isn't yet updated 
                 endDrag(event,ui.helper[0] );
+                event.persist(); 
               },1);//bug... event isn't yet updated 
           }
       };
@@ -521,7 +519,7 @@
           stylizeBlock([mainConfEvent]); 
           console.debug(moment().diff(startScript)+" to stylizeBlock")
 
-          if($('#reposition').is(':checked')){ 
+          if($('#reposition').is(':checked') && view.name !== "month"){ 
               //non-blocking
               setTimeout(function(){ 
                   var startScript = moment();
@@ -885,27 +883,22 @@
         var diff = moment(draggedStart).diff(moment(event['start']));
         if(diff===0)return;
 
-        //apply to children 
-        
+        //apply to children  
         var startScript = moment();
-        $.each(children,function(i,child){
- 
-                  
-              // console.log("#draggin child : ",child ); 
-               
-              var startScript = moment();
-              child['start']  = moment(child['start']).subtract(diff);
-              child['end']  = moment(child['end']).subtract(diff);
-              child.render();
-              child.persist(); 
-              console.debug(moment().diff(startScript)+" to affect one child");
-   
+        $.each(children,function(i,child){ 
+          var startScript = moment();
+          child['start']  = moment(child['start']).subtract(diff);
+          child['end']  = moment(child['end']).subtract(diff);
+          child.render();
+          child.persist(); 
+          console.debug(moment().diff(startScript)+" to affect one child"); 
         }); 
         console.debug(moment().diff(startScript)+" to affect children");
+
         //apply to parent
         var parent = EventCollection.find(event.parent.id,{noSidebar:true});
+        // return if not in calendar view  
         if(parent){
-          // return if not in callendar view  
           if(event.isOutOf(parent,true)){
             //event dropped out of parent
             console.log(" #### moved out ####");  
@@ -916,7 +909,8 @@
             //still inside but may need a parent update (to properly contains child)
             event.updateParentDate();
             event.render();
-          }
+          } 
+
         } 
       } 
 
@@ -933,22 +927,21 @@
       $(sidebar).on("dropped",function(ev,calEvent){  
           console.log("dropped",event)
           var event = Events[calEvent.id];
-          // event.deleteParent(mainConfEvent);
+          
           EventCollection.fitMainConfEvent();
 
-          //set as sidebar draggable element and then affect children 
-          sidebar.setSidebarEvent(event);
 
           //set as instant event 
           event['end'] = moment(event['start']);
           event.formatDate();
           // remove event from calendar 
           $calendar.fullCalendar('removeEvents',event.id); 
-          event.persist();  
+          event.persist();
 
+          //affect children
           var children = EventCollection.getChildren(event, {concat:true,onlyEvent:true} ); 
           $.each(children,function(i,child){
-              sidebar.setSidebarEvent(child); 
+              sidebar.setSidebarEvent(child,true); 
               //set as instant event 
               child['end'] = moment(child['start']);
               child.formatDate();
@@ -956,6 +949,8 @@
               $calendar.fullCalendar('removeEvents',child.id);  
               child.persist();
           });
+          //set as sidebar draggable 
+          sidebar.setSidebarEvent(event,true);
           // updateEventArray();
       }).on("drag",function(ev,event){ 
           dragChildren(event);
