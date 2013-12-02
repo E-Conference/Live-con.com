@@ -159,7 +159,7 @@ class Person
     protected $accounts;
 
      /**
-     * @ORM\Column(type="string", length=128, nullable=true)
+     * @ORM\Column(type="string", length=256, nullable=true)
      */
     protected $slug;
     
@@ -194,7 +194,7 @@ class Person
 
      /**
      * Slugify
-     * 
+     * @ORM\PrePersist()
      */
     public function slugify()
     {

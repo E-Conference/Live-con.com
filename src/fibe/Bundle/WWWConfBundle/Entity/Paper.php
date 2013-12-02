@@ -111,7 +111,7 @@ class Paper
     protected $conference;
 
      /**
-     * @ORM\Column(type="string", length=128, nullable=true)
+     * @ORM\Column(type="string", length=256, nullable=true)
      */
     protected $slug;
 
@@ -132,7 +132,7 @@ class Paper
 
      /**
      * Slugify
-     * 
+     * @ORM\PrePersist()
      */
     public function slugify()
     {
