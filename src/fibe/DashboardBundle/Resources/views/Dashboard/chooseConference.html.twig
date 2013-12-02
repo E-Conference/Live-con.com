@@ -1,0 +1,31 @@
+{% extends 'fibeDashboardBundle::base.html.twig' %}
+
+{% block title %}Dashboard - Livecon{% endblock title %}
+{% block body %}
+
+
+{% include "fibeDashboardBundle::navbar.html.twig" %}
+  <div class="container">
+     <div class="row center">
+        <div class="jumbotron">
+              <h1>Welcome to Livecon {{entity.username}} !</h1>
+              <p>Choose your conference or create a new one for start</p>
+              <div class="row-fluid">
+                  <div class="col-lg-4">
+                  {% for conference  in entity.conferences  %}
+                       <div class="btn-group"> 
+                          <a href="{{ path('dashboard_enter_conference', {id: conference.id}) }}" role="button" class="btn btn-default btn-large">
+                           {{conference.getConfName()}}
+                          </a>
+                      </div>
+                  </div>
+              </div>
+        </div>
+      </div>
+</div>    
+
+{% endblock body %}
+
+
+
+

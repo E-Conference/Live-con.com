@@ -8,7 +8,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use fibe\SecurityBundle\Entity\User;
+use fibe\SecurityBundle\Entity\Authorization;
 use fibe\SecurityBundle\Form\UserType;
+use fibe\SecurityBundle\Form\AuthorizationType;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
@@ -32,12 +34,17 @@ class UserController extends Controller
             // Sinon on déclenche une exception "Accès Interdit"
             throw new AccessDeniedHttpException('Access reserved to admin');
         }
+        $currentConf =$this->getUser()->getcurrentConf();
         $em = $this->getDoctrine()->getManager();
 
         //$entities = $em->getRepository('fibeSecurityBundle:User')->findAll();
         $entities = $this->getUser()->getCurrentConf()->getConfManagers();
+        $managers = $em->getRepository('fibeSecurityBundle:User')->findAll();
         $delete_forms= array();
         $update_forms= array();
+
+
+        $authorizationForm = $this->createForm(new AuthorizationType(), new Authorization());
 
         foreach($entities as $entity ){
             $delete_forms[] = $this->createDeleteForm($entity->getId())->createView();
@@ -51,6 +58,9 @@ class UserController extends Controller
             'entities'     => $entities,
             'delete_forms' => $delete_forms,
             'update_forms' => $update_forms,
+            'authorization_form' => $authorizationForm->createView(),
+            'currentConf'  => $currentConf,
+            'managers'     =>$managers
         );
     }
 

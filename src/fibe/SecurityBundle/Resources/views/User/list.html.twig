@@ -20,6 +20,9 @@
                 <th>Email</th>
                 <th>Last login</th>
                 <th>Role</th> 
+                <th>DataConf Authorization</th>
+                <th>Schedule Authorization</th>
+                <th>Datas Conference Authorization</th> 
             </tr>
         </thead>
         <tbody>
@@ -84,13 +87,78 @@
                     </form>
                     
                 </td> 
+                <td>
+                  <select class="flagAppWR" data-userId="{{entity.id }}">
+                    {% if  entity.getFlagAppByConferenceId(currentConf.id) == 1 %}
+                        <option value="1" selected>Read/Write</option>
+                        <option value="0">Read</option>
+                    {% else %}
+                         <option value="1">Read/Write</option>
+                         <option value="0" selected>Read</option>
+                    {% endif %} 
+                   </select>
+                 </td> 
+                 <td>
+                  <select class="flagSchedWR" data-userId="{{entity.id }}">
+                    {% if  entity.getFlagSchedByConferenceId(currentConf.id) == 1 %}
+                        <option value="1" selected>Read/Write</option>
+                        <option value="0">Read</option>
+                    {% else %}
+                         <option value="1">Read/Write</option>
+                         <option value="0" selected>Read</option>
+                    {% endif %} 
+                   </select>
+                 </td>  
+                 <td>
+                  <select class="flagconfDatasWR" data-userId="{{entity.id }}">
+                    {% if  entity.getFlagDatasByConferenceId(currentConf.id) == 1 %}
+                        <option value="1" selected>Read/Write</option>
+                        <option value="0">Read</option>
+                    {% else %}
+                         <option value="1">Read/Write</option>
+                         <option value="0" selected>Read</option>
+                    {% endif %} 
+                   </select>
+                 </td>  
             </tr>
         {% endfor %}
         </tbody>
     </table>
-    <a class="btn btn-info" href="{{ path('fos_user_registration_register') }}">
-        <i class="icon-plus icon-white"> </i> Create a new user
+    <!--<a class="btn btn-info" href="{{ path('fos_user_registration_register') }}">
+        <i class="icon-plus icon-white"> </i> Add user in conference
+    </a>-->
+    <a class="btn btn-info" id="addUserInConference" onclick="$('#addUserInConferenceForm').toggle('slow')">
+        <i class="icon-plus icon-white"></i> Add user in conference
     </a>
+    <div id="addUserInConferenceForm">
+          <form action="{{ path('schedule_user_create_authorization') }}" method="post" {{ form_enctype(authorization_form) }}>
+            <table class="records_list table table-striped table-hover">
+                <tr>
+                    <th>Manager</th>
+                    <th>DataConf Authorization</th>
+                    <th>Schedule Authorization</th>
+                    <th>Datas Conference Authorization</th> 
+                </tr>
+                    <td>
+                      {{ form_row(authorization_form.user) }}
+                    </td>
+                    <td>
+                      {{ form_row(authorization_form.flagAppWR) }}
+                    </td> 
+                    <td>
+                       {{ form_row(authorization_form.flagSchedWR) }}
+                    </td>  
+                    <td>
+                       {{ form_row(authorization_form.flagconfDatasWR) }}
+                    </td>
+               </tr>  
+            </table>
+            <button type="submit" class="btn btn-block btn-success">
+                          <i class="icon-ok"></i>
+            </button>
+        </form>
+        
+    <div>
   </div>
 <div>
 {% endblock body %}
@@ -99,12 +167,50 @@
 {{ parent() }}
     <script src="{{ asset('bundles/fibewwwconf/js/moment.min.js') }}" type="text/javascript" ></script>
     <script  type="text/javascript" >
+
+    //Add User in conference action
+    $("#addUserInConference").click(function(){
+
+
+    })
+     function changeAuthorization(id,authorizationType,value){
+        console.log(id);
+        //start send the post request           
+           $.ajax({
+              type: "POST",
+              url: "{{path('schedule_user_change_authorization')}}",
+              data: { 'value' : value , 'authorizationType': authorizationType,'id':id},
+            });
+      };
+
         $(document).ready(function(){
+            //Hide add manager form
+            $("#addUserInConferenceForm").hide();
             $('.moment').each(function(){
                 var momentString = moment($(this).html()); 
                 !momentString || $(this).html(momentString.format("dddd, MMMM Do YYYY, h:mm:ss a"));
             })
+
+            //Listen change authorization select
+            $(".flagAppWR").change(function(){
+                value = $(this).val();
+                id = $(this).attr("data-userId");
+                changeAuthorization(id,'app',value);
+            })
+            $(".flagSchedWR").change(function(){
+                value = $(this).val();
+                id = $("#flagSchedWR").attr("data-userId");
+                changeAuthorization(id,'sched',value);
+            })
+            $(".flagconfDatasWR").change(function(){
+                value = $(this).val();
+                id = $(this).attr("data-userId");
+                changeAuthorization(id,'datas',value);
+            })
+
         });
+
+       
     </script>
 
 {% endblock %}
