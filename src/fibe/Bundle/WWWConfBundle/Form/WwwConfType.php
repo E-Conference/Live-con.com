@@ -19,9 +19,6 @@ class WwwConfType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('acronym', 'text', array('required' => false,
-                                        'label'     => 'Acronym',
-                                        'attr'  => array('placeholder'   => 'Acronym')))
             ->add('logo', 'file',  array('required' => false, 
                                         'label'     => 'Logo',
                                         'attr'  => array('placeholder'   => 'logoPath')))

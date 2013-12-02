@@ -78,11 +78,7 @@ class DBImportController extends Controller
             $conferenceData = $JSONFile['conference'];
             foreach ($conferenceData as $setter => $value) { 
 
-                if($setter=="setAcronym"){
-                    //apply to both conference and mainconfevent
-                    $entity = $mainConfEvent; 
-                    call_user_func_array(array($conference, $setter), array($value)); 
-                }elseif($setter=="setLogoPath" ){
+                if($setter=="setLogoPath" ){
                     //apply to the conference
                     $entity = $conference; 
                 }else {

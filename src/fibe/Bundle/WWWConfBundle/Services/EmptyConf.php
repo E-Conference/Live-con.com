@@ -72,8 +72,7 @@ class EmptyConf {
       $conference->setMainConfEvent($newMainConfEvent);
       $em->persist($newMainConfEvent); 
       $em->remove($mainConfEvent);
-
-      $conference->setAcronym("");
+ 
       $em->persist($conference);
       $em->flush();
     }

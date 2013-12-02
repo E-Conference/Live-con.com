@@ -9,7 +9,7 @@
             <div class="col-lg-4">
                 <ul>
                   {% for entity in entities %}
-                    <li> <a href="{{ path('object', { 'slug': entity.slug, 'object': 'WwwConf' }) }}">{{ entity.acronym }}</a></li>
+                    <li> <a href="{{ path('object', { 'slug': entity.slug, 'object': 'WwwConf' }) }}">{{ entity.slug }}</a></li>
                   {% endfor %}
                 </ul> 
             </div> 

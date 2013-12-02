@@ -96,14 +96,7 @@ class WwwConf
      * @var String
      * @ORM\Column(name="logoPath", type="string", length=255,nullable=true)
      */
-    private $logoPath;
-
-    /**
-    * @var string
-    *
-    * @ORM\Column(name="acronym", type="string", length=255,nullable=true)
-    */
-    private $acronym;
+    private $logoPath; 
 
     /**
      * @ORM\OneToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\ConfEvent")
@@ -222,19 +215,7 @@ class WwwConf
     public function getLogo()
     {
         return $this->logo;
-    }
-
-
-    public function setAcronym($Acronym)
-    {
-        $this->acronym = $Acronym;
-        return $this;
     } 
-    
-    public function getAcronym()
-    {
-        return $this->acronym;
-    }
 
 
     public function setLogoPath($logoPath)

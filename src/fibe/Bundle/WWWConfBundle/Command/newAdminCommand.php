@@ -75,8 +75,7 @@ EOT
         $em = $this->getContainer()->get('doctrine')->getManager('default');
         //Create the default conference
         $defaultConference = new WwwConf();
-        $defaultConference->setLogoPath("livecon.png");
-        $defaultConference->setAcronym("My conference");
+        $defaultConference->setLogoPath("livecon.png"); 
         $em->persist($defaultConference);
 
         //Create new App config for the conference
