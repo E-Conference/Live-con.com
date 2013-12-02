@@ -89,6 +89,7 @@ class ScheduleController extends Controller
         $methodParam = $getData->get('method', '');
         $postData = $request->request->all();
         $currentManager=$this->get('security.context')->getToken()->getUser();
+        $mainConfEvent = $currentManager->getCurrentConf()->getMainConfEvent();
         
         $JSONArray = array();
         if( $methodParam=="add" )
@@ -127,18 +128,18 @@ class ScheduleController extends Controller
             
             $event->setStartAt( $startAt );
             $event->setEndAt( $endAt );
-            $event->setParent( $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['parent']['id']));
+            $event->setParent( ($postData['parent']['id']!= "" ? $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['parent']['id']) : $mainConfEvent) );
             $event->setSummary( $postData['title'] );
             $event->setIsAllDay($postData['allDay']=="true") ;
             
             $em->persist($event);
+            $em->flush();
  
 
             $JSONArray['IsSuccess'] = true;
             $JSONArray['Msg'] = "Success";
         }
     
-        $mainConfEvent = $this->getUser()->getCurrentConf()->getMainConfEvent();
         $mainConfEvent->fitChildrenDate();
         $mainConfEvent->setParent(null);
         $em->persist($mainConfEvent); 

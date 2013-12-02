@@ -14,7 +14,10 @@ class MobileAppWwwConfEventType extends WwwConfEventType
     {
         parent::buildForm($builder, $options);
        $builder 
-            ->remove('location')
+            ->remove('location') 
+            ->add('acronym', 'text', array('required' => false,
+                                        'label'     => 'Acronym',
+                                        'attr'  => array('placeholder'   => 'Acronym')))
         ;
     }
 

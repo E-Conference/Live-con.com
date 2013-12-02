@@ -81,7 +81,7 @@ CalEvent.prototype.render = function (){
     return renderedEvent;
 };
 
-CalEvent.prototype.persist = function(add){ 
+CalEvent.prototype.persist = function(add){  
     var toSend = {
       parent: this['parent'],
       id    : this['id'],
@@ -90,19 +90,23 @@ CalEvent.prototype.persist = function(add){
       parent: this['parent'],
       end   : this['end'],
       start : this['start']
-    } 
-    console.debug("persisting",this)
+    }  
     $.post(
       add=== true ? op.quickAddUrl : op.quickUpdateUrl,
       toSend,
       function(response) {  
-        bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well "+ (add=== true ? "added" : "updated"));
-        console.log(toSend.id+" "+(add=== true ? "added" : "updated"));
+        bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well "+ (add=== true ? "added" : "updated")); 
+        console.log(toSend.id+" persisted",toSend); 
         if(response.mainConfEvent){
           //get computed mainConfEvent dates
-          mainConfEvent.start = moment(response.mainConfEvent.start.date).format();
-          mainConfEvent.end = moment(response.mainConfEvent.end.date).format();
-          mainConfEvent.render();
+          var newStart = moment(response.mainConfEvent.start.date).startOf("day");
+          var newEnd   = moment(response.mainConfEvent.end.date).endOf("day");  
+          //if the main conf event has changed, update it
+          if(moment(mainConfEvent.start).startOf("day") - newStart != 0 || moment(mainConfEvent.end).endOf("day") - newEnd != 0){ 
+            mainConfEvent.start = newStart;
+            mainConfEvent.end = newEnd;
+            mainConfEvent.render();
+          } 
         }
       },
       'json'
@@ -135,7 +139,7 @@ CalEvent.prototype.updateParentDate = function(){
           return;
         } 
  
-        if(event.isInsideOf(parent))return;  
+        // if(event.isInsideOf(parent))return;  
 
         //event is out of parent
         console.log("isOutOfParent");  
@@ -267,6 +271,21 @@ CalEvent.prototype.SetRecurDate = function(){
         child.persist();
       } 
 };
+CalEvent.prototype.fitToDay = function (oldStart,oldEnd){
+  var duration =  moment(oldEnd).diff(moment(oldStart));
+  var midnightLimit = moment(this.end).startOf("day").format(); 
+  if(moment(this.start).diff(midnightLimit) > moment(midnightLimit).diff(this.end)){
+  // if(this.start < oldStart){
+    //we put the event to the next day
+    this.start = moment(midnightLimit).format();
+    this.end = moment(this.start).add(duration).format(); 
+
+  }else{
+    //we put the event to the previous day
+    this.end = moment(midnightLimit).format();
+    this.start = moment(this.end).subtract(duration).format(); 
+  }
+}
 
 // remove relation with old parent if exists
 // and update relation with new parent (render event but dont persist changes to db)
@@ -393,6 +412,10 @@ CalEvent.prototype.isInsideOf = function(event){
 CalEvent.prototype.isInstant = function(){
     var diff =moment(this["start"]).diff(this["end"]);
     return (diff  === 0 ) || (diff  === 1 );   
+};
+
+CalEvent.prototype.isOneDayLong = function(){ 
+    return (moment(this["start"]).dayOfYear() == moment(this["end"]).dayOfYear()); 
 };
 
 CalEvent.prototype.formatDate = function () {  
