@@ -275,7 +275,7 @@
           month: firstDay.month(),
           date: firstDay.date(), 
           windowResize: function(view) {
-              EventCollection.eventToRender = undefined; 
+              EventCollection.eventToRender = mainConfEvent; 
           }, 
           //get events
           events : function(start, end, callback) { 
@@ -451,9 +451,17 @@
           },
           eventDragStop: function( event, jsEvent, ui, view ) {  
               dragged = [ ui.helper[0], event ]; 
+              var oldStart = moment(event.start);
+              var oldEnd = moment(event.end);
               //save children to db
               setTimeout(function(){ //bug... event isn't yet updated 
-                endDrag(event,ui.helper[0] );
+                if(!event.isOneDayLong()){ 
+                  event.fitToDay(oldStart,oldEnd);
+                  // alert(moment(event.start).format() )
+                  // alert( moment(event.end).format())
+                  event.render();
+                }
+                endDrag(event,ui.helper[0] ); 
                 event.persist(); 
               },1);//bug... event isn't yet updated 
           }
@@ -927,7 +935,7 @@
       $(sidebar).on("dropped",function(ev,calEvent){  
           console.log("dropped",event)
           var event = Events[calEvent.id];
-          
+
           EventCollection.fitMainConfEvent();
 
 
