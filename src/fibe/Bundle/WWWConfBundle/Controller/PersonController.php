@@ -139,6 +139,8 @@ class PersonController extends Controller
             throw $this->createNotFoundException('Unable to find Person entity.');
         }
 
+
+
         $editForm = $this->createForm(new PersonType($this->getUser()), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -165,16 +167,24 @@ class PersonController extends Controller
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createForm(new PersonType($this->getUser()), $entity);
+       
         $papersToRemove = $entity->getPapers();
-        
         foreach($papersToRemove as $paper) { 
             $paper->removeAuthor($entity);
             $entity->removePaper($paper);
             $em->persist($paper);
         }
 
+
+        $accountToRemove = $entity->getAccounts();
+        foreach ($accountToRemove as $account) {
+            $em->remove($account);
+        }
+
         $editForm->bind($request);
         $paperToAdd = $entity->getPapers();
+        // $accountToAdd = $entity->getAccounts();
+
         if ($editForm->isValid()) {
 
             foreach($paperToAdd as $paper) { 
@@ -182,6 +192,13 @@ class PersonController extends Controller
                 //$entity->addMember($person);
                 $em->persist($paper);
             }
+
+            foreach ($entity->getAccounts() as $account) {
+                $account->setOwner($entity);
+            }
+
+
+          
             $em->persist($entity);
             $em->flush();
 

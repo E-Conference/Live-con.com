@@ -59,6 +59,10 @@ class databaseInitCommand extends ContainerAwareCommand
         $roleType->setName("Presenter");
         $em->persist($roleType);
 
+        $roleType = new RoleType(); 
+        $roleType->setName("ProgrammeCommitteeMember");
+        $em->persist($roleType);
+
         //Social Service 
         $socialService = new SocialService(); 
         $socialService->setName("Facebook");
