@@ -7,8 +7,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 //On insere l'entity Event  de simple schedule
 
-use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event;
+use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event; 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;
+use IDCI\Bundle\SimpleScheduleBundle\Entity\Location;
 use fibe\Bundle\WWWConfBundle\Entity\Role;
 
 use IDCI\Bundle\SimpleScheduleBundle\Form\EventType;
@@ -88,58 +89,57 @@ class ScheduleController extends Controller
         $getData = $request->query;
         $methodParam = $getData->get('method', '');
         $postData = $request->request->all();
+
         $currentManager=$this->get('security.context')->getToken()->getUser();
-        $mainConfEvent = $currentManager->getCurrentConf()->getMainConfEvent();
+        $conf =$currentManager->getCurrentConf();
+        $mainConfEvent = $conf->getMainConfEvent();
         
-        $JSONArray = array();
+        $JSONArray = array(); 
+        $resConfig = array(
+            "location"=>array(
+                "name"=>"Location",
+                "methodName"=>"setLocation",
+            )
+        ); 
+
+        $event;
         if( $methodParam=="add" )
-        {
-                $conf =$this->getUser()->getCurrentConf();
-                
-                $event= new Event(); 
-                $event->setEndAt(new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()))); 
-                $event->setStartAt(new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get())));  
-                $event->setSummary( $postData['title'] );
-                $event->setIsAllDay($postData['allDay']=="true") ; 
-                $event->setConference($conf);
-                $event->setParent( $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['parent']['id']) );
-
-                $em->persist($event); 
-                $em->flush();
-
-                $xprop= new XProperty(); 
-                $xprop->setXNamespace("event_uri"); 
-                $xprop->setXKey(rand(0,999999));
-                $xprop->setXValue("http://dataconf-event/" . $event->getId());  
-                $xprop->setCalendarEntity($event);
-
-                $em->persist($xprop);  
-                $em->flush();
-                
-                $JSONArray['id'] = $event->getId();
-                $JSONArray['IsSuccess'] = true;
-                $JSONArray['Msg'] = "add success"; 
+        {  
+                $event= new Event();    
+                $event->setConference($conf) ;
         }else if( $methodParam=="update")
-        { 
-            
-            $event = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['id']);
-            $startAt = new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get()));
-            $endAt =new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get()));
-            
-            $event->setStartAt( $startAt );
-            $event->setEndAt( $endAt );
-            $event->setParent( ($postData['parent']['id']!= "" ? $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['parent']['id']) : $mainConfEvent) );
-            $event->setSummary( $postData['title'] );
-            $event->setIsAllDay($postData['allDay']=="true") ;
-            
-            $em->persist($event);
-            $em->flush();
- 
-
-            $JSONArray['IsSuccess'] = true;
-            $JSONArray['Msg'] = "Success";
+        {  
+            $event = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['id']);  
         }
-    
+
+        //resource(s)
+        if(isset($postData['resource'])){
+            $resources =  $postData['resource'];
+            $currentRes = $resConfig[$postData['currentRes']];
+            if(count($resources)==1){  
+                $repo = $em->getRepository('IDCISimpleScheduleBundle:'.$currentRes["name"]);
+                if(!$repo) $repo = $em->getRepository('fibeWWWConfBundle:'.$currentRes["name"]);
+                if($repo){
+                    $value = $repo->find($resources[0]) ;
+                    call_user_func_array(array($event, $currentRes["methodName"]), array($value));  
+                }
+            }
+        }
+        
+        $event->setStartAt( new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get())) );
+        $event->setEndAt( new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get())) );
+        $event->setParent( ($postData['parent']['id']!= "" ? $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['parent']['id']) : $mainConfEvent) );
+        $event->setSummary( $postData['title'] ); 
+        $event->setIsAllDay($postData['allDay']=="true") ;
+
+        $em->persist($event); 
+        $em->flush(); 
+
+        $JSONArray['id'] = $event->getId();
+        $JSONArray['IsSuccess'] = true;
+        $JSONArray['Msg'] = $methodParam . " success"; 
+
+        //update mainConfEvent
         $mainConfEvent->fitChildrenDate();
         $mainConfEvent->setParent(null);
         $em->persist($mainConfEvent); 
@@ -250,7 +250,7 @@ class ScheduleController extends Controller
     }
     
     /**
-     * Override dimplescehdule controller to provide json response
+     * Override simplescehdule controller to provide json response
      * @Route("/{id}/xpropAdd", name="schedule_xproperty_add") 
      */
      

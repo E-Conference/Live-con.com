@@ -3,10 +3,11 @@ var CalEvent = function(event){
 
 
     this["id"]         = event.id; 
+    this["location"]   = event.location; 
     this["title"]      = event.name || event.title; 
     this["start"]      = event.start || event.start_at;
     this["end"]        = event.end || event.end_at; 
-    this["allDay"]     = (event.allDay === true || event.allDay === false) ?  
+    this["allDay"]     = (event.allDay === true || event.allDay === false) ?
                                 event.allDay : 
                                 event.is_allday ? 
                                         event.is_allday ==="true" : 
@@ -17,23 +18,28 @@ var CalEvent = function(event){
     if(this["is_mainconfevent"]){
       mainConfEvent = this;
       this["editable"] = false
-    };
+    }
     this["parent"]     = event.parent;
     this["children"]   = event.children;
     this["categories"] = event.categories || [];
 
     if( event.categories && event.categories.length > 0 && event.categories[0].color)
-      this["color"] = event.categories[0].color;
-
+      this["color"] = event.categories[0].color; 
     if(this.length > 0 && this.color)
       this["background-color"] = this.color;
-     
-    // console.log("new CalEvent" , this)
-    Events[this["id"]] = this; 
 
-    // for (var i in event){
-    //     this[i] = event[i];
-    // } 
+
+    //resources
+    if(!this["resource"])this["resource"] =  resConfig[currentRes].parse(event);
+    // if(this.location && this.location.id!= ""){
+    //   this["resource"].push(this.location.id);
+    // }else{
+    //   //TODO put to a "not defined yet" resource
+    //   //TODO put to a "not defined yet" resource
+    // }
+
+    Events[this["id"]] = this; 
+ 
 };
 
 CalEvent.prototype.render = function (){
@@ -83,13 +89,15 @@ CalEvent.prototype.render = function (){
 
 CalEvent.prototype.persist = function(add){  
     var toSend = {
-      parent: this['parent'],
-      id    : this['id'],
-      allDay: this['allDay'],
-      title : this['title'],
-      parent: this['parent'],
-      end   : this['end'],
-      start : this['start']
+      parent    : this['parent'],
+      id        : this['id'],
+      allDay    : this['allDay'],
+      title     : this['title'],
+      parent    : this['parent'],
+      end       : this['end'],
+      start     : this['start'],
+      resource  : this['resource'],
+      currentRes: currentRes,
     }  
     $.post(
       add=== true ? op.quickAddUrl : op.quickUpdateUrl,

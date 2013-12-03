@@ -119,7 +119,8 @@ EOT
         // conference location
         $mainConfEventLocation = new Location();
         $mainConfEventLocation->setName("Conference's location");
-        $mainConfEventLocation->addLocationAwareCalendarEntitie($mainConfEvent);
+        $mainConfEvent->setLocation($mainConfEventLocation);
+        $mainConfEventLocation->setConference($defaultConference);
         $em->persist($mainConfEventLocation);
  
         $em->persist($mainConfEvent);

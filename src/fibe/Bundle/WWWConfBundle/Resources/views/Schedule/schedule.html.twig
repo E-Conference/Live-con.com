@@ -24,6 +24,14 @@
           <button id="backwardBtn" class="btn btn-default" disabled="disabled" ><i class="icon-undo"></i></button>
           <button id="forewardBtn" class="btn btn-default" disabled="disabled" ><i class="icon-repeat"></i></button>
         </div>
+        <div id="resourceView">
+            <select class="form-control"> 
+                <option value="classic">Calendar</option> 
+                <optgroup label="Ressources views">
+                  <option value="location" data-feed-url="{{ path('exporter_api', { 'entity_reference': 'schedule_location','_format': 'json' }) }}?conference_id={{currentConf.id}}">Location</option> 
+                </optgroup>
+            </select>
+        </div>
         <div id="filters">  
 
           <h4>Filter by categories</h4>
@@ -177,9 +185,53 @@
         updateUrl     : "{{ path('schedule_view_event_edit') }}", //event modal form
         quickAddUrl   : DATA_FEED_URL + "?method=add", 
         quickUpdateUrl: DATA_FEED_URL + "?method=update",
-        quickDeleteUrl: DATA_FEED_URL + "?method=remove",
+        quickDeleteUrl: DATA_FEED_URL + "?method=remove", 
         data          : {}
     }; 
+
+    //top right button
+    var isClassicView = true;
+    var viewBtns = {
+      month:{
+        classic:"month",
+        resource:"resourceMonth",
+        elem:$('<span class="fc-button fc-state-default fc-corner-left" unselectable="on">month</span>')},
+      week:{
+        classic:"agendaWeek",
+        resource:"resourceWeek",
+        elem:$('<span class="fc-button fc-state-default fc-state-active" unselectable="on">week</span>')},
+      day:{
+        classic:"agendaDay",
+        resource:"resourceDay",
+        elem:$('<span class="fc-button fc-state-default fc-corner-right" unselectable="on">day</span>')},
+    };
+
+    //                       resources view
+    var currentView = "week"; 
+    var resConfig = {
+      location : {
+        url : "{{ path('exporter_api', { 'entity_reference': 'schedule_location','_format': 'json' }) }}?conference_id={{currentConf.id}}",
+        parse : function(e){
+          if(e.location && e.location.id!= ""){
+            return e.location.id;
+          }else{
+            return "other";
+          }
+        }
+      },category : {
+        url : "{{ path('exporter_api', { 'entity_reference': 'schedule_category','_format': 'json' }) }}?conference_id={{currentConf.id}}",
+        parse : function(e){
+          console.log(e)
+          if( e.categories && e.categories.length < 1) return "other" ; 
+          for(var i in e.categories){
+            var c = e.categories[i];
+            rtn.push(c.id);
+          } 
+          return rtn;
+        }
+      }
+    };
+    var currentRes = "location";
 
     $(document).ready(function() {    
 
@@ -204,17 +256,21 @@
 
 
 
+
+
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------- render events from json datasource -----------------------------------*/
       /*-----------------------------------------------------------------------------------------------------*/
  
       var fetched = false;
+      // calendar_events is the parsed array given to fullcalendar
       var calendar_events   = []; 
-      function renderEvents(events,callback){
+      function renderEvents(events){
           Events = {};
 
           var instant_events   = [];  
           calendar_events   = []; 
+
           var i = 0;
           var orphanChildren= [];
           //non-blocking loop
@@ -229,7 +285,7 @@
               if(mainConfEvent.parent.id != ""){
                 mainConfEvent.persist();
               }
-              EventCollection.eventToRender = undefined; 
+              EventCollection.eventToRender = mainConfEvent; 
             } 
             if(event.parent.id == ""){
               orphanChildren.push(event);
@@ -264,16 +320,19 @@
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------------- fullcalendar options ------------------------------------------*/
       /*-----------------------------------------------------------------------------------------------------*/ 
-      var calendarOption = { 
+      calendarOption = { 
           header: {
               left: 'prev,next today',
               center: 'title',
-              right: 'month,agendaWeek,agendaDay'
-          }, 
+              right: '' // computed in resource view
+          },  
+          aspectRatio: 1.6,
           editable: true,
+          firstDay: 1,         
           year: firstDay.year(), 
           month: firstDay.month(),
           date: firstDay.date(), 
+          resources : resConfig[currentRes].url,
           windowResize: function(view) {
               EventCollection.eventToRender = mainConfEvent; 
           }, 
@@ -283,10 +342,10 @@
               $calendar.off("stopRender").on("stopRender",function(){
                 stopRender = true;
               }); 
-
+              console.log("########fetching")
               //events have already been fetched
               if(fetched === true){
-                fetched = false;
+                fetched = false; 
                 callback(calendar_events );
                 return;
               }
@@ -305,8 +364,11 @@
                 op.data,
                 function(events) {  
                     if(stopRender===true)return;
-                    bootstrapAlert("success",events.length+" events have been well fetched" );
-                    renderEvents(events,callback);
+                    
+                    if(events.length!=0)bootstrapAlert("success",events.length+" events have been well fetched" );
+                    else bootstrapAlert("info","no event found");
+
+                    renderEvents(events);
                     //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                 },
                 'json'
@@ -360,6 +422,7 @@
                             bootstrapAlert("success","event <b>"+tmp['title']+"</b> has been well added");
                             tmp.id =response.id;
                             var ev = new CalEvent(tmp);  
+                            ev.setParent(mainConfEvent)
                             Events[ev.id] = ev;  
                             EventCollection.eventToRender = {id:ev["id"],oldStart:ev.start,oldEnd:ev.end}; 
                             ev.render();
@@ -452,7 +515,10 @@
           eventDragStop: function( event, jsEvent, ui, view ) {  
               dragged = [ ui.helper[0], event ]; 
               var oldStart = moment(event.start);
-              var oldEnd = moment(event.end);
+              var oldEnd = moment(event.end); 
+              if(isClassicView !== true ){
+                console.log("ressources changed ! "+ event.resource)
+              }
               //save children to db
               setTimeout(function(){ //bug... event isn't yet updated 
                 if(!event.isOneDayLong()){ 
@@ -464,10 +530,15 @@
                 endDrag(event,ui.helper[0] ); 
                 event.persist(); 
               },1);//bug... event isn't yet updated 
-          }
+          },
+          //resources managment 
+          // refetchResources : true,
+          eventDrop: function( event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) { 
+            console.log(Events[event.id]);
+          },
       };
       $calendar.fullCalendar(calendarOption);  
-      $calendar.fullCalendar('changeView', "agendaWeek" ); 
+      $calendar.fullCalendar('changeView', viewBtns[currentView].classic );
 
       /*-------------------------------------------------------------------------------------------------*/
       /*------------------------------------- update function -------------------------------------------*/
@@ -527,8 +598,8 @@
           stylizeBlock([mainConfEvent]); 
           console.debug(moment().diff(startScript)+" to stylizeBlock")
 
-          if($('#reposition').is(':checked') && view.name !== "month"){ 
-              //non-blocking
+          if($('#reposition').is(':checked') && (view.name == "agendaWeek" || view.name == "agendaDay")){ 
+              //non-blocking 
               setTimeout(function(){ 
                   var startScript = moment();
 
@@ -890,7 +961,6 @@
         //get diff
         var diff = moment(draggedStart).diff(moment(event['start']));
         if(diff===0)return;
-
         //apply to children  
         var startScript = moment();
         $.each(children,function(i,child){ 
@@ -968,25 +1038,66 @@
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------------- initialize filters --------------------------------------------*/
       /*-----------------------------------------------------------------------------------------------------*/
- 
-
-        //init filters
-        var filter = new initFilter();
-        $(filter).on("change", function(ev,key,val) {
-
-            EventCollection.eventToRender = undefined;
-            console.log(op.data);
-            console.log(val);
-            console.log(key);
-            op.data[key] = val;
-            $calendar.trigger("stopRender");
-            $calendar.fullCalendar('refetchEvents');   
-        });
 
 
-        /*-----------------------------------------------------------------------------------------------------*/
-        /*------------------------------------- History -------------------------------------------------------*/
-        /*-----------------------------------------------------------------------------------------------------*/ 
+      //init filters
+      var filter = new initFilter();
+      $(filter).on("change", function(ev,key,val) {
+
+          EventCollection.eventToRender = undefined;
+          console.log("filtering : ",val,key,op.data); 
+          op.data[key] = val;
+          $calendar.trigger("stopRender");
+          $calendar.fullCalendar('refetchEvents');   
+      });
+
+
+      /*-----------------------------------------------------------------------------------------------------*/
+      /*------------------------------------- resources view ------------------------------------------------*/
+      /*-----------------------------------------------------------------------------------------------------*/ 
+      
+      initViewsBtns(viewBtns);
+      $('#resourceView select').change(function(e){ 
+        isClassicView = $(this).val() == "classic";
+        if(isClassicView){ //render the classic view   
+          $('.fc-event').remove();
+          $calendar.fullCalendar('changeView', viewBtns[currentView].classic );
+          // $calendar.fullCalendar( 'renderEvent', Events);
+          // $calendar.trigger("stopRender");
+          // fetch = false;
+          // $calendar.fullCalendar('refetchEvents');   
+        }else{ //render a resource view
+
+          var resource = $(this).val();
+          calendarOption.resources = $(this).find("option[value='"+resource+"']").data("feed-url"); 
+          
+          //seems to be useless...
+          // $calendar.fullCalendar('refetchEvents');
+          // $calendar.fullCalendar('refetchResources');
+
+          //can fetch resources but can't go back to classic view when we destroy calendar
+          // $calendar.fullCalendar( 'destroy' ); 
+          // $calendar.fullCalendar(calendarOption);
+
+          $calendar.fullCalendar('changeView', viewBtns[currentView].resource );
+
+        }
+        initViewsBtns(viewBtns); 
+      })
+      function initViewsBtns(viewBtns){
+        for( var i in viewBtns){
+          viewBtns[i].elem.appendTo(".fc-header-right").off("click").click({i:i},function(e){ 
+                  currentView = e.data.i;
+                  $(this).siblings().removeClass("fc-state-active");
+                  $(this).addClass("fc-state-active");
+                  $calendar.fullCalendar('changeView', (isClassicView ? viewBtns[currentView].classic : viewBtns[currentView].resource)); 
+          })
+        }
+      }
+
+      /*-----------------------------------------------------------------------------------------------------*/
+      /*------------------------------------- History -------------------------------------------------------*/
+      /*-----------------------------------------------------------------------------------------------------*/ 
 
 
       //render an Events array

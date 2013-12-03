@@ -54,7 +54,7 @@ function Sidebar(){
                     // console.log("dropped into sidebar",event);
                     $(this).css("border-color","green"); 
                     sidebarEventHtml($sidebarTmp,event);
-                    $sidebarTmp.show().css("background-color",event.color || rgb(58, 135, 173)) ;
+                    $sidebarTmp.show().css("background-color",event.color || "rgb(58, 135, 173)") ;
                 }
             },
             out: function( event, ui ) {
