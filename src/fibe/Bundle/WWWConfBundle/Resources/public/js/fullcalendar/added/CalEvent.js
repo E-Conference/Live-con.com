@@ -384,7 +384,7 @@ CalEvent.prototype.getPopoverContent = function(){
     }
     return "<ul >\
               <li><b>duration : </b>"+moment.duration(moment(this.end).diff(this.start)).humanize()+"</li>\
-              <li><b>location : </b>"+((this.location && this.location.name && this.location.name!=="" && this.location.name) || "no location")+"</li>\
+              <li><b>location : </b>"+(this.location && this.location.name && this.location.name!=="" ? this.location.name :  "no location")+"</li>\
               <li class='description'><b>description : </b>"+(this.description || "no description")+"</li>\
               <li><b>categories : </b>"+categories+"\
               <li><b>topics : </b>"+topics+"\
