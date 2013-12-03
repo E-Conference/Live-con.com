@@ -146,4 +146,11 @@ class SocialService
     {
         return $this->accounts;
     }
+
+
+     public function __toString() 
+    {
+        return $this->name;
+
+    }
 }
