@@ -81,3 +81,12 @@ idci_exporter:
                         options:
 #                            template_path:
                             template_name_format: "export.json.twig"
+        schedule_location:
+            class: "IDCI\\Bundle\\SimpleScheduleBundle\\Entity\\Location"
+            formats:
+                jsonp:
+                    transformer:
+#                        service: "idci_exporter.transformer_twig"
+                        options:
+#                            template_path:
+                            template_name_format: "export.json.twig"
