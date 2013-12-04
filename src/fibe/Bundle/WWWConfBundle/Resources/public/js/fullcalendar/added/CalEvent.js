@@ -1,13 +1,15 @@
 
 var CalEvent = function(event){
 
-
-    this["id"]         = event.id; 
-    this["location"]   = event.location; 
-    this["title"]      = event.name || event.title; 
-    this["start"]      = event.start || event.start_at;
-    this["end"]        = event.end || event.end_at; 
-    this["allDay"]     = (event.allDay === true || event.allDay === false) ?
+    this["id"]          = event.id; 
+    this["description"] = event.description;
+    this["topics"]      = event.topics;
+    this["roles"]       = event.roles;
+    this["location"]    = event.location; 
+    this["title"]       = event.name || event.title; 
+    this["start"]       = event.start || event.start_at;
+    this["end"]         = event.end || event.end_at; 
+    this["allDay"]      = (event.allDay === true || event.allDay === false) ?
                                 event.allDay : 
                                 event.is_allday ? 
                                         event.is_allday ==="true" : 
@@ -375,21 +377,21 @@ CalEvent.prototype.getPopoverContent = function(){
         }
         topics += "</ul>";
     }
-    var speakers = "no speakers"
+    var roles = "no roles"
     if(this.roles && this.roles[0] && this.roles[0].id!==""){
-        speakers = "<ul>";
+        roles = "<ul>";
         for (var i=0;i<this.roles.length;i++){
-            speakers += "<li>"+this.roles[i].person.name+"</li>";
+            roles += "<li><b>"+this.roles[i].type+" : </b>"+this.roles[i].person.name+"</li>";
         }
-        speakers += "</ul>";
+        roles += "</ul>";
     }
-    return "<ul >\
+    return "<ul class='event-popover' >\
               <li><b>duration : </b>"+moment.duration(moment(this.end).diff(this.start)).humanize()+"</li>\
               <li><b>location : </b>"+(this.location && this.location.name && this.location.name!=="" ? this.location.name :  "no location")+"</li>\
               <li class='description'><b>description : </b>"+(this.description || "no description")+"</li>\
               <li><b>categories : </b>"+categories+"\
               <li><b>topics : </b>"+topics+"\
-              <li><b>speakers : </b>"+speakers+"\
+              <li><b>roles : </b>"+roles+"\
               </li>\
             </ul>"
 };

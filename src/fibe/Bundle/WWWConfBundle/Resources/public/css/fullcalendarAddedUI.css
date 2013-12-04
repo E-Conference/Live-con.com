@@ -1,3 +1,6 @@
+    .event-popover ul,ul.event-popover {
+        margin-left: -30px;
+    }
     .drag-over-events{
         outline : 3px dashed green;
     }    
