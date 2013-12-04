@@ -427,8 +427,8 @@
                             EventCollection.eventToRender = {id:ev["id"],oldStart:ev.start,oldEnd:ev.end}; 
                             ev.render();
                                //get computed mainConfEvent dates
-                              mainConfEvent.start = moment(response.mainConfEvent.start.date).format();
-                              mainConfEvent.end = moment(response.mainConfEvent.end.date).format();
+                              mainConfEvent.start = moment(response.mainConfEvent.start, "YYYY-MM-DD HH:mmZ").format();
+                              mainConfEvent.end = moment(response.mainConfEvent.end, "YYYY-MM-DD HH:mmZ").format();
                               mainConfEvent.render();
                              // $calendar.fullCalendar('renderEvent',ev); // 3rd arg make the event "stick"
                         },
@@ -449,7 +449,10 @@
               var oldEnd = moment(event["end"]).subtract({'d':dayDelta,'m':minuteDelta});
               EventCollection.eventToRender = {id:event["id"],oldStart:event["start"],oldEnd:oldEnd.format()};
 
-              console.log(dayDelta,minuteDelta,event);
+              console.log(dayDelta,minuteDelta,event); 
+              if(!event.isOneDayLong() && !event.allDay){ 
+                event.fitToDay( event["start"],oldEnd.format());  
+              }
 
               event.updateParentDate();
               event.updateChildrenDate();
@@ -522,10 +525,7 @@
               //save children to db
               setTimeout(function(){ //bug... event isn't yet updated 
                 if(!event.isOneDayLong()){ 
-                  event.fitToDay(oldStart,oldEnd);
-                  // alert(moment(event.start).format() )
-                  // alert( moment(event.end).format())
-                  event.render();
+                  event.fitToDay(oldStart,oldEnd);  
                 }
                 endDrag(event,ui.helper[0] ); 
                 event.persist(); 
@@ -1072,8 +1072,8 @@
           calendarOption.resources = $(this).find("option[value='"+resource+"']").data("feed-url"); 
           
           //seems to be useless...
-          // $calendar.fullCalendar('refetchEvents');
-          // $calendar.fullCalendar('refetchResources');
+          $calendar.fullCalendar('refetchEvents');
+          $calendar.fullCalendar('refetchResources');
 
           //can fetch resources but can't go back to classic view when we destroy calendar
           // $calendar.fullCalendar( 'destroy' ); 

@@ -141,13 +141,13 @@ class ConfEvent extends Event
 
         if($this->isMainConfEvent){
             //ensure main conf event fits its children dates 
-            $this->fitChildrenDate();
+            $this->fitChildrenDate(true);
             // $this->setIsInstant($this->getEndAt()->format('U') == $this->getStartAt()->format('U'));
         }
     }
 
     //ensure main conf event fits its children dates 
-    public function fitChildrenDate(){
+    public function fitChildrenDate($allDay = false){
         $earliestStart= new \DateTime('6000-10-10'); 
         $latestEnd = new \DateTime('1000-10-10');
         foreach ($this->getChildren() as $child) {
@@ -158,6 +158,24 @@ class ConfEvent extends Event
         if($earliestStart == new \DateTime('6000-10-10') || $latestEnd == new \DateTime('1000-10-10'))return;
         if($earliestStart == $latestEnd){ 
             $latestEnd->add(new \DateInterval('P1D'));
+        }
+        if($allDay==true){
+
+            $sTS = $earliestStart->getTimestamp();
+            $eTS = $latestEnd->getTimestamp();
+
+            //adjust timezone to correctly calculate with floor()
+            $tzOffset = \DateTime::createFromFormat('U', $sTS); 
+            $tzOffset->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
+
+            $sTS = $sTS + $tzOffset->getOffset();
+            $sTS = (floor($sTS/86400))*86400;
+
+            $eTS = $eTS - $tzOffset->getOffset();
+            $eTS = (floor(($eTS)/86400))*86400;
+
+            $earliestStart = $earliestStart->setTimestamp($sTS - $tzOffset->getOffset()); 
+            $latestEnd = $latestEnd->setTimestamp($eTS + $tzOffset->getOffset()); 
         }
         $this->setStartAt($earliestStart);
         $this->setEndAt($latestEnd);
