@@ -290,7 +290,8 @@ CalEvent.prototype.fitToDay = function (oldStart,oldEnd){
 
   }else{
     //we put the event to the previous day
-    this.end = moment(midnightLimit).subtract("s",1).format();
+    this.end = moment(midnightLimit).format();
+    // this.end = moment(midnightLimit).subtract("s",1).format();
     this.start = moment(midnightLimit).subtract(duration).format(); 
   }
 }

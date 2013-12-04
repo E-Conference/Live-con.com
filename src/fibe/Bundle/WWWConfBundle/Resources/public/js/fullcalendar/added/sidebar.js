@@ -105,7 +105,6 @@ function Sidebar(){
                     },
                     stop: function(a,b,c){ 
                       if($(a.target).hasClass("ui-draggable")){
-                        alert("revert")
                         $(this).show()
                       }else{
                         $(a.target).remove()

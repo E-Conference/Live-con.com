@@ -28,7 +28,8 @@
             <select class="form-control"> 
                 <option value="classic">Calendar</option> 
                 <optgroup label="Ressources views">
-                  <option value="location" data-feed-url="{{ path('exporter_api', { 'entity_reference': 'schedule_location','_format': 'json' }) }}?conference_id={{currentConf.id}}">Location</option> 
+                  <option value="location" >Location</option> 
+                  <option value="category" >Category</option> 
                 </optgroup>
             </select>
         </div>
@@ -186,6 +187,7 @@
         quickAddUrl   : DATA_FEED_URL + "?method=add", 
         quickUpdateUrl: DATA_FEED_URL + "?method=update",
         quickDeleteUrl: DATA_FEED_URL + "?method=remove", 
+        resFeedURL    : "",
         data          : {}
     }; 
 
@@ -326,6 +328,7 @@
               center: 'title',
               right: '' // computed in resource view
           },  
+          resources: op.resFeedURL,
           aspectRatio: 1.6,
           editable: true,
           firstDay: 1,         
@@ -446,11 +449,13 @@
           },
           eventResize: function(event,dayDelta,minuteDelta,revertFunc){
             setTimeout(function(){ //bug... event isn't yet updated
+              if(!moment(event["end"]))event["end"]=moment(event["start"]).add("h",1).format();
               var oldEnd = moment(event["end"]).subtract({'d':dayDelta,'m':minuteDelta});
               EventCollection.eventToRender = {id:event["id"],oldStart:event["start"],oldEnd:oldEnd.format()};
 
               console.log(dayDelta,minuteDelta,event); 
               if(!event.isOneDayLong() && !event.allDay){ 
+                // event.allDay = true;
                 event.fitToDay( event["start"],oldEnd.format());  
               }
 
@@ -526,6 +531,7 @@
               setTimeout(function(){ //bug... event isn't yet updated 
                 if(!event.isOneDayLong()){ 
                   event.fitToDay(oldStart,oldEnd);  
+                  // event.allDay = true;
                 }
                 endDrag(event,ui.helper[0] ); 
                 event.persist(); 
@@ -616,7 +622,7 @@
                   
                   // console.log(" ######positionBlocks######");
                   
-                  colWidth -=eventMargin; 
+                  colWidth -=eventMargin/2; 
                   var broCountRange;
                   try
                   {
@@ -649,20 +655,21 @@
 
                         var count   = broCountRange[event.id].count,
                             range   = broCountRange[event.id].range,
-                            left    = broCountRange[event.id].minLeft;
+                            left    = broCountRange[event.id].minLeft - 3;
                         // console.log("event "+event.id+" has "+count+" bros. range = "+range+" minLeft = "+left);
 
                         //width
-                        newColWidth = colWidth/(count)-eventMargin;
+                        newColWidth = (colWidth/count)-eventMargin/2
+                        //-(count/2);
 
                          
                         //place child into his parent
                         if(parentPos){
-                          left = parentPos.x+eventMargin/2;
-                          newColWidth = newColWidth+eventMargin;
+                          left = parentPos.x;
+                          // newColWidth = newColWidth;
                           if(moment(parent.start).isSame(moment(event.start))){
-                            element.css("top",elemProp.y+eventMargin); 
-                            element.css("height",elemProp.h-eventMargin*2);
+                            element.css("top",elemProp.y+eventMargin/2); 
+                            element.css("height",elemProp.h-eventMargin);
                           }
                           if(moment(parent.end).isSame(moment(event.end))){ 
                             element.css("height",elemProp.h-eventMargin);
@@ -670,7 +677,7 @@
                         } 
                         element.width(newColWidth);
                         
-                        left += (range*(newColWidth+eventMargin)); 
+                        left += eventMargin/2 + ((range)*(newColWidth + eventMargin/2)); 
                         if(left)element.css("left",left); 
                         // console.log(left)  
                     // }else{
@@ -1069,17 +1076,20 @@
         }else{ //render a resource view
 
           var resource = $(this).val();
-          calendarOption.resources = $(this).find("option[value='"+resource+"']").data("feed-url"); 
+            currentRes = resource;
+          op.resFeedURL = resConfig[resource].url; 
           
           //seems to be useless...
+          $('.fc-event').remove();
+          $calendar.fullCalendar('changeView', viewBtns[currentView].resource );
           $calendar.fullCalendar('refetchEvents');
           $calendar.fullCalendar('refetchResources');
+
 
           //can fetch resources but can't go back to classic view when we destroy calendar
           // $calendar.fullCalendar( 'destroy' ); 
           // $calendar.fullCalendar(calendarOption);
 
-          $calendar.fullCalendar('changeView', viewBtns[currentView].resource );
 
         }
         initViewsBtns(viewBtns); 
