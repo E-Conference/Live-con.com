@@ -11,14 +11,25 @@
 define(['jquery', 'underscore', 'jStorage'], function($, _, jStorage){
 	var StorageManager = {
 
-		initialize : function(){
+		initialize : function(parameters){
 			if(!$.jStorage.storageAvailable()){
 				this.commandStore = [];
 		    }
 			if(!StorageManager.get("keyword")){
 				StorageManager.set("keyword",{});
 			}
-			this.maxSize = 50;
+
+			var config = StorageManager.get("configurations");
+			if(!config){
+				debugger;
+				StorageManager.set("configurations",parameters.conference);
+			}else{
+				if(StorageManager.get("configurations").id != parameters.conference.id){
+					$.jStorage.flush();
+					this.initialize({conference : parameters.conference});
+				}
+			}
+			this.maxSize = 500;
 		},
 		
 		pushCommandToStorage : function (uri,commandName, JSONdata){
