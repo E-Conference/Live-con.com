@@ -5,11 +5,11 @@
     "country"  :  "{{ entity.country }}",
     "members":
             [
-            {% for member in entity.bouze %}
+            {% for member in entity.members %}
                 {% if loop.first %}
-                { "id": "{{ member.id }}", "name": "{{ member.name() }}"}
+                { "id": "{{ member.id }}", "name": "{{ member.name}}"}
                 {% else %}
-                ,{ "id": "{{ member.id }}", "name": "{{ member.name() }}"}
+                ,{ "id": "{{ member.id }}", "name": "{{ member.name}}"}
                 {% endif %}
             {% endfor %}
             ] 

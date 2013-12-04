@@ -17,7 +17,7 @@
       <div id="sidebar">  
         <div class="checkbox">
           <label>
-            <input id="reposition" checked="checked" type="checkbox"> Reposition parent/child <small>(<i>alpha</i>)</small>
+            <input id="reposition" checked="checked" type="checkbox"> Reposition parent/child <small>(<i>need performance</i>)</small>
           </label>
         </div> 
         <div class="history hide">
@@ -173,6 +173,7 @@
     var DATA_FEED_URL = "{{ path('schedule_view_event_get') }}";
     var op = {  
         getOrderedUrl     : "{{ path('exporter_api', { 'entity_reference': 'schedule_event','_format': 'json' }) }}?conference_id={{currentConf.id}}",
+        getDatalessUrl     : "{{ path('exporter_api', { 'entity_reference': 'schedule_event','_format': 'json' }) }}?only_instant=whatever&conference_id={{currentConf.id}}",
         updateUrl     : "{{ path('schedule_view_event_edit') }}", //event modal form
         quickAddUrl   : DATA_FEED_URL + "?method=add", 
         quickUpdateUrl: DATA_FEED_URL + "?method=update",
@@ -211,41 +212,47 @@
       var calendar_events   = []; 
       function renderEvents(events,callback){
           Events = {};
-          $calendar.fullCalendar( 'removeEvents'); 
 
           var instant_events   = [];  
           calendar_events   = []; 
           var i = 0;
+          var orphanChildren= [];
           //non-blocking loop
           function doWork() {
  
             var event = new CalEvent(events[i]);  
+ 
+            calendar_events.push(Events[events[i]["id"]]);  
 
-            if(event.isInstant()){
-              instant_events.push(Events[events[i]["id"]]); 
-            }else{ 
-                calendar_events.push(Events[events[i]["id"]]); 
-                // $calendar.fullCalendar( 'renderEvent',event);
-            } 
             if(event.mainconfevent){
               mainConfEvent = event;
+              if(mainConfEvent.parent.id != ""){
+                mainConfEvent.persist();
+              }
+              EventCollection.eventToRender = undefined; 
+            } 
+            if(event.parent.id == ""){
+              orphanChildren.push(event);
             }
           
             i++; 
 
             //last iteration  
             if (!events[i]) {
-
               //populate sidebar
-              sidebar.setInstantEvents(instant_events); 
-
               fetched = true; 
+              // $calendar.fullCalendar( 'removeEvents');
+              for(var j=0;j<orphanChildren.length;j++){
+                if(orphanChildren[j] == mainConfEvent)continue;
+                orphanChildren[j].parent.id = mainConfEvent.id;
+                orphanChildren[j].persist();
+                bootstrapAlert("info","event "+orphanChildren[j].title+" was orphan, so it's now the child of "+mainConfEvent.title)
+              }
               $calendar.fullCalendar('refetchEvents');
-
             }else if (stopRender!==true){ 
               //the loop goes on
               setTimeout(doWork, 1);
-            }       
+            }
           };
           var stopRender = false;
           $calendar.off("stopRender").on("stopRender",function(){
@@ -266,7 +273,10 @@
           editable: true,
           year: firstDay.year(), 
           month: firstDay.month(),
-          date: firstDay.date(),
+          date: firstDay.date(), 
+          windowResize: function(view) {
+              EventCollection.eventToRender = undefined; 
+          }, 
           //get events
           events : function(start, end, callback) { 
               var stopRender = false;
@@ -280,9 +290,16 @@
                 callback(calendar_events );
                 return;
               }
+              //compute dates to filter
+              if(firstDay){ 
+                op.data['before']=firstDay.endOf('week').format();
+                op.data['after']=firstDay.startOf('week').format();
+                firstDay = undefined;
+              }else{
+                op.data['before']=moment(end).format();
+                op.data['after']=moment(start).format();
+              }
               
-              op.data['before']=moment(end).format();
-              op.data['after']=moment(start).format();
               $.get(
                 op.getOrderedUrl,
                 op.data,
@@ -309,7 +326,7 @@
                           // rerender if changed
                       $modalBody.find("#eventForm,#delete-event-form").submit(function(){
                         $modal.off('hidden.bs.modal').on('hidden.bs.modal', function () {
-                          $calendar.fullCalendar( 'refetchEvents' ) 
+                          $calendar.fullCalendar( 'refetchEvents' );
                         })
                       }) 
                   }
@@ -335,21 +352,26 @@
                         end      : moment(start).isSame(moment(end)) ? moment(start).add("hours",1).format() : end,
                         allDay   : allDay
                     }; 
-                    console.log(tmp)
+                    console.log(tmp);
                     $.post(
-                            op.quickAddUrl,
-                            $.extend( {} , tmp ),
-                            function(response) {  
-                                bootstrapAlert("success","event <b>"+tmp['title']+"</b> has been well added");
-                                tmp.id =response.id;
-                                var ev = new CalEvent(tmp);  
-                                Events[ev.id] = ev; 
-                                ev.setParent(mainConfEvent);
-                                ev.updateParentDate();
-                                ev.render();
-                                // $calendar.fullCalendar('renderEvent',ev); // 3rd arg make the event "stick"
-                            },
-                            'json'
+                        op.quickAddUrl,
+                        $.extend( {} , tmp ),
+                        function(response) {  
+                            bootstrapAlert("success","event <b>"+tmp['title']+"</b> has been well added");
+                            tmp.id =response.id;
+                            var ev = new CalEvent(tmp);  
+                            Events[ev.id] = ev; 
+                            ev.setParent(mainConfEvent);
+                            ev.updateParentDate();
+                            EventCollection.eventToRender = {id:ev["id"],oldStart:ev.start,oldEnd:ev.end}; 
+                            ev.render();
+                               //get computed mainConfEvent dates
+                              mainConfEvent.start = moment(response.mainConfEvent.start.date).format();
+                              mainConfEvent.end = moment(response.mainConfEvent.end.date).format();
+                              mainConfEvent.render();
+                             // $calendar.fullCalendar('renderEvent',ev); // 3rd arg make the event "stick"
+                        },
+                        'json'
                     );
                     bootstrapAlert("info","add request sent","Info : ","<i class='icon-spinner icon-spin'></i>");
                   $modalNewEvent.modal("hide");
@@ -361,26 +383,38 @@
               $calendar.fullCalendar('unselect');
               
           },
-          eventResize: function(event,dayDelta,minuteDelta,revertFunc) {
-              setTimeout(function(){ //bug... event isn't yet updated 
-                    event.updateParentDate();
-                    event.updateChildrenDate();
-                    event.render();
-                    event.persist(); 
-              },1);//bug... event isn't yet updated 
+          eventResize: function(event,dayDelta,minuteDelta,revertFunc){
+            setTimeout(function(){ //bug... event isn't yet updated
+              var oldEnd = moment(event["end"]).subtract({'d':dayDelta,'m':minuteDelta});
+              EventCollection.eventToRender = {id:event["id"],oldStart:event["start"],oldEnd:oldEnd.format()};
+
+              console.log(dayDelta,minuteDelta,event);
+
+              event.updateParentDate();
+              event.updateChildrenDate();
+              event.render();
+              event.persist();
+            },1);//bug... event isn't yet updated 
           }, 
           eventDrop : function(event){ //drop from calendar
-            // EventCollection.eventsToRender.push(event["id"]);
               event.persist(); 
           }, 
+          viewRender : function( view, element ){
+          
+            EventCollection.eventToRender = mainConfEvent;
+          },
           eventAfterAllRender: function( view ) { 
               //avoid repeating this function 10 times...
+              if(!mainConfEvent)return;
               clearTimeout(repositionTimeout);
               repositionTimeout=setTimeout(function(){   
-                  if(!mainConfEvent)return;
+                  var startScript = moment();
                   updateEventArray();
 
-              if(view.name !== "month")reposition(view); 
+                  console.debug(moment().diff(startScript)+" to positionBlock");
+
+                  if(view.name !== "month")reposition(view); 
+                  console.log("eventToRender",EventCollection.eventToRender); 
               },repositionTimeout);
                   
           }, 
@@ -390,7 +424,7 @@
               // retrieve the dropped element's stored Event Object 
               var event = dragged[1]; 
               // var event = $.extend({},dragged[1]);  
-              event.elem.remove();
+              if(event.elem)event.elem.remove();
               // delete event.elem;
               event.allDay = allDay;
               event['start'] = date;
@@ -416,6 +450,7 @@
           eventDragStart: function( event, jsEvent, ui, view ) { 
               dragged = [ ui.helper[0], event ];
               setTimeout(function(){ //bug... event isn't yet updated 
+                EventCollection.eventToRender = {id:event["id"],oldStart:moment(event["start"])._d,oldEnd:moment(event["end"])._d}; 
                 dragChildren(event, jsEvent, ui, view);
               },1);//bug... event isn't yet updated
           },
@@ -429,43 +464,6 @@
       };
       $calendar.fullCalendar(calendarOption);  
       $calendar.fullCalendar('changeView', "agendaWeek" ); 
-
-      /*-------------------------------------------------------------------------------------------------*/
-      /*------------------------------------- initialize sidebar ----------------------------------------*/
-      /*-------------------------------------------------------------------------------------------------*/
-      
-      var sidebar = new Sidebar('#external-events')
-      //dropped on the sidebar;
-      $(sidebar).on("dropped",function(ev,calEvent){  
-          console.log("dropped",event)
-          var event = Events[calEvent.id];
-          event.deleteParent();
-          EventCollection.fitMainConfEvent();
-
-          //set as sidebar draggable element  and then affect children 
-          sidebar.setSidebarEvent(event);
-
-          //set as instant event 
-          event['end'] = moment(event['start']);
-          event.formatDate();
-          // remove event from calendar 
-          $calendar.fullCalendar('removeEvents',event.id); 
-          event.persist();  
-
-          var children = EventCollection.getChildren(event, {concat:true,onlyEvent:true} ); 
-          $.each(children,function(i,child){
-              sidebar.setSidebarEvent(child); 
-              //set as instant event 
-              child['end'] = moment(child['start']);
-              child.formatDate();
-              // remove event from calendar 
-              $calendar.fullCalendar('removeEvents',child.id);  
-              child.persist();
-          });
-          // updateEventArray();
-      }).on("drag",function(ev,event){ 
-          dragChildren(event);
-      }); 
 
       /*-------------------------------------------------------------------------------------------------*/
       /*------------------------------------- update function -------------------------------------------*/
@@ -486,19 +484,14 @@
             } 
           }
 
-          $(".fc-event-draggable").each(function(i){ 
+          $(".fc-event").each(function(i){ 
             var id = parseInt($(this).find(".fc-event-id").text()); 
             //$.inArray()
             if(Events[id])Events[id]['elem'] = $(this);
           });
           console.log("###event array updated###",Events);
-          // console.log("changed events :",EventCollection.eventsToRender);
           // console.log(Events) 
-
-          //if we render from history, dont store the state
-          // if(!History.isRenderingStateFromHistory()){
-          //     History.storeState(Events);
-          // }
+ 
       }
 
 
@@ -519,39 +512,49 @@
               popoverWidth = 276,
               colWidth     = view.getColWidth(),
               startScript ; 
-
-              // toppestParent = EventCollection.getToppestEventsToRender();
-              
+ 
               toppestParent = EventCollection.getToppestParent(view);
 
           console.log("toppest parent : ",toppestParent);
           if(!toppestParent)return;
           // console.log("toppestParent",toppestParent);
           
-          stylizeBlock(toppestParent); 
+          var startScript = moment()
+          stylizeBlock([mainConfEvent]); 
+          console.debug(moment().diff(startScript)+" to stylizeBlock")
 
           if($('#reposition').is(':checked')){ 
-            //non-blocking
-                  setTimeout(function(){ 
-                    positionBlock(toppestParent,colWidth-eventMargin,2);
-                  },1)
+              //non-blocking
+              setTimeout(function(){ 
+                  var startScript = moment();
+
+                  positionBlock(toppestParent,colWidth,2);
+                  console.debug(moment().diff(startScript)+" to positionBlock");
+                  console.log("--------------------------------------------------------------");
+                  console.log("-------------------      rendered       ----------------------");
+                  console.log("--------------------------------------------------------------");
+              },1)
+          }else{
+            EventCollection.eventToRender = undefined;
           }
           function positionBlock(events,colWidth,parentZindex,parentPos,parent){ 
                   
                   // console.log(" ######positionBlocks######");
                   
-                  colWidth -=eventMargin/2; 
+                  colWidth -=eventMargin; 
                   var broCountRange;
                   try
-                    {
+                  {
                       broCountRange = EventCollection.getBroCountRange(events)
-                    }
+                  }
                   catch(err)
-                    {
-                    // events aren't in the dom...
-                    return;
-                    }
-                  console.log("##getBroCountRange## ",broCountRange);  
+                  {
+                      // events aren't in the dom...
+                      
+                      return;
+                  }
+
+                  // console.log("##getBroCountRange of "+(events.length==1?events[0].id : "array["+events.length+"]")+"## ",broCountRange);  
 
 
                   for (var i in events){
@@ -566,33 +569,38 @@
 
                     // repositionning (width and Xpos) 
                     //positionning event to be over the parent
-                    var count   = broCountRange[event.id].count,
-                        range   = broCountRange[event.id].range,
-                        left    = broCountRange[event.id].minLeft;
-                    console.log("event "+event.id+" has "+count+" bros. range = "+range+" minLeft = "+left);
+                    // console.log(event.id)
+                    // if(broCountRange[event.id]){
 
-                    //width
-                    newColWidth = colWidth/(count)-eventMargin;
-                    element.width(newColWidth);
+                        var count   = broCountRange[event.id].count,
+                            range   = broCountRange[event.id].range,
+                            left    = broCountRange[event.id].minLeft;
+                        // console.log("event "+event.id+" has "+count+" bros. range = "+range+" minLeft = "+left);
 
-                     
-                    //left margin for events to respect hierarchy
-                    
-                    if(parentPos){
-                      left = parentPos.x+eventMargin/2;
-                      if(moment(parent.start).isSame(moment(event.start))){
-                        element.css("top",elemProp.y+eventMargin/2+5); 
-                        element.css("height",elemProp.h-eventMargin/2-5);
-                      }
-                      if(moment(parent.end).isSame(moment(event.end))){
-                        // element.css("top",elemProp.y+eventMargin/2); 
-                        element.css("height",elemProp.h-eventMargin/2-5);
-                      } 
-                    } 
+                        //width
+                        newColWidth = colWidth/(count)-eventMargin;
 
-                    left += (range*(newColWidth+eventMargin)); 
-                    if(left)element.css("left",left); 
-                    console.log(left)  
+                         
+                        //place child into his parent
+                        if(parentPos){
+                          left = parentPos.x+eventMargin/2;
+                          newColWidth = newColWidth+eventMargin;
+                          if(moment(parent.start).isSame(moment(event.start))){
+                            element.css("top",elemProp.y+eventMargin); 
+                            element.css("height",elemProp.h-eventMargin*2);
+                          }
+                          if(moment(parent.end).isSame(moment(event.end))){ 
+                            element.css("height",elemProp.h-eventMargin);
+                          } 
+                        } 
+                        element.width(newColWidth);
+                        
+                        left += (range*(newColWidth+eventMargin)); 
+                        if(left)element.css("left",left); 
+                        // console.log(left)  
+                    // }else{
+                    //   console.warn("couldn't have get broCountRange["+event.id+"]");
+                    // }
 
                     //z-index 
                     element.css('z-index',parentZindex+1)  
@@ -608,12 +616,12 @@
        
           }
           function stylizeBlock(events){ 
-
+                // console.log("stylizeBlocks : ",events);
                     /*****************  styling (opacity, hover, drag, drop) ********************/
                  
                 for (var i in events){
                     var event = events[i]; 
-                    console.log("positionning : ",event.id);
+                    // console.log("positionning : ",event.id);
                     var element = event.elem; 
                     if(!element)  continue; //event is in another view
 
@@ -716,8 +724,8 @@
                         }
                     }); //end droppable
     
-                    //action on hover (children opacity and bootstrap popover)
                     element
+                              /*************** popover *****************/
                         .popover({
                                 trigger : 'hover',
                                 html : true,
@@ -735,6 +743,7 @@
                                 title : ' <b><span class="muted">#'+event.id+'</span> '+event.title+'</b>',
                                 content : event.getPopoverContent(),
                         })
+                              /*************** hover : change border color  *****************/
                         .hover(function(){
                               //enter
                               $(this).animate({"border-color":"#3F3F3F"},{queue:false});
@@ -760,9 +769,10 @@
                     // end styling (opacity, hover, drag, drop)
                     
  
-                    var children = EventCollection.getChildren(event,{concat:false,onlyEvent:true});
+                    var children = EventCollection.getChildren(event,{concat:false,onlyEvent:true,noSidebar:true});
                     // console.log("elem",children)
-                    // 
+                    
+                    
                     if(children.length>0){
                       elemProp = getProp(element);
                       stylizeBlock(children);
@@ -771,15 +781,10 @@
 
                   }
                
-          // EventCollection.eventsToRender=[]; 
             
           }; 
-      }
 
-      
-
-
-
+      } 
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------------- position ------------------------------------------------------*/
       /*-----------------------------------------------------------------------------------------------------*/
@@ -813,7 +818,7 @@
           var diff = { 
             x : (draggedProp.x - newdraggedProp.x) , 
             y : (draggedProp.y - newdraggedProp.y)
-          }; 
+          };
           if(diff.x !== 0  || diff.y !== 0 ){
             draggedProp =  newdraggedProp;  
 
@@ -837,17 +842,22 @@
         if(diff===0)return;
 
         //apply to children 
+        
+        var startScript = moment();
         $.each(children,function(i,child){
  
                   
               // console.log("#draggin child : ",child ); 
                
+              var startScript = moment();
               child['start']  = moment(child['start']).subtract(diff);
               child['end']  = moment(child['end']).subtract(diff);
               child.render();
               child.persist(); 
+              console.debug(moment().diff(startScript)+" to affect one child");
    
         }); 
+        console.debug(moment().diff(startScript)+" to affect children");
         //apply to parent
         var parent = EventCollection.find(event.parent.id,{noSidebar:true});
         if(parent){
@@ -856,7 +866,7 @@
             //event dropped out of parent
             console.log(" #### moved out ####");  
             event.setParent(mainConfEvent);
-            event.updateParentDate();
+            // event.updateParentDate();
             event.render();
           }else{
             //still inside but may need a parent update (to properly contains child)
@@ -868,6 +878,46 @@
 
 
 
+      /*-------------------------------------------------------------------------------------------------*/
+      /*------------------------------------- initialize sidebar ----------------------------------------*/
+      /*-------------------------------------------------------------------------------------------------*/
+      
+      var sidebar = new Sidebar('#external-events');
+      sidebar.populate(op.getDatalessUrl);
+
+      //dropped from calendar to sidebar;
+      $(sidebar).on("dropped",function(ev,calEvent){  
+          console.log("dropped",event)
+          var event = Events[calEvent.id];
+          // event.deleteParent();
+          EventCollection.fitMainConfEvent();
+
+          //set as sidebar draggable element  and then affect children 
+          sidebar.setSidebarEvent(event);
+
+          //set as instant event 
+          event['end'] = moment(event['start']);
+          event.formatDate();
+          // remove event from calendar 
+          $calendar.fullCalendar('removeEvents',event.id); 
+          event.persist();  
+
+          var children = EventCollection.getChildren(event, {concat:true,onlyEvent:true} ); 
+          $.each(children,function(i,child){
+              sidebar.setSidebarEvent(child); 
+              //set as instant event 
+              child['end'] = moment(child['start']);
+              child.formatDate();
+              // remove event from calendar 
+              $calendar.fullCalendar('removeEvents',child.id);  
+              child.persist();
+          });
+          // updateEventArray();
+      }).on("drag",function(ev,event){ 
+          dragChildren(event);
+      }); 
+
+
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------------- initialize filters --------------------------------------------*/
       /*-----------------------------------------------------------------------------------------------------*/
@@ -876,6 +926,8 @@
         //init filters
         var filter = new initFilter();
         $(filter).on("change", function(ev,key,val) {
+
+            EventCollection.eventToRender = undefined;
             console.log(op.data);
             console.log(val);
             console.log(key);

@@ -28,7 +28,7 @@ var CalEvent = function(event){
     if(this.length > 0 && this.color)
       this["background-color"] = this.color;
      
-    console.log("new CalEvent" , this)
+    // console.log("new CalEvent" , this)
     Events[this["id"]] = this; 
 
     // for (var i in event){
@@ -45,10 +45,11 @@ CalEvent.prototype.render = function (){
     if($calendar.fullCalendar('clientEvents',this.id).length <1){
       // alert("new calEvent for "+ this.id) 
       renderedEvent = new CalEvent(this); 
+
       $calendar.fullCalendar('renderEvent', renderedEvent);
     }else{
       $calendar.fullCalendar('removeEvents', renderedEvent.id);
-      // EventCollection.eventsToRender.push(this["id"]);
+      // EventCollection.eventToRender.push(this["id"]);
       $calendar.fullCalendar('renderEvent', Events[renderedEvent.id]);
     }
 
@@ -76,10 +77,11 @@ CalEvent.prototype.render = function (){
 
     // console.log("event.render("+renderedEvent.id+")");
     // console.log("client event :",$calendar.fullCalendar('clientEvents',renderedEvent.id));
+    Events[renderedEvent.id] = renderedEvent;
     return renderedEvent;
 };
 
-CalEvent.prototype.persist = function(add){ 
+CalEvent.prototype.persist = function(add){  
     var toSend = {
       parent: this['parent'],
       id    : this['id'],
@@ -88,14 +90,23 @@ CalEvent.prototype.persist = function(add){
       parent: this['parent'],
       end   : this['end'],
       start : this['start']
-    } 
-    console.debug("persisting",this)
+    }  
     $.post(
       add=== true ? op.quickAddUrl : op.quickUpdateUrl,
       toSend,
-      function(doc) {   
-        bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well "+ (add=== true ? "added" : "updated"));
-        console.log(toSend.id+" "+(add=== true ? "added" : "updated"))
+      function(response) {  
+        bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well "+ (add=== true ? "added" : "updated")); 
+        console.log(toSend.id+" "+(add=== true ? "added" : "updated"),this); 
+        if(response.mainConfEvent){
+          //get computed mainConfEvent dates
+          var newStart = moment(response.mainConfEvent.start.date).startOf("day");
+          var newEnd   = moment(response.mainConfEvent.end.date).endOf("day");  
+          if(moment(mainConfEvent.start).startOf("day") - newStart != 0 || moment(mainConfEvent.end).endOf("day") - newEnd != 0){ 
+            mainConfEvent.start = newStart;
+            mainConfEvent.end = newEnd;
+            mainConfEvent.render();
+          } 
+        }
       },
       'json'
     );
@@ -124,19 +135,25 @@ CalEvent.prototype.updateParentDate = function(){
         //to make it fit to its children date
         if(parent.is_mainconfevent){
           EventCollection.fitMainConfEvent();
-        }
+          return;
+        } 
  
         if(event.isInsideOf(parent))return;  
 
         //event is out of parent
         console.log("isOutOfParent");  
         var Eduration = moment(event['end']).diff(event['start']); 
-
+        var changed = false;
+        var changed = false,
+            oldStart = event['start'],
+            oldEnd = event['end']
+            ;
         //event start is before parent start
         if(moment(event['start']).isBefore(parent['start'])){
           parent['start'] = event['start'];
 
           event['end'] = moment(event['start']).add(Eduration).format();
+          changed = true;
         }
         //event end is after parent end
         if(moment(event['end']).isAfter(parent['end'])){
@@ -144,13 +161,16 @@ CalEvent.prototype.updateParentDate = function(){
           parent['end'] = event['end'];
 
           event['start'] = moment(event['end']).subtract(Eduration).format();
+          changed = true;
         } 
 
-        
+        if(changed){
 
-        updateParentDate(parent); 
-        parent.render();
-        parent.persist(); 
+          EventCollection.eventToRender = {id:parent["id"],oldStart:oldStart,oldEnd:oldEnd}; 
+          updateParentDate(parent); 
+          parent.render();
+          parent.persist(); 
+        }
     }
 };
 

@@ -64,7 +64,7 @@ class Event extends LocationAwareCalendarEntity
         
         if($this->getEndAt()) {
             $this->setDuration($this->getEndAt()->diff($this->getStartAt())->format('P%aDT%HH%IM%SS')); 
-        }else 
+        }else if($this->getStartAt())
         {
             $endAt = clone $this->getStartAt();
             if($this->getDuration()) 
@@ -76,6 +76,8 @@ class Event extends LocationAwareCalendarEntity
             }
             
             $this->setEndAt($endAt);
+        }else{
+            throw new \Exception("Event ".$this." a startAt datetime to be persisted", 1); 
         }
     }
 

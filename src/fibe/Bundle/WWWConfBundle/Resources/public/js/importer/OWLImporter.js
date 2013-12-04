@@ -10,7 +10,6 @@ var conference,
     persons,
     topics,
     proceedings,
-    topics,
     organizations,
     relations,
     roles;
@@ -21,16 +20,13 @@ var notImportedLog,
 var mappingConfig,
     objectMap;
 
-function run(url,callback,fallback){ 
-    var completeConfRdfURL =  url;    
-    $.ajax({
-        url: completeConfRdfURL,   
-        cache:false,
-        dataType:"xml",
-        success:function(completeConfRdf){
+var defaultDate = 'now';
+
+function run(file,callback,fallback){ 
+   
              
-            console.log(completeConfRdf);
-            if(completeConfRdf==undefined )
+            // console.log(file);
+            if(file==undefined )
             {
                 if(fallback!=undefined)fallback("Empty response"); 
                 return;
@@ -46,15 +42,12 @@ function run(url,callback,fallback){
             persons        = [],
             topics         = [],
             proceedings    = [],
-            topics       = [],
             organizations  = [],
             roles          = [],
             conference     = {},
             notImportedLog = {},
             importedLog    = {},
-            objectMap      = {};
-            
-            var defaultDate='now';
+            objectMap      = {}; 
 
             //add custom config here (default : rdf)
             var formatConfig = { 
@@ -65,9 +58,18 @@ function run(url,callback,fallback){
             //check format (default : rdf)
             var format = undefined;    
             for (var i in formatConfig){
-                if(formatConfig[i].checkFormat(completeConfRdf) === true){
-                    console.log("format found ! :" + i);
-                    format = i;
+
+                try
+                {
+                    if(formatConfig[i].checkFormat(file) === true){
+                        console.log("format found ! :" + i);
+                        format = i;
+                    }
+                }
+                catch(err)
+                {
+                    if(fallback!=undefined)fallback("bad format"); 
+                    return;
                 }
             } 
 
@@ -76,9 +78,9 @@ function run(url,callback,fallback){
                                     ? formatConfig[format] 
                                     : rdfConfig;
 
-            var rootNode = mappingConfig.getRootNode(completeConfRdf);
+            var rootNode = mappingConfig.getRootNode(file);
             var parseItemOrder =  mappingConfig.getParseItemOrder();
-            console.log(rootNode)
+            // console.log(rootNode)
 
             //////////////////////////////////////////////////////////////////////////
             ///////////////////////////  pre processing  /////////////////////////////
@@ -97,8 +99,11 @@ function run(url,callback,fallback){
                 var itemMapping = mappingConfig[i];
                 var addArray = parseItemOrder[i];
                 rootNode.children().each(function(index,node){
-                    var n = mappingConfig.getNodeName(node);
-                    if(n && n.indexOf(itemMapping.nodeName)!= -1){
+                    var n = mappingConfig.getNodeName(node); 
+                    // console.log("parsing : "+n.toLowerCase());
+                    // console.log("expecting : "+itemMapping.nodeName);
+
+                    if(n && n.toLowerCase().indexOf(itemMapping.nodeName)!= -1){
                         add(addArray,itemMapping,this,{name:n}); 
                     }
                 }); 
@@ -111,7 +116,7 @@ function run(url,callback,fallback){
             var j=0;
             rootNode.children().each(function(index,node){ 
                 var n = mappingConfig.getNodeName(node); 
-                if(n && n.indexOf(mappingConfig.relationMapping.nodeName)!= -1){  
+                if(n && n.toLowerCase().indexOf(mappingConfig.relationMapping.nodeName)!= -1){  
                     add(relations,mappingConfig.relationMapping,this,{name:n,eventId:j});  
                     j++;
                 }
@@ -172,22 +177,22 @@ function run(url,callback,fallback){
             //////////////////////////////////////////////////////////////////////////
             
             // setRecursiveDates();
-            //allDay events
             for(var i=0;i<events.length;i++){
                 var event = events[i];
-                if(event['setStartAt']!=undefined){
+            // if(rtnArray.setAcronym){
+            //     console.log("rtnArray",rtnArray)
+            //     alert("lol")
+            // }
+                if(event['setStartAt']){
                     
                     //allDay events
                     if(moment(event['setStartAt']).dayOfYear() != moment(event['setEndAt']).dayOfYear()){
-                        event['setStartAt'] = moment(event['setStartAt']).hour(0).minute(0).second(0).millisecond(0).format('YYYY-MM-DDTHH:mm:ss Z');
-                        event['setEndAt'] = moment(event['setEndAt']).hour(0).minute(0).second(0).millisecond(0).add('d', 1).format('YYYY-MM-DDTHH:mm:ss Z');
+                        event['setStartAt'] = moment(event['setStartAt']).startOf("day").format('YYYY-MM-DDTHH:mm:ss Z');
+                        event['setEndAt'] = moment(event['setStartAt']).endOf("day").format('YYYY-MM-DDTHH:mm:ss Z');
                     }
 
                 }
-                // else
-                // {
-                //     event['setEndAt'] = event['setStartAt'] = defaultDate;
-                // } 
+                //if no startAt
                 else{
                     //try to get children date
                     var childrenDate = getChildrenDate(i);
@@ -198,10 +203,18 @@ function run(url,callback,fallback){
                     }else
                     {
                         delete event['setParent'];
-                        event['setEndAt'] = event['setStartAt'] = defaultDate;
-                    } 
+                        event['setEndAt'] = event['setStartAt'] = defaultDate; 
+
+                        if(event['mainConferenceEvent'] ){
+                            event['setEndAt'] = moment().hour(0).minute(0).second(0).millisecond(0).add('d', 1).format('YYYY-MM-DDTHH:mm:ss Z');
+                        }
+                    }
                 }
             }
+            // if(!conference.setStartAt){
+            //     conference['setStartAt'] = defaultDate; 
+            //     conference['setEndAt'] = moment().add('d', 2).format('YYYY-MM-DDTHH:mm:ss Z');
+            // }
             
             //////////////////////////////////////////////////////////////////////////
             ////////////////////////  INHERIT Child DATE  ///////////////////////////
@@ -248,15 +261,14 @@ function run(url,callback,fallback){
             }
             var dataArray={}; 
             dataArray['conference']=conference;  
-            dataArray['locations']=locations;  
-            dataArray['categories']=categories;
             dataArray['persons']=persons;   
-            dataArray['topics']=topics;   
             dataArray['events']=events; 
-            // dataArray['xproperties']=xproperties; 
-            dataArray['topics']=topics; 
             dataArray['proceedings']=proceedings; 
             dataArray['organizations']=organizations; 
+            dataArray['topics']=topics;   
+            dataArray['locations']=locations;  
+            dataArray['categories']=categories;
+            // dataArray['xproperties']=xproperties; 
             console.log('---------finished---------' );
             console.log(dataArray);
             console.log(roles)
@@ -279,15 +291,8 @@ function run(url,callback,fallback){
 
             console.log("not imported properties : ");
             console.log(notImportedLog);
-       },
-       //get import file ajax fallback
-       error:function(a,b,c){
-            console.log(a)
-            console.log(b)
-            console.log(c)
-            if(fallback)fallback('Request failed giving this error <b>"'+c+'"</b> ');
-       }
-   }); // end ajax
+       
+ 
 } // end run()
 
 
@@ -318,15 +323,15 @@ function add(addArray,mapping,node,arg){
     function process(addArray,mapping,node,arg){
         var rtnArray = {};
         var key = mappingConfig.getNodeKey(node);
-        console.log("processing : "+key);
+        // console.log("processing : "+key);
         $(node).children().each(function(){ 
-            if(mapping.label[this.nodeName]!== undefined){
+            if(mapping.label[this.localName]!== undefined){
                 
-                if(mapping.label[this.nodeName].setter){
-                    var nodeName = this.nodeName;
+                if(mapping.label[this.localName].setter){
+                    var nodeName = this.localName;
 
                     //unwrapped if needed
-                    if(mapping.label[this.nodeName].wrapped === true){
+                    if(mapping.label[this.localName].wrapped === true){
                         $(this).children().each(function(){ 
                             set(mapping,nodeName,this,arg); 
                         });
@@ -335,15 +340,24 @@ function add(addArray,mapping,node,arg){
                     }
                 }
             }else{ 
-                var mappingLake = arg.name+"/"+ this.nodeName;
+                var mappingLake = arg.name+"/"+ this.localName;
                 if(!notImportedLog[mappingLake])
                     notImportedLog[mappingLake] = undefined
             }
         });
              
+         //post processing
         if(mapping.action){
-            mapping.action(node,rtnArray); 
+            if(mapping.action(node,rtnArray) === true){
+                //if it was the main conf event
+                // console.log(rtnArray)
+                // alert("main conf event found")
+                objectMap[key] = rtnArray; 
+                conference = rtnArray;
+                return;
+            } 
         }
+
         if(Object.size(rtnArray) > 0){
             objectMap[key] = rtnArray; 
             addArray.push( rtnArray );
@@ -354,25 +368,47 @@ function add(addArray,mapping,node,arg){
             if(!importedLog[mappingStr])
                 importedLog[mappingStr] = undefined
             var val = node.textContent;
-                
-            // pre processing
-            if(mapping.label[nodeName].action){
-                mapping.label[nodeName].action(node,rtnArray); 
-            }
 
-            if(mapping.label[nodeName].format){   
-                val = mapping.label[nodeName].format(node);
-            }
-            val = mapping.label[nodeName].setter === false ? val : typeof val === 'string' ? str_format(val) : val ;
-            if(mapping.label[nodeName].multiple === true){
-                if(!rtnArray[mapping.label[nodeName].setter])
-                    rtnArray[mapping.label[nodeName].setter]={};
-                var index = Object.size(rtnArray[mapping.label[nodeName].setter]);
-                rtnArray[mapping.label[nodeName].setter][index] = val;
+            if(mapping.label[nodeName].list){
+                var vals = val.split(mapping.label[nodeName].list.delimiter);
+                for(var i=0;i<vals.length;i++){
+                    console.log(vals[i])
+                    setWithValue(mapping,nodeName,node,arg,vals[i]);
+                }
             }else{
-                rtnArray[mapping.label[nodeName].setter]= val;
+                setWithValue(mapping,nodeName,node,arg,val);    
             }
 
+
+            function setWithValue(mapping,nodeName,node,arg,val){
+
+                // pre processing
+                if(mapping.label[nodeName].action){
+                    mapping.label[nodeName].action(node,rtnArray,val); 
+                }
+
+                if(mapping.label[nodeName].format){   
+                    val = mapping.label[nodeName].format(node,val);
+                }
+                val = mapping.label[nodeName].setter === false ? val : typeof val === 'string' ? str_format(val) : val ;
+                if(mapping.label[nodeName].multiple === true){
+                    //create the object if not found
+                    if(!rtnArray[mapping.label[nodeName].setter])
+                        rtnArray[mapping.label[nodeName].setter]={};
+                    //get index
+                    var index = Object.size(rtnArray[mapping.label[nodeName].setter]);
+
+                    //check if there's no duplicated link
+                    var found = false;
+                    for ( var i in rtnArray[mapping.label[nodeName].setter]){
+                        if(rtnArray[mapping.label[nodeName].setter][i] == val){found = true;}
+                    }
+                    if(!found)rtnArray[mapping.label[nodeName].setter][index] = val;
+                }else{
+                    rtnArray[mapping.label[nodeName].setter]= val;
+                }
+
+            }
         }
     }
 }
@@ -421,23 +457,6 @@ function getTopicIdFromName(topicName){
         if(topics[i]['setName']==topicName){
             return i; 
         }
-    }
-    return -1;
-}
-
-function getTopicIdFromName(topicName,debug){
-    topicName = str_format(topicName);
-    
-    for (var i=0;i<topics.length;i++){
-        //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
-        if(topics[i]['setName']==topicName){
-            return i; 
-        }
-    }
-    if (debug){
-
-        console.log(topics);
-        alert("topic "+topicName+" not found");
     }
     return -1;
 }

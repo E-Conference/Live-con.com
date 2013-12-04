@@ -43,11 +43,17 @@ class ScheduleController extends Controller
  */
     public function indexAction()
     {
+          //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
         $conf = $this->getUser()->getCurrentConf();
-        return array('currentConf' => $conf);     
+        return array(
+                'currentConf' => $conf,
+                'authorized' => $authorization->getFlagSched(),
+            );     
     
-}    
+    }    
 
 /**
  *  @Route("/view", name="schedule_view")
@@ -55,6 +61,10 @@ class ScheduleController extends Controller
  */
     public function scheduleAction()
     {
+
+          //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
         $em = $this->getDoctrine();
         $conf =$this->getUser()->getCurrentConf();
@@ -68,7 +78,8 @@ class ScheduleController extends Controller
                 'currentConf' => $conf,
                 'categories'  => $categories,
                 'locations'  => $locations,
-                'topics'   => $topics
+                'topics'   => $topics,
+                'authorized' => $authorization->getFlagSched(),
             );     
     
 }
@@ -114,7 +125,7 @@ class ScheduleController extends Controller
 
                 $em->persist($xprop);  
                 $em->flush();
-
+                
                 $JSONArray['id'] = $event->getId();
                 $JSONArray['IsSuccess'] = true;
                 $JSONArray['Msg'] = "add success"; 
@@ -127,16 +138,24 @@ class ScheduleController extends Controller
             
             $event->setStartAt( $startAt );
             $event->setEndAt( $endAt );
-            $event->setParent( $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['parent']['id']) );
-            $event->setSummary( $postData['title'] );
+            $event->setParent( $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['parent']['id']));
+            // $event->setSummary( $postData['title'] );
             $event->setIsAllDay($postData['allDay']=="true") ;
-            
+            $event->onUpdate();
             $em->persist($event);
-            $em->flush();
+ 
+
             $JSONArray['IsSuccess'] = true;
-            $JSONArray['Msg'] = "Successfully";
+            $JSONArray['Msg'] = "Success";
         }
-        
+    
+        $mainConfEvent = $this->getUser()->getCurrentConf()->getMainConfEvent();
+        $mainConfEvent->fitChildrenDate();
+        $mainConfEvent->setParent(null);
+        $em->persist($mainConfEvent); 
+        $em->flush();
+        $JSONArray['mainConfEvent'] = array("start"=>$mainConfEvent->getStartAt(),"end"=>$mainConfEvent->getEndAt());
+
         $response = new Response(json_encode($JSONArray));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -150,14 +169,22 @@ class ScheduleController extends Controller
      
     public function scheduleEditAction(Request $request)
     {
-	    $getData = $request->query;
+	    
+         //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+        if(!$authorization->getFlagSched()){
+            throw new AccessDeniedException('Action not authorized !');
+        }
+
+        $getData = $request->query;
         $id = $getData->get('id', ''); 
         
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id);
-          
+        //The object have to belongs to the current conf
         $conf = $this->getUser()->getCurrentConf();
-         
+        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $conf, 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ConfEvent entity.');
         }
@@ -191,7 +218,8 @@ class ScheduleController extends Controller
             'role_form'  => $roleForm->createView(),
             'paper_form' => $form_paper->createView(),
             'topic_form' => $form_topic->createView(),
-            'delete_form' => $deleteForm->createView()
+            'delete_form' => $deleteForm->createView(),
+            'authorized' => $authorization->getFlagSched(),
         ));
 
     }
@@ -205,11 +233,22 @@ class ScheduleController extends Controller
     public function scheduleUpdateAction(Request $request,$id)
     {
     
+       //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+        if(!$authorization->getFlagSched()){
+            throw new AccessDeniedException('Action not authorized !');
+        }
+
       $JSONArray = array();
 	     
-          
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id);
+       //The object have to belongs to the current conf
+        $conf = $this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $conf, 'id' => $id));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find ConfEvent entity.');
+        }
 
         if ($entity) {
 
@@ -248,6 +287,7 @@ class ScheduleController extends Controller
     public function xpropAddAction(Request $request,$id)
     {
     
+
         $em = $this->getDoctrine()->getManager();
         $calendarEntity = $em->getRepository('IDCISimpleScheduleBundle:CalendarEntity')->find($id);
 

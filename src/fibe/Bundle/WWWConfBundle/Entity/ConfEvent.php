@@ -60,7 +60,7 @@ class ConfEvent extends Event
      * roles
      * Persons related to an event 
      *  
-     * @ORM\OneToMany(targetEntity="Role", mappedBy="event",cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Role", mappedBy="event",cascade={"persist","remove"})
      * @ORM\JoinColumn( onDelete="CASCADE")
      */
     private $roles;
@@ -75,10 +75,15 @@ class ConfEvent extends Event
      */
      private $isAllDay ;
 
+     /**
+     * @ORM\Column(type="string", length=128, nullable=true)
+     */
+    protected $acronym;
+ 
 
     /**
      *  
-     * Is a main conf event ?
+     * Is it a main conf event ?
      *   
      * @ORM\Column(name="is_mainConfEvent", type="boolean")
      */
@@ -88,6 +93,11 @@ class ConfEvent extends Event
      * @ORM\Column(type="string", length=128, nullable=true)
      */
     protected $slug;
+
+     /**
+     * @ORM\Column(name="is_instant", type="boolean")
+     */
+    protected $isInstant;
      
     /**
      * Constructor
@@ -120,7 +130,37 @@ class ConfEvent extends Event
     public function onUpdate()
     {
         $this->slugify();
+        $this->setIsInstant($this->getEndAt()->format('U') == $this->getStartAt()->format('U'));
+
+        // if($this->isMainConfEvent){
+        //     foreach ($this->getChildren() as $child) { 
+        //         if($child->getStartAt() < $this->getStartAt())$this->setStartAt($child->getStartAt());
+        //         if($child->getEndAt()   > $this->getEndAt()  )$this->setEndAt(  $child->getEndAt()  );
+        //     }
+        // }
+
+        if($this->isMainConfEvent){
+            $this->fitChildrenDate();
+            // $this->setIsInstant($this->getEndAt()->format('U') == $this->getStartAt()->format('U'));
+        }
     }
+
+    public function fitChildrenDate(){
+        //ensure main conf event fits its children dates 
+        $earliestStart= new \DateTime('6000-10-10'); 
+        $latestEnd = new \DateTime('1000-10-10');  
+        foreach ($this->getChildren() as $child) {
+            if($child->getIsInstant())continue; 
+            if($child->getStartAt() < $earliestStart) $earliestStart = $child->getStartAt();
+            if($child->getEndAt() > $latestEnd) $latestEnd = $child->getEndAt();
+        } 
+        if($earliestStart == new \DateTime('6000-10-10') || $latestEnd == new \DateTime('1000-10-10'))return;
+        if($earliestStart == $latestEnd){ 
+            $latestEnd->add(new \DateInterval('P1D'));
+        }
+        $this->setStartAt($earliestStart);
+        $this->setEndAt($latestEnd);
+    } 
 
      /**
      * Set slug
@@ -373,6 +413,53 @@ class ConfEvent extends Event
     public function getIsMainConfEvent()
     {
         return $this->isMainConfEvent;
+    }
+
+    
+    /**
+     * Set isInstant
+     *
+     * @param string $isInstant
+     * @return ConfEvent
+     */
+    public function setIsInstant($isInstant)
+    {
+        $this->isInstant = $isInstant;
+    
+        return $this;
+    }
+
+    /**
+     * Get isInstant
+     *
+     * @return string 
+     */
+    public function getIsInstant()
+    {
+        return $this->isInstant;
+    }
+
+     /**
+     * Set acronym
+     *
+     * @param string $acronym
+     * @return ConfEvent
+     */
+    public function setAcronym($acronym)
+    {
+        $this->acronym = $acronym;
+    
+        return $this;
+    }
+
+    /**
+     * Get acronym
+     *
+     * @return string 
+     */
+    public function getAcronym()
+    {
+        return $this->acronym;
     }
 
     

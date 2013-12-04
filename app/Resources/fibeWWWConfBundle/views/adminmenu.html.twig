@@ -13,18 +13,38 @@
   <div class="navbar-collapse collapse navbar-ex1-collapse">
 
     <ul class="nav navbar-nav">  
+
+     <!-- List conference dropdown -->
+        <li class="dropdown">
+          <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
+          {{ app.user.getCurrentConf().getConfName() }}
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+          {% for conference in app.user.getConferences() %}
+            <li> 
+              <a style="padding-right:5px;"   href="{{ path('schedule_conference_switch', {id: conference.id}) }}"  >
+              {{conference.getConfName()}}
+              </a>
+            </li>
+           {% endfor %}
+          </ul>
+        </li>
+
         <!-- Conference dropdown -->
        <li class="dropdown" >
           <a href ="{{ path('schedule_conference_edit') }}" title="manage schedule"class="dropdown-toggle" data-toggle="dropdown">
             Conference
             <b class="caret"></b>
           </a>
-          <ul class="dropdown-menu">
-            <li>   
-              <a href="{{ path('schedule_conference_edit') }}"><i class="icon-cog"></i> Conference settings </a>
-            </li>
-   
-          </ul>
+          {% if app.user.getFlagDatasByConferenceId(app.user.getCurrentConf().getId())==1 %}
+            <ul class="dropdown-menu">
+              <li>   
+                <a href="{{ path('schedule_conference_edit') }}"><i class="icon-cog"></i> Conference settings </a>
+              </li>
+     
+            </ul>
+          {% endif %}
         </li> 
 
        <!-- Schedule dropdown -->
@@ -137,11 +157,11 @@
               <span class="icon-list glyphicon-white "> Manage user
             </a>
           </li>
-          <li>
+          <!--<li>
               <a href="{{ path('fos_user_registration_register') }}" title="Add manager">
                 <span class="icon-plus glyphicon-white "> Add manager
               </a> 
-          </li>
+          </li>-->
           {% endif %}  
 
           <li>

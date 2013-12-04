@@ -42,7 +42,7 @@
                 <a class="btn btn-block btn-default" href="{{ path('schedule_confevent_show', { 'id': entity.id }) }}"><i class="icon-eye-open"></i></a>
             </td>
             <td>
-                <a class="btn btn-block btn-warning" href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
+                <a class="btn btn-block btn-warning edit-event" href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
             </td>
         </tr>
     {% endfor %}
@@ -54,7 +54,7 @@
 
         <ul>
         <li>
-            <a href="{{ path('schedule_confevent_new') }}">
+            <a href="{{ path('schedule_confevent_new') }}" class="create-event">
                 Create a new entry
             </a>
         </li>

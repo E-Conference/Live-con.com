@@ -11,7 +11,7 @@
                      <h1>{% trans %}Role Types{% endtrans %}</h1>
                 </div>
                 <div class="col-lg-4">
-                     <a class="btn btn-info btn-create" href="{{ path('schedule_roletype_new') }}">
+                     <a class="btn btn-info btn-create create" href="{{ path('schedule_roletype_new') }}">
                          <i class="icon-plus"></i>
                     </a>
                 </div>
@@ -33,7 +33,7 @@
                 <td>{{ entity.name }}</td>
                 <td> 
                     <a class="btn btn-default" href="{{ path('schedule_roletype_show', { 'id': entity.id }) }}"><i class="icon-eye-open"></i></a> 
-                    <a class="btn btn-warning" href="{{ path('schedule_roletype_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a> 
+                    <a class="btn btn-warning edit" href="{{ path('schedule_roletype_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a> 
                 </td>
             </tr>
         {% endfor %}

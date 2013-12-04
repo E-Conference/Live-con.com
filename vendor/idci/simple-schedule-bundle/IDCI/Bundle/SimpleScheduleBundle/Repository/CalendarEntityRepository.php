@@ -124,6 +124,16 @@ class CalendarEntityRepository extends EntityRepository
     {
         $qb = $this->getAllOrderByStartAtQueryBuilder();
 
+        if(isset($params['only_instant'])) {
+            $qb
+                ->andWhere('cer.isInstant = 1')
+            ;
+        }else{
+            $qb
+                ->andWhere('cer.isInstant = 0')
+            ;
+        }
+
         if(isset($params['id'])) {
             $qb
                 ->andWhere('cer.id = :id')
@@ -139,14 +149,14 @@ class CalendarEntityRepository extends EntityRepository
 
         if(isset($params['before'])) {
             $qb
-                ->andWhere('cer.endAt <= :before')
+                ->andWhere('cer.startAt < :before')
                 ->setParameter('before', new \DateTime($params['before']))
             ;
         }
 
         if(isset($params['after'])) {
             $qb
-                ->andWhere('cer.startAt >= :after')
+                ->andWhere('cer.endAt > :after')
                 ->setParameter('after', new \DateTime($params['after']))
             ;
         }

@@ -19,8 +19,11 @@ use fibe\Bundle\WWWConfBundle\Entity\SocialServiceAccount;
 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Category;
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Location; 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;   
- 
+use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;  
+
+
+use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
+
 
 /**
  * Api controller.
@@ -37,12 +40,24 @@ class DBImportController extends Controller
       
     public function importAction(Request $request)
     {      
+        //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagconfDatas()){
+            throw new AccessDeniedException('Action not authorized !');
+         } 
+
         $JSONFile = json_decode($request->request->get('dataArray'),true); 
         
-        $em = $this->getDoctrine()->getManager(); 
-        $entity=null;
-        $wwwConf =  $this->getUser()->getCurrentConf();
-        $mainConfEvent = $wwwConf->getMainConfEvent();
+        $em = $this->getDoctrine()->getManager();
+
+        $conference =  $this->getUser()->getCurrentConf();
+
+
+        //empty conf  
+        $emptyConf = $this->get('emptyConf');
+        $emptyConf->emptyConf($conference,$em);
 
         $eventEntities        = array();
         $personEntities       = array(); 
@@ -52,27 +67,41 @@ class DBImportController extends Controller
         $organizationEntities = array();
         $topicEntities        = array();
         $proceedingEntities   = array();
+        $entity               = null;
 
 
-        $defaultCategory = $this->getDoctrine()
-                                   ->getRepository('fibeWWWConfBundle:topic')
+        $mainConfEvent = $conference->getMainConfEvent();
+
+
+        $defaultCategory =    $this->getDoctrine()
+                                   ->getRepository('IDCISimpleScheduleBundle:Category')
                                    ->findOneBy(array('name' => 'TalkEvent'));
+
         //categories color.
         $colorArray = array('lime', 'red', 'blue', 'orange', 'gold', 'coral', 'crimson', 'aquamarine', 'darkOrchid', 'forestGreen', 'peru','purple' ,'seaGreen'  );
         
         ////////////////////// conference //////////////////////
         if(isset($JSONFile['conference'])){
-            $conference = $JSONFile['conference'];
-            foreach ($conference as $setter => $value) {
 
-                if($setter=="setAcronym"){
-                    $entity = $wwwConf;
-                }else{
+            $conferenceData = $JSONFile['conference'];
+            foreach ($conferenceData as $setter => $value) { 
+
+                if($setter=="setLogoPath" ){
+                    //apply to the conference
+                    $entity = $conference; 
+                }else {
+                    //apply to the mainconfevent
                     $entity = $mainConfEvent;
-                }
+                    if($setter=="setStartAt" || $setter=="setEndAt"){
+                        $date= explode(' ', $value); 
+                        $value=new \DateTime($date[0], new \DateTimeZone(date_default_timezone_get()));
+                    }
+                } 
+
                 call_user_func_array(array($entity, $setter), array($value)); 
             }
-            $conference = null;
+            $em->persist($mainConfEvent);
+            $conferenceData = null;
         }
         
         
@@ -82,18 +111,18 @@ class DBImportController extends Controller
             for($i=0;$i<count($topics);$i++){
                 $current = $topics[$i];  
                 $existsTest = $this->getDoctrine()
-                                   ->getRepository('fibeWWWConfBundle:topic')
-                                   ->findOneBy(array('name' => $defaultCategory));
+                                   ->getRepository('fibeWWWConfBundle:Topic')
+                                   ->findOneBy(array('name' => $current['setName']));
                 if($existsTest!=null){
                   array_push($topicEntities,$existsTest); 
-                  continue; //skip existing category
+                  continue; //skip existing topic
                 }
-                $entity= new topic();
+                $entity= new Topic();
                 foreach ($current as $setter => $value) {
 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
-                $entity->setConference(  $wwwConf );
+                $entity->setConference(  $conference );
                 $em->persist($entity); 
                 array_push($topicEntities,$entity); 
             }  
@@ -110,14 +139,14 @@ class DBImportController extends Controller
                                    ->findOneBy(array('name' => $current['setName']));
                 if($existsTest!=null){
                   array_push($locationEntities,$existsTest); 
-                  continue; //skip existing category
+                  continue; //skip existing location
                 }
                 $entity= new Location();
                 foreach ($current as $setter => $value) {
 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 } 
-                $entity->setConference(  $wwwConf );
+                $entity->setConference(  $conference );
                 $em->persist($entity); 
                 array_push($locationEntities,$entity); 
             }  
@@ -134,7 +163,7 @@ class DBImportController extends Controller
                                    ->findOneBy(array('name' => $current['setName']));
                 if($existsTest!=null){
                   array_push($organizationEntities,$existsTest);
-                  continue; //skip existing category
+                  continue; //skip existing organization
                 }
 
                 $entity= new Organization();
@@ -142,7 +171,7 @@ class DBImportController extends Controller
 
                     call_user_func_array(array($entity, $setter), array($value)); 
                 }
-                $entity->setConference(  $wwwConf );
+                $entity->setConference(  $conference );
                 $em->persist($entity); 
                 array_push($organizationEntities,$entity); 
             }  
@@ -182,9 +211,9 @@ class DBImportController extends Controller
                     } 
                 } 
                 
-                $entity->setConference(  $wwwConf );
+                $entity->setConference(  $conference );
                 $em->persist($entity); 
-                array_push($personEntities,$entity);  
+                array_push($personEntities,$entity);
             }  
             $entities = null;
         }    
@@ -200,7 +229,7 @@ class DBImportController extends Controller
                                    ->findOneBy(array('title' => $current['setTitle']));
                 if($existsTest!=null){
                   array_push($proceedingEntities,$existsTest); 
-                  continue; //skip existing category
+                  continue; //skip existing paper
                 }
                 $entity= new Paper();
                 foreach ($current as $setter => $value) {  
@@ -219,7 +248,7 @@ class DBImportController extends Controller
                     }
 
                 } 
-                $entity->setConference(  $wwwConf );
+                $entity->setConference(  $conference );
                 $em->persist($entity); 
                 array_push($proceedingEntities,$entity); 
             }  
@@ -227,53 +256,31 @@ class DBImportController extends Controller
         }   
         
         
-        //////////////////////  topics  //////////////////////
-        if(isset($JSONFile['topics'])){
-            $topics = $JSONFile['topics'];
-            for($i=0;$i<count($topics);$i++){
-                $current = $topics[$i];  
-                $existsTest = $this->getDoctrine()
-                                   ->getRepository('fibeWWWConfBundle:Topic')
-                                   ->findOneBy(array('name' => $current['setName']));
-                if($existsTest!=null){
-                  array_push($topicEntities,$existsTest); 
-                  continue; //skip existing category
-                }
-                $entity= new Topic();
-                foreach ($current as $setter => $value) { 
-                    call_user_func_array(array($entity, $setter), array($value)); 
-                } 
-                $entity->setConference(  $wwwConf );
-                $em->persist($entity); 
-                array_push($topicEntities,$entity); 
-            }  
-            $topics = null;
-        }     
-        
-        
         //////////////////////  categories  ////////////////////// 
         if(isset($JSONFile['categories'])){
             $entities = $JSONFile['categories'];
             $j=0;
             for($i=0;$i<count($entities);$i++){
-                $current = $entities[$i]; 
+                $current = $entities[$i];
+                $catSlug = StringTools::slugify($current['setName']); 
+
                 $existsTest = $this->getDoctrine()
                                    ->getRepository('IDCISimpleScheduleBundle:Category')
-                                   ->findOneBy(array('name' => $current['setName']));
+                                   ->findOneBy(array('slug' => $catSlug));
                 if($existsTest!=null){
-                  array_push($categoryEntities,$existsTest); 
-                  continue; //skip existing category
-                }
-                $entity= new Category();
-                foreach ($current as $setter => $value) {
-                    //if($setter!="setStartAt" && $setter!="setEndAt")echo "Event->".$setter."(".$value.");\n"; 
-                    call_user_func_array(array($entity, $setter), array($value)); 
-                }
-                // $entity->setConference(  $wwwConf );
-                $entity->setColor($colorArray[$j++]); //colorless categories
-                $em->persist($entity);
-                array_push($categoryEntities,$entity); 
+                    array_push($categoryEntities,$existsTest); 
+                    continue; //skip existing category
+                }else{
+                    array_push($categoryEntities,$defaultCategory);  
+                }    
+                // echo $current['setName']. " don't exists<br/>";
+
+                
+
             }  
+            // for ($i=0; $i < count($categoryEntities); $i++) { 
+            //     echo $i. " " . $categoryEntities[$i]->getName()."<br/>";
+            // } 
             $entities = null;
         }
 
@@ -286,27 +293,30 @@ class DBImportController extends Controller
         $presenterRoleType = $this->getDoctrine()
                            ->getRepository('fibeWWWConfBundle:RoleType')
                            ->findOneBy(array('name' => 'Presenter'));
+
         
         //////////////////////  events  //////////////////////
         if(isset($JSONFile['events'])){
             $entities = $JSONFile['events'];
             for($i=0;$i<count($entities);$i++){
                 $entity= new Event();
-                $current = $entities[$i]; 
-                foreach ($current as $setter => $value) {
-
+                $current = $entities[$i];
+                $isMainConfEvent = false;
+                if(isset($current["mainConferenceEvent"])){
+                    $isMainConfEvent = true;
+                    echo "mainConfEvent FOUND";
+                    var_dump($current);
+                    echo "\n";
+                    $entity = $mainConfEvent;
+                    // $conference->setMainConfEvent($entity); 
+                    // $entity->setIsMainConfEvent(true);
+                    // $em->remove($mainConfEvent);
+                    // $mainConfEvent = $entity;
+                }
+                foreach ($current as $setter => $value) { 
                     if($setter=="setStartAt" || $setter=="setEndAt"){
                         $date= explode(' ', $value); 
                         $value=new \DateTime($date[0], new \DateTimeZone(date_default_timezone_get()));
-                    }
-
-                    if($setter=="mainConferenceEvent"){ 
-                        $wwwConf->setMainConfEvent($entity);
-                        $entity->setIsMainConfEvent(true);
-                        $em->remove($mainConfEvent);
-                        $mainConfEvent = $entity;
-                        $em->persist($wwwConf);
-                        continue;
                     }
                     
                     if($setter=="setLocation"){
@@ -314,8 +324,13 @@ class DBImportController extends Controller
                     }
                     
                     if($setter=="addCategorie"){
-                        $value=$categoryEntities[$value];
-                    } 
+                        if(count($categoryEntities) <= $value){
+                            // echo count($categoryEntities)." ".$value." ".$entity->getSummary()."<br/>";
+                            $value = $defaultCategory;
+                        }else{
+                            $value=$categoryEntities[$value];
+                        }
+                    }
                     
                     if($setter=="addPaper"){
                         $j=0;
@@ -330,10 +345,21 @@ class DBImportController extends Controller
                         $value=$proceedingEntities[$value[0]];   
                     }
                      
+                    if($setter=="setParent"){continue;}
 
-                    if($setter=="setParent"){  
-                        // $current["addChild"] = $entities[$value];
-                    }else if(is_array($value)){
+                    // if($setter=="mainConferenceEvent"){
+
+                    //     // echo "mainConfEvent replaced";
+                    //     // $conference->setMainConfEvent($entity);
+                    //     // $entity->setIsMainConfEvent(true);
+                    //     // $conference->removeEvent($mainConfEvent);
+                    //     // $em->remove($mainConfEvent);
+                    //     // $mainConfEvent = $entity;
+                    //     continue;
+                    // }
+
+
+                    if(is_array($value)){
                         switch ($setter) {
                             case 'addTopic':
                                 $entityArray = $topicEntities;
@@ -370,7 +396,13 @@ class DBImportController extends Controller
                         call_user_func_array(array($entity, $setter), array($value)); 
                     } 
                 }
-                $entity->setConference(  $wwwConf );
+
+                // if($isMainConfEvent){
+                //      echo $entity->getSummary();
+                //      echo date_format($entity->getStartAt(), 'Y-m-d H:i:s');
+                // }
+
+                $entity->setConference(  $conference );
                 $em->persist($entity); 
                 array_push($eventEntities,$entity); 
             }
@@ -390,7 +422,7 @@ class DBImportController extends Controller
                 if(!$hasParent){
                     $entity->setParent($mainConfEvent);
                 }
-                $entity->setConference($wwwConf);
+                $entity->setConference($conference);
                 $em->persist($entity);
             }
             $entities = null;
@@ -420,18 +452,19 @@ class DBImportController extends Controller
          
         $mainConfEvent->setParent(null);
         $em->persist($mainConfEvent);
+        $em->persist($conference);
 
         //finally, make sure every events are at least child of the main conf event
         
-        // $confEvents = $wwwConf->getEvents(); 
-        // foreach ($confEvents as $event) {
-        //     if(!$event->getParent()){
-        //         $event->setParent($mainConfEvent);
-        //         $em->persist($event);
-        //     }
-        // }
-        // $mainConfEvent->setParent(null);
-        // $em->persist($mainConfEvent);
+        $confEvents = $conference->getEvents(); 
+        foreach ($confEvents as $event) {
+            if(!$event->getParent()){
+                $event->setParent($mainConfEvent);
+                $em->persist($event);
+            }
+        }
+        $mainConfEvent->setParent(null);
+        $em->persist($mainConfEvent);
         
         $em->flush();
 

@@ -73,10 +73,11 @@ EOT
         $newUser = $manipulator->create($username, $password, $email, !$inactive, $superadmin);
 
         $em = $this->getContainer()->get('doctrine')->getManager('default');
+        
+        /*
         //Create the default conference
         $defaultConference = new WwwConf();
-        $defaultConference->setLogoPath("livecon.png");
-        $defaultConference->setAcronym("My conference");
+        $defaultConference->setLogoPath("livecon.png"); 
         $em->persist($defaultConference);
 
         //Create new App config for the conference
@@ -133,7 +134,7 @@ EOT
         //Join the new user with his default conference
         $newUser->addConference($defaultConference);
         $newUser->setCurrentConf($defaultConference);
-
+        */
         $em->flush();
 
         $output->writeln(sprintf('Created user <comment>%s</comment>', $username));

@@ -35,6 +35,10 @@ class ConfEventController extends Controller
      */
     public function indexAction(Request $request)
     {
+        
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
         $em = $this->getDoctrine()->getManager();
 
         $entities = $this->getUser()->getCurrentConf()->getEvents()->toArray();
@@ -51,6 +55,7 @@ class ConfEventController extends Controller
 
         return array(
             'pager' => $pager,
+            'authorized' => $authorization->getFlagSched()
         );
     }
 
@@ -60,8 +65,18 @@ class ConfEventController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity  = new ConfEvent();
+        //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
+         if(!$authorization->getFlagSched()){
+            throw new AccessDeniedException('Action not authorized !');
+          } 
+
+        //events are created via the schedule view only
+        return $this->redirect($this->generateUrl('schedule_view'));
+
+        $entity  = new ConfEvent();
         $form = $this->createForm(new ConfEventType($this->getUser()), $entity);
 
         $form->bind($request);
@@ -91,6 +106,7 @@ class ConfEventController extends Controller
         return $this->render('fibeWWWConfBundle:ConfEvent:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'authorized' => $authorization->getFlagSched()
         ));
     }
 
@@ -100,7 +116,16 @@ class ConfEventController extends Controller
      * @Template()
      */
     public function newAction()
-    {
+    { 
+        //events are created via the schedule view only
+        return $this->redirect($this->generateUrl('schedule_view'));
+        //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagSched()){
+            throw new AccessDeniedException('Action not authorized !');
+          } 
         $entity = new ConfEvent();
         $form   = $this->createForm(new ConfEventType($this->getUser()), $entity);
 
@@ -108,6 +133,7 @@ class ConfEventController extends Controller
         return $this->render('fibeWWWConfBundle:ConfEvent:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'authorized' => $authorization->getFlagSched()
         ));
     }
 
@@ -119,10 +145,16 @@ class ConfEventController extends Controller
      
     public function showAction($id)
     {
+        
+        //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id);
-
+        //The object have to belongs to the current conf
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ConfEvent entity.');
         }
@@ -131,7 +163,10 @@ class ConfEventController extends Controller
 
         return $this->render('fibeWWWConfBundle:ConfEvent:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        ));
+            'delete_form' => $deleteForm->createView(), 
+            'authorized' => $authorization->getFlagSched()       
+
+            ));
     }
 
     /**
@@ -141,9 +176,20 @@ class ConfEventController extends Controller
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id);
+        
+        //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
+        if(!$authorization->getFlagSched()){
+            throw new AccessDeniedException('Action not authorized !');
+        } 
+
+        $em = $this->getDoctrine()->getManager();
+
+        //The object have to belongs to the current conf
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ConfEvent entity.');
         }
@@ -182,6 +228,7 @@ class ConfEventController extends Controller
             'delete_form' => $deleteForm->createView(),
             'paper_form' => $form_paper->createView(),
             'topic_form' => $form_topic->createView(),
+            'authorized' => $authorization->getFlagSched(),
         ));
     }
 
@@ -192,10 +239,20 @@ class ConfEventController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        
+         //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+        if(!$authorization->getFlagSched()){
+            throw new AccessDeniedException('Action not authorized !');
+        } 
+
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id);
-
+         //The object have to belongs to the current conf
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ConfEvent entity.');
         }
@@ -213,186 +270,8 @@ class ConfEventController extends Controller
 
         }
 
-            return $this->redirect($this->generateUrl('schedule_confevent_show', array('id' => $id)));
+        return $this->redirect($this->generateUrl('schedule_confevent_show', array('id' => $id)));
     
-    }
-
-
-
-       /**
-     * Add topic to a confEvent
-     *  @Route("/addTopic", name="schedule_confevent_addTopic")
-     *  @Method("POST")
-     *  
-     */
-    public function addTopicAction(Request $request)
-    {
-        $id_topic = $request->request->get('id_topic');
-        $id_entity = $request->request->get('id_entity');
-           
-         $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id_entity);
-        $topic =  $em->getRepository('fibeWWWConfBundle:Topic')->find($id_topic);
-
-        //Add paper to the confEvent
-        $entity->addTopic($topic);
-        //Sauvegarde des données
-        $em->persist($entity);
-        $em->flush();
-
-        return $this->render('fibeWWWConfBundle:ConfEvent:topicRelation.html.twig', array(
-            'entity'  => $entity,
-        ));
-    }
-
-
-     /**
-     * Delete topic of a confEvent
-     *  @Route("/deleteTopic", name="schedule_confevent_deleteTopic")
-     *  @Method("POST")
-     *  
-     */
-    public function deleteTopicAction(Request $request)
-    {
-        $id_topic = $request->request->get('id_topic');
-        $id_entity = $request->request->get('id_entity');
-           
-         $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id_entity);
-        $topic =  $em->getRepository('fibeWWWConfBundle:Topic')->find($id_topic);
-
-        //Add paper to the confEvent
-        $entity->removeTopic($topic);
-        //Sauvegarde des données
-        $em->persist($entity);
-        $em->flush();
-
-        return $this->render('fibeWWWConfBundle:ConfEvent:topicRelation.html.twig', array(
-            'entity'  => $entity,
-        ));
-    }
-
-
-
-     /**
-     * Add paper to the confEvent
-     *  @Route("/addPaper", name="schedule_confevent_addPaper")
-     *  @Method("POST")
-     *  
-     */
-    public function addPaperAction(Request $request)
-    {
-        $id_paper = $request->request->get('id_paper');
-        $id_entity = $request->request->get('id_entity');
-           
-         $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id_entity);
-        $paper =  $em->getRepository('fibeWWWConfBundle:Paper')->find($id_paper);
-
-        //Add paper to the confEvent
-        $entity->addPaper($paper);
-        //Sauvegarde des données
-        $em->persist($entity);
-        $em->flush();
-
-        return $this->render('fibeWWWConfBundle:ConfEvent:paperRelation.html.twig', array(
-            'entity'  => $entity,
-        ));
-    }
-
-     /**
-     * Delete paper to a confEvent
-     *  @Route("/deletePaper", name="schedule_confevent_deletePaper")
-     *  @Method({"DELETE","POST"})
-     *  
-     */
-    public function deletePaperAction(Request $request)
-    {
-        $id_paper = $request->request->get('id_paper');
-        $id_entity = $request->request->get('id_entity');
-           
-         $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id_entity);
-        $paper =  $em->getRepository('fibeWWWConfBundle:Paper')->find($id_paper);
-
-        //Add paper to the confEvent
-        $entity->removePaper($paper);
-        //Sauvegarde des données
-        $em->persist($entity);
-        $em->flush();
-
-        return $this->render('fibeWWWConfBundle:ConfEvent:paperRelation.html.twig', array(
-            'entity'  => $entity,
-        ));
-    }
-
-     /**
-     * Add person to the confEvent
-     * 
-     *  @Route( "/addPerson",name="schedule_confevent_addPerson")
-     *  @Method("POST")
-     *  
-     */
-    public function addPersonAction(Request $request)
-    {      
-        $id_person = $request->request->get('id_person');
-        $id_type = $request->request->get('id_type');
-        $id_event = $request->request->get('id');
-     
-        $em = $this->getDoctrine()->getManager();
-
-        $type = $em->getRepository('fibeWWWConfBundle:RoleType')->find($id_type);
-        $person =  $em->getRepository('fibeWWWConfBundle:Person')->find($id_person);
-        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id_event);
-      
-        $role = new Role();
-        $role->setPerson($person);
-        $role->setType($type);
-        $role->setEvent($entity);
-       //TODO $role->setConference($this->getUser()->getCurrentConf());
-        $em->persist($role);
-        
-        //Add paper to the confEvent
-        $entity->addRole($role);
-        //Sauvegarde des données
-        $em->persist($entity);
-        $em->flush();
-
-        return $this->render('fibeWWWConfBundle:ConfEvent:personRelation.html.twig', array(
-            'entity'  => $entity,
-        ));
-    }
-
-    /**
-     * Delete person  to a confEvent
-     *  @Route("/deletePerson", name="schedule_confevent_deletePerson")
-     *  @Method("POST")
-     *  
-     */
-    public function deletePersonAction(Request $request)
-    {
-        $id_role = $request->request->get('id_role');
-        $id_entity = $request->request->get('id_entity');
-           
-         $em = $this->getDoctrine()->getManager();
-
-        $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id_entity);
-        $role =  $em->getRepository('fibeWWWConfBundle:Role')->find($id_role);
-
-        //Add paper to the confEvent
-        $entity->removeRole($role);
-        $em->remove($role);
-        //Sauvegarde des données
-        $em->persist($entity);
-        $em->flush();
-
-        return $this->render('fibeWWWConfBundle:ConfEvent:personRelation.html.twig', array(
-            'entity'  => $entity,
-        ));
     }
 
     /**
@@ -402,16 +281,47 @@ class ConfEventController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        
+          //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+        if(!$authorization->getFlagSched()){
+            throw new AccessDeniedException('Action not authorized !');
+        } 
+
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($id);
 
+             //The object have to belongs to the current conf
+            $currentConf=$this->getUser()->getCurrentConf();
+            $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id));
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find ConfEvent entity.');
             }
+
+            $children = $entity->getChildren();
+            $mainConfEvent = $this->getUser()->getCurrentConf()->getMainConfEvent(); 
+
+            if($mainConfEvent->getId() ==  $entity->getId()){
+                $this->container->get('session')->getFlashBag()->add(
+                     'error',
+                     'Sorry, you cannot delete the Conference Event'
+                     );
+                return $this->redirect($this->generateUrl('schedule_event'));
+            }
+            foreach($children as $child)
+            {
+                $child->setParent($mainConfEvent);
+                $em->persist($child);
+            }
+            $this->container->get('session')->getFlashBag()->add(
+                     'success',
+                     'Event successfully deleted ! \n Its children have been set as children of the conference'
+                     );
 
             $em->remove($entity);
             $em->flush();
@@ -433,5 +343,273 @@ class ConfEventController extends Controller
             ->add('id', 'hidden')
             ->getForm()
         ;
+    }
+
+    /*************************************** topics *****************************************************/
+
+    /**
+     * Add topic to a confEvent
+     *  @Route("/addTopic", name="schedule_confevent_addTopic")
+     *  @Method("POST")
+     *  
+     */
+    public function addTopicAction(Request $request)
+    {
+        
+        //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+        if(!$authorization->getFlagSched()){
+            throw new AccessDeniedException('Action not authorized !');
+        } 
+
+        $id_topic = $request->request->get('id_topic');
+        $id_entity = $request->request->get('id_entity');
+           
+        $em = $this->getDoctrine()->getManager();
+
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
+        $topic =  $em->getRepository('fibeWWWConfBundle:Topic')->findOneBy(array('conference' => $currentConf, 'id' => $id_topic));
+
+         if (!$entity || !$topic) {
+            throw $this->createNotFoundException('Unable to find ConfEvent entity or topic.');
+        }
+
+        //Add paper to the confEvent
+        $entity->addTopic($topic);
+        //Sauvegarde des données
+        $em->persist($entity);
+        $em->flush();
+
+        return $this->render('fibeWWWConfBundle:ConfEvent:topicRelation.html.twig', array(
+            'entity'  => $entity,
+            'authorized' => $authorization->getFlagSched()
+        ));
+    }
+
+
+     /**
+     * Delete topic of a confEvent
+     *  @Route("/deleteTopic", name="schedule_confevent_deleteTopic")
+     *  @Method("POST")
+     *  
+     */
+    public function deleteTopicAction(Request $request)
+    {
+         //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+        if(!$authorization->getFlagSched()){
+            throw new AccessDeniedException('Action not authorized !');
+        } 
+
+        $id_topic = $request->request->get('id_topic');
+        $id_entity = $request->request->get('id_entity');
+           
+        $em = $this->getDoctrine()->getManager();
+
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
+        $topic =  $em->getRepository('fibeWWWConfBundle:Topic')->findOneBy(array('conference' => $currentConf, 'id' => $id_topic));
+
+         if (!$entity || !$topic) {
+            throw $this->createNotFoundException('Unable to find ConfEvent entity.');
+        }
+        //Delete topic to the confEvent
+        $entity->removeTopic($topic);
+        //Sauvegarde des données
+        $em->persist($entity);
+        $em->flush();
+
+        return $this->render('fibeWWWConfBundle:ConfEvent:topicRelation.html.twig', array(
+            'entity'  => $entity,
+            'authorized' => $authorization->getFlagSched()
+        ));
+    }
+
+
+    /*************************************** papers *****************************************************/
+
+     /**
+     * Add paper to the confEvent
+     *  @Route("/addPaper", name="schedule_confevent_addPaper")
+     *  @Method("POST")
+     *  
+     */
+    public function addPaperAction(Request $request)
+    {
+        
+         //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+        if(!$authorization->getFlagSched()){
+            throw new AccessDeniedException('Action not authorized !');
+        } 
+
+        $id_paper = $request->request->get('id_paper');
+        $id_entity = $request->request->get('id_entity');
+
+        $em = $this->getDoctrine()->getManager();
+
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
+        $paper =  $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id_paper));
+
+         if (!$entity || !$paper) {
+                throw $this->createNotFoundException('Unable to find ConfEvent entity or paper.');
+        }
+
+        //Add paper to the confEvent
+        $entity->addPaper($paper);
+        //Sauvegarde des données
+        $em->persist($entity);
+        $em->flush();
+
+        return $this->render('fibeWWWConfBundle:ConfEvent:paperRelation.html.twig', array(
+            'entity'  => $entity,
+            'authorized' => $authorization->getFlagSched()
+        ));
+    }
+
+     /**
+     * Delete paper to a confEvent
+     *  @Route("/deletePaper", name="schedule_confevent_deletePaper")
+     *  @Method({"DELETE","POST"})
+     *  
+     */
+    public function deletePaperAction(Request $request)
+    {
+        
+         //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+        if(!$authorization->getFlagSched()){
+            throw new AccessDeniedException('Action not authorized !');
+        } 
+
+        $id_paper = $request->request->get('id_paper');
+        $id_entity = $request->request->get('id_entity');
+           
+        $em = $this->getDoctrine()->getManager();
+
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
+        $paper =  $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id_paper));
+         if (!$entity || !$paper) {
+            throw $this->createNotFoundException('Unable to find ConfEvent entity or paper.');
+        }
+
+        //Add paper to the confEvent
+        $entity->removePaper($paper);
+        //Sauvegarde des données
+        $em->persist($entity);
+        $em->flush();
+
+        return $this->render('fibeWWWConfBundle:ConfEvent:paperRelation.html.twig', array(
+            'entity'  => $entity,
+            'authorized' => $authorization->getFlagSched()
+        ));
+    }
+
+    /*************************************** person *****************************************************/
+
+     /**
+     * Add person to the confEvent
+     * 
+     *  @Route( "/addPerson",name="schedule_confevent_addPerson")
+     *  @Method("POST")
+     *  
+     */
+    public function addPersonAction(Request $request)
+    {      
+        
+         //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+        if(!$authorization->getFlagSched()){
+            throw new AccessDeniedException('Action not authorized !');
+        } 
+
+        $id_person = $request->request->get('id_person');
+        $id_type = $request->request->get('id_type');
+        $id_entity = $request->request->get('id');
+     
+        $em = $this->getDoctrine()->getManager();
+
+        $currentConf=$this->getUser()->getCurrentConf();
+        $type = $em->getRepository('fibeWWWConfBundle:RoleType')->find($id_type);
+        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
+        $person =  $em->getRepository('fibeWWWConfBundle:Person')->findOneBy(array('conference' => $currentConf, 'id' => $id_person));
+
+         if (!$entity || !$person || !$type) {
+                throw $this->createNotFoundException('Unable to find ConfEvent entity, person or type.');
+        }
+
+        $role = new Role();
+        $role->setPerson($person);
+        $role->setType($type);
+        $role->setEvent($entity);
+        $role->setConference($this->getUser()->getCurrentConf());
+        $em->persist($role);
+        
+        //Add paper to the confEvent
+        $entity->addRole($role);
+        //Sauvegarde des données
+        $em->persist($entity);
+        $em->flush();
+
+        return $this->render('fibeWWWConfBundle:ConfEvent:personRelation.html.twig', array(
+            'entity'  => $entity,
+            'authorized' => $authorization->getFlagSched()
+        ));
+    }
+
+    /**
+     * Delete person  to a confEvent
+     *  @Route("/deletePerson", name="schedule_confevent_deletePerson")
+     *  @Method("POST")
+     *  
+     */
+    public function deletePersonAction(Request $request)
+    {
+       
+          //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+        if(!$authorization->getFlagSched()){
+            throw new AccessDeniedException('Action not authorized !');
+        } 
+
+        $id_role = $request->request->get('id_role');
+        $id_entity = $request->request->get('id_entity');
+           
+        $em = $this->getDoctrine()->getManager();
+
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
+        $role =  $em->getRepository('fibeWWWConfBundle:Role')->findOneBy(array('conference' => $currentConf, 'id' => $id_role));
+
+         if (!$entity || !$role) {
+            throw $this->createNotFoundException('Unable to find ConfEvent entity or role.');
+        }
+
+        //Add role to the confEvent
+        $entity->removeRole($role);
+        $em->remove($role);
+        //Sauvegarde des données
+        $em->persist($entity);
+        $em->flush();
+
+        return $this->render('fibeWWWConfBundle:ConfEvent:personRelation.html.twig', array(
+            'entity'  => $entity,
+            'authorized' => $authorization->getFlagSched()
+        ));
     }
 }

@@ -23,11 +23,11 @@
               <div class="col-lg-4 well">
                     <h1> Conference settings</h1> 
                     {{ form_row(conference_form.mainConfEvent.summary) }}
-                    {{ form_row(conference_form.acronym) }}
+                    {{ form_row(conference_form.mainConfEvent.acronym) }}
                     {{ form_row(conference_form.mainConfEvent.url) }}
                     {{ form_row(conference_form.logo) }}
                     {{ form_errors(conference_form) }}
-                     <button type="submit" class="btn btn-success"><i class="icon-edit"></i></button>
+                     <button type="submit" class="btn btn-success edit"><i class="icon-edit"></i></button>
                     <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(conference_form) }}</div> 
                </div>
               <div class="col-lg-4 well">
@@ -55,6 +55,7 @@
 {% endblock body %}
 
 {% block javascripts %}
+{{parent()}}
   <script type="text/javascript" src="{{ asset('js/spectrum/spectrum.js')}}"></script>
   <script type="text/javascript" src="{{ asset('js/colorThief.js')}}"></script>
 
@@ -66,6 +67,26 @@
         generateTheme();
     })
 
+      var initPalette = ["{{ mobile_app_config.TitleColorHeader}}", "{{ mobile_app_config.BGColorNavBar}}", "{{ mobile_app_config.BGColorContent}}", "{{ mobile_app_config.TitleColorContent}}", "{{ mobile_app_config.BGColorNavBar}}", "{{ mobile_app_config.BGColorFooter}}", " {{ mobile_app_config.TitleColorFooter}}", "{{ mobile_app_config.BGColorButton}}"]
+       $(".color").spectrum({
+        flat: false,
+        showInput: true,
+        showInitial: true,
+        showAlpha: false,
+        disabled: false,
+        localStorageKey: "color",
+        showPalette: true,
+        showPaletteOnly: false,
+        showSelectionPalette: true,
+        clickoutFiresChange: false,
+        cancelText: "cancelText",
+        chooseText: "choose",
+        className: "colorpicker",
+        preferredFormat: "hex",
+        maxSelectionSize: 12,
+        palette: [initPalette],
+        selectionPalette: initPalette || []
+     });
 
       var image = new Image();
       image.src = "{{ asset('uploads/')}}{{conference.logoPath}}";

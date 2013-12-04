@@ -7,6 +7,10 @@
 #             - { name: doctrine.event_listener, event: preUpdate }
 
 
+services:
+    emptyConf:
+        class:        "fibe\\Bundle\\WWWConfBundle\\Services\\EmptyConf"
+
 idci_exporter:
     api_route: "/api/{entity_reference}.{_format}"
     entities:

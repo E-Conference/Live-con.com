@@ -4,16 +4,36 @@
 
 var ocsConfig = {
     checkFormat : function(documentRootNode){
-        return documentRootNode.firstChild && documentRootNode.firstChild.nodeName === 'conference';
+ 
+        var formatOk = false;
+        $(documentRootNode).each(function(){
+            if(this.nodeName.toUpperCase()=== "CONFERENCE"){
+                console.log("input file is OCS");
+                formatOk= true;
+            }
+        })
+
+        return formatOk; 
     },
     getRootNode : function(documentRootNode){
-        return $(documentRootNode).children();
+
+        var rootNode = $(documentRootNode).children();
+ 
+        $(documentRootNode).each(function(){
+            if(this.nodeName.toUpperCase()=== "CONFERENCE"){ 
+                rootNode = $(this);
+            }
+        })
+
+        return rootNode;
+ 
     },
     getNodeKey : function(node){
+        // console.log(node)
         return $(node).attr("id");
     },
     getNodeName : function(node){
-        return node.nodeName;
+        return node.localName;
     },
     getParseItemOrder : function(){
         return {
@@ -24,6 +44,7 @@ var ocsConfig = {
             "eventMapping" : events
         };
     },
+    //preproccessing of the root node which contains the conference informations
     action : function(documentRootNode){
         conference = { 
             setSummary    : $(documentRootNode).children("name").text(),
@@ -46,9 +67,9 @@ var ocsConfig = {
             'email' : {
                 setter : 'setEmail'
             },
-            'country' : {
-                setter : 'setBased_near',
-            },
+            // 'country' : {
+            //     setter : 'setCountry',
+            // },
             'organization-id' : {
                 multiple : true,
                 setter : 'addOrganization',
@@ -130,18 +151,18 @@ var ocsConfig = {
             }, 
             //topics entity are created directly here (or retrieved)
             //then we register the correct index
-            'topics' : {
+            'keywords' : {
                 wrapped : true,
                 multiple : true,
                 setter : 'addTopic',
                 format : function(node){ 
                     var topicName = $(node).text();
-                    var index = gettopicIdFromName(topicName);
+                    var index = getTopicIdFromName(topicName);
                     return index !== -1 ? index : false ;
                 },
                 action : function(node){
                     var topicName = $(node).text();  
-                    if(gettopicIdFromName(topicName)=== -1 ){
+                    if(getTopicIdFromName(topicName)=== -1 ){
                         topics.push({'setName':str_format(topicName)});  
                     }
                 }
@@ -171,7 +192,7 @@ var ocsConfig = {
                 setter : 'setName',
             },
             'country' : {
-                setter : 'setBased_near',
+                setter : 'setCountry',
             },
         }
 

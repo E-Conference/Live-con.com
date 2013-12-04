@@ -107,6 +107,10 @@ a{
 	color:white;
 }
 
+input, textarea {
+outline: none;
+}
+
 
 
 
@@ -205,17 +209,54 @@ a{
 	position: relative;
 	background: #d1d1d1;
 	width: 100%;
-	height: 650px;
+	height: 1050px;
+	overflow: hidden;
 }
+
+	#overview hr{
+		position: absolute;
+		background: #aaaaaa;
+		border: none;
+		width: 2px;
+		height: 920px;
+		left: 50%;
+		top: 130px;
+	}
 
 	#overview h1{
 		text-align: center;
 		margin-top: 70px;
-		margin-bottom: 108px;
+		margin-bottom: 80px;
+	}
+
+	.elements{
+		margin-top: 50px;
+	}
+
+	.element{
+		position: relative;
+		background: url(../img/element.png) no-repeat;
+		width: 410px;
+		height: 70px;
+		padding-left: 63px;
+		left: -7px;
+		margin-bottom: 30px;
+	}
+
+	.element img{
+		width: 50px;
+		float: left;
+	}
+
+
+	.element p{
+		margin-left: 25px;
+		width: 270px;
+		float: left;
 	}
 
 	#overview .clearfix{
-		margin-bottom: 30px;
+		margin-bottom: 20px;
 	}
 
 	#overview .grid_4{
@@ -223,7 +264,9 @@ a{
 	}
 
 	#overview h2{
-		text-align: center;
+		color: #818181;
+		text-align: right;
+		padding-right: 40px;
 		margin-bottom: 50px;
 	}
 
@@ -266,6 +309,7 @@ a{
 	background: #f2f2f2;
 	width: 100%;
 	height: 800px;
+	overflow: hidden;
 }
 
 #before .illustration{
@@ -308,6 +352,7 @@ a{
 	background: #d4d4d4;
 	width: 100%;
 	height: 650px;
+	overflow: hidden;
 }
 
 #during h1{
@@ -338,6 +383,7 @@ a{
 	background: #f2f2f2;
 	width: 100%;
 	height: 630px;
+	overflow: hidden;
 }
 
 #after h1{
@@ -348,8 +394,21 @@ a{
 	width: 290px;
 }
 
+.overview_after{
+	position: relative;
+	height: 420px;
+}
+
+#overview05{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
 #overview06{
-	margin-top: 90px;
+	position: absolute;
+	top: 270px;
+	left: 0px;
 }
 
 
@@ -366,6 +425,7 @@ a{
 	background-size: cover;
 	width: 100%;
 	height: 1080px;
+	overflow: hidden;
 }
 
 	#app h1{
@@ -408,7 +468,7 @@ a{
 
 #getstarted{
 	position: relative;
-	background:#f2f2f2;
+	background:#d4d4d4;/*#f2f2f2*/
 	width: 100%;
 	height: 500px;
 }
@@ -456,7 +516,7 @@ a{
 
 #contact{
 	position: relative;
-	background:#f2f2f2;
+	background:#ffffff;
 	width: 100%;
 	height: 630px;
 }
@@ -464,6 +524,73 @@ a{
 	#contact h1{
 		margin-left: 10px;
 		margin-top: 70px;
+	}
+
+	#contact #contactform{
+		margin-top: 60px;
+	}
+
+	#contact p{
+		font-size: 17px;
+		line-height: 30px;
+		color: #19313b;
+	}
+
+
+	#contact input, #contact textarea{
+		background: #f3f3f3;
+		width: 360px;
+		height: 40px;
+		font-family: Helvetica, Arial sans-serif;
+		font-size: 14px;
+		line-height: 40px;
+		color: #19313b;
+		border: 1px solid #cccccc;
+		border-radius: 3px;
+		padding: 0px 10px;
+		margin-bottom: 17px;
+	}
+
+	#contact input#confname{
+		width: 440px;
+	}
+
+	#contact textarea#message{
+		width: 440px;
+		height: 130px;
+		line-height: 20px;
+		margin-bottom: 0px;
+	}
+
+	#contact input#submitButton{
+		background: #19313b;
+		width: 220px;
+		height: 40px;
+		font-family: QuickSand, sans-serif;
+		font-size: 17px;
+		line-height: 40px;
+		letter-spacing: 1px;
+		color: #ffffff;
+		float: right;
+		margin-top: 20px;
+		border: none;
+	}
+
+	#contact .requiredNote{
+		font-family: Helvetica, Arial sans-serif;
+		font-size: 12px;
+		line-height: 20px;
+		color: #19313b;
+		text-align: right;
+	}
+
+	#contact #callback{
+		font-family: Helvetica, Arial sans-serif;
+		font-size: 12px;
+		line-height: 20px;
+		color: #19313b;
+		text-align: right;
+		display: none;
 	}
 
 
@@ -477,5 +604,135 @@ a{
 	position: relative;
 	background:#19313b;
 	width: 100%;
-	height: 120px;
+	height: 190px;
+	padding-top: 30px;
 }
+
+#footer h3{
+	font-family: QuickSandBold, sans-serif;
+	font-size: 20px;
+	line-height: 30px;
+	text-transform: uppercase;
+	color:#ffffff;
+}
+
+#footer li{
+	margin-left: 70px; 
+}
+
+#footer p{
+	font-family: Helvetica, Arial sans-serif;
+	font-size: 15px;
+	line-height: 30px;
+	color:#ffffff;
+}
+
+#footer .design{
+	display: inline-block;
+	float: left;
+	margin-top: 20px;
+}
+
+#footer p.design{
+	margin-left: 10px;
+	line-height: 33px;
+}
+
+#footer img{
+	margin-bottom: 10px;
+}
+
+#footer h4{
+	font-family: QuickSandBold, sans-serif;
+	font-size: 17px;
+	line-height: 20px;
+	text-transform: uppercase;
+	color:#ffffff;
+	text-align: center;
+}
+
+#footer #version p{
+	font-size: 12px;
+	text-align: right;
+	margin-top: 10px;
+}
+
+
+
+
+/*-------------------------------------------------------------------------------------
+--------------------------------------LOGIN-----------------------------------------
+-------------------------------------------------------------------------------------*/
+
+#login_page #background{
+	position: absolute;
+	background: url(../img/entete.jpg) no-repeat center bottom;
+	background-size: cover;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+}
+
+#login_page #login{
+	position: absolute;
+	background: url(../img/login_bg.png);
+	width: 300px;
+	height: 450px;
+	left: 50%;
+	margin-left: -170px;
+	top: 50%;
+	margin-top: -225px;
+	padding: 0px 20px;
+		font-family: Helvetica, Arial sans-serif;
+		font-size: 17px;
+		line-height: 30px;
+		color: #19313b;
+}
+
+#login_page #login img{
+	margin-top:	30px; 
+	margin-left:40px; 
+}
+
+	#login_page form{
+		margin-top: 40px;
+	}
+
+	#login_page p{
+		font-family: Helvetica, Arial sans-serif;
+		font-size: 17px;
+		line-height: 30px;
+		color: #19313b;
+	}
+
+
+	#login_page input[type=text], #login_page input[type=password]{
+		background: #f3f3f3;
+		width: 280px;
+		height: 40px;
+		font-family: Helvetica, Arial sans-serif;
+		font-size: 14px;
+		line-height: 40px;
+		color: #19313b;
+		border: 1px solid #cccccc;
+		border-radius: 3px;
+		padding: 0px 10px;
+		margin-bottom: 17px;
+	}
+
+	#login_page input#submitButton{
+		position: relative;
+		background: #19313b;
+		width: 220px;
+		height: 40px;
+		font-family: QuickSand, sans-serif;
+		font-size: 17px;
+		line-height: 40px;
+		letter-spacing: 1px;
+		color: #ffffff;
+		float: right;
+		margin-top: 20px;
+		border: none;
+		left: -40px;
+	}

@@ -8,7 +8,7 @@ var EventCollection = {
        * events that need an UI update
        * @type {CalEvent}
        */
-      eventsToRender:[],
+      eventToRender:undefined,
 
 
       /*-----------------------------------------------------------------------------------------------------*/
@@ -27,13 +27,14 @@ var EventCollection = {
           if(id==="" || !id)return ;
           if(!op)op={}; 
           var event = Events[id];
-          if(!Events[id] || (op.noSidebar ===true && Events[id].isInstant()))return; 
+          if(!Events[id] || (op.noSidebar ===true && Events[id].isInstant()) || (op.noAllDay === true && Events[id].allDay ))return; 
           return event; 
     }, 
         /** 
          * @param parent        :  db model event
          * @param op            : concat : ( boolean default : false ) if true : dont preserve the tree nature of the relation (just concat children/subchildren/subsu...)
          *                        noSidebar(default false),
+         *                        noAllDay(default false),
          *                        recursive(default true) get only direct children
          * return children      : [{event:event,element:$element}, ... ]
          * events               : db modele events
@@ -70,26 +71,26 @@ var EventCollection = {
     },
     
     fitMainConfEvent : function (){
-        if(!mainConfEvent)return;
-        var oldStartDate = moment(this.start).format();
-        var oldEndDate = moment(this.end).format();
-        var minDate = moment("5000-10-10"),
-                maxDate = moment("1990-10-10");
+        // if(!mainConfEvent)return;
+        // var oldStartDate = moment(this.start).format();
+        // var oldEndDate = moment(this.end).format();
+        // var minDate = moment("5000-10-10"),
+        //         maxDate = moment("1990-10-10");
 
-        var children = EventCollection.getChildren(mainConfEvent, {concat:true,onlyEvent:true,noSidebar : true}); 
-        for(var i in children){
-          var child = children[i];
-          if(minDate.isAfter(child.start)) minDate = moment(child.start);
-          if(maxDate.isBefore(child.end))  maxDate = moment(child.end); 
+        // var children = EventCollection.getChildren(mainConfEvent, {concat:true,onlyEvent:true,noSidebar : true}); 
+        // for(var i in children){
+        //   var child = children[i];
+        //   if(minDate.isAfter(child.start)) minDate = moment(child.start);
+        //   if(maxDate.isBefore(child.end))  maxDate = moment(child.end); 
 
-        }
-        if(!minDate.isSame(moment("5000-10-10"))) mainConfEvent.start = minDate.format();
-        if(!maxDate.isSame(moment("1990-10-10"))) mainConfEvent.end = maxDate.format();
+        // }
+        // if(!minDate.isSame(moment("5000-10-10"))) mainConfEvent.start = minDate.format();
+        // if(!maxDate.isSame(moment("1990-10-10"))) mainConfEvent.end = maxDate.format();
 
-        if(oldStartDate !== mainConfEvent.start || oldEndDate !== mainConfEvent.end){
-            mainConfEvent.render();
-            mainConfEvent.persist(); 
-        } 
+        // if(oldStartDate !== mainConfEvent.start || oldEndDate !== mainConfEvent.end){
+        //     mainConfEvent.render();
+        //     mainConfEvent.persist(); 
+        // } 
     },
 
     /**
@@ -128,11 +129,20 @@ var EventCollection = {
     // },
 
 
-    getToppestParent : function (view){
+    getToppestParent : function (view){ 
         var toppestParent = []; 
 
-        return EventCollection.getChildren(mainConfEvent, {concat:true,recursive:false,onlyEvent:true,noSidebar:true}); 
-
+        var tmp =  EventCollection.getChildren(mainConfEvent, {recursive:false,onlyEvent:true,noSidebar:true}); 
+        //ignore allday events
+        for(var i in tmp){
+          var event = tmp[i];
+          if(event.allDay === true){
+            toppestParent = toppestParent.concat(EventCollection.getToppestNonAllDayChildren(event)); 
+          }else{
+            toppestParent.push(event);
+          }
+        }
+        return toppestParent;
         // $(view.getSlotContainer()).find(".fc-event").each(function(){
         //   var e = EventCollection.getEventByDiv($(this));
         //   parent = Events[e.parent.id];
@@ -182,28 +192,114 @@ var EventCollection = {
         // }
         return toppestParent;
     },
-    
-    getBroCountRange : function(brothers){
-      var startScript = moment()
+
+    getToppestNonAllDayChildren : function(parent)
+    {
+        var toppestNonAllDayChildren = []; 
+        var tmp = EventCollection.getChildren(parent, {recursive:false,onlyEvent:true,noSidebar:true});
+        for(var i in tmp){
+          var event = tmp[i];
+          if(event.allDay){
+            toppestNonAllDayChildren = toppestNonAllDayChildren.concat(EventCollection.getToppestNonAllDayChildren(event));
+
+          }else{
+            // alert(event.id+" "+ event.title+"were child of "+parent.id+" "+parent.title+" and was added");
+            toppestNonAllDayChildren.push(event);
+          }
+        }
+
+        return toppestNonAllDayChildren;
+    },
+    rtnArray:{},
+    getBroCountRange : function(brothers){ 
+      if(brothers.length==0)return false;
+      var brothers = brothers;
       var minLeft;
-      var rtnArray = {};
-      var done     = [];
-      var remaining = jQuery.extend({},brothers);
+      var done     = []; 
       var bro;
       var curBro;
-      var baseCount;
-      for (var i in brothers){
-        curBro = brothers[i]; 
-        console.log("curBro",curBro.id)
-        //create rtn object for curBro
-        if(!rtnArray[curBro.id])rtnArray[curBro.id] = {count:1,range:0,minLeft:Events[curBro.id].elem.position().left};
+      var baseCount; 
 
-        baseCount = rtnArray[curBro.id].count;
+      // console.log("getBroCountRange : brothers before = ",brothers);
+      // TODO children
+      // TODO ghost bro
+      if(EventCollection.eventToRender){
+        
+        var brothersTmp = brothers.slice(0);
+        brothers = [];
+        //compute days to render
+        var eventToRender = Events[EventCollection.eventToRender.id]; 
+        var oldDayToRender = {
+          start:moment(EventCollection.eventToRender.oldStart).startOf('day')
+          ,end :moment(EventCollection.eventToRender.oldEnd).endOf('day')
+        };
+        var newDayToRender = {
+          start:moment(eventToRender.start).startOf('day')
+          ,end:moment(eventToRender.end).endOf('day')
+        };
+
+        //compute affected events
+        for(var i in brothersTmp){
+          var e = brothersTmp[i]; 
+          // alert(e.title)
+          if( e.id == mainConfEvent.id  )continue; 
+          // if( e.id == eventToRender.id  )continue; 
+          if(!e.isOutOf(oldDayToRender) || !e.isOutOf(newDayToRender) ){
+            // console.log("#######affecting "+e.id);
+            delete EventCollection.rtnArray[e.id];
+            brothers.push(e);
+          }
+        }
+
+        // EventCollection.eventToRender = undefined; 
+
+
+        // // var brothersTmp = brothers.slice(0);
+        // var eventToRender = Events[EventCollection.eventToRender.id];  
+        // brothers = [];
+        
+        // // var brothersTmp = brothers.slice(0);
+        // var brothersTmp = EventCollection.getChildren(Events[eventToRender.parent.id], {concat:true,recursive:false,onlyEvent:true,noSidebar : true}); 
+
+        // // alert(moment(eventToRender.start).format())
+        // // console.log("#######affecting "+eventToRender.title);
+        // //compute affected events
+        // for(var i in brothersTmp){
+        //   var e = brothersTmp[i]; 
+        //   // alert(e.title)
+        //   if( e.id == mainConfEvent.id  )continue; 
+        //   // if( e.id == eventToRender.id  )continue; 
+        //   if(!e.isOutOf(eventToRender) || !e.isOutOf({start:EventCollection.eventToRender.oldStart,end:EventCollection.eventToRender.oldEnd})){
+        //     console.log("#######affecting "+e.id);
+        //     delete EventCollection.rtnArray[e.id];
+        //     brothers.push(e);
+        //   }
+        // }
+        // // console.log("#######affecting "+eventToRender.id);
+        // // delete EventCollection.rtnArray[eventToRender.id];
+        // // brothers.push(eventToRender)
+        // EventCollection.eventToRender = undefined; 
+      }else{
+        // EventCollection.rtnArray= {};
+      }
+      var remaining = brothers.slice(0);
+      // console.log("----------------------------------------------------");
+      // console.log("affected = ",brothers); 
+      // console.log("non affected : ",EventCollection.rtnArray);
+      // console.log("----------------------------------------------------");
+
+      for (var i in brothers){
+        curBro = brothers[i];  
+        // console.log("curBro",curBro.id)
+        //create rtn object for curBro
+        if(!EventCollection.rtnArray[curBro.id])EventCollection.rtnArray[curBro.id] = {count:1,range:0,minLeft:Events[curBro.id].elem.position().left};
+
+        baseCount = EventCollection.rtnArray[curBro.id].count;
 
         for (var j in remaining){
           bro = remaining[j]; 
 
-          //ensure the bro is not himself
+          //ensure the bro is not itself
           if(curBro.id===bro.id )continue;
 
           //ensure the bro has never been read 
@@ -212,22 +308,22 @@ var EventCollection = {
           //ensure the bro is a real bro
           if(curBro.isOutOf(bro,true))continue;
 
-          console.log("curBro ",curBro.id," discovering ",bro.id) 
+          // console.log("curBro ",curBro.id," discovering ",bro.id) 
 
-          minLeft = Math.min(rtnArray[curBro.id].minLeft,Events[bro.id].elem.position().left); 
+          minLeft = Math.min(EventCollection.rtnArray[curBro.id].minLeft,Events[bro.id].elem.position().left); 
           
           //update self properties
-          rtnArray[curBro.id].minLeft = minLeft;
-          rtnArray[curBro.id]["count"]++; 
+          EventCollection.rtnArray[curBro.id].minLeft = minLeft;
+          EventCollection.rtnArray[curBro.id]["count"]++; 
 
           //register bro as bro of curBro
-          rtnArray[bro.id] = {count:baseCount+1,range:rtnArray[curBro.id]["range"]+1,minLeft:minLeft}; 
+          EventCollection.rtnArray[bro.id] = {count:baseCount+1,range:EventCollection.rtnArray[curBro.id]["range"]+1,minLeft:minLeft}; 
 
           //the bro has been read
           // if( $.inArray(bro.id, done)=== -1)
           // {
           //   //the bro has been read and is a real bro of curBro
-          //   if($.inArray(bro.id, rtnArray[curBro.id].brosId)!==-1){
+          //   if($.inArray(bro.id, EventCollection.rtnArray[curBro.id].brosId)!==-1){
           //     //do nothing 
           //   }
           //   //the bro has been read and was out of curBro
@@ -241,25 +337,25 @@ var EventCollection = {
           //old alorithme
           // if(!curBro.isOutOf(bro,true))
           // {
-          //   if(!rtnArray[bro.id])rtnArray[bro.id] = {count:0,range:0,minLeft:Events[bro.id].elem.position().left}; 
-          //   rtnArray[curBro.id]["count"]++;
-          //   rtnArray[bro.id]["count"]++;
+          //   if(!EventCollection.rtnArray[bro.id])EventCollection.rtnArray[bro.id] = {count:0,range:0,minLeft:Events[bro.id].elem.position().left}; 
+          //   EventCollection.rtnArray[curBro.id]["count"]++;
+          //   EventCollection.rtnArray[bro.id]["count"]++;
 
-          //   minLeft = Math.min(rtnArray[curBro.id].minLeft,rtnArray[bro.id].minLeft); 
-          //   rtnArray[bro.id].minLeft = minLeft;
-          //   rtnArray[curBro.id].minLeft = minLeft;
+          //   minLeft = Math.min(EventCollection.rtnArray[curBro.id].minLeft,EventCollection.rtnArray[bro.id].minLeft); 
+          //   EventCollection.rtnArray[bro.id].minLeft = minLeft;
+          //   EventCollection.rtnArray[curBro.id].minLeft = minLeft;
 
           //   range++; 
 
           // } 
         }
-        console.log(remaining)
+        // console.log(remaining)
         delete remaining[i]
         // done.push(curBro.id);
 
       }
-        console.debug(moment().diff(startScript)+" to getBroCountRange")
-      return rtnArray;
+      // console.log("bro count range",EventCollection.rtnArray) 
+      return EventCollection.rtnArray;
     },
 
 

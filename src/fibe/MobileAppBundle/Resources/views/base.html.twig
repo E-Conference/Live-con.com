@@ -8,7 +8,17 @@
  {% endblock %}
 {% block javascripts %}
 	{{ parent()}}
-{% endblock%}
+
+	{% if authorized==0 %}
+        <script type="text/javascript" >
+        	$(document).ready(function(){
+		         $(".edit").hide();
+		         $(".edit-app").hide();
+		     });
+        </script> 
+    {% endif %}
+
+{% endblock javascripts%}
 
 
 {% block body %}

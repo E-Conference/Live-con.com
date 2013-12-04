@@ -14,6 +14,8 @@ use fibe\SecurityBundle\Form\UserType;
 use fibe\SecurityBundle\Form\AuthorizationType;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
+use Symfony\Component\Security\Core\Exception\AccessDeniedException; 
+
 /**
  * User controller.
  *
@@ -44,17 +46,16 @@ class AuthorizationController extends Controller
 
         $currentConf = $this->getUser()->getCurrentConf();
         $authorization =  $em->getRepository('fibeSecurityBundle:Authorization')->findOneBy(array('conference' => $currentConf, 'user' => $user));
-
       
-        switch ($authorizationType) {
+        switch ($authorizationType){
           case 'app':
-              $authorization->setFlagAppWR($value);
+              $authorization->setFlagApp($value);
               break;
           case 'sched':
-              $authorization->setFlagSchedWR($value);
+              $authorization->setFlagSched($value);
               break;
           case 'datas':
-             $authorization->setFlagconfDatasWR($value);
+             $authorization->setFlagconfDatas($value);
               break;
         }
        $em->persist($authorization);

@@ -14,7 +14,7 @@
                     <h1>{% trans %}Organization{% endtrans %}</h1>
                 </div>
                 <div class="col-lg-4">
-                    <a class="btn btn-info btn-create"  href="{{ path('schedule_organization_new') }}">
+                    <a class="btn btn-info btn-create create"  href="{{ path('schedule_organization_new') }}">
                          <i class="icon-plus"></i>
                     </a>
                 </div>
@@ -44,7 +44,7 @@
                 <td>{{ entity.country }}</td>
                 <td>
                     <a class="btn btn-large btn-default" href="{{ path('schedule_organization_show', { 'id': entity.id }) }}"><i class="icon-eye-open"></i></a> 
-                    <a class="btn btn-large btn-warning" href="{{ path('schedule_organization_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-large btn-warning edit" href="{{ path('schedule_organization_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
                 </td> 
             </tr>
         {% endfor %}

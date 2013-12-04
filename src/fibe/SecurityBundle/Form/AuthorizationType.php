@@ -11,16 +11,23 @@ class AuthorizationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('flagAppWR','choice', array(
-                              'choices' => array(false => 'Read', true => 'Read/Write'))
-            )
-            ->add('flagSchedWR','choice', array(
-                              'choices' => array(false => 'Read', true => 'Read/Write'))
-            )
-            ->add('flagconfDatasWR','choice', array(
-                              'choices' => array(false => 'Read', true => 'Read/Write'))
-            )
             ->add('user')
+            ->add('flagApp','choice', array(
+                              'choices' => array(false => 'False', true => 'True'),
+                              'label' => 'Mobile Application Manager'
+                               )
+            )
+            ->add('flagSched','choice', array(
+                              'choices' => array(false => 'False', true => 'True'),
+                               'label' => 'Schedule Manager'
+                               )
+            )
+            ->add('flagconfDatas','choice', array(
+                              'choices' => array(false => 'False', true => 'True'),
+                              'label' => 'Datas Conference Manager'
+                               )
+            )
+           
         ;
     }
 

@@ -1,41 +1,55 @@
-{% extends '::base.html.twig' %}
+{% block head %}
+  {% block meta %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="shortcut icon" href="{{ asset('bundles/fibehomepage/img/favicon.ico') }}" type="image/vnd.microsoft.icon">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ asset('bundles/fibehomepage/img/ios_icon.jpg') }}" />
+    <title>Livecon UPGRATE YOUR CONFERENCE</title>
+  {% endblock meta %}
 
+  {% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibehomepage/css/homepage.css') }}" /> 
+    <!-- reset -->
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/reset.css') }}" />
+    <!-- grid system 16 -->
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/960_12_col.css') }}" />
 
-{% block title %}Login to enter into schedule admin area{% endblock title %} 
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/style.css') }}" />
+  {% endblock %}
+{% endblock %}
 
 {% block body %}
-{{ parent() }}
+  
+<div id="login_page">
   
   {% if error %}
     <div class="alert alert-error">{{ error.message }}</div>
   {% endif %}
-  
-  <div class="jumbotron col-md-offset-1">
-    <div class="img-wrapper" style="width:8em;float:left;position:relative;left:-2em;margin:1em 2em 10em">
-        <img src="{{ asset('bundles/fibewwwconf/img/schedule.png') }}" alt="schedule icon"/>
-    </div> 
-        <h1>SWC Event Manager</h1>
-        <h3>The restfull event manager</h3>
-        <p>Import or create your dataset, manage your events and keep your data opened!.</p>
-  </div>
-  <br/>
-  <div class="container ">
-    <p class="text-info">Demo version ! Connect with login : <strong>"admin"</strong>, password : <strong>"admin"</strong>.</p>
+
+<div id="background"></div>
+    <div class="container_12">
+
+      <div id="login" class="grid_4">
+        <a href="http://live-con.com/" title="Livecon UPGRATE YOUR CONFERENCE"><img src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon" /></a>
         <form   action="{{ path('login_check') }}" method="post">
         
-            <label for="username">Login :</label>
+            <label for="username"><p>Login :</p></label>
             <input type="text" id="username" name="_username" value="{{ last_username }}" />
 
-            <label for="password">Password :</label>
+            <label for="password"><p>Password :</p></label>
             <input type="password" id="password" name="_password" />
             <br/>
             <input type="checkbox" id="remember_me" name="_remember_me" checked />
             <label for="remember_me">Remember me</label>
 
             <br />
-            <input class="btn btn-success" type="submit" value="Connexion" />
+            <input class="btn btn-success" id="submitButton" type="submit" value="Connexion" />
         </form>
-  </div>
+      </div>
+    </div>
+</div>
+
+
+
          
     
   

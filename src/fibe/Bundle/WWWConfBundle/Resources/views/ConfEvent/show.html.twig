@@ -19,6 +19,10 @@
                             <th>Summary</th>
                             <td>{{ entity.summary }}</td>
                         </tr>
+                         <tr>
+                            <th>Acronym</th>
+                            <td>{{ entity.acronym }}</td>
+                        </tr>
                         <tr>
                             <th>Startat</th>
                             <td>{{ entity.startAt|date('Y-m-d H:i:s') }}</td>
@@ -108,13 +112,13 @@
                   <a type="button" href="{{ path('schedule_event') }}" class="btn btn-warning">
                         <i class="icon-th-list"></i>
                   </a>
-                   <a href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}" class="btn btn-success">
+                   <a href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}" class="btn btn-success edit-event">
                          <i class="icon-pencil"></i>
                    </a>
                    <form action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
                       <input type="hidden" name="_method" value="DELETE" />
                         {{ form_widget(delete_form) }}
-                    <button type="submit" class="btn btn-danger">
+                    <button type="submit" class="btn btn-danger delete-event">
                         <i class="icon-remove"></i>
                     </button>
                   </form> 

@@ -39,19 +39,19 @@ class Authorization
     * @ORM\Column(type="boolean",options={"default" = 0})
     * Flag who gives read/write authorization on DataConf configurations
     */
-    protected $flagAppWR;
+    protected $flagApp;
 
     /**
     * @ORM\Column(type="boolean",options={"default" = 0})
     * Flag who gives read/write authorization on events managing
     */
-    protected $flagSchedWR;
+    protected $flagSched;
 
     /**
     * @ORM\Column(type="boolean",options={"default" = 0})
     * Flag who gives read/write authorization on conference datas(papers, persons, roles, topics ...)
     */
-    protected $flagconfDatasWR;
+    protected $flagconfDatas;
     
     
    
@@ -67,72 +67,72 @@ class Authorization
     }
 
     /**
-     * Set flagAppWR
+     * Set flagApp
      *
-     * @param boolean $flagAppWR
+     * @param boolean $flagApp
      * @return Authorization
      */
-    public function setFlagAppWR($flagAppWR)
+    public function setFlagApp($flagApp)
     {
-        $this->flagAppWR = $flagAppWR;
+        $this->flagApp = $flagApp;
     
         return $this;
     }
 
     /**
-     * Get flagAppWR
+     * Get flagApp
      *
      * @return boolean 
      */
-    public function getFlagAppWR()
+    public function getFlagApp()
     {
-        return $this->flagAppWR;
+        return $this->flagApp;
     }
 
     /**
-     * Set flagSchedWR
+     * Set flagSched
      *
-     * @param boolean $flagSchedWR
+     * @param boolean $flagSched
      * @return Authorization
      */
-    public function setFlagSchedWR($flagSchedWR)
+    public function setFlagSched($flagSched)
     {
-        $this->flagSchedWR = $flagSchedWR;
+        $this->flagSched = $flagSched;
     
         return $this;
     }
 
     /**
-     * Get flagSchedWR
+     * Get flagSched
      *
      * @return boolean 
      */
-    public function getFlagSchedWR()
+    public function getFlagSched()
     {
-        return $this->flagSchedWR;
+        return $this->flagSched;
     }
 
     /**
-     * Set flagconfDatasWR
+     * Set flagconfDatas
      *
-     * @param boolean $flagconfDatasWR
+     * @param boolean $flagconfDatas
      * @return Authorization
      */
-    public function setFlagconfDatasWR($flagconfDatasWR)
+    public function setFlagconfDatas($flagconfDatas)
     {
-        $this->flagconfDatasWR = $flagconfDatasWR;
+        $this->flagconfDatas = $flagconfDatas;
     
         return $this;
     }
 
     /**
-     * Get flagconfDatasWR
+     * Get flagconfDatas
      *
      * @return boolean 
      */
-    public function getFlagconfDatasWR()
+    public function getFlagconfDatas()
     {
-        return $this->flagconfDatasWR;
+        return $this->flagconfDatas;
     }
 
     /**

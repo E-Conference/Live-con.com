@@ -178,7 +178,7 @@ class User extends BaseUser
     {
         foreach ($this->authorizations as $authorization) {
             if($authorization->getConference()->getId()==$confId){
-                return $authorization->getFlagAppWR();
+                return $authorization->getFlagApp();
             }
         }
         return false;
@@ -192,7 +192,7 @@ class User extends BaseUser
     {
         foreach ($this->authorizations as $authorization) {
             if($authorization->getConference()->getId()==$confId){
-                return $authorization->getFlagSchedWR();
+                return $authorization->getFlagSched();
             }
         }
         return false;
@@ -206,13 +206,22 @@ class User extends BaseUser
     {
         foreach ($this->authorizations as $authorization) {
             if($authorization->getConference()->getId()==$confId){
-                return $authorization->getFlagconfDatasWR();
+                return $authorization->getFlagconfDatas();
             }
         }
         return false;
     }
 
 
+    public function authorizedAccesToConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conf)
+    {
+        $conferences = $this->conferences->toArray();
+        if (in_array($conf, $conferences)) {
+            return true;
+        }
+
+        return false;
+    }
 
 
 

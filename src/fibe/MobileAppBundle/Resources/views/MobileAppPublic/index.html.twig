@@ -75,12 +75,12 @@
 
         configuration.app.liveconLogo = "{{ asset('img/liveconApp.png') }}";
 
-        configuration.conference.name = {{ conference.acronym |json_encode|raw }};
-        configuration.conference.acronym = {{ conference.acronym |json_encode|raw }};
+        configuration.conference.name = {{ conference.mainConfEvent.summary |json_encode|raw }};
+        configuration.conference.acronym = {{ conference.mainConfEvent.acronym |json_encode|raw }};
         configuration.conference.id = {{ conference.id |json_encode|raw }};
         configuration.conference.eventId = {{ conference.mainConfEvent.id |json_encode|raw }};
         configuration.conference.logoUri = "{{ asset('uploads/')}}{{conference.logoPath}}";
-        configuration.routes.Home.title = {{ conference.acronym |json_encode|raw }};
+        configuration.routes.Home.title = {{ conference.mainConfEvent.acronym |json_encode|raw }};
         tpl.uri = "{{ asset('bundles/fibemobileapp/mobileApp/templates/') }}";
       });
       

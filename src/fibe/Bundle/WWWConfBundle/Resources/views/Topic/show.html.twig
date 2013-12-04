@@ -30,13 +30,13 @@
                   <a type="button" href="{{ path('schedule_topic') }}" class="btn btn-warning">
                         <i class="icon-th-list"></i>
                   </a>
-                   <a href="{{ path('schedule_topic_edit', { 'id': entity.id }) }}" class="btn btn-success">
+                   <a href="{{ path('schedule_topic_edit', { 'id': entity.id }) }}" class="btn btn-success edit">
                          <i class="icon-pencil"></i>
                    </a>
                    <form action="{{ path('schedule_topic_delete', { 'id': entity.id }) }}" method="post">
                       <input type="hidden" name="_method" value="DELETE" />
                         {{ form_widget(delete_form) }}
-                    <button type="submit" class="btn btn-danger">
+                    <button type="submit" class="btn btn-danger delete">
                         <i class="icon-remove"></i>
                     </button>
                   </form> 
