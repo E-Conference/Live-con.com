@@ -156,14 +156,27 @@ class ConfEvent extends Event
             if($child->getEndAt() > $latestEnd) $latestEnd = $child->getEndAt();
         } 
         if($earliestStart == new \DateTime('6000-10-10') || $latestEnd == new \DateTime('1000-10-10'))return;
+        if($allDay==true){
+
+            $sTS = $earliestStart->getTimestamp();
+            //adjust timezone
+            $dt = \DateTime::createFromFormat('U', $sTS);
+            $dt->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
+            $adjusted_sTS = $dt->format('U') + $dt->getOffset();
+            $sTS = (floor($adjusted_sTS/86400))*86400;
+
+            $eTS = $latestEnd->getTimestamp();
+            //adjust timezone
+            $dt = \DateTime::createFromFormat('U', $eTS);
+            $dt->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
+            $adjusted_eTS = $dt->format('U') + $dt->getOffset();
+            $eTS = (floor(($adjusted_eTS-1)/86400))*86400;
+
+            $earliestStart = $earliestStart->setTimestamp($sTS); 
+            $latestEnd = $latestEnd->setTimestamp($eTS); 
+        }
         if($earliestStart == $latestEnd){ 
             $latestEnd->add(new \DateInterval('P1D'));
-        }
-        if($allDay==true){
-            $sTS = (double)$earliestStart->getTimestamp();
-            $eTS = (double)$latestEnd->getTimestamp();
-            $earliestStart = $earliestStart->setTimestamp(round($sTS/86400)*86400); 
-            $latestEnd = $latestEnd->setTimestamp(round($eTS/86400-1)*86400); 
         }
         $this->setStartAt($earliestStart);
         $this->setEndAt($latestEnd);

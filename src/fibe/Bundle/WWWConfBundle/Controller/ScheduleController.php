@@ -126,8 +126,8 @@ class ScheduleController extends Controller
             }
         }
         
-        $event->setStartAt( new \DateTime($postData['start'], new \DateTimeZone(date_default_timezone_get())) );
-        $event->setEndAt( new \DateTime($postData['end'], new \DateTimeZone(date_default_timezone_get())) );
+        $event->setStartAt( new \DateTime($postData['start']));
+        $event->setEndAt( new \DateTime($postData['end'] ) );
         $event->setParent( ($postData['parent']['id']!= "" ? $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['parent']['id']) : $mainConfEvent) );
         $event->setSummary( $postData['title'] ); 
         $event->setIsAllDay($postData['allDay']=="true") ;
@@ -144,7 +144,7 @@ class ScheduleController extends Controller
         $mainConfEvent->setParent(null);
         $em->persist($mainConfEvent); 
         $em->flush();
-        $JSONArray['mainConfEvent'] = array("start"=>$mainConfEvent->getStartAt(),"end"=>$mainConfEvent->getEndAt());
+        $JSONArray['mainConfEvent'] = array("start"=>$mainConfEvent->getStartAt()->format(\DateTime::ISO8601),"end"=>$mainConfEvent->getEndAt()->format(\DateTime::ISO8601));
 
         $response = new Response(json_encode($JSONArray));
         $response->headers->set('Content-Type', 'application/json');

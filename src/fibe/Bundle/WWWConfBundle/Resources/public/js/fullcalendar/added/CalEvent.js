@@ -107,8 +107,8 @@ CalEvent.prototype.persist = function(add){
         console.log(toSend.id+" persisted",toSend); 
         if(response.mainConfEvent){
           //get computed mainConfEvent dates
-          var newStart = moment(response.mainConfEvent.start.date).startOf("day");
-          var newEnd   = moment(response.mainConfEvent.end.date).endOf("day");  
+          var newStart = moment(response.mainConfEvent.start);
+          var newEnd   = moment(response.mainConfEvent.end);   
           //if the main conf event has changed, update it
           if(moment(mainConfEvent.start).startOf("day") - newStart != 0 || moment(mainConfEvent.end).endOf("day") - newEnd != 0){ 
             mainConfEvent.start = newStart;

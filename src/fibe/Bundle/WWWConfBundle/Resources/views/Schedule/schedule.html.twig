@@ -427,8 +427,8 @@
                             EventCollection.eventToRender = {id:ev["id"],oldStart:ev.start,oldEnd:ev.end}; 
                             ev.render();
                                //get computed mainConfEvent dates
-                              mainConfEvent.start = moment(response.mainConfEvent.start.date).format();
-                              mainConfEvent.end = moment(response.mainConfEvent.end.date).format();
+                              mainConfEvent.start = moment(response.mainConfEvent.start, "YYYY-MM-DD HH:mmZ").format();
+                              mainConfEvent.end = moment(response.mainConfEvent.end, "YYYY-MM-DD HH:mmZ").format();
                               mainConfEvent.render();
                              // $calendar.fullCalendar('renderEvent',ev); // 3rd arg make the event "stick"
                         },
