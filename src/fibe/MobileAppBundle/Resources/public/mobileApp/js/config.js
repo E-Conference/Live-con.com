@@ -27,7 +27,7 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 				"logoUri": "css/images/banniereTranspBlend.png",
 				"website": "http://www.blendconference.com/",
 				"baseUri": "http://www.blendconference.com/",
-				"storage": "false"
+				"storage": "off"
 			},
 			
 			//Defnition of the datasources 

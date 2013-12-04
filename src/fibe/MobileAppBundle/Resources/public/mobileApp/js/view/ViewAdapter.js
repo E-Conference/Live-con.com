@@ -60,13 +60,15 @@ define(['jquery', 'jqueryMobile', 'view/ViewAdapterText', 'view/AbstractView', '
 				_.each(this.commands,function(commandItem){
 					ViewAdapterText.generateContainer(this.currentPage,commandItem.name);	
 				},this);
+
+				this.addControlButton();
 			// }else{
 			// 	this.currentPage.find(".content").empty();
 			// 	this.addswitchButton();
 			// 	ViewAdapterGraph.initContainer(this.currentPage.find(".content"),this.uri,this.name);
 			// }
 		},
-		addswitchButton : function (){
+		addControlButton : function (){
 			// var btnLabel = "";
 			// if(this.mode == "text"){
 			// 	btnlabel = "Graph View";
@@ -80,10 +82,14 @@ define(['jquery', 'jqueryMobile', 'view/ViewAdapterText', 'view/AbstractView', '
 			// switchViewBtn.css("z-index","20"); 
 			// switchViewBtn.trigger("create");
 
-			// var self = this;
-			// switchViewBtn.click(function(){  
-			// 	self.changeMode();
-			// });
+			//Handle switch of storage mode on/off
+
+			var switchStorageModeBtn = this.currentPage.find("#flip-storage");
+			switchStorageModeBtn.val(StorageManager.getMode()).slider('refresh');
+			switchStorageModeBtn.on( "slidestop", function() {
+				StorageManager.switchMode(this.value);
+			});
+		
 		},
 		changeMode : function(){
 			

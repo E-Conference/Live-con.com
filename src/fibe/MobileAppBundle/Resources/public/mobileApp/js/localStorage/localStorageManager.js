@@ -50,7 +50,8 @@ define(['jquery', 'underscore', 'jStorage'], function($, _, jStorage){
 		},
 		pullCommandFromStorage : function (uri){
 			var dataContainer = StorageManager.get(uri);
-			if(dataContainer != null){
+			var config = StorageManager.get("configurations");
+			if(dataContainer != null && config.storage == "on"){
 				dataContainer.cpt +=1;
 				return dataContainer;
 			}else{
@@ -81,7 +82,6 @@ define(['jquery', 'underscore', 'jStorage'], function($, _, jStorage){
 			}
 			
 		},
-		
 		set : function(key,dataContainer){
 			if(this.commandStore !== undefined){
 				this.commandStore[key] = dataContainer;
@@ -107,7 +107,17 @@ define(['jquery', 'underscore', 'jStorage'], function($, _, jStorage){
 					StorageManager.initialize();
 				}
 			}
-		}
+		},
+		switchMode : function(mode){
+			var config = StorageManager.get("configurations");
+			debugger;
+			config.storage = mode;
+			this.set("configurations", config);
+		},
+		getMode : function(){
+			return StorageManager.get("configurations").storage;
+		},
+
 		
 	};
 	return StorageManager;
