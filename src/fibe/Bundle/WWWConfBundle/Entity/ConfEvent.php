@@ -159,21 +159,20 @@ class ConfEvent extends Event
         if($allDay==true){
 
             $sTS = $earliestStart->getTimestamp();
-            //adjust timezone
-            $dt = \DateTime::createFromFormat('U', $sTS);
-            $dt->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
-            $adjusted_sTS = $dt->format('U') + $dt->getOffset();
-            $sTS = (floor($adjusted_sTS/86400))*86400;
-
             $eTS = $latestEnd->getTimestamp();
-            //adjust timezone
-            $dt = \DateTime::createFromFormat('U', $eTS);
-            $dt->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
-            $adjusted_eTS = $dt->format('U') + $dt->getOffset();
-            $eTS = (floor(($adjusted_eTS-1)/86400))*86400;
 
-            $earliestStart = $earliestStart->setTimestamp($sTS); 
-            $latestEnd = $latestEnd->setTimestamp($eTS); 
+            //adjust timezone to correctly calculate with floor()
+            $tzOffset = \DateTime::createFromFormat('U', $sTS); 
+            $tzOffset->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
+
+            $sTS = $sTS + $tzOffset->getOffset();
+            $sTS = (floor($sTS/86400))*86400;
+
+            $eTS = $eTS - $tzOffset->getOffset();
+            $eTS = (floor(($eTS)/86400))*86400;
+
+            $earliestStart = $earliestStart->setTimestamp($sTS - $tzOffset->getOffset()); 
+            $latestEnd = $latestEnd->setTimestamp($eTS + $tzOffset->getOffset()); 
         }
         if($earliestStart == $latestEnd){ 
             $latestEnd->add(new \DateInterval('P1D'));
