@@ -39,6 +39,14 @@ var CalEvent = function(event){
     //   //TODO put to a "not defined yet" resource
     //   //TODO put to a "not defined yet" resource
     // }
+    this.renderForRefetch();
+    // if(!calendar_events_indexes[this.id]){
+    //   calendar_events.push(this);
+    //   calendar_events_indexes[this.id]=calendar_events.length-1; 
+    // }
+    // else{
+    //   calendar_events.splice(calendar_events_indexes[this.id],1,this); 
+    // }
 
     Events[this["id"]] = this; 
  
@@ -51,7 +59,7 @@ CalEvent.prototype.render = function (){
     renderedEvent.formatDate(); 
     // render the event on the calendar
     if($calendar.fullCalendar('clientEvents',this.id).length <1){
-      // alert("new calEvent for "+ this.id) 
+      console.debug(" new cal event for : "+this.id); 
       renderedEvent = new CalEvent(this); 
 
       $calendar.fullCalendar('renderEvent', renderedEvent);
@@ -61,9 +69,9 @@ CalEvent.prototype.render = function (){
       $calendar.fullCalendar('renderEvent', Events[renderedEvent.id]);
     }
 
-    //sometimes, event isn't rendered .... so we create a new CalEvent
+    //sometimes, event is still not rendered .... so we create a new CalEvent
     if($calendar.fullCalendar('clientEvents',this.id).length <1){
-      // alert("new calEvent for "+ this.id)
+      console.debug("another calEvent for "+ this.id)
       renderedEvent = new CalEvent(this);
       $calendar.fullCalendar('renderEvent',renderedEvent);
     }
@@ -85,8 +93,24 @@ CalEvent.prototype.render = function (){
 
     // console.log("event.render("+renderedEvent.id+")");
     // console.log("client event :",$calendar.fullCalendar('clientEvents',renderedEvent.id));
+
+
     Events[renderedEvent.id] = renderedEvent;
-    return renderedEvent;
+    // return renderedEvent;
+};
+CalEvent.prototype.renderForRefetch = function(){   
+    // console.log("##renderForRefetch",this);
+    if(this.isInstant())return;
+    if(calendar_events_indexes[this.id]=== undefined){
+      console.debug("#renderForRefetch pushing "+this.id);
+      calendar_events.push(this);
+      calendar_events_indexes[this.id]=calendar_events.length-1; 
+    }
+    else{
+      console.log("#renderForRefetch updating "+this.id);
+      calendar_events.splice(calendar_events_indexes[this.id],1,this); 
+    }
+    // console.log("",calendar_events[calendar_events_indexes[this.id]]);
 };
 
 CalEvent.prototype.persist = function(add){  
@@ -106,17 +130,9 @@ CalEvent.prototype.persist = function(add){
       toSend,
       function(response) {  
         bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well "+ (add=== true ? "added" : "updated")); 
-        console.log(toSend.id+" persisted",toSend); 
+        // console.log(toSend.id+" persisted",toSend); 
         if(response.mainConfEvent){
-          //get computed mainConfEvent dates
-          var newStart = moment(response.mainConfEvent.start);
-          var newEnd   = moment(response.mainConfEvent.end);   
-          //if the main conf event has changed, update it
-          if(moment(mainConfEvent.start).startOf("day") - newStart != 0 || moment(mainConfEvent.end).endOf("day") - newEnd != 0){ 
-            mainConfEvent.start = newStart;
-            mainConfEvent.end = newEnd;
-            mainConfEvent.render();
-          } 
+            EventCollection.updateMainConfEvent(response.mainConfEvent.start,response.mainConfEvent.end); 
         }
       },
       'json'
@@ -282,8 +298,11 @@ CalEvent.prototype.SetRecurDate = function(){
       } 
 };
 CalEvent.prototype.fitToDay = function (oldStart,oldEnd){
-  var duration =  moment(oldEnd).diff(moment(oldStart));
-  var midnightLimit = moment(this.end).startOf("day").format(); 
+  var duration = moment(this.end).diff(moment(this.start));
+  var midnightLimit = moment(this.end).startOf("day").format();
+  if(duration >= moment().diff(moment().add("d",1))){
+    this.allDay = true;
+  }
   if(moment(this.start).diff(midnightLimit) > moment(midnightLimit).diff(this.end)){
   // if(this.start < oldStart){
     //we put the event to the next day
@@ -365,7 +384,7 @@ CalEvent.prototype.getPopoverContent = function(){
     if(this.categories && this.categories[0] && this.categories[0].name!==""){
         categories = "<ul>";
         for (var i=0;i<this.categories.length;i++){
-          categories += "<li style='color:"+this.categories[i].color+";'>"+this.categories[i].name+"</li>";
+          categories += "<li><span style='color:"+this.categories[i].color+";'>"+this.categories[i].name+"</span></li>";
         }
         categories += "</ul>";
     }

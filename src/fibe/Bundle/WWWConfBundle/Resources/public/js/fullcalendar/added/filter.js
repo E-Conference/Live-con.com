@@ -14,7 +14,7 @@
                 })
                 .change(function(){  
                     //update fullcalendar getEvent 's url 
-                    $('#filters').find("select").each(function(){ 
+                    $(this).each(function(){ 
                       $(self).trigger("change", [$(this).data("filter"),$(this).val()]);
                     }); 
                 });  

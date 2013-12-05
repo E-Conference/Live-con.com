@@ -141,7 +141,7 @@ class ConfEvent extends Event
 
         if($this->isMainConfEvent){
             //ensure main conf event fits its children dates 
-            $this->fitChildrenDate(true);
+            return $this->fitChildrenDate(true);
             // $this->setIsInstant($this->getEndAt()->format('U') == $this->getStartAt()->format('U'));
         }
     }
@@ -159,26 +159,31 @@ class ConfEvent extends Event
         if($earliestStart == $latestEnd){ 
             $latestEnd->add(new \DateInterval('P1D'));
         }
-        if($allDay==true){
+        // get startof and endof day
+        // if($allDay==true){
 
-            $sTS = $earliestStart->getTimestamp();
-            $eTS = $latestEnd->getTimestamp();
+        //     $sTS = $earliestStart->getTimestamp();
+        //     $eTS = $latestEnd->getTimestamp();
 
-            //adjust timezone to correctly calculate with floor()
-            $tzOffset = \DateTime::createFromFormat('U', $sTS); 
-            $tzOffset->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
+        //     //adjust timezone to correctly calculate with floor()
+        //     $tzOffset = \DateTime::createFromFormat('U', $sTS); 
+        //     $tzOffset->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
 
-            $sTS = $sTS + $tzOffset->getOffset();
-            $sTS = (floor($sTS/86400))*86400;
+        //     $sTS = $sTS + $tzOffset->getOffset();
+        //     $sTS = (floor($sTS/86400))*86400;
 
-            $eTS = $eTS - $tzOffset->getOffset();
-            $eTS = (floor(($eTS)/86400))*86400;
+        //     $eTS = $eTS - $tzOffset->getOffset();
+        //     $eTS = (floor(($eTS)/86400))*86400;
 
-            $earliestStart = $earliestStart->setTimestamp($sTS - $tzOffset->getOffset()); 
-            $latestEnd = $latestEnd->setTimestamp($eTS + $tzOffset->getOffset()); 
+        //     //adjust timezone back
+        //     $earliestStart = $earliestStart->setTimestamp($sTS - $tzOffset->getOffset()); 
+        //     $latestEnd = $latestEnd->setTimestamp($eTS + $tzOffset->getOffset()); 
+        // }
+        if($earliestStart->getTimestamp() != $this->getStartAt()->getTimestamp() || $latestEnd->getTimestamp() != $this->getEndAt()->getTimestamp()){
+            $this->setStartAt($earliestStart);
+            $this->setEndAt($latestEnd);
+            return true;
         }
-        $this->setStartAt($earliestStart);
-        $this->setEndAt($latestEnd);
     } 
 
      /**

@@ -106,7 +106,6 @@ class ScheduleController extends Controller
         if( $methodParam=="add" )
         {  
                 $event= new Event();    
-                $event->setConference($conf) ;
         }else if( $methodParam=="update")
         {  
             $event = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['id']);  
@@ -126,11 +125,13 @@ class ScheduleController extends Controller
             }
         }
         
+        $event->setConference($conf) ;
         $event->setStartAt( new \DateTime($postData['start']));
         $event->setEndAt( new \DateTime($postData['end'] ) );
         $event->setParent( ($postData['parent']['id']!= "" ? $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['parent']['id']) : $mainConfEvent) );
         $event->setSummary( $postData['title'] ); 
         $event->setIsAllDay($postData['allDay']=="true") ;
+        $mainConfEvent->setParent(null);
 
         $em->persist($event); 
         $em->flush(); 
@@ -140,11 +141,12 @@ class ScheduleController extends Controller
         $JSONArray['Msg'] = $methodParam . " success"; 
 
         //update mainConfEvent
-        $mainConfEvent->fitChildrenDate();
-        $mainConfEvent->setParent(null);
-        $em->persist($mainConfEvent); 
+        if($mainConfEvent->fitChildrenDate() == true){
+            $mainConfEvent->setParent(null);
+            $em->persist($mainConfEvent); 
+            $JSONArray['mainConfEvent'] = array("start"=>$mainConfEvent->getStartAt()->format(\DateTime::ISO8601),"end"=>$mainConfEvent->getEndAt()->format(\DateTime::ISO8601));
+        }
         $em->flush();
-        $JSONArray['mainConfEvent'] = array("start"=>$mainConfEvent->getStartAt()->format(\DateTime::ISO8601),"end"=>$mainConfEvent->getEndAt()->format(\DateTime::ISO8601));
 
         $response = new Response(json_encode($JSONArray));
         $response->headers->set('Content-Type', 'application/json');
