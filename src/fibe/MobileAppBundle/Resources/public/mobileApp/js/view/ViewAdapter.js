@@ -7,7 +7,7 @@
 *   Version: 1.2
 *   Tags:  arborjs   
 **/
-define(['jquery', 'jqueryMobile', 'view/ViewAdapterText', 'view/AbstractView', 'localStorage/localStorageManager', 'ajaxLoader'], function($, jqueryMobile, ViewAdapterText, AbstractView, StorageManager, AjaxLoader){
+define(['jquery', 'jqueryMobile', 'encoder', 'view/ViewAdapterText', 'view/AbstractView', 'localStorage/localStorageManager', 'ajaxLoader'], function($, jqueryMobile, encoder, ViewAdapterText, AbstractView, StorageManager, AjaxLoader){
 	var ViewAdapter = {
 
 		initialize : function(mode){
@@ -82,8 +82,26 @@ define(['jquery', 'jqueryMobile', 'view/ViewAdapterText', 'view/AbstractView', '
 			// switchViewBtn.css("z-index","20"); 
 			// switchViewBtn.trigger("create");
 
-			//Handle switch of storage mode on/off
 
+			var currentUrl = encoder.encode(document.URL);
+			var currentTitle = encoder.encode(this.title);
+
+			var facebookLink = this.currentPage.find("#facebookLink");
+			facebookLink.attr("href","http://www.facebook.com/sharer/sharer.php?u="+currentUrl);
+
+
+			var twitterLink = this.currentPage.find("#twitterLink");
+			twitterLink.attr("href","https://twitter.com/intent/tweet?text="+currentTitle+"&url="+currentUrl);
+
+
+			var googleLink = this.currentPage.find("#googleLink");
+			googleLink.attr("href","https://plus.google.com/share?url="+currentUrl);
+
+			var linkedinLink = this.currentPage.find("#linkedinLink");
+			linkedinLink.attr("href","http://www.linkedin.com/shareArticle?mini=true&url="+currentUrl);
+
+
+			//Handle switch of storage mode on/off
 			var switchStorageModeBtn = this.currentPage.find("#flip-storage");
 			switchStorageModeBtn.val(StorageManager.getMode()).slider('refresh');
 			switchStorageModeBtn.on( "slidestop", function() {

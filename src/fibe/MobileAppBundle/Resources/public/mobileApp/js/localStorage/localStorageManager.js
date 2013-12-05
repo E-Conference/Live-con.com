@@ -21,7 +21,6 @@ define(['jquery', 'underscore', 'jStorage'], function($, _, jStorage){
 
 			var config = StorageManager.get("configurations");
 			if(!config){
-				debugger;
 				StorageManager.set("configurations",parameters.conference);
 			}else{
 				if(StorageManager.get("configurations").id != parameters.conference.id){
@@ -110,7 +109,6 @@ define(['jquery', 'underscore', 'jStorage'], function($, _, jStorage){
 		},
 		switchMode : function(mode){
 			var config = StorageManager.get("configurations");
-			debugger;
 			config.storage = mode;
 			this.set("configurations", config);
 		},
