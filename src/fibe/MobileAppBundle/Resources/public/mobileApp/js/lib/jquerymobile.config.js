@@ -7,7 +7,6 @@ define(['jquery'], function ($) {
 
         // use ? $.mobile.autoInitializePage = false;
        /*  $(document).on("mobileinit", function () {
-        debugger;
         jqueryMobile.ajaxEnabled = false;
         jqueryMobile.linkBindingEnabled = false;
         jqueryMobile.hashListeningEnabled = false;
