@@ -496,6 +496,7 @@
               // delete event.elem;
               event.allDay = allDay;
               event['start'] = date;
+              event.renderForRefetch();
               // event = new CalEvent(event); 
               console.log("dropped from sidebar", event);
               // assign it the date that was reported
@@ -508,7 +509,6 @@
 
               event.setParent(mainConfEvent);
               event.updateParentDate(); 
-              event.renderForRefetch();
               EventCollection.refetchEvents();
               event.persist();
 
@@ -576,8 +576,7 @@
               // console.log(calendarEvent.id+"_###found in calendar",Events[calendarEvent.id]);
             } 
           } 
-          var foundElem = [];
-          console.log(".fc-view-"+currentView+" .fc-event:visible") 
+          var foundElem = []; 
           $(".fc-view-"+(isClassicView ? viewBtns[currentView].classic : viewBtns[currentView].resource)+" .fc-event:visible").each(function(i){ 
             var id = parseInt($(this).find(".fc-event-id").text()); 
 
@@ -1028,32 +1027,34 @@
 
       //dropped from calendar to sidebar;
       $(sidebar).on("dropped",function(ev,calEvent){  
-          console.log("dropped",event)
+          console.log("dropped",calEvent)
           var event = Events[calEvent.id];
-
           EventCollection.fitMainConfEvent();
-
+          
 
           //set as instant event 
           event['end'] = moment(event['start']);
           event.formatDate();
           // remove event from calendar 
-          $calendar.fullCalendar('removeEvents',event.id); 
+          event.removeForRefetch();
+          // $calendar.fullCalendar('removeEvents',event.id); 
           event.persist();
 
           //affect children
           var children = EventCollection.getChildren(event, {concat:true,onlyEvent:true} ); 
           $.each(children,function(i,child){
-              sidebar.setSidebarEvent(child,true); 
               //set as instant event 
               child['end'] = moment(child['start']);
               child.formatDate();
               // remove event from calendar 
+              child.removeForRefetch(); 
               $calendar.fullCalendar('removeEvents',child.id);  
+              sidebar.setSidebarEvent(child,true); 
               child.persist();
           });
           //set as sidebar draggable 
           sidebar.setSidebarEvent(event,true);
+          EventCollection.refetchEvents();
           // updateEventArray();
       }).on("drag",function(ev,event){ 
           dragChildren(event);

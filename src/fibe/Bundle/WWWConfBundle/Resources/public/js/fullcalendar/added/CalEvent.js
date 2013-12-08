@@ -100,6 +100,7 @@ CalEvent.prototype.render = function (){
     Events[renderedEvent.id] = renderedEvent;
     // return renderedEvent;
 };
+
 CalEvent.prototype.renderForRefetch = function(){   
     // console.log("##renderForRefetch",this);
     if(this.isInstant())return;
@@ -114,6 +115,20 @@ CalEvent.prototype.renderForRefetch = function(){
     }
     // console.log("",calendar_events[calendar_events_indexes[this.id]]);
 };
+
+CalEvent.prototype.removeForRefetch = function(){    
+    if(calendar_events_indexes[this.id]!== undefined){
+      calendar_events.splice(calendar_events_indexes[this.id],1); 
+      for(var i in calendar_events_indexes){
+        if(calendar_events_indexes[i]>=calendar_events_indexes[this.id]){
+          calendar_events_indexes[i]--;
+        }
+      }
+      delete calendar_events_indexes[this.id] ;
+    }
+    console.log(calendar_events);
+    console.log(calendar_events_indexes); 
+}; 
 
 CalEvent.prototype.persist = function(add){  
     var toSend = {
@@ -283,6 +298,7 @@ CalEvent.prototype.SetRecurDate = function(){
 
         if(child.subChildren && child.subChildren.length > 0){
           for(var i in child.subChildren){
+            child.subChildren[i].elem.remove();
             setRecurChildDate(child.subChildren[i]); 
           }
         }else{
@@ -295,7 +311,7 @@ CalEvent.prototype.SetRecurDate = function(){
         child['end']  = moment(lastMoment).format();    
         // child.elem.remove();  
 
-        child.render();
+        child.renderForRefetch();
         child.persist();
       } 
 };

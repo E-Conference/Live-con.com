@@ -84,10 +84,10 @@ function Sidebar(){
           else $event.appendTo($sidebar);
           $sidebarTmp.prependTo($sidebar);
           // console.log(event);
-          sidebarEventHtml ($event,event);
+          sidebarEventHtml($event,event);
           $event.prepend("<span class='fc-event-id ' style='color:grey;'>"+event.id+"</span>");
-          //set child drag   
-          delete event['elem'];
+          //set child drag    
+          event['elem'] = $event;
           // console.log(event);
           $event.draggable({
                     zIndex: 999,
@@ -97,18 +97,20 @@ function Sidebar(){
                     containment: 'window', 
                     helper: 'clone',
                     start : function (ev,ui){
-                          $(this).hide();   
-                          dragged = [ ui.helper[0], event ];
-                          setTimeout(function(){ //bug... event isn't yet updated  
-                            $(self).trigger("drag",[event]); 
-                          },1);//event isn't yet updated   
+                        $(this).hide();   
+                        dragged = [ ui.helper[0], event ];
+                        setTimeout(function(){ //bug... event isn't yet updated  
+                          $(self).trigger("drag",[event]); 
+                        },1);//event isn't yet updated   
                     },
-                    stop: function(a,b,c){ 
-                      if($(a.target).hasClass("ui-draggable")){
-                        $(this).show()
-                      }else{
-                        $(a.target).remove()
-                      }
+                    stop: function(a,b,c){   
+                        // setTimeout(function(){ //bug... event isn't yet updated   
+                          if(calendar_events_indexes[event.id] === undefined){
+                            $(this).show()
+                          }else{
+                            // $(this).hide()
+                          } 
+                        // },1);//event isn't yet updated   
                     } 
                   }) 
 
