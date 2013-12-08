@@ -181,6 +181,7 @@
     var $sidebar;
     var $calendar;
     var stopRender = false;
+    var fetched = false;
     //path
     var DATA_FEED_URL = "{{ path('schedule_view_event_get') }}";
     var op = {  
@@ -267,7 +268,6 @@
       /*------------------------------- render events from json datasource -----------------------------------*/
       /*-----------------------------------------------------------------------------------------------------*/
  
-      var fetched = false;
       // calendar_events is the parsed array given to fullcalendar
       function renderEvents(events){
           Events = {};
@@ -305,7 +305,7 @@
                 orphanChildren[j].persist();
                 bootstrapAlert("info","event "+orphanChildren[j].title+" was orphan, so it's now the child of "+mainConfEvent.title)
               }
-              $calendar.fullCalendar('refetchEvents');
+              EventCollection.refetchEvents();
             }else if (stopRender!==true){ 
               //the loop goes on
               setTimeout(doWork, 1);
@@ -338,8 +338,8 @@
           events : function(start, end, callback) {  
               //events have already been fetched
               if(fetched === true ){
-                stopRender = false; 
-                // fetched = false;
+                fetched = false;
+                stopRender = false;  
                 console.log("fetched",calendar_events_indexes) 
                 console.log(calendar_events)
                 callback(calendar_events );
@@ -385,7 +385,8 @@
                           // rerender if changed
                       $modalBody.find("#eventForm,#delete-event-form").submit(function(){
                         $modal.off('hidden.bs.modal').on('hidden.bs.modal', function () {
-                          $calendar.fullCalendar( 'refetchEvents' );
+                          EventCollection.refetchEvents(true);
+                          // $calendar.fullCalendar( 'refetchEvents' );
                         })
                       }) 
                   }
@@ -459,7 +460,7 @@
             },1);//bug... event isn't yet updated 
           },  
           viewRender : function( view, element ){
-          
+            // fetched = false;
             EventCollection.eventToRender = mainConfEvent;
           },
           eventAfterAllRender: function( view ) { 
@@ -514,17 +515,19 @@
               },1);//bug... event isn't yet updated
           },
           eventDragStop: function( event, jsEvent, ui, view ) {  
+            var event = Events[event.id]
               dragged = [ ui.helper[0], event ]; 
               var oldStart = moment(event.start);
               var oldEnd = moment(event.end); 
               if(isClassicView !== true ){
                 console.log("ressources changed ! "+ event.resource)
               }
-              //save children to db
               setTimeout(function(){ //bug... event isn't yet updated 
-                if(!event.isOneDayLong()){ 
-                  event.fitToDay(oldStart,oldEnd);  
-                  // event.allDay = true;
+                if(!event.isOneDayLong()){
+                  if(event.fitToDay(oldStart,oldEnd) === false){
+                    event.render();   
+                    return;
+                  }
                 }
                 endDrag(event,ui.helper[0] ); 
                 event.persist(); 
@@ -536,8 +539,8 @@
       $calendar.fullCalendar(calendarOption);  
       $calendar.fullCalendar('changeView', viewBtns[currentView].classic );
       // $('.fc-header-left .fc-button').click(function(){ 
-      //   fetched = false;
-      //   $calendar.fullCalendar( 'refetchEvents' );
+      //   EventCollection.eventToRender = mainConfEvent;
+      //   EventCollection.refetchEvents();
       // })
 
       /*-------------------------------------------------------------------------------------------------*/
@@ -986,20 +989,18 @@
 
         //apply to parent
         var parent = EventCollection.find(event.parent.id,{noSidebar:true});
-        // return if not in calendar view  
-        if(parent){
-          if(event.isOutOf(parent,true)){
-            //event dropped out of parent
-            console.log(" #### moved out ####");  
-            event.setParent(mainConfEvent);
-            // event.updateParentDate(); 
-          }else{
-            //still inside but may need a parent update (to properly contains child)
-            event.updateParentDate(); 
-            event.renderForRefetch(); 
-            // event.render();  
-          }
-        }
+        // return if not in calendar view   
+        if(event.isOutOf(parent,true)){
+          //event dropped out of parent
+          console.log(" #### moved out ####");  
+          event.setParent(mainConfEvent);
+          // event.updateParentDate(); 
+        }else{
+          //still inside but may need a parent update (to properly contains child)
+          event.updateParentDate(); 
+          event.renderForRefetch(); 
+          // event.render();  
+        } 
         EventCollection.refetchEvents();
           // stopRender = true;
           //non-blocking loop
@@ -1057,11 +1058,12 @@
       var filter = new initFilter();
       $(filter).on("change", function(ev,key,val) {
 
-          EventCollection.eventToRender = undefined;
+          EventCollection.eventToRender = mainConfEvent;
           console.log("filtering : ",val,key,op.data); 
-          op.data[key] = val; 
+          op.data[key] = val;  
           stopRender = true;
-          $calendar.fullCalendar('refetchEvents');   
+          EventCollection.refetchEvents();
+          // $calendar.fullCalendar('refetchEvents');   
       });
 
 
@@ -1075,6 +1077,7 @@
         if(isClassicView){ //render the classic view   
           $('.fc-event').remove();
           $calendar.fullCalendar('changeView', viewBtns[currentView].classic );
+          EventCollection.refetchEvents(); 
           // $calendar.fullCalendar( 'renderEvent', Events);
           // $calendar.trigger("stopRender");
           // fetch = false;
@@ -1084,14 +1087,16 @@
           var resource = $(this).val();
             currentRes = resource;
           op.resFeedURL = resConfig[resource].url; 
+          // $('.fc-event').remove();
+          //  
+          $calendar.fullCalendar('changeView', viewBtns[currentView].resource );
+          EventCollection.refetchEvents(); 
+          // $calendar.fullCalendar('refetchEvents');
+          // $calendar.fullCalendar('refetchResources');
+
+
           
           //seems to be useless...
-          $('.fc-event').remove();
-          $calendar.fullCalendar('changeView', viewBtns[currentView].resource );
-          $calendar.fullCalendar('refetchEvents');
-          $calendar.fullCalendar('refetchResources');
-
-
           //can fetch resources but can't go back to classic view when we destroy calendar
           // $calendar.fullCalendar( 'destroy' ); 
           // $calendar.fullCalendar(calendarOption);
@@ -1106,6 +1111,8 @@
                   currentView = e.data.i;
                   $(this).siblings().removeClass("fc-state-active");
                   $(this).addClass("fc-state-active");
+                  // EventCollection.eventToRender = mainConfEvent;
+                  // EventCollection.refetchEvents();
                   $calendar.fullCalendar('changeView', (isClassicView ? viewBtns[currentView].classic : viewBtns[currentView].resource)); 
           })
         }

@@ -57,6 +57,8 @@ CalEvent.prototype.render = function (){
 
     renderedEvent = this;
     renderedEvent.formatDate(); 
+  
+
     // render the event on the calendar
     if($calendar.fullCalendar('clientEvents',this.id).length <1){
       console.debug(" new cal event for : "+this.id); 
@@ -297,23 +299,31 @@ CalEvent.prototype.SetRecurDate = function(){
         child.persist();
       } 
 };
+
 CalEvent.prototype.fitToDay = function (oldStart,oldEnd){
   var duration = moment(this.end).diff(moment(this.start));
-  var midnightLimit = moment(this.end).startOf("day").format();
-  if(duration >= moment().diff(moment().add("d",1))){
+  var midnightLimit = moment(this.end).startOf("day");
+  if(duration >= moment().add("d",1).diff(moment())){
     this.allDay = true;
+    return;
+  } 
+  if(oldStart.isSame(midnightLimit) ||oldEnd.isSame(midnightLimit)){
+    this.start = oldStart.format();
+    this.end = oldEnd.format();
+    return false;
   }
-  if(moment(this.start).diff(midnightLimit) > moment(midnightLimit).diff(this.end)){
+  if(moment(this.start).diff(midnightLimit) > midnightLimit.diff(this.end)){
   // if(this.start < oldStart){
+    
     //we put the event to the next day
-    this.start = moment(midnightLimit).format();
+    this.start = midnightLimit.format();
     this.end = moment(this.start).add(duration).format(); 
 
   }else{
     //we put the event to the previous day
-    this.end = moment(midnightLimit).format();
+    this.end = midnightLimit.format();
     // this.end = moment(midnightLimit).subtract("s",1).format();
-    this.start = moment(midnightLimit).subtract(duration).format(); 
+    this.start = moment(this.end).subtract(duration).format(); 
   }
 }
 
@@ -427,10 +437,18 @@ CalEvent.prototype.getPopoverContent = function(){
  * @return {Boolean}        
  */
 CalEvent.prototype.isOutOf = function(event,same){
-    var rtn = ( moment(this['end']).isBefore(event['start']) ||
-                moment(this['start']).isAfter(event['end']));
+    var rtn ;
+    if(event.allDay){
+      rtn = ( (moment(this['end']).subtract("s",1).endOf("day").isAfter(moment(event['end']).endOf("day"))) ||
+              (moment(this['start']).isBefore(moment(event['start']).startOf("day")) )
+              ); 
+    }else{
+
+      rtn = ( moment(this['end']).isBefore(event['start']) ||
+              moment(this['start']).isAfter(event['end']));
+    }
     if(same ===true) rtn = rtn || moment(this['end']).isSame(event['start'])
-                               || moment(this['start']).isSame(event['end'])
+                               || moment(this['start']).isSame(event['end']);
     return  rtn;
 };
 CalEvent.prototype.isInsideOf = function(event){

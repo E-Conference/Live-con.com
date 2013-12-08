@@ -73,16 +73,20 @@ var EventCollection = {
     },
     updateMainConfEvent : function(newStart,newEnd){ 
             console.log("mainConfEvent changed, rendering...");  
+            stopRender = true;
             mainConfEvent.start = moment(newStart, "YYYY-MM-DD HH:mmZ").format();
             mainConfEvent.end = moment(newEnd, "YYYY-MM-DD HH:mmZ").format(); 
+
+            bootstrapAlert("success","conference event "+mainConfEvent.title+" have been updated")
             mainConfEvent.renderForRefetch();
-            EventCollection.eventToRender = undefined;
+            // EventCollection.eventToRender = mainConfEvent;
             EventCollection.refetchEvents();
     },
-    refetchEvents : function(){
+    refetchEvents : function(force){
 
         function doWork() {
           stopRender = false;
+          fetched = force === true ? false : true ;
           $calendar.fullCalendar('refetchEvents');   
         }
         setTimeout(doWork, 1);
