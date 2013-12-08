@@ -182,6 +182,7 @@
     var $calendar;
     var stopRender = false;
     var fetched = false;
+    var firstWeekDay = 1;
     //path
     var DATA_FEED_URL = "{{ path('schedule_view_event_get') }}";
     var op = {  
@@ -273,6 +274,7 @@
           Events = {};
    
           calendar_events   = []; 
+          calendar_events_indexes   = {};  
 
           var i = 0;
           var orphanChildren= [];
@@ -326,7 +328,7 @@
           resources: op.resFeedURL,
           aspectRatio: 1.6,
           editable: true,
-          firstDay: 1,         
+          firstDay: firstWeekDay,         
           year: firstDay.year(), 
           month: firstDay.month(),
           date: firstDay.date(), 
@@ -347,8 +349,8 @@
               } 
               //compute dates to filter
               if(firstDay){ 
-                op.data['before']=firstDay.endOf('week').format();
-                op.data['after']=firstDay.startOf('week').format();
+                op.data['before']=moment(firstDay).endOf('week').add("days",firstWeekDay).format();
+                op.data['after']=moment(firstDay).startOf('week').add("days",firstWeekDay).format();
                 firstDay = undefined;
               }else{
                 op.data['before']=moment(end).format();
@@ -360,7 +362,7 @@
                 op.getOrderedUrl,
                 op.data,
                 function(events) {  
-                    if(stopRender===true)return;
+                    // if(stopRender===true)return;
                     
                     if(events.length!=0)bootstrapAlert("success",events.length+" events have been well fetched" );
                     else bootstrapAlert("info","no event found");
@@ -989,8 +991,7 @@
           // var startScript = moment();
           child['start']  = moment(child['start']).subtract(diff);
           child['end']  = moment(child['end']).subtract(diff);
-
-          // child.render() 
+ 
           child.renderForRefetch();
           child.formatDate() 
           child.persist() 
@@ -1009,8 +1010,7 @@
         }else{
           //still inside but may need a parent update (to properly contains child)
           event.updateParentDate(); 
-          event.renderForRefetch(); 
-          // event.render();  
+          event.renderForRefetch();  
         } 
         EventCollection.refetchEvents();
           // stopRender = true;
@@ -1086,7 +1086,7 @@
       $('#resourceView select').change(function(e){ 
         isClassicView = $(this).val() == "classic";
         if(isClassicView){ //render the classic view   
-          $('.fc-event').remove();
+          // $('.fc-event').remove();
           $calendar.fullCalendar('changeView', viewBtns[currentView].classic );
           EventCollection.refetchEvents(); 
           // $calendar.fullCalendar( 'renderEvent', Events);
