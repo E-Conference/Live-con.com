@@ -423,10 +423,14 @@
                             var ev = new CalEvent(tmp);  
                             ev.setParent(mainConfEvent)
                             Events[ev.id] = ev;  
-                            EventCollection.eventToRender = {id:ev["id"],oldStart:ev.start,oldEnd:ev.end}; 
+                            EventCollection.eventToRender = {id:ev["id"],oldStart:ev.start,oldEnd:ev.end};  
                             ev.render();
+                            ev.renderForRefetch();
+                            EventCollection.refetchEvents();
                             if(response.mainConfEvent){
                                 EventCollection.updateMainConfEvent(response.mainConfEvent.start,response.mainConfEvent.end); 
+                            }else{
+                              EventCollection.refetchEvents();
                             } 
                         },
                         'json'
@@ -453,9 +457,11 @@
                 event.fitToDay( event["start"],oldEnd.format());  
               }
 
+              event.renderForRefetch();
               event.updateParentDate();
               event.updateChildrenDate();
-              event.render();
+              // event.render();
+              EventCollection.refetchEvents();
               event.persist();
             },1);//bug... event isn't yet updated 
           },  
@@ -499,9 +505,10 @@
               Events[event.id] = event;
 
               event.setParent(mainConfEvent);
-              event.updateParentDate();
+              event.updateParentDate(); 
+              event.renderForRefetch();
+              EventCollection.refetchEvents();
               event.persist();
-              event.render();
 
 
               // render the event on the calendar  
@@ -524,8 +531,9 @@
               }
               setTimeout(function(){ //bug... event isn't yet updated 
                 if(!event.isOneDayLong()){
-                  if(event.fitToDay(oldStart,oldEnd) === false){
-                    event.render();   
+                  if(event.fitToDay(oldStart,oldEnd) === false){ 
+                    event.renderForRefetch();
+                    EventCollection.refetchEvents();
                     return;
                   }
                 }
@@ -565,11 +573,13 @@
 
               // console.log(calendarEvent.id+"_###found in calendar",Events[calendarEvent.id]);
             } 
-          }
-
-          $(".fc-event").each(function(i){ 
+          } 
+          var foundElem = [];
+          console.log(".fc-view-"+currentView+" .fc-event:visible") 
+          $(".fc-view-"+(isClassicView ? viewBtns[currentView].classic : viewBtns[currentView].resource)+" .fc-event:visible").each(function(i){ 
             var id = parseInt($(this).find(".fc-event-id").text()); 
-            //$.inArray()
+
+            foundElem.push(id)
             if(Events[id])Events[id]['elem'] = $(this);
           });
           console.debug(moment().diff(startScript)+" to updateEventArray");
@@ -808,8 +818,9 @@
 
                               //set event as parent of draggedEvent and children relation
                               draggedEvent.setParent(event);
-                              draggedEvent.updateParentDate();
-                              draggedEvent.render();
+                              draggedEvent.updateParentDate(); 
+                              draggedEvent.renderForRefetch();
+                              EventCollection.refetchEvents();
                               draggedEvent.persist(); 
                             });  
 
@@ -1062,7 +1073,7 @@
           console.log("filtering : ",val,key,op.data); 
           op.data[key] = val;  
           stopRender = true;
-          EventCollection.refetchEvents();
+          EventCollection.refetchEvents(true);
           // $calendar.fullCalendar('refetchEvents');   
       });
 

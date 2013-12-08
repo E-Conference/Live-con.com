@@ -77,14 +77,14 @@ var EventCollection = {
             mainConfEvent.start = moment(newStart, "YYYY-MM-DD HH:mmZ").format();
             mainConfEvent.end = moment(newEnd, "YYYY-MM-DD HH:mmZ").format(); 
 
-            bootstrapAlert("success","conference event "+mainConfEvent.title+" have been updated")
-            mainConfEvent.renderForRefetch();
+            bootstrapAlert("success","conference event "+mainConfEvent.title+" have been updated") 
             // EventCollection.eventToRender = mainConfEvent;
             EventCollection.refetchEvents();
     },
     refetchEvents : function(force){
 
         function doWork() {
+          mainConfEvent.renderForRefetch(); 
           stopRender = false;
           fetched = force === true ? false : true ;
           $calendar.fullCalendar('refetchEvents');   
