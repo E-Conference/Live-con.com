@@ -35,6 +35,7 @@ define(['jquery','jqueryMobile'], function($, jqueryMobile){
 			var name = parameters.name;
 			//Preparing the cross domain technic according to datasource definition
 			if(datasource.crossDomainMode == "CORS"){
+				debugger;
 				jQuery.support.cors = true;
 			}else{
 				jQuery.support.cors = false;	

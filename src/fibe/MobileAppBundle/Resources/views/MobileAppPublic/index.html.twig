@@ -64,7 +64,8 @@
       
       //Configurations
       require(['config', 'tpl'], function(configuration, tpl){
-        configuration.datasources.eventDatasource.uri = "{{ api_uri }}";
+        configuration.datasources.eventDatasource.uri = "http://localhost:2020/snorql/"; //"{{ api_uri }}";
+        configuration.datasources.eventDatasource.crossDomainMode = "CORS"; 
 
         configuration.app.liveconLogo = "{{ asset('img/liveconApp.png') }}";
 
@@ -74,6 +75,7 @@
         configuration.conference.eventId = {{ conference.mainConfEvent.id |json_encode|raw }};
         configuration.conference.logoUri = "{{ asset('uploads/')}}{{conference.logoPath}}";
         configuration.routes.Home.title = {{ conference.mainConfEvent.acronym |json_encode|raw }};
+        configuration.conference.baseUri = "http://localhost:2020/livecon.com/resource/conference/{{conference.id}}/{{conference.slug}}";
         tpl.uri = "{{ asset('bundles/fibemobileapp/mobileApp/templates/') }}";
       });
       
