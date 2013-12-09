@@ -893,7 +893,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    getQuery : function(parameters){	
 		    
 			    var conferenceUri = parameters.conferenceUri;
-		      var ajaxData = { conference : parameters.conference.id, id : parameters.uri} ; 
+		      var ajaxData = { conference_id : parameters.conference.id, id : parameters.uri} ; 
 		      return ajaxData; 
 			      
 		    },
@@ -1002,7 +1002,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				if(parameters.uri != "null"){
 					var  ajaxData = {"location_name" : parameters.uri};
 				}else{
-					var  ajaxData = {conference : parameters.conference.id};
+					var  ajaxData = {conference_id : parameters.conference.id};
 				}
 				return ajaxData;
 			},
@@ -1220,7 +1220,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    getQuery : function(parameters){	
 		    
 			   var conferenceUri = parameters.conferenceUri;
-		      var ajaxData = { conference : parameters.conference.id, id : parameters.uri} ; 
+		      var ajaxData = { conference_id : parameters.conference.id, id : parameters.uri} ; 
 		      return ajaxData; 
 			      
 		    },

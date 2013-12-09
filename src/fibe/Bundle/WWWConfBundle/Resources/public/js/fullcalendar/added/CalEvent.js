@@ -1,12 +1,15 @@
 
 var CalEvent = function(event){
 
-
-    this["id"]         = event.id; 
-    this["title"]      = event.name || event.title; 
-    this["start"]      = event.start || event.start_at;
-    this["end"]        = event.end || event.end_at; 
-    this["allDay"]     = (event.allDay === true || event.allDay === false) ?  
+    this["id"]          = event.id; 
+    this["description"] = event.description;
+    this["topics"]      = event.topics;
+    this["roles"]       = event.roles;
+    this["location"]    = event.location; 
+    this["title"]       = event.name || event.title; 
+    this["start"]       = event.start || event.start_at;
+    this["end"]         = event.end || event.end_at; 
+    this["allDay"]      = (event.allDay === true || event.allDay === false) ?
                                 event.allDay : 
                                 event.is_allday ? 
                                         event.is_allday ==="true" : 
@@ -17,23 +20,36 @@ var CalEvent = function(event){
     if(this["is_mainconfevent"]){
       mainConfEvent = this;
       this["editable"] = false
-    };
+    }
     this["parent"]     = event.parent;
     this["children"]   = event.children;
     this["categories"] = event.categories || [];
 
     if( event.categories && event.categories.length > 0 && event.categories[0].color)
-      this["color"] = event.categories[0].color;
-
+      this["color"] = event.categories[0].color; 
     if(this.length > 0 && this.color)
       this["background-color"] = this.color;
-     
-    // console.log("new CalEvent" , this)
-    Events[this["id"]] = this; 
 
-    // for (var i in event){
-    //     this[i] = event[i];
-    // } 
+
+    //resources
+    if(!this["resource"])this["resource"] =  resConfig[currentRes].parse(event);
+    // if(this.location && this.location.id!= ""){
+    //   this["resource"].push(this.location.id);
+    // }else{
+    //   //TODO put to a "not defined yet" resource
+    //   //TODO put to a "not defined yet" resource
+    // }
+    this.renderForRefetch();
+    // if(!calendar_events_indexes[this.id]){
+    //   calendar_events.push(this);
+    //   calendar_events_indexes[this.id]=calendar_events.length-1; 
+    // }
+    // else{
+    //   calendar_events.splice(calendar_events_indexes[this.id],1,this); 
+    // }
+
+    Events[this["id"]] = this; 
+ 
 };
 
 CalEvent.prototype.render = function (){
@@ -41,9 +57,11 @@ CalEvent.prototype.render = function (){
 
     renderedEvent = this;
     renderedEvent.formatDate(); 
+  
+
     // render the event on the calendar
     if($calendar.fullCalendar('clientEvents',this.id).length <1){
-      // alert("new calEvent for "+ this.id) 
+      console.debug(" new cal event for : "+this.id); 
       renderedEvent = new CalEvent(this); 
 
       $calendar.fullCalendar('renderEvent', renderedEvent);
@@ -53,9 +71,9 @@ CalEvent.prototype.render = function (){
       $calendar.fullCalendar('renderEvent', Events[renderedEvent.id]);
     }
 
-    //sometimes, event isn't rendered .... so we create a new CalEvent
+    //sometimes, event is still not rendered .... so we create a new CalEvent
     if($calendar.fullCalendar('clientEvents',this.id).length <1){
-      // alert("new calEvent for "+ this.id)
+      console.debug("another calEvent for "+ this.id)
       renderedEvent = new CalEvent(this);
       $calendar.fullCalendar('renderEvent',renderedEvent);
     }
@@ -77,35 +95,61 @@ CalEvent.prototype.render = function (){
 
     // console.log("event.render("+renderedEvent.id+")");
     // console.log("client event :",$calendar.fullCalendar('clientEvents',renderedEvent.id));
+
+
     Events[renderedEvent.id] = renderedEvent;
-    return renderedEvent;
+    // return renderedEvent;
 };
+
+CalEvent.prototype.renderForRefetch = function(){   
+    // console.log("##renderForRefetch",this);
+    if(this.isInstant())return;
+    if(calendar_events_indexes[this.id]=== undefined){
+      console.debug("#renderForRefetch pushing "+this.id);
+      calendar_events.push(this);
+      calendar_events_indexes[this.id]=calendar_events.length-1; 
+    }
+    else{
+      console.log("#renderForRefetch updating "+this.id);
+      calendar_events.splice(calendar_events_indexes[this.id],1,this); 
+    }
+    // console.log("",calendar_events[calendar_events_indexes[this.id]]);
+};
+
+CalEvent.prototype.removeForRefetch = function(){    
+    if(calendar_events_indexes[this.id]!== undefined){
+      calendar_events.splice(calendar_events_indexes[this.id],1); 
+      for(var i in calendar_events_indexes){
+        if(calendar_events_indexes[i]>=calendar_events_indexes[this.id]){
+          calendar_events_indexes[i]--;
+        }
+      }
+      delete calendar_events_indexes[this.id] ;
+    }
+    console.log(calendar_events);
+    console.log(calendar_events_indexes); 
+}; 
 
 CalEvent.prototype.persist = function(add){  
     var toSend = {
-      parent: this['parent'],
-      id    : this['id'],
-      allDay: this['allDay'],
-      title : this['title'],
-      parent: this['parent'],
-      end   : this['end'],
-      start : this['start']
+      parent    : this['parent'],
+      id        : this['id'],
+      allDay    : this['allDay'],
+      title     : this['title'],
+      parent    : this['parent'],
+      end       : this['end'],
+      start     : this['start'],
+      resource  : this['resource'],
+      currentRes: currentRes,
     }  
     $.post(
       add=== true ? op.quickAddUrl : op.quickUpdateUrl,
       toSend,
       function(response) {  
         bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well "+ (add=== true ? "added" : "updated")); 
-        console.log(toSend.id+" "+(add=== true ? "added" : "updated"),this); 
+        // console.log(toSend.id+" persisted",toSend); 
         if(response.mainConfEvent){
-          //get computed mainConfEvent dates
-          var newStart = moment(response.mainConfEvent.start.date).startOf("day");
-          var newEnd   = moment(response.mainConfEvent.end.date).endOf("day");  
-          if(moment(mainConfEvent.start).startOf("day") - newStart != 0 || moment(mainConfEvent.end).endOf("day") - newEnd != 0){ 
-            mainConfEvent.start = newStart;
-            mainConfEvent.end = newEnd;
-            mainConfEvent.render();
-          } 
+            EventCollection.updateMainConfEvent(response.mainConfEvent.start,response.mainConfEvent.end); 
         }
       },
       'json'
@@ -138,7 +182,7 @@ CalEvent.prototype.updateParentDate = function(){
           return;
         } 
  
-        if(event.isInsideOf(parent))return;  
+        // if(event.isInsideOf(parent))return;  
 
         //event is out of parent
         console.log("isOutOfParent");  
@@ -254,6 +298,7 @@ CalEvent.prototype.SetRecurDate = function(){
 
         if(child.subChildren && child.subChildren.length > 0){
           for(var i in child.subChildren){
+            child.subChildren[i].elem.remove();
             setRecurChildDate(child.subChildren[i]); 
           }
         }else{
@@ -266,10 +311,37 @@ CalEvent.prototype.SetRecurDate = function(){
         child['end']  = moment(lastMoment).format();    
         // child.elem.remove();  
 
-        child.render();
+        child.renderForRefetch();
         child.persist();
       } 
 };
+
+CalEvent.prototype.fitToDay = function (oldStart,oldEnd){
+  var duration = moment(this.end).diff(moment(this.start));
+  var midnightLimit = moment(this.end).startOf("day");
+  if(duration >= moment().add("d",1).diff(moment())){
+    this.allDay = true;
+    return;
+  } 
+  if(oldStart.isSame(midnightLimit) ||oldEnd.isSame(midnightLimit)){
+    this.start = oldStart.format();
+    this.end = oldEnd.format();
+    return false;
+  }
+  if(moment(this.start).diff(midnightLimit) > midnightLimit.diff(this.end)){
+  // if(this.start < oldStart){
+    
+    //we put the event to the next day
+    this.start = midnightLimit.format();
+    this.end = moment(this.start).add(duration).format(); 
+
+  }else{
+    //we put the event to the previous day
+    this.end = midnightLimit.format();
+    // this.end = moment(midnightLimit).subtract("s",1).format();
+    this.start = moment(this.end).subtract(duration).format(); 
+  }
+}
 
 // remove relation with old parent if exists
 // and update relation with new parent (render event but dont persist changes to db)
@@ -338,7 +410,7 @@ CalEvent.prototype.getPopoverContent = function(){
     if(this.categories && this.categories[0] && this.categories[0].name!==""){
         categories = "<ul>";
         for (var i=0;i<this.categories.length;i++){
-          categories += "<li style='color:"+this.categories[i].color+";'>"+this.categories[i].name+"</li>";
+          categories += "<li><span style='color:"+this.categories[i].color+";'>"+this.categories[i].name+"</span></li>";
         }
         categories += "</ul>";
     }
@@ -350,21 +422,21 @@ CalEvent.prototype.getPopoverContent = function(){
         }
         topics += "</ul>";
     }
-    var speakers = "no speakers"
+    var roles = "no roles"
     if(this.roles && this.roles[0] && this.roles[0].id!==""){
-        speakers = "<ul>";
+        roles = "<ul>";
         for (var i=0;i<this.roles.length;i++){
-            speakers += "<li>"+this.roles[i].person.name+"</li>";
+            roles += "<li><b>"+this.roles[i].type+" : </b>"+this.roles[i].person.name+"</li>";
         }
-        speakers += "</ul>";
+        roles += "</ul>";
     }
-    return "<ul >\
+    return "<ul class='event-popover' >\
               <li><b>duration : </b>"+moment.duration(moment(this.end).diff(this.start)).humanize()+"</li>\
-              <li><b>location : </b>"+((this.location && this.location.name && this.location.name!=="" && this.location.name) || "no location")+"</li>\
+              <li><b>location : </b>"+(this.location && this.location.name && this.location.name!=="" ? this.location.name :  "no location")+"</li>\
               <li class='description'><b>description : </b>"+(this.description || "no description")+"</li>\
               <li><b>categories : </b>"+categories+"\
               <li><b>topics : </b>"+topics+"\
-              <li><b>speakers : </b>"+speakers+"\
+              <li><b>roles : </b>"+roles+"\
               </li>\
             </ul>"
 };
@@ -381,10 +453,18 @@ CalEvent.prototype.getPopoverContent = function(){
  * @return {Boolean}        
  */
 CalEvent.prototype.isOutOf = function(event,same){
-    var rtn = ( moment(this['end']).isBefore(event['start']) ||
-                moment(this['start']).isAfter(event['end']));
+    var rtn ;
+    if(event.allDay){
+      rtn = ( (moment(this['end']).subtract("s",1).endOf("day").isAfter(moment(event['end']).endOf("day"))) ||
+              (moment(this['start']).isBefore(moment(event['start']).startOf("day")) )
+              ); 
+    }else{
+
+      rtn = ( moment(this['end']).isBefore(event['start']) ||
+              moment(this['start']).isAfter(event['end']));
+    }
     if(same ===true) rtn = rtn || moment(this['end']).isSame(event['start'])
-                               || moment(this['start']).isSame(event['end'])
+                               || moment(this['start']).isSame(event['end']);
     return  rtn;
 };
 CalEvent.prototype.isInsideOf = function(event){
@@ -396,6 +476,10 @@ CalEvent.prototype.isInsideOf = function(event){
 CalEvent.prototype.isInstant = function(){
     var diff =moment(this["start"]).diff(this["end"]);
     return (diff  === 0 ) || (diff  === 1 );   
+};
+
+CalEvent.prototype.isOneDayLong = function(){ 
+    return (moment(this["start"]).dayOfYear() == moment(this["end"]).dayOfYear()); 
 };
 
 CalEvent.prototype.formatDate = function () {  

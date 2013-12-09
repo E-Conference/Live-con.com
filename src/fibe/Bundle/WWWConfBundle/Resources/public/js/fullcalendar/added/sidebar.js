@@ -54,7 +54,7 @@ function Sidebar(){
                     // console.log("dropped into sidebar",event);
                     $(this).css("border-color","green"); 
                     sidebarEventHtml($sidebarTmp,event);
-                    $sidebarTmp.show() ;
+                    $sidebarTmp.show().css("background-color",event.color || "rgb(58, 135, 173)") ;
                 }
             },
             out: function( event, ui ) {
@@ -79,13 +79,15 @@ function Sidebar(){
           });
         }
 
-        function sidebarDraggable($event,event){
-          $event.appendTo($sidebar);
+        function sidebarDraggable($event,event,prepend){
+          if(prepend===true)$event.prependTo($sidebar);
+          else $event.appendTo($sidebar);
+          $sidebarTmp.prependTo($sidebar);
           // console.log(event);
-          sidebarEventHtml ($event,event);
+          sidebarEventHtml($event,event);
           $event.prepend("<span class='fc-event-id ' style='color:grey;'>"+event.id+"</span>");
-          //set child drag   
-          delete event['elem'];
+          //set child drag    
+          event['elem'] = $event;
           // console.log(event);
           $event.draggable({
                     zIndex: 999,
@@ -95,14 +97,20 @@ function Sidebar(){
                     containment: 'window', 
                     helper: 'clone',
                     start : function (ev,ui){
-                          $(this).hide();   
-                          dragged = [ ui.helper[0], event ];
-                          setTimeout(function(){ //bug... event isn't yet updated  
-                            $(self).trigger("drag",[event]); 
-                          },1);//event isn't yet updated   
+                        $(this).hide();   
+                        dragged = [ ui.helper[0], event ];
+                        setTimeout(function(){ //bug... event isn't yet updated  
+                          $(self).trigger("drag",[event]); 
+                        },1);//event isn't yet updated   
                     },
-                    stop: function(){
-                        // $(this).show()
+                    stop: function(a,b,c){   
+                        // setTimeout(function(){ //bug... event isn't yet updated   
+                          if(calendar_events_indexes[event.id] === undefined){
+                            $(this).show()
+                          }else{
+                            // $(this).hide()
+                          } 
+                        // },1);//event isn't yet updated   
                     } 
                   }) 
 
@@ -111,9 +119,9 @@ function Sidebar(){
         }
 
         
-        function setSidebarEvent(event){
+        function setSidebarEvent(event,prepend){
           var $event = $(eventHtml);
-          var $event = sidebarDraggable($event,event);
+          var $event = sidebarDraggable($event,event,prepend);
         }
 
         function sidebarEventHtml ($event,event){

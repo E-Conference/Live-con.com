@@ -36,7 +36,7 @@ define(['backbone', 'jquery', 'config', 'encoder', 'localStorage/localStorageMan
 
 		
 			//Initialize storage manager
-			StorageManager.initialize();
+			StorageManager.initialize({conference : this.conference});
 			//Initialize ViewAdapter to text mode
 			ViewAdapter.initialize("text");	
 			//Initialize ajax Loader 

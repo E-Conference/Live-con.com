@@ -8,7 +8,9 @@ var EventCollection = {
        * events that need an UI update
        * @type {CalEvent}
        */
+      //used to get day(s) to recalculate broCountRange
       eventToRender:undefined,
+ 
 
 
       /*-----------------------------------------------------------------------------------------------------*/
@@ -68,6 +70,26 @@ var EventCollection = {
 
           }); 
           return children; 
+    },
+    updateMainConfEvent : function(newStart,newEnd){ 
+            console.log("mainConfEvent changed, rendering...");  
+            stopRender = true;
+            mainConfEvent.start = moment(newStart, "YYYY-MM-DD HH:mmZ").format();
+            mainConfEvent.end = moment(newEnd, "YYYY-MM-DD HH:mmZ").format(); 
+
+            bootstrapAlert("success","conference event "+mainConfEvent.title+" have been updated") 
+            // EventCollection.eventToRender = mainConfEvent;
+            EventCollection.refetchEvents();
+    },
+    refetchEvents : function(force){
+
+        function doWork() {
+          mainConfEvent.renderForRefetch(); 
+          stopRender = false;
+          fetched = force === true ? false : true ;
+          $calendar.fullCalendar('refetchEvents');   
+        }
+        setTimeout(doWork, 1);
     },
     
     fitMainConfEvent : function (){
@@ -236,7 +258,7 @@ var EventCollection = {
         var newDayToRender = {
           start:moment(eventToRender.start).startOf('day')
           ,end:moment(eventToRender.end).endOf('day')
-        };
+        }; 
 
         //compute affected events
         for(var i in brothersTmp){

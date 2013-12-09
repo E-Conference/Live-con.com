@@ -41,6 +41,10 @@ class PersonType extends AbstractType
                 'required' => false,
                 'multiple'  => true
             ))
+
+            ->add('accounts', 'collection',array('type' => new SocialServiceAccountType(),
+                                                  'allow_add'  => true,
+                                                  'allow_delete' => true))
            
         ;
     }

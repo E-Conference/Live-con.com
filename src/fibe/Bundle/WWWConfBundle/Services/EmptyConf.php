@@ -1,6 +1,7 @@
 <?php
 
 namespace fibe\Bundle\WWWConfBundle\Services;
+use IDCI\Bundle\SimpleScheduleBundle\Entity\Location;
 
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event; 
 
@@ -70,6 +71,14 @@ class EmptyConf {
       $newMainConfEvent->setSummary("Conference Event");
       $newMainConfEvent->setConference($conference);
       $conference->setMainConfEvent($newMainConfEvent);
+
+      // conference location
+      $mainConfEventLocation = new Location();
+      $mainConfEventLocation->setName("Conference's location");
+      $newMainConfEvent->setLocation($mainConfEventLocation);
+      $mainConfEventLocation->setConference($conference);
+      $em->persist($mainConfEventLocation);
+      
       $em->persist($newMainConfEvent); 
       $em->remove($mainConfEvent);
  

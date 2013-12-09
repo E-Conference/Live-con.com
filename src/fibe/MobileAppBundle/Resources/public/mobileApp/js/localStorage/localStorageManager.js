@@ -11,14 +11,24 @@
 define(['jquery', 'underscore', 'jStorage'], function($, _, jStorage){
 	var StorageManager = {
 
-		initialize : function(){
+		initialize : function(parameters){
 			if(!$.jStorage.storageAvailable()){
 				this.commandStore = [];
 		    }
 			if(!StorageManager.get("keyword")){
 				StorageManager.set("keyword",{});
 			}
-			this.maxSize = 50;
+
+			var config = StorageManager.get("configurations");
+			if(!config){
+				StorageManager.set("configurations",parameters.conference);
+			}else{
+				if(StorageManager.get("configurations").id != parameters.conference.id){
+					$.jStorage.flush();
+					this.initialize({conference : parameters.conference});
+				}
+			}
+			this.maxSize = 500;
 		},
 		
 		pushCommandToStorage : function (uri,commandName, JSONdata){
@@ -39,7 +49,8 @@ define(['jquery', 'underscore', 'jStorage'], function($, _, jStorage){
 		},
 		pullCommandFromStorage : function (uri){
 			var dataContainer = StorageManager.get(uri);
-			if(dataContainer != null){
+			var config = StorageManager.get("configurations");
+			if(dataContainer != null && config.storage == "on"){
 				dataContainer.cpt +=1;
 				return dataContainer;
 			}else{
@@ -70,7 +81,6 @@ define(['jquery', 'underscore', 'jStorage'], function($, _, jStorage){
 			}
 			
 		},
-		
 		set : function(key,dataContainer){
 			if(this.commandStore !== undefined){
 				this.commandStore[key] = dataContainer;
@@ -96,7 +106,16 @@ define(['jquery', 'underscore', 'jStorage'], function($, _, jStorage){
 					StorageManager.initialize();
 				}
 			}
-		}
+		},
+		switchMode : function(mode){
+			var config = StorageManager.get("configurations");
+			config.storage = mode;
+			this.set("configurations", config);
+		},
+		getMode : function(){
+			return StorageManager.get("configurations").storage;
+		},
+
 		
 	};
 	return StorageManager;
