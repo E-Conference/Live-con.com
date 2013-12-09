@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig;
 use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
+
 /**
  * Mobile app controller.
  *

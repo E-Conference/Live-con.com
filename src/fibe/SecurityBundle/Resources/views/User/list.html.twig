@@ -19,10 +19,12 @@
                 <th>User</th>
                 <th>Email</th>
                 <th>Last login</th>
-                <th>Team Manager</th> 
+               <!-- <th>Team Manager</th> -->
                 <th>Mobil App Manager</th>
                 <th>Schedule Manager</th>
-                <th>Datas Conference Manager</th> 
+                <th>Team Manager</th>
+                <th>Datas Conference Manager</th>
+                 
             </tr>
         </thead>
         <tbody>
@@ -30,10 +32,12 @@
             <tr>
                 <td>
                     <div class="btn-group">
+                   
                         <button class="btn dropdown-toggle" data-toggle="dropdown">
                             <b>{{ entity.username }}</b>
                             <span class="caret"></span>
                         </button>
+                         {% if app.user.getCurrentConf().getConfManagers()|length > 1 %}
                         <ul class="dropdown-menu">
                            <!-- <li>
                                 <a href="{{ path('schedule_user_toggle_role', { 'id': entity.id }) }}"> 
@@ -43,24 +47,28 @@
                                              promote to admin 
                                         {% endif %} 
                                 </a>  
-                            </li>-->
+                            </li>
                             <li>
                                 <a href="#" onclick="document.getElementById('delete-form{{ loop.index0 }}').submit()"><i class=" icon-trash"></i> delete user</a>
                                 
+                            </li>-->
+                            
+                            <li>
+                               <a href="#" onclick="removeManager({{entity.id}})"><i class=" icon-trash"></i> Remove user from the conference</a>
                             </li>
-
                         </ul>
+                        {% endif %}
                     </div>
-                    <form style="height:0px;" id="delete-form{{ loop.index0 }}" action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
+                   <!-- <form style="height:0px;" id="delete-form{{ loop.index0 }}" action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
                         <input type="hidden" name="_method" value="DELETE" />
                         {{ form_widget(delete_forms[loop.index0]) }}
-                    </form>
+                    </form>-->
                 </td>
                 <td><a href="mailto:{{ entity.email }}">{{ entity.email }}</a></td>
                 <td class="moment">{% if entity.lastLogin %}{{ entity.lastLogin|date('Y-m-d H:i:s') }}{% endif %}</td> 
-                <td>
+                <!--  <td>
                     <div class="btn-group">
-                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                      <button class="btn dropdown-toggle" data-toggle="dropdown">
                             {% if  'ROLE_ADMIN' in entity.roles %}
                                 True
                             {% else %}
@@ -80,7 +88,7 @@
                                      
                             </li>
                         </ul>
-                    </div>
+                    </div>-->
                     <form style="height:0px;" id="toggle-role-form{{ loop.index0 }}" action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
                         <input type="hidden" name="_method" value="DELETE" />
                         {{ form_widget(delete_forms[loop.index0]) }}
@@ -89,37 +97,48 @@
                 </td> 
                 <td>
                   <select class="flagApp" data-userId="{{entity.id}}">
-                      {% if  entity.getFlagAppByConferenceId(currentConf.id) == 1 %}
-                        <option value="1" selected>True</option>
-                        <option value="0">False</option>
+                      {% if  entity.getFlagByConferenceId(currentConf.id,'app') == 1 %}
+                        <option value="1" selected>Yes</option>
+                        <option value="0">No</option>
                       {% else %}
-                         <option value="1">True</option>
-                         <option value="0" selected>False</option>
+                         <option value="1">Yes</option>
+                         <option value="0" selected>No</option>
                       {% endif %} 
                    </select>
                  </td> 
                  <td>
                   <select class="flagSched" data-userId="{{entity.id}}">
-                      {% if  entity.getFlagSchedByConferenceId(currentConf.id) == 1 %}
-                        <option value="1" selected>True</option>
-                        <option value="0">False</option>
+                      {% if  entity.getFlagByConferenceId(currentConf.id,'sched') == 1 %}
+                        <option value="1" selected>Yes</option>
+                        <option value="0">No</option>
                       {% else %}
                          <option value="1">True</option>
-                         <option value="0" selected>False</option>
+                         <option value="0" selected>No</option>
                       {% endif %} 
                    </select>
-                 </td>  
+                 </td>
                  <td>
-                  <select class="flagconfDatas" data-userId="{{entity.id}}">
-                      {% if  entity.getFlagDatasByConferenceId(currentConf.id) == 1 %}
-                        <option value="1" selected>True</option>
-                        <option value="0">False</option>
+                  <select class="flagTeam" data-userId="{{entity.id}}">
+                      {% if  entity.getFlagByConferenceId(currentConf.id,'team') == 1 %}
+                        <option value="1" selected>Yes</option>
+                        <option value="0">No</option>
                       {% else %}
-                         <option value="1">True</option>
-                         <option value="0" selected>False</option>
+                         <option value="1">Yes</option>
+                         <option value="0" selected>No</option>
                      {% endif %} 
                    </select>
-                 </td>  
+                 </td>    
+                 <td>
+                  <select class="flagconfDatas" data-userId="{{entity.id}}">
+                      {% if  entity.getFlagByConferenceId(currentConf.id,'datas') == 1 %}
+                        <option value="1" selected>Yes</option>
+                        <option value="0">No</option>
+                      {% else %}
+                         <option value="1">Yes</option>
+                         <option value="0" selected>No</option>
+                     {% endif %} 
+                   </select>
+                 </td>
             </tr>
         {% endfor %}
         </tbody>
@@ -168,6 +187,15 @@
             });
       };
 
+      function removeManager(managerId){
+        //start send the post request           
+           $.ajax({
+              type: "POST",
+              url: "{{path('schedule_conference_remove_manager')}}",
+              data: { 'id' : managerId },
+            });
+      };
+
         $(document).ready(function(){
             //Hide add manager form
             $("#addUserInConferenceForm").hide();
@@ -192,8 +220,14 @@
                 id = $(this).attr("data-userId");
                 changeAuthorization(id,'datas',value);
             })
+             $(".flagTeam").change(function(){
+                value = $(this).val();
+                id = $(this).attr("data-userId");
+                changeAuthorization(id,'team',value);
+            })
 
         });
+
 
        
     </script>

@@ -13,18 +13,23 @@ class AuthorizationType extends AbstractType
         $builder
             ->add('user')
             ->add('flagApp','choice', array(
-                              'choices' => array(false => 'False', true => 'True'),
+                              'choices' => array(false => 'No', true => 'Yes'),
                               'label' => 'Mobile Application Manager'
                                )
             )
             ->add('flagSched','choice', array(
-                              'choices' => array(false => 'False', true => 'True'),
+                              'choices' => array(false => 'No', true => 'Yes'),
                                'label' => 'Schedule Manager'
                                )
             )
             ->add('flagconfDatas','choice', array(
-                              'choices' => array(false => 'False', true => 'True'),
+                              'choices' => array(false => 'No', true => 'Yes'),
                               'label' => 'Datas Conference Manager'
+                               )
+            )
+            ->add('flagTeam','choice', array(
+                              'choices' => array(false => 'No', true => 'Yes'),
+                              'label' => 'Team Manager'
                                )
             )
            

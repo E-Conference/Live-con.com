@@ -40,6 +40,11 @@ class LocationController extends Controller
     public function indexAction(Request $request)
     {
         
+         //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
+
         $em = $this->getDoctrine()->getManager();
         //$entities = $em->getRepository('IDCISimpleScheduleBundle:Location')->findAll();
         $currentConf = $this->getUser()->getCurrentConf();
@@ -57,6 +62,7 @@ class LocationController extends Controller
 
         return array(
             'pager' => $pager,
+            'authorized' => $authorized,
         );
     }
 
@@ -68,10 +74,17 @@ class LocationController extends Controller
      */
     public function showAction($id)
     {
+        
+        //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
+
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Location')->find($id);
-        
-        
+
+        //The object have to belongs to the current conf
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('IDCISimpleScheduleBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Location entity.');
         }
@@ -80,7 +93,8 @@ class LocationController extends Controller
 
         return array(
             'entity'      => $entity, 
-            'delete_form' => $deleteForm->createView(), 
+            'delete_form' => $deleteForm->createView(),
+            'authorized' => $authorized, 
         );
     }
 
@@ -92,12 +106,24 @@ class LocationController extends Controller
      */
     public function newAction()
     {
+        
+       //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
+
+         if(!$authorized){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $entity = new Location();
         $form   = $this->createForm(new LocationType(), $entity);
 
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'authorized' => $authorized,
+            'authorized' => $authorized,
         );
     }
 
@@ -110,6 +136,16 @@ class LocationController extends Controller
      */
     public function createAction(Request $request)
     {
+        
+        //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
+
+         if(!$authorized){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $entity  = new Location();
         $form = $this->createForm(new LocationType(), $entity);
         $form->bind($request);
@@ -134,6 +170,7 @@ class LocationController extends Controller
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'authorized' => $authorized,
         );
     }
 
@@ -144,10 +181,20 @@ class LocationController extends Controller
      * @Template()
      */
     public function editAction($id)
-    {
+    { 
+        //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
+
+         if(!$authorized){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Location')->find($id);
-        
+         //The object have to belongs to the current conf
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('IDCISimpleScheduleBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Location entity.');
         }
@@ -161,7 +208,8 @@ class LocationController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(), 
             'delete_form' => $deleteForm->createView(),
-            'equipments'  => $equipments
+            'equipments'  => $equipments,
+            'authorized' => $authorized,
         );
     }
 
@@ -174,9 +222,20 @@ class LocationController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Location')->find($id);
+        
+        //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
 
+         if(!$authorized){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
+        $em = $this->getDoctrine()->getManager();
+         //The object have to belongs to the current conf
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('IDCISimpleScheduleBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Location entity.');
         }
@@ -203,6 +262,7 @@ class LocationController extends Controller
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(), 
+            'authorized' => $authorized,
         );
     }
 
@@ -214,12 +274,30 @@ class LocationController extends Controller
      */
     public function addEquipmentAction(Request $request)
     {
+        
+       //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
+
+         if(!$authorized){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $id_location = $request->request->get('id_location');
         $id_equipment = $request->request->get('id_equipment');
 
         $em = $this->getDoctrine()->getManager();
-        $location = $em->getRepository('IDCISimpleScheduleBundle:Location')->find($id_location);
+
+      
+          //The object have to belongs to the current conf
+        $currentConf=$this->getUser()->getCurrentConf();
+        $location =  $em->getRepository('IDCISimpleScheduleBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id_location));
         $equipment  = $em->getRepository('fibeWWWConfBundle:Equipment')->find($id_equipment);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Location or equipment entity.');
+        }
 
         $equipments = $em->getRepository('fibeWWWConfBundle:Equipment')->getEquipmentForLocationSelect($location);
 
@@ -231,6 +309,7 @@ class LocationController extends Controller
           return $this->render('IDCISimpleScheduleBundle:Location:equipmentsRelation.html.twig', array(
             'entity'  => $location,
             'equipments' => $equipments,
+            'authorized' => $authorized,
         ));
 
     }
@@ -244,15 +323,30 @@ class LocationController extends Controller
      */
     public function deleteEquipmentAction(Request $request)
     {
+        
+       //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
+
+         if(!$authorized){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $id_location = $request->request->get('id_location');
         $id_equipment = $request->request->get('id_equipment');
 
         $em = $this->getDoctrine()->getManager();
-        $location = $em->getRepository('IDCISimpleScheduleBundle:Location')->find($id_location);
+         //The object have to belongs to the current conf
+        $currentConf=$this->getUser()->getCurrentConf();
+        $location =  $em->getRepository('IDCISimpleScheduleBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id_location));
         $equipment  = $em->getRepository('fibeWWWConfBundle:Equipment')->find($id_equipment);
 
-        $location->removeEquipment($equipment);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Location or equipment entity.');
+        }
 
+        $location->removeEquipment($equipment);
 
         $em->persist($location);
         $em->flush();
@@ -263,6 +357,7 @@ class LocationController extends Controller
           return $this->render('IDCISimpleScheduleBundle:Location:equipmentsRelation.html.twig', array(
             'entity'  => $location,
             'equipments' => $equipments,
+            'authorized' => $authorized,
         ));
 
     }
@@ -275,13 +370,24 @@ class LocationController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        
+        //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
+
+         if(!$authorized){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('IDCISimpleScheduleBundle:Location')->find($id);
-
+             //The object have to belongs to the current conf
+            $currentConf=$this->getUser()->getCurrentConf();
+            $entity =  $em->getRepository('IDCISimpleScheduleBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Location entity.');
             }
@@ -308,9 +414,20 @@ class LocationController extends Controller
      */
     public function deleteFormAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Location')->find($id);
+        
+        //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
 
+         if(!$authorized){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
+        $em = $this->getDoctrine()->getManager();
+        //The object have to belongs to the current conf
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('IDCISimpleScheduleBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Location entity.');
         }
@@ -320,6 +437,7 @@ class LocationController extends Controller
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
+            'authorized' => $authorized,
         );
     }
 

@@ -17,6 +17,8 @@ use fibe\MobileAppBundle\Form\MobileAppWwwConfType;
 use fibe\Bundle\WWWConfBundle\Form\WwwConfType;
 use fibe\Bundle\WWWConfBundle\Form\MobileAppConfigType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+use Symfony\Component\Security\Core\Exception\AccessDeniedException; 
 /**
  * Mobile app controller.
  *

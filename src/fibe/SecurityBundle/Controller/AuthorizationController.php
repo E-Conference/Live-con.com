@@ -31,11 +31,13 @@ class AuthorizationController extends Controller
      */
     public function authorizationUpdateAction(Request $request)
     {
-       /* if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') )
+       
+        $currentConf = $this->getUser()->getCurrentConf();
+        if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') && $this->getUser()->getAuthorizationByConference($currentConf)->getFlagTeam()==1 )
         {
             // Sinon on déclenche une exception "Accès Interdit"
             throw new AccessDeniedHttpException('Access reserved to admin');
-        }*/
+        }
 
         $id = $request->request->get('id');
         $authorizationType = $request->request->get('authorizationType');
@@ -43,9 +45,10 @@ class AuthorizationController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $user = $em->getRepository('fibeSecurityBundle:User')->find($id);
-
-        $currentConf = $this->getUser()->getCurrentConf();
         $authorization =  $em->getRepository('fibeSecurityBundle:Authorization')->findOneBy(array('conference' => $currentConf, 'user' => $user));
+        if (!$authorization || !$user) {
+            throw $this->createNotFoundException('Unable to find Authorization or Manager entity.');
+        }
       
         switch ($authorizationType){
           case 'app':
@@ -56,6 +59,9 @@ class AuthorizationController extends Controller
               break;
           case 'datas':
              $authorization->setFlagconfDatas($value);
+              break;
+          case 'team':
+             $authorization->setFlagTeam($value);
               break;
         }
        $em->persist($authorization);
@@ -71,13 +77,20 @@ class AuthorizationController extends Controller
      */
       public function authorizationCreateAction(Request $request)
     {
+        
+        $currentConf = $this->getUser()->getCurrentConf();
+        if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') && $this->getUser()->getAuthorizationByConference($currentConf)->getFlagTeam()==1 )
+        {
+            // Sinon on déclenche une exception "Accès Interdit"
+            throw new AccessDeniedHttpException('Access reserved to admin and team manager');
+        }
         $entity  = new Authorization();
 
         $form = $this->createForm(new AuthorizationType($this->getUser()), $entity);
 
         $form->bind($request);
 
-      // if ($form->isValid()) {
+        if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
 
@@ -92,7 +105,7 @@ class AuthorizationController extends Controller
             $em->persist($user); 
             $em->flush();
             
-      //  }
+       }
 
 
         return $this->redirect($this->generateUrl('schedule_user_list'));

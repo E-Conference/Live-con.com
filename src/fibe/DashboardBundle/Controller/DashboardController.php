@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 use fibe\Bundle\WWWConfBundle\Form\WwwConfDefaultType;
 
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
 /**
  * Dashboard Controller 
  *
@@ -30,7 +32,7 @@ class DashboardController extends Controller
      * @Template()
      */
     public function chooseConferenceAction()
-    {
+    {    
         $currentUser = $this->getUser();
         $createform = $this->createForm(new WwwConfDefaultType($this->getUser()), new WwwConf());
 
@@ -45,6 +47,7 @@ class DashboardController extends Controller
      */
     public function enterConferenceAction($id)
     {
+
         $em = $this->getDoctrine()->getManager();
         $choosenConf = $em->getRepository('fibeWWWConfBundle:WwwConf')->find($id);
         $user=$this->getUser();

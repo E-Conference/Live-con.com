@@ -214,37 +214,38 @@
 			<div class="container_12">
 				<h1>Contact us</h1>
 				<div id="contactWrapper">
-					<form action="" method="post"  id="contactform" class="contact">
-						<input type="hidden" name="_method" value="post" />
+					<form action="{{ path('homePage_index') }}" method="post">
+                      <input type="hidden" name="POST" value="" />
 						<div class="grid_5">
 							<div class="stage">
-								<label for="name"><p>First Name : <em>*</em></p></label>
-								<input type="text" name="nom" id="nom" value="" class="nom" />
+								<p>{{ form_label(form_contact.nom) }}</p>
+								{{ form_widget(form_contact.nom) }}
 							</div>
 							<div class="stage">
-								<label for="name"><p>Last Name : <em>*</em></p></label>
-								<input type="text" name="prenom" id="prenom" class="prenom" />
+								<p>{{ form_label(form_contact.prenom) }}</p>
+								{{ form_widget(form_contact.prenom) }}
 							</div>
 
 							<div class="stage">
-								<label for="email"><p>Email : <em>*</em></p></label>
-								<input type="email" name="email" id="email" class="email" />
+								<p>{{ form_label(form_contact.email) }}</p>
+								{{ form_widget(form_contact.email) }}
 							</div>
 						</div>
 						<div class="grid_6 push_1">
 							<div class="stage">
-								<label for="name"><p>Conference name : <em>*</em></p></label>
-								<input type="text" name="confname" id="confname" class="confname" />
+								<p>{{ form_label(form_contact.confname) }}</p>
+								{{ form_widget(form_contact.confname) }}
 							</div>
 
 							<div class="stage">
-								<label for="message"><p>Message : <em>*</em></p></label>
-								<textarea rows="8" name="message" id="message" class="message"></textarea>
+								<p>{{ form_label(form_contact.message) }}</p>
+								{{ form_widget(form_contact.message) }}
 							</div>
 												
 							<p class="requiredNote"><em>*</em> Denotes a required field.</p>
 							
-							<input type="button" value="Send Message" id="submitButton" class="btn submit" title="Click here to submit your message!" />
+							<input type="submit" value="Send Message" id="submitButton" class="btn submit" title="Click here to submit your message!" />
+							<!--<button type="submit" value="Send Message" id="submitButton" class="btn submit" title="Click here to submit your message!"></button>-->
 							<p class="disclaimer"></p>
 							<p id="callback">callback</p>
 						</div>

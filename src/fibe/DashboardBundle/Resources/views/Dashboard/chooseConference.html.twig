@@ -51,7 +51,16 @@
                                        {% endif %}
                                   </h5>
                                 </li>
-                                </ul>
+                                <li>
+                                  <h5>Conference Datas Manager
+                                      {% if conference.getFlagByManagerId(entity.id,'team')==1 %}
+                                            <i class="icon-ok"></i>
+                                       {% else %}
+                                            <span class="glyphicon glyphicon-ban-circle"></span> 
+                                       {% endif %}
+                                  </h5>
+                                </li>
+                              </ul>
                               </li>
                               <li class="list-group-item"><h5>Events <span class="badge">{{ conference.events|length }}</span></h5></li>
                               <li class="list-group-item"><h5>Papers <span class="badge">{{ conference.papers|length }}</span></h5> </li>

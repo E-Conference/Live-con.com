@@ -49,7 +49,8 @@ class ConferenceController extends Controller
         $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
          if(!$authorization->getFlagconfDatas()){
-            throw new AccessDeniedException('Action not authorized !');
+            //throw new AccessDeniedException('Action not authorized !');
+           return $this->redirect($this->generateUrl('schedule_conference_show'));
           } 
  
             $request = $this->get('request');
@@ -245,6 +246,7 @@ class ConferenceController extends Controller
              $creatorAuthorization->setFlagApp(1);
              $creatorAuthorization->setFlagSched(1);
              $creatorAuthorization->setFlagconfDatas(1);
+             $creatorAuthorization->setFlagTeam(1);
              $em->persist($creatorAuthorization);
 
 
@@ -264,7 +266,7 @@ class ConferenceController extends Controller
                 'success',
                 'The conference has been successfully created'
             );
-           return $this->redirect($this->generateUrl('dashboard_chooses_conference'));
+           return $this->redirect($this->generateUrl('dashboard_choose_conference'));
         }else{
 
             $this->container->get('session')->getFlashBag()->add(
@@ -274,6 +276,54 @@ class ConferenceController extends Controller
         }
 
         
+    }
+
+    
+    /**
+     * @Route("/removeManager", name="schedule_conference_remove_manager") 
+    */
+    public function removeManager(Request $request)
+    {
+
+        $id = $request->request->get('id');
+
+        $em = $this->getDoctrine()->getManager();
+        $manager = $em->getRepository('fibeSecurityBundle:User')->find($id);
+        if (!$manager) {
+            throw $this->createNotFoundException('Unable to find Manager.');
+        }
+
+        $currentConf = $this->getUser()->getCurrentConf();
+        if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') && $this->getUser()->getAuthorizationByConference($currentConf)->getFlagTeam()==1 )
+        {
+            // Sinon on déclenche une exception "Accès Interdit"
+            throw new AccessDeniedHttpException('Access reserved to admin or team Manager');
+        }
+
+        //It must stay one manager in a conference
+        if(count($currentConf->getConfManagers())>1){
+             //Remove authorization
+            $authorization = $currentConf->getAuthorizationByUser($manager);
+            $em->remove($authorization);
+            //Remove current conf from the user conferences collection
+            $manager->removeConference($currentConf);
+            $em->persist($manager); 
+            $em->flush();
+
+           $this->container->get('session')->getFlashBag()->add(
+                  'success',
+                  'The manager has been successfully remove from the conferences'
+              );
+        }else{
+
+            $this->container->get('session')->getFlashBag()->add(
+                'error',
+                'It must stay unless one manager by conference.'
+            );
+        }
+        
+         return $this->redirect($this->generateUrl('schedule_user_list'));
+
     }
 
 

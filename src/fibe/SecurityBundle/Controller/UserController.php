@@ -34,7 +34,18 @@ class UserController extends Controller
             // Sinon on déclenche une exception "Accès Interdit"
             throw new AccessDeniedHttpException('Access reserved to admin');
         }
+
+          //Authorization Verification conference sched manager
+        $user=$this->getUser();
         $currentConf =$this->getUser()->getcurrentConf();
+        $authorization = $user->getAuthorizationByConference($currentConf);
+
+         if(!$authorization->getFlagTeam()){
+            //throw new AccessDeniedException('Action not authorized !');
+            return $this->redirect($this->generateUrl('schedule_conference_show')); 
+          }
+
+       
         $em = $this->getDoctrine()->getManager();
 
         $entities = $this->getUser()->getCurrentConf()->getConfManagers();

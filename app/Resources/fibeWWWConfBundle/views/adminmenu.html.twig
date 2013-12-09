@@ -17,10 +17,14 @@
      <!-- List conference dropdown -->
         <li class="dropdown">
           <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
-          {{ app.user.getCurrentConf().getConfName() }}
+            Switch Conference
             <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
+            <li>   
+                <a href="{{ path('dashboard_choose_conference') }}"><i class="icon-th-list"></i> Conferences Homepage </a>
+            </li>
+            <li class="divider"></li>
           {% for conference in app.user.getConferences() %}
             <li> 
               <a style="padding-right:5px;"   href="{{ path('schedule_conference_switch', {id: conference.id}) }}"  >
@@ -34,17 +38,17 @@
         <!-- Conference dropdown -->
        <li class="dropdown" >
           <a href ="{{ path('schedule_conference_edit') }}" title="manage schedule"class="dropdown-toggle" data-toggle="dropdown">
-            Conference
+             {{ app.user.getCurrentConf().getConfName() }}
             <b class="caret"></b>
           </a>
-          {% if app.user.getFlagDatasByConferenceId(app.user.getCurrentConf().getId())==1 %}
             <ul class="dropdown-menu">
+             {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
               <li>   
                 <a href="{{ path('schedule_conference_edit') }}"><i class="icon-cog"></i> Conference settings </a>
               </li>
-     
+             {% endif %}
             </ul>
-          {% endif %}
+        
         </li> 
 
        <!-- Schedule dropdown -->
@@ -151,7 +155,7 @@
             </a>
           </li>
 
-          {% if is_granted("ROLE_ADMIN") %} 
+          {% if is_granted("ROLE_ADMIN") and app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')==1 %} 
           <li>
             <a href="{{ path('schedule_user_list') }}" title="Manage manager">
               <span class="icon-list glyphicon-white "> Manage user

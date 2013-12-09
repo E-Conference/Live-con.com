@@ -199,7 +199,7 @@ class User extends BaseUser
     }
 
     /**
-    *Get an authorization falg app for a specific conference
+    *Get an authorization flag app for a specific conference
     *
     */
     public function getFlagDatasByConferenceId($confId)
@@ -207,6 +207,33 @@ class User extends BaseUser
         foreach ($this->authorizations as $authorization) {
             if($authorization->getConference()->getId()==$confId){
                 return $authorization->getFlagconfDatas();
+            }
+        }
+        return false;
+    }
+
+    /**
+    *Get an authorization flag app for a specific conference
+    *
+    */
+    public function getFlagByConferenceId($confId,$flagType)
+    {
+        foreach ($this->authorizations as $authorization) {
+            if($authorization->getConference()->getId()==$confId){
+                switch($flagType){
+                    case 'sched':
+                        return $authorization->getFlagSched();
+                        break;
+                    case 'app':
+                         return $authorization->getFlagApp();
+                         break;
+                    case 'datas':
+                         return $authorization->getFlagconfDatas();
+                         break;
+                    case 'team':
+                         return $authorization->getFlagTeam();
+                         break;
+                }
             }
         }
         return false;

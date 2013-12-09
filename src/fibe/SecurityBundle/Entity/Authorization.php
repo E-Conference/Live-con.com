@@ -52,6 +52,12 @@ class Authorization
     * Flag who gives read/write authorization on conference datas(papers, persons, roles, topics ...)
     */
     protected $flagconfDatas;
+
+     /**
+    * @ORM\Column(type="boolean",options={"default" = 0})
+    * Flag who gives write for manage users(papers, persons, roles, topics ...)
+    */
+    protected $flagTeam;
     
     
    
@@ -179,5 +185,28 @@ class Authorization
     public function getConference()
     {
         return $this->conference;
+    }
+
+     /**
+     * Set flagTeam
+     *
+     * @param boolean $flagTeam
+     * @return Authorization
+     */
+    public function setFlagTeam($flagTeam)
+    {
+        $this->flagTeam = $flagTeam;
+    
+        return $this;
+    }
+
+    /**
+     * Get flagTeam
+     *
+     * @return boolean 
+     */
+    public function getFlagTeam()
+    {
+        return $this->flagTeam;
     }
 }

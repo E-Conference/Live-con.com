@@ -632,6 +632,33 @@ class WwwConf
         return false;
     }
 
+      /**
+    *Get an authorization flag app for a specific conference
+    *
+    */
+    public function getFlagByManagerId($userId,$flagType)
+    {
+        foreach ($this->authorizations as $authorization) {
+            if($authorization->getUser()->getId()==$userId){
+                switch($flagType){
+                    case 'sched':
+                        return $authorization->getFlagSched();
+                        break;
+                    case 'app':
+                         return $authorization->getFlagApp();
+                         break;
+                    case 'datas':
+                         return $authorization->getFlagconfDatas();
+                         break;
+                    case 'team':
+                         return $authorization->getFlagTeam();
+                         break;
+                }
+            }
+        }
+        return false;
+    }
+
     public function isEmpty(){
         return  (count($this->events)<=1)
             and (count($this->locations) == 0)

@@ -71,6 +71,7 @@ EOT
 
         $manipulator = $this->getContainer()->get('fos_user.util.user_manipulator');
         $newUser = $manipulator->create($username, $password, $email, !$inactive, $superadmin);
+        $newUser->addRole('ROLE_ADMIN');
 
         $em = $this->getContainer()->get('doctrine')->getManager('default');
         
