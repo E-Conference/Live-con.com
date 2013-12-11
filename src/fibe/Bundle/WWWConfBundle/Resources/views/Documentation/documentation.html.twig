@@ -1,14 +1,9 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block title %}fibeWWWConfBundle:Documentation:documentation{% endblock %}
+{% block title %}Documentation{% endblock title %}
 
-{% block body %}
-
-
-
-{{ parent() }}
-<div class="container">
-    <div class="row center">
+{% block centerPanel %}
+  {{ parent() }}
     <h1>Documentation</h1>
    <div id="first">
       Technical writers and corporate communicators are professionals whose field and work is documentation. Ideally, technical writers have a background in both the subject matter and also in writing and managing content (information architecture). Technical writers more commonly collaborate with subject matter experts (SMEs), such as engineers, medical professionals, or other types of clients to define and then create content (documentation) that meets the user's needs. Corporate communications includes other types of written documentation that is required for most companies.
@@ -52,17 +47,17 @@
    </div>
 
 {% endblock %}
-{% block javascripts %}
-{{ parent() }}
-<script type="text/javascript">
+{% block javascripts_page %}
+  {{ parent() }}
+  <script type="text/javascript">
 
-   $(document).ready(function() {
-   	console.log("{{anchor}}");
-   	var anchor = $("#{{anchor}}");
-   		//anchor.scrollLeft();
-   		$('html,body').animate({scrollTop: anchor.offset().top},'slow');
-  
-    });
-</script>
+     $(document).ready(function() {
+     	console.log("{{anchor}}");
+     	var anchor = $("#{{anchor}}");
+     		//anchor.scrollLeft();
+     		$('html,body').animate({scrollTop: anchor.offset().top},'slow');
+    
+      });
+  </script>
 
 {% endblock javascripts %}

@@ -1,6 +1,9 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body -%}
+{% block title %}Equipment detail{% endblock title %}
+
+{% block centerPanel %}
+    {{ parent() }}
     <h1>Equipment</h1>
 
     <table class="table-hover record_properties">
@@ -28,14 +31,14 @@
     </li>
     <li>
         <a class="btn btn-warning" href="{{ path('schedule_equipment_edit', { 'id': entity.id }) }}">  <a  class="btn btn-info" href="{{ path('schedule_equipment_new') }}">
-                 <i class="icon-edit"></i>       
+                 <i class="fa fa-pencil-square-o"></i>       
         </a>
     </li>
     <li>
         <form action="{{ path('schedule_equipment_delete', { 'id': entity.id }) }}" method="post">
             <input type="hidden" name="_method" value="DELETE" />
             {{ form_widget(delete_form) }}
-            <button type="submit" class="btn btn-danger"><i class="icon-trash"></i></button>
+            <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
         </form>
     </li>
 </ul>

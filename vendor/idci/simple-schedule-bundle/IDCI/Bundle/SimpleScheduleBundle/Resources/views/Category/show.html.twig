@@ -1,14 +1,12 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body %}
-{{ parent() }}
+{% block title %}Categories{% endblock title %}
 
-
-<div class="container">
-    <div class="row center">
-        <div class="page-header">
-          <h1>Category</h1>
-        </div>
+{% block centerPanel %}
+  {{ parent() }}
+    <div class="page-header">
+      <h1>Category</h1>
+    </div>
     <div class="row">
     <div class="col-lg-1"></div>
     <div class="col-lg-6">
@@ -50,14 +48,13 @@
         </table>
     </div>
   </div>
-    <div class="row">
-         <div class="col-lg-6"></div>
-              <div class="col-lg-2 btn-group">
-                  <a type="button" href="{{ path('schedule_category') }}" class="btn btn-warning">
-                        <i class="icon-th-list"></i>
-                  </a>
-              </div>    
-        </div>
-    </div>
-</div> 
-{% endblock body %}
+ <div class="row">
+    <div class="col-lg-6"></div>
+      <div class="col-lg-2 btn-group">
+          <a type="button" href="{{ path('schedule_category') }}" class="btn btn-warning">
+                <i class="fa fa-list"></i>
+          </a>
+    </div>    
+</div>
+
+{% endblock %}

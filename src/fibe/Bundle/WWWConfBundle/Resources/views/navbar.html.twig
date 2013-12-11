@@ -14,42 +14,8 @@
 
     <ul class="nav navbar-nav">  
 
-     <!-- List conference dropdown -->
-        <li class="dropdown">
-          <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
-            Switch Conference
-            <b class="caret"></b>
-          </a>
-          <ul class="dropdown-menu">
-            <li>   
-                <a href="{{ path('dashboard_choose_conference') }}"><i class="fa fa-list"></i> Conferences Homepage </a>
-            </li>
-            <li class="divider"></li>
-          {% for conference in app.user.getConferences() %}
-            <li> 
-              <a style="padding-right:5px;"   href="{{ path('schedule_conference_switch', {id: conference.id}) }}"  >
-              {{conference.getConfName()}}
-              </a>
-            </li>
-           {% endfor %}
-          </ul>
-        </li>
-
-        <!-- Conference dropdown -->
-       <li class="dropdown" >
-          <a href ="{{ path('schedule_conference_edit') }}" title="manage schedule"class="dropdown-toggle" data-toggle="dropdown">
-             {{ app.user.getCurrentConf().getConfName() }}
-            <b class="caret"></b>
-          </a>
-            <ul class="dropdown-menu">
-             {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
-              <li>   
-                <a href="{{ path('schedule_conference_edit') }}"><i class="icon-cog"></i> Conference settings </a>
-              </li>
-             {% endif %}
-            </ul>
-        
-        </li> 
+       
+      
 
        <!-- Schedule dropdown -->
         <li class="dropdown">
@@ -142,38 +108,24 @@
 
     </ul><!-- end class nav-->
 
+
+
     <ul class="nav navbar-nav navbar-right">
-      <li class="dropdown">
-        <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
-          <i class="icon-user "></i> {{ app.user.username }}
-          <b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu">
-          <li> 
-            <a style="padding-right:5px;" href="{{ path('fos_user_profile_edit') }}" title="Profile">
-              <span class="icon-user glyphicon-white "> Profile		
-            </a>
-          </li>
-
-          {% if is_granted("ROLE_ADMIN") and app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')==1 %} 
-          <li>
-            <a href="{{ path('schedule_user_list') }}" title="Manage manager">
-              <span class="icon-list glyphicon-white "> Manage user
-            </a>
-          </li>
-          <!--<li>
-              <a href="{{ path('fos_user_registration_register') }}" title="Add manager">
-                <span class="icon-plus glyphicon-white "> Add manager
-              </a> 
-          </li>-->
-          {% endif %}  
-
-          <li>
-              <a href="{{ path('logout') }}" title="logout">
-                  <i class="icon-off "></i> Logout</a>
-          </li>
-        </ul>
-      </li> 
+        <!-- Conference dropdown -->
+       <li class="dropdown" >
+          <a href ="{{ path('schedule_conference_edit') }}" title="manage schedule"class="dropdown-toggle" data-toggle="dropdown">
+             {{ app.user.getCurrentConf().getConfName() }}
+            <b class="caret"></b>
+          </a>
+            <ul class="dropdown-menu">
+             {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
+              <li>   
+                <a href="{{ path('schedule_conference_edit') }}"><i class="icon-cog"></i> Conference settings </a>
+              </li>
+             {% endif %}
+            </ul>
+        
+        </li> 
     </ul> 
   </div>
 </div>

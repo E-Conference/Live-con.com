@@ -1,6 +1,10 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body -%}
+
+{% block title %}New equipment{% endblock title %}
+
+{% block centerPanel %}
+    {{ parent() }}
 <div class="container">
     <div class="row center">
     <h1>Equipment creation</h1>
@@ -8,7 +12,7 @@
     <form action="{{ path('schedule_equipment_create') }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
         <p>
-            <button type="submit" class="btn btn-default"><span class="icon-ok"></span></button>
+            <button type="submit" class="btn btn-default"><span class="fa fa-check"></span></button>
         </p>
     </form>
 

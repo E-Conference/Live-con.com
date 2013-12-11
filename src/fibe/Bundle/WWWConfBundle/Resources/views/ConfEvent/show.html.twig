@@ -1,9 +1,12 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body %}
-{{ parent() }}
-<div class="container">
-    <div class="row center">
+{% block title %}conference details{% endblock title %}
+
+{% block stylesheets_page %}
+{% endblock stylesheets_page %}
+
+{% block centerPanel %}
+  {{ parent() }}
      <h1>Event</h1>
       <div class="row">
             <div class="col-lg-1"></div>
@@ -110,16 +113,16 @@
          <div class="col-lg-6"></div>
               <div class="col-lg-2 btn-group">
                   <a type="button" href="{{ path('schedule_event') }}" class="btn btn-warning">
-                        <i class="icon-th-list"></i>
+                        <i class="fa fa-list"></i>
                   </a>
                    <a href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}" class="btn btn-success edit-event">
-                         <i class="icon-pencil"></i>
+                         <i class="fa fa-pencil"></i>
                    </a>
                    <form action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
                       <input type="hidden" name="_method" value="DELETE" />
                         {{ form_widget(delete_form) }}
                     <button type="submit" class="btn btn-danger delete-event">
-                        <i class="icon-remove"></i>
+                        <i class="fa fa-trash-o"></i>
                     </button>
                   </form> 
               </div>    
@@ -152,6 +155,4 @@
            </div>
     </div>
           </br> 
-</div>
-</div>
 {% endblock %}

@@ -2,7 +2,7 @@
 --------------------------------------GLOBAL-----------------------------------------
 -------------------------------------------------------------------------------------*/
 body{
-	min-width:750px;
+	min-width:500px;
 }
 
 
@@ -13,12 +13,66 @@ body{
 .navbar{
 	background-color : #f2f2f2;
 	border-bottom : 2px solid #19313b;
-	margin-bottom : 30px;
+	margin-bottom : 0px !important;
 }
 
 .nav{
 	margin-top:15px;
 }
+
+
+/*-------------------------------------------------------------------------------------
+--------------------------------------NAVBAR-----------------------------------------
+-------------------------------------------------------------------------------------*/
+
+
+
+#sideBar{
+	position:fixed;
+	top : 100px;
+	left:-180px;
+	height: 600px;
+	width:200px;
+	background-color: #19313b;
+	z-index : 100;
+	zoom: 1;
+	filter: alpha(opacity=80);
+	opacity: 0.8;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+
+#sideBarList{
+	float:left;
+	background-color: #19313b;
+	height:100%;
+	width:90%;
+	padding-top:20px;
+	z-index : 100;
+
+	
+}
+
+#sideBarBtn{
+	float:right;
+	height:100%;
+	width:5%;
+	padding-top: 100%;
+	background-color: #f2f2f2;
+	height:100%;
+	-webkit-border-radius: 0px 30px 30px 0px;
+	-moz-border-radius: 0px 30px 30px 0px;
+	border-radius: 0px 30px 30px 0px;
+}
+
+#sideBar a{
+	background-color : #f2f2f2;
+	color : #19313b;
+	
+}
+
+
 
 
 /*-------------------------------------------------------------------------------------
@@ -29,6 +83,7 @@ body{
 
 	padding: 1.5em 1.5em 10.5em;
 	margin-bottom: 1.5em;
+	margin-top: 15px;
 	min-height : 800px;
 	border: solid 2px #19313b;
 	background-color: #eeeeee;
@@ -69,7 +124,6 @@ option
 footer {
 	border-top : 2px solid #f2f2f2;
 	font-family: QuickSandBold, sans-serif;
-	margin-top: 30px;
 	background:#19313b;
 	padding-top: 30px;
 	color:#f2f2f2 ;
@@ -79,3 +133,25 @@ footer a {
 	color:#f2f2f2 ;
 
 }
+
+
+
+
+/*-------------------------------------------------------------------------------------
+--------------------------------------LOG-----------------------------------------
+-------------------------------------------------------------------------------------*/
+
+ #bootstrap_alert{
+        position     : fixed;
+        top          : 1em ;
+        right        : 1em ; 
+        max-width    : 60em;
+        max-height   : 20em;
+        z-index      : 3001;
+        text-overflow: ellipsis;
+        overflow     : hidden;
+        white-space  : nowrap;
+    }     
+    #bootstrap_alert ul{
+        margin: 1em 0 1 0.5em;
+    }

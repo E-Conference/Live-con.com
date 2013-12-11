@@ -3,12 +3,16 @@
 
 {% block title %}Schedule{% endblock title %}
 
+{% block content %}
 
 
+{% block sideBarPanel%} 
+ {{ parent() }}
 
-{% block body %} 
-  {{ parent() }}
-      
+{% endblock %}
+
+
+<div class="content">
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
         <div id='calendar'></div> 
@@ -136,34 +140,25 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
-
-
+</div>
 
 
 {% endblock %}
 
 
 
- {% block stylesheets %}
-  {{ parent() }}
- 
-    <!--
-    <link rel='stylesheet' type='text/css' href='http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/topics/start/jquery-ui.css' />
-    --> 
-
-<link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.css') }}" rel='stylesheet' />
-<link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.print.css') }}" rel='stylesheet' media='print' /> 
+{% block stylesheets_page %}
+  <link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.css') }}" rel='stylesheet' />
+  <link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.print.css') }}" rel='stylesheet' media='print' /> 
   <link href="{{ asset('bundles/fibewwwconf/css/fullcalendarAddedUI.css') }}" rel='stylesheet'/>  
-{% endblock stylesheets %}
+{% endblock stylesheets_page %}
 
 
 
-{%  block javascripts %}   
-  {{ parent() }} 
+{%  block javascripts_page %}
   <script src="{{ asset('bundles/fibewwwconf/js/moment.min.js') }}" type="text/javascript" ></script>
        
-  <!-- <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/jquery-ui-1.10.3.custom.min.js') }}"></script> -->
-  <script type="text/javascript" src="{{ asset('js/jquery-ui-1.10.3.custom.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('js/jquery-ui.custom.js') }}"></script>
   <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.js') }}"></script>
 
   <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/added/filter.js') }}"></script>
@@ -1248,5 +1243,5 @@
 
   </script>    
 	
-{% endblock javascripts %}
+{% endblock javascripts_page %}
 
