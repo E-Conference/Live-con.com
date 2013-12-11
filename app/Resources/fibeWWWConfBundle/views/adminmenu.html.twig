@@ -13,18 +13,42 @@
   <div class="navbar-collapse collapse navbar-ex1-collapse">
 
     <ul class="nav navbar-nav">  
-        <!-- Conference dropdown -->
-       <li class="dropdown" >
-          <a href ="{{ path('schedule_conference_edit') }}" title="manage schedule"class="dropdown-toggle" data-toggle="dropdown">
-            Conference
+
+     <!-- List conference dropdown -->
+        <li class="dropdown">
+          <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Switch Conference
             <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
             <li>   
-              <a href="{{ path('schedule_conference_edit') }}"><i class="icon-cog"></i> Conference settings </a>
+                <a href="{{ path('dashboard_choose_conference') }}"><i class="fa fa-list"></i> Conferences Homepage </a>
             </li>
-   
+            <li class="divider"></li>
+          {% for conference in app.user.getConferences() %}
+            <li> 
+              <a style="padding-right:5px;"   href="{{ path('schedule_conference_switch', {id: conference.id}) }}"  >
+              {{conference.getConfName()}}
+              </a>
+            </li>
+           {% endfor %}
           </ul>
+        </li>
+
+        <!-- Conference dropdown -->
+       <li class="dropdown" >
+          <a href ="{{ path('schedule_conference_edit') }}" title="manage schedule"class="dropdown-toggle" data-toggle="dropdown">
+             {{ app.user.getCurrentConf().getConfName() }}
+            <b class="caret"></b>
+          </a>
+            <ul class="dropdown-menu">
+             {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
+              <li>   
+                <a href="{{ path('schedule_conference_edit') }}"><i class="icon-cog"></i> Conference settings </a>
+              </li>
+             {% endif %}
+            </ul>
+        
         </li> 
 
        <!-- Schedule dropdown -->
@@ -40,7 +64,7 @@
               </a> 
                <li> 
               <a style="padding-right:5px;"   href="{{ path('schedule_event') }}"  >
-                <i class="icon-th-list"></i> Events
+                <i class="fa fa-list"></i> Events
               </a>
               <a style="padding-right:5px;"   href="{{ path('schedule_location') }}"  >
                 <i class="icon-map-marker"></i> Locations
@@ -66,7 +90,7 @@
           <ul class="dropdown-menu">
             <li> 
               <a style="padding-right:5px;"   href="{{ path('schedule_person_index') }}"  >
-                <i class="icon-th-list"></i> List
+                <i class="fa fa-list"></i> List
               </a>
                <a style="padding-right:5px;"   href="{{ path('schedule_roletype') }}"  >
                 <i class="icon-link"></i> Roles
@@ -84,7 +108,7 @@
           <ul class="dropdown-menu">
             <li> 
               <a style="padding-right:5px;"   href="{{ path('schedule_paper') }}"  >
-                <i class="icon-th-list"></i> List
+                <i class="fa fa-list"></i> List
               </a>
             </li>
           </ul>
@@ -99,7 +123,7 @@
           <ul class="dropdown-menu">
             <li> 
               <a style="padding-right:5px;"   href="{{ path('schedule_organization_index') }}"  >
-                <i class="icon-th-list"></i> List
+                <i class="fa fa-list"></i> List
               </a>
             </li>
           </ul>
@@ -131,17 +155,17 @@
             </a>
           </li>
 
-          {% if is_granted("ROLE_ADMIN") %} 
+          {% if is_granted("ROLE_ADMIN") and app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')==1 %} 
           <li>
             <a href="{{ path('schedule_user_list') }}" title="Manage manager">
               <span class="icon-list glyphicon-white "> Manage user
             </a>
           </li>
-          <li>
+          <!--<li>
               <a href="{{ path('fos_user_registration_register') }}" title="Add manager">
                 <span class="icon-plus glyphicon-white "> Add manager
               </a> 
-          </li>
+          </li>-->
           {% endif %}  
 
           <li>

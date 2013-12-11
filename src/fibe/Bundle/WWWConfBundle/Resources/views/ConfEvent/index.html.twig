@@ -1,8 +1,13 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body %}
+{% block title %}Your conference{% endblock title %}
 
-{{ parent() }}
+{% block stylesheets_page %}
+{% endblock stylesheets_page %}
+
+{% block centerPanel %}
+  {{ parent() }}
+
     <h1>ConfEvent list</h1>
 
     <table class="table table-hover records_list">
@@ -39,10 +44,12 @@
             {% endif %}
             </td>
             <td>
-                <a class="btn btn-block btn-default" href="{{ path('schedule_confevent_show', { 'id': entity.id }) }}"><i class="icon-eye-open"></i></a>
+                <a class="btn btn-block btn-default" href="{{ path('schedule_confevent_show', { 'id': entity.id }) }}"><i class="fa fa-eye"></i></a>
             </td>
             <td>
-                <a class="btn btn-block btn-warning" href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
+                <a class="btn btn-block btn-warning edit-event" href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}">
+                    <i class="fa fa-pencil"></i>
+                </a>
             </td>
         </tr>
     {% endfor %}
@@ -54,9 +61,9 @@
 
         <ul>
         <li>
-            <a href="{{ path('schedule_confevent_new') }}">
+            <a href="{{ path('schedule_confevent_new') }}" class="create-event">
                 Create a new entry
             </a>
         </li>
     </ul>
-    {% endblock %}
+{% endblock %}

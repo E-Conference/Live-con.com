@@ -1,10 +1,10 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body %}
-{{ parent() }}
 
+{% block title %}Event{% endblock title %}
 
-
+{% block centerPanel %}
+  {{ parent() }}
 <div class="page-header">
   <h1>Event</h1>
 </div>
@@ -102,11 +102,11 @@
         </a>
    
         <a class="btn btn-info" href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}">
-           <i class="icon-edit"></i>
+           <i class="fa fa-pencil-square-o"></i>
         </a>
    
         <form action="{{ path('schedule_event_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
-            <button type="submit" class="btn btn-danger"><i class="icon-remove"></i></button>
+            <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
         </form>
-{% endblock body %}
+{% endblock %}

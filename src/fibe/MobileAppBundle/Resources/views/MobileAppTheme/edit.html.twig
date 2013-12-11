@@ -30,13 +30,14 @@
 		{{ form_row(mobile_app_form.BGColorFooter) }}
 		{{ form_row(mobile_app_form.TitleColorFooter) }}
 		</div>
-		<button type="submit" class="btn btn-success"><i class="icon-edit"></i></button>
-		<button  class="btn btn-infos"><a href="{{path('mobileAppPublic_index', { 'id': conference.id })}}" ><i class="icon-eye-open icon"></i></a></button>
+		<button type="submit" class="btn btn-success edit-app"><i class="fa fa-pencil-square-o"></i></button>
 		
+			<a class="btn btn-infos" href="{{path('mobileAppPublic_index', { 'id': conference.id })}}"  target="_blank"><i class="fa fa-eye"></i></a>
 		<div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
                 {{ form_rest(mobile_app_form)}}
             </div>
 	</form>
+
 </div>
 
 

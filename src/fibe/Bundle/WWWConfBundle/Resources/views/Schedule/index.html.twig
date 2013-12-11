@@ -1,11 +1,9 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block title %}Index{{ parent() }}{% endblock title %}
-{% block body %}
+{% block title %}Schedule{% endblock title %}
 
-  {{ parent() }}
-  <div class="container">
-    <div class="row center">
+{% block centerPanel %}
+    {{ parent() }}
       <div class="hero-unit">
             <h1>SWC event linker</h1>
             <p>This app has been made to manage a conference using SWC ontology.</p>
@@ -26,15 +24,13 @@
                 </div>
     			       <div class="col-lg-4">
 
-                    <a href="{{ path('schedule_conference_edit') }}" role="button" class="btn btn-primary btn-large"><span class="icon-cog glyphicon-white"></span>  Manage your conference </a>
+                    <a href="{{ path('schedule_conference_edit') }}" role="button" class="btn btn-primary btn-large edit"><span class="icon-cog glyphicon-white"></span>  Manage your conference </a>
 
                 </div> 
             </div>
       </div>
-    </div>
-   </div> 
 
-{% endblock body %}
+{% endblock %}
 
 
 

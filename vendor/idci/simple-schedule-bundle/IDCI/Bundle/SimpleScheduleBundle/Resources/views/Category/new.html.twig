@@ -1,10 +1,9 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body %}
-{{ parent() }}
+{% block title %}New category{% endblock title %}
 
-<div class="container">
-    <div class="row center">
+{% block centerPanel %}
+  {{ parent() }}
 
     <div class="page-header">
       <h1>{% trans %}Category creation{% endtrans %}</h1>
@@ -15,13 +14,13 @@
         <div class="row-fluid">
                 <div class="col-lg-9"></div>
                 <div class="col-lg-2">
-                      <button type="submit" class="btn btn-default"><i class="icon-ok"></i></button>
+                      <button type="submit" class="btn btn-default"><i class="fa fa-check"></i></button>
                       <a class="btn btn-warning" href="{{ path('schedule_category') }}">
-                        <i class="icon-th-list"></i>
+                        <i class="fa fa-list"></i>
                     </a>
                 </div>
             </div>
     </form>
   </div>
 </div>
-{% endblock body %}
+{% endblock %}

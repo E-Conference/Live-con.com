@@ -75,10 +75,15 @@ class ConfEvent extends Event
      */
      private $isAllDay ;
 
+     /**
+     * @ORM\Column(type="string", length=128, nullable=true)
+     */
+    protected $acronym;
+ 
 
     /**
      *  
-     * Is a main conf event ?
+     * Is it a main conf event ?
      *   
      * @ORM\Column(name="is_mainConfEvent", type="boolean")
      */
@@ -88,6 +93,11 @@ class ConfEvent extends Event
      * @ORM\Column(type="string", length=128, nullable=true)
      */
     protected $slug;
+
+     /**
+     * @ORM\Column(name="is_instant", type="boolean")
+     */
+    protected $isInstant;
      
     /**
      * Constructor
@@ -120,7 +130,61 @@ class ConfEvent extends Event
     public function onUpdate()
     {
         $this->slugify();
+        $this->setIsInstant($this->getEndAt()->format('U') == $this->getStartAt()->format('U'));
+
+        // if($this->isMainConfEvent){
+        //     foreach ($this->getChildren() as $child) { 
+        //         if($child->getStartAt() < $this->getStartAt())$this->setStartAt($child->getStartAt());
+        //         if($child->getEndAt()   > $this->getEndAt()  )$this->setEndAt(  $child->getEndAt()  );
+        //     }
+        // }
+
+        if($this->isMainConfEvent){
+            //ensure main conf event fits its children dates 
+            return $this->fitChildrenDate(true);
+            // $this->setIsInstant($this->getEndAt()->format('U') == $this->getStartAt()->format('U'));
+        }
     }
+
+    //ensure main conf event fits its children dates 
+    public function fitChildrenDate($allDay = false){
+        $earliestStart= new \DateTime('6000-10-10'); 
+        $latestEnd = new \DateTime('1000-10-10');
+        foreach ($this->getChildren() as $child) {
+            if($child->getIsInstant())continue; 
+            if($child->getStartAt() < $earliestStart) $earliestStart = $child->getStartAt();
+            if($child->getEndAt() > $latestEnd) $latestEnd = $child->getEndAt();
+        } 
+        if($earliestStart == new \DateTime('6000-10-10') || $latestEnd == new \DateTime('1000-10-10'))return;
+        if($earliestStart == $latestEnd){ 
+            $latestEnd->add(new \DateInterval('P1D'));
+        }
+        // get startof and endof day
+        // if($allDay==true){
+
+        //     $sTS = $earliestStart->getTimestamp();
+        //     $eTS = $latestEnd->getTimestamp();
+
+        //     //adjust timezone to correctly calculate with floor()
+        //     $tzOffset = \DateTime::createFromFormat('U', $sTS); 
+        //     $tzOffset->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
+
+        //     $sTS = $sTS + $tzOffset->getOffset();
+        //     $sTS = (floor($sTS/86400))*86400;
+
+        //     $eTS = $eTS - $tzOffset->getOffset();
+        //     $eTS = (floor(($eTS)/86400))*86400;
+
+        //     //adjust timezone back
+        //     $earliestStart = $earliestStart->setTimestamp($sTS - $tzOffset->getOffset()); 
+        //     $latestEnd = $latestEnd->setTimestamp($eTS + $tzOffset->getOffset()); 
+        // }
+        if($earliestStart->getTimestamp() != $this->getStartAt()->getTimestamp() || $latestEnd->getTimestamp() != $this->getEndAt()->getTimestamp()){
+            $this->setStartAt($earliestStart);
+            $this->setEndAt($latestEnd);
+            return true;
+        }
+    } 
 
      /**
      * Set slug
@@ -373,6 +437,53 @@ class ConfEvent extends Event
     public function getIsMainConfEvent()
     {
         return $this->isMainConfEvent;
+    }
+
+    
+    /**
+     * Set isInstant
+     *
+     * @param string $isInstant
+     * @return ConfEvent
+     */
+    public function setIsInstant($isInstant)
+    {
+        $this->isInstant = $isInstant;
+    
+        return $this;
+    }
+
+    /**
+     * Get isInstant
+     *
+     * @return string 
+     */
+    public function getIsInstant()
+    {
+        return $this->isInstant;
+    }
+
+     /**
+     * Set acronym
+     *
+     * @param string $acronym
+     * @return ConfEvent
+     */
+    public function setAcronym($acronym)
+    {
+        $this->acronym = $acronym;
+    
+        return $this;
+    }
+
+    /**
+     * Get acronym
+     *
+     * @return string 
+     */
+    public function getAcronym()
+    {
+        return $this->acronym;
     }
 
     

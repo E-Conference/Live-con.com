@@ -26,7 +26,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 				"acronym": "Livecon",
 				"logoUri": "css/images/banniereTranspBlend.png",
 				"website": "http://www.blendconference.com/",
-				"baseUri": "http://www.blendconference.com/"
+				"baseUri": "http://www.blendconference.com/",
+				"storage": "off"
 			},
 			
 			//Defnition of the datasources 

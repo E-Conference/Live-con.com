@@ -6,8 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 use fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig;
 use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
+
 /**
  * Mobile app controller.
  *
@@ -22,6 +27,7 @@ class MobileAppPublicController extends Controller
     public function indexAction($id)
     {
     	$em = $this->getDoctrine()->getManager();
+
     	$conference = $em->getRepository('fibeWWWConfBundle:WwwConf')->find($id);
     	$mobile_app_config = $conference->getAppConfig();
         $apiUri = $this->get('router')->generate('idci_exporter_api_homeapi');

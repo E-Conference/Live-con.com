@@ -124,6 +124,16 @@ class CalendarEntityRepository extends EntityRepository
     {
         $qb = $this->getAllOrderByStartAtQueryBuilder();
 
+        if(isset($params['only_instant'])) {
+            $qb
+                ->andWhere('cer.isInstant = 1')
+            ;
+        }else{
+            $qb
+                ->andWhere('cer.isInstant = 0')
+            ;
+        }
+
         if(isset($params['id'])) {
             $qb
                 ->andWhere('cer.id = :id')
@@ -135,25 +145,26 @@ class CalendarEntityRepository extends EntityRepository
             $qb
                 ->andWhere($qb->expr()->in('cer.id', $params['ids']))
             ;
-        }
+        } 
 
         if(isset($params['before'])) {
             $qb
-                ->andWhere('cer.endAt <= :before')
+                ->andWhere('cer.startAt < :before')
                 ->setParameter('before', new \DateTime($params['before']))
             ;
         }
 
         if(isset($params['after'])) {
             $qb
-                ->andWhere('cer.startAt >= :after')
+                ->andWhere('cer.endAt > :after')
                 ->setParameter('after', new \DateTime($params['after']))
             ;
         }
-
-        if(isset($params['ids'])) {
+        
+        if(isset($params['conference_id'])) {
             $qb
-                ->andWhere($qb->expr()->in('cer.id', $params['ids']))
+                ->andWhere('cer.conference = :conference_id')
+                ->setParameter('conference_id', $params['conference_id'])
             ;
         }
 
@@ -296,13 +307,6 @@ class CalendarEntityRepository extends EntityRepository
                 ->leftJoin('cer.children', 'child')
                 ->andWhere('child.id = :child_id')
                 ->setParameter('child_id', $params['child_id'])
-            ;
-        }
-        
-        if(isset($params['conference_id'])) {
-            $qb
-                ->andWhere('cer.conference = :conference_id')
-                ->setParameter('conference_id', $params['conference_id'])
             ;
         }
 

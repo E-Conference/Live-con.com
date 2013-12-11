@@ -1,20 +1,17 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block title %}Index{% endblock title %}
+{% block title %}Person{% endblock title %}
 
-{% block body %}
-{{ parent() }}
- {% block center %}
-<div class="container">
-    <div class="row center">
+{% block centerPanel %}
+    {{ parent() }}
     <div class="page-header">
          <div class="row">
             <div class="col-lg-2">
                 <h1>{% trans %}Persons{% endtrans %}</h1>
             </div>
             <div class="col-lg-4">
-                <a class="btn btn-info btn-create" href="{{ path('schedule_person_new') }}">
-                     <i class="icon-plus"></i>
+                <a class="btn btn-info btn-create create" href="{{ path('schedule_person_new') }}">
+                     <i class="fa fa-plus"></i>
                 </a>
             </div>
         </div>
@@ -46,16 +43,19 @@
                     <td>{{ entity.flagdata }}</td>
                     <td>{% if entity.flagdataadmin %}<i class="icon-user"></i>{% endif %}</td>
                     <td> {% for organization in entity.organizations  %}
-                            <li>{{ organization.name|e }}</li>
+                            <li>
+                           <a href="{{ path('schedule_organization_show', { 'id': organization.id }) }}">
+                             {{ organization|e }}
+                            </a></li>
                          {% endfor %}
                     </td>
                     <td>
                         <a class="btn btn-default" href="{{ path('schedule_person_show', { 'id': entity.id }) }}">
-                            <i class="icon-eye-open"></i>
+                            <i class="fa fa-eye"></i>
                         </a>
                        
-                        <a class="btn btn-warning" href="{{ path('schedule_person_edit', { 'id': entity.id }) }}">
-                             <i class="icon-pencil"></i>
+                        <a class="btn btn-warning edit" href="{{ path('schedule_person_edit', { 'id': entity.id }) }}">
+                             <i class="fa fa-pencil"></i>
                         </a>
                     </td>
                 </tr>
@@ -65,7 +65,5 @@
         <p>
             {{ pagerfanta(pager, 'twitter_bootstrap') }}
         </p>
-</div>
-</div>
 {% endblock %}
-    {% endblock %}
+

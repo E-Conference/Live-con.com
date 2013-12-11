@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use fibe\SecurityBundle\Entity\User;
+use fibe\SecurityBundle\Entity\Authorization;
 use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
 
 /**
@@ -56,6 +57,13 @@ class WwwConf
     private $persons;
 
     /**
+    * Roles
+    *
+    * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Role", mappedBy="conference",cascade={"persist", "remove"})
+    */
+    private $roles;
+
+    /**
     * Topics
     *
     * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Organization", mappedBy="conference",cascade={"persist", "remove"})
@@ -75,6 +83,14 @@ class WwwConf
     * @ORM\ManyToMany(targetEntity="fibe\SecurityBundle\Entity\User", mappedBy="conferences",cascade={"persist"})
     */
     private $confManagers;
+
+    /**
+     *  
+     * @ORM\OneToMany(targetEntity="fibe\SecurityBundle\Entity\Authorization",  mappedBy="conference",cascade={"persist"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     * 
+     */
+     private $authorizations;
     
 
     /**
@@ -84,6 +100,8 @@ class WwwConf
     * @ORM\JoinColumn(name="appConfig", referencedColumnName="id")
     */
     private $appConfig;
+
+
 
 
      /**
@@ -96,18 +114,10 @@ class WwwConf
      * @var String
      * @ORM\Column(name="logoPath", type="string", length=255,nullable=true)
      */
-    private $logoPath;
+    private $logoPath; 
 
     /**
-    * @var string
-    *
-    * @ORM\Column(name="acronym", type="string", length=255,nullable=true)
-    */
-    private $acronym;
-
-    /**
-     * @ORM\OneToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\ConfEvent", cascade={"persist"})
-     * @ORM\JoinColumn(name="event_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\ConfEvent")
      **/
      private $mainConfEvent; 
 
@@ -223,19 +233,7 @@ class WwwConf
     public function getLogo()
     {
         return $this->logo;
-    }
-
-
-    public function setAcronym($Acronym)
-    {
-        $this->acronym = $Acronym;
-        return $this;
     } 
-    
-    public function getAcronym()
-    {
-        return $this->acronym;
-    }
 
 
     public function setLogoPath($logoPath)
@@ -256,6 +254,7 @@ class WwwConf
     {
         $this->events = new \Doctrine\Common\Collections\ArrayCollection();
         $this->confManagers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -532,5 +531,141 @@ class WwwConf
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
         return 'uploads/';
+    }
+
+    /**
+     * Get logoPath
+     *
+     * @return string 
+     */
+    public function getLogoPath()
+    {
+        return $this->logoPath;
+    }
+
+    /**
+     * Add authorizations
+     *
+     * @param \fibe\SecurityBundle\Entity\Authorization $authorizations
+     * @return WwwConf
+     */
+    public function addAuthorization(\fibe\SecurityBundle\Entity\Authorization $authorizations)
+    {
+        $this->authorizations[] = $authorizations;
+    
+        return $this;
+    }
+
+    /**
+     * Remove authorizations
+     *
+     * @param \fibe\SecurityBundle\Entity\Authorization $authorizations
+     */
+    public function removeAuthorization(\fibe\SecurityBundle\Entity\Authorization $authorizations)
+    {
+        $this->authorizations->removeElement($authorizations);
+    }
+
+    /**
+     * Get authorizations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAuthorizations()
+    {
+        return $this->authorizations;
+    }
+
+    /**
+    *Get an authorization for a specific user
+    *
+    */
+    public function getAuthorizationByUser(\fibe\SecurityBundle\Entity\User $confManager)
+    {
+        foreach ($this->authorizations as $authorization) {
+            if($authorization->getUser()->getId()==$confManager->getId()){
+                return $authorization;
+            }
+        }
+        return null;
+    }
+
+     /**
+    *Get an authorization falg app for a specific conference
+    *
+    */
+    public function getFlagAppByManagerId($userId)
+    {
+        foreach ($this->authorizations as $authorization) {
+            if($authorization->getUser()->getId()==$userId){
+                return $authorization->getFlagApp();
+            }
+        }
+        return false;
+    }
+
+    /**
+    *Get an authorization falg app for a specific conference
+    *
+    */
+    public function getFlagSchedByManagerId($userId)
+    {
+        foreach ($this->authorizations as $authorization) {
+            if($authorization->getUser()->getId()==$userId){
+                return $authorization->getFlagSched();
+            }
+        }
+        return false;
+    }
+
+    /**
+    *Get an authorization falg app for a specific conference
+    *
+    */
+    public function getFlagDatasByManagerId($userId)
+    {
+        foreach ($this->authorizations as $authorization) {
+            if($authorization->getUser()->getId()==$userId){
+                return $authorization->getFlagconfDatas();
+            }
+        }
+        return false;
+    }
+
+      /**
+    *Get an authorization flag app for a specific conference
+    *
+    */
+    public function getFlagByManagerId($userId,$flagType)
+    {
+        foreach ($this->authorizations as $authorization) {
+            if($authorization->getUser()->getId()==$userId){
+                switch($flagType){
+                    case 'sched':
+                        return $authorization->getFlagSched();
+                        break;
+                    case 'app':
+                         return $authorization->getFlagApp();
+                         break;
+                    case 'datas':
+                         return $authorization->getFlagconfDatas();
+                         break;
+                    case 'team':
+                         return $authorization->getFlagTeam();
+                         break;
+                }
+            }
+        }
+        return false;
+    }
+
+    public function isEmpty(){
+        return  (count($this->events)<=1)
+            and (count($this->locations) == 0)
+            and (count($this->papers)==0)
+            and (count($this->persons)==0)
+            and (count($this->organizations)==0)
+            and (count($this->topics)==0);
+
     }
 }

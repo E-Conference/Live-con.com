@@ -47,13 +47,18 @@ security:
 
 
         main:
+            remember_me:
+                key:      "%secret%"
+                lifetime: 31536000 # 365 days in seconds
+                path:     /
+                domain:   ~ # Defaults to the current domain from $_SERVER
             pattern:   ^/
             anonymous: false
             provider:  main
             form_login:
                 login_path: login
                 check_path: login_check
-                default_target_path: dashboard_index
+                default_target_path: dashboard_choose_conference
             logout:
                 path:   logout
                 target: /login

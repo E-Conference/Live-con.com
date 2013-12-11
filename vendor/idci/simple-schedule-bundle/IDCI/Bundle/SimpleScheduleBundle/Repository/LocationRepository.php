@@ -78,6 +78,13 @@ class LocationRepository extends EntityRepository
                 ->andWhere($qb->expr()->in('loc.id', $params['ids']))
             ;
         }
+        
+        if(isset($params['conference_id'])) {
+            $qb
+                ->andWhere('loc.conference = :conference_id')
+                ->setParameter('conference_id', $params['conference_id'])
+            ;
+        }
 
         return $qb;
     }

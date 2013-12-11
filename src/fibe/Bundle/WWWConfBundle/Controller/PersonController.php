@@ -16,6 +16,8 @@ use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 
+use Symfony\Component\Security\Core\Exception\AccessDeniedException; 
+
 /**
  * Person controller.
  * @Route("/person")
@@ -31,6 +33,11 @@ class PersonController extends Controller
      
     public function indexAction(Request $request)
     {
+        
+         //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
         $em = $this->getDoctrine()->getManager();
 
         $currentConf = $this->getUser()->getCurrentConf();
@@ -48,6 +55,7 @@ class PersonController extends Controller
 
         return array(
             'pager' => $pager,
+            'authorized' => $authorization->getFlagconfDatas(),
         );
     }
 
@@ -58,11 +66,19 @@ class PersonController extends Controller
      */
     public function createAction(Request $request)
     {
+         //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagconfDatas()){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $entity  = new Person();
         $form = $this->createForm(new PersonType($this->getUser()), $entity);
         $form->bind($request);
 
-        if ($form->isValid()) {
+        if($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->setConference($this->getUser()->getCurrentConf());
 
@@ -83,6 +99,7 @@ class PersonController extends Controller
         return $this->render('fibeWWWConfBundle:Person:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'authorized' => $authorization->getFlagconfDatas(),
         ));
     }
 
@@ -93,12 +110,22 @@ class PersonController extends Controller
      */
     public function newAction()
     {
+        
+         //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagconfDatas()){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $entity = new Person();
         $form   = $this->createForm(new PersonType($this->getUser()), $entity);
 
         return $this->render('fibeWWWConfBundle:Person:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'authorized' => $authorization->getFlagconfDatas(),
         ));
     }
 
@@ -109,6 +136,11 @@ class PersonController extends Controller
      */
     public function showAction($id)
     {
+        
+         //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('fibeWWWConfBundle:Person')->find($id);
@@ -121,7 +153,8 @@ class PersonController extends Controller
 
         return $this->render('fibeWWWConfBundle:Person:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        ));
+            'delete_form' => $deleteForm->createView(),
+            'authorized' => $authorization->getFlagconfDatas(),        ));
     }
 
     /**
@@ -131,13 +164,25 @@ class PersonController extends Controller
      */
     public function editAction($id)
     {
-        $em = $this->getDoctrine()->getManager();
+        
+         //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $entity = $em->getRepository('fibeWWWConfBundle:Person')->find($id);
+         if(!$authorization->getFlagconfDatas()){
+            throw new AccessDeniedException('Action not authorized !');
+          }
 
+           $em = $this->getDoctrine()->getManager();
+        //The object have to belongs to the current conf
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('fibeWWWConfBundle:Person')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+        
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Person entity.');
         }
+
+
 
         $editForm = $this->createForm(new PersonType($this->getUser()), $entity);
         $deleteForm = $this->createDeleteForm($id);
@@ -146,6 +191,7 @@ class PersonController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'authorized' => $authorization->getFlagconfDatas(),
         ));
     }
 
@@ -155,26 +201,43 @@ class PersonController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+         //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagconfDatas()){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('fibeWWWConfBundle:Person')->find($id);
-
+        //The object have to belongs to the current conf
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('fibeWWWConfBundle:Person')->findOneBy(array('conference' => $currentConf, 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Person entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createForm(new PersonType($this->getUser()), $entity);
+       
         $papersToRemove = $entity->getPapers();
-        
         foreach($papersToRemove as $paper) { 
             $paper->removeAuthor($entity);
             $entity->removePaper($paper);
             $em->persist($paper);
+         }
+
+
+        $accountToRemove = $entity->getAccounts();
+        foreach ($accountToRemove as $account) {
+            $em->remove($account);
         }
 
         $editForm->bind($request);
         $paperToAdd = $entity->getPapers();
+        // $accountToAdd = $entity->getAccounts();
+
         if ($editForm->isValid()) {
 
             foreach($paperToAdd as $paper) { 
@@ -182,6 +245,13 @@ class PersonController extends Controller
                 //$entity->addMember($person);
                 $em->persist($paper);
             }
+
+            foreach ($entity->getAccounts() as $account) {
+                $account->setOwner($entity);
+            }
+
+
+          
             $em->persist($entity);
             $em->flush();
 
@@ -192,6 +262,7 @@ class PersonController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'authorized' => $authorization->getFlagconfDatas(),
         ));
     }
 
@@ -202,13 +273,23 @@ class PersonController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        
+         //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagconfDatas()){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('fibeWWWConfBundle:Person')->find($id);
-
+            //The object have to belongs to the current conf
+            $currentConf=$this->getUser()->getCurrentConf();
+            $entity =  $em->getRepository('fibeWWWConfBundle:Person')->findOneBy(array('conference' => $currentConf, 'id' => $id));
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Person entity.');
             }

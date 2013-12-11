@@ -71,12 +71,14 @@ EOT
 
         $manipulator = $this->getContainer()->get('fos_user.util.user_manipulator');
         $newUser = $manipulator->create($username, $password, $email, !$inactive, $superadmin);
+        $newUser->addRole('ROLE_ADMIN');
 
         $em = $this->getContainer()->get('doctrine')->getManager('default');
+        
+        /*
         //Create the default conference
         $defaultConference = new WwwConf();
-        $defaultConference->setLogoPath("livecon.png");
-        $defaultConference->setAcronym("My conference");
+        $defaultConference->setLogoPath("livecon.png"); 
         $em->persist($defaultConference);
 
         //Create new App config for the conference
@@ -120,7 +122,8 @@ EOT
         // conference location
         $mainConfEventLocation = new Location();
         $mainConfEventLocation->setName("Conference's location");
-        $mainConfEventLocation->addLocationAwareCalendarEntitie($mainConfEvent);
+        $mainConfEvent->setLocation($mainConfEventLocation);
+        $mainConfEventLocation->setConference($defaultConference);
         $em->persist($mainConfEventLocation);
  
         $em->persist($mainConfEvent);
@@ -133,7 +136,7 @@ EOT
         //Join the new user with his default conference
         $newUser->addConference($defaultConference);
         $newUser->setCurrentConf($defaultConference);
-
+        */
         $em->flush();
 
         $output->writeln(sprintf('Created user <comment>%s</comment>', $username));

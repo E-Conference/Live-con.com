@@ -8,7 +8,9 @@ var EventCollection = {
        * events that need an UI update
        * @type {CalEvent}
        */
+      //used to get day(s) to recalculate broCountRange
       eventToRender:undefined,
+ 
 
 
       /*-----------------------------------------------------------------------------------------------------*/
@@ -69,28 +71,48 @@ var EventCollection = {
           }); 
           return children; 
     },
+    updateMainConfEvent : function(newStart,newEnd){ 
+            console.log("mainConfEvent changed, rendering...");  
+            stopRender = true;
+            mainConfEvent.start = moment(newStart, "YYYY-MM-DD HH:mmZ").format();
+            mainConfEvent.end = moment(newEnd, "YYYY-MM-DD HH:mmZ").format(); 
+
+            bootstrapAlert("success","conference event "+mainConfEvent.title+" have been updated") 
+            // EventCollection.eventToRender = mainConfEvent;
+            EventCollection.refetchEvents();
+    },
+    refetchEvents : function(force){
+
+        function doWork() {
+          mainConfEvent.renderForRefetch(); 
+          stopRender = false;
+          fetched = force === true ? false : true ;
+          $calendar.fullCalendar('refetchEvents');   
+        }
+        setTimeout(doWork, 1);
+    },
     
     fitMainConfEvent : function (){
-        if(!mainConfEvent)return;
-        var oldStartDate = moment(this.start).format();
-        var oldEndDate = moment(this.end).format();
-        var minDate = moment("5000-10-10"),
-                maxDate = moment("1990-10-10");
+        // if(!mainConfEvent)return;
+        // var oldStartDate = moment(this.start).format();
+        // var oldEndDate = moment(this.end).format();
+        // var minDate = moment("5000-10-10"),
+        //         maxDate = moment("1990-10-10");
 
-        var children = EventCollection.getChildren(mainConfEvent, {concat:true,onlyEvent:true,noSidebar : true}); 
-        for(var i in children){
-          var child = children[i];
-          if(minDate.isAfter(child.start)) minDate = moment(child.start);
-          if(maxDate.isBefore(child.end))  maxDate = moment(child.end); 
+        // var children = EventCollection.getChildren(mainConfEvent, {concat:true,onlyEvent:true,noSidebar : true}); 
+        // for(var i in children){
+        //   var child = children[i];
+        //   if(minDate.isAfter(child.start)) minDate = moment(child.start);
+        //   if(maxDate.isBefore(child.end))  maxDate = moment(child.end); 
 
-        }
-        if(!minDate.isSame(moment("5000-10-10"))) mainConfEvent.start = minDate.format();
-        if(!maxDate.isSame(moment("1990-10-10"))) mainConfEvent.end = maxDate.format();
+        // }
+        // if(!minDate.isSame(moment("5000-10-10"))) mainConfEvent.start = minDate.format();
+        // if(!maxDate.isSame(moment("1990-10-10"))) mainConfEvent.end = maxDate.format();
 
-        if(oldStartDate !== mainConfEvent.start || oldEndDate !== mainConfEvent.end){
-            mainConfEvent.render();
-            mainConfEvent.persist(); 
-        } 
+        // if(oldStartDate !== mainConfEvent.start || oldEndDate !== mainConfEvent.end){
+        //     mainConfEvent.render();
+        //     mainConfEvent.persist(); 
+        // } 
     },
 
     /**
@@ -236,7 +258,7 @@ var EventCollection = {
         var newDayToRender = {
           start:moment(eventToRender.start).startOf('day')
           ,end:moment(eventToRender.end).endOf('day')
-        };
+        }; 
 
         //compute affected events
         for(var i in brothersTmp){
@@ -245,7 +267,7 @@ var EventCollection = {
           if( e.id == mainConfEvent.id  )continue; 
           // if( e.id == eventToRender.id  )continue; 
           if(!e.isOutOf(oldDayToRender) || !e.isOutOf(newDayToRender) ){
-            console.log("#######affecting "+e.id);
+            // console.log("#######affecting "+e.id);
             delete EventCollection.rtnArray[e.id];
             brothers.push(e);
           }
@@ -282,12 +304,11 @@ var EventCollection = {
       }else{
         // EventCollection.rtnArray= {};
       }
-      console.log("----------------------------------------------------");
-      console.log("affected = ",brothers);
-      console.log("remaining = ",remaining);
-      console.log("non affected : ",EventCollection.rtnArray);
-      console.log("----------------------------------------------------");
       var remaining = brothers.slice(0);
+      // console.log("----------------------------------------------------");
+      // console.log("affected = ",brothers); 
+      // console.log("non affected : ",EventCollection.rtnArray);
+      // console.log("----------------------------------------------------");
 
       for (var i in brothers){
         curBro = brothers[i];  
@@ -355,7 +376,7 @@ var EventCollection = {
         // done.push(curBro.id);
 
       }
-      console.log("bro count range",EventCollection.rtnArray) 
+      // console.log("bro count range",EventCollection.rtnArray) 
       return EventCollection.rtnArray;
     },
 

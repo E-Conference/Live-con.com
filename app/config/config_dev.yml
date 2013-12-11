@@ -25,12 +25,12 @@ monolog:
 assetic:
     use_controller: true
 
-#swiftmailer:
-#    delivery_address: me@example.com
-#    transport:  smtp
-#    encryption: ssl
-#    auth_mode:  login
-#    host:       smtp.gmail.com
-#    username:   your_username
-#    password:   your_password
+swiftmailer:
+    delivery_address: flepeutrec@gmail.com
+    transport:  smtp
+    encryption: ssl
+    auth_mode:  login
+    host:       smtp.gmail.com
+    username:   flepeutrec
+    password:   31051989
  

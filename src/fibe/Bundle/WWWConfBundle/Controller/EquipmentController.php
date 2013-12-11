@@ -42,6 +42,15 @@ class EquipmentController extends Controller
      */
     public function createAction(Request $request)
     {
+        
+        //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagconfDatas()){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $entity  = new Equipment();
         $form = $this->createForm(new EquipmentType(), $entity);
         $form->bind($request);
@@ -57,6 +66,7 @@ class EquipmentController extends Controller
         return $this->render('fibeWWWConfBundle:Equipment:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'authorized' => $authorization->getFlagSched()
         ));
     }
 
@@ -67,12 +77,22 @@ class EquipmentController extends Controller
      */
     public function newAction()
     {
+       
+         //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagconfDatas()){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $entity = new Equipment();
         $form   = $this->createForm(new EquipmentType(), $entity);
 
         return $this->render('fibeWWWConfBundle:Equipment:new.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'authorized' => $authorization->getFlagSched()
         ));
     }
 
@@ -83,6 +103,11 @@ class EquipmentController extends Controller
      */
     public function showAction($id)
     {
+        
+          //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('fibeWWWConfBundle:Equipment')->find($id);
@@ -95,7 +120,8 @@ class EquipmentController extends Controller
 
         return $this->render('fibeWWWConfBundle:Equipment:show.html.twig', array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        ));
+            'delete_form' => $deleteForm->createView(), 
+            'authorized' => $authorization->getFlagSched()       ));
     }
 
     /**
@@ -105,6 +131,15 @@ class EquipmentController extends Controller
      */
     public function editAction($id)
     {
+       
+          //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagconfDatas()){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('fibeWWWConfBundle:Equipment')->find($id);
@@ -120,6 +155,7 @@ class EquipmentController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'authorized' => $authorization->getFlagSched()
         ));
     }
 
@@ -130,6 +166,15 @@ class EquipmentController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        
+          //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagconfDatas()){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('fibeWWWConfBundle:Equipment')->find($id);
@@ -153,6 +198,7 @@ class EquipmentController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'authorized' => $authorization->getFlagSched()
         ));
     }
 
@@ -163,6 +209,15 @@ class EquipmentController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        
+          //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagconfDatas()){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 

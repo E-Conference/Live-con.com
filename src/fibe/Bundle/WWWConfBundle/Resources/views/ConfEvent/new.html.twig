@@ -1,16 +1,20 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body %}
-{{ parent() }}
-<div class="container">
-    <div class="row center">
+{% block title %}New conference{% endblock title %}
+
+{% block stylesheets_page %}
+{% endblock stylesheets_page %}
+
+{% block centerPanel %}
+  {{ parent() }}
+
     <h1>Event creation</h1>
 
     <div class="row">
      <div class="col-lg-9"></div>
           <div class="col-lg-2 btn-group">
               <a type="button" href="{{ path('schedule_event') }}" class="btn btn-warning">
-                    <i class="icon-th-list"></i>
+                    <i class="fa fa-list"></i>
               </a>
               
           </div>    
@@ -50,11 +54,9 @@
             <div class="col-lg-4"></div>
             <div class="col-lg-4">  
                  <button type="submit" class="btn btn-block btn-success">
-                          <i class="icon-ok"></i>
+                          <i class="fa fa-check"></i>
                 </button>
             </div>
         </div>
     </form>
-  </div>
-</div>
 {% endblock %}

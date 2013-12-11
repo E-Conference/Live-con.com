@@ -1,9 +1,9 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body %}
-{{ parent() }}
-<div class="container">
-    <div class="row center">
+{% block title %}Topic detail{% endblock title %}
+
+{% block centerPanel %}
+    {{ parent() }}
     <h1>Topic</h1>
      <div class="row">
         <div class="col-lg-1"></div>
@@ -28,21 +28,19 @@
          <div class="col-lg-6"></div>
               <div class="col-lg-2 btn-group">
                   <a type="button" href="{{ path('schedule_topic') }}" class="btn btn-warning">
-                        <i class="icon-th-list"></i>
+                        <i class="fa fa-list"></i>
                   </a>
-                   <a href="{{ path('schedule_topic_edit', { 'id': entity.id }) }}" class="btn btn-success">
-                         <i class="icon-pencil"></i>
+                   <a href="{{ path('schedule_topic_edit', { 'id': entity.id }) }}" class="btn btn-success edit">
+                         <i class="fa fa-pencil"></i>
                    </a>
                    <form action="{{ path('schedule_topic_delete', { 'id': entity.id }) }}" method="post">
                       <input type="hidden" name="_method" value="DELETE" />
                         {{ form_widget(delete_form) }}
-                    <button type="submit" class="btn btn-danger">
-                        <i class="icon-remove"></i>
+                    <button type="submit" class="btn btn-danger delete">
+                        <i class="fa fa-trash-o"></i>
                     </button>
                   </form> 
               </div>    
         </div>
-  </div>
-</div> 
-    
+
 {% endblock %}

@@ -65,7 +65,7 @@ class Organization
 
 	
     /**
-     * @ORM\Column(type="string", length=128, nullable=true)
+     * @ORM\Column(type="string", length=256, nullable=true)
      */
     protected $slug;
 
@@ -84,7 +84,7 @@ class Organization
 
     /**
      * Slugify
-     * 
+     * @ORM\PrePersist()
      */
     public function slugify()
     {

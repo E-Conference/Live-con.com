@@ -1,4 +1,19 @@
-    
+    .event-popover ul,ul.event-popover {
+        margin-left: -1.5em;
+    }
+    .drag-over-events{
+        outline : 3px dashed green;
+    }    
+    .external-event {
+        min-width : 230px;
+        border-bottom-width: 1px;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px; 
+        border-top-width: 1px;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+    }
+
     #calendar {  
         width  : 100%; 
         margin : 0;

@@ -1,20 +1,17 @@
 
 {% extends "fibeWWWConfBundle::base.html.twig" %}
 
-{% block title %}Index{% endblock title %}
-{% block body %}
+{% block title %}New person{% endblock title %}
 
-{{ parent() }}
-
-<div class="container">
-    <div class="row center">
+{% block centerPanel %}
+    {{ parent() }}
     <h1>Person Creation</h1>
 
     <div class="row">
      <div class="col-lg-9"></div>
           <div class="col-lg-2 btn-group">
               <a type="button" href="{{ path('schedule_person_index') }}" class="btn btn-warning">
-                    <i class="icon-th-list"></i>
+                    <i class="fa fa-list"></i>
               </a>
           </div>    
     </div>     
@@ -45,12 +42,11 @@
             <div class="col-lg-4"></div>
             <div class="col-lg-4">  
                  <button type="submit" class="btn btn-block btn-success">
-                          <i class="icon-ok"></i>
+                          <i class="fa fa-check"></i>
                 </button>
             </div>
         </div>
     </form>
   </div>
 </div>
-
 {% endblock %}

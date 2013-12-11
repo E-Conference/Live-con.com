@@ -6,6 +6,7 @@ use FOS\UserBundle\Entity\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
 use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
+use fibe\SecurityBundle\Entity\Authorization;
 
  
 /**
@@ -35,6 +36,14 @@ class User extends BaseUser
      *  @ORM\JoinColumn(name="currentConf", referencedColumnName="id")
      */
     protected $currentConf;
+
+     /**
+     *  
+     * @ORM\OneToMany(targetEntity="Authorization",  mappedBy="user",cascade={"persist"})
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     * 
+     */
+     protected $authorizations;
     
     
     /**
@@ -111,4 +120,138 @@ class User extends BaseUser
     {
         return $this->currentConf;
     }
+
+  
+
+    /**
+     * Add authorizations
+     *
+     * @param \fibe\SecurityBundle\Entity\Authorization $authorizations
+     * @return User
+     */
+    public function addAuthorization(\fibe\SecurityBundle\Entity\Authorization $authorizations)
+    {
+        $this->authorizations[] = $authorizations;
+    
+        return $this;
+    }
+
+    /**
+     * Remove authorizations
+     *
+     * @param \fibe\SecurityBundle\Entity\Authorization $authorizations
+     */
+    public function removeAuthorization(\fibe\SecurityBundle\Entity\Authorization $authorizations)
+    {
+        $this->authorizations->removeElement($authorizations);
+    }
+
+    /**
+     * Get authorizations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAuthorizations()
+    {
+        return $this->authorizations;
+    }
+
+    /**
+    *Get an authorization for a specific conference
+    *
+    */
+    public function getAuthorizationByConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conf)
+    {
+        foreach ($this->authorizations as $authorization) {
+            if($authorization->getConference()->getId()==$conf->getId()){
+                return $authorization;
+            }
+        }
+        return null;
+    }
+
+    /**
+    *Get an authorization falg app for a specific conference
+    *
+    */
+    public function getFlagAppByConferenceId($confId)
+    {
+        foreach ($this->authorizations as $authorization) {
+            if($authorization->getConference()->getId()==$confId){
+                return $authorization->getFlagApp();
+            }
+        }
+        return false;
+    }
+
+    /**
+    *Get an authorization falg app for a specific conference
+    *
+    */
+    public function getFlagSchedByConferenceId($confId)
+    {
+        foreach ($this->authorizations as $authorization) {
+            if($authorization->getConference()->getId()==$confId){
+                return $authorization->getFlagSched();
+            }
+        }
+        return false;
+    }
+
+    /**
+    *Get an authorization flag app for a specific conference
+    *
+    */
+    public function getFlagDatasByConferenceId($confId)
+    {
+        foreach ($this->authorizations as $authorization) {
+            if($authorization->getConference()->getId()==$confId){
+                return $authorization->getFlagconfDatas();
+            }
+        }
+        return false;
+    }
+
+    /**
+    *Get an authorization flag app for a specific conference
+    *
+    */
+    public function getFlagByConferenceId($confId,$flagType)
+    {
+        foreach ($this->authorizations as $authorization) {
+            if($authorization->getConference()->getId()==$confId){
+                switch($flagType){
+                    case 'sched':
+                        return $authorization->getFlagSched();
+                        break;
+                    case 'app':
+                         return $authorization->getFlagApp();
+                         break;
+                    case 'datas':
+                         return $authorization->getFlagconfDatas();
+                         break;
+                    case 'team':
+                         return $authorization->getFlagTeam();
+                         break;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public function authorizedAccesToConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conf)
+    {
+        $conferences = $this->conferences->toArray();
+        if (in_array($conf, $conferences)) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+
+
+
 }

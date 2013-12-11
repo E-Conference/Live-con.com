@@ -1,76 +1,121 @@
-{% extends '::base.html.twig' %}
+{% extends "::base.html.twig" %}
+       
 
-{% block title %}Index{% endblock title %}
-{% block stylesheets %} 
-    
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibewwwconf/css/datetimepicker.css') }}" />  
-    <style type="text/css">
-            
-    #bootstrap_alert{
-        position     : fixed;
-        top          : 1em ;
-        right        : 1em ; 
-        max-width    : 60em;
-        max-height   : 20em;
-        z-index      : 3001;
-        text-overflow: ellipsis;
-        overflow     : hidden;
-        white-space  : nowrap;
-    }     
-    #bootstrap_alert ul{
-        margin: 1em 0 1 0.5em;
-    }
-    </style>
+{% block meta %}{% endblock %}
+{% block title %}{% endblock %}
+
+     
+{% block stylesheets %}
     {{ parent() }}
+    {% block stylesheets_page %}
+    {% endblock %}
 {% endblock %}
+      
+{% block javascripts %}
+        {{ parent() }}
 
-{% block javascripts %} 
-    {{ parent() }}
+        <script type="text/javascript">
+         $(document).ready(function() {
 
-    </script>   
-    <script type="text/javascript" src="{{ asset('bundles/fibewwwconf/js/bootstrap-datetimepicker.min.js') }}"></script>
-    <script type="text/javascript" >
-        $(document).ready(function(){ 
-            $('.datetimepicker')
-                .wrap('<div class="input-group">') 
-                .after('<span class="input-group-addon"><span class="icon-calendar"></span></span>')
-                .datetimepicker({
-                    format: 'dd/mm/yyyy hh:ii',
-                    autoclose: true,
-                });
+                $('label[class="required"]').append("<i style='color:#C00000  '>*</i>");
 
-            $('label[class="required"]').append("<i style='color:#C00000  '>*</i>");
+                deployed = false;
+                $("#sideBarBtn").click(function(){
+                    deployResultBox();
+                }); 
+                $("select").select2(); 
+                //  $('.datetimepicker')
+                // .wrap('<div class="input-group">') 
+                // .after('<span class="input-group-addon"><span class="icon-calendar"></span></span>')
+                // .datetimepicker({
+                //     format: 'dd/mm/yyyy hh:ii',
+                //     autoclose: true,
+                // });
 
-        });
-    </script> 
-    <!-- <script type="text/javascript" src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>  -->
-    <script src ="{{ asset('bundles/fibewwwconf/js/json2.js') }}" type="text/javascript" ></script>
-        
-    </script>   
-{% endblock %}
- 
-{% block body %}
-    {{ parent() }}
-    {% include "fibeWWWConfBundle::adminmenu.html.twig" %}
 
-    {% for flashMessage in app.session.flashbag.get('info') %}
-        <script type="text/javascript" >
-            bootstrapAlert("info","{{ flashMessage }}","Info : ",'<i class="icon-info"></i> ');
+            });
+            function deployResultBox(){
+                    if(!deployed){
+                        $('#sideBar').animate({left:'0px'});
+                        deployed = true;
+                    }else{
+                        $('#sideBar').animate({left:'-180px'});
+                        deployed = false;
+                    }
+            }
         </script> 
-    {% endfor %}
-
-    {% for flashMessage in app.session.flashbag.get('success') %} 
-        <script type="text/javascript" >
-        bootstrapAlert("success","{{ flashMessage }}","Success : ",'<i class="icon-ok-sign"></i> '); 
-        </script>  
-    {% endfor %}
-
-    {% for flashMessage in app.session.flashbag.get('error') %}
-        <script type="text/javascript" >
-        bootstrapAlert("warning","{{ flashMessage }}","Error : ",'<i class="icon-meh"></i> '); 
-        </script> 
-    {% endfor %}
 
     
-{% endblock body %}
- 
+
+        {% for flashMessage in app.session.flashbag.get('info') %}
+            <script type="text/javascript" >
+                bootstrapAlert("info","{{ flashMessage }}","Info : ",'<i class="icon-info"></i> ');
+            </script> 
+        {% endfor %}
+
+        {% for flashMessage in app.session.flashbag.get('success') %} 
+            <script type="text/javascript" >
+            bootstrapAlert("success","{{ flashMessage }}","Success : ",'<i class="icon-ok-sign"></i> '); 
+            </script>  
+        {% endfor %}
+
+        {% for flashMessage in app.session.flashbag.get('error') %}
+            <script type="text/javascript" >
+            bootstrapAlert("warning","{{ flashMessage }}","Error : ",'<i class="icon-meh"></i> '); 
+            </script> 
+        {% endfor %}
+
+        {% if authorized==0 %}
+            <script type="text/javascript" >
+             $(document).ready(function(){
+                 $(".edit").hide();
+                 $(".create").hide();
+                 $(".delete").hide();
+                 $(".edit-event").hide();
+                 $(".create-event").hide();
+                 $(".delete-event").hide(); 
+             });
+            </script> 
+        {% endif %}
+
+        {%  block javascripts_page %}
+        {% endblock%}
+{% endblock%}
+
+{% block body %} 
+    {{ parent() }}
+
+    {% block navBar %} 
+        {% include "fibeWWWConfBundle::navbar.html.twig" %}
+    {% endblock navBar%}
+    {% block content %} 
+    <div class="content">
+         {% block sideBarPanel%} 
+        <div id="sideBar">
+            <div id="sideBarList">
+                <div class="panel-group">
+                {% block sideBar_page%} 
+                {% endblock sideBar_page%} 
+                 {% block sideBar%} 
+                    {% include "fibeWWWConfBundle::sideBar.html.twig" %}
+                {% endblock sideBar %}
+                </div>
+            </div>
+            <div id="sideBarBtn">
+                <i class="fa fa-chevron-right"></i>
+            </div>
+        </div>
+         {% endblock sideBarPanel%} 
+
+        <div class="row">
+            <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div> 
+            <div class="col-xs-10 col-sm-10  col-md-10 col-lg-10 center">
+                {% block centerPanel %} 
+                {% endblock centerPanel %}
+            </div>
+           <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div>
+        </div>
+
+    </div>
+    {% endblock content%}
+{% endblock body%}

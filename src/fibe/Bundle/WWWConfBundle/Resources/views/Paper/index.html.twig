@@ -1,18 +1,17 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body %}
-{{ parent() }}
+{% block title %}Paper{% endblock title %}
 
-<div class="container">
-    <div class="row center">
+{% block centerPanel %}
+    {{ parent() }}
         <div class="page-header">
             <div class="row">
                 <div class="col-lg-2">
                     <h1>{% trans %}Papers{% endtrans %}</h1>
                 </div>
                 <div class="col-lg-4">
-                    <a class="btn btn-info btn-create" href="{{ path('schedule_paper_new') }}">
-                         <i class="icon-plus"></i>
+                    <a class="btn btn-info btn-create create" href="{{ path('schedule_paper_new') }}">
+                         <i class="fa fa-plus"></i>
                     </a>
                 </div>
             </div>
@@ -26,8 +25,9 @@
                 <th>Id</th>
                 <th>Title</th>
                 <th>Abstract</th>
-                <th>Date</th>
-                <th>Url</th>
+                {# <th>Date</th>
+                <th>Url</th> #}
+                <th>Authors</th>
                 <th>Subjects</th>
                 <th>Actions</th>
             </tr>
@@ -38,15 +38,26 @@
                 <td><a href="{{ path('schedule_paper_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                 <td>{{ entity.title }}</td>
                 <td>{{ entity.abstract }}</td>
-                <td>{{ entity.publishDate }}</td>
-                <td>{{ entity.url }}</td>
+                {# <td>{{ entity.publishDate }}</td>
+                <td>{{ entity.url }}</td> #}
+                <td>
+                     {% for author in entity.authors %}
+                        <li>
+                           <a href="{{ path('schedule_person_show', { 'id': author.id }) }}">
+                             {{ author|e }}
+                            </a>
+                        </li>
+                     {% endfor %}
+                </td>
                 <td><ul> {% for topic in entity.topics  %}
-                          <li>  {{ topic.name|e }}</li>
+                          <li><a href="{{ path('schedule_topic_show', { 'id': topic.id }) }}">
+                             {{ topic.name|e }}
+                          </a> </li>
                          {% endfor %}
                 </ul></td>
                 <td>
-                    <a class="btn btn-large btn-default" href="{{ path('schedule_paper_show', { 'id': entity.id }) }}"><i class="icon-eye-open"></i></a> 
-                    <a class="btn btn-large btn-warning" href="{{ path('schedule_paper_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-large btn-default" href="{{ path('schedule_paper_show', { 'id': entity.id }) }}"><i class="fa fa-eye"></i></a> 
+                    <a class="btn btn-large btn-warning edit" href="{{ path('schedule_paper_edit', { 'id': entity.id }) }}"><i class="fa fa-pencil"></i></a>
                 </td> 
             </tr>
         {% endfor %}
@@ -55,6 +66,4 @@
     <p>
         {{ pagerfanta(pager, 'twitter_bootstrap') }}
     </p>
-</div>
-</div>
-    {% endblock %}
+{% endblock %}

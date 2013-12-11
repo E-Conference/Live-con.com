@@ -17,6 +17,8 @@ use fibe\MobileAppBundle\Form\MobileAppWwwConfType;
 use fibe\Bundle\WWWConfBundle\Form\WwwConfType;
 use fibe\Bundle\WWWConfBundle\Form\MobileAppConfigType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+use Symfony\Component\Security\Core\Exception\AccessDeniedException; 
 /**
  * Mobile app controller.
  *
@@ -31,11 +33,14 @@ class MobileAppThemeController extends Controller
     public function indexAction()
     {
 
-
-        $mobile_app_config = $this->getUser()->getCurrentConf()->getAppConfig();
+         //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+       
+        $mobile_app_config =$user->getCurrentConf()->getAppConfig();
         $mobile_app_form = $this->createForm(new MobileAppConfigType(), $mobile_app_config);
 
-        $conference = $this->getUser()->getCurrentConf();
+        $conference = $user->getCurrentConf();
         $conference_form = $this->createForm(new MobileAppWwwConfType($this->getUser()), $conference);
         // $conference_form = $this->createForm(new WwwConfType($this->getUser()), $conference); 
 
@@ -43,7 +48,8 @@ class MobileAppThemeController extends Controller
             'mobile_app_form' => $mobile_app_form->createView(),
             'conference_form' => $conference_form->createView(),
 		    'mobile_app_config' => $mobile_app_config,
-            'conference' => $conference
+            'conference' => $conference,
+            'authorized' => $authorization->getFlagSched(),
 		    
 		));
 	}
@@ -54,6 +60,14 @@ class MobileAppThemeController extends Controller
      */
     public function updateMobileAppAction(Request $request, $id)
     {
+        //Authorization Verification conference app manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+        if(!$authorization->getFlagApp()){
+            throw new AccessDeniedException('Action not authorized !');
+        } 
+
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('fibeWWWConfBundle:MobileAppConfig')->find($id);
 
@@ -80,10 +94,17 @@ class MobileAppThemeController extends Controller
     */
     public function updateConferenceAction(Request $request, $id)
     {
+        
+         //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+        if(!$authorization->getFlagconfDatas()){
+            throw new AccessDeniedException('Action not authorized !');
+        } 
+
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('fibeWWWConfBundle:WwwConf')->find($id);
-
-       
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find conference entity.');
         }

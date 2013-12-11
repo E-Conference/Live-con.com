@@ -14,6 +14,8 @@ use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 
+use Symfony\Component\Security\Core\Exception\AccessDeniedException; 
+
 /**
  * Organization controller.
  *
@@ -30,6 +32,11 @@ class OrganizationController extends Controller
      */
     public function indexAction(Request $request)
     {
+        
+        //Authorization Verification conference datas manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
         $em = $this->getDoctrine()->getManager();
 
         $conf = $this->getUser()->getCurrentConf();
@@ -47,6 +54,7 @@ class OrganizationController extends Controller
 
         return array(
             'pager' => $pager,
+            'authorized' => $authorization->getFlagconfDatas() 
         );
     }
 
@@ -59,6 +67,15 @@ class OrganizationController extends Controller
      */
     public function createAction(Request $request)
     {
+        
+        //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagconfDatas()){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $entity  = new Organization();
         $form = $this->createForm(new OrganizationType($this->getUser()), $entity);
         $form->bind($request);
@@ -82,6 +99,7 @@ class OrganizationController extends Controller
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'authorized' => $authorization->getFlagconfDatas()
         );
     }
 
@@ -94,12 +112,22 @@ class OrganizationController extends Controller
      */
     public function newAction()
     {
+        
+          //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagconfDatas()){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $entity = new Organization();
         $form   = $this->createForm(new OrganizationType($this->getUser()), $entity);
 
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'authorized' => $authorization->getFlagconfDatas()
         );
     }
 
@@ -112,10 +140,16 @@ class OrganizationController extends Controller
      */
     public function showAction($id)
     {
+        
+          //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('fibeWWWConfBundle:Organization')->find($id);
-
+        //The object have to belongs to the current conf
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('fibeWWWConfBundle:Organization')->findOneBy(array('conference' => $currentConf, 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Organization entity.');
         }
@@ -125,6 +159,7 @@ class OrganizationController extends Controller
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
+            'authorized' => $authorization->getFlagconfDatas()
         );
     }
 
@@ -137,10 +172,20 @@ class OrganizationController extends Controller
      */
     public function editAction($id)
     {
+        
+          //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagconfDatas()){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('fibeWWWConfBundle:Organization')->find($id);
-
+        //The object have to belongs to the current conf
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('fibeWWWConfBundle:Organization')->findOneBy(array('conference' => $currentConf, 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Organization entity.');
         }
@@ -152,6 +197,7 @@ class OrganizationController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'authorized' => $authorization->getFlagconfDatas()
         );
     }
 
@@ -164,10 +210,20 @@ class OrganizationController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        
+          //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagconfDatas()){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('fibeWWWConfBundle:Organization')->find($id);
-
+         //The object have to belongs to the current conf
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('fibeWWWConfBundle:Organization')->findOneBy(array('conference' => $currentConf, 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Organization entity.');
         }
@@ -205,6 +261,7 @@ class OrganizationController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'authorized' => $authorization->getFlagconfDatas()
         );
     }
 
@@ -216,13 +273,23 @@ class OrganizationController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        
+          //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagconfDatas()){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('fibeWWWConfBundle:Organization')->find($id);
-
+             //The object have to belongs to the current conf
+            $currentConf=$this->getUser()->getCurrentConf();
+            $entity =  $em->getRepository('fibeWWWConfBundle:Organization')->findOneBy(array('conference' => $currentConf, 'id' => $id));
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Organization entity.');
             }
