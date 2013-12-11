@@ -1,68 +1,62 @@
 {% extends 'fibeMobileAppBundle::base.html.twig' %}
 
-{% block title %}Index{% endblock title %}
-{% block body %}
+{% block title %}Mobile App' theme{% endblock title %}
 
-{% include "fibeMobileAppBundle::navbar.html.twig" %}
-<div class="container">
-    <div class="row center">
-     
-      <div class="row">
-         <div class="row-fluid">
-            <div class='col-lg-8'>
-              <iframe style="height:500px;width:100%;" src="{{path('mobileAppPublic_index', { 'id': conference.id })}}"/></iframe>
-            </div>
+{% block stylesheets_page %}
+<link rel="stylesheet" type="text/css" href="{{ asset('css/spectrum/spectrum.css')}}" />  
+{% endblock stylesheets_page %}
+
+ {% block centerPanel %}
+          <div class="row">
+             <div class="row-fluid">
+                <div class='col-lg-8'>
+                  <iframe style="height:500px;width:100%;" src="{{path('mobileAppPublic_index', { 'id': conference.id })}}"/></iframe>
+                </div>
+                
+              </div>
+              {% include "fibeMobileAppBundle:MobileAppTheme:edit.html.twig" %}
             
           </div>
-          {% include "fibeMobileAppBundle:MobileAppTheme:edit.html.twig" %}
-        
-      </div>
-       <div>
-        <form action="{{ path('mobileAppTheme_update_conference', { 'id': conference.id })}}" method="post" {{ form_enctype(conference_form) }}>
-           <div class="row">
-              <div class="col-lg-4 well">
-                    <h1> Conference settings</h1> 
-                    {{ form_row(conference_form.mainConfEvent.summary) }}
-                    {{ form_row(conference_form.mainConfEvent.acronym) }}
-                    {{ form_row(conference_form.mainConfEvent.url) }}
-                    {{ form_row(conference_form.logo) }}
-                    {{ form_errors(conference_form) }}
-                     <button type="submit" class="btn btn-success edit"><i class="icon-edit"></i></button>
-                    <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(conference_form) }}</div> 
-               </div>
-              <div class="col-lg-4 well">
-                  <h1>Logo</h1>
-                  <div class='logo' style="width:300px; height: 100px">
-                    <div class="logo-choice"  style="width:300px; height: 100px">
-                        <img src="{{ asset('uploads/')}}{{conference.logoPath}}" style="width:auto; height: 100%">
+           <div>
+            <form action="{{ path('mobileAppTheme_update_conference', { 'id': conference.id })}}" method="post" {{ form_enctype(conference_form) }}>
+               <div class="row">
+                  <div class="col-lg-4 well">
+                        <h1> Conference settings</h1> 
+                        {{ form_row(conference_form.mainConfEvent.summary) }}
+                        {{ form_row(conference_form.mainConfEvent.acronym) }}
+                        {{ form_row(conference_form.mainConfEvent.url) }}
+                        {{ form_row(conference_form.logo) }}
+                        {{ form_errors(conference_form) }}
+                         <button type="submit" class="btn btn-success edit"><i class="fa fa-pencil-square-o"></i></button>
+                        <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(conference_form) }}</div> 
+                   </div>
+                  <div class="col-lg-4 well">
+                      <h1>Logo</h1>
+                      <div class='logo' style="width:300px; height: 100px">
+                        <div class="logo-choice"  style="width:300px; height: 100px">
+                            <img src="{{ asset('uploads/')}}{{conference.logoPath}}" style="width:auto; height: 100%">
+                        </div>
+                     </div>
+                   </div>
+                    <div class="col-lg-4 well">
+                      <h1>Color board</h1> 
+                      <div id="palette"> 
+                        <a href="#" id="generateTheme" class="btn btn-success"><i class="fa fa-magic"></i>Generate theme</a>
+                      </div>
                     </div>
-                 </div>
-               </div>
-                <div class="col-lg-4 well">
-                  <h1>Color board</h1> 
-                  <div id="palette"> 
-                    <a href="#" id="generateTheme" class="btn btn-success"><i class="fa fa-magic"></i>Generate theme</a>
-                  </div>
-                </div>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
+  {% endblock centerPanel %}
+{% block javascripts_page %}
 
-     
-    </div> 
-</div>    
-
-{% endblock body %}
-
-{% block javascripts %}
-{{parent()}}
   <script type="text/javascript" src="{{ asset('js/spectrum/spectrum.js')}}"></script>
   <script type="text/javascript" src="{{ asset('js/colorThief.js')}}"></script>
 
 
-   <script type="text/javascript">
+  <script type="text/javascript">
   $( document ).ready(function() {
-
+    debugger;
     $("#generateTheme").click(function(){
         generateTheme();
     })

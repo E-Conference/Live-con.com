@@ -37,10 +37,10 @@ class MobileAppThemeController extends Controller
         $user=$this->getUser();
         $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
        
-        $mobile_app_config = $this->getUser()->getCurrentConf()->getAppConfig();
+        $mobile_app_config =$user->getCurrentConf()->getAppConfig();
         $mobile_app_form = $this->createForm(new MobileAppConfigType(), $mobile_app_config);
 
-        $conference = $this->getUser()->getCurrentConf();
+        $conference = $user->getCurrentConf();
         $conference_form = $this->createForm(new MobileAppWwwConfType($this->getUser()), $conference);
         // $conference_form = $this->createForm(new WwwConfType($this->getUser()), $conference); 
 

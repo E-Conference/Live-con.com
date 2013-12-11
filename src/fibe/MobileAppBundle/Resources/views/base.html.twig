@@ -1,28 +1,68 @@
-{% extends '::base.html.twig' %}
+{% extends "::base.html.twig" %}
 
-{% block title %}Index{% endblock title %}
 {% block stylesheets %}
-	 {{ parent()}}
-	 <link rel='stylesheet' href="{{ asset('css/spectrum/spectrum.css') }}" />
-	  <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibemobileapp/css/mobileApp.css') }}" /> 
- {% endblock %}
+	{{ parent() }}
+	{% block stylesheets_page %}
+ 	{% endblock%}
+{% endblock %}
+      
+
 {% block javascripts %}
-	{{ parent()}}
+ 	{{ parent() }}
+ 	<script type="text/javascript" >
 
-	{% if authorized==0 %}
-        <script type="text/javascript" >
-        	$(document).ready(function(){
-		         $(".edit").hide();
-		         $(".edit-app").hide();
-		     });
-        </script> 
-    {% endif %}
+ 		$(document).ready(function() {
+ 		 	deployed = false;
+            $("#sideBarBtn").click(function(){
+                deployResultBox();
+            });
+        });
 
-{% endblock javascripts%}
+	 	function deployResultBox(){
+				if(!deployed){
+					$('#sideBar').animate({left:'0px'});
+					deployed = true;
+				}else{
+					$('#sideBar').animate({left:'-180px'});
+					deployed = false;
+				}
+		}
+	</script>
 
+ 	{% block javascripts_page %}
+ 	{% endblock%}
+{% endblock%}
 
-{% block body %}
-	{{ parent()}}
+{% block body %} 
+	{{ parent() }}
 
-{% endblock body %}
+	{% include "fibeMobileAppBundle::navbar.html.twig" %}
+	{% block content %} 
+    <div class="content">
+		<div id="sideBar">
+			<div id="sideBarList">
+				{% block sideBar%} 
+					{% include "fibeMobileAppBundle::sideBar.html.twig" %}
+				{% endblock sideBar %}
+			</div>
+			<div id="sideBarBtn">
+				<i class="fa fa-chevron-right"></i>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div> 
+			<div class="col-xs-10 col-sm-10  col-md-10 col-lg-10 center">
+	            {% block centerPanel %} 
+	            {% endblock centerPanel %}
+		    </div>
+		   <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div>
+		</div>
+
+    </div>
+    {% endblock content%}
+
+ {% endblock body%}
+    
+
 

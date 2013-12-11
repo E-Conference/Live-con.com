@@ -1,18 +1,16 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body %}
+{% block title %}New location{% endblock title %}
 
-{{ parent() }}
-
-<div class="container">
-    <div class="row center">
+{% block centerPanel %}
+  {{ parent() }}
       <h1>{% trans %}Location creation{% endtrans %}</h1>
 
   <div class="row">
      <div class="col-lg-5"></div>
           <div class="col-lg-2 btn-group">
               <a type="button" href="{{ path('schedule_event') }}" class="btn btn-warning">
-                    <i class="icon-th-list"></i>
+                    <i class="fa fa-list"></i>
               </a>
           </div>    
   </div> 
@@ -25,11 +23,11 @@
         {{ form_widget(form) }}
         </br>
         <button type="submit" class="btn btn-block btn-success">
-                        <i class="icon-ok"></i>
+                        <i class="fa fa-check"></i>
               </button>
         </div>
         
     </form>
   </div>
 </div>
-{% endblock body %}
+{% endblock %}

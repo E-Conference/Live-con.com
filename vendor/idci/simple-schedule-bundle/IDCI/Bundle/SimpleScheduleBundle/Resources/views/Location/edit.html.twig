@@ -1,11 +1,9 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body %}
-{{ parent() }}
+{% block title %}Location edit{% endblock title %}
 
-
-<div class="container">
-    <div class="row center">
+{% block centerPanel %}
+  {{ parent() }}
       <h1>{% trans %}Edit Location{% endtrans %}</h1>
     
 
@@ -13,13 +11,13 @@
      <div class="col-lg-5"></div>
           <div class="col-lg-2 btn-group">
               <a type="button" href="{{ path('schedule_location') }}" class="btn btn-warning">
-                    <i class="icon-th-list"></i>
+                    <i class="fa fa-list"></i>
               </a>
                <form action="{{ path('schedule_location_delete', { 'id': entity.id }) }}" method="post">
                   <input type="hidden" name="_method" value="DELETE" />
                     {{ form_widget(delete_form) }}
                 <button type="submit" class="btn btn-danger">
-                    <i class="icon-remove"></i>
+                    <i class="fa fa-trash-o"></i>
                 </button>
               </form> 
           </div> 
@@ -33,7 +31,7 @@
                {{ form_widget(edit_form) }}
                </br>
               <button type="submit" class="btn btn-block btn-success">
-                        <i class="icon-ok"></i>
+                        <i class="fa fa-check"></i>
               </button>
            </div>
             <div class="col-lg-4">
@@ -50,4 +48,4 @@
 
     </div>
 
-{% endblock body %}
+{% endblock %}

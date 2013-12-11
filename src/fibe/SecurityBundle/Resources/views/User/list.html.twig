@@ -1,13 +1,12 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block title %}Index{% endblock title %}
-{% block body %}
-{{ parent() }}
+{% block title %}Team{% endblock title %}
+
+{% block centerPanel %}
+
  
 
 {% trans_default_domain 'FOSUserBundle' %}
-<div class="container">
-  <div class="row center">
     <header class="subhead" id="overview">
         <div class="page-header">
             <h1>Manage user</h1>
@@ -54,7 +53,7 @@
                             </li>-->
                             
                             <li>
-                               <a href="#" onclick="removeManager({{entity.id}})"><i class=" icon-trash"></i> Remove user from the conference</a>
+                               <a href="#" onclick="removeManager({{entity.id}});location.reload();"><i class=" icon-trash"></i> Remove user from the conference</a>
                             </li>
                         </ul>
                         {% endif %}
@@ -161,19 +160,16 @@
                     {{ form_errors(authorization_form) }}
                     </br>
                 <button type="submit" class="btn btn-block btn-success">
-                    <i class="icon-ok"></i>
+                    <i class="fa fa-check"></i>
                 </button>
             </form> 
           </div>
         </div>
      </div>
 
+{% endblock  %}
 
-  </div>
-<div>
-{% endblock body %}
-
-{%  block javascripts %}
+{%  block javascripts_page %}
 
     <script src="{{ asset('bundles/fibewwwconf/js/moment.min.js') }}" type="text/javascript" ></script>
     <script  type="text/javascript" >

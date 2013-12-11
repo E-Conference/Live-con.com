@@ -1,12 +1,9 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body %}
-{{ parent() }}
+{% block title %}Organization detail{% endblock title %}
 
-
-
-<div class="container">
-    <div class="row center">
+{% block centerPanel %}
+    {{ parent() }}
     <h1>Organization</h1>
     
     <div class="row">
@@ -48,22 +45,20 @@
         </div>
         <div class="row">
              <div class="col-lg-6"></div>
-                  <div class="col-lg-2 btn-group">
-                      <a type="button" href="{{ path('schedule_organization_index') }}" class="btn btn-warning">
-                            <i class="icon-th-list"></i>
-                      </a>
-                       <a href="{{ path('schedule_organization_edit', { 'id': entity.id }) }}" class="btn btn-success edit">
-                             <i class="icon-pencil"></i>
-                       </a>
-                       <form action="{{ path('schedule_organization_delete', { 'id': entity.id }) }}" method="post">
-                          <input type="hidden" name="_method" value="DELETE" />
-                            {{ form_widget(delete_form) }}
-                        <button type="submit" class="btn btn-danger delete">
-                            <i class="icon-remove"></i>
-                        </button>
-                      </form> 
-                  </div>    
-            </div>
+              <div class="col-lg-2 btn-group">
+                  <a type="button" href="{{ path('schedule_organization_index') }}" class="btn btn-warning">
+                        <i class="fa fa-list"></i>
+                  </a>
+                   <a href="{{ path('schedule_organization_edit', { 'id': entity.id }) }}" class="btn btn-success edit">
+                         <i class="fa fa-pencil"></i>
+                   </a>
+                   <form action="{{ path('schedule_organization_delete', { 'id': entity.id }) }}" method="post">
+                      <input type="hidden" name="_method" value="DELETE" />
+                        {{ form_widget(delete_form) }}
+                    <button type="submit" class="btn btn-danger delete">
+                        <i class="fa fa-trash-o"></i>
+                    </button>
+                  </form> 
+              </div>    
         </div>
-    </div> 
 {% endblock %}

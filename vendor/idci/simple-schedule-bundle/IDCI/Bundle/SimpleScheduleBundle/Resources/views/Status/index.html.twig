@@ -12,7 +12,7 @@
         </div>
         <div class="col-lg-4">
             <a class="btn btn-info btn-create" href="{{ path('schedule_status_new') }}">
-                 <i class="icon-plus"></i>
+                 <i class="fa fa-plus"></i>
             </a>
         </div>
     </div>
@@ -35,10 +35,10 @@
             <td>{{ entity.value }}</td>
             <td>{{ entity.discr }}</td>
             <td>
-                <a class="btn btn-success btn-block" href="{{ path('schedule_status_show', { 'id': entity.id }) }}"><i class="icon-eye-open"></i></a>
+                <a class="btn btn-success btn-block" href="{{ path('schedule_status_show', { 'id': entity.id }) }}"><i class="fa fa-eye"></i></a>
             </td>
             <td>
-                <a class="btn btn-block btn-warning" href="{{ path('schedule_status_edit', { 'id': entity.id }) }}"><i class="icon-edit"></i></a>
+                <a class="btn btn-block btn-warning" href="{{ path('schedule_status_edit', { 'id': entity.id }) }}"><i class="fa fa-pencil-square-o"></i></a>
             </td>
         </tr>
     {% endfor %}

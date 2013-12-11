@@ -1,9 +1,9 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body %}
+{% block title %}New event{% endblock title %}
 
-
-{{ parent() }}
+{% block centerPanel %}
+  {{ parent() }}
 
 <div class="page-header">
   <h1>{% trans %}Event creation{% endtrans %}</h1>
@@ -15,11 +15,11 @@
    <div class="row-fluid">
           <div class="col-lg-9"></div>
           <div class="col-lg-2">
-                  <button type="submit" class="btn btn-default"><i class="icon-ok"></i></button>
+                  <button type="submit" class="btn btn-default"><i class="fa fa-check"></i></button>
                   <a class="btn btn-warning" href="{{ path('schedule_event') }}">
-                    <i class="icon-th-list"></i>
+                    <i class="fa fa-list"></i>
                 </a>
             </div>
         </div>
 </form>
-{% endblock body %}
+{% endblock %}

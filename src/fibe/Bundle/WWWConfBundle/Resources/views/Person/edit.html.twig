@@ -1,23 +1,22 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body %}
-{{ parent() }}
+{% block title %}Person edit{% endblock title %}
 
-<div class="container">
-    <div class="row center">
+{% block centerPanel %}
+    {{ parent() }}
     <h1>Person edit</h1>
 
     <div class="row">
      <div class="col-lg-9"></div>
           <div class="col-lg-2 btn-group">
               <a type="button" href="{{ path('schedule_person_index') }}" class="btn btn-warning">
-                    <i class="icon-th-list"></i>
+                    <i class="fa fa-list"></i>
               </a>
                <form action="{{ path('schedule_person_delete', { 'id': entity.id }) }}" method="post">
                   <input type="hidden" name="_method" value="DELETE" />
                     {{ form_widget(delete_form) }}
                 <button type="submit" class="btn btn-danger">
-                    <i class="icon-remove"></i>
+                    <i class="fa fa-trash-o"></i>
                 </button>
               </form> 
           </div>    
@@ -52,26 +51,21 @@
             <div class="col-lg-4"></div>
             <div class="col-lg-4">  
                  <button type="submit" class="btn btn-block btn-success">
-                          <i class="icon-ok"></i>
+                          <i class="fa fa-check"></i>
                 </button>
             </div>
         </div>
     </form>
-  </div>
-</div>
-
-
-
 {% endblock %}
-{%  block javascripts %} 
-{{ parent() }}
+
+{%  block javascripts_page %} 
 <script type="text/javascript">
 $(document).ready(function() {
   // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
   var $container = $('#fibe_bundle_wwwconfbundle_persontype_accounts');
 
   // On ajoute un lien pour ajouter une nouvelle catégorie
-  var $lienAjout = $('<a href="#" id="add_account" class="btn btn-info btn-create"><i class="icon-plus"></i></a>');
+  var $lienAjout = $('<a href="#" id="add_account" class="btn btn-info btn-create"><i class="fa fa-plus"></i></a>');
   $container.append($lienAjout);
 
   // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
@@ -114,7 +108,7 @@ $(document).ready(function() {
   // La fonction qui ajoute un lien de suppression d'une catégorie
   function addDeleteLink($prototype) {
     // Création du lien
-    $lienSuppression = $('<a href="#" class="btn btn-danger"> <i class="icon-remove"></i></a>');
+    $lienSuppression = $('<a href="#" class="btn btn-danger"> <i class="fa fa-trash-o"></i></a>');
 
     // Ajout du lien
     $prototype.append($lienSuppression);

@@ -1,22 +1,23 @@
 
-{% block body %}
+{% extends 'fibeWWWConfBundle::base.html.twig' %}
 
+{% block title %}Event edit{% endblock title %}
 
-<div class="container">
-    <div class="row center">
+{% block centerPanel %}
+    {{ parent() }}
     <h1>Event edit</h1>
 
     <div class="row">
      <div class="col-lg-9"></div>
           <div class="col-lg-2 btn-group">
               <a type="button" href="{{ path('schedule_event') }}" class="btn btn-warning">
-                    <i class="icon-th-list"></i>
+                    <i class="fa fa-list"></i>
               </a>
                <form  id="delete-event-form" action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
                   <input type="hidden" name="_method" value="DELETE" />
                     {{ form_widget(delete_form) }}
                 <button type="submit" class="btn btn-danger">
-                    <i class="icon-remove"></i>
+                    <i class="fa fa-trash-o"></i>
                 </button>
               </form> 
           </div>    
@@ -51,7 +52,7 @@
             <div class="col-lg-4"></div>
             <div class="col-lg-4">  
                  <button type="submit" class="btn btn-block btn-success">
-                          <i class="icon-ok"></i>
+                          <i class="fa fa-check"></i>
                 </button>
             </div>
         </div>
@@ -99,7 +100,7 @@
                      {{ form_errors(role_form) }}
                       </br>
                 <button id="role_form_submit"class="btn btn-info" type="submit">
-                    <i class="icon-plus"></i> add Person
+                    <i class="fa fa-plus"></i> add Person
                 </button>
                 </form>
                 
@@ -108,32 +109,30 @@
         </div>
       </br>
 
-  </div>
-</div>
 {% endblock %}
 
     
-{% block javascripts %} 
+{% block javascripts_page %} 
       <script type="text/javascript" >
         $(document).ready(function() { $("select").select2(); });
       </script> 
-<script type="text/javascript">
-    var ajaxForms = [
-        {
-            formId : "#eventForm",
-            route : '{{path("schedule_confevent_update", { "id": entity.id }) }}',
-            callback : function(response){
-              bootstrapAlert("success","Event updated");
-            }
-        },
-        {
-            formId : "#delete-event-form",
-            route : "{{ path('schedule_confevent_delete', { 'id': entity.id }) }}",
-            callback : function(response){
-              bootstrapAlert("success","Event deleted");
-            },
-        },
-    ];
+      <script type="text/javascript">
+      var ajaxForms = [
+          {
+              formId : "#eventForm",
+              route : '{{path("schedule_confevent_update", { "id": entity.id }) }}',
+              callback : function(response){
+                bootstrapAlert("success","Event updated");
+              }
+          },
+          {
+              formId : "#delete-event-form",
+              route : "{{ path('schedule_confevent_delete', { 'id': entity.id }) }}",
+              callback : function(response){
+                bootstrapAlert("success","Event deleted");
+              },
+          },
+      ];
 
     $(document).ready(function() { 
       for (var i in ajaxForms){
@@ -191,6 +190,6 @@
          });
         })
 </script>
-{% endblock javascripts %}
+{% endblock javascripts_page %}
 
 

@@ -1,21 +1,21 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body %}
-{{ parent() }}
-<div class="container">
-    <div class="row center">
+{% block title %}Paper edit{% endblock title %}
+
+{% block centerPanel %}
+    {{ parent() }}
     <h1>Paper edit</h1>
      <div class="row">
          <div class="col-lg-5"></div>
               <div class="col-lg-2 btn-group">
                   <a type="button" href="{{ path('schedule_paper') }}" class="btn btn-warning">
-                        <i class="icon-th-list"></i>
+                        <i class="fa fa-list"></i>
                   </a>
                    <form action="{{ path('schedule_paper_delete', { 'id': entity.id }) }}" method="post">
                       <input type="hidden" name="_method" value="DELETE" />
                         {{ form_widget(delete_form) }}
                     <button type="submit" class="btn btn-danger">
-                        <i class="icon-remove"></i>
+                        <i class="fa fa-trash-o"></i>
                     </button>
                   </form> 
               </div>    
@@ -30,10 +30,9 @@
                  {{ form_errors(edit_form) }}
                  </br>
                   <button type="submit" class="btn btn-block btn-success">
-                            <i class="icon-ok"></i>
+                            <i class="fa fa-check"></i>
                   </button>
             </div>
-        </form>
-    </div>
-</div>
+    </form>
+
 {% endblock %}

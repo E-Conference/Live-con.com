@@ -1,40 +1,93 @@
-{% extends 'fibeDashboardBundle::base.html.twig' %}
+{% extends "fibeDashboardBundle::base.html.twig" %}
+{% block title %}Dashboard{% endblock title %}
 
-{% block title %}Dashboard - seamposium{% endblock title %}
-{% block body %}
+{% block stylesheets_page %}
+{% endblock stylesheets_page %}
 
-
-{% include "fibeDashboardBundle::navbar.html.twig" %}
-  <div class="container">
-     <div class="row center">
-              <div class="row-fluid">
-
-                  <div class="col-lg-4 well">
-                        <i class="icon-calendar icon-5x" style="display:block;text-align:center"></i>
-
-                          <a href="{{ path('schedule_view') }}" role="button" class="btn btn-info btn-large" style="display:block;text-align:center">
-                            <span class="icon-calendar"></span>Manage your schedule
-                          </a>
-                  </div>
-                   <div class="col-lg-4 well">
-                       <i class="icon-cog icon-5x"  style="display:block; text-align:center"></i>
-                          <a href="{{ path('schedule_conference_show') }}" role="button" class="btn btn-success btn-large" style="display:block;text-align:center">
-                            <span class="icon-cog"></span>Manage your conference
-                          </a>
-
-                  </div>
-                  <div class="col-lg-4 well">
-                       <i class="icon-qrcode  icon-5x"  style="display:block; text-align:center"></i>
-                          <a href="{{ path('mobileAppTheme_index') }}" role="button" class="btn btn-warning btn-large" style="display:block;text-align:center">
-                            <span class="icon-grcode"></span>Manage your mobile applciation
-                          </a>
-
-                  </div>
-              </div>
+{% block sideBar_page %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#sideBarBtn" href="#collapseConferences"  title="Switch conference">
+            <i class="fa fa-folder-open fa-3x"></i> Conferences  
+        </a>
+      </h4>
+    </div>
+     <div id="collapseConferences" class="panel-collapse collapse">
+      <div class="panel-body">
+        {% for conference in app.user.getConferences() %}
+              <a role="button" class="btn btn-info btn-medium" href="{{ path('schedule_conference_switch', {id: conference.id}) }}"  >
+              {{conference.getConfName()}}
+              </a>
+           {% endfor %}
       </div>
-</div>    
+    </div>
+  </div>
+   
+   {% if is_granted("ROLE_ADMIN") and app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')==1 %} 
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a  href="{{ path('schedule_user_list') }}" title="Manage team">
+         <i class="fa fa-users fa-3x"></i> Team
+        </a>
+      </h4>
+    </div>
+  </div>
+  {% endif %}
 
-{% endblock body %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a href="{{ path('dashboard_choose_conference') }}" title="Go to homepage">
+          <i class="fa fa-home fa-3x"></i> Home</a>
+        </a>
+      </h4>
+    </div>
+  </div>
+{% endblock sideBar_page %}
+
+{% block centerPanel %}
+      {{ parent() }}
+      <div class="col-lg-4 well">
+              <a href="{{ path('schedule_view') }}" role="button" class="btn btn-info btn-large" style="display:block;text-align:center">
+                <span class="fa fa-calendar fa-5x"></span>Schedule
+              </a>
+      </div>
+       <div class="col-lg-4 well">
+              <a href="{{ path('schedule_conference_show') }}" role="button" class="btn btn-success btn-large" style="display:block;text-align:center">
+                <span class="fa fa-cogs fa-5x"></span>Settings
+              </a>
+
+      </div>
+      <div class="col-lg-4 well">
+              <a href="{{ path('mobileAppTheme_index') }}" role="button" class="btn btn-danger btn-large" style="display:block;text-align:center">
+                <span class="fa fa-mobile fa-5x"></span>Mobile app'
+              </a>
+      </div>
+       <div class="col-lg-4 well">
+              <a href="{{ path('schedule_location') }}" role="button" class="btn btn-danger btn-large" style="display:block;text-align:center">
+                <span class="fa fa-map-marker fa-5x"></span>Locations
+              </a>
+      </div>
+
+      <div class="col-lg-4 well">
+              <a href="{{ path('schedule_organization_index') }}" role="button" class="btn btn-warning btn-large" style="display:block;text-align:center">
+                <span class="fa fa-users fa-5x"></span>Organizations
+              </a>
+      </div>
+       <div class="col-lg-4 well"> 
+              <a href="{{ path('schedule_paper') }}" role="button" class="btn btn-info btn-large" style="display:block;text-align:center">
+                <span class="fa fa-book fa-5x"></span>Publications
+              </a>
+      </div>
+
+       <div class="col-lg-4 well">
+              <a href="{{ path('schedule_person_index') }}" role="button" class="btn btn-success btn-large" style="display:block;text-align:center">
+                <span class="fa fa-user fa-5x"></span>Authors
+              </a>
+      </div>
+{% endblock%}
 
 
 

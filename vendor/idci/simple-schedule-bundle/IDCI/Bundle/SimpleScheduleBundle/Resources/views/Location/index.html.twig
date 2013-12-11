@@ -1,11 +1,9 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body %}
+{% block title %}Location{% endblock title %}
 
-{{ parent() }}
-
-<div class="container">
-    <div class="row center">
+{% block centerPanel %}
+  {{ parent() }}
     <div class="page-header">
         <div class="row">
             <div class="col-lg-2">
@@ -42,10 +40,10 @@
                     {% endfor %}
                 </td>
                 <td>
-                    <a class="btn btn-block btn-default btn-small" href="{{ path('schedule_location_show', { 'id': entity.id }) }}"><i class="icon-eye-open"></i></a>
+                    <a class="btn btn-block btn-default btn-small" href="{{ path('schedule_location_show', { 'id': entity.id }) }}"><i class="fa fa-eye"></i></a>
                 </td>
                 <td>
-                    <a class="btn btn-block btn-warning btn-small edit" href="{{ path('schedule_location_edit', { 'id': entity.id }) }}"><i class="icon-pencil"></i></a>
+                    <a class="btn btn-block btn-warning btn-small edit" href="{{ path('schedule_location_edit', { 'id': entity.id }) }}"><i class="fa fa-pencil"></i></a>
                  </td> 
             </tr>
         {% endfor %}
@@ -56,8 +54,5 @@
         {{ pagerfanta(pager, 'twitter_bootstrap') }}
     </p>
 
-    </div>
-</div>
 
-
-{% endblock body %}
+{% endblock %}

@@ -1,17 +1,16 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block body %}
-{{ parent() }}
+{% block title %}New paper{% endblock title %}
 
-<div class="container">
-   <div class="row center">
+{% block centerPanel %}
+    {{ parent() }}
     <h1>Paper creation</h1>
 
     <div class="row">
      <div class="col-lg-5"></div>
           <div class="col-lg-2 btn-group">
               <a type="button" href="{{ path('schedule_paper') }}" class="btn btn-warning">
-                    <i class="icon-th-list"></i>
+                    <i class="fa fa-list"></i>
               </a>
           </div>    
      </div> 
@@ -25,13 +24,11 @@
              {{ form_errors(form) }}
              </br>
        <button type="submit" class="btn btn-block btn-success">
-                        <i class="icon-ok"></i>
+                        <i class="fa fa-check"></i>
               </button>
         </div>
     </form>
 
-    </div>
-</div>
 {% endblock %}
  
               
