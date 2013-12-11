@@ -548,6 +548,9 @@
       };
       $calendar.fullCalendar(calendarOption);  
       $calendar.fullCalendar('changeView', viewBtns[currentView].classic );
+      $('.fc-header-left').append('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"><span class="icon-refresh"></span></button>').click(function(e){
+        EventCollection.refetchEvents(true)
+      })
       // $('.fc-header-left .fc-button').click(function(){ 
       //   EventCollection.eventToRender = mainConfEvent;
       //   EventCollection.refetchEvents();
@@ -747,20 +750,7 @@
 
                             currentDragOverEvent = {id:event.id,elem:$(this)};  
                             dragOverEvents.push(currentDragOverEvent);
-                            if(draggedEvent.parent.id !== event.id) currentDragOverEvent.elem.addClass("drag-over-events") 
-                            
-                            // if(draggedEvent.parent.id === event.id){
-                            //   // already sub-event
-                            //   return;
-                            // }
-                            // if(!shortestDragOverEvent ) shortestDragOverEvent = event;
-
-                            // if(shortestDragOverEvent.duration() >= event.duration()){
-                            //   shortestDragOverEvent.elem.css({"outline":"0px dashed green"});
-                            //   lastShortestDragOverEvent = shortestDragOverEvent;
-                            //   shortestDragOverEvent = event;
-                            //   $(this).css({"outline":"3px dashed green"});
-                            // }
+                            if(draggedEvent.parent.id !== event.id) currentDragOverEvent.elem.addClass("drag-over-events")  
                             
                           }
                         },
@@ -823,46 +813,7 @@
                               draggedEvent.renderForRefetch();
                               EventCollection.refetchEvents();
                               draggedEvent.persist(); 
-                            });  
-
-                              /*
-
-                            if(shortestDragOverEvent && shortestDragOverEvent.id === event.id){
-                              shortestDragOverEvent = null;
-                              lastShortestDragOverEvent= null;
-                            }else{
-                              return;
-                            }
-
-                            var draggedEvent = dragged[1];
-                            if(draggedEvent.parent.id === event.id){
-                              // already sub-event
-                              return;
-                            }
-
-                            //check if it's going to do a loop in the tree
-                            if(event.isChild(draggedEvent)){
-                              bootstrapAlert("stop");
-                              bootstrapAlert("info","cannot set event <b>"+event.title+"</b> as child of <b>"+draggedEvent.title+"</b> because this is going to do a loop in the event tree","Circular reference : "); 
-                        
-                              return;
-                            } 
-                            setTimeout(function(){
-                              if(event.isOutOf(draggedEvent))return;
-                              // console.log("lol" ,draggedEvent)
-                              $modalSetParent.modal('show').find(".sub-event").text(draggedEvent.title);
-                              $modalSetParent.find(".super-event").text(event.title);
-
-                              $modalSetParent.find('button.yes').off("click").click(function(){
-
-                                //set event as parent of draggedEvent and children relation
-                                draggedEvent.setParent(event);
-                                draggedEvent.updateParentDate();
-                                draggedEvent.render();
-                                draggedEvent.persist(); 
-                              });  
-                            },1)
-                            */
+                            });   
                           }
                         }
                     }); //end droppable
