@@ -543,8 +543,8 @@
       };
       $calendar.fullCalendar(calendarOption);  
       $calendar.fullCalendar('changeView', viewBtns[currentView].classic );
-      $('.fc-header-left').append('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"><span class="fa fa-refresh"></span></button>').click(function(e){
-        EventCollection.refetchEvents(true)
+      $('.fc-header-left').append('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"><span class="fa fa-refresh"></span></button>').click(function(e){ 
+        EventCollection.resetEvents();
       })
       // $('.fc-header-left .fc-button').click(function(){ 
       //   EventCollection.eventToRender = mainConfEvent;
