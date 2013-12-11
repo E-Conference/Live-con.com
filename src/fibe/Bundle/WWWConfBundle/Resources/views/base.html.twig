@@ -84,7 +84,10 @@
 
 {% block body %} 
     {{ parent() }}
-    {% include "fibeWWWConfBundle::navbar.html.twig" %}
+
+    {% block navBar %} 
+        {% include "fibeWWWConfBundle::navbar.html.twig" %}
+    {% endblock navBar%}
     {% block content %} 
     <div class="content">
          {% block sideBarPanel%} 
