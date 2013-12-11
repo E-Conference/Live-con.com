@@ -9,6 +9,7 @@
     </button>
      <a class="navbar-brand" href="{{ path('dashboard_index') }}" title="Go back to Index"> <img src="{{ asset('img/livecon.png') }}" /></a>
   </div> 
+
    <div class="navbar-collapse collapse navbar-ex1-collapse">
       {% if app.user.getCurrentConf() %}
       <ul class="nav navbar-nav navbar-right">
