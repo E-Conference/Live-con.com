@@ -145,7 +145,7 @@ class CalendarEntityRepository extends EntityRepository
             $qb
                 ->andWhere($qb->expr()->in('cer.id', $params['ids']))
             ;
-        }
+        } 
 
         if(isset($params['before'])) {
             $qb
@@ -160,10 +160,11 @@ class CalendarEntityRepository extends EntityRepository
                 ->setParameter('after', new \DateTime($params['after']))
             ;
         }
-
-        if(isset($params['ids'])) {
+        
+        if(isset($params['conference_id'])) {
             $qb
-                ->andWhere($qb->expr()->in('cer.id', $params['ids']))
+                ->andWhere('cer.conference = :conference_id')
+                ->setParameter('conference_id', $params['conference_id'])
             ;
         }
 
@@ -306,13 +307,6 @@ class CalendarEntityRepository extends EntityRepository
                 ->leftJoin('cer.children', 'child')
                 ->andWhere('child.id = :child_id')
                 ->setParameter('child_id', $params['child_id'])
-            ;
-        }
-        
-        if(isset($params['conference_id'])) {
-            $qb
-                ->andWhere('cer.conference = :conference_id')
-                ->setParameter('conference_id', $params['conference_id'])
             ;
         }
 
