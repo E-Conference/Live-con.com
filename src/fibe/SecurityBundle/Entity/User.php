@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 use fibe\SecurityBundle\Entity\Authorization;
-
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  
 /**
  * @ORM\Entity
@@ -160,8 +160,11 @@ class User extends BaseUser
     *Get an authorization for a specific conference
     *
     */
-    public function getAuthorizationByConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conf)
+    public function getAuthorizationByConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conf = null)
     {
+        if($conf == null){
+            throw new AccessDeniedException('you have to choose a conference !');
+        }
         foreach ($this->authorizations as $authorization) {
             if($authorization->getConference()->getId()==$conf->getId()){
                 return $authorization;

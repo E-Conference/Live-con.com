@@ -91,6 +91,12 @@ var EventCollection = {
         }
         setTimeout(doWork, 1);
     },
+
+    resetEvents : function (){
+      EventCollection.rtnArray = {};
+      EventCollection.eventToRender = undefined;
+      EventCollection.refetchEvents(true);
+    },
     
     fitMainConfEvent : function (){
         // if(!mainConfEvent)return;
