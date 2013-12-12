@@ -131,7 +131,7 @@ class ConferenceController extends Controller
       
       //check if the processed conference belongs to the user
       $user=$this->getUser();
-      if ($user->authorizedAccesToConference($conference)) {
+      if (!$user->authorizedAccesToConference($conference)) {
           throw new AccessDeniedException('Look at your conferences !!!');
       } 
       //Authorization Verification conference datas manager
