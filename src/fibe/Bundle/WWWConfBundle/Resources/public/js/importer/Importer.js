@@ -72,10 +72,35 @@ function run(file,callback,fallback){
             // console.log(rootNode)
 
             //////////////////////////////////////////////////////////////////////////
-            ///////////////////////////  pre processing  /////////////////////////////
+            ////////////////////  pre process the root node  /////////////////////////
             //////////////////////////////////////////////////////////////////////////  
-            if(mappingConfig.preProcess!==undefined){
-                mappingConfig.preProcess(rootNode);
+            if(mappingConfig.parseConference !== undefined){
+
+                for ( var i in mappingConfig.parseConference){
+                    var confInfoMapping = mappingConfig.parseConference[i];
+                    var node = rootNode;
+                    if(confInfoMapping.child){
+                        node = NodeUtils["child"](node,confInfoMapping.child)
+                    }
+                    objects.conference[i] = NodeUtils[confInfoMapping.key](node); 
+                }
+        // parseConference : function(documentRootNode){
+
+        //     objects.conference = { 
+        //         setSummary    : $(documentRootNode).children("name").text(),
+        //         setAcronym    : $(documentRootNode).children("acronym").text(),
+        //         setDescription: $(documentRootNode).children("description").text(),
+        //         setUrl        : $(documentRootNode).children("homepage").text(),
+        //     }
+        // },
+        // setSummary : {
+        //     node : {
+        //         child : "name",
+        //     },
+        //     key : text,
+        // },
+        
+        //        mappingConfig.preProcess(rootNode);
             }
 
 
@@ -200,7 +225,7 @@ function run(file,callback,fallback){
  * @param {array} addArray      the array to populate
  * @param {object} mapping      mapping object (defined in config files)
  * @param {dom elem} node       the xml dom element from the import file
- * @param {object} arg          arg for overide function
+ * @param {object} arg          arg for the overide function
  */
 function add(addArray,mapping,node,arg){
 
@@ -336,6 +361,10 @@ function add(addArray,mapping,node,arg){
     }
 }
 
+/**
+ * utils function to get arrays index
+ */
+
 function getArrayId(arrayName,field,value){
     array = objects[arrayName];
     valueFormatted=str_format(value);
@@ -347,7 +376,9 @@ function getArrayId(arrayName,field,value){
     return -1;
 }
 
-// utils function to get arrays index
+/**
+ *  AMENE A DISPARAITRE
+ */
 function getCategoryIdFromName(name){
     name = str_format(name);
 
@@ -403,7 +434,13 @@ function getEventIdFromURI(uri,show){
         }
     }
     return undefined;
-}  
+}
+
+
+/**
+ * computes concatenation of children's dates given a parent id
+ */
+
 
 function getChildrenDate(eventIndex)
 {
@@ -464,4 +501,7 @@ NodeUtils = {
     idAttr : function(node){
         return $(node).attr("id");
     },
+    child : function(node,childNodeName){
+        return $(node).children(childNodeName);
+    }
 }

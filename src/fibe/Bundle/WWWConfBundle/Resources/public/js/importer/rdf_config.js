@@ -16,7 +16,6 @@ var rdfConfig = {
                 rootNode = $(this);
             }
         })
-
         return rootNode;
     },
     getNodeKey : function(node){ 
@@ -381,7 +380,7 @@ var rdfConfig = {
     },
     presenterMapping : {
         nodeName : 'presenter', 
-        overide : function(node){
+        override : function(node){
 
             var event ;
             $(node).children().each(function(){
@@ -403,7 +402,7 @@ var rdfConfig = {
         }
     },
     chairMapping : {
-        nodeName : 'chair', 
+        nodeName : 'chair',
         overide : function(node){
 
             var event ;
@@ -439,43 +438,6 @@ var rdfConfig = {
                     } 
                 } 
             });
-            // console.log(event);
-            // console.log("event",event,"currentEventId",currentEventId)
-            // alert("hehe")
-            // var found=false;
-            // $(event).children().each(function(){
-            //     if(this.nodeName=="swc:isSubEventOf"||this.nodeName=="swc:isSuperEventOf"){ 
-            //         var relatedToEventId=getEventIdFromURI($(this).attr('rdf:resource'));
-            //         if(relatedToEventId!=undefined && events[relatedToEventId]!=undefined ){
-                    
-            //             var relationId = getRelationIdFromCalendarEntityId(currentEventId,relatedToEventId);
-            //             if(!relations[relationId]){
-            //                 var relationType = this.nodeName.indexOf("swc:isSubEventOf")!== -1?"PARENT":"CHILD";
-            //                 events[currentEventId]['setParent'] = parseInt(relatedToEventId);
-            //                 var relation= {}; 
-            //                 relation['setCalendarEntity']=parseInt(relatedToEventId); 
-            //                 relation['setRelationType']=relationType;
-            //                 relation['setRelatedTo']=parseInt(currentEventId);
-            //                 //console.log("----------   PUSHED    -----------");
-            //                 //console.log(relation);
-            //                 relations.push(relation);
-    
-            //                 var relationType = (relationType=="PARENT"?"CHILD":"PARENT");
-            //                 var relation= {};
-            //                 relation['setCalendarEntity']=parseInt(currentEventId);
-            //                 relation['setRelationType']=relationType;
-            //                 relation['setRelatedTo']=parseInt(relatedToEventId);
-            //                 //console.log(relation);
-            //                 relations.push(relation); 
-            //                 found=true;
-            //             } 
-            //         }else{
-            //           //console.log( event['setSummary']+", "+$(this).attr('rdf:resource'));
-            //           //console.log("Unknown parent");
-                      
-            //         }
-            //     }  
-            // });
         }
     },
     organizationMapping : {

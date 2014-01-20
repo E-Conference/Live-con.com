@@ -20,7 +20,7 @@ var ocsConfig = {
         var rootNode = $(documentRootNode).children();
  
         $(documentRootNode).each(function(){
-            if(this.nodeName.toUpperCase()=== "CONFERENCE"){ 
+            if(this.nodeName.toUpperCase()=== "CONFERENCE"){
                 rootNode = $(this);
             }
         })
@@ -35,15 +35,26 @@ var ocsConfig = {
             "personMapping" : "persons",
             "proceedingMapping" : "proceedings",
             "eventMapping" : "events" 
-    }
-,    //preproccessing of the root node which contains the conference informations
-    preProcess : function(documentRootNode){
-        objects.conference = { 
-            setSummary    : $(documentRootNode).children("name").text(),
-            setAcronym    : $(documentRootNode).children("acronym").text(),
-            setDescription: $(documentRootNode).children("description").text(),
-            setUrl        : $(documentRootNode).children("homepage").text(),
-        }
+    },
+    //preproccessing of the root node which contains the conference informations
+    parseConference : {
+        //conference mapping
+        setSummary : {
+            child : "name",
+            key : "text",
+        },
+        setAcronym : {
+            child : "acronym",
+            key : "text",
+        },
+        setDescription : {
+            child : "description",
+            key : "text",
+        },
+        setUrl : {
+            child : "homepage",
+            key : "text",
+        },
     },
     personMapping : {
         //nodes are wrapped in a collection node
@@ -142,7 +153,7 @@ var ocsConfig = {
                 fk : {
                     key : "text",
                     array : "persons",
-                },  
+                },
             }
         },
     },
