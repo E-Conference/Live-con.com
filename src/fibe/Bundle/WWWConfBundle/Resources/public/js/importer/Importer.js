@@ -43,7 +43,6 @@ function run(file,callback,fallback){
             var formatConfig = { 
                 'ocs': ocsConfig,
             }
-
  
             //check format (default : rdf)
             var format = undefined;    
@@ -68,8 +67,10 @@ function run(file,callback,fallback){
                                     ? formatConfig[format] 
                                     : rdfConfig;
 
-            var rootNode = mappingConfig.getRootNode(file); 
-            // console.log(rootNode)
+            var rootNode = file; 
+            if(mappingConfig.rootNode){ 
+                rootNode = doFormat(file,mappingConfig.rootNode.format); 
+            } 
 
             //////////////////////////////////////////////////////////////////////////
             ////////////////////  pre process the root node  /////////////////////////
@@ -79,10 +80,11 @@ function run(file,callback,fallback){
                 for ( var i in mappingConfig.parseConference){
                     var confInfoMapping = mappingConfig.parseConference[i];
                     var node = rootNode;
-                    if(confInfoMapping.child){
-                        node = NodeUtils["child"](node,confInfoMapping.child)
+                    if(confInfoMapping.format){ 
+                        node = doFormat(node,confInfoMapping.format); 
+                        // node = NodeUtils["child"](node,confInfoMapping.child)
                     }
-                    objects.conference[i] = NodeUtils[confInfoMapping.key](node); 
+                    objects.conference[i] = node;
                 }
         // parseConference : function(documentRootNode){
 
@@ -491,6 +493,19 @@ function str_format(string){
     return size;
 };
 
+
+
+function doFormat(node,format){
+    console.log("doFormat");
+    console.log(node);
+    console.log(format);
+    for (var i in format){
+        var currentFormat = format[i];
+        node = NodeUtils[currentFormat.nodeUtils](node,currentFormat.arg)
+    } 
+    return node;
+}
+
 NodeUtils = {
     text : function(node){
         return $(node).text();
@@ -501,7 +516,30 @@ NodeUtils = {
     idAttr : function(node){
         return $(node).attr("id");
     },
-    child : function(node,childNodeName){
-        return $(node).children(childNodeName);
-    }
+
+    // get a specific node in a nodeSet
+    //arg[0] must contain the wanted nodeName
+    node : function(nodes,arg){
+        var rtnNode;
+        childNodeName = arg[0].toLowerCase();
+        $(nodes).each(function(){
+            if(this.nodeName.toLowerCase() === childNodeName){
+                rtnNode = $(this);
+            }
+        })
+        return rtnNode;
+    }, 
+    //arg[0] must contain the wanted child nodeName 
+    child : function(node,arg){
+        var rtnNode;
+        childNodeName = arg[0].toLowerCase();
+        $(node).children().each(function(){
+            if(this.nodeName.toLowerCase() === childNodeName){
+                rtnNode = $(this);
+            }
+        })
+        return rtnNode;
+        // return $(node).children(childNodeName);
+    },
+    
 }

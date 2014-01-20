@@ -15,45 +15,63 @@ var ocsConfig = {
 
         return formatOk; 
     },
-    getRootNode : function(documentRootNode){
-
-        var rootNode = $(documentRootNode).children();
- 
-        $(documentRootNode).each(function(){
-            if(this.nodeName.toUpperCase()=== "CONFERENCE"){
-                rootNode = $(this);
-            }
-        })
-
-        return rootNode;
- 
+    rootNode : {
+        format : [{
+            nodeUtils : "node",
+            arg : ["conference"],
+        }] 
     },
+    // getRootNode : function(documentRootNode){
+    //     var rootNode = $(documentRootNode).children();
+    //     $(documentRootNode).each(function(){
+    //         if(this.nodeName.toUpperCase()=== "CONFERENCE"){
+    //             rootNode = $(this);
+    //         }
+    //     })
+    //     return rootNode;
+    // },
     getNodeKey : "idAttr",
     getNodeName : "localName",
     parseItemOrder : {
             "organizationMapping" : "organizations",
             "personMapping" : "persons",
             "proceedingMapping" : "proceedings",
-            "eventMapping" : "events" 
+            "eventMapping" : "events"
     },
     //preproccessing of the root node which contains the conference informations
     parseConference : {
         //conference mapping
         setSummary : {
-            child : "name",
-            key : "text",
+            format : [{
+                nodeUtils : "child",
+                arg : ["name"],
+            },{
+                nodeUtils : "text",
+            }] 
         },
         setAcronym : {
-            child : "acronym",
-            key : "text",
+            format : [{
+                nodeUtils : "child",
+                arg : ["acronym"],
+            },{
+                nodeUtils : "text",
+            }] 
         },
         setDescription : {
-            child : "description",
-            key : "text",
+            format : [{
+                nodeUtils : "child",
+                arg : ["description"],
+            },{
+                nodeUtils : "text",
+            }] 
         },
         setUrl : {
-            child : "homepage",
-            key : "text",
+            format : [{
+                nodeUtils : "child",
+                arg : ["homepage"],
+            },{
+                nodeUtils : "text",
+            }] 
         },
     },
     personMapping : {
