@@ -10,18 +10,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 /**
  * Equipment controller.
- * @Route("/externalization")
+ * @Route("/importer")
  */
-class ExternalizationController extends Controller
+class ImportController extends Controller
 {
 
 	/**
      * Importer access.
     *
-    * @Route("/importer", name="schedule_externalization_importer")
+    * @Route("/", name="schedule_import_index")
     * @Template()
     */
-    public function importAction()
+    public function indexAction()
     {
       
         $em = $this->getDoctrine()->getManager();       
@@ -38,15 +38,4 @@ class ExternalizationController extends Controller
     }
 
 
-
-    /**
-     * Exporter access
-    *
-    * @Route("/exporter", name="schedule_externalization_exporter")
-    * @Template()
-    */
-    public function exportAction()
-    {
-       return  array();
-    }
 }
