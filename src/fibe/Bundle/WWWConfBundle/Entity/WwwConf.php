@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use fibe\SecurityBundle\Entity\User;
 use fibe\SecurityBundle\Entity\Authorization;
+use fibe\Bundle\WWWConfBundle\Entity\MappingFile;
 use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
 
 /**
@@ -100,6 +101,13 @@ class WwwConf
     * @ORM\JoinColumn(name="appConfig", referencedColumnName="id")
     */
     private $appConfig;
+
+    /**
+    * mappingFiles
+    *
+    * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\MappingFile", mappedBy="conference",cascade={"persist", "remove"})
+    */
+    private $mappingFiles;
 
 
 
@@ -667,5 +675,38 @@ class WwwConf
             and (count($this->organizations)==0)
             and (count($this->topics)==0);
 
+    }
+
+      /**
+     * Add mappingFiles
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\MappingFile $mappingFiles
+     * @return WwwConf
+     */
+    public function addMappingFile(\fibe\Bundle\WWWConfBundle\Entity\MappingFile $mappingFiles)
+    {
+        $this->mappingFiles[] = $mappingFiles;
+    
+        return $this;
+    }
+
+    /**
+     * Remove mappingFiles
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\MappingFile $mappingFiles
+     */
+    public function removeMappingFile(\fibe\Bundle\WWWConfBundle\Entity\MappingFile $mappingFiles)
+    {
+        $this->mappingFiles->removeElement($mappingFiles);
+    }
+
+    /**
+     * Get mappingFiles
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getMappingFiles()
+    {
+        return $this->mappingFiles;
     }
 }

@@ -1,0 +1,58 @@
+{% extends 'fibeWWWConfBundle::base.html.twig' %}
+
+{% block title %}Equipment edit{% endblock title %}
+
+{% block centerPanel %}
+    {{ parent() }}
+    <h1> Importer </h1>
+
+    <div class="col-lg-6">
+                    <h3 class="text-info">Import a data from file</h3>
+                    <form id="EventImportForm"  class="input-append">
+                        <label for="EventImport"> 
+                            Available XML input format are : 
+                                <span class="badge badge-success" ><i class="fa fa-check" ></i>  XML</span>
+                                <span class="badge badge-success"><i class="fa fa-check" ></i>  XLS</span>
+                              
+                            {% if not wwwConf.isEmpty() %}<p class="text-warning"><i class="icon-s"></i>Your conference will be emptied first!</p>{% endif %}
+                        </label>
+                        
+                    	<div class="input-group">
+ 							  <span class="input-group-addon">Mapping file</span>
+							  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+							    Mapping file <span class="caret"></span>
+							  </button>
+							  <ul class="dropdown-menu" role="menu">
+							    <li><a href="#">OCS format</a></li>
+							    <li><a href="#">SWC format</a></li>
+							  </ul>
+						</div>
+                          
+                        <div class="input-group">
+     					   <span class="input-group-addon">File to import</span>
+      	                    <input id="EventImport" method="POST" action="/uploadDataset" class="form-control" name="EventImport" value="Choose your file" type="file"/>
+                          
+                        </div>
+
+                          <span class="input-group-btn">
+                                <button disabled="disabled" type="submit"class="btn btn-default">
+                                    Process import <i class="icon-arrow-right"></i> 
+                                </button>
+                            </span>
+                    </form> 
+
+                    <h3 class="text-info">Action</h3> 
+                    <a  class="empty-conf btn btn-danger btn-xs" 
+                        {% if  wwwConf.isEmpty() %}
+                        disabled="disabled" 
+                        {% else %} 
+                        {% endif %}
+                        href="{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}"> 
+                        <i class="fa fa-trash-o"></i> Empty conference
+                    </a>
+                    
+                    
+
+                </div>
+
+ {% endblock %}
