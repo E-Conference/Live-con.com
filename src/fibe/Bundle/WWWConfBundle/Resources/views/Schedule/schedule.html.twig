@@ -511,6 +511,24 @@
               // render the event on the calendar  
                 
           },
+          eventCalculateWidth : function(event, seg, leftmost, availWidth, outerWidth, levelI, bottom, top, forward, dis,view) { 
+
+            //TODO COMPUTE WIDTH AND LEFT POS HERE TO AVOID EVENT TO BLINK 
+            //TODO COMPUTE WIDTH AND LEFT POS HERE TO AVOID EVENT TO BLINK 
+            //TODO COMPUTE WIDTH AND LEFT POS HERE TO AVOID EVENT TO BLINK  
+            //
+            // Example :
+            //
+            // event.top = top;
+            // event.left = left;
+            // event.outerWidth = outerWidth;
+            // event.outerHeight = bottom - top;
+            
+            console.log("##############################\neventCalculateWidth !!! ")
+            console.log(" event "+event.event.id+"   : ",event ) 
+            console.log(" view      : ",view) 
+            console.log(" seg:",seg," leftmost:",leftmost," availWidth:",availWidth," outerWidth:",outerWidth," levelI:",levelI,", bottom:",bottom,",top:",top," forward:",forward," dis:",dis);
+          },
           eventDragStart: function( event, jsEvent, ui, view ) { 
               dragged = [ ui.helper[0], event ];
               setTimeout(function(){ //bug... event isn't yet updated 
