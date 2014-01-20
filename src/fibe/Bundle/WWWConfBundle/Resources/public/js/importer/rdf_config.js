@@ -58,18 +58,16 @@ var rdfConfig = {
         } 
         return rtn;
     },
-    getParseItemOrder : function(){
-        return {
-            "locationMapping" : locations,
-            "organizationMapping" : organizations,
-            "personMapping" : persons,
-            "proceedingMapping" : proceedings,
-            "eventMapping" : events,
-            "presenterMapping" : roles,
-            "chairMapping" : roles,
-        };
+    parseItemOrder : {
+            "locationMapping" : "locations",
+            "organizationMapping" : "organizations",
+            "personMapping" : "persons",
+            "proceedingMapping" : "proceedings",
+            "eventMapping" : "events",
+            "presenterMapping" : "roles",
+            "chairMapping" : "roles", 
     },
-    personMapping : {
+    persons : {
         nodeName : 'person',
         label : {
 
@@ -79,7 +77,7 @@ var rdfConfig = {
                 format : function(node){  
                     return $(node).text().split(" ")[0];
                 },
-                action : function(node,person){
+                preProcess : function(node,person){
                     person["setFamilyName"] =$(node).text().split(" ")[1] || "";
                 }
             },
@@ -120,7 +118,7 @@ var rdfConfig = {
         }
     },
 
-    locationMapping : {
+    locations : {
         nodeName : 'meetingroomplace',
         label : {
             'rdfs:label' : {
@@ -132,7 +130,7 @@ var rdfConfig = {
         }
     },
 
-    proceedingMapping : {
+    proceedings : {
         nodeName : 'inproceedings',
 
         label : {
@@ -155,7 +153,7 @@ var rdfConfig = {
                     var index = getTopicIdFromName(topicName);
                     return index !== -1 ? index : false ;
                 },
-                action : function(node){
+                preProcess : function(node){
                     var topicName = $(node).text() || $(node).attr("rdf:resource");  
                     if(getTopicIdFromName(topicName)=== -1 ){
                         topics.push({'setName':str_format(topicName)});  
@@ -171,7 +169,7 @@ var rdfConfig = {
                     var index = getTopicIdFromName(topicName);
                     return index !== -1 ? index : false ;
                 },
-                action : function(node,rtnArray,value){
+                preProcess : function(node,rtnArray,value){
                     var topicName = value;  
                     if(getTopicIdFromName(topicName)=== -1 ){
                         topics.push({'setName':str_format(topicName)});  
@@ -206,41 +204,9 @@ var rdfConfig = {
 
 
         },
-        /*
-        overide : function(addArray,mapping,node){  
-            var eventUri;
-            $(node).children().each(function()
-            {
-                if(this.nodeName=="swc:relatedToEvent"  )
-                {
-                    eventUri = $(this).attr("rdf:resource");
-                }
-                
-            });
-            
-            if(eventUri){ 
-                var eventId = getEventIdFromURI(eventUri);
-
-                //if we find the related event 
-                var xproperty= {}; 
-                xproperty['setCalendarEntity']=eventId;
-                xproperty['setXNamespace']="publication_uri";
-                xproperty['setXValue']=$(node).attr('rdf:about');
-                
-                //we look for the title
-                $(node).children().each(function(){
-                    if(this.nodeName=="dce:title" || this.nodeName=="rdfs:label"  || this.nodeName=="dc:title" )
-                    {
-                        //to finally store it in the setXKey !
-                        xproperty.setXKey=str_format($(node).text());
-                    }
-                });
-                xproperties.push(xproperty);
-            } 
-        }*/
     },
 
-    eventMapping : {
+    events : {
         nodeName : 'event',
         label : {
             'rdfs:label' : {
@@ -292,7 +258,7 @@ var rdfConfig = {
                 }
             },
             'swc:hasRelatedDocument' : { 
-                action : function(node){
+                preProcess : function(node){
                     // var xproperty= {}; 
                     // xproperty['setCalendarEntity']=events.length;
                     // xproperty['setXNamespace']="publication_uri";
@@ -307,7 +273,7 @@ var rdfConfig = {
                     var topicName = $(node).text() || $(node).attr("rdf:resource"); 
                     return getTopicIdFromName(topicName);
                 },
-                action : function(node){
+                preProcess : function(node){
                     var topicName = $(node).text() || $(node).attr("rdf:resource"); 
                     if(getTopicIdFromName(topicName)=== -1 ){
                         topics.push({setName:str_format(topicName)});  
@@ -326,7 +292,7 @@ var rdfConfig = {
                     }
                     return getLocationIdFromName(locationName);
                 },
-                action : function(node){
+                preProcess : function(node){
                     var key = $(node).text() || $(node).attr('rdf:resource');
                     if(objectMap[key])
                         locationName = objectMap[key]['setName'];
@@ -360,14 +326,14 @@ var rdfConfig = {
             },
         },
         //post processing
-        action : function(node,event){
+        postProcess : function(node,event){
 
             // EVENT CAT 
             var catName
                 ,tmp
                 ,isMainConfEvent = false;
 
-            //different ways to get the category name 
+            //3 different ways to get the category name 
             tmp = node.nodeName.split("swc:").join("").split("&swc;").join("").split("event:").join("");
             if(testCatName(tmp))catName = tmp;
 
@@ -379,7 +345,7 @@ var rdfConfig = {
  
             if(catName){
                 var catId = getCategoryIdFromName(catName);
-                if(catId==undefined){ 
+                if(catId==-1){ 
                     var category= {}; 
                     category['setName']=catName;
                     // console.log(catName);
@@ -460,7 +426,7 @@ var rdfConfig = {
         }
     },
 
-    relationMapping : {
+    relations : {
         nodeName : 'event',
         overide : function(node){ 
             var event = objectMap[rdfConfig.getNodeKey(node)];

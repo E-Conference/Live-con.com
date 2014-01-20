@@ -1,18 +1,5 @@
 
-
-var conference,
-    events,
-    locations,
-    xproperties,
-    relations,
-    categories,
-    proceedings,
-    persons,
-    topics,
-    proceedings,
-    organizations,
-    relations,
-    roles;
+var objects = {};
 
 var notImportedLog,
     importedLog;
@@ -32,19 +19,22 @@ function run(file,callback,fallback){
                 return;
             } 
 
+
             var confName ;
-            events         = [],
-            locations      = [],
-            xproperties    = [],
-            relations      = [],
-            categories     = [],
-            proceedings    = [],
-            persons        = [],
-            topics         = [],
-            proceedings    = [],
-            organizations  = [],
-            roles          = [],
-            conference     = {},
+
+            objects["events"]         = [],
+            objects["locations"]      = [],
+            objects["xproperties"]    = [],
+            objects["relations"]      = [],
+            objects["categories"]     = [],
+            objects["proceedings"]    = [],
+            objects["persons"]        = [],
+            objects["topics"]         = [],
+            objects["proceedings"]    = [],
+            objects["organizations"]  = [],
+            objects["roles"]          = [], 
+            objects["conference"]     = {},
+
             notImportedLog = {},
             importedLog    = {},
             objectMap      = {}; 
@@ -78,8 +68,7 @@ function run(file,callback,fallback){
                                     ? formatConfig[format] 
                                     : rdfConfig;
 
-            var rootNode = mappingConfig.getRootNode(file);
-            var parseItemOrder =  mappingConfig.getParseItemOrder();
+            var rootNode = mappingConfig.getRootNode(file); 
             // console.log(rootNode)
 
             //////////////////////////////////////////////////////////////////////////
@@ -95,9 +84,11 @@ function run(file,callback,fallback){
             ///////////////////////////  items Processing  ///////////////////////////
             //////////////////////////////////////////////////////////////////////////
  
-            for (var i in parseItemOrder){ 
+            for (var i in mappingConfig.parseItemOrder){ 
                 var itemMapping = mappingConfig[i];
-                var addArray = parseItemOrder[i];
+                var addArray = objects[mappingConfig.parseItemOrder[i]];
+                console.log(itemMapping);
+                console.log(addArray);
                 rootNode.children().each(function(index,node){
                     var n = mappingConfig.getNodeName(node); 
                     // console.log("parsing : "+n.toLowerCase());
@@ -112,77 +103,23 @@ function run(file,callback,fallback){
             //////////////////////////////////////////////////////////////////////////
             /////////////////////////////  relationships  ////////////////////////////
             //////////////////////////////////////////////////////////////////////////
-            
-            var j=0;
-            rootNode.children().each(function(index,node){ 
-                var n = mappingConfig.getNodeName(node); 
-                if(n && n.toLowerCase().indexOf(mappingConfig.relationMapping.nodeName)!= -1){  
-                    add(relations,mappingConfig.relationMapping,this,{name:n,eventId:j});  
-                    j++;
-                }
-            });
-            // $(completeConfRdf).children().children().each(function(index,node){ 
-            //     if( node.nodeName=="NamedIndividual" ) {
-            //         var n = mappingConfig.getNodeName(node);
-            //         if(n && n.indexOf("Event")!= -1){
-            //             // j is supposed to be the event index inside the events array
-            //             addRelation(node,j);
-            //             j++;
-            //         }
-            //     }
-            // });
-              
-            
-            // $(completeConfRdf).children().children().each(function(index,node){ 
-            //     if( node.nodeName=="NamedIndividual" ) 
-            //     {
-            //         var n = mappingConfig.getNodeName(node);
-            //         if(n && n.indexOf("InProceedings")!= -1)
-            //         {   
-            //             var eventUri;
-            //             $(node).children().each(function()
-            //             {
-            //                 if(this.nodeName=="swc:relatedToEvent"  )
-            //                 {
-            //                     eventUri = $(this).attr("rdf:resource");
-            //                 }
-                            
-            //             });
-                        
-            //             if(eventUri){ 
-            //                 eventId = getEventIdFromURI(eventUri);
+            if(mappingConfig.relationMapping){ 
+                var j=0;
+                rootNode.children().each(function(index,node){ 
+                    var n = mappingConfig.getNodeName(node); 
+                    if(n && n.toLowerCase().indexOf(mappingConfig.relationMapping.nodeName)!= -1){  
+                        add(relations,mappingConfig.relationMapping,this,{name:n,eventId:j});  
+                        j++;
+                    }
+                });
+            }
 
-            //                 //if we find a related event 
-            //                 var xproperty= {}; 
-            //                 xproperty['setCalendarEntity']=eventId;
-            //                 xproperty['setXNamespace']="publication_uri";
-            //                 xproperty['setXValue']=$(node).attr('rdf:about');
-                            
-            //                 //we look for the title
-            //                 $(node).children().each(function(){
-            //                     if(this.nodeName=="dce:title" || this.nodeName=="rdfs:label"  || this.nodeName=="dc:title" )
-            //                     {
-            //                         //to finally store it in the setXKey !
-            //                         xproperty.setXKey=str_format($(node).text());
-            //                     }
-            //                 });
-            //                 xproperties.push(xproperty);
-            //             } 
-            //         }
-            //     }
-            // }); 
-             
             //////////////////////////////////////////////////////////////////////////
             ///////////////////////////// startAt less  //////////////////////////////
             //////////////////////////////////////////////////////////////////////////
-            
-            // setRecursiveDates();
-            for(var i=0;i<events.length;i++){
-                var event = events[i];
-            // if(rtnArray.setAcronym){
-            //     console.log("rtnArray",rtnArray)
-            //     alert("lol")
-            // }
+             
+            for(var i=0;i<objects.events.length;i++){
+                var event = objects.events[i]; 
                 if(event['setStartAt']){
                     
                     //allDay events
@@ -211,67 +148,27 @@ function run(file,callback,fallback){
                     }
                 }
             }
-            // if(!conference.setStartAt){
-            //     conference['setStartAt'] = defaultDate; 
-            //     conference['setEndAt'] = moment().add('d', 2).format('YYYY-MM-DDTHH:mm:ss Z');
-            // }
-            
-            //////////////////////////////////////////////////////////////////////////
-            ////////////////////////  INHERIT Child DATE  ///////////////////////////
-            //////////////////////////////////////////////////////////////////////////
-            /*var maxCllStck=1000;
-            var ctn;
-                    alert(events.length);
-            for(var i=0;i<events.length;i++){
-                if(events[i]['setStartAt']==undefined){ 
-                    ctn=0;
-                    var childDate= getChildDate(i);
-                    if(childDate!=undefined){
-                        
-                        //multiple days events
-                        if(moment(childDate.start).dayOfYear() != moment(childDate.end).dayOfYear()){
-                            childDate.start = moment(childDate.start).hour(0).minute(0).second(0).millisecond(0);
-                            childDate.end = moment(childDate.end).hour(0).minute(0).second(0).millisecond(0).add('d', 1);
-                        }
-                        //alert(moment(childDate.start)+", "+moment(childDate.end));
-                        events[i]['setStartAt']=childDate.start;
-                        events[i]['setEndAt']=childDate.end;
-                    }else{
-                    
-                        var parentStartAt= getParentProp(i,'setStartAt');
-                        //alert(parentStartAt);
-                        if(parentStartAt){
-                            events[i]['setStartAt']=parentStartAt;
-                            events[i]['setEndAt']=getParentProp(i,'setEndAt');
-                        }else{
-                            events[i]['setStartAt']=events[0]['setStartAt'];
-                            events[i]['setEndAt']=events[0]['setEndAt'];
-                            console.log("no date found for : ")
-                            console.log(events[i]);
-                        } 
-                    }
-                }
-            }  */
+
             
             
             // SEND TO IMPORT PHP SCRIPT 
-            for (var i=0;i<locations.length;i++)
+            for (var i=0;i<objects.locations.length;i++)
             {
-                delete locations[i]["uri"];
+                delete objects.locations[i]["uri"];
             }
             var dataArray={}; 
-            dataArray['conference']=conference;  
-            dataArray['persons']=persons;   
-            dataArray['events']=events; 
-            dataArray['proceedings']=proceedings; 
-            dataArray['organizations']=organizations; 
-            dataArray['topics']=topics;   
-            dataArray['locations']=locations;  
-            dataArray['categories']=categories;
+            dataArray['conference']=objects.conference;  
+            dataArray['persons']=objects.persons;   
+            dataArray['events']=objects.events; 
+            dataArray['proceedings']=objects.proceedings; 
+            dataArray['organizations']=objects.organizations; 
+            dataArray['topics']=objects.topics;   
+            dataArray['locations']=objects.locations;  
+            dataArray['categories']=objects.categories;
             // dataArray['xproperties']=xproperties; 
             console.log('---------finished---------' );
             console.log(dataArray);
-            console.log(roles)
+            console.log(objects.roles)
 
             var empty = true;
             for (var i in dataArray){
@@ -347,8 +244,8 @@ function add(addArray,mapping,node,arg){
         });
              
          //post processing
-        if(mapping.action){
-            if(mapping.action(node,rtnArray) === true){
+        if(mapping.postProcess){
+            if(mapping.postProcess(node,rtnArray) === true){
                 //if it was the main conf event
                 // console.log(rtnArray)
                 // alert("main conf event found")
@@ -383,8 +280,34 @@ function add(addArray,mapping,node,arg){
             function setWithValue(mapping,nodeName,node,arg,val){
 
                 // pre processing
-                if(mapping.label[nodeName].action){
-                    mapping.label[nodeName].action(node,rtnArray,val); 
+                if(mapping.label[nodeName].preProcess){
+                    mapping.label[nodeName].preProcess(node,rtnArray,val); 
+                }
+
+                if(mapping.label[nodeName].fk){   
+                    var key = NodeUtils[mapping.label[nodeName].fk.key](node); 
+                    //pointed entity isn't a concrete node in this format and thus, don't contains any index 
+                    //so we must retrieve an index with getArrayId instead of objectMap 
+                    //i.e. keywords in ocs format
+                    var pointedEntity;
+                    if(mapping.label[nodeName].fk.findInArrayWith){
+                        pointedEntity = objects[ getArrayId(mapping.label[nodeName].fk.array,mapping.label[nodeName].fk.findInArrayWith,key) ];
+                    }else{
+                        pointedEntity = objectMap[key];
+                    } 
+                    if(pointedEntity){
+                        val = $.inArray(pointedEntity, objects[mapping.label[nodeName].fk.array]);
+                    }else {
+                        if(mapping.label[nodeName].fk.create){
+                            var entry = {};
+                            entry[mapping.label[nodeName].fk.findInArrayWith] = key;
+                            objects[mapping.label[nodeName].fk.array].push(entry);  
+                            val = objects[mapping.label[nodeName].fk.array].length -1 ;
+                        }else{
+                            conole.warn(mapping.label[nodeName].setter+" : "+key+" can't be found");
+                            return;
+                        }
+                    }   
                 }
 
                 if(mapping.label[nodeName].format){   
@@ -413,13 +336,24 @@ function add(addArray,mapping,node,arg){
     }
 }
 
+function getArrayId(arrayName,field,value){
+    array = objects[arrayName];
+    valueFormatted=str_format(value);
+    for (var i=0;i<array.length;i++){ 
+        if(array[i][field]==value || array[i][field]==valueFormatted){
+            return i; 
+        }
+    }
+    return -1;
+}
+
 // utils function to get arrays index
 function getCategoryIdFromName(name){
     name = str_format(name);
 
-    for (var i=0;i<categories.length;i++){
+    for (var i=0;i<objects.categories.length;i++){
         //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
-        if(categories[i]['setName']==name){
+        if(objects.categories[i]['setName']==name){
             return i; 
         }
     }
@@ -428,9 +362,9 @@ function getCategoryIdFromName(name){
 
 function getLocationIdFromUri(uri){ 
 
-    for (var i=0;i<locations.length;i++){
+    for (var i=0;i<objects.locations.length;i++){
         //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
-        if(locations[i]['uri']==uri){
+        if(objects.locations[i]['uri']==uri){
             return i; 
         }
     }
@@ -439,10 +373,10 @@ function getLocationIdFromUri(uri){
 
 function getLocationIdFromName(locationName){
     locationName = str_format(locationName);
-    for (var i=0;i<locations.length;i++){
+    for (var i=0;i<objects.locations.length;i++){
         //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
         // alert(locationName+" == "+locations[i]['setName']+"\n"+(locations[i]['setName']==locationName ?"true":"false"));
-        if(locations[i]['setName']==locationName){
+        if(objects.locations[i]['setName']==locationName){
             return i; 
         }
     }
@@ -452,9 +386,9 @@ function getLocationIdFromName(locationName){
 function getTopicIdFromName(topicName){
     topicName = str_format(topicName);
     
-    for (var i=0;i<topics.length;i++){
+    for (var i=0;i< objects.topics.length;i++){
         //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
-        if(topics[i]['setName']==topicName){
+        if(objects.topics[i]['setName']==topicName){
             return i; 
         }
     }
@@ -463,166 +397,21 @@ function getTopicIdFromName(topicName){
 
 function getEventIdFromURI(uri,show){
 
-    for (var i=0;i<xproperties.length;i++){
-        //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
-        if(show)alert(xproperties[i]['setXValue']+" =?= "+uri);
-        if(xproperties[i]['setXValue']==uri){
-            return xproperties[i]['setCalendarEntity'];
+    for (var i=0;i<objects.xproperties.length;i++){ 
+        if(objects.xproperties[i]['setXValue']==uri){
+            return objects.xproperties[i]['setCalendarEntity'];
         }
     }
     return undefined;
-}
-
-// function getParentIndex(eventIndex){
-//     for(var i=0;i<relations.length;i++){
-//          if(relations[i]['setRelatedTo'] == eventIndex  && relations[i]['setRelationType'].indexOf("PARENT")!=-1 ){
-//             return relations[i]['setCalendarEntity'];
-//          }
-//     }
-//     // console.log("event "+ eventIndex +" has no parent");
-//     // console.log(events[eventIndex]);
-//     return undefined;
-// }
- 
-
-// function getChildIndex(eventIndex){
-//     var rtrnArray=[];
-//     for(var i=0;i<relations.length;i++){  
-//          if(relations[i]['setRelatedTo'] == eventIndex  && relations[i]['setRelationType'].indexOf("CHILD")!=-1 ){ 
-//             rtrnArray.push( relations[i]['setCalendarEntity']);
-//          }
-//     } 
-//     return rtrnArray.length==0 ? undefined : rtrnArray;
-// }
- 
-
-
-// function getRelationIdFromCalendarEntityId(eventId,relatedToEventId){
-//     for(var i=0;i<relations.length;i++){  
-         
-//          if(relations[i]['setCalendarEntity'] === eventId && relations[i]['setRelatedTo'] === relatedToEventId){  
-//             return i;
-//          }
-//     } 
-//     return undefined;
-    
-// } 
-/*
-function getTrackEventFromInProceedingsUri(ProceedingsUri){
-    
-    for(var trackEvent in proceedings){  
-         
-        for(var j=0;j<proceedings[trackEvent].length;j++){  
-             
-             if(proceedings[trackEvent][j] === ProceedingsUri){  
-                return trackEvent;
-             }
-        } 
-    } 
-    return undefined;
-    
-}
-*/
-
-// GET RECURSIVELY PARENT PROP
-
-// function getParentProp(eventIndex,parentProp)
-// { 
-//     //ctn++;
-//     if(ctn>maxCllStck)
-//         return undefined;
-    
-//     var parentIndex=getParentIndex(eventIndex); 
-    
-//     if( parentIndex == undefined )
-//         return undefined;
-    
-//     // console.log("getParentProp(eventIndex,parentProp)");
-//     // console.log(eventIndex);
-//     // console.log(parentProp);
-//     // console.log(events[parentIndex][parentProp]);
-//     if( events[parentIndex][parentProp])
-//         return events[parentIndex][parentProp];
-        
-//     return getParentProp(parentIndex,parentProp);
-// }
-
-
-function setRecursiveDates(){
-
-
-    var done = [];
-    for(var i=0;i<events.length;i++)
-    {
-        var event = events[i]; 
-        var parentId = event.setParent;
-        if(parentId && $.inArray( parentId, done ) ){
-            var parent = events[parentId];
-            if(!parent.mainConferenceEvent)
-            {
-                var childrenDate = getChildrenDate(parentId); 
-                parent["setStartAt"] = childrenDate.start;
-                parent["setEndAt"] = childrenDate.end; 
-            }
-        }
-    }
-
-    // var lowestChildren = getLowestChildren();
-    // console.log(lowestChildren);
-    // var done = [];
-    // for(var i=0;i<lowestChildren.length;i++)
-    // {
-    //     var event = lowestChildren[i]; 
-    //     var parentId = event.setParent;
-    //     if(parentId && $.inArray( parentId, done ) ){
-    //         var parent = events[parentId];
-    //         if(!parent.mainConferenceEvent)
-    //         {
-    //             var childrenDate = getChildrenDate(parentId); 
-    //             parent["setStartAt"] = childrenDate.start;
-    //             parent["setEndAt"] = childrenDate.end;
-    //             done.push(parentId);
-    //         }
-    //     }
-    // }
-}
-
-function getLowestChildren(){
-
-    var rtn = [];
-    for(var i=0;i<events.length;i++)
-    {
-        var event = events[i];
-        var children = getChildren(i);
-        if(children.length == 0)
-        { 
-            rtn.push(event)
-        } 
-    }
-    return rtn;
-}
-
-function getChildren(eventIndex)
-{
-    var rtn = [];
-    for (var i in events)
-    {
-        var child = events[i];
-        if(child.setParent == eventIndex)
-        { 
-            rtn.push({event:child,id:i});
-        } 
-    }
-    return rtn;
-}
+}  
 
 function getChildrenDate(eventIndex)
 {
     var start = moment('5010-10-20'); 
     var end   = moment('1900-10-20');
-    for (var i in events)
+    for (var i in objects.events)
     {
-        var child = events[i];
+        var child = objects.events[i];
         if(child.setParent == eventIndex)
         { 
             if( child['setStartAt'] && moment(child['setStartAt']).isBefore(start)){
@@ -635,60 +424,7 @@ function getChildrenDate(eventIndex)
     }
     if(start.isSame(moment('5010-10-20')) || end.isSame(moment('1900-10-20')) )return undefined;
     return {start:start.format(),end:end.format()}
-}
-// function getChildDate(eventIndex){ 
-
-//     var childIndexArr=getChildIndex(eventIndex);
-    
-//     if( !childIndexArr )
-//         return undefined;
-    
-//     var start = moment('5010-10-20'); 
-//     var end = moment(defaultDate);
-//     for (var i=0;i<childIndexArr.length;i++){
-    
-//         var childId = childIndexArr[i];
-//         if( events[childId]['setStartAt'] && moment(events[childId]['setStartAt']).isBefore(start)){
-//           start = events[childId]['setStartAt'];
-//         }
-//         if( events[childId]['setEndAt'] && moment(events[childId]['setEndAt']).isAfter(end)){
-//           end = events[childId]['setEndAt'];
-//         }
-          
-//     }
-//     if(!moment(start).isSame('5010-10-20') && !moment(end).isSame(defaultDate)){
-//       return {start:start,end:end};
-       
-    
-//     }
-    
-//     return getChildrenDate(childIndexArr);
-// }
-
-// function getChildrenDate(childIndexArr){  
-//     var start = moment('5010-10-20'); 
-//     var end = moment(defaultDate);
-//     for (var i=0;i<childIndexArr.length;i++){ 
-    
-//         var childId = childIndexArr[i];
-//         var date = getChildDate(childId);
-        
-//         if( date.start && moment(date.start).isBefore(start)){
-//           start = date.start;
-//         }
-//         if( date.end && moment(date.end).isAfter(end)){
-//           end = date.end;
-//         }
-          
-//     }
-    
-//     if(!moment(start).isSame('5010-10-20') && !moment(end).isSame(defaultDate)){
-//       return {start:start,end:end};
-//     } 
-        
-//         return undefined;
-// }
- 
+} 
 
 function str_format(string){
     // return string ;
@@ -696,7 +432,6 @@ function str_format(string){
         // return unescape(encodeURIComponent(string));  
 
     // console.log("format:",string)
-    return string
                 // .split(/(\r\n|\n|\r)/gm).join(" ")//line break
                 // .split(/\s+/g).join(" ")//spaces
                 // .split(/\x26/).join("%26")//spaces
@@ -709,6 +444,7 @@ function str_format(string){
     //              .split(/\x3D/).join("%3D")// & caract
     //              .split(/\ue00E9/).join("e")// & caract
     //              ;
+    return string;
 }
 
 
@@ -717,3 +453,9 @@ function str_format(string){
     for (key in obj)if (obj.hasOwnProperty(key)) size++;
     return size;
 };
+
+NodeUtils = {
+    text : function(node){
+        return $(node).text();
+    }
+}

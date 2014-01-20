@@ -35,18 +35,15 @@ var ocsConfig = {
     getNodeName : function(node){
         return node.localName;
     },
-    getParseItemOrder : function(){
-        return {
-            "locationMapping" : locations,
-            "organizationMapping" : organizations,
-            "personMapping" : persons,
-            "proceedingMapping" : proceedings,
-            "eventMapping" : events
-        };
+    parseItemOrder : {
+            "organizationMapping" : "organizations",
+            "personMapping" : "persons",
+            "proceedingMapping" : "proceedings",
+            "eventMapping" : "events" 
     },
     //preproccessing of the root node which contains the conference informations
     preProcess : function(documentRootNode){
-        conference = { 
+        objects.conference = { 
             setSummary    : $(documentRootNode).children("name").text(),
             setAcronym    : $(documentRootNode).children("acronym").text(),
             setDescription: $(documentRootNode).children("description").text(),
@@ -67,26 +64,15 @@ var ocsConfig = {
             'email' : {
                 setter : 'setEmail'
             },
-            // 'country' : {
-            //     setter : 'setCountry',
-            // },
             'organization-id' : {
                 multiple : true,
                 setter : 'addOrganization',
-                format : function(node){ 
-                    var key = $(node).text(); 
-                    if(objectMap[key])
-                        return $.inArray(objectMap[key], organizations);
-                    else {
-                        console.warn("organization : "+key+" can't be found");
-                    }  
-                }, 
-
+                fk : {
+                    key : "text",
+                    array : "organizations",
+                },  
             },
         }
-    },
-
-    locationMapping : {
     },
 
     eventMapping : {  
@@ -100,43 +86,32 @@ var ocsConfig = {
                 wrapped : true,
                 multiple : true,
                 setter : 'addPaper',
-                format : function(node){ 
-                    var key = $(node).text(); 
-                    if(objectMap[key])
-                        return $.inArray(objectMap[key], proceedings);
-                    else {
-                        console.warn("paper : "+key+" can't be found");
-                    }  
-                } 
+                fk : {
+                    key : "text",
+                    array : "proceedings",
+                },  
             },
             'pc-chairs' : {
                 wrapped : true,
                 multiple : true,
                 setter : 'addChair',
-                format : function(node){ 
-                    var key = $(node).text(); 
-                    if(objectMap[key])
-                        return $.inArray(objectMap[key], persons);
-                    else {
-                        console.warn("chair : "+key+" can't be found");
-                    }  
-                },  
+                fk : {
+                    key : "text",
+                    array : "persons",
+                }, 
             }
         },
-        action : function(node,event){
-              // add session category
-            var catName = "SessionEvent"; 
-
-            var catId = getCategoryIdFromName(catName);
-            if(catId==undefined){ 
+        postProcess : function(node,event){
+            var catName = "SessionEvent";
+            var catId = getArrayId("categories",'setName',catName);
+            if(catId==-1){
               var category= {}; 
               category['setName']=catName;
-              
-              categories.push(category);
-              catId = categories.length-1;
+              objects.categories.push(category);
+              catId = objects.categories.length-1;
             }
             event['addCategorie']=catId; 
-        }, 
+        },
     },
 
     proceedingMapping : {
@@ -155,31 +130,35 @@ var ocsConfig = {
                 wrapped : true,
                 multiple : true,
                 setter : 'addTopic',
-                format : function(node){ 
-                    var topicName = $(node).text();
-                    var index = getTopicIdFromName(topicName);
-                    return index !== -1 ? index : false ;
-                },
-                action : function(node){
-                    var topicName = $(node).text();  
-                    if(getTopicIdFromName(topicName)=== -1 ){
-                        topics.push({'setName':str_format(topicName)});  
-                    }
-                }
+                //keywords aren't entities in this format and thus, don't contains any index 
+                //so we must retrieve an index with getArrayId instead of objectMap 
+                fk : {
+                    key : "text",
+                    array : "topics",
+                    findInArrayWith : "setName",
+                    create : true,
+                },  
+                // format : function(node){ 
+                //     var topicName = $(node).text();
+                //     var index = getArrayId("topics",'setName',topicName);
+                //     return index !== -1 ? index : false ;
+                // },
+                // preProcess : function(node){
+                //     var topicName = $(node).text();  
+                //     if(getArrayId("topics",'setName',topicName)=== -1 ){
+                //         objects.topics.push({'setName':str_format(topicName)});  
+                //     }
+                // }
             },
             //authors are retrieved from their id in the objectMap .
             'authors' : {
                 wrapped : true,
                 multiple : true,
                 setter : 'addAuthor',
-                format : function(node){ 
-                    var key = $(node).text(); 
-                    if(objectMap[key])
-                        return $.inArray(objectMap[key], persons);
-                    else {
-                        console.warn("author : "+key+" can't be found");
-                    }  
-                }, 
+                fk : {
+                    key : "text",
+                    array : "persons",
+                },  
             }
         },
     },
@@ -197,5 +176,5 @@ var ocsConfig = {
         }
 
     },
-    relationMapping : {}
+
 };
