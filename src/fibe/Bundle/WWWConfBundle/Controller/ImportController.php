@@ -38,4 +38,28 @@ class ImportController extends Controller
     }
 
 
+    /**
+     * Importer access.
+    *
+    * @Route("/xls", name="schedule_import_xls")
+    * @Template()
+    */
+    public function xlsImportAction()
+    {
+      
+        $em = $this->getDoctrine()->getManager();       
+        $wwwConf = $this->getUser()->getCurrentConf();
+
+        //Authorization Verification conference datas manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+        return array(
+              'wwwConf'  => $wwwConf,
+              'authorized' => $authorization->getFlagconfDatas()
+              );
+    }
+
+
+
 }
