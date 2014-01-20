@@ -28,20 +28,15 @@ var ocsConfig = {
         return rootNode;
  
     },
-    getNodeKey : function(node){
-        // console.log(node)
-        return $(node).attr("id");
-    },
-    getNodeName : function(node){
-        return node.localName;
-    },
+    getNodeKey : "idAttr",
+    getNodeName : "localName",
     parseItemOrder : {
             "organizationMapping" : "organizations",
             "personMapping" : "persons",
             "proceedingMapping" : "proceedings",
             "eventMapping" : "events" 
-    },
-    //preproccessing of the root node which contains the conference informations
+    }
+,    //preproccessing of the root node which contains the conference informations
     preProcess : function(documentRootNode){
         objects.conference = { 
             setSummary    : $(documentRootNode).children("name").text(),
@@ -137,18 +132,7 @@ var ocsConfig = {
                     array : "topics",
                     findInArrayWith : "setName",
                     create : true,
-                },  
-                // format : function(node){ 
-                //     var topicName = $(node).text();
-                //     var index = getArrayId("topics",'setName',topicName);
-                //     return index !== -1 ? index : false ;
-                // },
-                // preProcess : function(node){
-                //     var topicName = $(node).text();  
-                //     if(getArrayId("topics",'setName',topicName)=== -1 ){
-                //         objects.topics.push({'setName':str_format(topicName)});  
-                //     }
-                // }
+                },   
             },
             //authors are retrieved from their id in the objectMap .
             'authors' : {

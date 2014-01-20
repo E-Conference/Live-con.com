@@ -90,7 +90,7 @@ function run(file,callback,fallback){
                 console.log(itemMapping);
                 console.log(addArray);
                 rootNode.children().each(function(index,node){
-                    var n = mappingConfig.getNodeName(node); 
+                    var n = NodeUtils[mappingConfig.getNodeName](node);  
                     // console.log("parsing : "+n.toLowerCase());
                     // console.log("expecting : "+itemMapping.nodeName);
 
@@ -106,7 +106,7 @@ function run(file,callback,fallback){
             if(mappingConfig.relationMapping){ 
                 var j=0;
                 rootNode.children().each(function(index,node){ 
-                    var n = mappingConfig.getNodeName(node); 
+                    var n = NodeUtils[mappingConfig.getNodeName](node); 
                     if(n && n.toLowerCase().indexOf(mappingConfig.relationMapping.nodeName)!= -1){  
                         add(relations,mappingConfig.relationMapping,this,{name:n,eventId:j});  
                         j++;
@@ -219,7 +219,7 @@ function add(addArray,mapping,node,arg){
 
     function process(addArray,mapping,node,arg){
         var rtnArray = {};
-        var key = mappingConfig.getNodeKey(node);
+        var key = NodeUtils[mappingConfig.getNodeKey](node); 
         // console.log("processing : "+key);
         $(node).children().each(function(){ 
             if(mapping.label[this.localName]!== undefined){
@@ -457,5 +457,11 @@ function str_format(string){
 NodeUtils = {
     text : function(node){
         return $(node).text();
-    }
+    },
+    localName : function(node){
+        return node.localName;
+    },
+    idAttr : function(node){
+        return $(node).attr("id");
+    },
 }
