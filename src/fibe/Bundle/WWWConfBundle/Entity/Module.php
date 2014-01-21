@@ -36,13 +36,6 @@ class Module
      */
     private $paperModule;
 
-    /**
-     * @ORM\OneToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf")
-     **/
-    private $conference; 
-
-
-   
 
     /**
      * Get id
@@ -76,28 +69,4 @@ class Module
     {
         return $this->paperModule;
     }
-
-    /**
-     * Set conference
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
-     * @return Module
-     */
-    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference = null)
-    {
-        $this->conference = $conference;
-    
-        return $this;
-    }
-
-    /**
-     * Get conference
-     *
-     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
-     */
-    public function getConference()
-    {
-        return $this->conference;
-    }
-    
 }

@@ -184,7 +184,7 @@ class PersonController extends Controller
 
 
 
-        $editForm = $this->createForm(new PersonType($this->getUser()), $entity);
+        $editForm = $this->createForm(new PersonType($user), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('fibeWWWConfBundle:Person:edit.html.twig', array(

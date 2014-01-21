@@ -45,12 +45,17 @@
                      <tr>
                         <th>Papers</th>
                         <td> {% for paper in entity.papers %}
-                              <li>
-                                <a href="{{ path('schedule_paper_show', { 'id': paper.id }) }}">
-                                    {{ paper.title|e }}
-                                </a>
-                              </li>
-                              {% endfor %}
+
+                                  <li>
+                                    {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
+                                      <a href="{{ path('schedule_paper_show', { 'id': paper.id }) }}">
+                                          {{ paper.title|e }}
+                                      </a>
+                                    {% else %}
+                                          {{ paper.title|e }}
+                                    {% endif %}
+                                  </li>
+                                  {% endfor %}
                         </td>
                     </tr>
                     <tr>

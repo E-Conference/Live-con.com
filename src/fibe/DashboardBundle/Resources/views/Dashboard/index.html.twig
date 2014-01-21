@@ -76,16 +76,18 @@
                 <span class="fa fa-users fa-5x"></span>Organizations
               </a>
       </div>
+      {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
        <div class="col-lg-4 well"> 
               <a href="{{ path('schedule_paper') }}" role="button" class="btn btn-info btn-large" style="display:block;text-align:center">
                 <span class="fa fa-book fa-5x"></span>Publications
               </a>
       </div>
-
+      {% endif %}
        <div class="col-lg-4 well">
               <a href="{{ path('schedule_person_index') }}" role="button" class="btn btn-success btn-large" style="display:block;text-align:center">
                 <span class="fa fa-user fa-5x"></span>Authors
               </a>
+      
       </div>
 
       <div class="col-lg-4 well">

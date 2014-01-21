@@ -67,7 +67,9 @@
                         </ul>
                         </li>
                         <li class="list-group-item"><h5>Events <span class="badge">{{ conference.events|length }}</span></h5></li>
+                        {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
                         <li class="list-group-item"><h5>Papers <span class="badge">{{ conference.papers|length }}</span></h5> </li>
+                        {% endif %}
                         <li class="list-group-item"><h5>Locations <span class="badge">{{ conference.locations|length }}</span></h5></li>
                         <li class="list-group-item"><h5>Persons <span class="badge">{{ conference.persons|length }}</span></h5> </li>
                         <li class="list-group-item"><h5>Topics <span class="badge">{{ conference.topics|length }}</span></h5> </li>

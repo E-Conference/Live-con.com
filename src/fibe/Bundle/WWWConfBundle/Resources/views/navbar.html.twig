@@ -65,6 +65,8 @@
           </ul>
         </li> 
 
+        {% if app.user.getCurrentConf().getModule().getPaperModule()== true %}
+
         <!-- Papers dropdown -->
         <li class="dropdown">
           <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -79,6 +81,8 @@
             </li>
           </ul>
         </li>
+
+        {% endif %}
 
          <!-- Organizations dropdown -->
         <li class="dropdown">
@@ -120,7 +124,10 @@
             <ul class="dropdown-menu">
              {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
               <li>   
-                <a href="{{ path('schedule_conference_edit') }}"><i class="icon-cog"></i> Conference settings </a>
+                <a href="{{ path('schedule_conference_edit') }}"><i class="fa fa-eye"></i> Conference overview </a>
+              </li>
+              <li>   
+                <a href="{{ path('schedule_conference_settings') }}"><i class="fa fa-wrench"></i> Conference settings </a>
               </li>
              {% endif %}
             </ul>

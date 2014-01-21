@@ -109,8 +109,10 @@ class WwwConf
     */
     private $mappingFiles;
 
-
-
+     /**
+     * @ORM\OneToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Module")
+     **/
+    private $module; 
 
      /**
      * @var UploadedFile
@@ -708,5 +710,29 @@ class WwwConf
     public function getMappingFiles()
     {
         return $this->mappingFiles;
+    }
+
+
+     /**
+     * Set module
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $module
+     * @return WwwConf
+     */
+    public function setModule(\fibe\Bundle\WWWConfBundle\Entity\Module $module = null)
+    {
+        $this->module = $module;
+    
+        return $this;
+    }
+
+    /**
+     * Get module
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\ConfEvent 
+     */
+    public function getModule()
+    {
+        return $this->module;
     }
 }

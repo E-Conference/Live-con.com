@@ -22,7 +22,10 @@ class WwwConfDefaultType extends AbstractType
             ->remove('logo')
             ->add('mainConfEvent', new WwwConfEventDefaultType($this->user),array(
                                         'label' => 'Conference event',
-                                        'attr'  => array('class'   => 'well'))) 
+                                        'attr'  => array('class'   => 'well')))
+            ->add('module', new ModuleType(),array(
+                                        'label' => 'Actived Module',
+                                        'attr'  => array('class'   => 'well')))   
         ;
     }
 

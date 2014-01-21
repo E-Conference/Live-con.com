@@ -65,7 +65,8 @@
             </script> 
         {% endfor %}
 
-        {% if authorized==0 %}
+        <!-- Authorization -->
+        {% if authorized == 0 %}
             <script type="text/javascript" >
              $(document).ready(function(){
                  $(".edit").hide();
@@ -74,6 +75,15 @@
                  $(".edit-event").hide();
                  $(".create-event").hide();
                  $(".delete-event").hide(); 
+             });
+            </script> 
+        {% endif %}
+
+        <!-- Hide module not used in the conference -->
+         {% if app.user.getCurrentConf().getModule().getPaperModule() == 0 %}
+            <script type="text/javascript" >
+             $(document).ready(function(){
+                 $(".module_paper").hide();
              });
             </script> 
         {% endif %}

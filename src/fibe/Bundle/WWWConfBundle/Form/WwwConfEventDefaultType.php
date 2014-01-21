@@ -17,8 +17,9 @@ class WwwConfEventDefaultType extends ConfEventType
             ->remove('endAt')                          
             ->remove('categories')                          
             ->remove('location')                          
-            ->remove('parent')  
-            ->remove('location')                         
+            ->remove('parent') 
+             
+                              
         ;
     }
 

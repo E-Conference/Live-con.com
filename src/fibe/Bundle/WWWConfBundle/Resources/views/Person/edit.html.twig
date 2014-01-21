@@ -38,7 +38,9 @@
                      {{ form_row(edit_form.openId) }}
                      {# {{ form_row(edit_form.nick) }} #}
                      {{ form_row(edit_form.organizations) }}
-                     {{ form_row(edit_form.papers) }}
+                     {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
+                        {{ form_row(edit_form.papers) }}
+                     {% endif %}
                      {{ form_row(edit_form.accounts) }}
                      {{ form_errors(edit_form) }}
               </div>

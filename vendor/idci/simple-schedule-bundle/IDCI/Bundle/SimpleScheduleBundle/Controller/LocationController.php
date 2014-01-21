@@ -203,13 +203,13 @@ class LocationController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         $equipments = $em->getRepository('fibeWWWConfBundle:Equipment')->getEquipmentForLocationSelect($entity);
-
+    
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(), 
             'delete_form' => $deleteForm->createView(),
             'equipments'  => $equipments,
-            'authorized' => $authorized,
+            'authorized'  => $authorized,
         );
     }
 

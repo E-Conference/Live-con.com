@@ -11,6 +11,9 @@ use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
 use fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig;
 use fibe\Bundle\WWWConfBundle\Form\WwwConfType;
+use fibe\Bundle\WWWConfBundle\Form\ModuleType;
+use fibe\Bundle\WWWConfBundle\Form\WwwConfEventDefaultType;
+use fibe\Bundle\WWWConfBundle\Form\WwwConfDefaultType;
 
 use fibe\SecurityBundle\Entity\Authorization;
 
@@ -19,6 +22,8 @@ use IDCI\Bundle\SimpleScheduleBundle\Form\EventType;
 use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty; 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Event; 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Location; 
+use fibe\Bundle\WWWConfBundle\Entity\Module;
+
 
 
 
@@ -189,14 +194,17 @@ class ConferenceController extends Controller
       
         $user = $this->getUser();
         $entity  = new WwwConf();
-        $form = $this->createForm(new WwwConfType($this->getUser()), $entity);
-
+        $form = $this->createForm(new WwwConfDefaultType($this->getUser()), $entity);
+    
         $form->bind($request);
+    
 
         if ($form->isValid()) {
             //Persist Conference
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);        
+            $em->persist($entity); 
+
+            $em->persist($entity->getModule());       
 
             //Create new App config for the conference
             $defaultAppConfig = new MobileAppConfig();
@@ -249,6 +257,9 @@ class ConferenceController extends Controller
              $creatorAuthorization->setFlagTeam(1);
              $em->persist($creatorAuthorization);
 
+             //Create default module TODO
+
+
 
             //Linking app config to conference
             $entity->setAppConfig($defaultAppConfig);
@@ -275,7 +286,7 @@ class ConferenceController extends Controller
             );
         }
 
-        
+        return $this->redirect($this->generateUrl('dashboard_choose_conference')); 
     }
 
     
@@ -324,6 +335,38 @@ class ConferenceController extends Controller
         
          return $this->redirect($this->generateUrl('schedule_user_list'));
 
+    }
+
+      /**
+     * @Route("/settings", name="schedule_conference_settings")
+     * 
+     * @Template()
+     */
+    public function settingsAction(Request $request)
+    {    
+        $em = $this->getDoctrine()->getManager();       
+        $wwwConf = $this->getUser()->getCurrentConf();
+        $module = $wwwConf->getModule();
+        //main conf event MUST have a location
+      
+      //Authorization Verification conference datas manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+        $ModuleForm = $this->createForm(new ModuleType(), $wwwConf->getModule());
+
+    
+      /*  if(!$authorization->getFlagconfDatas()){
+          throw new AccessDeniedException('Action not authorized !');
+        }  */
+            
+        return array(
+              'wwwConf'  => $wwwConf,
+              'module' => $module,
+              'authorized' => $authorization->getFlagconfDatas(),
+              'module_form' => $ModuleForm->createView(),
+              );
+        
     }
 
 
