@@ -1,0 +1,131 @@
+<div class="navbar navbar-static-top navbar-inverse" role="navigation">
+
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="{{ path('dashboard_index') }}" title="Go back to Index"> <img src="{{ asset('img/livecon.png') }}"/></a>
+  </div> 
+
+  <div class="navbar-collapse collapse navbar-ex1-collapse">
+
+    <ul class="nav navbar-nav">  
+
+       
+      
+
+       <!-- Schedule dropdown -->
+        <li class="dropdown">
+          <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Schedule
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li> 
+              <a style="padding-right:5px;"   href="{{ path('schedule_view') }}"  >
+                <i class="fa fa-calendar"></i> Schedule view
+              </a> 
+               <li> 
+              <a style="padding-right:5px;"   href="{{ path('schedule_event') }}"  >
+                <i class="fa fa-list"></i> Events
+              </a>
+              <a style="padding-right:5px;"   href="{{ path('schedule_location') }}"  >
+                <i class="fa fa-map-marker"></i> Locations
+              </a>
+              <a style="padding-right:5px;"   href="{{ path('schedule_category') }}"  >
+                <i class="fa fa-sort-amount-asc"></i> Categories
+              </a>
+               <a style="padding-right:5px;"   href="{{ path('schedule_topic') }}"  >
+                <i class="fa fa-screenshot "></i> Topic
+              </a>
+            </li> 
+            </li>
+          </ul>
+        </li> 
+
+
+        <!-- Persons dropdown -->
+        <li class="dropdown">
+          <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Persons
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li> 
+              <a style="padding-right:5px;"   href="{{ path('schedule_person_index') }}"  >
+                <i class="fa fa-list"></i> List
+              </a>
+               <a style="padding-right:5px;"   href="{{ path('schedule_roletype') }}"  >
+                <i class="fa fa-link"></i> Roles
+              </a>
+            </li>
+          </ul>
+        </li> 
+
+        <!-- Papers dropdown -->
+        <li class="dropdown">
+          <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Papers
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li> 
+              <a style="padding-right:5px;"   href="{{ path('schedule_paper') }}"  >
+                <i class="fa fa-list"></i> List
+              </a>
+            </li>
+          </ul>
+        </li>
+
+         <!-- Organizations dropdown -->
+        <li class="dropdown">
+          <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
+            Organizations
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li> 
+              <a style="padding-right:5px;"   href="{{ path('schedule_organization_index') }}"  >
+                <i class="fa fa-list"></i> List
+              </a>
+            </li>
+          </ul>
+        </li> 
+
+
+        <!-- <li><a href ="{{ path('schedule_status') }}" title="Status">Status</a></li> -->
+       <!--  <li><a href ="{{ path('schedule_location') }}" title="Location">Location</a></li>
+        <li><a href ="{{ path('schedule_category') }}" title="Category">Category</a></li>
+        <li><a href ="{{ path('schedule_topic') }}" title="Theme">Theme</a></li>
+        <li><a href ="{{ path('schedule_event') }}" title="Event">Event</a></li>
+        <li><a href ="{{ path('schedule_person_index') }}" title="Person">Person</a></li>
+         <li><a href ="{{ path('schedule_paper') }}" title="Paper">Paper</a></li>
+        <li><a href ="{{ path('schedule_roletype') }}" title="Person">RoleType</a></li> -->
+
+
+    </ul><!-- end class nav-->
+
+
+
+    <ul class="nav navbar-nav navbar-right">
+        <!-- Conference dropdown -->
+       <li class="dropdown" >
+          <a href ="{{ path('schedule_conference_edit') }}" title="manage schedule"class="dropdown-toggle" data-toggle="dropdown">
+             {{ app.user.getCurrentConf().getConfName() }}
+            <b class="caret"></b>
+          </a>
+            <ul class="dropdown-menu">
+             {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
+              <li>   
+                <a href="{{ path('schedule_conference_edit') }}"><i class="icon-cog"></i> Conference settings </a>
+              </li>
+             {% endif %}
+            </ul>
+        
+        </li> 
+    </ul> 
+  </div>
+</div>

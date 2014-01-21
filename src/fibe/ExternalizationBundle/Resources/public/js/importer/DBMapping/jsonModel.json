@@ -1,0 +1,123 @@
+{
+	
+	"WwwConf": {
+	  "summary": "",
+	  "url": "",
+	  "description": "",
+	  "comment": "",
+	  "organizer": "",
+	  "contacts": "",
+	  "acronym": "",
+	  "logo": "",
+	  "location": "",
+	  "mainConfEvent": "",
+	  "events": "",
+	  "persons": "",
+	  "roles": "",
+	  "organizations": "",
+	  "topics": "",
+
+	}
+
+	"ConfEvent": {
+	  "id": "",
+	  "summary": "",
+	  "acronym": "",
+	  "description": "",
+	  "url": "",
+	  "comment": "",
+	  "organizer": "",
+	  "children": "",
+	  "parent": "",
+	  "contacts": "",
+	  "categories": "",
+	  "papers": "",
+	  "topics": "",
+	  "roles": "",
+
+	}
+
+	"Person":{
+	  	"id": "",
+		"familyName": "",
+		"firstName": "",
+		"email": "",
+		"age": "",
+		"img": "",
+		"page": "",
+		"openId": "",
+		"organizations": "",
+		"papers": "",
+		"accounts": "",
+	}
+	 
+	"Paper": {
+	  	"id": "",
+	  	"title": "",
+	  	"abstract": "",
+	  	"publishdate": "",
+	  	"publisher": "",
+	  	"url": "",
+	  	"authors": "",
+	  	"subjects": "",
+	  	"topics": "",
+	  	"events": "",
+	  }
+
+	"Organization": {
+	  	"name": "",
+	  	"page": "",
+	  	"country": "",
+	  	"members": "",
+	  }
+
+	"SocialServiceAccount": {
+		"accountName": "",
+	  	"owner": "",
+	  	"socialService": "",
+	}
+
+	"SocialService": {
+		"name": "",
+	  	"accountServiceHomepage": "",
+	  	"accounts": "",
+	}
+
+	"Location": {
+	  	"name": "",
+	  	"capacity": "",
+	  	"description": "",
+	  	"latitude": "",
+	  	"longitude": "",
+	  }
+
+	"Category": {
+	  	"color": "",
+	  	"name": "",
+	  	"slug": "",
+	  }
+
+	"Topic": {
+	  	"name": "",
+	  }
+
+	"Role": {
+	  	"person": "",
+	  	"event": "",
+	  	"type": "",
+	  }
+
+	"Role": {
+	  	"person": "",
+	  	"event": "",
+	  	"type": "",
+	  }
+
+	"RoleType": {
+	  	"name": "",
+	  	"roles": "",
+	  }
+}
+
+
+
