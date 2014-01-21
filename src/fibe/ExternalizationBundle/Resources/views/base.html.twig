@@ -86,7 +86,7 @@
     {{ parent() }}
 
     {% block navBar %} 
-        {% include "fibeWWWConfBundle::navbar.html.twig" %}
+        {% include "fibeExternalizationBundle::navbar.html.twig" %}
     {% endblock navBar%}
     {% block content %} 
     <div class="content">
@@ -97,7 +97,7 @@
                 {% block sideBar_page%} 
                 {% endblock sideBar_page%} 
                  {% block sideBar%} 
-                    {% include "fibeWWWConfBundle::sideBar.html.twig" %}
+                    {% include "fibeExternalizationBundle::sideBar.html.twig" %}
                 {% endblock sideBar %}
                 </div>
             </div>

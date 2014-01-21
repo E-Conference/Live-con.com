@@ -1,6 +1,6 @@
 <?php
 
-namespace fibe\Bundle\WWWConfBundle\Controller;
+namespace fibe\ExternalizationBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -9,16 +9,16 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 /**
- * Equipment controller.
- * @Route("/importer")
+ * Exporter controller.
+ * @Route("/exporter")
  */
-class ImportController extends Controller
+class ExportController extends Controller
 {
 
 	/**
-     * Importer access.
+     * Exporter index.
     *
-    * @Route("/", name="schedule_import_index")
+    * @Route("/", name="externalization_export_index")
     * @Template()
     */
     public function indexAction()
@@ -36,30 +36,6 @@ class ImportController extends Controller
               'authorized' => $authorization->getFlagconfDatas()
               );
     }
-
-
-    /**
-     * Importer access.
-    *
-    * @Route("/xls", name="schedule_import_xls")
-    * @Template()
-    */
-    public function xlsImportAction()
-    {
-      
-        $em = $this->getDoctrine()->getManager();       
-        $wwwConf = $this->getUser()->getCurrentConf();
-
-        //Authorization Verification conference datas manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-        return array(
-              'wwwConf'  => $wwwConf,
-              'authorized' => $authorization->getFlagconfDatas()
-              );
-    }
-
 
 
 }
