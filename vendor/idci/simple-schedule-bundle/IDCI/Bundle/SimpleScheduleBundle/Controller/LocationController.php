@@ -284,6 +284,7 @@ class LocationController extends Controller
             throw new AccessDeniedException('Action not authorized !');
           }
 
+          var_dump($authorized);
         $id_location = $request->request->get('id_location');
         $id_equipment = $request->request->get('id_equipment');
 
