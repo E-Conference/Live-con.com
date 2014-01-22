@@ -12,6 +12,7 @@
             <h1>Manage user</h1>
         </div>
     </header>
+
     <table class="records_list table table-striped table-hover">
         <thead>
             <tr>
@@ -94,49 +95,42 @@
                     </form>
                     
                 </td> 
-                <td>
-                  <select class="flagApp" data-userId="{{entity.id}}">
-                      {% if  entity.getFlagByConferenceId(currentConf.id,'app') == 1 %}
-                        <option value="1" selected>Yes</option>
-                        <option value="0">No</option>
-                      {% else %}
-                         <option value="1">Yes</option>
-                         <option value="0" selected>No</option>
-                      {% endif %} 
-                   </select>
-                 </td> 
                  <td>
-                  <select class="flagSched" data-userId="{{entity.id}}">
-                      {% if  entity.getFlagByConferenceId(currentConf.id,'sched') == 1 %}
-                        <option value="1" selected>Yes</option>
-                        <option value="0">No</option>
+
+                     {% if  entity.getFlagByConferenceId(currentConf.id,'app') == 1 %}
+                       <input type="checkbox" data-userId="{{entity.id}}" value="0" class=" flagApp switch switch-small flagApp" checked data-on-label= "<i class='fa fa-check fa-white'>"
+                                        data-off-label= "<i class='fa fa-ban'>">
                       {% else %}
-                         <option value="1">True</option>
-                         <option value="0" selected>No</option>
-                      {% endif %} 
-                   </select>
+                         <input type="checkbox" data-userId="{{entity.id}}" value="1" class=" flagApp switch switch-small flagApp"  data-on-label= "<i class='fa fa-check fa-white'>"
+                                        data-off-label= "<i class='fa fa-ban'>">
+                      {% endif %}
+                </td>
+                <td>
+                    {% if  entity.getFlagByConferenceId(currentConf.id,'sched') == 1 %}
+                      <input type="checkbox" data-userId="{{entity.id}}" value="0" class=" flagSched switch switch-small flagApp" checked data-on-label= "<i class='fa fa-check fa-white'>"
+                                      data-off-label= "<i class='fa fa-ban'>">
+                    {% else %}
+                       <input type="checkbox" data-userId="{{entity.id}}" value="1" class=" flagSched switch switch-small flagApp"  data-on-label= "<i class='fa fa-check fa-white'>"
+                                      data-off-label= "<i class='fa fa-ban'>">
+                    {% endif %} 
                  </td>
                  <td>
-                  <select class="flagTeam" data-userId="{{entity.id}}">
-                      {% if  entity.getFlagByConferenceId(currentConf.id,'team') == 1 %}
-                        <option value="1" selected>Yes</option>
-                        <option value="0">No</option>
-                      {% else %}
-                         <option value="1">Yes</option>
-                         <option value="0" selected>No</option>
-                     {% endif %} 
-                   </select>
+                    {% if  entity.getFlagByConferenceId(currentConf.id,'team') == 1 %}
+                       <input type="checkbox" data-userId="{{entity.id}}" value="0" class=" flagconfDatas switch switch-small flagApp" checked data-on-label= "<i class='fa fa-check fa-white'>"
+                                    data-off-label= "<i class='fa fa-ban'>" >
+                    {% else %}
+                     <input type="checkbox" data-userId="{{entity.id}}" value="1" class=" flagconfDatas switch switch-small flagApp"  data-on-label= "<i class='fa fa-check fa-white'>"
+                                    data-off-label= "<i class='fa fa-ban'>">
+                    {% endif %} 
                  </td>    
                  <td>
-                  <select class="flagconfDatas" data-userId="{{entity.id}}">
-                      {% if  entity.getFlagByConferenceId(currentConf.id,'datas') == 1 %}
-                        <option value="1" selected>Yes</option>
-                        <option value="0">No</option>
-                      {% else %}
-                         <option value="1">Yes</option>
-                         <option value="0" selected>No</option>
-                     {% endif %} 
-                   </select>
+                    {% if  entity.getFlagByConferenceId(currentConf.id,'datas') == 1 %}
+                     <input type="checkbox" data-userId="{{entity.id}}" value="0" class=" flagTeam switch switch-small flagApp" checked data-on-label= "<i class='fa fa-check fa-white'>"
+                                    data-off-label= "<i class='fa fa-ban'>">
+                  {% else %}
+                     <input type="checkbox" data-userId="{{entity.id}}" value="1" class=" flagTeam switch switch-small flagApp"  data-on-label= "<i class='fa fa-check fa-white'>"
+                                    data-off-label= "<i class='fa fa-ban'>">
+                   {% endif %} 
                  </td>
             </tr>
         {% endfor %}
@@ -192,6 +186,7 @@
             });
       };
 
+       //Listen change authorization select
         $(document).ready(function(){
             //Hide add manager form
             $("#addUserInConferenceForm").hide();
@@ -200,33 +195,48 @@
                 !momentString || $(this).html(momentString.format("dddd, MMMM Do YYYY, h:mm:ss a"));
             })
 
-            //Listen change authorization select
             $(".flagApp").change(function(){
                 value = $(this).val();
+                $(this).val(!value);
                 id = $(this).attr("data-userId");
                 changeAuthorization(id,'app',value);
             })
             $(".flagSched").change(function(){
                 value = $(this).val();
+                $(this).val(!value);
                 id =  $(this).attr("data-userId");
                 changeAuthorization(id,'sched',value);
             })
             $(".flagconfDatas").change(function(){
                 value = $(this).val();
+                $(this).val(!value);
                 id = $(this).attr("data-userId");
                 changeAuthorization(id,'datas',value);
             })
              $(".flagTeam").change(function(){
                 value = $(this).val();
+                $(this).val(!value);
                 id = $(this).attr("data-userId");
                 changeAuthorization(id,'team',value);
             })
+
+           
 
         });
 
 
        
     </script>
+
+      <!--If conference have only manager you can't remove the team manager authorization-->
+    {{  app.user.getCurrentConf().getConfManagers()|length   }}
+      {% if  app.user.getCurrentConf().getConfManagers()|length <= 1 %}
+         <script  type="text/javascript" >
+            $(document).ready(function(){
+              $(".flagconfDatas").attr('disabled', 'disabled');    
+              }); 
+         </script>
+      {% endif %}
 
 {% endblock %}
 
