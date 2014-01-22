@@ -99,7 +99,7 @@ class databaseInitCommand extends ContainerAwareCommand
 
         $equipment = new Equipment(); 
         $equipment->setLabel("OHP")
-                  ->setIcon("facetime-video");
+                  ->setIcon("video-camera");
         $em->persist($equipment);
 
         $equipment = new Equipment(); 

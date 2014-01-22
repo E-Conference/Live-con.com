@@ -23,6 +23,13 @@ class LocationType extends AbstractType
             ->add('description')
             ->add('latitude')
             ->add('longitude')
+            ->add('equipments', 'entity', array(
+                'class' => 'fibeWWWConfBundle:Equipment',
+                'label'   => 'Equipment',
+                'required' => false,
+                'multiple'  => true
+            ))
+
         ;
     }
 
