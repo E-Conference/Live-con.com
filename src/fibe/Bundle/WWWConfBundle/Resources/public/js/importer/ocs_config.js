@@ -21,17 +21,20 @@ var ocsConfig = {
             arg : ["conference"],
         }] 
     },
-    // getRootNode : function(documentRootNode){
-    //     var rootNode = $(documentRootNode).children();
-    //     $(documentRootNode).each(function(){
-    //         if(this.nodeName.toUpperCase()=== "CONFERENCE"){
-    //             rootNode = $(this);
-    //         }
-    //     })
-    //     return rootNode;
-    // },
-    getNodeKey : "idAttr",
-    getNodeName : "localName",
+
+    getNodeKey : {
+        format : [{
+            nodeUtils : "attr",
+            arg : ["id"],
+        }]
+    },
+    
+    getNodeName : {
+        format : [{
+            nodeUtils : "localName",
+        }]
+    },
+
     parseItemOrder : {
             "organizationMapping" : "organizations",
             "personMapping" : "persons",
@@ -92,7 +95,9 @@ var ocsConfig = {
                 multiple : true,
                 setter : 'addOrganization',
                 fk : {
-                    key : "text",
+                    format : [{
+                        nodeUtils : "text",
+                    }],
                     array : "organizations",
                 },  
             },
@@ -111,7 +116,9 @@ var ocsConfig = {
                 multiple : true,
                 setter : 'addPaper',
                 fk : {
-                    key : "text",
+                    format : [{
+                        nodeUtils : "text",
+                    }],
                     array : "proceedings",
                 },  
             },
@@ -120,7 +127,9 @@ var ocsConfig = {
                 multiple : true,
                 setter : 'addChair',
                 fk : {
-                    key : "text",
+                    format : [{
+                        nodeUtils : "text",
+                    }],
                     array : "persons",
                 }, 
             }
@@ -157,7 +166,9 @@ var ocsConfig = {
                 //keywords aren't entities in this format and thus, don't contains any index 
                 //so we must retrieve an index with getArrayId instead of objectMap 
                 fk : {
-                    key : "text",
+                    format : [{
+                        nodeUtils : "text",
+                    }],
                     array : "topics",
                     findInArrayWith : "setName",
                     create : true,
@@ -169,7 +180,9 @@ var ocsConfig = {
                 multiple : true,
                 setter : 'addAuthor',
                 fk : {
-                    key : "text",
+                    format : [{
+                        nodeUtils : "text",
+                    }],
                     array : "persons",
                 },
             }

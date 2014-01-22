@@ -81,28 +81,10 @@ function run(file,callback,fallback){
                     var confInfoMapping = mappingConfig.parseConference[i];
                     var node = rootNode;
                     if(confInfoMapping.format){ 
-                        node = doFormat(node,confInfoMapping.format); 
-                        // node = NodeUtils["child"](node,confInfoMapping.child)
+                        node = doFormat(node,confInfoMapping.format);  
                     }
                     objects.conference[i] = node;
                 }
-        // parseConference : function(documentRootNode){
-
-        //     objects.conference = { 
-        //         setSummary    : $(documentRootNode).children("name").text(),
-        //         setAcronym    : $(documentRootNode).children("acronym").text(),
-        //         setDescription: $(documentRootNode).children("description").text(),
-        //         setUrl        : $(documentRootNode).children("homepage").text(),
-        //     }
-        // },
-        // setSummary : {
-        //     node : {
-        //         child : "name",
-        //     },
-        //     key : text,
-        // },
-        
-        //        mappingConfig.preProcess(rootNode);
             }
 
 
@@ -117,9 +99,8 @@ function run(file,callback,fallback){
                 console.log(itemMapping);
                 console.log(addArray);
                 rootNode.children().each(function(index,node){
-                    var n = NodeUtils[mappingConfig.getNodeName](node);  
-                    // console.log("parsing : "+n.toLowerCase());
-                    // console.log("expecting : "+itemMapping.nodeName);
+                    // var n = NodeUtils[mappingConfig.getNodeName](node);  
+                    var n = doFormat(node,mappingConfig.getNodeName.format);     
 
                     if(n && n.toLowerCase().indexOf(itemMapping.nodeName)!= -1){
                         add(addArray,itemMapping,this,{name:n}); 
@@ -192,7 +173,7 @@ function run(file,callback,fallback){
             dataArray['topics']=objects.topics;   
             dataArray['locations']=objects.locations;  
             dataArray['categories']=objects.categories;
-            // dataArray['xproperties']=xproperties; 
+
             console.log('---------finished---------' );
             console.log(dataArray);
             console.log(objects.roles)
@@ -245,8 +226,8 @@ function add(addArray,mapping,node,arg){
     }
 
     function process(addArray,mapping,node,arg){
-        var rtnArray = {};
-        var key = NodeUtils[mappingConfig.getNodeKey](node); 
+        var rtnArray = {};  
+        var key = doFormat(node,mappingConfig.getNodeKey.format);     
         // console.log("processing : "+key);
         $(node).children().each(function(){ 
             if(mapping.label[this.localName]!== undefined){
@@ -312,7 +293,11 @@ function add(addArray,mapping,node,arg){
                 }
 
                 if(mapping.label[nodeName].fk){   
-                    var key = NodeUtils[mapping.label[nodeName].fk.key](node); 
+                    // var key = NodeUtils[mapping.label[nodeName].fk.key](node);
+
+                    var key = doFormat(node,mapping.label[nodeName].fk.format); 
+                    // node = NodeUtils["child"](node,confInfoMapping.child)
+                    
                     //pointed entity isn't a concrete node in this format and thus, don't contains any index 
                     //so we must retrieve an index with getArrayId instead of objectMap 
                     //i.e. keywords in ocs format
@@ -513,10 +498,11 @@ NodeUtils = {
     localName : function(node){
         return node.localName;
     },
-    idAttr : function(node){
-        return $(node).attr("id");
+    // get a specific attr for the given node
+    //arg[0] must contain the wanted attr
+    attr : function(node,arg){
+        return $(node).attr(arg[0]);
     },
-
     // get a specific node in a nodeSet
     //arg[0] must contain the wanted nodeName
     node : function(nodes,arg){
@@ -531,6 +517,7 @@ NodeUtils = {
     }, 
     //arg[0] must contain the wanted child nodeName 
     child : function(node,arg){
+        // return $(node).children(childNodeName);
         var rtnNode;
         childNodeName = arg[0].toLowerCase();
         $(node).children().each(function(){
@@ -539,7 +526,6 @@ NodeUtils = {
             }
         })
         return rtnNode;
-        // return $(node).children(childNodeName);
     },
     
 }
