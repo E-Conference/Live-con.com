@@ -263,6 +263,7 @@ function add(addArray,mapping,node,arg){
             } 
         }
 
+        //finally add the object in the addArray and store a reference in the objectMap for faster access
         if(Object.size(rtnArray) > 0){
             objectMap[key] = rtnArray; 
             addArray.push( rtnArray );
@@ -298,7 +299,7 @@ function add(addArray,mapping,node,arg){
                     var key = doFormat(node,mapping.label[nodeName].fk.format); 
                     // node = NodeUtils["child"](node,confInfoMapping.child)
                     
-                    //pointed entity isn't a concrete node in this format and thus, don't contains any index 
+                    //pointed entity isn't a concrete node in this format and thus, don't contains any required unique index 
                     //so we must retrieve an index with getArrayId instead of objectMap 
                     //i.e. keywords in ocs format
                     var pointedEntity;
@@ -330,7 +331,8 @@ function add(addArray,mapping,node,arg){
                     //create the object if not found
                     if(!rtnArray[mapping.label[nodeName].setter])
                         rtnArray[mapping.label[nodeName].setter]={};
-                    //get index
+                    
+                    //get object length
                     var index = Object.size(rtnArray[mapping.label[nodeName].setter]);
 
                     //check if there's no duplicated link

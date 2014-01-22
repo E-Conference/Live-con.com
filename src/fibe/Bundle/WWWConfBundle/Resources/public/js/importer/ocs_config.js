@@ -134,6 +134,7 @@ var ocsConfig = {
                 }, 
             }
         },
+        // set all events to sessionEvent
         postProcess : function(node,event){
             var catName = "SessionEvent";
             var catId = getArrayId("categories",'setName',catName);
@@ -163,7 +164,7 @@ var ocsConfig = {
                 wrapped : true,
                 multiple : true,
                 setter : 'addTopic',
-                //keywords aren't entities in this format and thus, don't contains any index 
+                //pointed entity isn't a concrete node in this format and thus, don't contains any index 
                 //so we must retrieve an index with getArrayId instead of objectMap 
                 fk : {
                     format : [{
