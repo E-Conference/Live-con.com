@@ -6,57 +6,30 @@
 
 var rdfConfig = {
     isRDF : false,
-    getRootNode : function(documentRootNode){
-        var rootNode = $(documentRootNode).children();
- 
-        $(documentRootNode).each(function(){
-            if(this.nodeName.toUpperCase()=== "RDF:RDF"){
-                console.log("input file is RDF");
-                rdfConfig.isRDF = true;
-                rootNode = $(this);
-            }
-        })
-        return rootNode;
+
+    rootNode : {
+        format : [{
+            nodeUtils : "node",
+            arg : ["RDF:RDF"],
+        }] 
+    }, 
+    getNodeKey : {
+        format : [{
+            nodeUtils : "attr",
+            arg : ["rdf:about"],
+        }] 
     },
-    getNodeKey : function(node){ 
-        return $(node).attr("rdf:about");
+    rootNode : {
+        format : [{
+            nodeUtils : "node",
+            arg : ["RDF:RDF"],
+        }] 
     },
-    getNodeName : function(node){
-        var uri=[];
-        var rtn;
-        $(node).children().each(function(){ 
-            if(this.localName.indexOf("rdf:type")!== -1 ){
-                if($(this).attr('rdf:resource').indexOf("#")!== -1 ){ 
-                    uri.push($(this).attr('rdf:resource').split('#')[1]); 
-                }
-                else{
-                    var nodeName = $(this).attr('rdf:resource').split('/'); 
-                    uri.push(nodeName[nodeName.length-1]);  
-                }
-            } 
-        });
-        // console.log("getNodeName",node.localName)
-        // console.log("uri",uri)
-        for(var i in uri){
-            var lc = uri[i].toLowerCase();
-            if(lc.indexOf('keynotetalk')>-1){
-                rtn = 'KeynoteEvent'; 
-            }
-        } 
-        var lc = node.localName.toLowerCase();
-        if(lc.indexOf('keynotetalk')>-1){
-            rtn = 'KeynoteEvent'; 
-        }
-        else if(uri.length==1)
-        {
-            rtn = uri[0];
-        }
-        else if(uri.length==0) //rdf
-        { 
-            rtn = node.localName;
-        } 
-        return rtn;
-    },
+    getNodeName : {
+        format : [{
+            nodeUtils : "rdfNodeName", 
+        }] 
+    }, 
     parseItemOrder : {
             "locationMapping" : "locations",
             "organizationMapping" : "organizations",
@@ -65,12 +38,17 @@ var rdfConfig = {
             "eventMapping" : "events",
             "presenterMapping" : "roles",
             "chairMapping" : "roles", 
+            "relationMapping" : "events", 
     },
-    persons : {
+    personMapping : {
         nodeName : 'person',
         label : {
 
             //some dataset use rdfs:label instead of foaf ontology
+            // TODO ADD SPLITER NODEUTIL
+            // TODO ADD SPLITER NODEUTIL
+            // TODO ADD SPLITER NODEUTIL
+            // TODO ADD SPLITER NODEUTIL
             'rdfs:label' : {
                 setter : 'setFirstName',
                 format : function(node){  
@@ -105,19 +83,18 @@ var rdfConfig = {
             'swrc:affiliation' : {
                 multiple : true,
                 setter : 'addOrganization',
-                format : function(node){ 
-                    var key = $(node).text() || $(node).attr("rdf:resource"); 
-                    if(objectMap[key])
-                        return $.inArray(objectMap[key], organizations);
-                    else {
-                        console.warn("organization : "+key+" can't be found");
-                    }  
-                },
+                fk : {
+                    format : [{
+                        nodeUtils : "attr",
+                        arg : ["rdf:resource"],
+                    }],
+                    array : "organizations",
+                },  
             },
         }
     },
 
-    locations : {
+    locationMapping : {
         nodeName : 'meetingroomplace',
         label : {
             'rdfs:label' : {
@@ -129,7 +106,7 @@ var rdfConfig = {
         }
     },
 
-    proceedings : {
+    proceedingMapping : {
         nodeName : 'inproceedings',
 
         label : {
@@ -141,71 +118,63 @@ var rdfConfig = {
             },
             'swrc:abstract': {
                 setter : 'setAbstract',
-            }, 
-            //topics entity are created directly here (or retrieved)
-            //then we register the correct index
+            },
             'dc:subject' : {
                 multiple : true,
-                setter : 'addTopic',
-                format : function(node){ 
-                    var topicName = $(node).text() || $(node).attr("rdf:resource");
-                    var index = getTopicIdFromName(topicName);
-                    return index !== -1 ? index : false ;
-                },
-                preProcess : function(node){
-                    var topicName = $(node).text() || $(node).attr("rdf:resource");  
-                    if(getTopicIdFromName(topicName)=== -1 ){
-                        topics.push({'setName':str_format(topicName)});  
-                    }
-                }
+                setter : 'addTopic', 
+                fk : {
+                    format : [{
+                        nodeUtils : "text",
+                    }],
+                    array : "topics",
+                    //pointed entity isn't a concrete node in this format and thus, don't contains any index 
+                    //so we must retrieve an index with getArrayId instead of objectMap 
+                    findInArrayWith : "setName",
+                    create : true,
+                },    
             },
             'swrc:listkeyword' : {
                 multiple : true,
                 list : {delimiter:", "},
                 setter : 'addTopic',
-                format : function(node,value){ 
-                    var topicName = value;
-                    var index = getTopicIdFromName(topicName);
-                    return index !== -1 ? index : false ;
-                },
-                preProcess : function(node,rtnArray,value){
-                    var topicName = value;  
-                    if(getTopicIdFromName(topicName)=== -1 ){
-                        topics.push({'setName':str_format(topicName)});  
-                    }
-                }
+                fk : {
+                    format : [{
+                        nodeUtils : "text",
+                    }],
+                    array : "topics",
+                    //pointed entity isn't a concrete node in this format and thus, don't contains any index 
+                    //so we must retrieve an index with getArrayId instead of objectMap 
+                    findInArrayWith : "setName",
+                    create : true,
+                },    
             },
             //authors are retrieved from their id in the objectMap .
             'dc:creator' : {
                 multiple : true,
                 setter : 'addAuthor',
-                format : function(node){ 
-                    var key = $(node).text() || $(node).attr("rdf:resource"); 
-                    if(objectMap[key])
-                        return $.inArray(objectMap[key], persons);
-                    else {
-                        console.warn("author : "+key+" can't be found");
-                    }  
+                fk : {
+                    format : [{
+                        nodeUtils : "attr",
+                        arg : ["rdf:resource"],
+                    }],
+                    array : "persons",
                 }, 
             },
             'foaf:maker' : {
                 multiple : true,
                 setter : 'addAuthor',
-                format : function(node){ 
-                    var key = $(node).text() || $(node).attr("rdf:resource"); 
-                    if(objectMap[key]){
-                        return $.inArray(objectMap[key], persons);
-                    }else {
-                        console.warn("author : "+key+" can't be found");
-                    }  
+                fk : {
+                    format : [{
+                        nodeUtils : "attr",
+                        arg : ["rdf:resource"],
+                    }],
+                    array : "persons",
                 }, 
             },
-
-
         },
     },
 
-    events : {
+    eventMapping : {
         nodeName : 'event',
         label : {
             'rdfs:label' : {
@@ -217,10 +186,11 @@ var rdfConfig = {
             },
             //only for conference event
             'swc:haslogo' : {
-                setter : 'setLogoPath'
-                ,format : function(node){ 
-                    return $(node).attr("rdf:resource");  
-                },
+                setter : 'setLogoPath',
+                format : [{
+                    nodeUtils : "attr",
+                    arg : ["rdf:resource"],
+                }], 
             },
             'dce:description' : {
                 setter : 'setDescription'
@@ -234,6 +204,9 @@ var rdfConfig = {
             'icaltzd:dtend' : {
                 setter : 'setEndAt'
             },
+            //TODO ADD TIME PARSER
+            //TODO ADD TIME PARSER
+            //TODO ADD TIME PARSER
             'ical:dtstart' : {
                 setter : 'setStartAt',
                 format : function(node){ 
@@ -268,20 +241,31 @@ var rdfConfig = {
             'dc:subject' : {
                 multiple: true,
                 setter : 'addTopic',
-                format : function(node){ 
-                    var topicName = $(node).text() || $(node).attr("rdf:resource"); 
-                    return getTopicIdFromName(topicName);
-                },
-                preProcess : function(node){
-                    var topicName = $(node).text() || $(node).attr("rdf:resource"); 
-                    if(getTopicIdFromName(topicName)=== -1 ){
-                        topics.push({setName:str_format(topicName)});  
-                    }
-                }
+                fk : {
+                    format : [{
+                        nodeUtils : "text",
+                    }],
+                    array : "topics",
+                    findInArrayWith : "setName",
+                    create : true,
+                },   
+                // format : function(node){ 
+                //     var topicName = $(node).text() || $(node).attr("rdf:resource"); 
+                //     return getTopicIdFromName(topicName);
+                // },
+                // preProcess : function(node){
+                //     var topicName = $(node).text() || $(node).attr("rdf:resource"); 
+                //     if(getTopicIdFromName(topicName)=== -1 ){
+                //         topics.push({setName:str_format(topicName)});  
+                //     }
+                // }
             },
             'swc:hasLocation' : {
                 setter : 'setLocation',
-                format : function(node){ 
+                // TODO add spliter nodeutil and add to objectmap anyway
+                // TODO add spliter nodeutil and add to objectmap anyway
+                // TODO add spliter nodeutil and add to objectmap anyway
+                format : function(node){
                     var key = $(node).text() || $(node).attr('rdf:resource');
                     if(objectMap[key])
                         locationName = objectMap[key]['setName'];
@@ -289,7 +273,8 @@ var rdfConfig = {
                         locationName = key.split("/");
                         locationName = locationName[locationName.length -1 ];
                     }
-                    return getLocationIdFromName(locationName);
+                    return getArrayId("locations",'setName',locationName)  
+                    // return getLocationIdFromName(locationName);
                 },
                 preProcess : function(node){
                     var key = $(node).text() || $(node).attr('rdf:resource');
@@ -298,8 +283,8 @@ var rdfConfig = {
                     else {
                         locationName = key.split("/");
                         locationName = locationName[locationName.length -1 ];
-                    }
-                    if(getLocationIdFromName(locationName)=== -1 ){
+                    }  
+                    if(getArrayId("locations",'setName',locationName) === -1 ){
                         locations.push({setDescription:"",setName:str_format(locationName)});  
                     }
                 }
@@ -314,17 +299,17 @@ var rdfConfig = {
                         locationName = key.split("/");
                         locationName = locationName[locationName.length -1 ];
                     }
-                    return getLocationIdFromName(locationName);
+                    return getArrayId("locations",'setName',locationName) ;
                 },
             },
             'foaf:homepage' : {
                 setter : 'setUrl',
-                format : function(node){ 
-                    return $(node).text() || $(node).attr('rdf:resource');
-                }, 
+                format : [{
+                    nodeUtils : "attr",
+                    arg : ["rdf:resource"],
+                }],  
             },
         },
-        //post processing
         postProcess : function(node,event){
 
             // EVENT CAT 
@@ -335,15 +320,15 @@ var rdfConfig = {
             //3 different ways to get the category name 
             tmp = node.nodeName.split("swc:").join("").split("&swc;").join("").split("event:").join("");
             if(testCatName(tmp))catName = tmp;
-
-            tmp = rdfConfig.getNodeName(node);
+ 
+            tmp = doFormat(node,rdfConfig.getNodeName.format); 
             if(testCatName(tmp))catName = tmp;
 
-            tmp = rdfConfig.getNodeName(node).split("&swc;").join("").split("swc:").join("").split("event:").join("");
+            tmp = doFormat(node,rdfConfig.getNodeName.format).split("&swc;").join("").split("swc:").join("").split("event:").join("");
             if(testCatName(tmp))catName = tmp; 
  
             if(catName){
-                var catId = getCategoryIdFromName(catName);
+                var catId = getArrayId("categories","setName",catName) 
                 if(catId==-1){ 
                     var category= {}; 
                     category['setName']=catName;
@@ -353,8 +338,8 @@ var rdfConfig = {
                         console.debug("mainconference event is ",event)
                         defaultDate = event['setStartAt'] || defaultDate;
                     }
-                    categories.push(category);
-                    catId = categories.length-1;
+                    objects.categories.push(category);
+                    catId = objects.categories.length-1;
                 }
                 if(!isMainConfEvent)event['addCategorie']=catId;
             }
@@ -363,10 +348,10 @@ var rdfConfig = {
             // store uri via xproperty array to get the event back in the relation loop
             if(!isMainConfEvent){
                 var xproperty= {}; 
-                xproperty['setCalendarEntity']=events.length;
+                xproperty['setCalendarEntity']=objects.events.length;
                 xproperty['setXNamespace']="event_uri";
                 xproperty['setXValue']=$(node).attr('rdf:about');
-                xproperties.push(xproperty);
+                objects.xproperties.push(xproperty);
             }
             //don't store the original event
             return isMainConfEvent;
@@ -378,6 +363,10 @@ var rdfConfig = {
             }
         }, 
     },
+    //TODO DO NOT PERMIT OVERRIDING
+    //TODO DO NOT PERMIT OVERRIDING
+    //TODO DO NOT PERMIT OVERRIDING
+    //TODO DO NOT PERMIT OVERRIDING
     presenterMapping : {
         nodeName : 'presenter', 
         override : function(node){
@@ -403,7 +392,7 @@ var rdfConfig = {
     },
     chairMapping : {
         nodeName : 'chair',
-        overide : function(node){
+        override : function(node){
 
             var event ;
             $(node).children().each(function(){
@@ -425,14 +414,16 @@ var rdfConfig = {
         }
     },
 
-    relations : {
+    relationMapping : {
         nodeName : 'event',
-        overide : function(node){ 
-            var event = objectMap[rdfConfig.getNodeKey(node)];
+        override : function(node){  
+            var event = doFormat(node,rdfConfig.getNodeKey.format);     
             var found=false;
             $(node).children().each(function(){
                 if(this.nodeName.toLowerCase()=="swc:issubeventof"){ 
-                    var relatedToEventId=getEventIdFromURI($(this).attr('rdf:resource')) 
+
+                var relatedToEventId = getArrayId("xproperties",'setXValue',$(this).attr('rdf:resource')) 
+                // var relatedToEventId=getEventIdFromURI($(this).attr('rdf:resource')) 
                     if(relatedToEventId){
                         event['setParent']= relatedToEventId;
                     } 

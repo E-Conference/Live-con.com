@@ -96,30 +96,14 @@ function run(file,callback,fallback){
             for (var i in mappingConfig.parseItemOrder){ 
                 var itemMapping = mappingConfig[i];
                 var addArray = objects[mappingConfig.parseItemOrder[i]];
-                console.log(itemMapping);
-                console.log(addArray);
                 rootNode.children().each(function(index,node){
                     // var n = NodeUtils[mappingConfig.getNodeName](node);  
                     var n = doFormat(node,mappingConfig.getNodeName.format);     
 
                     if(n && n.toLowerCase().indexOf(itemMapping.nodeName)!= -1){
-                        add(addArray,itemMapping,this,{name:n}); 
+                        add(addArray,itemMapping,this,{name:n});   
                     }
                 }); 
-            }
-
-            //////////////////////////////////////////////////////////////////////////
-            /////////////////////////////  relationships  ////////////////////////////
-            //////////////////////////////////////////////////////////////////////////
-            if(mappingConfig.relationMapping){ 
-                var j=0;
-                rootNode.children().each(function(index,node){ 
-                    var n = NodeUtils[mappingConfig.getNodeName](node); 
-                    if(n && n.toLowerCase().indexOf(mappingConfig.relationMapping.nodeName)!= -1){  
-                        add(relations,mappingConfig.relationMapping,this,{name:n,eventId:j});  
-                        j++;
-                    }
-                });
             }
 
             //////////////////////////////////////////////////////////////////////////
@@ -208,13 +192,13 @@ function run(file,callback,fallback){
  * @param {array} addArray      the array to populate
  * @param {object} mapping      mapping object (defined in config files)
  * @param {dom elem} node       the xml dom element from the import file
- * @param {object} arg          arg for the overide function
+ * @param {object} arg          arg for the override function
  */
 function add(addArray,mapping,node,arg){
 
-    //to override this method, write an "overide : function(){...}" in the mapping file of the function. 
-    if(mapping.overide!==undefined){
-        return mapping.overide(node,addArray,arg);
+    //to override this method, write an "override : function(){...}" in the mapping file of the function. 
+    if(mapping.override!==undefined){
+        return mapping.override(node,addArray,arg);
     }
     //unwrapped if needed
     if(mapping.wrapped===true){ 
@@ -228,7 +212,7 @@ function add(addArray,mapping,node,arg){
     function process(addArray,mapping,node,arg){
         var rtnArray = {};  
         var key = doFormat(node,mappingConfig.getNodeKey.format);     
-        // console.log("processing : "+key);
+
         $(node).children().each(function(){ 
             if(mapping.label[this.localName]!== undefined){
                 
@@ -259,6 +243,7 @@ function add(addArray,mapping,node,arg){
                 // alert("main conf event found")
                 objectMap[key] = rtnArray; 
                 conference = rtnArray;
+
                 return;
             } 
         }
@@ -267,7 +252,7 @@ function add(addArray,mapping,node,arg){
         if(Object.size(rtnArray) > 0){
             objectMap[key] = rtnArray; 
             addArray.push( rtnArray );
-        }
+        } 
 
         function set(mapping,nodeName,node,arg){
             var mappingStr = arg.name+"/"+ nodeName;
@@ -307,7 +292,8 @@ function add(addArray,mapping,node,arg){
                         pointedEntity = objects[ getArrayId(mapping.label[nodeName].fk.array,mapping.label[nodeName].fk.findInArrayWith,key) ];
                     }else{
                         pointedEntity = objectMap[key];
-                    } 
+                    }
+
                     if(pointedEntity){
                         val = $.inArray(pointedEntity, objects[mapping.label[nodeName].fk.array]);
                     }else {
@@ -317,14 +303,14 @@ function add(addArray,mapping,node,arg){
                             objects[mapping.label[nodeName].fk.array].push(entry);  
                             val = objects[mapping.label[nodeName].fk.array].length -1 ;
                         }else{
-                            conole.warn(mapping.label[nodeName].setter+" : "+key+" can't be found");
+                            console.warn("error while parsing "+mapping.nodeName+", "+mapping.label[nodeName].setter+" : "+key+" can't be found ");
                             return;
                         }
                     }   
                 }
 
                 if(mapping.label[nodeName].format){   
-                    val = mapping.label[nodeName].format(node,val);
+                    val = doFormat(node,mapping.label[nodeName].format) 
                 }
                 val = mapping.label[nodeName].setter === false ? val : typeof val === 'string' ? str_format(val) : val ;
                 if(mapping.label[nodeName].multiple === true){
@@ -365,65 +351,65 @@ function getArrayId(arrayName,field,value){
     return -1;
 }
 
-/**
- *  AMENE A DISPARAITRE
- */
-function getCategoryIdFromName(name){
-    name = str_format(name);
+// /**
+//  *  AMENE A DISPARAITRE
+//  */
+// function getCategoryIdFromName(name){
+//     name = str_format(name);
 
-    for (var i=0;i<objects.categories.length;i++){
-        //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
-        if(objects.categories[i]['setName']==name){
-            return i; 
-        }
-    }
-    return undefined;
-}
+//     for (var i=0;i<objects.categories.length;i++){
+//         //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
+//         if(objects.categories[i]['setName']==name){
+//             return i; 
+//         }
+//     }
+//     return undefined;
+// }
 
-function getLocationIdFromUri(uri){ 
+// function getLocationIdFromUri(uri){ 
 
-    for (var i=0;i<objects.locations.length;i++){
-        //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
-        if(objects.locations[i]['uri']==uri){
-            return i; 
-        }
-    }
-    return undefined;
-} 
+//     for (var i=0;i<objects.locations.length;i++){
+//         //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
+//         if(objects.locations[i]['uri']==uri){
+//             return i; 
+//         }
+//     }
+//     return undefined;
+// } 
 
-function getLocationIdFromName(locationName){
-    locationName = str_format(locationName);
-    for (var i=0;i<objects.locations.length;i++){
-        //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
-        // alert(locationName+" == "+locations[i]['setName']+"\n"+(locations[i]['setName']==locationName ?"true":"false"));
-        if(objects.locations[i]['setName']==locationName){
-            return i; 
-        }
-    }
-    return -1;
-}
+// function getLocationIdFromName(locationName){
+//     locationName = str_format(locationName);
+//     for (var i=0;i<objects.locations.length;i++){
+//         //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
+//         // alert(locationName+" == "+locations[i]['setName']+"\n"+(locations[i]['setName']==locationName ?"true":"false"));
+//         if(objects.locations[i]['setName']==locationName){
+//             return i; 
+//         }
+//     }
+//     return -1;
+// }
 
-function getTopicIdFromName(topicName){
-    topicName = str_format(topicName);
+// function getTopicIdFromName(topicName){
+//     topicName = str_format(topicName);
     
-    for (var i=0;i< objects.topics.length;i++){
-        //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
-        if(objects.topics[i]['setName']==topicName){
-            return i; 
-        }
-    }
-    return -1;
-}
+//     for (var i=0;i< objects.topics.length;i++){
+//         //console.log(url+"\n"+xproperties[i]['setXValue']+"\n"+(xproperties[i]['setXValue']==url)+"\n"+i);
+//         if(objects.topics[i]['setName']==topicName){
+//             return i; 
+//         }
+//     }
+//     return -1;
+// }
 
-function getEventIdFromURI(uri,show){
+// function getEventIdFromURI(uri){
 
-    for (var i=0;i<objects.xproperties.length;i++){ 
-        if(objects.xproperties[i]['setXValue']==uri){
-            return objects.xproperties[i]['setCalendarEntity'];
-        }
-    }
-    return undefined;
-}
+//     for (var i=0;i<objects.xproperties.length;i++){ 
+//         if(objects.xproperties[i]['setXValue']==uri){
+//             return objects.xproperties[i]['setCalendarEntity'];
+//         }
+//     }
+//     return undefined;
+// }
 
 
 /**
@@ -482,15 +468,20 @@ function str_format(string){
 
 
 
-function doFormat(node,format){
-    console.log("doFormat");
-    console.log(node);
-    console.log(format);
+function doFormat(node,format){ 
+    if(isFunction(format)){
+       return format(node); 
+    } 
     for (var i in format){
         var currentFormat = format[i];
         node = NodeUtils[currentFormat.nodeUtils](node,currentFormat.arg)
     } 
     return node;
+}
+
+function isFunction(functionToCheck) {
+    var getType = {};
+    return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 }
 
 NodeUtils = {
@@ -499,6 +490,42 @@ NodeUtils = {
     },
     localName : function(node){
         return node.localName;
+    },
+    rdfNodeName : function(node){
+        var uri=[];
+        var rtn;
+        $(node).children().each(function(){ 
+            if(this.localName.indexOf("rdf:type")!== -1 ){
+                if($(this).attr('rdf:resource').indexOf("#")!== -1 ){ 
+                    uri.push($(this).attr('rdf:resource').split('#')[1]); 
+                }
+                else{
+                    var nodeName = $(this).attr('rdf:resource').split('/'); 
+                    uri.push(nodeName[nodeName.length-1]);  
+                }
+            } 
+        });
+        // console.log("getNodeName",node.localName)
+        // console.log("uri",uri)
+        for(var i in uri){
+            var lc = uri[i].toLowerCase();
+            if(lc.indexOf('keynotetalk')>-1){
+                rtn = 'KeynoteEvent'; 
+            }
+        } 
+        var lc = node.localName.toLowerCase();
+        if(lc.indexOf('keynotetalk')>-1){
+            rtn = 'KeynoteEvent'; 
+        }
+        else if(uri.length==1)
+        {
+            rtn = uri[0];
+        }
+        else if(uri.length==0) //rdf
+        { 
+            rtn = node.localName;
+        } 
+        return rtn;
     },
     // get a specific attr for the given node
     //arg[0] must contain the wanted attr
