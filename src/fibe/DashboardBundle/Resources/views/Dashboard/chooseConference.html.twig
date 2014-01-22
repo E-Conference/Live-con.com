@@ -73,7 +73,9 @@
                         <li class="list-group-item"><h5>Locations <span class="badge">{{ conference.locations|length }}</span></h5></li>
                         <li class="list-group-item"><h5>Persons <span class="badge">{{ conference.persons|length }}</span></h5> </li>
                         <li class="list-group-item"><h5>Topics <span class="badge">{{ conference.topics|length }}</span></h5> </li>
+                        {% if app.user.getCurrentConf().getModule().getOrganizationModule() == 1 %}
                         <li class="list-group-item"><h5>Organizations <span class="badge">{{ conference.organizations|length }}</span></h5> </li> 
+                        {% endif %}
                         <li class="list-group-item"><h5>Conf Managers <span class="badge">{{ conference.confManagers|length }}</span></h5> </li>
                       </ul>
                      </div>

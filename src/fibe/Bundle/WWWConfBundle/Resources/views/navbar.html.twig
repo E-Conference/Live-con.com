@@ -85,6 +85,7 @@
         {% endif %}
 
          <!-- Organizations dropdown -->
+        {% if app.user.getCurrentConf().getModule().getOrganizationModule() == 1 %}
         <li class="dropdown">
           <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
             Organizations
@@ -98,6 +99,7 @@
             </li>
           </ul>
         </li> 
+       {% endif %}
 
 
         <!-- <li><a href ="{{ path('schedule_status') }}" title="Status">Status</a></li> -->

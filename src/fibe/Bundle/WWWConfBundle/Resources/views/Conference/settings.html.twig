@@ -1,21 +1,23 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block title %}Paper edit{% endblock title %}
+{% block title %}Conference Settings{% endblock title %}
 
 {% block centerPanel %}
     {{ parent() }}
     <h1>Conference Settings</h1>
      
    
-    <form action="{{ path('schedule_module_update', { 'id': module.id }) }}" method="post" {{ form_enctype(module_form) }}>
+    <form action="{{ path('schedule_module_update', { 'id': module.id }) }}" method="post" class="form-inline" role="form" {{ form_enctype(module_form) }}>
         <input type="hidden" name="_method" value="PUT" />
             <div class="row">
                <div class="col-lg-2"></div>
-               <div class="col-lg-4">
-               <h2>Modules</h2>
+               <div class="col-lg-4 well">
+                <h2>Modules</h2>
                  {{ form_widget(module_form) }}
                  {{ form_errors(module_form) }}
-                 </br>
+               
+               
+                </br>
                   <button type="submit" class="btn btn-block btn-success">
                             <i class="fa fa-check"></i>
                   </button>
@@ -23,3 +25,4 @@
     </form>
 
 {% endblock %}
+
