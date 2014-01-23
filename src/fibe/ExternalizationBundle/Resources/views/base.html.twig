@@ -85,9 +85,13 @@
 {% block body %} 
     {{ parent() }}
 
-    {% block navBar %} 
-        {% include "fibeExternalizationBundle::navbar.html.twig" %}
+      {% block navBar %} 
+        {% include "fibeWWWConfBundle::mainNavBar.html.twig" %}
     {% endblock navBar%}
+
+    {% block menuNavBar %} 
+        {% include "fibeWWWConfBundle::menuNavBar.html.twig" %}
+    {% endblock menuNavBar%}
     {% block content %} 
     <div class="content">
          {% block sideBarPanel%} 
@@ -109,9 +113,18 @@
 
         <div class="row">
             <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div> 
-            <div class="col-xs-10 col-sm-10  col-md-10 col-lg-10 center">
+            <div class="col-xs-10 col-sm-10  col-md-10 col-lg-10 ">
+                 <div class="row ">
+                  <ul class="nav breadcrum nav-tabs">
+                          <li class="active"><a href="#">Home</a></li>
+                          <li><a href="#">Profile</a></li>
+                          <li><a href="#">Messages</a></li>
+                        </ul>
+                 </div>
+                 <div class="row center">
                 {% block centerPanel %} 
                 {% endblock centerPanel %}
+                </div>
             </div>
            <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div>
         </div>

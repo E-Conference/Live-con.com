@@ -1,3 +1,4 @@
+
 <div class="navbar navbar-static-top navbar-inverse" role="navigation">
 
   <div class="navbar-header">
@@ -17,14 +18,19 @@
        
       
 
-       <!-- Schedule dropdown -->
+       <!-- Import/export dropdown -->
         <li class="dropdown">
           <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
-            Schedule
+             <i class="fa fa-users fa-3x"></i> Team
             <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
-            <li> 
+              <li>
+              <a  href="{{ path('schedule_user_list') }}" title="Manage team">
+               <i class="fa fa-users fa-3x"></i> Team
+              </a>
+              </li>
+          <!--   <li> 
               <a style="padding-right:5px;"   href="{{ path('schedule_view') }}"  >
                 <i class="fa fa-calendar"></i> Schedule view
               </a> 
@@ -42,7 +48,7 @@
                 <i class="fa fa-screenshot "></i> Topic
               </a>
             </li> 
-            </li>
+            </li> -->
           </ul>
         </li> 
 

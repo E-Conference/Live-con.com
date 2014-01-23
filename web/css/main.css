@@ -8,21 +8,21 @@ body{
 
 
 /*-------------------------------------------------------------------------------------
---------------------------------------NAVBAR-----------------------------------------
+--------------------------------------MAINNAVBAR-----------------------------------------
 -------------------------------------------------------------------------------------*/
-.navbar{
+#main-navbar{
 	background-color : #f2f2f2;
 	border-bottom : 2px solid #19313b;
 	margin-bottom : 0px !important;
 }
 
 .nav{
-	margin-top:15px;
+	
 }
 
 
 /*-------------------------------------------------------------------------------------
---------------------------------------NAVBAR-----------------------------------------
+--------------------------------------SIDEBAR-----------------------------------------
 -------------------------------------------------------------------------------------*/
 
 
@@ -41,6 +41,7 @@ body{
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
+	display:none;
 }
 
 #sideBarList{
@@ -72,6 +73,82 @@ body{
 	
 }
 
+/*-------------------------------------------------------------------------------------
+--------------------------------------MENUNAVBAR----------------------------------------
+-------------------------------------------------------------------------------------*/
+
+
+#menu-navbar{
+		
+	font-family: QuickSandBold, sans-serif;
+	margin-bottom: 0px !important;
+	background:#19313b;
+	color:#f2f2f2 ;
+}
+
+
+#menu-navbar ul *{
+	background:#19313b;
+	color:  #f2f2f2;
+}
+
+
+#menu-navbar .btn-conf {
+	background:#f2f2f2;
+	border: none;
+	margin-top : -4px;
+	margin-left : 10px;
+
+
+	overflow : hidden;
+	border-radius: 0px  0px 20px 20px;
+	width : 230px;
+	color: #19313b;
+}
+
+
+
+
+#menu-navbar .dropdown-menu>li>a {
+		background:#19313b !important ;
+		color:#f2f2f2 !important ;
+
+}
+
+#menu-navbar .dropdown-menu > li :hover{
+			background:#f2f2f2!important ;
+		color: #19313b !important ;
+}
+
+#menu-navbar li :focus{
+		background:#19313b !important ;
+		color:#f2f2f2 !important ;
+}
+
+/*-------------------------------------------------------------------------------------
+--------------------------------------BREADCRUM-ENTITIES-----------------------------------------
+-------------------------------------------------------------------------------------*/
+
+.breadcrum {
+	border-bottom: solid 2px #19313b;
+	margin-top: 20px;
+	
+	color: ;
+
+}
+.breadcrum>li.active>a {
+
+	background-color:#f2f2f2;
+	border-bottom:none;
+}
+.breadcrum > li > a{
+	background-color:#999;
+	color : #f2f2f2 ; 
+}
+.breadcrum > li .active {
+	background-color : #eeeeee;
+}
+
 
 
 
@@ -83,13 +160,17 @@ body{
 
 	padding: 1.5em 1.5em 10.5em;
 	margin-bottom: 1.5em;
-	margin-top: 15px;
 	min-height : 800px;
-	border: solid 2px #19313b;
+	border-bottom: solid 2px #19313b;
+	border-right: solid 2px #19313b;
+	border-left: solid 2px #19313b;
 	background-color: #eeeeee;
-	-webkit-border-radius: 18px;
-	-moz-border-radius: 18px;
-	border-radius: 18px;
+	-webkit-border-bottom-left-radius: 18px;
+	-moz-border-bottom-left-radius: 18px;
+	border-bottom-left-radius: 18px;
+	-webkit-border-bottom-right-radius: 18px;
+	-moz-border-bottom-right-radius: 18px;
+	border-bottom-right-radius: 18px;
 }
 
 
