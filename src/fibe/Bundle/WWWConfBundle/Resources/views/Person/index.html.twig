@@ -46,9 +46,14 @@
                     <td>{% if entity.flagdataadmin %}<i class="icon-user"></i>{% endif %}</td>
                     <td> {% for organization in entity.organizations  %}
                             <li>
-                           <a href="{{ path('schedule_organization_show', { 'id': organization.id }) }}">
-                             {{ organization|e }}
-                            </a></li>
+                           {% if app.user.getCurrentConf().getModule().getOrganizationModule() == 1 %}
+                                  <a href="{{ path('schedule_organization_show', { 'id': organization.id }) }}">
+                                     {{ organization.name|e }}
+                                  </a>
+                                {% else %}
+                                     {{ organization.name|e }}
+                                {% endif %}
+                            </li>
                          {% endfor %}
                     </td>
                     <td>

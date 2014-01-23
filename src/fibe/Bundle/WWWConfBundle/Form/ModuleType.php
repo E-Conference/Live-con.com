@@ -12,9 +12,23 @@ class ModuleType extends AbstractType
     {
         $builder
             ->add('paperModule','checkbox', array(
-                     'label'     => 'Paper',
+                     'label'     => 'Publications ',
                      'required'  => false,
-                    ));
+                     'attr'      => array('class' => 'switch switch-small',
+                                          'data-on-label' => "<i class='fa fa-check fa-white'>",
+                                          'data-off-label' => "<i class='fa fa-ban'>",
+
+                                                                        ),
+                    ))
+             ->add('organizationModule','checkbox', array(
+                     'label'     => 'Organizations ',
+                     'required'  => false,
+                     'attr'      => array('class' => 'switch switch-small',
+                                          'data-on-label' => "<i class='fa fa-check fa-white'>",
+                                          'data-off-label' => "<i class='fa fa-ban'>",
+                                      
+                                                                        ),
+                    ));          
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

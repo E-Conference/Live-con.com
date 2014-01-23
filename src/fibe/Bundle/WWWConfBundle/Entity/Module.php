@@ -36,6 +36,13 @@ class Module
      */
     private $paperModule;
 
+    /**
+     *  
+     * @ORM\Column(type="boolean",options={"default" = 1})
+     *
+     */
+    private $organizationModule;
+
 
     /**
      * Get id
@@ -68,5 +75,28 @@ class Module
     public function getPaperModule()
     {
         return $this->paperModule;
+    }
+
+    /**
+     * Set organizationModule
+     *
+     * @param boolean $organizationModule
+     * @return Module
+     */
+    public function setOrganizationModule($organizationModule)
+    {
+        $this->organizationModule = $organizationModule;
+    
+        return $this;
+    }
+
+    /**
+     * Get organizationModule
+     *
+     * @return boolean 
+     */
+    public function getOrganizationModule()
+    {
+        return $this->organizationModule;
     }
 }

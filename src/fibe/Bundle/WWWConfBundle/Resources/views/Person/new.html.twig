@@ -30,8 +30,13 @@
                      {{ form_row(form.page) }}
                      {{ form_row(form.openId) }}
                      {# {{ form_row(form.nick) }} #}
+                      {% if app.user.getCurrentConf().getModule().getOrganizationModule() == 1 %}
                      {{ form_row(form.organizations) }}
-                     {{ form_row(form.papers) }}
+                     {% endif %}
+
+                     {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
+                        {{ form_row(form.papers) }}
+                     {% endif %}
               </div>
               <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
                     {{ form_rest(form)}}

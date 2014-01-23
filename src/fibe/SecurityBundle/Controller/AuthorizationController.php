@@ -49,6 +49,7 @@ class AuthorizationController extends Controller
         if (!$authorization || !$user) {
             throw $this->createNotFoundException('Unable to find Authorization or Manager entity.');
         }
+     
       
         switch ($authorizationType){
           case 'app':
@@ -61,11 +62,20 @@ class AuthorizationController extends Controller
              $authorization->setFlagconfDatas($value);
               break;
           case 'team':
+            //It must stay one manager in a conference
+          if(count($currentConf->getConfManagers())>1){
              $authorization->setFlagTeam($value);
+          }else{
+
+            $this->container->get('session')->getFlashBag()->add(
+                'error',
+                'It must stay unless one team manager by conference.'
+            );
+          }
               break;
         }
        $em->persist($authorization);
-       $em->flush();
+       $em->flush($authorization);
        return new Response();
     }
 
@@ -73,7 +83,7 @@ class AuthorizationController extends Controller
      * Change authorization
      *
      * @Route("/authorization/create", name="schedule_user_create_authorization") 
-     * TODO // Uniquement le createur de la conf peut ajouter une personne ou les modifier dans la conf
+     * 
      */
       public function authorizationCreateAction(Request $request)
     {

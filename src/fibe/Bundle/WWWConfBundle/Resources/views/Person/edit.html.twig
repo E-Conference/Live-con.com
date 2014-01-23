@@ -37,10 +37,15 @@
                      {{ form_row(edit_form.page) }}
                      {{ form_row(edit_form.openId) }}
                      {# {{ form_row(edit_form.nick) }} #}
+                     
+                     {% if app.user.getCurrentConf().getModule().getOrganizationModule() == 1 %}
                      {{ form_row(edit_form.organizations) }}
+                     {% endif %}
+
                      {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
                         {{ form_row(edit_form.papers) }}
                      {% endif %}
+
                      {{ form_row(edit_form.accounts) }}
                      {{ form_errors(edit_form) }}
               </div>
