@@ -1,5 +1,6 @@
-{% extends "::base.html.twig" %}
-       
+{% extends "::base.html.twig" %}    
+
+{% set currentPath = app.request.attributes.get('_route') %}
 
 {% block meta %}{% endblock %}
 {% block title %}{% endblock %}
@@ -16,6 +17,8 @@
 
         <script type="text/javascript">
          $(document).ready(function() {
+               
+                $(".{{currentPath}}").addClass("active");
 
                 $('label[class="required"]').append("<i style='color:#C00000  '>*</i>");
 
@@ -65,7 +68,8 @@
             </script> 
         {% endfor %}
 
-        {% if authorized==0 %}
+        <!-- Authorization -->
+        {% if authorized == 0 %}
             <script type="text/javascript" >
              $(document).ready(function(){
                  $(".edit").hide();
@@ -78,48 +82,50 @@
             </script> 
         {% endif %}
 
+        <!-- Hide module not used in the conference -->
+         {% if app.user.getCurrentConf().getModule().getPaperModule() == 0 %}
+            <script type="text/javascript" >
+             $(document).ready(function(){
+                 $(".module_paper").hide();
+             });
+            </script> 
+        {% endif %}
+
         {%  block javascripts_page %}
         {% endblock%}
 {% endblock%}
 
 {% block body %} 
     {{ parent() }}
-
-      {% block navBar %} 
+    {% block navBar %} 
         {% include "fibeWWWConfBundle::mainNavBar.html.twig" %}
     {% endblock navBar%}
 
-    {% block menuNavBar %} 
-        {% include "fibeWWWConfBundle::menuNavBar.html.twig" %}
-    {% endblock menuNavBar%}
+
+    {% if app.user.getCurrentConf() %} 
+      {% block menuNavBar %} 
+          {% include "fibeWWWConfBundle::menuNavBar.html.twig" %}
+      {% endblock menuNavBar%}
+    {% endif %}
+
     {% block content %} 
     <div class="content">
-         {% block sideBarPanel%} 
-        <div id="sideBar">
-            <div id="sideBarList">
-                <div class="panel-group">
-                {% block sideBar_page%} 
-                {% endblock sideBar_page%} 
-                 {% block sideBar%} 
-                    {% include "fibeExternalizationBundle::sideBar.html.twig" %}
-                {% endblock sideBar %}
-                </div>
-            </div>
-            <div id="sideBarBtn">
-                <i class="fa fa-chevron-right"></i>
-            </div>
-        </div>
-         {% endblock sideBarPanel%} 
 
         <div class="row">
             <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div> 
+
             <div class="col-xs-10 col-sm-10  col-md-10 col-lg-10 ">
                  <div class="row ">
-                  <ul class="nav breadcrum nav-tabs">
-                          <li class="active"><a href="#">Home</a></li>
-                          <li><a href="#">Profile</a></li>
-                          <li><a href="#">Messages</a></li>
-                        </ul>
+                   <ul class="nav breadcrum nav-tabs">
+                          
+                          <li class="schedule_conference_edit"><a href="{{ path('schedule_conference_edit') }}">Overview</a></li>
+                          <li class="schedule_conference_settings"><a href="{{ path('schedule_conference_settings') }}">Modules</a></li>
+                          <li class="conference_team_list"><a href="{{ path('conference_team_list') }}">Team</a></li>
+                          <li class="externalization_import_index"><a href="{{ path('externalization_import_index') }}">Import/export</a></li>
+                           {% block menu_page%} 
+                           {% endblock menu_page %}
+                      
+                    </ul>
                  </div>
                  <div class="row center">
                 {% block centerPanel %} 
@@ -132,3 +138,6 @@
     </div>
     {% endblock content%}
 {% endblock body%}
+
+
+ 

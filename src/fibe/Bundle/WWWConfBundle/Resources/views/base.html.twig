@@ -97,7 +97,6 @@
 
 {% block body %} 
     {{ parent() }}
-     {{currentPath}}
     {% block navBar %} 
         {% include "fibeWWWConfBundle::mainNavBar.html.twig" %}
     {% endblock navBar%}
@@ -111,23 +110,6 @@
 
     {% block content %} 
     <div class="content">
-         {% block sideBarPanel%} 
-        <div id="sideBar">
-            <div id="sideBarList">
-                <div class="panel-group">
-                {% block sideBar_page%} 
-                {% endblock sideBar_page%} 
-                 {% block sideBar%} 
-                    {% include "fibeWWWConfBundle::sideBar.html.twig" %}
-                {% endblock sideBar %}
-                </div>
-            </div>
-            <div id="sideBarBtn">
-                <i class="fa fa-chevron-right"></i>
-            </div>
-        </div>
-         {% endblock sideBarPanel%} 
-
 
         <div class="row">
             <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div> 

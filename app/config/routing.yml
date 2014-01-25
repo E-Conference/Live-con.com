@@ -1,3 +1,8 @@
+fibe_conference:
+    resource: "@fibeConferenceBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 fibe_externalization:
     resource: "@fibeExternalizationBundle/Controller/"
     type:     annotation

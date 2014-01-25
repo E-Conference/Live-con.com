@@ -29,6 +29,29 @@
       </div>
     </div>
   </div>
+
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#sideBarBtn" href="#collapseExternalization"  title="import/export">
+            <i class="fa fa-arrows-v fa-3x"></i> Import/export  
+        </a>
+      </h4>
+    </div>
+     <div id="collapseExternalization" class="panel-collapse collapse">
+      <div class="panel-body">
+     
+              <a role="button" class="btn btn-info btn-medium" href="{{ path('externalization_import_index')}}">
+              Import
+              </a>
+
+              <a role="button" class="btn btn-info btn-medium" href="{{ path('externalization_export_index')}}">
+              Export
+              </a>
+      </div>
+    </div>
+  </div>
   
    {% if is_granted("ROLE_ADMIN") and app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')==1 %} 
   <div class="panel panel-default">
