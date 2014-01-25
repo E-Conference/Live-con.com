@@ -52,60 +52,60 @@ var CalEvent = function(event){
  
 };
 
-CalEvent.prototype.render = function (){
-    // alert("render "+this.id+" "+this.allDay)
+// CalEvent.prototype.render = function (){
+//     // alert("render "+this.id+" "+this.allDay)
 
-    renderedEvent = this;
-    renderedEvent.formatDate(); 
+//     renderedEvent = this;
+//     renderedEvent.formatDate(); 
   
 
-    // render the event on the calendar
-    if($calendar.fullCalendar('clientEvents',this.id).length <1){
-      console.debug(" new cal event for : "+this.id); 
-      renderedEvent = new CalEvent(this); 
+//     // render the event on the calendar
+//     if($calendar.fullCalendar('clientEvents',this.id).length <1){
+//       console.debug(" new cal event for : "+this.id); 
+//       renderedEvent = new CalEvent(this); 
 
-      $calendar.fullCalendar('renderEvent', renderedEvent);
-    }else{
-      $calendar.fullCalendar('removeEvents', renderedEvent.id);
-      // EventCollection.eventToRender.push(this["id"]);
-      $calendar.fullCalendar('renderEvent', Events[renderedEvent.id]);
-    }
+//       $calendar.fullCalendar('renderEvent', renderedEvent);
+//     }else{
+//       $calendar.fullCalendar('removeEvents', renderedEvent.id);
+//       // EventCollection.eventToRender.push(this["id"]);
+//       $calendar.fullCalendar('renderEvent', Events[renderedEvent.id]);
+//     }
 
-    //sometimes, event is still not rendered .... so we create a new CalEvent
-    if($calendar.fullCalendar('clientEvents',this.id).length <1){
-      console.debug("another calEvent for "+ this.id)
-      renderedEvent = new CalEvent(this);
-      $calendar.fullCalendar('renderEvent',renderedEvent);
-    }
-
-
+//     //sometimes, event is still not rendered .... so we create a new CalEvent
+//     if($calendar.fullCalendar('clientEvents',this.id).length <1){
+//       console.debug("another calEvent for "+ this.id)
+//       renderedEvent = new CalEvent(this);
+//       $calendar.fullCalendar('renderEvent',renderedEvent);
+//     }
 
 
-    // var e = this;
-    //       function doWork() { 
-    //         console.log(e);
-    //           alert("new calEvent for "+ e.id)
-    //           renderedEvent = new CalEvent(e);
-    //           $calendar.fullCalendar('renderEvent', renderedEvent ); 
-    //       };
-    //       setTimeout(doWork, 50);
+
+
+//     // var e = this;
+//     //       function doWork() { 
+//     //         console.log(e);
+//     //           alert("new calEvent for "+ e.id)
+//     //           renderedEvent = new CalEvent(e);
+//     //           $calendar.fullCalendar('renderEvent', renderedEvent ); 
+//     //       };
+//     //       setTimeout(doWork, 50);
  
-    // console.log("client events :",$calendar.fullCalendar('clientEvents'));
-    // console.log("Events :",Events);
+//     // console.log("client events :",$calendar.fullCalendar('clientEvents'));
+//     // console.log("Events :",Events);
 
-    // console.log("event.render("+renderedEvent.id+")");
-    // console.log("client event :",$calendar.fullCalendar('clientEvents',renderedEvent.id));
+//     // console.log("event.render("+renderedEvent.id+")");
+//     // console.log("client event :",$calendar.fullCalendar('clientEvents',renderedEvent.id));
 
 
-    Events[renderedEvent.id] = renderedEvent;
-    // return renderedEvent;
-};
+//     Events[renderedEvent.id] = renderedEvent;
+//     // return renderedEvent;
+// };
 
 CalEvent.prototype.renderForRefetch = function(){   
     // console.log("##renderForRefetch",this);
     if(this.isInstant())return;
     if(calendar_events_indexes[this.id]=== undefined){
-      console.debug("#renderForRefetch pushing "+this.id);
+      console.debug("#renderForRefetch rendering "+this.id);
       calendar_events.push(this);
       calendar_events_indexes[this.id]=calendar_events.length-1; 
     }
@@ -151,7 +151,6 @@ CalEvent.prototype.persist = function(add){
         if(response.mainConfEvent){
             EventCollection.updateMainConfEvent(response.mainConfEvent.start,response.mainConfEvent.end);
         }
-        EventCollection.refetchEvents(); 
       },
       'json'
     );
@@ -213,7 +212,7 @@ CalEvent.prototype.updateParentDate = function(){
 
           EventCollection.eventToRender = {id:parent["id"],oldStart:oldStart,oldEnd:oldEnd}; 
           updateParentDate(parent); 
-          parent.render();
+          parent.renderForRefetch();
           parent.persist(); 
         }
     }
@@ -259,7 +258,7 @@ CalEvent.prototype.updateChildrenDate = function(){
             child['start'] = childStart;
             child['end'] = childEnd;
             updateChildrenDate(child);
-            child.render();
+            child.renderForRefetch();
             child.persist();
           } 
         }
@@ -360,8 +359,8 @@ CalEvent.prototype.setParent = function (parent){
     parent.children.push( { "id": this.id});
 
     //update parentDate 
-    // this.renderForRefetch();
-    // parent.render();
+    this.renderForRefetch();
+    parent.renderForRefetch();
 };
 
 CalEvent.prototype.deleteParent = function (){   
@@ -399,6 +398,23 @@ CalEvent.prototype.hasChild = function (){
     if(!children || children.length < 1)
       return false;
     return true;
+};
+
+CalEvent.prototype.isBroOf = function (bro){  
+    if(bro.id == mainConfEvent.id)return false; 
+    var brosOfBro = bro.getBros(); 
+    for(var i in brosOfBro){ 
+      if(brosOfBro[i].id === this.id)
+        return true
+    }
+    return false;
+};
+
+CalEvent.prototype.getBros = function (){ 
+    if(this.id == mainConfEvent.id)
+        return []; 
+
+    return EventCollection.getChildren(Events[this.parent.id], { onlyEvent:true, noSidebar : true})
 };
 
 

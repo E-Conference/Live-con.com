@@ -19,15 +19,15 @@
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
       <div id="sidebar">  
-        <div class="checkbox">
+        {# <div class="checkbox">
           <label>
             <input id="reposition" checked="checked" type="checkbox"> Reposition parent/child <small>(<i>need performance</i>)</small>
           </label>
         </div> 
-        <div class="history hide">
+        <div class="history ">
           <button id="backwardBtn" class="btn btn-default" disabled="disabled" ><i class="icon-undo"></i></button>
           <button id="forewardBtn" class="btn btn-default" disabled="disabled" ><i class="icon-repeat"></i></button>
-        </div>
+        </div> #}
         <div id="resourceView">
             <select class="form-control"> 
                 <option value="classic">Calendar</option> 
@@ -214,7 +214,7 @@
       location : {
         url : "{{ path('exporter_api', { 'entity_reference': 'schedule_location','_format': 'json' }) }}?conference_id={{currentConf.id}}",
         parse : function(e){
-          alert(e.location)
+          // alert(e.location)
           if(e.location && e.location.id!= ""){
             return e.location.id;
           }else{
@@ -264,53 +264,7 @@
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------- render events from json datasource -----------------------------------*/
       /*-----------------------------------------------------------------------------------------------------*/
- 
-      // calendar_events is the parsed array given to fullcalendar
-      function renderEvents(events){
-          Events = {};
-   
-          calendar_events   = []; 
-          calendar_events_indexes   = {};  
-
-          var i = 0;
-          var orphanChildren= [];
-          //non-blocking loop
-          function doWork() {
- 
-            var event = new CalEvent(events[i]);
-
-            if(event.mainconfevent){
-              mainConfEvent = event;
-              if(mainConfEvent.parent.id != ""){
-                mainConfEvent.persist();
-              }
-              EventCollection.eventToRender = mainConfEvent; 
-            } 
-            if(event.parent.id == ""){
-              orphanChildren.push(event);
-            }
-          
-            i++; 
-
-            //last iteration  
-            if (!events[i]) {
-              //populate sidebar
-              fetched = true; 
-              // $calendar.fullCalendar( 'removeEvents');
-              for(var j=0;j<orphanChildren.length;j++){
-                if(orphanChildren[j] == mainConfEvent)continue;
-                orphanChildren[j].parent.id = mainConfEvent.id;
-                orphanChildren[j].persist();
-                bootstrapAlert("info","event "+orphanChildren[j].title+" was an orphan, so it's now the child of "+mainConfEvent.title)
-              }
-              EventCollection.refetchEvents(false,true);
-            }else if (stopRender!==true){ 
-              //the loop goes on
-              setTimeout(doWork, 1);
-            }
-          }; 
-          if(events[i])setTimeout(doWork, 1);
-      } 
+  
  
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------------- fullcalendar options ------------------------------------------*/
@@ -329,10 +283,10 @@
           date: firstDay.date(), 
           resources : resConfig[currentRes].url,
           windowResize: function(view) {
-              EventCollection.eventToRender = mainConfEvent; 
+              EventCollection.addEventToComputeCountRange(mainConfEvent) 
           }, 
           //get events
-          events : function(start, end, callback) {  
+          events : function(start, end, callback) { 
               //events have already been fetched
               if(fetched === true ){
                 fetched = false;
@@ -362,7 +316,50 @@
                     if(events.length!=0)bootstrapAlert("success",events.length+" events have been well fetched" );
                     else bootstrapAlert("info","no event found");
 
-                    renderEvents(events);
+                    Events = {};
+
+                    //initialize events
+                    calendar_events   = []; 
+                    calendar_events_indexes   = {};  
+
+                    var i = 0;
+                    var orphanChildren= [];
+                    //non-blocking loop
+                    function doWork() {
+           
+                      var event = new CalEvent(events[i]);
+                      EventCollection.addEventToComputeCountRange(event);
+
+                      if(event.mainconfevent){
+                        mainConfEvent = event;
+                        if(mainConfEvent.parent.id != ""){
+                          mainConfEvent.persist();
+                        } 
+                      } 
+                      if(event.parent.id == ""){
+                        orphanChildren.push(event);
+                      }
+                    
+                      i++; 
+
+                      //last iteration  
+                      if (!events[i]) {
+                        //populate sidebar
+                        fetched = true; 
+                        // $calendar.fullCalendar( 'removeEvents');
+                        for(var j=0;j<orphanChildren.length;j++){
+                          if(orphanChildren[j] == mainConfEvent)continue;
+                          orphanChildren[j].parent.id = mainConfEvent.id;
+                          orphanChildren[j].persist();
+                          bootstrapAlert("info","event "+orphanChildren[j].title+" was an orphan, so it's now the child of "+mainConfEvent.title)
+                        }
+                        EventCollection.refetchEvents(false,true);
+                      }else if (stopRender!==true){ 
+                        //the loop goes on
+                        setTimeout(doWork, 1);
+                      }
+                    }; 
+                    if(events[i])setTimeout(doWork, 1);
                     //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                 },
                 'json'
@@ -381,7 +378,7 @@
 
                           // rerender if changed
                       $modalBody.find("#eventForm,#delete-event-form").submit(function(){
-                        $modal.off('hidden.bs.modal').on('hidden.bs.modal', function () {
+                        $modal.off('hide.bs.modal').on('hide.bs.modal', function () {
                           EventCollection.refetchEvents(true);
                           // $calendar.fullCalendar( 'refetchEvents' );
                         })
@@ -420,7 +417,7 @@
                             var ev = new CalEvent(tmp);   
                             ev.setParent(mainConfEvent) 
                             Events[ev.id] = ev;   
-                            EventCollection.eventToRender = {id:ev["id"],oldStart:ev.start,oldEnd:ev.end};   
+                            EventCollection.addEventToComputeCountRange(ev) 
                             // ev.render();
                             ev.renderForRefetch(); 
                             if(response.mainConfEvent){
@@ -444,7 +441,7 @@
             setTimeout(function(){ //bug... event isn't yet updated
               if(!moment(event["end"]))event["end"]=moment(event["start"]).add("h",1).format();
               var oldEnd = moment(event["end"]).subtract({'d':dayDelta,'m':minuteDelta});
-              EventCollection.eventToRender = {id:event["id"],oldStart:event["start"],oldEnd:oldEnd.format()};
+              EventCollection.addEventToComputeCountRange(event);
 
               console.log(dayDelta,minuteDelta,event); 
               if(!event.isOneDayLong() && !event.allDay){ 
@@ -460,18 +457,16 @@
               event.persist();
             },1);//bug... event isn't yet updated 
           },  
-          viewRender : function( view, element ){
-            // fetched = false;
-            EventCollection.eventToRender = mainConfEvent;
-          },
+          // viewRender : function( view, element ){
+          //   // fetched = false; 
+          //   if(mainConfEvent)
+          //   EventCollection.addEventToComputeCountRange(mainConfEvent,{allEventsInDay:true});
+          // },
           eventAfterAllRender: function( view ) { 
               //avoid repeating this function 10 times...
               if(!mainConfEvent || stopRender)return;
               clearTimeout(repositionTimeout);
-              repositionTimeout=setTimeout(function(){   
-                  console.log("--------------------------------------------------------------");
-                  console.log("-------------------      rendering       ---------------------");
-                  console.log("--------------------------------------------------------------");
+              repositionTimeout=setTimeout(function(){    
                   updateEventArray(); 
 
 
@@ -522,10 +517,10 @@
             // seg.outerWidth = outerWidth;
             // seg.outerHeight = bottom - top;
             
-            console.log("##############################\neventCalculateWidth !!! ")
-            console.log(" event "+event.id+"   : ",event ) 
-            console.log(" view      : ",view) 
-            console.log(" seg:",seg," leftmost:",leftmost," availWidth:",availWidth," outerWidth:",outerWidth," levelI:",levelI,", bottom:",bottom,",top:",top," forward:",forward," dis:",dis);
+            console.log("###### computing width of event "+event.id);
+            // console.log(" event "+event.id+"   : ",event ) 
+            // console.log(" view      : ",view) 
+            // console.log(" seg:",seg," leftmost:",leftmost," availWidth:",availWidth," outerWidth:",outerWidth," levelI:",levelI,", bottom:",bottom,",top:",top," forward:",forward," dis:",dis);
 
             var count   = EventCollection.broCountRange[event.id].count,
                 range   = EventCollection.broCountRange[event.id].range; 
@@ -538,43 +533,52 @@
           },
           eventDragStart: function( event, jsEvent, ui, view ) { 
               dragged = [ ui.helper[0], event ];
-              setTimeout(function(){ //bug... event isn't yet updated 
-                EventCollection.eventToRender = {id:event["id"],oldStart:moment(event["start"])._d,oldEnd:moment(event["end"])._d}; 
+              setTimeout(function(){ //bug... event isn't yet updated  
                 dragChildren(event, jsEvent, ui, view);
               },1);//bug... event isn't yet updated
           },
           eventDragStop: function( event, jsEvent, ui, view ) {  
-            var event = Events[event.id]
-              dragged = [ ui.helper[0], event ]; 
-              var oldStart = moment(event.start);
-              var oldEnd = moment(event.end); 
+              var event = Events[event.id]
+              dragged = [ ui.helper[0], event,moment(event.start),moment(event.end) ];  
               if(isClassicView !== true ){
                 console.log("ressources changed ! "+ event.resource)
               }
-              setTimeout(function(){ //bug... event isn't yet updated 
+              EventCollection.addEventToComputeCountRange(event,{allBrosInDay:true});
+              // setTimeout(function(){ // event isn't yet updated 
+              //   if(!event.isOneDayLong()){
+              //     if(event.fitToDay(oldStart,oldEnd) === false){  
+              //       EventCollection.addEventToComputeCountRange(event,{allBrosInDay:true});
+              //       event.renderForRefetch();
+              //       EventCollection.refetchEvents();
+              //       return;
+              //     }
+              //   }
+              //   endDrag(event,ui.helper[0] ); 
+              //   event.persist(); 
+              // },1);//bug... event isn't yet updated  
+ 
+            },
+            eventDrop : function(event,dayDelta,minuteDelta,allDay,revert,ev,ui,resource ){ 
+              // setTimeout(function(){ // event isn't yet updated 
                 if(!event.isOneDayLong()){
-                  if(event.fitToDay(oldStart,oldEnd) === false){ 
+                  if(event.fitToDay(dragged[2],dragged[3]) === false){  
+                    EventCollection.addEventToComputeCountRange(event,{allBrosInDay:true});
                     event.renderForRefetch();
                     EventCollection.refetchEvents();
                     return;
                   }
                 }
+                EventCollection.addEventToComputeCountRange(event,{allBrosInDay:true});
                 endDrag(event,ui.helper[0] ); 
                 event.persist(); 
-              },1);//bug... event isn't yet updated 
-          },
-          //resources managment 
-          // refetchResources : true,
+              // },1);//bug... event isn't yet updated  
+            },
       };
       $calendar.fullCalendar(calendarOption);  
       $calendar.fullCalendar('changeView', viewBtns[currentView].classic );
       $('.fc-header-left').append('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"><span class="fa fa-refresh"></span></button>').click(function(e){ 
         EventCollection.resetEvents();
-      })
-      // $('.fc-header-left .fc-button').click(function(){ 
-      //   EventCollection.eventToRender = mainConfEvent;
-      //   EventCollection.refetchEvents();
-      // })
+      }) 
 
       /*-------------------------------------------------------------------------------------------------*/
       /*------------------------------------- update function -------------------------------------------*/
@@ -598,7 +602,7 @@
           var foundElem = []; 
           $(".fc-view-"+(isClassicView ? viewBtns[currentView].classic : viewBtns[currentView].resource)+" .fc-event:visible").each(function(i){ 
             var id = parseInt($(this).data("id")); 
-            alert(id)
+            // alert(id)
             foundElem.push(id)
             if(Events[id])Events[id]['elem'] = $(this);
           });
@@ -777,31 +781,35 @@
                                 return;
                               }
 
-                              var draggedEvent = dragged[1];
-                              console.log("dropped1 on "+event.id)
+                              var draggedEvent = dragged[1]; 
                               // check if it's not already a child
                               if(draggedEvent.parent.id === event.id){
                                 return;
-                              } 
-                              console.log("dropped2 on "+event.id)
+                              }  
                               //check if it's going to do a loop in the tree
                               if(event.isChild(draggedEvent)){ 
                                 return;
-                              } 
-                              console.log("dropped3 on "+event.id)
+                              }  
                               console.log(event)
                               console.log(draggedEvent)
 
-                              // if(event.isOutOf(draggedEvent))return; 
-                              console.log("dropped4 on "+event.id)
+                              // if(event.isOutOf(draggedEvent))return;  
                               $modalSetParent.modal('show').find(".sub-event").text(draggedEvent.title);
                               $modalSetParent.find(".super-event").text(event.title);
 
                               $modalSetParent.find('button.yes').off("click").click(function(){ 
                                   //set event as parent of draggedEvent and children relation
+                                  console.log(draggedEvent+" is child of "+event.id)
+                                  
                                   draggedEvent.setParent(event);
                                   draggedEvent.updateParentDate(); 
+                                  
+                                  EventCollection.addEventToComputeCountRange(draggedEvent);
                                   draggedEvent.renderForRefetch();
+
+                                  EventCollection.addEventToComputeCountRange(event);
+                                  event.renderForRefetch();
+                                  
                                   EventCollection.refetchEvents();
                                   draggedEvent.persist(); 
                               });   
@@ -910,8 +918,7 @@
 
 
       function endDrag(event){ //end drag from calendar to calendar
-    
-        console.log("endDrag"); 
+     
         stopRender = true;
         //get diff
         var diff = moment(draggedStart).diff(moment(event['start']));
@@ -942,7 +949,8 @@
           //still inside but may need a parent update (to properly contains child)
           event.updateParentDate(); 
           event.renderForRefetch();  
-        } 
+        }
+        EventCollection.addEventToComputeCountRange(event);
         EventCollection.refetchEvents();
           // stopRender = true;
           //non-blocking loop
@@ -1000,8 +1008,8 @@
       //init filters
       var filter = new initFilter();
       $(filter).on("change", function(ev,key,val) {
-
-          EventCollection.eventToRender = mainConfEvent;
+ 
+          EventCollection.addEventToComputeCountRange(mainConfEvent);
           console.log("filtering : ",val,key,op.data); 
           op.data[key] = val;  
           stopRender = true;
@@ -1053,8 +1061,7 @@
           viewBtns[i].elem.appendTo(".fc-header-right").off("click").click({i:i},function(e){ 
                   currentView = e.data.i;
                   $(this).siblings().removeClass("fc-state-active");
-                  $(this).addClass("fc-state-active");
-                  // EventCollection.eventToRender = mainConfEvent;
+                  $(this).addClass("fc-state-active"); 
                   // EventCollection.refetchEvents();
                   $calendar.fullCalendar('changeView', (isClassicView ? viewBtns[currentView].classic : viewBtns[currentView].resource)); 
           })
