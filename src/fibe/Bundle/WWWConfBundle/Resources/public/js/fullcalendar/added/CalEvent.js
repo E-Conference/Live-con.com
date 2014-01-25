@@ -143,14 +143,15 @@ CalEvent.prototype.persist = function(add){
       currentRes: currentRes,
     }  
     $.post(
-      add=== true ? op.quickAddUrl : op.quickUpdateUrl,
+      add === true ? op.quickAddUrl : op.quickUpdateUrl,
       toSend,
       function(response) {  
         bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well "+ (add=== true ? "added" : "updated")); 
         // console.log(toSend.id+" persisted",toSend); 
         if(response.mainConfEvent){
-            EventCollection.updateMainConfEvent(response.mainConfEvent.start,response.mainConfEvent.end); 
+            EventCollection.updateMainConfEvent(response.mainConfEvent.start,response.mainConfEvent.end);
         }
+        EventCollection.refetchEvents(); 
       },
       'json'
     );
@@ -359,8 +360,8 @@ CalEvent.prototype.setParent = function (parent){
     parent.children.push( { "id": this.id});
 
     //update parentDate 
-    this.render();
-    parent.render();
+    // this.renderForRefetch();
+    // parent.render();
 };
 
 CalEvent.prototype.deleteParent = function (){   

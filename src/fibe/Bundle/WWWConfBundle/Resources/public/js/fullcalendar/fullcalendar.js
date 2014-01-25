@@ -4175,7 +4175,7 @@ function AgendaEventRenderer() {
 			seg.left = left;
 			seg.outerWidth = outerWidth;
 			seg.outerHeight = bottom - top;
-			trigger('eventCalculateWidth', event,  seg,leftmost,availWidth,outerWidth,levelI,bottom,top,forward, dis,rtl);
+			trigger('eventCalculateWidth', event,event,  seg,leftmost,availWidth,outerWidth,levelI,bottom,top,forward, dis,rtl);//ADDED BY BENOITDDLP
 			html += slotSegHtml(event, seg);
 		}
 		slotSegmentContainer[0].innerHTML = html; // faster than html()
@@ -4275,7 +4275,9 @@ function AgendaEventRenderer() {
 		html +=
 			" class='" + classes.join(' ') + "'" +
 			" style='position:absolute;z-index:8;top:" + seg.top + "px;left:" + seg.left + "px;" + skinCss + "'" +
-			">" +
+        //ADDED BY BENOITDDLP
+		"data-id='"+event.id+"' >" +
+		//ADDED BY BENOITDDLP
 			"<div class='fc-event-inner'>" +
 			"<div class='fc-event-id'>" + event.id + "</div>" +  //ADDED BY benoitddlp
 			"<div class='fc-event-time'>" +
@@ -6425,7 +6427,9 @@ function DayEventRenderer() {
 			html +=
 				" class='" + classes.join(' ') + "'" +
 				" style='position:absolute;z-index:8;left:"+left+"px;" + skinCss + "'" +
-				">" +
+        //ADDED BY BENOITDDLP
+		"data-id='"+event.id+"' >" +
+		//ADDED BY BENOITDDLP
 				"<div class='fc-event-inner'" +
 				(skinCss ? " style='" + skinCss + "'" : "") +
 				">"+

@@ -208,12 +208,13 @@
         elem:$('<span class="fc-button fc-state-default fc-corner-right" unselectable="on">day</span>')},
     };
 
-    //                       resources view
+    // resources view
     var currentView = "week"; 
     var resConfig = {
       location : {
         url : "{{ path('exporter_api', { 'entity_reference': 'schedule_location','_format': 'json' }) }}?conference_id={{currentConf.id}}",
         parse : function(e){
+          alert(e.location)
           if(e.location && e.location.id!= ""){
             return e.location.id;
           }else{
@@ -300,9 +301,9 @@
                 if(orphanChildren[j] == mainConfEvent)continue;
                 orphanChildren[j].parent.id = mainConfEvent.id;
                 orphanChildren[j].persist();
-                bootstrapAlert("info","event "+orphanChildren[j].title+" was orphan, so it's now the child of "+mainConfEvent.title)
+                bootstrapAlert("info","event "+orphanChildren[j].title+" was an orphan, so it's now the child of "+mainConfEvent.title)
               }
-              EventCollection.refetchEvents();
+              EventCollection.refetchEvents(false,true);
             }else if (stopRender!==true){ 
               //the loop goes on
               setTimeout(doWork, 1);
@@ -319,8 +320,7 @@
               left: 'prev,next today',
               center: 'title',
               right: '' // computed in resource view
-          },  
-          resources: op.resFeedURL,
+          },   
           aspectRatio: 1.6,
           editable: true,
           firstDay: firstWeekDay,         
@@ -339,7 +339,7 @@
                 stopRender = false;  
                 console.log("fetched",calendar_events_indexes) 
                 console.log(calendar_events)
-                callback(calendar_events );
+                callback(calendar_events ); 
                 return;
               } 
               //compute dates to filter
@@ -417,18 +417,16 @@
                         function(response) {  
                             bootstrapAlert("success","event <b>"+tmp['title']+"</b> has been well added");
                             tmp.id =response.id;
-                            var ev = new CalEvent(tmp);  
-                            ev.setParent(mainConfEvent)
-                            Events[ev.id] = ev;  
-                            EventCollection.eventToRender = {id:ev["id"],oldStart:ev.start,oldEnd:ev.end};  
-                            ev.render();
-                            ev.renderForRefetch();
-                            EventCollection.refetchEvents();
+                            var ev = new CalEvent(tmp);   
+                            ev.setParent(mainConfEvent) 
+                            Events[ev.id] = ev;   
+                            EventCollection.eventToRender = {id:ev["id"],oldStart:ev.start,oldEnd:ev.end};   
+                            // ev.render();
+                            ev.renderForRefetch(); 
                             if(response.mainConfEvent){
-                                EventCollection.updateMainConfEvent(response.mainConfEvent.start,response.mainConfEvent.end); 
-                            }else{
-                              EventCollection.refetchEvents();
-                            } 
+                              EventCollection.updateMainConfEvent(response.mainConfEvent.start,response.mainConfEvent.end); 
+                            }  
+                            EventCollection.refetchEvents(); 
                         },
                         'json'
                     );
@@ -517,17 +515,26 @@
             //TODO COMPUTE WIDTH AND LEFT POS HERE TO AVOID EVENT TO BLINK 
             //TODO COMPUTE WIDTH AND LEFT POS HERE TO AVOID EVENT TO BLINK  
             //
-            // Example :
+            // Default :
             //
-            // event.top = top;
-            // event.left = left;
-            // event.outerWidth = outerWidth;
-            // event.outerHeight = bottom - top;
+            // seg.top = top;
+            // seg.left = left;
+            // seg.outerWidth = outerWidth;
+            // seg.outerHeight = bottom - top;
             
             console.log("##############################\neventCalculateWidth !!! ")
-            console.log(" event "+event.event.id+"   : ",event ) 
+            console.log(" event "+event.id+"   : ",event ) 
             console.log(" view      : ",view) 
             console.log(" seg:",seg," leftmost:",leftmost," availWidth:",availWidth," outerWidth:",outerWidth," levelI:",levelI,", bottom:",bottom,",top:",top," forward:",forward," dis:",dis);
+
+            var count   = EventCollection.broCountRange[event.id].count,
+                range   = EventCollection.broCountRange[event.id].range; 
+
+            var width = (availWidth+10)/count;
+            var left = leftmost-1+(width*range);
+
+            seg.outerWidth = width;
+            seg.left = left;
           },
           eventDragStart: function( event, jsEvent, ui, view ) { 
               dragged = [ ui.helper[0], event ];
@@ -574,7 +581,7 @@
       /*-------------------------------------------------------------------------------------------------*/
 
       /**
-       * function triggered after all events have been rendered 
+       * function triggered when all events have been rendered 
        */
       function updateEventArray(){ 
 
@@ -586,23 +593,17 @@
             var calendarEvent = calendarEvents[i];
             if(Events[calendarEvent.id]){
               Events[calendarEvent.id] = calendarEvent;
-              // calendar_events.push(calendarEvent);
-              // calendar_events_indexes[calendarEvent.id]=calendar_events.length-1;
-
-              // console.log(calendarEvent.id+"_###found in calendar",Events[calendarEvent.id]);
             } 
           } 
           var foundElem = []; 
           $(".fc-view-"+(isClassicView ? viewBtns[currentView].classic : viewBtns[currentView].resource)+" .fc-event:visible").each(function(i){ 
-            var id = parseInt($(this).find(".fc-event-id").text()); 
-
+            var id = parseInt($(this).data("id")); 
+            alert(id)
             foundElem.push(id)
             if(Events[id])Events[id]['elem'] = $(this);
           });
           console.debug(moment().diff(startScript)+" to updateEventArray");
           console.log("event array updated",Events);
-          // console.log(Events) 
- 
       }
 
 
@@ -622,110 +623,88 @@
           var eventMargin  = 4,
               popoverWidth = 276,
               colWidth     = view.getColWidth(),
-              startScript ; 
-              toppestParent = EventCollection.getToppestParent(view); 
+              startScript ;
 
-          console.log("toppest parent : ",toppestParent);
-          if(!toppestParent)return;
-          // console.log("toppestParent",toppestParent);
           
           var startScript = moment()
           stylizeBlock([mainConfEvent]); 
           console.debug(moment().diff(startScript)+" to stylizeBlock")
-
-          if($('#reposition').is(':checked') && (view.name == "agendaWeek" || view.name == "agendaDay")){ 
-              //non-blocking 
-              setTimeout(function(){ 
-                  var startScript = moment();
-
-                  positionBlock(toppestParent,colWidth,2);
-                  console.debug(moment().diff(startScript)+" to positionBlock");
                   console.log("--------------------------------------------------------");
                   console.log("----------------      rendered       -------------------");
                   console.log("--------------------------------------------------------");
-              },1)
-          }else{
-            EventCollection.eventToRender = undefined;
-          }
+
+          // if($('#reposition').is(':checked') && (view.name == "agendaWeek" || view.name == "agendaDay")){ 
+          //     //non-blocking 
+          //     setTimeout(function(){ 
+          //         var startScript = moment(); 
+          //         positionBlock(EventCollection.getToppestParent(),colWidth,2);
+          //         console.debug(moment().diff(startScript)+" to positionBlock");
+          //         console.log("--------------------------------------------------------");
+          //         console.log("----------------      rendered       -------------------");
+          //         console.log("--------------------------------------------------------");
+          //     },1)
+          // } 
+
           function positionBlock(events,colWidth,parentZindex,parentPos,parent){ 
-                  
-                  // console.log(" ######positionBlocks######");
-                  
-                  colWidth -=eventMargin/2; 
-                  var broCountRange;
-                  try
-                  {
-                      broCountRange = EventCollection.getBroCountRange(events)
-                  }
-                  catch(err)
-                  {
-                      // events aren't in the dom...
+                
+                // console.log(" ######positionBlocks######");
+                
+                colWidth -=eventMargin/2;   
+
+
+                for (var i in events){
+
+                  var event = events[i]; 
+                  // console.log("positionning : ",event.id);
+                  var element = event.elem; 
+                  if(!element)  continue; //event is in another view
                       
-                      return;
-                  }
+                  var elemProp = getProp(element); 
+                  var newColWidth;
 
-                  // console.log("##getBroCountRange of "+(events.length==1?events[0].id : "array["+events.length+"]")+"## ",broCountRange);  
+                  // repositionning (width and Xpos) 
+                  //positionning event to be over the parent 
 
+                  var count   = EventCollection.broCountRange[event.id].count,
+                      range   = EventCollection.broCountRange[event.id].range,
+                      left    = EventCollection.broCountRange[event.id].minLeft - 3;
+                  // console.log("event "+event.id+" has "+count+" bros. range = "+range+" minLeft = "+left);
 
-                  for (var i in events){
+                  //width
+                  newColWidth = (colWidth/count)-eventMargin/2
+                  //-(count/2);
 
-                    var event = events[i]; 
-                    // console.log("positionning : ",event.id);
-                    var element = event.elem; 
-                    if(!element)  continue; //event is in another view
-                        
-                    var elemProp = getProp(element); 
-                    var newColWidth;
-
-                    // repositionning (width and Xpos) 
-                    //positionning event to be over the parent
-                    // console.log(event.id)
-                    // if(broCountRange[event.id]){
-
-                        var count   = broCountRange[event.id].count,
-                            range   = broCountRange[event.id].range,
-                            left    = broCountRange[event.id].minLeft - 3;
-                        // console.log("event "+event.id+" has "+count+" bros. range = "+range+" minLeft = "+left);
-
-                        //width
-                        newColWidth = (colWidth/count)-eventMargin/2
-                        //-(count/2);
-
-                         
-                        //place child into his parent
-                        if(parentPos){
-                          left = parentPos.x;
-                          // newColWidth = newColWidth;
-                          if(moment(parent.start).isSame(moment(event.start))){
-                            element.css("top",elemProp.y+eventMargin/2); 
-                            element.css("height",elemProp.h-eventMargin);
-                          }
-                          if(moment(parent.end).isSame(moment(event.end))){ 
-                            element.css("height",elemProp.h-eventMargin);
-                          } 
-                        } 
-                        element.width(newColWidth);
-                        
-                        left += eventMargin/2 + ((range)*(newColWidth + eventMargin/2)); 
-                        if(left)element.css("left",left); 
-                        // console.log(left)  
-                    // }else{
-                    //   console.warn("couldn't have get broCountRange["+event.id+"]");
-                    // }
-
-                    //z-index 
-                    element.css('z-index',parentZindex+1)  
-                    // end repositionning (width and Xpos)
-                    
-                    var children = EventCollection.getChildren(event,{concat:false,onlyEvent:true});
-                    // console.log("elem",children)
-                    if(children.length>0){
-                      elemProp = getProp(element);
-                      positionBlock(children,newColWidth,parentZindex+1,elemProp,event);
+                   
+                  //place child into his parent
+                  if(parentPos){
+                    left = parentPos.x;
+                    // newColWidth = newColWidth;
+                    if(moment(parent.start).isSame(moment(event.start))){
+                      element.css("top",elemProp.y+eventMargin/2); 
+                      element.css("height",elemProp.h-eventMargin);
                     }
+                    if(moment(parent.end).isSame(moment(event.end))){ 
+                      element.css("height",elemProp.h-eventMargin);
+                    } 
+                  } 
+                  element.width(newColWidth);
+                  
+                  left += eventMargin/2 + ((range)*(newColWidth + eventMargin/2)); 
+                  if(left)element.css("left",left);
+
+                  //z-index 
+                  element.css('z-index',parentZindex+1)  
+                  // end repositionning (width and Xpos)
+                  
+                  var children = EventCollection.getChildren(event,{concat:false,onlyEvent:true});
+                  // console.log("elem",children)
+                  if(children.length>0){
+                    elemProp = getProp(element);
+                    positionBlock(children,newColWidth,parentZindex+1,elemProp,event);
                   }
-       
+                }
           }
+
           var dragOverEvents = []; 
           var currentDragOverEvent = null;
           function stylizeBlock(events){ 
@@ -748,88 +727,87 @@
                     // var lastShortestDragOverEvent = null;
                     
                     element.droppable({ 
-                      tolerance: "pointer" ,
+                        tolerance: "pointer" ,
                         over: function( ev, ui ) {
                           if ( $(ui.draggable).hasClass("fc-event") ){ 
-                            var event = EventCollection.getEventByDiv($(this));
-                            var draggedEvent = dragged[1];
- 
-                            //check if it's going to do a loop in the tree
-                            if(event.isChild(draggedEvent)){
-                              return;
-                            }
+                              var event = EventCollection.getEventByDiv($(this));
+                              var draggedEvent = dragged[1];
+   
+                              //check if it's going to do a loop in the tree
+                              if(event.isChild(draggedEvent)){
+                                return;
+                              }
 
-                            if(currentDragOverEvent)currentDragOverEvent.elem.removeClass("drag-over-events");
+                              if(currentDragOverEvent)currentDragOverEvent.elem.removeClass("drag-over-events");
 
-                            currentDragOverEvent = {id:event.id,elem:$(this)};  
-                            dragOverEvents.push(currentDragOverEvent);
-                            if(draggedEvent.parent.id !== event.id) currentDragOverEvent.elem.addClass("drag-over-events")  
-                            
+                              currentDragOverEvent = {id:event.id,elem:$(this)};  
+                              dragOverEvents.push(currentDragOverEvent);
+                              if(draggedEvent.parent.id !== event.id) currentDragOverEvent.elem.addClass("drag-over-events")  
+                              
                           }
                         },
                         out: function( ev, ui ) { 
                           if ( $(ui.draggable).hasClass("fc-event") ){
-                            // $(this).animate({"background-color":$(this).data("background-color")},{queue:false});
-                            $(this).removeClass("drag-over-events")
-                            var event = EventCollection.getEventByDiv($(this));
+                              // $(this).animate({"background-color":$(this).data("background-color")},{queue:false});
+                              $(this).removeClass("drag-over-events")
+                              var event = EventCollection.getEventByDiv($(this));
 
-                            for(var i in dragOverEvents){
-                              if(dragOverEvents[i].id == event.id){
-                                dragOverEvents.splice(i,1); 
+                              for(var i in dragOverEvents){
+                                if(dragOverEvents[i].id == event.id){
+                                  dragOverEvents.splice(i,1); 
+                                }
                               }
-                            }
-                            if(dragOverEvents.length>0){
-                              currentDragOverEvent = dragOverEvents[dragOverEvents.length-1]; 
+                              if(dragOverEvents.length>0){
+                                currentDragOverEvent = dragOverEvents[dragOverEvents.length-1]; 
 
-                              // if(dragged[1].parent.id !== event.id)
-                                currentDragOverEvent.elem.addClass("drag-over-events");
-                            }
+                                // if(dragged[1].parent.id !== event.id)
+                                  currentDragOverEvent.elem.addClass("drag-over-events");
+                              }
                           }
                         },
                         drop: function( ev, ui ) { 
                           if ( $(ui.draggable).hasClass("fc-event") &&  currentDragOverEvent){  
                             
-                            var event = Events[currentDragOverEvent.id];
-                            if(currentDragOverEvent.id === event.id){
-                              currentDragOverEvent.elem.removeClass("drag-over-events");
-                              dragOverEvents = []; 
-                              currentDragOverEvent = null;
-                            } else {
-                              return;
-                            }
+                              var event = Events[currentDragOverEvent.id];
+                              if(currentDragOverEvent.id === event.id){
+                                currentDragOverEvent.elem.removeClass("drag-over-events");
+                                dragOverEvents = []; 
+                                currentDragOverEvent = null;
+                              } else {
+                                return;
+                              }
 
-                            var draggedEvent = dragged[1];
-                            console.log("dropped1 on "+event.id)
-                            // check if it's not already a child
-                            if(draggedEvent.parent.id === event.id){
-                              return;
-                            } 
-                            console.log("dropped2 on "+event.id)
-                            //check if it's going to do a loop in the tree
-                            if(event.isChild(draggedEvent)){ 
-                              return;
-                            } 
-                            console.log("dropped3 on "+event.id)
-                            console.log(event)
-                            console.log(draggedEvent)
+                              var draggedEvent = dragged[1];
+                              console.log("dropped1 on "+event.id)
+                              // check if it's not already a child
+                              if(draggedEvent.parent.id === event.id){
+                                return;
+                              } 
+                              console.log("dropped2 on "+event.id)
+                              //check if it's going to do a loop in the tree
+                              if(event.isChild(draggedEvent)){ 
+                                return;
+                              } 
+                              console.log("dropped3 on "+event.id)
+                              console.log(event)
+                              console.log(draggedEvent)
 
-                            // if(event.isOutOf(draggedEvent))return; 
-                            console.log("dropped4 on "+event.id)
-                            $modalSetParent.modal('show').find(".sub-event").text(draggedEvent.title);
-                            $modalSetParent.find(".super-event").text(event.title);
+                              // if(event.isOutOf(draggedEvent))return; 
+                              console.log("dropped4 on "+event.id)
+                              $modalSetParent.modal('show').find(".sub-event").text(draggedEvent.title);
+                              $modalSetParent.find(".super-event").text(event.title);
 
-                            $modalSetParent.find('button.yes').off("click").click(function(){
-
-                              //set event as parent of draggedEvent and children relation
-                              draggedEvent.setParent(event);
-                              draggedEvent.updateParentDate(); 
-                              draggedEvent.renderForRefetch();
-                              EventCollection.refetchEvents();
-                              draggedEvent.persist(); 
-                            });   
+                              $modalSetParent.find('button.yes').off("click").click(function(){ 
+                                  //set event as parent of draggedEvent and children relation
+                                  draggedEvent.setParent(event);
+                                  draggedEvent.updateParentDate(); 
+                                  draggedEvent.renderForRefetch();
+                                  EventCollection.refetchEvents();
+                                  draggedEvent.persist(); 
+                              });   
                           }
                         }
-                    }); //end droppable
+                    }); 
     
                     element
                               /*************** popover *****************/
@@ -871,24 +849,14 @@
                                 if(!curChildDiv)continue;
                                 curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
                               }
-                    });  
-
-                    // end styling (opacity, hover, drag, drop)
-                    
- 
-                    var children = EventCollection.getChildren(event,{concat:false,onlyEvent:true,noSidebar:true});
-                    // console.log("elem",children)
-                    
-                    
+                    });   
+                    // stylize children
+                    var children = EventCollection.getChildren(event,{concat:false,onlyEvent:true,noSidebar:true}); 
                     if(children.length>0){
                       elemProp = getProp(element);
-                      stylizeBlock(children);
-
+                      stylizeBlock(children); 
                     }
-
                   }
-               
-            
           }; 
 
       } 
@@ -900,7 +868,7 @@
 
 
       /*-----------------------------------------------------------------------------------------------------*/
-      /*------------------------------------- drag children  ------------------------------------------------*/
+      /*------------------------------------- start/end drag ------------------------------------------------*/
       /*-----------------------------------------------------------------------------------------------------*/
  
 
@@ -934,7 +902,7 @@
               var childProp = getProp(child.elem);
               // console.log("lol ",childProp);
               $(child.elem).css("left",childProp.x-diff.x+"px")
-                              .css("top",childProp.y-diff.y+"px");
+                           .css("top" ,childProp.y-diff.y+"px");
             });
           }
         }); 
@@ -1018,8 +986,7 @@
           });
           //set as sidebar draggable 
           sidebar.setSidebarEvent(event,true);
-          EventCollection.refetchEvents();
-          // updateEventArray();
+          EventCollection.refetchEvents(); 
       }).on("drag",function(ev,event){ 
           dragChildren(event);
       }); 

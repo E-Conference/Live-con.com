@@ -262,9 +262,7 @@ var rdfConfig = {
             },
             'swc:hasLocation' : {
                 setter : 'setLocation',
-                // TODO add spliter nodeutil and add to objectmap anyway
-                // TODO add spliter nodeutil and add to objectmap anyway
-                // TODO add spliter nodeutil and add to objectmap anyway
+                // TODO add spliter nodeutil 
                 format : function(node){
                     var key = $(node).text() || $(node).attr('rdf:resource');
                     if(objectMap[key])
