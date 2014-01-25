@@ -6,18 +6,20 @@
     {{ parent() }}
 
 
-    <div class="page-header">
+
          <div class="row">
-            <div class="col-lg-2">
-                <h1>{% trans %}Persons{% endtrans %}</h1>
+            <div class="page-title col-lg-2">
+                <span>List</span>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-8">
+            </div>
+            <div class="page-btn-list col-lg-2">
                 <a class="btn btn-info btn-create create" href="{{ path('schedule_person_new') }}">
                      <i class="fa fa-plus"></i>
                 </a>
             </div>
         </div>
-    </div>
+
         
         <table class="table table-hover records_list">
             <thead>

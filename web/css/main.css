@@ -17,9 +17,12 @@ body{
 }
 
 .nav{
-	
+	padding-left : inherit;
 }
 
+.navbar-collapse{
+	overflow-x: hidden;
+}
 
 
 /*-------------------------------------------------------------------------------------
@@ -29,7 +32,6 @@ body{
 
 #menu-navbar{
 		
-	font-family: QuickSandBold, sans-serif;
 	margin-bottom: 0px !important;
 	background:#19313b;
 	color:#f2f2f2 ;
@@ -107,7 +109,7 @@ body{
 .center{
 	/*min-height : 1000px;*/
 
-	padding: 1.5em 1.5em 10.5em;
+	padding: 0.5em 1.5em 10.5em;
 	margin-bottom: 1.5em;
 	min-height : 800px;
 	border-bottom: solid 2px #19313b;
@@ -147,7 +149,22 @@ option
 	background-color: #5cb85c;
 }
 
+.page-title{
+	border-bottom: solid 2px #19313b;
+	background:#19313b;
+	color:  #f2f2f2;
+}
 
+.page-title > span{
+	font-size: 1.5em;
+}
+
+
+.page-btn-list{
+	border-bottom: solid 2px #19313b;
+	background:#19313b;
+	color:  #f2f2f2;
+}
 /*-------------------------------------------------------------------------------------
 --------------------------------------FOOTER-----------------------------------------
 -------------------------------------------------------------------------------------*/
