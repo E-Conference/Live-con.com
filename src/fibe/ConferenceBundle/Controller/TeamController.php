@@ -50,7 +50,7 @@ class TeamController extends Controller
         $update_forms= array();
 
 
-        $authorizationForm = $this->createForm(new AuthorizationType(), new Authorization());
+        $authorizationForm = $this->createForm(new AuthorizationType($this->getUser()), new Authorization());
 
         foreach($entities as $entity ){
             $delete_forms[] = $this->createDeleteForm($entity->getId())->createView();
@@ -66,7 +66,8 @@ class TeamController extends Controller
             'update_forms' => $update_forms,
             'authorization_form' => $authorizationForm->createView(),
             'currentConf'  => $currentConf,
-            'managers'     =>$managers
+            'managers'     =>$managers,
+            'authorized' => $authorization->getFlagTeam(),
         );
     }
 

@@ -22,7 +22,7 @@
           </a>
           <ul class="dropdown-menu">
             <li>   
-                <a href="{{ path('dashboard_choose_conference') }}"><i class="fa fa-list"></i> Conferences Homepage </a>
+                <a href="{{ path('schedule_conference_index') }}"><i class="fa fa-list"></i> Conferences Homepage </a>
             </li>
             <li class="divider"></li>
           {% for conference in app.user.getConferences() %}

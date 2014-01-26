@@ -5,10 +5,11 @@ namespace fibe\SecurityBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use fibe\SecurityBundle\Form\AuthorizationType;
 
-class AuthorizationType extends AbstractType
+class UserAuthorizationType extends AbstractType
 {
-    
+
     private $user;
 
     public function __construct($user)
@@ -16,14 +17,11 @@ class AuthorizationType extends AbstractType
         $this->user = $user;
     }
 
-
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-
-           $builder
-            ->add('user')
-            ->add('flagApp','checkbox', array(
+        $builder
+             ->remove('user')
+             ->add('flagApp','checkbox', array(
                               'required' => false,
                               'label' => 'Mobile Application Manager',
                               'attr'  => array('class' => 'switch switch-small',
@@ -47,22 +45,21 @@ class AuthorizationType extends AbstractType
                                           'data-on-label' => "<i class='fa fa-check fa-white'>",
                                           'data-off-label' => "<i class='fa fa-ban'>",
                                ))
-                               
-            );
+         );
 
-            if(count($this->user->getCurrentConf()->getConfManagers()) <= 1){
+        if(count($this->user->getCurrentConf()->getConfManagers()) <= 1){
                 $builder
                   ->add('flagTeam','checkbox', array(
                                   'required' => false,
-                                  'label' => 'Team Manager',
                                   'disabled' => true,
+                                  'label' => 'Team Manager',
                                   'attr'  => array('class' => 'switch switch-small',
                                               'data-on-label' => "<i class='fa fa-check fa-white'>",
                                               'data-off-label' => "<i class='fa fa-ban'>",
                                    ))
                 );
 
-            }else{
+        }else{
 
                 $builder
                   ->add('flagTeam','checkbox', array(
@@ -74,15 +71,13 @@ class AuthorizationType extends AbstractType
                                    ))
                 );
             }
-               
-            
     }
-
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'fibe\SecurityBundle\Entity\Authorization'
+            'data_class' => 'fibe\SecurityBundle\Entity\Authorization',
+            'inherit_data' => true
         ));
     }
 

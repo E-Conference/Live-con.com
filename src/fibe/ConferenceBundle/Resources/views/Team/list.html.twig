@@ -24,6 +24,7 @@
                 <th>Schedule Manager</th>
                 <th>Team Manager</th>
                 <th>Datas Conference Manager</th>
+                <th>Action<th>
                  
             </tr>
         </thead>
@@ -96,41 +97,35 @@
                     
                 </td> 
                  <td>
-
-                     {% if  entity.getFlagByConferenceId(currentConf.id,'app') == 1 %}
-                       <input type="checkbox" data-userId="{{entity.id}}" value="0" class=" flagApp switch switch-small flagApp" checked data-on-label= "<i class='fa fa-check fa-white'>"
-                                        data-off-label= "<i class='fa fa-ban'>">
-                      {% else %}
-                         <input type="checkbox" data-userId="{{entity.id}}" value="1" class=" flagApp switch switch-small flagApp"  data-on-label= "<i class='fa fa-check fa-white'>"
-                                        data-off-label= "<i class='fa fa-ban'>">
-                      {% endif %}
+                    {% if  entity.getFlagByConferenceId(currentConf.id,'app') == 1 %}
+                              <i class="fa fa-check"></i>
+                    {% else %}
+                              <i class="fa fa-ban"></i>
+                    {% endif %}
                 </td>
                 <td>
                     {% if  entity.getFlagByConferenceId(currentConf.id,'sched') == 1 %}
-                      <input type="checkbox" data-userId="{{entity.id}}" value="0" class=" flagSched switch switch-small flagApp" checked data-on-label= "<i class='fa fa-check fa-white'>"
-                                      data-off-label= "<i class='fa fa-ban'>">
+                              <i class="fa fa-check"></i>
                     {% else %}
-                       <input type="checkbox" data-userId="{{entity.id}}" value="1" class=" flagSched switch switch-small flagApp"  data-on-label= "<i class='fa fa-check fa-white'>"
-                                      data-off-label= "<i class='fa fa-ban'>">
-                    {% endif %} 
+                              <i class="fa fa-ban"></i>
+                    {% endif %}
                  </td>
                  <td>
                     {% if  entity.getFlagByConferenceId(currentConf.id,'team') == 1 %}
-                       <input type="checkbox" data-userId="{{entity.id}}" value="0" class=" flagconfDatas switch switch-small flagApp" checked data-on-label= "<i class='fa fa-check fa-white'>"
-                                    data-off-label= "<i class='fa fa-ban'>" >
+                              <i class="fa fa-check"></i>
                     {% else %}
-                     <input type="checkbox" data-userId="{{entity.id}}" value="1" class=" flagconfDatas switch switch-small flagApp"  data-on-label= "<i class='fa fa-check fa-white'>"
-                                    data-off-label= "<i class='fa fa-ban'>">
-                    {% endif %} 
+                              <i class="fa fa-ban"></i>
+                    {% endif %}
                  </td>    
                  <td>
                     {% if  entity.getFlagByConferenceId(currentConf.id,'datas') == 1 %}
-                     <input type="checkbox" data-userId="{{entity.id}}" value="0" class=" flagTeam switch switch-small flagApp" checked data-on-label= "<i class='fa fa-check fa-white'>"
-                                    data-off-label= "<i class='fa fa-ban'>">
-                  {% else %}
-                     <input type="checkbox" data-userId="{{entity.id}}" value="1" class=" flagTeam switch switch-small flagApp"  data-on-label= "<i class='fa fa-check fa-white'>"
-                                    data-off-label= "<i class='fa fa-ban'>">
-                   {% endif %} 
+                              <i class="fa fa-check"></i>
+                    {% else %}
+                              <i class="fa fa-ban"></i>
+                    {% endif %}
+                 </td>
+                 <td>
+                      <a class="btn btn-large btn-warning edit" href="{{ path('schedule_authorization_edit', { 'id': entity.getAuthorizationByConference(app.user.getCurrentConf()).getId()}) }}"><i class="fa fa-pencil"></i></a>
                  </td>
             </tr>
         {% endfor %}
@@ -167,15 +162,7 @@
 
     <script src="{{ asset('bundles/fibewwwconf/js/moment.min.js') }}" type="text/javascript" ></script>
     <script  type="text/javascript" >
-     function changeAuthorization(id,authorizationType,value){
-        console.log(id);
-        //start send the post request           
-           $.ajax({
-              type: "POST",
-              url: "{{path('schedule_user_change_authorization')}}",
-              data: { 'value' : value , 'authorizationType': authorizationType,'id':id},
-            });
-      };
+
 
       function removeManager(managerId){
         //start send the post request           
@@ -185,6 +172,7 @@
               data: { 'id' : managerId },
             });
       };
+      
 
        //Listen change authorization select
         $(document).ready(function(){
@@ -194,49 +182,8 @@
                 var momentString = moment($(this).html()); 
                 !momentString || $(this).html(momentString.format("dddd, MMMM Do YYYY, h:mm:ss a"));
             })
-
-            $(".flagApp").change(function(){
-                value = $(this).val();
-                $(this).val(!value);
-                id = $(this).attr("data-userId");
-                changeAuthorization(id,'app',value);
-            })
-            $(".flagSched").change(function(){
-                value = $(this).val();
-                $(this).val(!value);
-                id =  $(this).attr("data-userId");
-                changeAuthorization(id,'sched',value);
-            })
-            $(".flagconfDatas").change(function(){
-                value = $(this).val();
-                $(this).val(!value);
-                id = $(this).attr("data-userId");
-                changeAuthorization(id,'datas',value);
-            })
-             $(".flagTeam").change(function(){
-                value = $(this).val();
-                $(this).val(!value);
-                id = $(this).attr("data-userId");
-                changeAuthorization(id,'team',value);
-            })
-
-           
-
         });
-
-
-       
     </script>
-
-      <!--If conference have only manager you can't remove the team manager authorization-->
-    {{  app.user.getCurrentConf().getConfManagers()|length   }}
-      {% if  app.user.getCurrentConf().getConfManagers()|length <= 1 %}
-         <script  type="text/javascript" >
-            $(document).ready(function(){
-              $(".flagconfDatas").attr('disabled', 'disabled');    
-              }); 
-         </script>
-      {% endif %}
 
 {% endblock %}
 

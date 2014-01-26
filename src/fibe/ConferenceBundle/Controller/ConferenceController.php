@@ -37,6 +37,21 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class ConferenceController extends Controller
 {
+
+
+ /**
+   * @Route("/conferences" , name="schedule_conference_index")
+   * @Template()
+   */
+  public function indexAction()
+  {    
+      $currentUser = $this->getUser();
+
+      return array(
+        'entity' => $currentUser,
+        );
+  }
+
 /**
  * @Route("/edit", name="schedule_conference_edit")
  * 
@@ -159,53 +174,28 @@ class ConferenceController extends Controller
       return $this->redirect($this->generateUrl('schedule_conference_edit'));
     }
 
-/**
- * @Route("/{id}/switch", name="schedule_conference_switch") 
- */
-    public function switchCurrentConferenceAction($id)
-    {
-       // $request = $this->container->get('request');
-        //$currentRouteName = $request->get('_route');
-
-        $em = $this->getDoctrine()->getManager();
-        $conf = $em->getRepository('fibeWWWConfBundle:WwwConf')->find($id);
-        
-        if (!$conf) {
-            throw $this->createNotFoundException('Unable to find Conference.');
-        }
-
-        $user = $this->getUser();
-        if (!$user->authorizedAccesToConference($conf)) {
-          throw new AccessDeniedException('Look at your conferences !!!');
-        } 
-
-        $user->setCurrentConf($conf);
-        $em->persist($user);
-        $em->flush();
-
-         return $this->redirect($this->getRequest()->headers->get('referer'));
-    }
-
      /**
      * Creates a new ConfEvent entity.
      *  @Route("/create", name="schedule_conference_create")
      */
     public function createAction(Request $request)
     {
-      
-        $user = $this->getUser();
-        $entity  = new WwwConf();
-        $form = $this->createForm(new WwwConfDefaultType($this->getUser()), $entity);
-    
-        $form->bind($request);
-    
-
-        if ($form->isValid()) {
             //Persist Conference
             $em = $this->getDoctrine()->getManager();
+        
+            //Create the default conference
+            $entity = new WwwConf();
+            $entity->setLogoPath("livecon.png"); 
             $em->persist($entity); 
 
-            $em->persist($entity->getModule());       
+            //Session user 
+            $user = $this->getUser();
+
+            //Module
+            $defaultModule = new Module();
+            $defaultModule->setPaperModule(1);
+            $defaultModule->setOrganizationModule(1);
+            $em->persist($defaultModule);
 
             //Create new App config for the conference
             $defaultAppConfig = new MobileAppConfig();
@@ -232,7 +222,8 @@ class ConferenceController extends Controller
             $categorie = $em->getRepository('IDCISimpleScheduleBundle:Category')->findOneByName("ConferenceEvent");
             
            //Main conf event  
-            $mainConfEvent = $entity->getMainConfEvent();
+            $mainConfEvent = new ConfEvent();
+            $mainConfEvent->setSummary("Livecon Conference");
             $mainConfEvent->setIsMainConfEvent(true);
             $mainConfEvent->setStartAt( new \DateTime('now'));
             $end = new \DateTime('now');
@@ -244,8 +235,8 @@ class ConferenceController extends Controller
             $mainConfEventLocation = new Location();
             $mainConfEventLocation->setName("Conference's location");
             $mainConfEventLocation->addLocationAwareCalendarEntitie($mainConfEvent);
+            $mainConfEventLocation->setConference($entity);
             $em->persist($mainConfEventLocation);
-     
             $em->persist($mainConfEvent);
 
             //Create authorization
@@ -265,29 +256,20 @@ class ConferenceController extends Controller
             //Linking app config to conference
             $entity->setAppConfig($defaultAppConfig);
             $entity->setMainConfEvent($mainConfEvent);
-            $entity->setLogoPath("livecon.png"); 
+            $entity->setModule($defaultModule);
+
             //Add conference to current manager
+            $user->setCurrentConf($entity);
             $user->addConference($entity); 
+
             $em->persist($user);
             $em->persist($entity); 
 
+
             $em->flush();
 
-            
-           $this->container->get('session')->getFlashBag()->add(
-                'success',
-                'The conference has been successfully created'
-            );
-           return $this->redirect($this->generateUrl('dashboard_choose_conference'));
-        }else{
 
-            $this->container->get('session')->getFlashBag()->add(
-                'error',
-                'Submition error, please try again.'
-            );
-        }
-
-        return $this->redirect($this->generateUrl('dashboard_choose_conference')); 
+        return $this->redirect($this->generateUrl('schedule_conference_edit')); 
     }
 
     

@@ -12,6 +12,8 @@ use fibe\SecurityBundle\Entity\User;
 use fibe\SecurityBundle\Entity\Authorization;
 use fibe\SecurityBundle\Form\UserType;
 use fibe\SecurityBundle\Form\AuthorizationType;
+use fibe\SecurityBundle\Form\UserAuthorizationType;
+
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 use Symfony\Component\Security\Core\Exception\AccessDeniedException; 
@@ -23,62 +25,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class AuthorizationController extends Controller
 {
-    /**
-     * Change authorization
-     *
-     * @Route("/authorization/update", name="schedule_user_change_authorization") 
-     * TODO // Uniquement le createur de la conf peut ajouter une personne ou les modifier dans la conf
-     */
-    public function authorizationUpdateAction(Request $request)
-    {
-       
-        $currentConf = $this->getUser()->getCurrentConf();
-        if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') && $this->getUser()->getAuthorizationByConference($currentConf)->getFlagTeam()==1 )
-        {
-            // Sinon on déclenche une exception "Accès Interdit"
-            throw new AccessDeniedHttpException('Access reserved to admin');
-        }
-
-        $id = $request->request->get('id');
-        $authorizationType = $request->request->get('authorizationType');
-        $value = $request->request->get('value');
-
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('fibeSecurityBundle:User')->find($id);
-        $authorization =  $em->getRepository('fibeSecurityBundle:Authorization')->findOneBy(array('conference' => $currentConf, 'user' => $user));
-        if (!$authorization || !$user) {
-            throw $this->createNotFoundException('Unable to find Authorization or Manager entity.');
-        }
-     
-      
-        switch ($authorizationType){
-          case 'app':
-              $authorization->setFlagApp($value);
-              break;
-          case 'sched':
-              $authorization->setFlagSched($value);
-              break;
-          case 'datas':
-             $authorization->setFlagconfDatas($value);
-              break;
-          case 'team':
-            //It must stay one manager in a conference
-          if(count($currentConf->getConfManagers())>1){
-             $authorization->setFlagTeam($value);
-          }else{
-
-            $this->container->get('session')->getFlashBag()->add(
-                'error',
-                'It must stay unless one team manager by conference.'
-            );
-          }
-              break;
-        }
-       $em->persist($authorization);
-       $em->flush($authorization);
-       return new Response();
-    }
-
+   
      /**
      * Change authorization
      *
@@ -119,6 +66,79 @@ class AuthorizationController extends Controller
 
 
         return $this->redirect($this->generateUrl('schedule_user_list'));
+    }
+
+
+      /**
+     * Displays a form to edit an existing Paper entity.
+     * @Route("/{id}/edit", name="schedule_authorization_edit")
+     * @Template()
+     */
+    public function editAction($id)
+    {
+        
+           //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagTeam()){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
+        $em = $this->getDoctrine()->getManager();
+
+         //The object have to belongs to the current conf
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('fibeSecurityBundle:Authorization')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find authorization entity.');
+        }
+
+        $editForm = $this->createForm(new UserAuthorizationType($this->getUser()), $entity);
+      
+
+        return $this->render('fibeSecurityBundle:Authorization:edit.html.twig', array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'authorized' => $authorization->getFlagTeam(),
+        ));
+    }
+
+    /**
+     * Edits an existing Paper entity.
+     * @Route("/{id}/update", name="schedule_authorization_update")
+     */
+    public function updateAction(Request $request, $id)
+    {
+       
+           //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+
+         if(!$authorization->getFlagTeam()){
+            throw new AccessDeniedException('Action not authorized !');
+          }
+
+        $em = $this->getDoctrine()->getManager();
+
+         //The object have to belongs to the current conf
+        $currentConf=$this->getUser()->getCurrentConf();
+        $entity =  $em->getRepository('fibeSecurityBundle:Authorization')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find authorization entity.');
+        }
+
+        $editForm = $this->createForm(new UserAuthorizationType($this->getUser()), $entity);
+        $editForm->bind($request);
+
+        if ($editForm->isValid()) {
+            $em->persist($entity);
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('conference_team_list'));
+        }
+
+        return $this->redirect($this->generateUrl('schedule_authorization_edit', array('id' => $id)));
     }
 
     
