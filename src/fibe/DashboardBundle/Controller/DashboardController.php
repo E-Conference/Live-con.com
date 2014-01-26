@@ -18,13 +18,17 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  */
 class DashboardController extends Controller
 {
-    /**
-     * @Route("/" , name="dashboard_index")
-     * @Template()
-     */
+   /**
+   * @Route("/" , name="dashboard_index")
+   * @Template()
+   */
     public function indexAction()
     {
-        return array();
+      $currentUser = $this->getUser();
+
+      return array(
+        'entity' => $currentUser,
+        );
     }
 
     

@@ -39,19 +39,6 @@ class ConferenceController extends Controller
 {
 
 
- /**
-   * @Route("/conferences" , name="schedule_conference_index")
-   * @Template()
-   */
-  public function indexAction()
-  {    
-      $currentUser = $this->getUser();
-
-      return array(
-        'entity' => $currentUser,
-        );
-  }
-
 /**
  * @Route("/edit", name="schedule_conference_edit")
  * 
