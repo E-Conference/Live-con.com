@@ -12,8 +12,8 @@
 
 {% block centerPanel %}
  <div class="jumbotron">
-        <h1>Welcome to Livecon {{entity.username}} !</h1>
-        <p>Choose your conference or create a new one for start</p>
+        <h3>Welcome to Livecon {{entity.username}} !</h3>
+        <p>Choose your conference or create a new one to get started</p>
         <div class="row-fluid">
         {% for conference  in entity.getConferences()  %}
         

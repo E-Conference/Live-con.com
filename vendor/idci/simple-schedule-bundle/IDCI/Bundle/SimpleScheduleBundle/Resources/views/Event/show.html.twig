@@ -1,112 +1,122 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
 
-{% block title %}Event{% endblock title %}
+{% block title %}Event edit{% endblock title %}
 
 {% block centerPanel %}
   {{ parent() }}
-<div class="page-header">
-  <h1>Event</h1>
-</div>
+  <div class="row page-top-header ">
+            <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <span>Event details</span>
+            </div>
 
-<table class="table table-hover record_properties">
-    <tbody>
-        <tr>
-            <th>Id</th>
-            <td>{{ entity.id }}</td>
-        </tr>
-        <tr>
-            <th>Revisionsequence</th>
-            <td>{{ entity.revisionSequence }}</td>
-        </tr>
-        <tr>
-            <th>Createdat</th>
-            <td>{{ entity.createdAt|date('Y-m-d H:i:s') }}</td>
-        </tr>
-        <tr>
-            <th>Lastmodifiedat</th>
-            <td>{{ entity.lastModifiedAt|date('Y-m-d H:i:s') }}</td>
-        </tr>
-        <tr>
-            <th>Startat</th>
-            <td>{{ entity.startAt|date('Y-m-d H:i:s') }}</td>
-        </tr>
-        <tr>
-            <th>Duration</th>
-            <td>{{ entity.duration }}</td>
-        </tr>
-        <tr>
-            <th>Endat</th>
-            <td>{% if entity.endAt %}{{ entity.endAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-        </tr>
-        <tr>
-            <th>Summary</th>
-            <td>{{ entity.summary }}</td>
-        </tr>
-        <tr>
-            <th>Description</th>
-            <td>{{ entity.description }}</td>
-        </tr>
-        <tr>
-            <th>Comment</th>
-            <td>{{ entity.comment }}</td>
-        </tr>
-        <tr>
-            <th>Url</th>
-            <td>{{ entity.url }}</td>
-        </tr>
-        <tr>
-            <th>Organizer</th>
-            <td>{{ entity.organizer }}</td>
-        </tr>
-        <tr>
-            <th>Contacts</th>
-            <td>{{ entity.contacts }}</td>
-        </tr>
-        <tr>
-            <th>Excludeddates</th>
-            <td>{{ entity.excludedDates }}</td>
-        </tr>
-        <tr>
-            <th>Includeddates</th>
-            <td>{{ entity.includedDates }}</td>
-        </tr>
-        <tr>
-            <th>Classification</th>
-            <td>{{ entity.classification }}</td>
-        </tr>
-        <tr>
-            <th>Priority</th>
-            <td>{{ entity.priority }}</td>
-        </tr>
-        <tr>
-            <th>Resources</th>
-            <td>{{ entity.resources }}</td>
-        </tr>
-        <tr>
-            <th>Istransparent</th>
-            <td>{{ entity.isTransparent }}</td>
-        </tr>
-    </tbody>
-</table>
+            <div class="col-xs-2 col-sm-4 col-md-6 col-lg-8">
+            </div>
+            <div class="page-btn-list col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                 <a class="btn btn-warning" href="{{ path('schedule_event') }}" title="Go back to the list">
+               <i class="icon-list"></i>
+                </a>
+           
+                <a class="btn btn-info" href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}" title="Edit event">
+                   <i class="fa fa-pencil-square-o"></i>
+                </a>
+           
+                <form action="{{ path('schedule_event_delete', { 'id': entity.id }) }}" method="post">
+                    {{ form_widget(delete_form) }}
+                    <button type="submit" class="btn btn-danger" title="Remove event"><i class="fa fa-trash-o"></i></button>
+                </form>
+            </div>
+      </div>
+      <div class="row page-content">
 
-<h2>Event Relation</h2>
-<h3>Paper</h3></br>
-{% include "IDCISimpleScheduleBundle:Event:paperRelation.html.twig" %}
-<h3>Person</h3></br>
-{% include "IDCISimpleScheduleBundle:Event:personRelation.html.twig" %}
+    <table class="table table-hover record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Revisionsequence</th>
+                <td>{{ entity.revisionSequence }}</td>
+            </tr>
+            <tr>
+                <th>Createdat</th>
+                <td>{{ entity.createdAt|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Lastmodifiedat</th>
+                <td>{{ entity.lastModifiedAt|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Startat</th>
+                <td>{{ entity.startAt|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Duration</th>
+                <td>{{ entity.duration }}</td>
+            </tr>
+            <tr>
+                <th>Endat</th>
+                <td>{% if entity.endAt %}{{ entity.endAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Summary</th>
+                <td>{{ entity.summary }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ entity.description }}</td>
+            </tr>
+            <tr>
+                <th>Comment</th>
+                <td>{{ entity.comment }}</td>
+            </tr>
+            <tr>
+                <th>Url</th>
+                <td>{{ entity.url }}</td>
+            </tr>
+            <tr>
+                <th>Organizer</th>
+                <td>{{ entity.organizer }}</td>
+            </tr>
+            <tr>
+                <th>Contacts</th>
+                <td>{{ entity.contacts }}</td>
+            </tr>
+            <tr>
+                <th>Excludeddates</th>
+                <td>{{ entity.excludedDates }}</td>
+            </tr>
+            <tr>
+                <th>Includeddates</th>
+                <td>{{ entity.includedDates }}</td>
+            </tr>
+            <tr>
+                <th>Classification</th>
+                <td>{{ entity.classification }}</td>
+            </tr>
+            <tr>
+                <th>Priority</th>
+                <td>{{ entity.priority }}</td>
+            </tr>
+            <tr>
+                <th>Resources</th>
+                <td>{{ entity.resources }}</td>
+            </tr>
+            <tr>
+                <th>Istransparent</th>
+                <td>{{ entity.isTransparent }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Event Relation</h2>
+    <h3>Paper</h3></br>
+    {% include "IDCISimpleScheduleBundle:Event:paperRelation.html.twig" %}
+    <h3>Person</h3></br>
+    {% include "IDCISimpleScheduleBundle:Event:personRelation.html.twig" %}
 
 
-        <a class="btn btn-warning" href="{{ path('schedule_event') }}">
-           <i class="icon-list"></i>
-        </a>
-   
-        <a class="btn btn-info" href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}">
-           <i class="fa fa-pencil-square-o"></i>
-        </a>
-   
-        <form action="{{ path('schedule_event_delete', { 'id': entity.id }) }}" method="post">
-            {{ form_widget(delete_form) }}
-            <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-        </form>
+           
+    </div>
 {% endblock %}
