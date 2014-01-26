@@ -27,20 +27,7 @@ class DashboardController extends Controller
         return array();
     }
 
-     /**
-     * @Route("/conferences" , name="dashboard_choose_conference")
-     * @Template()
-     */
-    public function chooseConferenceAction()
-    {    
-        $currentUser = $this->getUser();
-        $createform = $this->createForm(new WwwConfDefaultType($this->getUser()), new WwwConf());
-
-        return array(
-        	'entity' => $currentUser,
-            'form' =>  $createform->createView()
-        	);
-    }
+    
 
       /**
      * @Route("{id}/enter" , name="dashboard_enter_conference")

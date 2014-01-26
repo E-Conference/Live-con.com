@@ -74,9 +74,11 @@
               <a style="padding-right:5px;"   href="{{ path('schedule_location') }}"  >
                 <i class="fa fa-map-marker fa-3x"></i> Locations
               </a>
+              {% if app.user.getCurrentConf().getModule().getOrganizationModule()== true %}
                <a style="padding-right:5px;"   href="{{ path('schedule_organization_index') }}"  >
                 <i class="fa fa-users fa-3x"></i> Organizations
               </a>
+              {% endif %}
               <a style="padding-right:5px;"   href="{{ path('schedule_category') }}"  >
                 <i class="fa fa-sort-amount-asc fa-3x"></i> Categories
               </a>
