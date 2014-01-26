@@ -58,7 +58,7 @@ security:
             form_login:
                 login_path: login
                 check_path: login_check
-                default_target_path: schedule_conference_index
+                default_target_path: dashboard_index
             logout:
                 path:   logout
                 target: /login
