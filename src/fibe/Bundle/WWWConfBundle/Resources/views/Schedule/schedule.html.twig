@@ -168,7 +168,7 @@
   <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/added/EventCollection.js') }}"></script>
     
   <script type="text/javascript">
-    var Events;
+    var Events = {};
     var calendar_events_indexes   = {}; 
     var calendar_events   = []; 
     var mainConfEvent;
@@ -178,6 +178,8 @@
     var stopRender = false;
     var fetched = false;
     var firstWeekDay = 1;
+
+    var logtime;
     //path
     var DATA_FEED_URL = "{{ path('schedule_view_event_get') }}";
     var op = {  
@@ -255,6 +257,7 @@
           } 
       {% endif %} 
       if(firstDay.isSame(moment('5000-10-10'))) firstDay = moment(); 
+      initing = true;
 
 
 
@@ -270,7 +273,7 @@
       /*-----------------------------------------------------------------------------------------------------*/ 
       calendarOption = { 
           header: {
-              left: 'prev,next today',
+              left: 'prev,next',
               center: 'title',
               right: '' // computed in resource view
           },   
@@ -287,20 +290,25 @@
           //get events
           events : function(start, end, callback) { 
               //events have already been fetched
+              
               if(fetched === true ){
                 fetched = false;
                 stopRender = false;  
                 // console.log("fetched",calendar_events_indexes) 
                 // console.log(calendar_events)
                 console.log("########fullcalendar rendering")
+
+                logtime = moment();
                 callback(calendar_events ); 
+                console.debug(moment().diff(logtime)+" for fullcalendar to render"); 
+                logtime = moment();
                 return;
               } 
               //compute dates to filter
-              if(firstDay){ 
+              if(initing){ 
                 op.data['before']=moment(firstDay).endOf('week').add("days",firstWeekDay).format();
                 op.data['after']=moment(firstDay).startOf('week').add("days",firstWeekDay).format();
-                firstDay = undefined;
+                initing = false;
               }else{
                 op.data['before']=moment(end).format();
                 op.data['after']=moment(start).format();
@@ -316,7 +324,9 @@
                     if(events.length!=0)bootstrapAlert("success",events.length+" events have been well fetched" );
                     else bootstrapAlert("info","no event found");
 
-                    Events = {};
+                    logtime = moment();
+
+                    // Events = {};
 
                     //initialize events
                     calendar_events   = []; 
@@ -326,9 +336,10 @@
                     var orphanChildren= [];
                     //non-blocking loop
                     function doWork() {
-           
+                      
+                      var known = !!Events[events[i].id];
                       var event = new CalEvent(events[i]);
-                      EventCollection.addEventToComputeCountRange(event);
+                      if(!known)EventCollection.addEventToComputeCountRange(event);
 
                       if(event.mainconfevent){
                         mainConfEvent = event;
@@ -353,6 +364,7 @@
                           orphanChildren[j].persist();
                           bootstrapAlert("info","event "+orphanChildren[j].title+" was an orphan, so it's now the child of "+mainConfEvent.title)
                         }
+                        console.debug(moment().diff(logtime)+" to init"); 
                         EventCollection.refetchEvents(false,true);
                       }else if (stopRender!==true){ 
                         //the loop goes on
@@ -468,13 +480,16 @@
           // },
           eventAfterAllRender: function( view ) { 
               //avoid repeating this function 10 times...
+                console.debug(moment().diff(logtime)+" to call eventAfterAllRender"); 
               if(!mainConfEvent || stopRender)return;
               clearTimeout(repositionTimeout);
               repositionTimeout=setTimeout(function(){    
+                logtime = moment()
                   updateEventArray(); 
 
 
                   reposition(view); 
+                console.debug(moment().diff(logtime)+" to updateEventArray & reposition"); 
               },repositionTime);
                   
           }, 
@@ -529,7 +544,7 @@
             // console.log(" view      : ",view) 
             // console.log(" seg:",seg," leftmost:",leftmost," availWidth:",availWidth," outerWidth:",outerWidth," levelI:",levelI,", bottom:",bottom,",top:",top," forward:",forward," dis:",dis);
 
-            var width = availWidth;
+            var width = availWidth + ( currentView == "day" ? 55 : 10 );
             var height = bottom - top;
             var left = leftmost;
 
@@ -582,6 +597,9 @@
               // }
               EventCollection.addEventToComputeCountRange(event,{allBrosInDay:true}); 
 
+              //TODO : parent  has here a wrong start/end updated from somewhere
+              //TODO : parent  has here a wrong start/end updated from somewhere
+              //TODO : parent  has here a wrong start/end updated from somewhere 
 
 
               dragged = [ ui.helper[0], 
@@ -593,7 +611,10 @@
 
               // alert(parent.start+" \n"+parent.end)
               
-              setTimeout(function(){ //bug... event isn't yet updated  
+              //TODO : parent  has here a wrong start/end updated from somewhere
+              //TODO : parent  has here a wrong start/end updated from somewhere
+              //TODO : parent  has here a wrong start/end updated from somewhere 
+              setTimeout(function(){  
                   // EventCollection.addEventToComputeCountRange(event,{allEventsInDay:true}); 
                   var event = dragged[1] 
                   var parentDate = dragged[3];
@@ -622,8 +643,7 @@
                     // console.debug(moment().diff(startScript)+" to affect one child"); 
                   }); 
                   // console.debug(moment().diff(startScript)+" to affect children");
-
-                  console.log("#eventDragStop2");
+ 
                   //apply to parent
                   
                   // alert(event.title+" "+(event.isOutOf(parent,true)? "out of parent":"in the parent")+" "+parent.title)
@@ -654,19 +674,28 @@
 
  
           },
-          eventDrop : function(event,dayDelta,minuteDelta,allDay,revert,ev,ui,resource ){
-              //TODO : parent  has here a wrong start/end updated from somewhere
-              //TODO : parent  has here a wrong start/end updated from somewhere
-              //TODO : parent  has here a wrong start/end updated from somewhere 
-            },
+          // eventDrop : function(event,dayDelta,minuteDelta,allDay,revert,ev,ui,resource ){
+          //     //TODO : parent  has here a wrong start/end updated from somewhere
+          //     //TODO : parent  has here a wrong start/end updated from somewhere
+          //     //TODO : parent  has here a wrong start/end updated from somewhere 
+          //   },
       };
 
       //launch calendar
       $calendar.fullCalendar(calendarOption);  
       $calendar.fullCalendar('changeView', viewBtns[currentView].classic );
-      $('.fc-header-left').append('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"><span class="fa fa-refresh"></span></button>').click(function(e){ 
-        EventCollection.resetEvents();
-      }) 
+      $('.fc-header-left')
+          .append(
+            $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"> First day</button>')
+              .click(function(e){ 
+                $calendar.fullCalendar( 'gotoDate', firstDay.year(), firstDay.month(), firstDay.date() ) 
+              })
+          ).append(
+            $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"><span class="fa fa-refresh"></span></button>')
+              .click(function(e){ 
+                EventCollection.resetEvents();
+              })
+          ) 
 
       /*-------------------------------------------------------------------------------------------------*/
       /*------------------------------------- update function -------------------------------------------*/
@@ -693,8 +722,8 @@
             foundElem.push(id)
             if(Events[id])Events[id]['elem'] = $(this);
           });
-          console.debug(moment().diff(startScript)+" to updateEventArray");
-          console.log("event array updated",Events);
+          // console.debug(moment().diff(startScript)+" to updateEventArray");
+          // console.log("event array updated",Events);
       }
 
 
@@ -719,7 +748,7 @@
           
           var startScript = moment()
           stylizeBlock([mainConfEvent]); 
-          console.debug(moment().diff(startScript)+" to stylizeBlock")
+          // console.debug(moment().diff(startScript)+" to stylizeBlock")
                   console.log("--------------------------------------------------------");
                   console.log("----------------      rendered       -------------------");
                   console.log("--------------------------------------------------------");

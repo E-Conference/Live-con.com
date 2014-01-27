@@ -110,6 +110,8 @@ function run(file,callback,fallback){
             ///////////////////////////// startAt less  //////////////////////////////
             //////////////////////////////////////////////////////////////////////////
              
+            var earliestStart = moment('6000-10-10');
+            var latestEnd = moment('1000-10-10');
             for(var i=0;i<objects.events.length;i++){
                 var event = objects.events[i]; 
                 if(event['setStartAt']){
@@ -139,6 +141,15 @@ function run(file,callback,fallback){
                         }
                     }
                 }
+                if(moment(event['setStartAt']).isBefore(earliestStart))
+                    earliestStart = moment(event['setStartAt']);
+                if(moment(event['setEndAt']).isAfter(latestEnd))
+                    latestEnd = moment(event['setEndAt']);
+            }
+            if(earliestStart != moment('6000-10-10') && latestEnd != moment('1000-10-10')){
+                alert("conf changed")
+                objects["conference"]['setStartAt'] = earliestStart; 
+                objects["conference"]['setEndAt']   = latestEnd; 
             }
 
             

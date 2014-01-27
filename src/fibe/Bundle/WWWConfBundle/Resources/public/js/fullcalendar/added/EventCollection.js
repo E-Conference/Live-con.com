@@ -75,6 +75,7 @@ var EventCollection = {
 
          bootstrapAlert("success","conference event "+mainConfEvent.title+" have been updated") 
          mainConfEvent.renderForRefetch(); 
+         firstDay = moment(mainConfEvent.start);
          EventCollection.forceMainConfRendering = true;
       }
     },
@@ -85,18 +86,17 @@ var EventCollection = {
     refetchEvents : function(refetch,force){
         // alert(EventCollection.eventsToComputeBroCountRange.length==0)
         // alert(EventCollection.forceMainConfRendering!==true)
-        if(force!==true && (EventCollection.forceMainConfRendering!==true && EventCollection.eventsToComputeBroCountRange.length==0)){
-        console.log(EventCollection.eventsToComputeBroCountRange.length==0)
-        console.log(EventCollection.forceMainConfRendering!==true)
+        if(force!==true && (EventCollection.forceMainConfRendering!==true && EventCollection.eventsToComputeBroCountRange.length==0)){ 
           console.log("not rendered")
           return; 
         } 
         // alert("ok")
         EventCollection.forceMainConfRendering = false;
         // function doWork() {
-
+        
 
           // mainConfEvent.renderForRefetch(); 
+          
           updateBroCountRange();  
           stopRender = false;
           fetched = !refetch;
@@ -117,13 +117,14 @@ var EventCollection = {
               brothers = EventCollection.eventsToComputeBroCountRange;   
             
             // console.log("----------------------------------------------------");
-            console.debug("affected = ",brothers); 
+            console.log("affected = ",brothers); 
             // console.log("non affected : ",EventCollection.broCountRange);
             // console.log("----------------------------------------------------");
             computeCountRange(brothers,doChildren);
             EventCollection.eventsToComputeBroCountRangeIndexes = [];
             EventCollection.eventsToComputeBroCountRange = [];
-            console.log("BroCountRange : updated "+brothers.length+" events in "+moment().diff(startScript)+" ms",EventCollection.broCountRange) 
+            console.debug("BroCountRange : updated "+brothers.length+" events in "+moment().diff(startScript)+" ms");
+            // console.log(EventCollection.broCountRange) 
             // return EventCollection.broCountRange;
             
             function computeCountRange(bros,doChildren){
@@ -197,18 +198,18 @@ var EventCollection = {
             EventCollection.eventsToComputeBroCountRangeIndexes.push(e.id);
             EventCollection.eventsToComputeBroCountRange.push(e);
             EventCollection.broCountRange[e.id] = {count:1,range:0};
-            console.debug("#ComputeCountRange "+e.id);
+            // console.debug("#ComputeCountRange "+e.id);
           }
-          else{ 
-            console.debug("#ComputeCountRange didn't add event "+e.id);
-          }
+          // else{ 
+          //   console.debug("#ComputeCountRange didn't add event "+e.id);
+          // }
         }
     },
 
-    resetEvents : function (){
-      EventCollection.broCountRange = {};
+    resetEvents : function (){ 
+      Events = {};
       EventCollection.eventToRender = undefined;
-      EventCollection.refetchEvents(true);
+      EventCollection.refetchEvents(true,true);
     },
     
     //this is now done at server side

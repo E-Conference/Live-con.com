@@ -103,12 +103,12 @@ CalEvent.prototype.renderForRefetch = function(){
     // console.log("##renderForRefetch",this);
     if(this.isInstant())return;
     if(calendar_events_indexes[this.id]=== undefined){
-      console.debug("#renderForRefetch rendering "+this.id);
+      // console.debug("#renderForRefetch rendering "+this.id);
       calendar_events.push(this);
       calendar_events_indexes[this.id]=calendar_events.length-1; 
     }
     else{
-      console.debug("#renderForRefetch updating "+this.id);
+      // console.debug("#renderForRefetch updating "+this.id);
       calendar_events.splice(calendar_events_indexes[this.id],1,this); 
     } 
     // console.log("",calendar_events[calendar_events_indexes[this.id]]);

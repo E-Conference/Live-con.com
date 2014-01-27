@@ -4175,7 +4175,7 @@ function AgendaEventRenderer() {
 			seg.left = left;
 			seg.outerWidth = outerWidth;
 			seg.outerHeight = bottom - top;
-			trigger('eventCalculateWidth', event,event,  seg,leftmost-1,availWidth+10,outerWidth,levelI,bottom,top,forward, dis,rtl);//ADDED BY BENOITDDLP
+			trigger('eventCalculateWidth', event,event,  seg,leftmost-1,availWidth,outerWidth,levelI,bottom,top,forward, dis,rtl);//ADDED BY BENOITDDLP
 			html += slotSegHtml(event, seg);
 		}
 		slotSegmentContainer[0].innerHTML = html; // faster than html()
