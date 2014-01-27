@@ -52,8 +52,7 @@ var CalEvent = function(event){
  
 };
 
-// CalEvent.prototype.render = function (){
-//     // alert("render "+this.id+" "+this.allDay)
+// CalEvent.prototype.render = function (){ 
 
 //     renderedEvent = this;
 //     renderedEvent.formatDate(); 
@@ -83,8 +82,7 @@ var CalEvent = function(event){
 
 //     // var e = this;
 //     //       function doWork() { 
-//     //         console.log(e);
-//     //           alert("new calEvent for "+ e.id)
+//     //         console.log(e); 
 //     //           renderedEvent = new CalEvent(e);
 //     //           $calendar.fullCalendar('renderEvent', renderedEvent ); 
 //     //       };
@@ -110,9 +108,9 @@ CalEvent.prototype.renderForRefetch = function(){
       calendar_events_indexes[this.id]=calendar_events.length-1; 
     }
     else{
-      console.log("#renderForRefetch updating "+this.id);
+      console.debug("#renderForRefetch updating "+this.id);
       calendar_events.splice(calendar_events_indexes[this.id],1,this); 
-    }
+    } 
     // console.log("",calendar_events[calendar_events_indexes[this.id]]);
 };
 
@@ -126,11 +124,12 @@ CalEvent.prototype.removeForRefetch = function(){
       }
       delete calendar_events_indexes[this.id] ;
     }
-    console.log(calendar_events);
-    console.log(calendar_events_indexes); 
+    // console.log(calendar_events);
+    // console.log(calendar_events_indexes); 
 }; 
 
-CalEvent.prototype.persist = function(add){  
+CalEvent.prototype.persist = function(add){ 
+  if(this.is_mainconfevent)return;
     var toSend = {
       parent    : this['parent'],
       id        : this['id'],
@@ -150,6 +149,7 @@ CalEvent.prototype.persist = function(add){
         // console.log(toSend.id+" persisted",toSend); 
         if(response.mainConfEvent){
             EventCollection.updateMainConfEvent(response.mainConfEvent.start,response.mainConfEvent.end);
+            EventCollection.refetchEvents(); 
         }
       },
       'json'
@@ -175,28 +175,28 @@ CalEvent.prototype.updateParentDate = function(){
 
         if(!parent)return;  
 
-        //make main conf get a special treatment
-        //to make it fit to its children date
+        // //make main conf get a special treatment
+        // //to make it fit to its children date
         if(parent.is_mainconfevent){
-          EventCollection.fitMainConfEvent();
+          // EventCollection.fitMainConfEvent();
           return;
-        } 
- 
-        // if(event.isInsideOf(parent))return;  
+        }
+        if(event.isInsideOf(parent))return;  
 
-        //event is out of parent
-        console.log("isOutOfParent");  
-        var Eduration = moment(event['end']).diff(event['start']); 
-        var changed = false;
+        //event is out of parent 
+        var Eduration = moment(event['end']).diff(event['start']);  
         var changed = false,
             oldStart = event['start'],
             oldEnd = event['end']
             ;
+          console.log(event.id+" is not inside of "+parent.id)
+          // console.log("oldStart : "+oldStart)
+          // console.log("oldEnd : "+oldEnd)
         //event start is before parent start
         if(moment(event['start']).isBefore(parent['start'])){
           parent['start'] = event['start'];
 
-          event['end'] = moment(event['start']).add(Eduration).format();
+          event['end'] = moment(event['start']).subtract(Eduration).format();
           changed = true;
         }
         //event end is after parent end
@@ -208,10 +208,14 @@ CalEvent.prototype.updateParentDate = function(){
           changed = true;
         } 
 
-        if(changed){
+        if(changed){ 
+          // console.log("event['start'] : "+event['start'])
+          // console.log("event['end'] : "+event['end'])
 
-          EventCollection.eventToRender = {id:parent["id"],oldStart:oldStart,oldEnd:oldEnd}; 
+          // EventCollection.eventToRender = {id:parent["id"],oldStart:oldStart,oldEnd:oldEnd}; 
           updateParentDate(parent); 
+
+          EventCollection.addEventToComputeCountRange(parent);  
           parent.renderForRefetch();
           parent.persist(); 
         }
@@ -230,37 +234,45 @@ CalEvent.prototype.updateChildrenDate = function(){
         {
           var child = children[i];
           var Cduration = moment(child.end).diff(child.start); 
+          var changed =false;
           //TODO check if not less than 30mn  
-          if(!child.isInsideOf(event))
-          { 
+          if(child.isInsideOf(event))continue; 
             var childStart = child['start'],
                 childEnd = child['end'];
             //child start is before event start
+            alert("stick start "+(moment(child['start']).isBefore(event['start'])?"true":"false"))
             if(moment(child['start']).isBefore(event['start']))
             {
               // event['start'] = parent['start'];
               childStart = event['start'];
 
               childEnd = moment(childStart).add(Cduration).format();
+              changed=true;
             }
             //child end is after child start
+            alert("stick end "+(moment(child['end']).isAfter(event['end'])?"true":"false"))
             if(moment(child['end']).isAfter(event['end']))
             {
               // event['start'] = parent['start'];
               childEnd = event['end']; 
 
               childStart = moment(childEnd).subtract(Cduration).format(); 
+              changed=true;
             } 
+            alert("bigger? "+(Cduration>Eduration ?"true":"false"))
+
             if(Cduration>Eduration){
               childStart = event['start'];
               childEnd = event['end'];
+              changed=true;
             }
-            child['start'] = childStart;
-            child['end'] = childEnd;
-            updateChildrenDate(child);
-            child.renderForRefetch();
-            child.persist();
-          } 
+            if(changed){ 
+              child['start'] = childStart;
+              child['end'] = childEnd;
+              updateChildrenDate(child);
+              child.renderForRefetch();
+              child.persist(); 
+            }
         }
     }
 };
@@ -470,7 +482,7 @@ CalEvent.prototype.getPopoverContent = function(){
  * @return {Boolean}        
  */
 CalEvent.prototype.isOutOf = function(event,same){
-    var rtn ;
+    var rtn ; 
     if(event.allDay){
       rtn = ( (moment(this['end']).subtract("s",1).endOf("day").isAfter(moment(event['end']).endOf("day"))) ||
               (moment(this['start']).isBefore(moment(event['start']).startOf("day")) )
@@ -481,10 +493,10 @@ CalEvent.prototype.isOutOf = function(event,same){
               moment(this['start']).isAfter(event['end']));
     }
     if(same ===true) rtn = rtn || moment(this['end']).isSame(event['start'])
-                               || moment(this['start']).isSame(event['end']);
+                               || moment(this['start']).isSame(event['end']); 
     return  rtn;
 };
-CalEvent.prototype.isInsideOf = function(event){
+CalEvent.prototype.isInsideOf = function(event){  
     return (moment(this['start']).isAfter(event['start']) &&
             moment(this['end']).isBefore(event['end'])
     );

@@ -64,29 +64,42 @@ var EventCollection = {
           }); 
           return children; 
     },
-    updateMainConfEvent : function(newStart,newEnd){ 
-            console.log("mainConfEvent changed, rendering...");  
-            stopRender = true;
-            mainConfEvent.start = moment(newStart, "YYYY-MM-DD HH:mmZ").format();
-            mainConfEvent.end = moment(newEnd, "YYYY-MM-DD HH:mmZ").format(); 
+    forceMainConfRendering : true,
+    updateMainConfEvent : function(newStart,newEnd){
+    if(moment(mainConfEvent.start).dayOfYear() !== moment(newStart).dayOfYear() ||
+       moment(mainConfEvent.end).dayOfYear() !== moment(newEnd).dayOfYear()){  
+         console.debug("mainConfEvent changed, rendering...");  
+         stopRender = true;
+         mainConfEvent.start = moment(newStart, "YYYY-MM-DD HH:mmZ").format();
+         mainConfEvent.end = moment(newEnd, "YYYY-MM-DD HH:mmZ").format(); 
 
-            bootstrapAlert("success","conference event "+mainConfEvent.title+" have been updated") 
-            mainConfEvent.renderForRefetch(); 
-            EventCollection.eventToRender = mainConfEvent;
+         bootstrapAlert("success","conference event "+mainConfEvent.title+" have been updated") 
+         mainConfEvent.renderForRefetch(); 
+         EventCollection.forceMainConfRendering = true;
+      }
     },
 
     broCountRange:{},
     eventsToComputeBroCountRange:[],
     eventsToComputeBroCountRangeIndexes:[],
-    refetchEvents : function(force,doChildren){
-
+    refetchEvents : function(refetch,force){
+        // alert(EventCollection.eventsToComputeBroCountRange.length==0)
+        // alert(EventCollection.forceMainConfRendering!==true)
+        if(force!==true && (EventCollection.forceMainConfRendering!==true && EventCollection.eventsToComputeBroCountRange.length==0)){
+        console.log(EventCollection.eventsToComputeBroCountRange.length==0)
+        console.log(EventCollection.forceMainConfRendering!==true)
+          console.log("not rendered")
+          return; 
+        } 
+        // alert("ok")
+        EventCollection.forceMainConfRendering = false;
         // function doWork() {
 
 
           // mainConfEvent.renderForRefetch(); 
-          updateBroCountRange(doChildren);  
+          updateBroCountRange();  
           stopRender = false;
-          fetched = !force;
+          fetched = !refetch;
           $calendar.fullCalendar('refetchEvents');   
         // }
         // setTimeout(doWork, 1);
@@ -100,13 +113,8 @@ var EventCollection = {
                 ,bro
                 ,curBro
                 ,baseCount; 
- 
-           
-            if(EventCollection.eventsToComputeBroCountRange.length>0){
-              brothers = EventCollection.eventsToComputeBroCountRange;  
-            }else{
-               brothers = EventCollection.getToppestParent();  
-            } 
+  
+              brothers = EventCollection.eventsToComputeBroCountRange;   
             
             // console.log("----------------------------------------------------");
             console.debug("affected = ",brothers); 
@@ -158,13 +166,15 @@ var EventCollection = {
      * add events to EventCollection.eventsToComputeBroCountRange
      * @param CalEvent event to add
      * @param Object   opt   :
-     *                  allBrosInDay: add all brothers too 
+     *                  allEventsInDay: add all brothers too 
      */
     addEventToComputeCountRange : function(event,opt){
         if(event.is_mainconfevent)return;
         if(!opt)opt={}
-        if(opt.allBrosInDay){
-          var bros = event.getBros();
+        if(opt.allEventsInDay || opt.allBrosInDay){
+          console.log("#ComputeCountRange all day "+event.id);
+          var bros = calendar_events;
+          // var bros = event.getBros();
           var dayToRender = {
             start:moment(event.start).startOf('day')
             ,end:moment(event.end).endOf('day')
@@ -172,7 +182,9 @@ var EventCollection = {
           for(var i in bros){
             var bro = bros[i]; 
             if(!bro.isOutOf(dayToRender) || !bro.isOutOf(dayToRender) ){
-              addEvent(bro);
+              if(opt.allBrosInDay !== true || event.isBroOf(bro) ){
+                addEvent(bro);
+              }
             }
           }
         }else{
@@ -181,13 +193,14 @@ var EventCollection = {
 
         function addEvent(e){
 
-          if($.inArray(e.id, EventCollection.eventsToComputeBroCountRangeIndexes) === -1) { 
+          if(!e.id || $.inArray(e.id, EventCollection.eventsToComputeBroCountRangeIndexes) === -1) { 
             EventCollection.eventsToComputeBroCountRangeIndexes.push(e.id);
             EventCollection.eventsToComputeBroCountRange.push(e);
             EventCollection.broCountRange[e.id] = {count:1,range:0};
-            console.debug("#adding event to ComputeCountRange "+e.id);
-          }else{ 
-            console.debug("#didn't add event to ComputeCountRange "+e.id);
+            console.debug("#ComputeCountRange "+e.id);
+          }
+          else{ 
+            console.debug("#ComputeCountRange didn't add event "+e.id);
           }
         }
     },
@@ -250,8 +263,7 @@ var EventCollection = {
     //       if(event.allDay){
     //         toppestNonAllDayChildren = toppestNonAllDayChildren.concat(EventCollection.getToppestNonAllDayChildren(event));
 
-    //       }else{
-    //         // alert(event.id+" "+ event.title+"were child of "+parent.id+" "+parent.title+" and was added");
+    //       }else{ 
     //         toppestNonAllDayChildren.push(event);
     //       }
     //     }
