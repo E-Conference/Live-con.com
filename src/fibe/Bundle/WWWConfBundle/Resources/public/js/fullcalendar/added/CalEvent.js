@@ -414,9 +414,9 @@ CalEvent.prototype.hasChild = function (){
 
 CalEvent.prototype.isBroOf = function (bro){  
     if(bro.id == mainConfEvent.id)return false; 
-    var brosOfBro = bro.getBros(); 
-    for(var i in brosOfBro){ 
-      if(brosOfBro[i].id === this.id)
+    var brosOfBroId = bro.getBrosId(); 
+    for(var i in brosOfBroId){ 
+      if(brosOfBroId[i] === this.id)
         return true
     }
     return false;
@@ -427,6 +427,12 @@ CalEvent.prototype.getBros = function (){
         return []; 
 
     return EventCollection.getChildren(Events[this.parent.id], { onlyEvent:true, noSidebar : true})
+};
+CalEvent.prototype.getBrosId = function (){ 
+    if(!this.parent)
+        return []; 
+
+    return $(Events[this.parent.id].children).map(function(){return this.id;})
 };
 
 

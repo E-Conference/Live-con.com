@@ -431,7 +431,7 @@
                             Events[ev.id] = ev;   
                             // ev.render();
                             // 
-                            EventCollection.addEventToComputeCountRange(ev) 
+                            EventCollection.addEventToComputeCountRange(ev,{allBrosInDay:true}); 
                             ev.renderForRefetch(); 
 
                             if(response.mainConfEvent){
@@ -466,6 +466,7 @@
                   event.updateParentDate();
                   event.updateChildrenDate(); 
      
+                  EventCollection.addEventToComputeCountRange(event,{allBrosInDay:true}); 
 
                   event.renderForRefetch();
 
@@ -479,8 +480,7 @@
           //   EventCollection.addEventToComputeCountRange(mainConfEvent,{allEventsInDay:true});
           // },
           eventAfterAllRender: function( view ) { 
-              //avoid repeating this function 10 times...
-                console.debug(moment().diff(logtime)+" to call eventAfterAllRender"); 
+              //avoid repeating this function 10 times... 
               if(!mainConfEvent || stopRender)return;
               clearTimeout(repositionTimeout);
               repositionTimeout=setTimeout(function(){    
@@ -526,23 +526,7 @@
               // render the event on the calendar  
                 
           },
-          eventCalculateWidth : function(event, seg, leftmost, availWidth, outerWidth, levelI, bottom, top, forward, dis,view) { 
-
-            //TODO COMPUTE WIDTH AND LEFT POS HERE TO AVOID EVENT TO BLINK 
-            //TODO COMPUTE WIDTH AND LEFT POS HERE TO AVOID EVENT TO BLINK 
-            //TODO COMPUTE WIDTH AND LEFT POS HERE TO AVOID EVENT TO BLINK  
-            //
-            // Default :
-            //
-            // seg.top = top;
-            // seg.left = left;
-            // seg.outerWidth = outerWidth;
-            // seg.outerHeight = bottom - top;
-            
-            // console.log("###### computing position of event "+event.id);
-            // console.log(" event "+event.id+"   : ",event ) 
-            // console.log(" view      : ",view) 
-            // console.log(" seg:",seg," leftmost:",leftmost," availWidth:",availWidth," outerWidth:",outerWidth," levelI:",levelI,", bottom:",bottom,",top:",top," forward:",forward," dis:",dis);
+          eventCalculateWidth : function(event, seg, leftmost, availWidth, outerWidth, levelI, bottom, top, forward, dis,view) {  
 
             var width = availWidth + ( currentView == "day" ? 55 : 10 );
             var height = bottom - top;
@@ -628,8 +612,7 @@
                   stopRender = true;
                   //get diff
                   var diff = moment(dragged[2].start).diff(moment(event['start']));
-
-                  console.log("#eventDragStop1");
+ 
                   //apply to children  
                   $.each(children,function(i,child){ 
                     // var startScript = moment();
@@ -658,16 +641,13 @@
                     //still inside but may need a parent update (to properly contain child) 
                       event.updateParentDate();  
                   }  
-
-                  console.log("#eventDragStop3");
+ 
 
      
                   EventCollection.addEventToComputeCountRange(event,{allEventsInDay:true});
                   // event.renderForRefetch();
-
-                  console.log("#eventDragStop4");
-                  EventCollection.refetchEvents();
-                  console.log("#eventDragStop5");
+ 
+                  EventCollection.refetchEvents(); 
                   event.persist(); 
 
               },0);//bug... event isn't yet updated
@@ -736,7 +716,7 @@
        *  just after to the fullcalendar "all event render" function
        */
  
-      var repositionTime = 100;
+      var repositionTime = 0;
       var repositionTimeout;
       function reposition(view){
 
