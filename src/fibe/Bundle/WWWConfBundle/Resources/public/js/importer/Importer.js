@@ -146,8 +146,7 @@ function run(file,callback,fallback){
                 if(moment(event['setEndAt']).isAfter(latestEnd))
                     latestEnd = moment(event['setEndAt']);
             }
-            if(earliestStart != moment('6000-10-10') && latestEnd != moment('1000-10-10')){
-                alert("conf changed")
+            if(earliestStart != moment('6000-10-10') && latestEnd != moment('1000-10-10')){ 
                 objects["conference"]['setStartAt'] = earliestStart; 
                 objects["conference"]['setEndAt']   = latestEnd; 
             }

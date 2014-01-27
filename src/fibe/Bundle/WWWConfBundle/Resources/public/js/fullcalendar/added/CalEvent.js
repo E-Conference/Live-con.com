@@ -196,7 +196,7 @@ CalEvent.prototype.updateParentDate = function(){
         if(moment(event['start']).isBefore(parent['start'])){
           parent['start'] = event['start'];
 
-          event['end'] = moment(event['start']).subtract(Eduration).format();
+          event['end'] = moment(event['start']).add(Eduration).format();
           changed = true;
         }
         //event end is after parent end
@@ -240,7 +240,7 @@ CalEvent.prototype.updateChildrenDate = function(){
             var childStart = child['start'],
                 childEnd = child['end'];
             //child start is before event start
-            alert("stick start "+(moment(child['start']).isBefore(event['start'])?"true":"false"))
+            // alert("stick start "+(moment(child['start']).isBefore(event['start'])?"true":"false"))
             if(moment(child['start']).isBefore(event['start']))
             {
               // event['start'] = parent['start'];
@@ -250,7 +250,7 @@ CalEvent.prototype.updateChildrenDate = function(){
               changed=true;
             }
             //child end is after child start
-            alert("stick end "+(moment(child['end']).isAfter(event['end'])?"true":"false"))
+            // alert("stick end "+(moment(child['end']).isAfter(event['end'])?"true":"false"))
             if(moment(child['end']).isAfter(event['end']))
             {
               // event['start'] = parent['start'];
@@ -259,7 +259,7 @@ CalEvent.prototype.updateChildrenDate = function(){
               childStart = moment(childEnd).subtract(Cduration).format(); 
               changed=true;
             } 
-            alert("bigger? "+(Cduration>Eduration ?"true":"false"))
+            // alert("bigger? "+(Cduration>Eduration ?"true":"false"))
 
             if(Cduration>Eduration){
               childStart = event['start'];
@@ -413,7 +413,7 @@ CalEvent.prototype.hasChild = function (){
 };
 
 CalEvent.prototype.isBroOf = function (bro){  
-    if(bro.id == mainConfEvent.id)return false; 
+    if(this.id == mainConfEvent.id)return false; 
     var brosOfBroId = bro.getBrosId(); 
     for(var i in brosOfBroId){ 
       if(brosOfBroId[i] === this.id)
@@ -426,13 +426,16 @@ CalEvent.prototype.getBros = function (){
     if(this.id == mainConfEvent.id)
         return []; 
 
-    return EventCollection.getChildren(Events[this.parent.id], { onlyEvent:true, noSidebar : true})
+    return EventCollection.getChildren(Events[this.parent.id], {recursive:false,concat:false, onlyEvent:true, noSidebar : true})
 };
 CalEvent.prototype.getBrosId = function (){ 
-    if(!this.parent)
+    if(this.id == mainConfEvent.id)
         return []; 
+    var id = this.id;
+    // console.log("children of"+this.id,Events[this.parent.id].children)
+    return $(Events[this.parent.id].children).map(function(key,value){ if(value && value.id!=id){return value.id;}})
 
-    return $(Events[this.parent.id].children).map(function(){return this.id;})
+    // return $(Events[this.parent.id].children).map(function(key,value){return value.id!=this.id?value.id:undefined;})
 };
 
 

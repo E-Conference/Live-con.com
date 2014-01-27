@@ -141,8 +141,12 @@ class ConfEvent extends Event
 
         if($this->isMainConfEvent){
             //ensure main conf event fits its children dates 
-            return $this->fitChildrenDate(true);
-            // $this->setIsInstant($this->getEndAt()->format('U') == $this->getStartAt()->format('U'));
+            $this->fitChildrenDate(true);
+            if ($this->getEndAt()->getTimestamp() <=  $this->getStartAt()->getTimestamp()) {
+                $endAt = clone $this->getStartAt() ; 
+                $this->setEndAt($endAt->add(new \DateInterval('P1D')));
+            }
+            $this->setIsInstant(false);
         }
     }
 

@@ -6157,7 +6157,7 @@ function View(element, calendar, viewName) {
 			resource
 		);
 		//COMMENTED BY BENOITDDLP
-		reportEventChange(eventId);
+		// reportEventChange(eventId);
 	}
 	
 	

@@ -124,7 +124,7 @@ var EventCollection = {
             EventCollection.eventsToComputeBroCountRangeIndexes = [];
             EventCollection.eventsToComputeBroCountRange = [];
             console.debug("BroCountRange : updated "+brothers.length+" events in "+moment().diff(startScript)+" ms");
-            // console.log(EventCollection.broCountRange) 
+            console.log(EventCollection.broCountRange) 
             // return EventCollection.broCountRange;
             
             function computeCountRange(bros,doChildren){
@@ -135,15 +135,15 @@ var EventCollection = {
                 // console.log("curBro",curBro.id)
                 //create rtn object for curBro  
                 baseCount = EventCollection.broCountRange[curBro.id].count;
-
+                var brosId = curBro.getBrosId(); 
                 for (var j in remaining){
                   bro = remaining[j];  
                   //ensure the bro is not itself  
-                  if(curBro.id===bro.id )continue; 
+                  if(curBro.id===bro.id )continue;  
                   //ensure the bro is a real bro
-                  if(curBro.isOutOf(bro,true) || !curBro.isBroOf(bro))continue;  
+                  if(curBro.isOutOf(bro,true) || ($.inArray(bro.id, brosId) === -1))continue;   
                   // console.log("curBro ",curBro.id," discovering ",bro.id)  
-                  //update self properties 
+                  //update self properties  
                   EventCollection.broCountRange[curBro.id]["count"]++; 
 
                   //register bro as bro of curBro
@@ -194,7 +194,7 @@ var EventCollection = {
 
         function addEvent(e){
 
-          if(!e.id || $.inArray(e.id, EventCollection.eventsToComputeBroCountRangeIndexes) === -1) { 
+          if(e.id && $.inArray(e.id, EventCollection.eventsToComputeBroCountRangeIndexes) === -1 && !e.allDay) { 
             EventCollection.eventsToComputeBroCountRangeIndexes.push(e.id);
             EventCollection.eventsToComputeBroCountRange.push(e);
             EventCollection.broCountRange[e.id] = {count:1,range:0};
