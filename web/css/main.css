@@ -42,7 +42,7 @@ body{
 }
 
 
-#menu-navbar ul *{
+#menu-navbar ul {
 	background:#19313b;
 	color:  #f2f2f2;
 }
