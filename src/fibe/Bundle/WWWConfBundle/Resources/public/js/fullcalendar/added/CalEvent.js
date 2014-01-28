@@ -215,7 +215,7 @@ CalEvent.prototype.updateParentDate = function(){
           // EventCollection.eventToRender = {id:parent["id"],oldStart:oldStart,oldEnd:oldEnd}; 
           updateParentDate(parent); 
 
-          EventCollection.addEventToComputeCountRange(parent);  
+          EventCollection.addEventToComputeCountRange(parent,{allBrosInDay:true});   
           parent.renderForRefetch();
           parent.persist(); 
         }
@@ -239,8 +239,7 @@ CalEvent.prototype.updateChildrenDate = function(){
           if(child.isInsideOf(event))continue; 
             var childStart = child['start'],
                 childEnd = child['end'];
-            //child start is before event start
-            // alert("stick start "+(moment(child['start']).isBefore(event['start'])?"true":"false"))
+            //child start is before event start 
             if(moment(child['start']).isBefore(event['start']))
             {
               // event['start'] = parent['start'];
@@ -249,8 +248,7 @@ CalEvent.prototype.updateChildrenDate = function(){
               childEnd = moment(childStart).add(Cduration).format();
               changed=true;
             }
-            //child end is after child start
-            // alert("stick end "+(moment(child['end']).isAfter(event['end'])?"true":"false"))
+            //child end is after child start 
             if(moment(child['end']).isAfter(event['end']))
             {
               // event['start'] = parent['start'];
@@ -258,8 +256,7 @@ CalEvent.prototype.updateChildrenDate = function(){
 
               childStart = moment(childEnd).subtract(Cduration).format(); 
               changed=true;
-            } 
-            // alert("bigger? "+(Cduration>Eduration ?"true":"false"))
+            }  
 
             if(Cduration>Eduration){
               childStart = event['start'];

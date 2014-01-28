@@ -83,14 +83,11 @@ var EventCollection = {
     broCountRange:{},
     eventsToComputeBroCountRange:[],
     eventsToComputeBroCountRangeIndexes:[],
-    refetchEvents : function(refetch,force){
-        // alert(EventCollection.eventsToComputeBroCountRange.length==0)
-        // alert(EventCollection.forceMainConfRendering!==true)
+    refetchEvents : function(refetch,force){ 
         if(force!==true && (EventCollection.forceMainConfRendering!==true && EventCollection.eventsToComputeBroCountRange.length==0)){ 
           console.log("not rendered")
           return; 
-        } 
-        // alert("ok")
+        }  
         EventCollection.forceMainConfRendering = false;
         // function doWork() {
         
@@ -188,9 +185,8 @@ var EventCollection = {
               }
             }
           }
-        }else{
-          addEvent(event);
         }
+        addEvent(event);
 
         function addEvent(e){
 
@@ -198,11 +194,11 @@ var EventCollection = {
             EventCollection.eventsToComputeBroCountRangeIndexes.push(e.id);
             EventCollection.eventsToComputeBroCountRange.push(e);
             EventCollection.broCountRange[e.id] = {count:1,range:0};
-            // console.debug("#ComputeCountRange "+e.id);
+            console.debug("#ComputeCountRange "+e.id);
           }
-          // else{ 
-          //   console.debug("#ComputeCountRange didn't add event "+e.id);
-          // }
+          else{ 
+            console.debug("#ComputeCountRange didn't add event "+e.id);
+          }
         }
     },
 

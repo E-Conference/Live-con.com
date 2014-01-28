@@ -45,7 +45,7 @@
               {% for category in categories %}
                 <option data-color="{{category.color}};" value="{{category.id}}">{{category.name}}</option>
               {% endfor %}
-            </select>  
+            </select>
           </div>
 
           <h4>Filter by locations</h4>
@@ -54,7 +54,7 @@
               {% for location in locations %}
                 <option value="{{location.id}}">{{location.name}}</option>
               {% endfor %}
-            </select>  
+            </select>
           </div> 
 
           <h4>Filter by topic</h4>
@@ -75,7 +75,7 @@
   </div>
 
 
-  <div id="modal"  class="modal fade">
+  <div id="modal"  class="modal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -89,7 +89,7 @@
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
    
-  <div id="modal-new-event"  class="modal fade">
+  <div id="modal-new-event"  class="modal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -111,7 +111,7 @@
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
    
-  <div id="modal-set-parent"  class="modal fade">
+  <div id="modal-set-parent"  class="modal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -403,7 +403,7 @@
           selectHelper: true,
           select: function(start, end, allDay) { //new event
               $modalNewEvent.modal("show")
-                            .on('show.bs.modal', function() {
+                            .on('shown.bs.modal', function() {
                                 $(this).find("#name").focus();
                             });
 
@@ -427,13 +427,9 @@
                             bootstrapAlert("success","event <b>"+tmp['title']+"</b> has been well added");
                             tmp.id =response.id;
                             var ev = new CalEvent(tmp);   
-                            ev.setParent(mainConfEvent) 
-                            Events[ev.id] = ev;   
-                            // ev.render();
-                            // 
-                            EventCollection.addEventToComputeCountRange(ev,{allBrosInDay:true}); 
+                            ev.setParent(mainConfEvent)  
                             ev.renderForRefetch(); 
-
+                            EventCollection.addEventToComputeCountRange(ev,{allBrosInDay:true});  
                             if(response.mainConfEvent){
                               EventCollection.updateMainConfEvent(response.mainConfEvent.start,response.mainConfEvent.end); 
                             }  
@@ -442,13 +438,14 @@
                         'json'
                     );
                     bootstrapAlert("info","add request sent","Info : ","<i class='icon-spinner icon-spin'></i>");
-                  $modalNewEvent.modal("hide");
+                    $modalNewEvent.modal("hide");
                 }else{
                     bootstrapAlert("info","You must give a name to the event");
+                    $modalNewEvent.find("#name").focus();
                 }
                 return false;
               });
-              $calendar.fullCalendar('unselect');
+              // $calendar.fullCalendar('unselect');
               
           },
           //resizing events in calendar
@@ -531,6 +528,7 @@
             var width = availWidth + ( currentView == "day" ? 55 : 10 );
             var height = bottom - top;
             var left = leftmost;
+            var zindex = 8;
 
             var Hmargin = 5;
             var Wmargin = 3;
@@ -541,7 +539,7 @@
                 var parentCount   = EventCollection.broCountRange[parentId].count,
                     parentRange   = EventCollection.broCountRange[parentId].range; 
 
-              console.log("## eventCalculateWidth"+event.id+" : parent : "+parentId+" count "+count+" range "+range)
+              // console.log("## eventCalculateWidth"+event.id+" : parent : "+parentId+" count "+count+" range "+range)
                 width /= parentCount;
                 left += width*parentRange;
 
@@ -549,6 +547,8 @@
                 // width  -= (2*Wmargin);
                 top     = top + Hmargin;
                 height -= (2*Hmargin);
+
+                zindex +=100
 
                 parentId = Events[parentId].parent.id;
             }
@@ -564,6 +564,7 @@
             seg.left = left;
             seg.outerHeight = height;
             seg.top = top;
+            seg.zindex = zindex;
           },
           eventDragStart: function( event, jsEvent, ui, view ) { 
               dragged = [ ui.helper[0], event ];
@@ -572,8 +573,7 @@
               },1);
           },
           eventDragStop: function( event, jsEvent, ui, view ) {  
-              // var parent = EventCollection.find(event.parent.id,{noSidebar:true}); 
-              // alert("1"+parent.start+"\n"+parent.end) 
+              // var parent = EventCollection.find(event.parent.id,{noSidebar:true});  
               var event = Events[event.id]
               var parent = EventCollection.find(event.parent.id,{noSidebar:true}); 
               var children = EventCollection.getChildren(event,{concat:true,onlyEvent:true});
@@ -593,8 +593,7 @@
                           {start:moment(parent.start),end:moment(parent.end)},
                           $(children).map(function(){return {start:moment(this.start),end:moment(this.end)};})
                         ];  
-
-              // alert(parent.start+" \n"+parent.end)
+ 
               
               //TODO : parent  has here a wrong start/end updated from somewhere
               //TODO : parent  has here a wrong start/end updated from somewhere
@@ -603,8 +602,7 @@
                   // EventCollection.addEventToComputeCountRange(event,{allEventsInDay:true}); 
                   var event = dragged[1] 
                   var parentDate = dragged[3];
-                  var childrenDates = dragged[4];
-                  // alert(parent.start+" \n"+parent.end) 
+                  var childrenDates = dragged[4]; 
                    
                   var parent = EventCollection.find(event.parent.id,{noSidebar:true});
                   var children = EventCollection.getChildren(event,{concat:true,onlyEvent:true});
@@ -628,11 +626,7 @@
                   }); 
                   // console.debug(moment().diff(startScript)+" to affect children");
  
-                  //apply to parent
-                  
-                  // alert(event.title+" "+(event.isOutOf(parent,true)? "out of parent":"in the parent")+" "+parent.title)
-                  // alert(parent.start+"\n"+parent.end)
-                  // alert(event.start+"\n"+event.end)
+                  //apply to parent 
                   if(event.isOutOf(parent,true)){
                     //event dropped out of parent
                     console.log(" #### moved out ####");  
