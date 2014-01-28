@@ -403,7 +403,7 @@
           selectHelper: true,
           select: function(start, end, allDay) { //new event
               $modalNewEvent.modal("show")
-                            .on('shown.bs.modal', function() {
+                            .on('show.bs.modal', function() {
                                 $(this).find("#name").focus();
                             });
 
@@ -456,7 +456,7 @@
 
               var oldEnd = moment(event["end"]).subtract({'d':dayDelta,'m':minuteDelta});
 
-              setTimeout(function(){ //bug... event isn't yet updated  
+              setTimeout(function(){   
                   console.log(dayDelta,minuteDelta,event); 
                   if(!event.isOneDayLong() && !event.allDay){ 
                     // event.allDay = true;
@@ -472,7 +472,7 @@
 
                   EventCollection.refetchEvents(false,true);
                   event.persist(); 
-              },0);//bug... event isn't yet updated
+              },0);
           },  
           // viewRender : function( view, element ){
           //   // fetched = false; 
@@ -567,9 +567,9 @@
           },
           eventDragStart: function( event, jsEvent, ui, view ) { 
               dragged = [ ui.helper[0], event ];
-              setTimeout(function(){ //bug... event isn't yet updated  
+              setTimeout(function(){   
                 dragChildren(event, jsEvent, ui, view);
-              },1);//bug... event isn't yet updated
+              },1);
           },
           eventDragStop: function( event, jsEvent, ui, view ) {  
               // var parent = EventCollection.find(event.parent.id,{noSidebar:true}); 
@@ -651,7 +651,7 @@
                   EventCollection.refetchEvents(); 
                   event.persist(); 
 
-              },0);//bug... event isn't yet updated
+              },0);
 
  
           },
@@ -802,25 +802,30 @@
                               console.log(draggedEvent)
 
                               // if(event.isOutOf(draggedEvent))return;  
-                              $modalSetParent.modal('show').find(".sub-event").text(draggedEvent.title);
-                              $modalSetParent.find(".super-event").text(event.title);
+                              
+                              setTimeout(function(){   
 
-                              $modalSetParent.find('button.yes').off("click").click(function(){ 
-                                  //set event as parent of draggedEvent and children relation
-                                  console.log(draggedEvent+" is now the child of "+event.id)
-                                  
-                                  draggedEvent.setParent(event);
-                                  draggedEvent.updateParentDate(); 
-                                  
-                                  draggedEvent.renderForRefetch();
-                                  EventCollection.addEventToComputeCountRange(draggedEvent,{allBrosInDay:true});
+                                $modalSetParent.modal('show').find(".sub-event").text(draggedEvent.title);
+                                $modalSetParent.find(".super-event").text(event.title);
 
-                                  event.renderForRefetch();
-                                  EventCollection.addEventToComputeCountRange(event,{allBrosInDay:true});
-                                  
-                                  EventCollection.refetchEvents();
-                                  draggedEvent.persist(); 
-                              });   
+                                $modalSetParent.find('button.yes').off("click").click(function(){ 
+                                    //set event as parent of draggedEvent and children relation
+                                    console.log(draggedEvent+" is now the child of "+event.id)
+                                    
+                                    draggedEvent.setParent(event);
+                                    draggedEvent.updateParentDate(); 
+                                    
+                                    draggedEvent.renderForRefetch();
+                                    EventCollection.addEventToComputeCountRange(draggedEvent,{allBrosInDay:true});
+
+                                    event.renderForRefetch();
+                                    EventCollection.addEventToComputeCountRange(event,{allBrosInDay:true});
+                                    
+                                    EventCollection.refetchEvents();
+                                    draggedEvent.persist(); 
+                                });   
+                              },0); 
+
                           }
                         }
                     }); 
