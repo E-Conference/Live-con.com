@@ -1,0 +1,196 @@
+{% extends 'fibeConferenceBundle::base.html.twig' %}
+
+{% block title %}Team{% endblock title %}
+
+{% block centerPanel %}
+
+ 
+
+{% trans_default_domain 'FOSUserBundle' %}
+     <div class="row page-top-header ">
+            <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <span>Team managment</span>
+            </div>
+
+            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+            </div>
+      </div>
+      <div class="row page-content">
+
+             
+
+            <table class="records_list table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Last login</th>
+                       <!-- <th>Team Manager</th> -->
+                        <th>Mobil App Manager</th>
+                        <th>Schedule Manager</th>
+                        <th>Team Manager</th>
+                        <th>Datas Conference Manager</th>
+                        <th>Action<th>
+                         
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in entities %}
+                    <tr>
+                        <td>
+                            <div class="btn-group">
+                           
+                                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                    <b>{{ entity.username }}</b>
+                                    <span class="caret"></span>
+                                </button>
+                                 {% if app.user.getCurrentConf().getConfManagers()|length > 1 %}
+                                <ul class="dropdown-menu">
+                                   <!-- <li>
+                                        <a href="{{ path('schedule_user_toggle_role', { 'id': entity.id }) }}"> 
+                                                {% if  'ROLE_ADMIN' in entity.roles %}
+                                                      demote to manager 
+                                                {% else %}
+                                                     promote to admin 
+                                                {% endif %} 
+                                        </a>  
+                                    </li>
+                                    <li>
+                                        <a href="#" onclick="document.getElementById('delete-form{{ loop.index0 }}').submit()"><i class=" icon-trash"></i> delete user</a>
+                                        
+                                    </li>-->
+                                    
+                                    <li>
+                                       <a href="#" onclick="removeManager({{entity.id}});location.reload();"><i class=" icon-trash"></i> Remove user from the conference</a>
+                                    </li>
+                                </ul>
+                                {% endif %}
+                            </div>
+                           <!-- <form style="height:0px;" id="delete-form{{ loop.index0 }}" action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
+                                <input type="hidden" name="_method" value="DELETE" />
+                                {{ form_widget(delete_forms[loop.index0]) }}
+                            </form>-->
+                        </td>
+                        <td><a href="mailto:{{ entity.email }}">{{ entity.email }}</a></td>
+                        <td class="moment">{% if entity.lastLogin %}{{ entity.lastLogin|date('Y-m-d H:i:s') }}{% endif %}</td> 
+                        <!--  <td>
+                            <div class="btn-group">
+                              <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                    {% if  'ROLE_ADMIN' in entity.roles %}
+                                        True
+                                    {% else %}
+                                        False
+                                    {% endif %} 
+                                    <span class="caret"></span>
+                                 </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="{{ path('schedule_user_toggle_role', { 'id': entity.id }) }}"> 
+                                          {% if  'ROLE_ADMIN' in entity.roles %}
+                                               False
+                                          {% else %}
+                                               True
+                                          {% endif %} 
+                                        </a> 
+                                             
+                                    </li>
+                                </ul>
+                            </div>-->
+                            <form style="height:0px;" id="toggle-role-form{{ loop.index0 }}" action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
+                                <input type="hidden" name="_method" value="DELETE" />
+                                {{ form_widget(delete_forms[loop.index0]) }}
+                            </form>
+                            
+                        </td> 
+                         <td>
+                            {% if  entity.getFlagByConferenceId(currentConf.id,'app') == 1 %}
+                                      <i class="fa fa-check"></i>
+                            {% else %}
+                                      <i class="fa fa-ban"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if  entity.getFlagByConferenceId(currentConf.id,'sched') == 1 %}
+                                      <i class="fa fa-check"></i>
+                            {% else %}
+                                      <i class="fa fa-ban"></i>
+                            {% endif %}
+                         </td>
+                         <td>
+                            {% if  entity.getFlagByConferenceId(currentConf.id,'team') == 1 %}
+                                      <i class="fa fa-check"></i>
+                            {% else %}
+                                      <i class="fa fa-ban"></i>
+                            {% endif %}
+                         </td>    
+                         <td>
+                            {% if  entity.getFlagByConferenceId(currentConf.id,'datas') == 1 %}
+                                      <i class="fa fa-check"></i>
+                            {% else %}
+                                      <i class="fa fa-ban"></i>
+                            {% endif %}
+                         </td>
+                         <td>
+                              <a class="btn btn-large btn-warning edit" href="{{ path('schedule_authorization_edit', { 'id': entity.getAuthorizationByConference(app.user.getCurrentConf()).getId()}) }}"><i class="fa fa-pencil"></i></a>
+                         </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <!--<a class="btn btn-info" href="{{ path('fos_user_registration_register') }}">
+                <i class="icon-plus icon-white"> </i> Add user in conference
+            </a>-->
+
+
+            <!--   Add user in conference  -->
+            <a class="btn btn-info" id="addUserInConference" onclick="$('#addUserInConferenceForm').toggle('slow')">
+                <i class="icon-plus icon-white"></i> Add user in conference
+            </a>
+            </br>
+            <div id="addUserInConferenceForm">
+              <div class="row-fluid">
+                 <div class="col-lg-4 well">
+                    <form action="{{ path('schedule_user_create_authorization') }}" method="post" {{ form_enctype(authorization_form) }}>
+                            {{ form_widget(authorization_form) }}
+                            {{ form_errors(authorization_form) }}
+                            </br>
+                        <button type="submit" class="btn btn-block btn-success">
+                            <i class="fa fa-check"></i>
+                        </button>
+                    </form> 
+                  </div>
+                </div>
+             </div>
+    </div>
+{% endblock  %}
+
+{%  block javascripts_page %}
+
+    <script src="{{ asset('bundles/fibewwwconf/js/moment.min.js') }}" type="text/javascript" ></script>
+    <script  type="text/javascript" >
+
+
+      function removeManager(managerId){
+        //start send the post request           
+           $.ajax({
+              type: "POST",
+              url: "{{path('schedule_conference_remove_manager')}}",
+              data: { 'id' : managerId },
+            });
+      };
+      
+
+       //Listen change authorization select
+        $(document).ready(function(){
+            //Hide add manager form
+            $("#addUserInConferenceForm").hide();
+            $('.moment').each(function(){
+                var momentString = moment($(this).html()); 
+                !momentString || $(this).html(momentString.format("dddd, MMMM Do YYYY, h:mm:ss a"));
+            })
+        });
+    </script>
+
+{% endblock %}
+
+ 

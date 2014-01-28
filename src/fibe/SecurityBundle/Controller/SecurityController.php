@@ -11,7 +11,7 @@ class SecurityController extends Controller
   {
     // Si le visiteur est déjà identifié, on le redirige vers l'accueil
     if ($this->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-      return $this->redirect($this->generateUrl('dashboard_choose_conference'));
+      return $this->redirect($this->generateUrl('dashboard_index'));
     }
  
     $request = $this->getRequest();

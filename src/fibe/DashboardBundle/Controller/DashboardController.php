@@ -18,29 +18,20 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  */
 class DashboardController extends Controller
 {
-    /**
-     * @Route("/" , name="dashboard_index")
-     * @Template()
-     */
+   /**
+   * @Route("/" , name="dashboard_index")
+   * @Template()
+   */
     public function indexAction()
     {
-        return array();
+      $currentUser = $this->getUser();
+
+      return array(
+        'entity' => $currentUser,
+        );
     }
 
-     /**
-     * @Route("/conferences" , name="dashboard_choose_conference")
-     * @Template()
-     */
-    public function chooseConferenceAction()
-    {    
-        $currentUser = $this->getUser();
-        $createform = $this->createForm(new WwwConfDefaultType($this->getUser()), new WwwConf());
-
-        return array(
-        	'entity' => $currentUser,
-            'form' =>  $createform->createView()
-        	);
-    }
+    
 
       /**
      * @Route("{id}/enter" , name="dashboard_enter_conference")
@@ -60,7 +51,7 @@ class DashboardController extends Controller
         $em->persist($user);
         $em->flush();
 
-        return $this->redirect($this->generateUrl('dashboard_index'));
+        return $this->redirect($this->generateUrl('schedule_conference_edit'));
     
     }
 

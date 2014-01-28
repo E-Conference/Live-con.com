@@ -1,5 +1,6 @@
-{% extends "::base.html.twig" %}
-       
+{% extends "::base.html.twig" %}    
+
+{% set currentPath = app.request.attributes.get('_route') %}
 
 {% block meta %}{% endblock %}
 {% block title %}{% endblock %}
@@ -16,6 +17,8 @@
 
         <script type="text/javascript">
          $(document).ready(function() {
+               
+                $(".{{currentPath}}").addClass("active");
 
                 $('label[class="required"]').append("<i style='color:#C00000  '>*</i>");
 
@@ -65,7 +68,8 @@
             </script> 
         {% endfor %}
 
-        {% if authorized==0 %}
+        <!-- Authorization -->
+        {% if authorized == 0 %}
             <script type="text/javascript" >
              $(document).ready(function(){
                  $(".edit").hide();
@@ -78,40 +82,57 @@
             </script> 
         {% endif %}
 
+        <!-- Hide module not used in the conference -->
+         {% if app.user.getCurrentConf().getModule().getPaperModule() == 0 %}
+            <script type="text/javascript" >
+             $(document).ready(function(){
+                 $(".module_paper").hide();
+             });
+            </script> 
+        {% endif %}
+
         {%  block javascripts_page %}
         {% endblock%}
 {% endblock%}
 
 {% block body %} 
     {{ parent() }}
-
     {% block navBar %} 
-        {% include "fibeWWWConfBundle::navbar.html.twig" %}
+        {% include "fibeWWWConfBundle::mainNavBar.html.twig" %}
     {% endblock navBar%}
+
+
+    {% if app.user.getCurrentConf() %} 
+      {% block menuNavBar %} 
+          {% include "fibeWWWConfBundle::menuNavBar.html.twig" %}
+      {% endblock menuNavBar%}
+    {% endif %}
+
     {% block content %} 
     <div class="content">
-         {% block sideBarPanel%} 
-        <div id="sideBar">
-            <div id="sideBarList">
-                <div class="panel-group">
-                {% block sideBar_page%} 
-                {% endblock sideBar_page%} 
-                 {% block sideBar%} 
-                    {% include "fibeWWWConfBundle::sideBar.html.twig" %}
-                {% endblock sideBar %}
-                </div>
-            </div>
-            <div id="sideBarBtn">
-                <i class="fa fa-chevron-right"></i>
-            </div>
-        </div>
-         {% endblock sideBarPanel%} 
 
         <div class="row">
             <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div> 
-            <div class="col-xs-10 col-sm-10  col-md-10 col-lg-10 center">
+
+            <div class="col-xs-10 col-sm-10  col-md-10 col-lg-10 ">
+                 <div class="row ">
+                   <ul class="nav breadcrum nav-tabs">
+                          <li class="schedule_event schedule_event_new schedule_event_edit schedule_event_show"><a href="{{ path('schedule_event') }}">Events</a></li>
+                          <li class="schedule_person_index schedule_person_edit schedule_person_new schedule_person_show"><a href="{{ path('schedule_person_index') }}">Persons</a></li>
+                          <li class="schedule_location schedule_location_edit schedule_location_new schedule_location_show"><a href="{{ path('schedule_location') }}">Locations</a></li>
+                          <li class="schedule_organization_index  schedule_organization_new schedule_organization_edit schedule_organization_show"><a href="{{ path('schedule_organization_index') }}">Organizations</a></li>
+                          <li class="schedule_paper schedule_paper_edit schedule_paper_new schedule_paper_show"><a href="{{ path('schedule_paper') }}">Publications</a></li>
+                          <li class="schedule_category schedule_category_new schedule_category_edit schedule_category_show"><a href="{{ path('schedule_category') }}" >Categories</a></li>
+                          <li class="schedule_topic schedule_topic_new  schedule_topic_edit schedule_topic_show"><a href="{{ path('schedule_topic') }}">Topics</a></li>
+                           {% block menu_page%} 
+                           {% endblock menu_page %}
+                      
+                    </ul>
+                 </div>
+                 <div class="row center">
                 {% block centerPanel %} 
                 {% endblock centerPanel %}
+                </div>
             </div>
            <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div>
         </div>
@@ -119,3 +140,6 @@
     </div>
     {% endblock content%}
 {% endblock body%}
+
+
+ 

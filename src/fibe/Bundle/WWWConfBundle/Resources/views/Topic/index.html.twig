@@ -4,46 +4,50 @@
 
 {% block centerPanel %}
     {{ parent() }}
-    <div class="page-header">
-         <div class="row">
-            <div class="col-lg-2">
-                <h1>{% trans %}Topics{% endtrans %}</h1>
+
+         <div class="row page-top-header ">
+            <div class="page-title col-xs-2  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <span>List</span>
             </div>
-            <div class="col-lg-4">
-                <a class="btn btn-info btn-create create" href="{{ path('schedule_topic_new') }}">
+
+            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+            </div>
+            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <a class="btn btn-info btn-create create" href="{{ path('schedule_topic_new') }}" title="Add a topic">
                      <i class="fa fa-plus"></i>
                 </a>
             </div>
         </div>
-    </div>
+        <div class="row page-content">
         
-    <table class="table table-hover records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in pager.currentPageResults %}
-            <tr>
-                <td><a href="{{ path('schedule_topic_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.name }}</td>
-                <td>
-                        <a class="btn btn-default" href="{{ path('schedule_topic_show', { 'id': entity.id }) }}">
-                            <i class="fa fa-eye"></i>
-                        </a>
-                       
-                        <a class="btn btn-warning edit" href="{{ path('schedule_topic_edit', { 'id': entity.id }) }}">
-                             <i class="fa fa-pencil"></i>
-                        </a>
-                    </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <p>
-        {{ pagerfanta(pager, 'twitter_bootstrap') }}
-    </p>
+            <table class="table table-hover records_list">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in pager.currentPageResults %}
+                    <tr>
+                        <td><a href="{{ path('schedule_topic_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                        <td>{{ entity.name }}</td>
+                        <td>
+                                <a class="btn btn-default" href="{{ path('schedule_topic_show', { 'id': entity.id }) }}">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                               
+                                <a class="btn btn-warning edit" href="{{ path('schedule_topic_edit', { 'id': entity.id }) }}">
+                                     <i class="fa fa-pencil"></i>
+                                </a>
+                            </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+             </table>
+            <p>
+                {{ pagerfanta(pager, 'twitter_bootstrap') }}
+            </p>
+        </div>
 {% endblock %} 

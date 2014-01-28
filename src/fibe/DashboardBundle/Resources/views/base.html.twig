@@ -61,29 +61,28 @@
 {% block body %} 
     {{ parent() }}
 
-    {% include "fibeDashboardBundle::navbar.html.twig" %}
+    {% block navBar %} 
+        {% include "fibeWWWConfBundle::mainNavBar.html.twig" %}
+    {% endblock navBar%}
+
     {% block content %} 
     <div class="content">
-        <div id="sideBar">
-            <div id="sideBarList">
-                <div class="panel-group">
-                {% block sideBar_page%} 
-                {% endblock sideBar_page%} 
-                 {% block sideBar%} 
-                    {% include "fibeDashboardBundle::sideBar.html.twig" %}
-                {% endblock sideBar %}
-                </div>
-            </div>
-            <div id="sideBarBtn">
-                <i class="fa fa-chevron-right"></i>
-            </div>
-        </div>
-
         <div class="row">
             <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div> 
-            <div class="col-xs-10 col-sm-10  col-md-10 col-lg-10 center">
+            <div class="col-xs-10 col-sm-10  col-md-10 col-lg-10">
+                   <div class="row ">
+                   <ul class="nav breadcrum nav-tabs">
+                          <li class="active"><a href="#">My conferences</a></li>
+                        
+                           {% block menu_page%} 
+                           {% endblock menu_page %}
+                      
+                    </ul>
+                 </div>
+                 <div class="row center">
                 {% block centerPanel %} 
                 {% endblock centerPanel %}
+                </div>
             </div>
            <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div>
         </div>

@@ -63,7 +63,7 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-       $username   = $input->getArgument('username');
+        $username   = $input->getArgument('username');
         $email      = $input->getArgument('email');
         $password   = $input->getArgument('password');
         $inactive   = $input->getOption('inactive');

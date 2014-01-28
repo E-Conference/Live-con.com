@@ -19,10 +19,13 @@
                     {% endfor %}
                 </td>
                 <td>
-                 <a  class="btn btn-default abstract_paper" data-toggle="popover" title="{{ paper.title }} Abstract" data-content="{{ paper.abstract }}"><i class="icon-file-text"></i>
-                 </a>
-                 <a id="{{paper.id}}" class="btn btn-danger delete_paper edit-event" data-toggle="tooltip" title="Remove this Paper from the list"><i class="fa fa-trash-o"></i>
-                 </a>
+                
+                     <a  class="btn btn-default abstract_paper" data-toggle="popover" title="{{ paper.title }} Abstract" data-content="{{ paper.abstract }}"><i class="fa fa-file-text"></i>
+                     </a>
+                 {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
+                     <a id="{{paper.id}}" class="btn btn-danger delete_paper edit-event" data-toggle="tooltip" title="Remove this Paper from the list"><i class="fa fa-trash-o"></i>
+                     </a>
+                 {% endif %}
                 </td>
                  
             </tr> 

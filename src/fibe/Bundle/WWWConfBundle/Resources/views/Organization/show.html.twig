@@ -4,61 +4,66 @@
 
 {% block centerPanel %}
     {{ parent() }}
-    <h1>Organization</h1>
-    
-    <div class="row">
-        <div class="col-lg-1"></div>
-        <div class="col-lg-6">
-            <h2> {{ entity.title }}</h2>
-            <table class="table table-hover">
-                <tbody>
-                 <tr>
-                <th>Id</th>
-                    <td>{{ entity.id }}</td>
-                </tr>
-                <tr>
-                    <th>Name</th>
-                    <td>{{ entity.name }}</td>
-                </tr>
-                <tr>
-                    <th>Page</th>
-                    <td>{{ entity.page }}</td>
-                </tr>
-                <tr>
-                    <th>Country</th>
-                    <td>{{ entity.country }}</td>
-                </tr>
-                 <tr>
-                    <th>Members</th>
-                    <td> {% for person in entity.members %}
-                           <li>
-                              <a href="{{ path('schedule_person_show', { 'id': person.id }) }}">
-                                   {{ person.name }}
-                              </a>
-                           </li>
-                         {% endfor %}
-                    </td>
-                </tr>
-                    </tbody>
-                </table>
-           </div>
-        </div>
-        <div class="row">
-             <div class="col-lg-6"></div>
-              <div class="col-lg-2 btn-group">
-                  <a type="button" href="{{ path('schedule_organization_index') }}" class="btn btn-warning">
-                        <i class="fa fa-list"></i>
-                  </a>
-                   <a href="{{ path('schedule_organization_edit', { 'id': entity.id }) }}" class="btn btn-success edit">
-                         <i class="fa fa-pencil"></i>
-                   </a>
-                   <form action="{{ path('schedule_organization_delete', { 'id': entity.id }) }}" method="post">
-                      <input type="hidden" name="_method" value="DELETE" />
-                        {{ form_widget(delete_form) }}
-                    <button type="submit" class="btn btn-danger delete">
-                        <i class="fa fa-trash-o"></i>
-                    </button>
-                  </form> 
-              </div>    
-        </div>
+    <div class="row page-top-header ">
+            <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <span>Organization details</span>
+            </div>
+
+            <div class="col-xs-2 col-sm-4 col-md-6 col-lg-8">
+            </div>
+            <div class="page-btn-list col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                   <a type="button" href="{{ path('schedule_organization_index') }}" class="btn btn-warning" title="Go back to the list">
+                          <i class="fa fa-list"></i>
+                    </a>
+                     <a href="{{ path('schedule_organization_edit', { 'id': entity.id }) }}" class="btn btn-success edit" title="Edit organization">
+                           <i class="fa fa-pencil"></i>
+                     </a>
+                     <form action="{{ path('schedule_organization_delete', { 'id': entity.id }) }}" method="post"  >
+                        <input type="hidden" name="_method" value="DELETE" />
+                          {{ form_widget(delete_form) }}
+                      <button type="submit" class="btn btn-danger delete" title="Remove organization">
+                          <i class="fa fa-trash-o"></i>
+                      </button>
+                    </form> 
+            </div>
+      </div>
+    <div class="row page-content">
+      <div class="row">
+          <div class="col-lg-1"></div>
+          <div class="col-lg-6">
+              <h2> {{ entity.title }}</h2>
+              <table class="table table-hover">
+                  <tbody>
+                   <tr>
+                  <th>Id</th>
+                      <td>{{ entity.id }}</td>
+                  </tr>
+                  <tr>
+                      <th>Name</th>
+                      <td>{{ entity.name }}</td>
+                  </tr>
+                  <tr>
+                      <th>Page</th>
+                      <td>{{ entity.page }}</td>
+                  </tr>
+                  <tr>
+                      <th>Country</th>
+                      <td>{{ entity.country }}</td>
+                  </tr>
+                   <tr>
+                      <th>Members</th>
+                      <td> {% for person in entity.members %}
+                             <li>
+                                <a href="{{ path('schedule_person_show', { 'id': person.id }) }}">
+                                     {{ person.name }}
+                                </a>
+                             </li>
+                           {% endfor %}
+                      </td>
+                  </tr>
+                      </tbody>
+                  </table>
+             </div>
+          </div>
+      </div>
 {% endblock %}

@@ -203,13 +203,13 @@ class LocationController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         $equipments = $em->getRepository('fibeWWWConfBundle:Equipment')->getEquipmentForLocationSelect($entity);
-
+    
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(), 
             'delete_form' => $deleteForm->createView(),
             'equipments'  => $equipments,
-            'authorized' => $authorized,
+            'authorized'  => $authorized,
         );
     }
 
@@ -266,101 +266,7 @@ class LocationController extends Controller
         );
     }
 
-    /**
-     * Deletes a Location entity.
-     *
-     * @Route("/addEquipment", name="schedule_location_addEquipment")
-     * @Method("POST")
-     */
-    public function addEquipmentAction(Request $request)
-    {
-        
-       //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
-
-         if(!$authorized){
-            throw new AccessDeniedException('Action not authorized !');
-          }
-
-        $id_location = $request->request->get('id_location');
-        $id_equipment = $request->request->get('id_equipment');
-
-        $em = $this->getDoctrine()->getManager();
-
-      
-          //The object have to belongs to the current conf
-        $currentConf=$this->getUser()->getCurrentConf();
-        $location =  $em->getRepository('IDCISimpleScheduleBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id_location));
-        $equipment  = $em->getRepository('fibeWWWConfBundle:Equipment')->find($id_equipment);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Location or equipment entity.');
-        }
-
-        $equipments = $em->getRepository('fibeWWWConfBundle:Equipment')->getEquipmentForLocationSelect($location);
-
-        $location->addEquipment($equipment);
-
-        $em->persist($location);
-        $em->flush();
-
-          return $this->render('IDCISimpleScheduleBundle:Location:equipmentsRelation.html.twig', array(
-            'entity'  => $location,
-            'equipments' => $equipments,
-            'authorized' => $authorized,
-        ));
-
-    }
-
-
-    /**
-     * Deletes a Location entity.
-     *
-     * @Route("/deleteEquipment", name="schedule_location_deleteEquipment")
-     * @Method("POST")
-     */
-    public function deleteEquipmentAction(Request $request)
-    {
-        
-       //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
-
-         if(!$authorized){
-            throw new AccessDeniedException('Action not authorized !');
-          }
-
-        $id_location = $request->request->get('id_location');
-        $id_equipment = $request->request->get('id_equipment');
-
-        $em = $this->getDoctrine()->getManager();
-         //The object have to belongs to the current conf
-        $currentConf=$this->getUser()->getCurrentConf();
-        $location =  $em->getRepository('IDCISimpleScheduleBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id_location));
-        $equipment  = $em->getRepository('fibeWWWConfBundle:Equipment')->find($id_equipment);
-
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Location or equipment entity.');
-        }
-
-        $location->removeEquipment($equipment);
-
-        $em->persist($location);
-        $em->flush();
-
-        $equipments = $em->getRepository('fibeWWWConfBundle:Equipment')->getEquipmentForLocationSelect($location);
-
-
-          return $this->render('IDCISimpleScheduleBundle:Location:equipmentsRelation.html.twig', array(
-            'entity'  => $location,
-            'equipments' => $equipments,
-            'authorized' => $authorized,
-        ));
-
-    }
+   
 
     /**
      * Deletes a Location entity.

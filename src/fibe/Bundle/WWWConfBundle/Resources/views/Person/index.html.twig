@@ -4,18 +4,25 @@
 
 {% block centerPanel %}
     {{ parent() }}
-    <div class="page-header">
-         <div class="row">
-            <div class="col-lg-2">
-                <h1>{% trans %}Persons{% endtrans %}</h1>
+
+         <div class="row page-top-header ">
+            <div class="page-title col-xs-2  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <span>List</span>
             </div>
-            <div class="col-lg-4">
-                <a class="btn btn-info btn-create create" href="{{ path('schedule_person_new') }}">
+
+            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+            </div>
+            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <a class="btn btn-info btn-create create" href="{{ path('schedule_person_new') }}" title="Add a person">
                      <i class="fa fa-plus"></i>
                 </a>
             </div>
         </div>
-    </div>
+        <div class="row page-content">
+            <table class="table table-hover records_list">
+                <thead>
+                    <tr>
+
         
         <table class="table table-hover records_list">
             <thead>
@@ -24,10 +31,6 @@
                     <th>Id</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Schedule Acces</th>
-                    <th>Schedule Admin</th>
-                    <th>Acces Data Paper</th>
-                    <th>Data Paper Admin</th>
                     <th>Organizations</th>
                     <th>Actions</th>
                 </tr>
@@ -38,15 +41,16 @@
                     <td><a href="{{ path('schedule_person_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                     <td>{{ entity.name }}</td>
                     <td>{{ entity.email }}</td>
-                    <td>{{ entity.flagschedule }}</td>
-                    <td>{% if entity.flagscheduleadmin %}<i class="icon-user"></i>{% endif %}</td>
-                    <td>{{ entity.flagdata }}</td>
-                    <td>{% if entity.flagdataadmin %}<i class="icon-user"></i>{% endif %}</td>
                     <td> {% for organization in entity.organizations  %}
                             <li>
-                           <a href="{{ path('schedule_organization_show', { 'id': organization.id }) }}">
-                             {{ organization|e }}
-                            </a></li>
+                           {% if app.user.getCurrentConf().getModule().getOrganizationModule() == 1 %}
+                                  <a href="{{ path('schedule_organization_show', { 'id': organization.id }) }}">
+                                     {{ organization.name|e }}
+                                  </a>
+                                {% else %}
+                                     {{ organization.name|e }}
+                                {% endif %}
+                            </li>
                          {% endfor %}
                     </td>
                     <td>
@@ -65,5 +69,6 @@
         <p>
             {{ pagerfanta(pager, 'twitter_bootstrap') }}
         </p>
+
 {% endblock %}
 

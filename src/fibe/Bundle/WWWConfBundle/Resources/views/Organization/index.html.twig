@@ -4,50 +4,52 @@
 
 {% block centerPanel %}
     {{ parent() }}
-        <div class="page-header">
-            <div class="row">
+        <div class="row page-top-header ">
+            <div class="page-title col-xs-2  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <span>List</span>
+            </div>
 
-                <div class="col-lg-3">
-                    <h1>{% trans %}Organization{% endtrans %}</h1>
-                </div>
-                <div class="col-lg-4">
-                    <a class="btn btn-info btn-create create"  href="{{ path('schedule_organization_new') }}">
-                         <i class="fa fa-plus"></i>
-                    </a>
-                </div>
+            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+            </div>
+            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <a class="btn btn-info btn-create create" href="{{ path('schedule_organization_new') }}" title="Add an organization">
+                     <i class="fa fa-plus"></i>
+                </a>
             </div>
         </div>
+        <div class="row page-content">
 
-   <a type="button" title="documentationTest" href="{{ path('documentation', { 'anchor': 'second' }) }}" class="btn btn-warning">
+             <!--    <a type="button" title="documentationTest" href="{{ path('documentation', { 'anchor': 'second' }) }}" class="btn btn-warning">
                     <i class="icon-question"></i>
-              </a>
+              </a> -->
 
-    <table class=" table table-hover">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Page</th>
-                <th>Country</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-         {% for entity in pager.currentPageResults %}
-            <tr>
-                <td><a href="{{ path('schedule_organization_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.name }}</td>
-                <td>{{ entity.page }}</td>
-                <td>{{ entity.country }}</td>
-                <td>
-                    <a class="btn btn-large btn-default" href="{{ path('schedule_organization_show', { 'id': entity.id }) }}"><i class="fa fa-eye"></i></a> 
-                    <a class="btn btn-large btn-warning edit" href="{{ path('schedule_organization_edit', { 'id': entity.id }) }}"><i class="fa fa-pencil"></i></a>
-                </td> 
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-     <p>
-        {{ pagerfanta(pager, 'twitter_bootstrap') }}
-    </p>
+            <table class=" table table-hover">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Page</th>
+                        <th>Country</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                 {% for entity in pager.currentPageResults %}
+                    <tr>
+                        <td><a href="{{ path('schedule_organization_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                        <td>{{ entity.name }}</td>
+                        <td>{{ entity.page }}</td>
+                        <td>{{ entity.country }}</td>
+                        <td>
+                            <a class="btn btn-large btn-default" href="{{ path('schedule_organization_show', { 'id': entity.id }) }}"><i class="fa fa-eye"></i></a> 
+                            <a class="btn btn-large btn-warning edit" href="{{ path('schedule_organization_edit', { 'id': entity.id }) }}"><i class="fa fa-pencil"></i></a>
+                        </td> 
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+             <p>
+                {{ pagerfanta(pager, 'twitter_bootstrap') }}
+            </p>
+        </div>
 {% endblock %}

@@ -4,30 +4,35 @@
 
 {% block centerPanel %}
     {{ parent() }}
-    <h1>Paper creation</h1>
+   <div class="row page-top-header ">
+            <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <span>New person</span>
+            </div>
 
-    <div class="row">
-     <div class="col-lg-5"></div>
-          <div class="col-lg-2 btn-group">
-              <a type="button" href="{{ path('schedule_paper') }}" class="btn btn-warning">
-                    <i class="fa fa-list"></i>
-              </a>
-          </div>    
-     </div> 
+            <div class="col-xs-2 col-sm-4 col-md-6 col-lg-8">
+            </div>
+            <div class="page-btn-list col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                 <a type="button" href="{{ path('schedule_paper') }}" class="btn btn-warning" title="Go back to the list">
+                  <i class="fa fa-list"></i>
+                 </a>
+            </div>
+      </div>
+      <div class="row page-content">
 
 
-    <form action="{{ path('schedule_paper_create') }}" method="post" {{ form_enctype(form) }}>
-      <div class="row">
-           <div class="col-lg-2"></div>
-           <div class="col-lg-4">
-             {{ form_widget(form) }}
-             {{ form_errors(form) }}
-             </br>
-       <button type="submit" class="btn btn-block btn-success">
-                        <i class="fa fa-check"></i>
-              </button>
-        </div>
-    </form>
+        <form action="{{ path('schedule_paper_create') }}" method="post" {{ form_enctype(form) }}>
+          <div class="row">
+               <div class="col-lg-2"></div>
+               <div class="col-lg-4">
+                 {{ form_widget(form) }}
+                 {{ form_errors(form) }}
+                 </br>
+           <button type="submit" class="btn btn-block btn-success">
+                            <i class="fa fa-check"></i>
+                  </button>
+            </div>
+        </form>
+      </div>
 
 {% endblock %}
  

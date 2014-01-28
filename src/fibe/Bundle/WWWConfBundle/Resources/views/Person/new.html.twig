@@ -5,48 +5,58 @@
 
 {% block centerPanel %}
     {{ parent() }}
-    <h1>Person Creation</h1>
-
-    <div class="row">
-     <div class="col-lg-9"></div>
-          <div class="col-lg-2 btn-group">
-              <a type="button" href="{{ path('schedule_person_index') }}" class="btn btn-warning">
-                    <i class="fa fa-list"></i>
-              </a>
-          </div>    
-    </div>     
-
-    <form action="{{ path('schedule_person_create') }}" method="post" {{ form_enctype(form) }}>
-         <div class="row">
-               <div class="col-lg-2"></div>
-               <div class="col-lg-4">
-                     {{ form_row(form.firstName) }}
-                     {{ form_row(form.familyName) }}
-                     {{ form_row(form.email) }}
-                     {{ form_row(form.age) }}
-                     {{ form_row(form.img) }}
-              </div>
-              <div class="col-lg-4">
-                     {{ form_row(form.page) }}
-                     {{ form_row(form.openId) }}
-                     {# {{ form_row(form.nick) }} #}
-                     {{ form_row(form.organizations) }}
-                     {{ form_row(form.papers) }}
-              </div>
-              <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
-                    {{ form_rest(form)}}
-             </div>  
-        </div> 
-        </br>
-         <div class="row"> 
-            <div class="col-lg-4"></div>
-            <div class="col-lg-4">  
-                 <button type="submit" class="btn btn-block btn-success">
-                          <i class="fa fa-check"></i>
-                </button>
+   
+    <div class="row page-top-header ">
+            <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <span>New person</span>
             </div>
-        </div>
-    </form>
-  </div>
-</div>
+
+            <div class="col-xs-2 col-sm-4 col-md-6 col-lg-8">
+            </div>
+            <div class="page-btn-list col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                 <a type="button" href="{{ path('schedule_person_index') }}" class="btn btn-warning" title="Go back to the list">
+                  <i class="fa fa-list"></i>
+                 </a>
+            </div>
+      </div>
+      <div class="row page-content">
+
+      <form action="{{ path('schedule_person_create') }}" method="post" {{ form_enctype(form) }}>
+           <div class="row">
+                 <div class="col-lg-2"></div>
+                 <div class="col-lg-4">
+                       {{ form_row(form.firstName) }}
+                       {{ form_row(form.familyName) }}
+                       {{ form_row(form.email) }}
+                       {{ form_row(form.age) }}
+                       {{ form_row(form.img) }}
+                </div>
+                <div class="col-lg-4">
+                       {{ form_row(form.page) }}
+                       {{ form_row(form.openId) }}
+                       {# {{ form_row(form.nick) }} #}
+                        {% if app.user.getCurrentConf().getModule().getOrganizationModule() == 1 %}
+                       {{ form_row(form.organizations) }}
+                       {% endif %}
+
+                       {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
+                          {{ form_row(form.papers) }}
+                       {% endif %}
+                </div>
+                <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
+                      {{ form_rest(form)}}
+               </div>  
+          </div> 
+          </br>
+           <div class="row"> 
+              <div class="col-lg-4"></div>
+              <div class="col-lg-4">  
+                   <button type="submit" class="btn btn-block btn-success">
+                            <i class="fa fa-check"></i>
+                  </button>
+              </div>
+          </div>
+      </form>
+    </div>
+
 {% endblock %}

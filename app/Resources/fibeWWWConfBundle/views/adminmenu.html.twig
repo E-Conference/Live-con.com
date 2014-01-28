@@ -22,7 +22,7 @@
           </a>
           <ul class="dropdown-menu">
             <li>   
-                <a href="{{ path('dashboard_choose_conference') }}"><i class="fa fa-list"></i> Conferences Homepage </a>
+                <a href="{{ path('dashboard_index') }}"><i class="fa fa-list"></i> Conferences Homepage </a>
             </li>
             <li class="divider"></li>
           {% for conference in app.user.getConferences() %}
@@ -115,6 +115,7 @@
         </li>
 
          <!-- Organizations dropdown -->
+        {% if app.user.getCurrentConf().getModule().getOrganizationModule() == 1 %}
         <li class="dropdown">
           <a style="padding-left:5px;" href="#" class="dropdown-toggle" data-toggle="dropdown">
             Organizations
@@ -128,6 +129,7 @@
             </li>
           </ul>
         </li> 
+        {% endif %}
 
 
         <!-- <li><a href ="{{ path('schedule_status') }}" title="Status">Status</a></li> -->

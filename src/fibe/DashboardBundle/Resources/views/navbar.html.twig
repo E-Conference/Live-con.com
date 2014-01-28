@@ -21,8 +21,11 @@
           </a>
             <ul class="dropdown-menu">
              {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
+               <li>   
+                <a href="{{ path('schedule_conference_edit') }}"><i class="fa fa-eye"></i> Conference overview </a>
+              </li>
               <li>   
-                <a href="{{ path('schedule_conference_edit') }}"><i class="icon-cog"></i> Conference settings </a>
+                <a href="{{ path('schedule_conference_settings') }}"><i class="fa fa-wrench"></i> Conference settings </a>
               </li>
              {% endif %}
             </ul>

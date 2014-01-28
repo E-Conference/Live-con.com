@@ -1,0 +1,133 @@
+{% extends "::base.html.twig" %}    
+
+{% set currentPath = app.request.attributes.get('_route') %}
+
+{% block meta %}{% endblock %}
+{% block title %}{% endblock %}
+
+     
+{% block stylesheets %}
+    {{ parent() }}
+    {% block stylesheets_page %}
+    {% endblock %}
+{% endblock %}
+      
+{% block javascripts %}
+        {{ parent() }}
+
+        <script type="text/javascript">
+         $(document).ready(function() {
+               
+                $(".{{currentPath}}").addClass("active");
+
+                $('label[class="required"]').append("<i style='color:#C00000  '>*</i>");
+
+                deployed = false;
+                $("#sideBarBtn").click(function(){
+                    deployResultBox();
+                }); 
+                $("select").select2(); 
+                //  $('.datetimepicker')
+                // .wrap('<div class="input-group">') 
+                // .after('<span class="input-group-addon"><span class="icon-calendar"></span></span>')
+                // .datetimepicker({
+                //     format: 'dd/mm/yyyy hh:ii',
+                //     autoclose: true,
+                // });
+
+
+            });
+            function deployResultBox(){
+                    if(!deployed){
+                        $('#sideBar').animate({left:'0px'});
+                        deployed = true;
+                    }else{
+                        $('#sideBar').animate({left:'-180px'});
+                        deployed = false;
+                    }
+            }
+        </script> 
+
+    
+
+        {% for flashMessage in app.session.flashbag.get('info') %}
+            <script type="text/javascript" >
+                bootstrapAlert("info","{{ flashMessage }}","Info : ",'<i class="icon-info"></i> ');
+            </script> 
+        {% endfor %}
+
+        {% for flashMessage in app.session.flashbag.get('success') %} 
+            <script type="text/javascript" >
+            bootstrapAlert("success","{{ flashMessage }}","Success : ",'<i class="icon-ok-sign"></i> '); 
+            </script>  
+        {% endfor %}
+
+        {% for flashMessage in app.session.flashbag.get('error') %}
+            <script type="text/javascript" >
+            bootstrapAlert("warning","{{ flashMessage }}","Error : ",'<i class="icon-meh"></i> '); 
+            </script> 
+        {% endfor %}
+
+        <!-- Authorization -->
+        {% if authorized == 0 %}
+            <script type="text/javascript" >
+             $(document).ready(function(){
+                 $(".edit").hide();
+                 $(".create").hide();
+                 $(".delete").hide();
+                 $(".edit-event").hide();
+                 $(".create-event").hide();
+                 $(".delete-event").hide(); 
+             });
+            </script> 
+        {% endif %}
+
+        <!-- Hide module not used in the conference -->
+         {% if app.user.getCurrentConf().getModule().getPaperModule() == 0 %}
+            <script type="text/javascript" >
+             $(document).ready(function(){
+                 $(".module_paper").hide();
+             });
+            </script> 
+        {% endif %}
+
+        {%  block javascripts_page %}
+        {% endblock%}
+{% endblock%}
+
+{% block body %} 
+    {{ parent() }}
+    {% block navBar %} 
+        {% include "fibeWWWConfBundle::mainNavBar.html.twig" %}
+    {% endblock navBar%}
+
+    {% block content %} 
+    <div class="content">
+
+        <div class="row">
+            <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div> 
+
+            <div class="col-xs-10 col-sm-10  col-md-10 col-lg-10 ">
+                 <div class="row ">
+                   <ul class="nav breadcrum nav-tabs">
+                          
+                          <li class="active"><a href="#">My profil</a></li>
+                           {% block menu_page%} 
+                           {% endblock menu_page %}
+                      
+                    </ul>
+                 </div>
+                 <div class="row center">
+                {% block centerPanel %} 
+                {% endblock centerPanel %}
+                </div>
+            </div>
+           <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div>
+        </div>
+
+    </div>
+    {% endblock content%}
+{% endblock body%}
+
+
+ 

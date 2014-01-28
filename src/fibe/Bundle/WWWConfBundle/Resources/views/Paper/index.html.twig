@@ -4,66 +4,67 @@
 
 {% block centerPanel %}
     {{ parent() }}
-        <div class="page-header">
-            <div class="row">
-                <div class="col-lg-2">
-                    <h1>{% trans %}Papers{% endtrans %}</h1>
-                </div>
-                <div class="col-lg-4">
-                    <a class="btn btn-info btn-create create" href="{{ path('schedule_paper_new') }}">
-                         <i class="fa fa-plus"></i>
-                    </a>
-                </div>
+      <div class="row page-top-header ">
+            <div class="page-title col-xs-2  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <span>List</span>
+            </div>
+
+            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+            </div>
+            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <a class="btn btn-info btn-create create" href="{{ path('schedule_paper_new') }}" title="Add a publication">
+                     <i class="fa fa-plus"></i>
+                </a>
             </div>
         </div>
+        <div class="row page-content">
 
-   
-
-    <table class="records_listb table table-hover">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Abstract</th>
-                {# <th>Date</th>
-                <th>Url</th> #}
-                <th>Authors</th>
-                <th>Subjects</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in pager.currentPageResults %}
-            <tr>
-                <td><a href="{{ path('schedule_paper_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.title }}</td>
-                <td>{{ entity.abstract }}</td>
-                {# <td>{{ entity.publishDate }}</td>
-                <td>{{ entity.url }}</td> #}
-                <td>
-                     {% for author in entity.authors %}
-                        <li>
-                           <a href="{{ path('schedule_person_show', { 'id': author.id }) }}">
-                             {{ author|e }}
-                            </a>
-                        </li>
-                     {% endfor %}
-                </td>
-                <td><ul> {% for topic in entity.topics  %}
-                          <li><a href="{{ path('schedule_topic_show', { 'id': topic.id }) }}">
-                             {{ topic.name|e }}
-                          </a> </li>
-                         {% endfor %}
-                </ul></td>
-                <td>
-                    <a class="btn btn-large btn-default" href="{{ path('schedule_paper_show', { 'id': entity.id }) }}"><i class="fa fa-eye"></i></a> 
-                    <a class="btn btn-large btn-warning edit" href="{{ path('schedule_paper_edit', { 'id': entity.id }) }}"><i class="fa fa-pencil"></i></a>
-                </td> 
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <p>
-        {{ pagerfanta(pager, 'twitter_bootstrap') }}
-    </p>
+            <table class="records_listb table table-hover">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Title</th>
+                        <th>Abstract</th>
+                        {# <th>Date</th>
+                        <th>Url</th> #}
+                        <th>Authors</th>
+                        <th>Subjects</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for entity in pager.currentPageResults %}
+                    <tr>
+                        <td><a href="{{ path('schedule_paper_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                        <td>{{ entity.title }}</td>
+                        <td>{{ entity.abstract }}</td>
+                        {# <td>{{ entity.publishDate }}</td>
+                        <td>{{ entity.url }}</td> #}
+                        <td>
+                             {% for author in entity.authors %}
+                                <li>
+                                   <a href="{{ path('schedule_person_show', { 'id': author.id }) }}">
+                                     {{ author|e }}
+                                    </a>
+                                </li>
+                             {% endfor %}
+                        </td>
+                        <td><ul> {% for topic in entity.topics  %}
+                                  <li><a href="{{ path('schedule_topic_show', { 'id': topic.id }) }}">
+                                     {{ topic.name|e }}
+                                  </a> </li>
+                                 {% endfor %}
+                        </ul></td>
+                        <td>
+                            <a class="btn btn-large btn-default" href="{{ path('schedule_paper_show', { 'id': entity.id }) }}"><i class="fa fa-eye"></i></a> 
+                            <a class="btn btn-large btn-warning edit" href="{{ path('schedule_paper_edit', { 'id': entity.id }) }}"><i class="fa fa-pencil"></i></a>
+                        </td> 
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <p>
+                {{ pagerfanta(pager, 'twitter_bootstrap') }}
+            </p>
+    </div>
 {% endblock %}

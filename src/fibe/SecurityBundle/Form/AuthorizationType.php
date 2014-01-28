@@ -8,33 +8,76 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class AuthorizationType extends AbstractType
 {
+    
+    private $user;
+
+    public function __construct($user)
+    {
+        $this->user = $user;
+    }
+
+
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
+
+           $builder
             ->add('user')
-            ->add('flagApp','choice', array(
-                              'choices' => array(false => 'No', true => 'Yes'),
-                              'label' => 'Mobile Application Manager'
-                               )
+            ->add('flagApp','checkbox', array(
+                              'required' => false,
+                              'label' => 'Mobile Application Manager',
+                              'attr'  => array('class' => 'switch switch-small',
+                                          'data-on-label' => "<i class='fa fa-check fa-white'>",
+                                          'data-off-label' => "<i class='fa fa-ban'>",
+                               ))
             )
-            ->add('flagSched','choice', array(
-                              'choices' => array(false => 'No', true => 'Yes'),
-                               'label' => 'Schedule Manager'
-                               )
+            ->add('flagSched','checkbox', array(
+                               'required' => false,
+                               'label' => 'Schedule Manager',
+                               'attr'  => array('class' => 'switch switch-small',
+                                          'data-on-label' => "<i class='fa fa-check fa-white'>",
+                                          'data-off-label' => "<i class='fa fa-ban'>",
+                               ))
+                          
             )
-            ->add('flagconfDatas','choice', array(
-                              'choices' => array(false => 'No', true => 'Yes'),
-                              'label' => 'Datas Conference Manager'
-                               )
-            )
-            ->add('flagTeam','choice', array(
-                              'choices' => array(false => 'No', true => 'Yes'),
-                              'label' => 'Team Manager'
-                               )
-            )
-           
-        ;
+            ->add('flagconfDatas','checkbox', array(
+                              'required' => false,
+                              'label' => 'Datas Conference Manager',
+                               'attr' => array('class' => 'switch switch-small',
+                                          'data-on-label' => "<i class='fa fa-check fa-white'>",
+                                          'data-off-label' => "<i class='fa fa-ban'>",
+                               ))
+                               
+            );
+
+            if(count($this->user->getCurrentConf()->getConfManagers()) <= 1){
+                $builder
+                  ->add('flagTeam','checkbox', array(
+                                  'required' => false,
+                                  'label' => 'Team Manager',
+                                  'disabled' => true,
+                                  'attr'  => array('class' => 'switch switch-small',
+                                              'data-on-label' => "<i class='fa fa-check fa-white'>",
+                                              'data-off-label' => "<i class='fa fa-ban'>",
+                                   ))
+                );
+
+            }else{
+
+                $builder
+                  ->add('flagTeam','checkbox', array(
+                                  'required' => false,
+                                  'label' => 'Team Manager',
+                                  'attr'  => array('class' => 'switch switch-small',
+                                              'data-on-label' => "<i class='fa fa-check fa-white'>",
+                                              'data-off-label' => "<i class='fa fa-ban'>",
+                                   ))
+                );
+            }
+               
+            
     }
+
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
