@@ -92,7 +92,7 @@ CalEvent.prototype.computeCountRange = function(opt){
         if(this.is_mainconfevent)return;
         if(!opt)opt={}
         if(opt.allEventsInDay || opt.allBrosInDay){
-          console.log("#ComputeCountRange all day "+event.id);
+          console.log("#ComputeCountRange all day "+this.id);
           var bros = calendar_events;
           // var bros = event.getBros();
           var dayToRender = {
