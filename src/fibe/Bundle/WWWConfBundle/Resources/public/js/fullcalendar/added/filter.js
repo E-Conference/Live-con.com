@@ -24,7 +24,7 @@
                           endPointUrl,
                           op.data,
                           function(events) {    
-                            $(self).trigger("changed",[$(events).map(function(key,val){ return val.id;})]); 
+                            $(self).trigger("changed",[EventCollection.getIds(events)]); 
                           },
                           'json'
                         ).error(function(jqXHR, textStatus, errorThrown) {

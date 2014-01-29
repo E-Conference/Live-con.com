@@ -28,15 +28,15 @@
           <button id="backwardBtn" class="btn btn-default" disabled="disabled" ><i class="icon-undo"></i></button>
           <button id="forewardBtn" class="btn btn-default" disabled="disabled" ><i class="icon-repeat"></i></button>
         </div> #}
-        <div id="resourceView">
+        {# <div id="resourceView">
             <select class="form-control"> 
                 <option value="classic">Calendar</option> 
                 <optgroup label="Ressources views">
                   <option value="location" >Location</option> 
-                  {# <option value="category" >Category</option>  #}
+                  <option value="category" >Category</option>
                 </optgroup>
             </select>
-        </div>
+        </div> #}
         <div id="filters">  
 
           <h4>Filter by categories</h4>
@@ -284,9 +284,8 @@
           month: firstDay.month(),
           date: firstDay.date(), 
           resources : resConfig[currentRes].url,
-          windowResize: function(view) {
-              EventCollection.addEventToComputeCountRange(mainConfEvent) 
-          }, 
+          // windowResize: function(view) { 
+          // }, 
           //get events
           events : function(start, end, callback) { 
               //events have already been fetched
@@ -332,38 +331,28 @@
                     calendar_events   = []; 
                     calendar_events_indexes   = {};  
 
-                    var i = 0;
                     // var orphanChildren= [];
-                    //non-blocking loop
+                    //non-blocking loop over events[i]
+                    setTimeout(doWork, 1);
+                    var i = 0;
                     function doWork() {
                       
                       var known = !!Events[events[i].id];
                       var event = new CalEvent(events[i]);
-                      if(!known)EventCollection.addEventToComputeCountRange(event);
+                      if(!known)event.computeCountRange();
 
                       if(event.mainconfevent){
                         mainConfEvent = event;
                         if(mainConfEvent.parent.id != ""){
                           mainConfEvent.persist();
                         } 
-                      }  
-                      // if(event.parent.id == ""){
-                      //   orphanChildren.push(event);
-                      // }
-                     
+                      }   
 
                       i++; 
 
                       //last iteration  
                       if (!events[i]) { 
-                        fetched = true; 
-                        // $calendar.fullCalendar( 'removeEvents');
-                        // for(var j=0;j<orphanChildren.length;j++){
-                        //   if(orphanChildren[j] == mainConfEvent)continue;
-                        //   orphanChildren[j].parent.id = mainConfEvent.id;
-                        //   orphanChildren[j].persist();
-                        //   bootstrapAlert("info","event "+orphanChildren[j].title+" was an orphan, so it's now the child of "+mainConfEvent.title)
-                        // }
+                        fetched = true;  
                         console.debug(moment().diff(logtime)+" to init"); 
                         EventCollection.refetchEvents(false,true);
                       }else if (stopRender!==true){ 
@@ -371,7 +360,6 @@
                         setTimeout(doWork, 1);
                       }
                     }; 
-                    if(events[i])setTimeout(doWork, 1);
                     //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
                 },
                 'json'
@@ -431,7 +419,7 @@
                             var ev = new CalEvent(tmp);   
                             ev.setParent(mainConfEvent)  
                             ev.renderForRefetch(); 
-                            EventCollection.addEventToComputeCountRange(ev,{allBrosInDay:true});  
+                            ev.computeCountRange({allBrosInDay:true});  
                             if(response.mainConfEvent){
                               EventCollection.updateMainConfEvent(response.mainConfEvent.start,response.mainConfEvent.end); 
                             }  
@@ -465,8 +453,7 @@
                   event.updateParentDate();
                   event.updateChildrenDate(); 
      
-                  EventCollection.addEventToComputeCountRange(event,{allBrosInDay:true}); 
-
+                  event.computeCountRange({allBrosInDay:true}); 
                   event.renderForRefetch();
 
                   EventCollection.refetchEvents(false,true);
@@ -476,7 +463,7 @@
           // viewRender : function( view, element ){
           //   // fetched = false; 
           //   if(mainConfEvent)
-          //   EventCollection.addEventToComputeCountRange(mainConfEvent,{allEventsInDay:true});
+          //   mainConfEvent.computeCountRange({allEventsInDay:true});
           // },
           eventAfterAllRender: function( view ) { 
               //avoid repeating this function 10 times... 
@@ -501,7 +488,7 @@
               event.allDay = allDay;
               event['start'] = date;
 
-              EventCollection.addEventToComputeCountRange(event);
+              event.computeCountRange();
               event.renderForRefetch();
 
               // event = new CalEvent(event); 
@@ -588,7 +575,9 @@
               // if(isClassicView !== true ){
               //   console.log("ressources changed ! "+ event.resource)
               // }
-              EventCollection.addEventToComputeCountRange(event,{allBrosInDay:true}); 
+              
+              //compute old day too 
+              event.computeCountRange({allBrosInDay:true}); 
 
               //TODO : parent  has here a wrong start/end updated from somewhere
               //TODO : parent  has here a wrong start/end updated from somewhere
@@ -607,7 +596,7 @@
               //TODO : parent  has here a wrong start/end updated from somewhere
               //TODO : parent  has here a wrong start/end updated from somewhere 
               setTimeout(function(){  
-                  // EventCollection.addEventToComputeCountRange(event,{allEventsInDay:true}); 
+                  // event.computeCountRange({allEventsInDay:true}); 
                   var event = dragged[1] 
                   var parentDate = dragged[3];
                   var childrenDates = dragged[4]; 
@@ -626,7 +615,7 @@
                     child['start']  = moment(childrenDates[i]['start']).subtract(diff);
                     child['end']  = moment(childrenDates[i]['end']).subtract(diff);
            
-                    EventCollection.addEventToComputeCountRange(child);
+                    child.computeCountRange();
                     child.renderForRefetch();
                     child.formatDate() 
                     child.persist() 
@@ -647,7 +636,7 @@
  
 
      
-                  EventCollection.addEventToComputeCountRange(event,{allEventsInDay:true});
+                  event.computeCountRange({allEventsInDay:true});
                   // event.renderForRefetch();
  
                   EventCollection.refetchEvents(); 
@@ -727,6 +716,8 @@
           var currentDragOverEvent = null;
             // console.log("stylizeBlocks : ",events);
                 /*****************  styling (opacity, hover, drag, drop) ********************/
+
+            var calendarEventsIds = EventCollection.getIds($calendar.fullCalendar('clientEvents'));
             for (var i in Events){
                 var event = Events[i]; 
 
@@ -738,8 +729,8 @@
                        // .data("background-color",element.css("background-color"))
                        .data("prop",getProp(element)); 
 
-                  
-                if( calendarEvents = $calendar.fullCalendar('clientEvents',event.id)){
+                
+                if($.inArray(event.id, calendarEventsIds) !== -1 ){ //stylize only event in the calendar
                     element.droppable({ 
                         tolerance: "pointer" ,
                         over: function( ev, ui ) {
@@ -814,15 +805,15 @@
                                     //set event as parent of draggedEvent and children relation
                                     console.log(draggedEvent+" is now the child of "+event.id)
                                     
-                                    EventCollection.addEventToComputeCountRange(draggedEvent,{allBrosInDay:true});
+                                    draggedEvent.computeCountRange({allBrosInDay:true});
                                     draggedEvent.setParent(event);
                                     draggedEvent.updateParentDate(); 
                                     
                                     draggedEvent.renderForRefetch();
-                                    EventCollection.addEventToComputeCountRange(draggedEvent,{allBrosInDay:true});
+                                    draggedEvent.computeCountRange({allBrosInDay:true});
 
                                     event.renderForRefetch();
-                                    EventCollection.addEventToComputeCountRange(event,{allBrosInDay:true});
+                                    event.computeCountRange({allBrosInDay:true});
                                     
                                     EventCollection.refetchEvents();
                                     draggedEvent.persist(); 
@@ -833,7 +824,7 @@
                         }
                     }); 
 
-                            /*************** popover *****************/
+                    /*************** popover *****************/
                     element.popover({
                         trigger : 'hover',
                         html : true,
@@ -851,8 +842,9 @@
                         title : ' <b><span class="muted">#'+event.id+'</span> '+event.title+'</b>',
                         content : event.getPopoverContent(),
                     });
-              }
-                    /*************** hover : change border color  *****************/
+              }//end stylize only event in the calendar
+
+              /*************** hover : change border color  *****************/
               element.hover(function(){
                     //enter
                     $(this).animate({"border-color":"#3F3F3F"},{queue:false});
@@ -939,8 +931,7 @@
       //dropped from calendar to sidebar;
       $(sidebar).on("dropped",function(ev,calEvent){  
           console.log("dropped",calEvent)
-          var event = Events[calEvent.id];
-          EventCollection.fitMainConfEvent();
+          var event = Events[calEvent.id]; 
           
 
           //set as instant event 

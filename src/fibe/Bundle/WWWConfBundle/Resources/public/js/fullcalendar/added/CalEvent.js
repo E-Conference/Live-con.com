@@ -50,54 +50,7 @@ var CalEvent = function(event){
 
     Events[this["id"]] = this; 
  
-};
-
-// CalEvent.prototype.render = function (){ 
-
-//     renderedEvent = this;
-//     renderedEvent.formatDate(); 
-  
-
-//     // render the event on the calendar
-//     if($calendar.fullCalendar('clientEvents',this.id).length <1){
-//       console.debug(" new cal event for : "+this.id); 
-//       renderedEvent = new CalEvent(this); 
-
-//       $calendar.fullCalendar('renderEvent', renderedEvent);
-//     }else{
-//       $calendar.fullCalendar('removeEvents', renderedEvent.id);
-//       // EventCollection.eventToRender.push(this["id"]);
-//       $calendar.fullCalendar('renderEvent', Events[renderedEvent.id]);
-//     }
-
-//     //sometimes, event is still not rendered .... so we create a new CalEvent
-//     if($calendar.fullCalendar('clientEvents',this.id).length <1){
-//       console.debug("another calEvent for "+ this.id)
-//       renderedEvent = new CalEvent(this);
-//       $calendar.fullCalendar('renderEvent',renderedEvent);
-//     }
-
-
-
-
-//     // var e = this;
-//     //       function doWork() { 
-//     //         console.log(e); 
-//     //           renderedEvent = new CalEvent(e);
-//     //           $calendar.fullCalendar('renderEvent', renderedEvent ); 
-//     //       };
-//     //       setTimeout(doWork, 50);
- 
-//     // console.log("client events :",$calendar.fullCalendar('clientEvents'));
-//     // console.log("Events :",Events);
-
-//     // console.log("event.render("+renderedEvent.id+")");
-//     // console.log("client event :",$calendar.fullCalendar('clientEvents',renderedEvent.id));
-
-
-//     Events[renderedEvent.id] = renderedEvent;
-//     // return renderedEvent;
-// };
+}; 
 
 CalEvent.prototype.renderForRefetch = function(){   
     // console.log("##renderForRefetch",this);
@@ -126,7 +79,50 @@ CalEvent.prototype.removeForRefetch = function(){
     }
     // console.log(calendar_events);
     // console.log(calendar_events_indexes); 
-}; 
+};
+
+
+/**
+ * add events to EventCollection.eventsToComputeBroCountRange
+ * @param CalEvent event to add
+ * @param Object   opt   :
+ *                  allEventsInDay: add all brothers too 
+ */
+CalEvent.prototype.computeCountRange = function(opt){
+        if(this.is_mainconfevent)return;
+        if(!opt)opt={}
+        if(opt.allEventsInDay || opt.allBrosInDay){
+          console.log("#ComputeCountRange all day "+event.id);
+          var bros = calendar_events;
+          // var bros = event.getBros();
+          var dayToRender = {
+            start:moment(this.start).startOf('day')
+            ,end:moment(this.end).endOf('day')
+          };
+          for(var i in bros){
+            var bro = bros[i]; 
+            if(!bro.isOutOf(dayToRender) || !bro.isOutOf(dayToRender) ){
+              if(opt.allBrosInDay !== true || this.isBroOf(bro) ){
+                addEvent(bro);
+              }
+            }
+          }
+        }
+        addEvent(this);
+
+        function addEvent(e){
+
+          if(e.id && $.inArray(e.id, EventCollection.eventsToComputeBroCountRangeIndexes) === -1 && !e.allDay) { 
+            EventCollection.eventsToComputeBroCountRangeIndexes.push(e.id);
+            EventCollection.eventsToComputeBroCountRange.push(e);
+            EventCollection.broCountRange[e.id] = {count:1,range:0};
+            console.debug("#ComputeCountRange "+e.id);
+          }
+          else{ 
+            console.debug("#ComputeCountRange didn't add event "+e.id);
+          }
+        }
+    },
 
 CalEvent.prototype.persist = function(add){ 
   if(this.is_mainconfevent)return;
@@ -177,8 +173,7 @@ CalEvent.prototype.updateParentDate = function(){
 
         // //make main conf get a special treatment
         // //to make it fit to its children date
-        if(parent.is_mainconfevent){
-          // EventCollection.fitMainConfEvent();
+        if(parent.is_mainconfevent){ 
           return;
         }
         if(event.isInsideOf(parent))return;  
@@ -215,7 +210,7 @@ CalEvent.prototype.updateParentDate = function(){
           // EventCollection.eventToRender = {id:parent["id"],oldStart:oldStart,oldEnd:oldEnd}; 
           updateParentDate(parent); 
 
-          EventCollection.addEventToComputeCountRange(parent,{allBrosInDay:true});   
+          parent.computeCountRange({allBrosInDay:true});   
           parent.renderForRefetch();
           parent.persist(); 
         }
