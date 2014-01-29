@@ -154,7 +154,7 @@ CalEvent.prototype.persist = function(add){
       },
       'json'
     );
-    bootstrapAlert("info","update request sent ","Info : ","<i class='icon-spinner icon-spin'></i>");
+    bootstrapAlert("info","update request sent ","Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
 };
 
 
@@ -266,7 +266,7 @@ CalEvent.prototype.updateChildrenDate = function(){
             if(changed){ 
               child['start'] = childStart;
               child['end'] = childEnd;
-              updateChildrenDate(child);
+              updateChildrenDate(child,{allBrosInDay:true});
               child.renderForRefetch();
               child.persist(); 
             }

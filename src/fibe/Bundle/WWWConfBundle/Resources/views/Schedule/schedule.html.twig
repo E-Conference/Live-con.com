@@ -116,11 +116,11 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h3 class="modal-title"> 
-            <span class="icon-stack">
-              <i class="icon-sign-blank icon-stack-base"></i>
-              <i class="icon-sitemap icon-light"></i>
-            </span>  
+          <h3 class="modal-title">  
+            <span class="fa-stack fa-lg">
+              <i class="fa fa-square-o fa-stack-2x"></i>
+              <i class="fa fa-sitemap fa-stack-1x"></i>
+            </span>
             Affect parent
           </h3>
         </div>
@@ -133,8 +133,8 @@
         </div> 
         
         <div class="modal-footer row-fluid">
-          <div class="col-lg-6"><button class="col-md-6 btn btn-default btn-block no" data-dismiss="modal"><i class='icon-remove'></i> no</button></div>
-          <div class="col-lg-6"><button class="col-md-6 btn btn-success btn-block yes" data-dismiss="modal"><i class='icon-ok'></i> ok</button></div>
+          <div class="col-xs-6"><button class="col-md-6 btn btn-default btn-block no" data-dismiss="modal"><i class='fa-remove'></i> no</button></div>
+          <div class="col-xs-6"><button class="col-md-6 btn btn-success btn-block yes" data-dismiss="modal"><i class='fa-ok'></i> ok</button></div>
         </div>
 
       </div><!-- /.modal-content -->
@@ -378,7 +378,7 @@
               ).error(function(jqXHR, textStatus, errorThrown) {
                 bootstrapAlert("warning","there was an error during the fetch of events",""); 
               });
-              bootstrapAlert("info","event request sent","","<i class='icon-spinner icon-spin'></i>");
+              bootstrapAlert("info","event request sent","","<i class='fa-2x fa fa-spinner fa-spin'></i>");
           },
           eventClick: function(calEvent, jsEvent, view) {  
               $.ajax({
@@ -386,25 +386,27 @@
                   success: function(doc) {
                       $modal.modal("show");
                       $modalBody.html(doc);
-                      bootstrapAlert("stop");
+                      bootstrapAlert("success","Options for event : <b>"+calEvent['title']+"</b> has been well fetched"); 
 
+                      $modal.off('shown.bs.modal').on('shown.bs.modal', function () {
                           // rerender if changed
-                      $modalBody.find("#eventForm,#delete-event-form").submit(function(){
-                        $modal.off('hide.bs.modal').on('hide.bs.modal', function () {
-                          EventCollection.refetchEvents(true);
-                          // $calendar.fullCalendar( 'refetchEvents' );
-                        })
+                        $modalBody.find("#eventForm,#delete-event-form").submit(function(){
+                          $modal.off('hide.bs.modal').on('hide.bs.modal', function () {
+                            EventCollection.refetchEvents(true);
+                            // $calendar.fullCalendar( 'refetchEvents' );
+                          })
+                        }) 
                       }) 
                   }
               }); 
-              bootstrapAlert("info","edit <b>"+(calEvent['title'] || calEvent['name'])+"</b> request sent","Info : ","<i class='icon-spinner icon-spin'></i>");  
+              bootstrapAlert("info","edit <b>"+(calEvent['title'] || calEvent['name'])+"</b> request sent","Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");  
           },
           selectable: true,
           selectHelper: true,
           select: function(start, end, allDay) { //new event
               $modalNewEvent.modal("show")
                             .on('shown.bs.modal', function() {
-                                $(this).find("#name").focus();
+                                $(this).find("#name").val("").focus();
                             });
 
               $modalNewEvent.find("form").off("submit").submit(function(e){
@@ -437,7 +439,7 @@
                         },
                         'json'
                     );
-                    bootstrapAlert("info","add request sent","Info : ","<i class='icon-spinner icon-spin'></i>");
+                    bootstrapAlert("info","add request sent","Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
                     $modalNewEvent.modal("hide");
                 }else{
                     bootstrapAlert("info","You must give a name to the event");
@@ -545,8 +547,14 @@
 
                 left   += Wmargin;
                 // width  -= (2*Wmargin);
-                top     = top + Hmargin;
-                height -= (2*Hmargin);
+                if(moment(Events[parentId].start).isSame(moment(event.start))){
+                  top    += Hmargin/2;
+                  height -= Hmargin/2;
+                } 
+                if(moment(Events[parentId].end).isSame(moment(event.end))){ 
+                  height -= Hmargin;
+                }
+                // height -= (2*Hmargin);
 
                 zindex +=100
 
@@ -806,6 +814,7 @@
                                     //set event as parent of draggedEvent and children relation
                                     console.log(draggedEvent+" is now the child of "+event.id)
                                     
+                                    EventCollection.addEventToComputeCountRange(draggedEvent,{allBrosInDay:true});
                                     draggedEvent.setParent(event);
                                     draggedEvent.updateParentDate(); 
                                     
@@ -967,15 +976,23 @@
 
 
       //init filters
-      var filter = new initFilter();
-      $(filter).on("change", function(ev,key,val) {
+      var filter = new initFilter(op.getOrderedUrl);
+      $(filter).on("change", function(ev,key,val) { 
  
-          EventCollection.addEventToComputeCountRange(mainConfEvent);
-          console.log("filtering : ",val,key,op.data); 
-          op.data[key] = val;  
-          stopRender = true;
-          EventCollection.refetchEvents(true);
-          // $calendar.fullCalendar('refetchEvents');   
+          
+          bootstrapAlert("info","event request sent","","<i class='fa-2x fa fa-spinner fa-spin'></i>");
+      }).on("changed", function(ev,ids){
+        bootstrapAlert("success",ids.length+" events have been well fetched" );
+        ids.push(mainConfEvent.id)
+        var calendarEvents = $calendar.fullCalendar('clientEvents'); //loop only on calendar events
+        for(var i in calendarEvents){
+          if($.inArray(calendarEvents[i].id, ids) === -1 ){
+            Events[calendarEvents[i].id].elem.fadeOut('fast');
+          }else{
+            Events[calendarEvents[i].id].elem.fadeIn('fast');
+          }
+
+        }
       });
 
 

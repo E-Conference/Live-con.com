@@ -220,7 +220,7 @@
 
                 {% if not wwwConf.isEmpty() %} 
                     confirmEmpty(function(){
-                        bootstrapAlert("info",' emptying the conference...',"Info : ","<i class='icon-spinner icon-spin'></i>");
+                        bootstrapAlert("info",' emptying the conference...',"Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
                         $.ajax({ 
                                 type: "GET",
                                 cache: false,  
@@ -228,7 +228,7 @@
                                 success:function(a,b,c)
                                 {
                                     bootstrapAlert("success",'conference emptied');
-                                    bootstrapAlert("success",' now sending file...',"conference emptied,","<i class='icon-spinner icon-spin'></i>"); 
+                                    bootstrapAlert("success",' now sending file...',"conference emptied,","<i class='fa-2x fa fa-spinner fa-spin'></i>"); 
                                     sendSerializedConf(dataArray);
                                 },
                                 error:function(a,b,c)
@@ -241,7 +241,7 @@
                             });
                     }) 
                 {% else %} 
-                    bootstrapAlert("info",' sending file...',"Info : ","<i class='icon-spinner icon-spin'></i>");
+                    bootstrapAlert("info",' sending file...',"Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
                     sendSerializedConf(dataArray);
                 {% endif %}
                 return false;

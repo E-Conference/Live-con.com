@@ -21,7 +21,7 @@ var calendarOption =  function(){
                         }) 
                     }
                 }); 
-                bootstrapAlert("info","edit <b>"+(calEvent['title'] || calEvent['name'])+"</b> request sent","Info : ","<i class='icon-spinner icon-spin'></i>"); 
+                bootstrapAlert("info","edit <b>"+(calEvent['title'] || calEvent['name'])+"</b> request sent","Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>"); 
 
         },
 
@@ -51,7 +51,7 @@ var calendarOption =  function(){
                           },
                           'json'
                   );
-                  bootstrapAlert("info","add request sent","Info : ","<i class='icon-spinner icon-spin'></i>");
+                  bootstrapAlert("info","add request sent","Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
               }
               $modalNewEvent.modal("hide");
               return false;

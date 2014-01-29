@@ -1,8 +1,9 @@
  
 //filter must be a <select> inside a #filters
     
-    function initFilter(){
+    function initFilter(endPointUrl){
       var self = this;
+      var endPointUrl = endPointUrl;
       $('#filters').find("select").each(function(){ 
         $(this).select2("destroy").select2({
                     closeOnSelect : false,
@@ -16,7 +17,19 @@
                     //update fullcalendar getEvent 's url 
                     $(this).each(function(){ 
                       $(self).trigger("change", [$(this).data("filter"),$(this).val()]);
-                    }); 
+                      op.data[$(this).data("filter")] = $(this).val(); 
+                    });
+  
+                    $.get(
+                          endPointUrl,
+                          op.data,
+                          function(events) {    
+                            $(self).trigger("changed",[$(events).map(function(key,val){ return val.id;})]); 
+                          },
+                          'json'
+                        ).error(function(jqXHR, textStatus, errorThrown) {
+                          bootstrapAlert("warning","there was an error during the fetch of events",""); 
+                    });
                 });  
       }) 
     }
