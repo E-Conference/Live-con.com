@@ -524,7 +524,7 @@
 
             //go to the parent place
             var parentId = event.parent.id;
-            while(mainConfEvent.id !== parentId){ 
+            while(!Events[parentId].allDay){ 
                 var parentCount   = EventCollection.broCountRange[parentId].count,
                     parentRange   = EventCollection.broCountRange[parentId].range; 
 

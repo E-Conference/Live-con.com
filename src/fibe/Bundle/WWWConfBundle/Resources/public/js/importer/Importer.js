@@ -5,7 +5,10 @@ var notImportedLog,
     importedLog;
 
 var mappingConfig,
-    objectMap;
+    objectMap,
+    objectsIndexes,
+    fkMap,
+    fkMapIndexes;
 
 var defaultDate = 'now';
 
@@ -21,6 +24,7 @@ function run(file,callback,fallback){
 
 
             var confName ;
+            var objectMapIndex = 0;
 
             objects["events"]         = [],
             objects["locations"]      = [],
@@ -37,7 +41,10 @@ function run(file,callback,fallback){
 
             notImportedLog = {},
             importedLog    = {},
-            objectMap      = {}; 
+            objectMap      = {}, 
+            objectsIndexes = {}, 
+            fkMap          = [], 
+            fkMapIndexes   = []; 
 
             //add custom config here (default : rdf)
             var formatConfig = { 
@@ -93,17 +100,67 @@ function run(file,callback,fallback){
             ///////////////////////////  items Processing  ///////////////////////////
             //////////////////////////////////////////////////////////////////////////
  
-            for (var i in mappingConfig.parseItemOrder){ 
-                var itemMapping = mappingConfig[i];
-                var addArray = objects[mappingConfig.parseItemOrder[i]];
+            for (var i in mappingConfig.mappings){ 
+                var itemMapping = mappingConfig.mappings[i];  
                 rootNode.children().each(function(index,node){
                     // var n = NodeUtils[mappingConfig.getNodeName](node);  
                     var n = doFormat(node,mappingConfig.getNodeName.format);     
 
                     if(n && n.toLowerCase().indexOf(itemMapping.nodeName)!= -1){
-                        add(addArray,itemMapping,this,{name:n});   
+                        add(itemMapping.array,itemMapping,this,{name:n});   
                     }
                 }); 
+            } 
+
+            //////////////////////////////////////////////////////////////////////////
+            ///////////////////////////  fk Processing  ///////////////////////////
+            //////////////////////////////////////////////////////////////////////////
+            for (var i in fkMap){ 
+                var fk = fkMap[i];
+                var fks = objectMap[fk.entity][fk.setter];
+                if(typeof fks === 'object'){
+                    for(var j in fks){
+                        computeFk(fks[j],j); 
+                    }
+                }else{
+                    computeFk(fks)
+                }
+                function computeFk(fkKey,index){
+                    // console.log("computeFk : "+fk,addArray);
+                    var objInd = objectsIndexes[fkKey];
+                    if(!objInd ){
+                        console.log("error while retreiving fk "+fk.entity+"-"+fk.setter+" : cannot find "+fkKey);
+                        deleteKey(); 
+                        return; 
+                    }else if(objInd.array == "conference"){
+                        deleteKey(); 
+                        console.log("parent is mainConfEvent",objectMap[fk.entity][fk.setter]);
+                        return;
+                    } 
+                    else {
+                        if(index){
+                            objectMap[fk.entity][fk.setter][index] = objInd.index;
+                        }else{
+                            objectMap[fk.entity][fk.setter] = objInd.index; 
+                        } 
+                    } 
+                    function deleteKey(){
+                        if(index){
+                            delete fks[index];
+                        }else{
+                            delete objectMap[fk.entity][fk.setter]; 
+                        } 
+                    }
+                }
+                // var addArray = objects[itemMapping.array];
+                // rootNode.children().each(function(index,node){
+                //     // var n = NodeUtils[mappingConfig.getNodeName](node);  
+                //     var n = doFormat(node,mappingConfig.getNodeName.format);     
+
+                //     if(n && n.toLowerCase().indexOf(itemMapping.nodeName)!= -1){
+                //         add(addArray,itemMapping,this,{name:n});   
+                //     }
+                // }); 
             }
 
             //////////////////////////////////////////////////////////////////////////
@@ -249,19 +306,20 @@ function add(addArray,mapping,node,arg){
         if(mapping.postProcess){
             if(mapping.postProcess(node,rtnArray) === true){
                 //if it was the main conf event
-                // console.log(rtnArray)
-                // alert("main conf event found")
-                objectMap[key] = rtnArray; 
+                //register in the objectmap index
+                addObjectMap(key,rtnArray); 
                 conference = rtnArray;
+                objectsIndexes[key] = {array:"conference"};
 
                 return;
             } 
         }
 
         //finally add the object in the addArray and store a reference in the objectMap for faster access
-        if(Object.size(rtnArray) > 0){
-            objectMap[key] = rtnArray; 
-            addArray.push( rtnArray );
+        if(Object.size(rtnArray) > 0){ 
+            //register in the objectmap index
+            addObjectMap(key,rtnArray);
+            addObject(addArray,rtnArray,key); 
         } 
 
         function set(mapping,nodeName,node,arg){
@@ -271,17 +329,16 @@ function add(addArray,mapping,node,arg){
             var val = node.textContent;
 
             if(mapping.label[nodeName].list){
-                var vals = val.split(mapping.label[nodeName].list.delimiter);
-                for(var i=0;i<vals.length;i++){
-                    console.log(vals[i])
-                    setWithValue(mapping,nodeName,node,arg,vals[i]);
+                var vals = val.split(mapping.label[nodeName].list.delimiter); 
+                for(var i=0;i<vals.length;i++){  
+                    setWithValue(mapping,nodeName,node,arg,vals[i],true);
                 }
             }else{
                 setWithValue(mapping,nodeName,node,arg,val);    
             }
 
 
-            function setWithValue(mapping,nodeName,node,arg,val){
+            function setWithValue(mapping,nodeName,node,arg,val,splitter){
 
                 // pre processing
                 if(mapping.label[nodeName].preProcess){
@@ -289,34 +346,35 @@ function add(addArray,mapping,node,arg){
                 }
 
                 if(mapping.label[nodeName].fk){   
-                    // var key = NodeUtils[mapping.label[nodeName].fk.key](node);
 
-                    var key = doFormat(node,mapping.label[nodeName].fk.format); 
-                    // node = NodeUtils["child"](node,confInfoMapping.child)
+                    var fk = mapping.label[nodeName].fk;
+                    var fkKey = !splitter ? doFormat(node,fk.format) : val; 
                     
-                    //pointed entity isn't a concrete node in this format and thus, don't contains any required unique index 
-                    //so we must retrieve an index with getArrayId instead of objectMap 
-                    //i.e. keywords in ocs format
                     var pointedEntity;
-                    if(mapping.label[nodeName].fk.findInArrayWith){
-                        pointedEntity = objects[ getArrayId(mapping.label[nodeName].fk.array,mapping.label[nodeName].fk.findInArrayWith,key) ];
-                    }else{
-                        pointedEntity = objectMap[key];
-                    }
 
-                    if(pointedEntity){
-                        val = $.inArray(pointedEntity, objects[mapping.label[nodeName].fk.array]);
-                    }else {
-                        if(mapping.label[nodeName].fk.create){
+                    if(fk.create){ 
+                        fkKey = fk.array+"-"+fkKey;
+                        if(!objectMap[fkKey]){
                             var entry = {};
-                            entry[mapping.label[nodeName].fk.findInArrayWith] = key;
-                            objects[mapping.label[nodeName].fk.array].push(entry);  
-                            val = objects[mapping.label[nodeName].fk.array].length -1 ;
-                        }else{
-                            console.warn("error while parsing "+mapping.nodeName+", "+mapping.label[nodeName].setter+" : "+key+" can't be found ");
-                            return;
+                            entry[fk.create] = val;
+
+                            addObject(fk.array,entry,fkKey);  
+                            addObjectMap(fkKey,entry);
                         }
-                    }   
+                    } 
+                    val = fkKey; 
+                    if(!fkMapIndexes[key+"-"+mapping.label[nodeName].setter]){
+                        fkMapIndexes[key+"-"+mapping.label[nodeName].setter] = "lol";
+                        fkMap.push({entity:key,setter:mapping.label[nodeName].setter,fkArray:fk.array});
+                    }
+                    // pointedEntity = objectMap[fkKey]; 
+                    // if(pointedEntity){
+                    //     val = $.inArray(pointedEntity, objects[fk.array]);
+                    // }else {
+                     
+                    //     console.warn("error while parsing "+mapping.nodeName+", "+mapping.label[nodeName].setter+" : "+fkKey+" can't be found ");
+                    //     return; 
+                    // }   
                 }
 
                 if(mapping.label[nodeName].format){   
@@ -333,8 +391,8 @@ function add(addArray,mapping,node,arg){
 
                     //check if there's no duplicated link
                     var found = false;
-                    for ( var i in rtnArray[mapping.label[nodeName].setter]){
-                        if(rtnArray[mapping.label[nodeName].setter][i] == val){found = true;}
+                    for ( var j in rtnArray[mapping.label[nodeName].setter]){
+                        if(rtnArray[mapping.label[nodeName].setter][j] == val){found = true;}
                     }
                     if(!found)rtnArray[mapping.label[nodeName].setter][index] = val;
                 }else{
@@ -343,6 +401,15 @@ function add(addArray,mapping,node,arg){
 
             }
         }
+        function addObjectMap(key,rtnArray){
+            // console.log("objectMap."+key);
+            objectMap[key] = rtnArray; 
+        } 
+        function addObject(addArray,rtnArray,key) {
+            objects[addArray].push(rtnArray);
+            // console.debug("addObject "+key) 
+            objectsIndexes[key] = {array:addArray,index:objects[addArray].length-1}; 
+        } 
     }
 }
 
