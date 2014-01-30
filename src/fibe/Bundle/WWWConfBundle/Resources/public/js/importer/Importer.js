@@ -134,7 +134,7 @@ function run(file,callback,fallback){
                         return; 
                     }else if(objInd.array == "conference"){
                         deleteKey(); 
-                        console.log("parent is mainConfEvent",objectMap[fk.entity][fk.setter]);
+                        // console.log("parent is mainConfEvent",objectMap[fk.entity][fk.setter]);
                         return;
                     } 
                     else {
@@ -193,9 +193,9 @@ function run(file,callback,fallback){
                         delete event['setParent'];
                         event['setEndAt'] = event['setStartAt'] = defaultDate; 
 
-                        if(event['mainConferenceEvent'] ){
-                            event['setEndAt'] = moment().hour(0).minute(0).second(0).millisecond(0).add('d', 1).format('YYYY-MM-DDTHH:mm:ss Z');
-                        }
+                        // if(event['mainConferenceEvent'] ){
+                        //     event['setEndAt'] = moment().hour(0).minute(0).second(0).millisecond(0).add('d', 1).format('YYYY-MM-DDTHH:mm:ss Z');
+                        // }
                     }
                 }
                 if(moment(event['setStartAt']).isBefore(earliestStart))
@@ -203,9 +203,14 @@ function run(file,callback,fallback){
                 if(moment(event['setEndAt']).isAfter(latestEnd))
                     latestEnd = moment(event['setEndAt']);
             }
-            if(earliestStart != moment('6000-10-10') && latestEnd != moment('1000-10-10')){ 
-                objects["conference"]['setStartAt'] = earliestStart; 
-                objects["conference"]['setEndAt']   = latestEnd; 
+            if(earliestStart != moment('6000-10-10') && latestEnd != moment('1000-10-10')){
+                if(earliestStart == latestEnd){
+                    objects["conference"]['setStartAt'] = moment().hour(0).minute(0).second(0).millisecond(0).format('YYYY-MM-DDTHH:mm:ss Z');
+                    objects["conference"]['setEndAt'] = moment().hour(0).minute(0).second(0).millisecond(0).add('d', 1).format('YYYY-MM-DDTHH:mm:ss Z');
+                }else{
+                    objects["conference"]['setStartAt'] = earliestStart; 
+                    objects["conference"]['setEndAt']   = latestEnd; 
+                }
             }
 
             
