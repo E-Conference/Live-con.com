@@ -23,7 +23,7 @@ function bootstrapAlert(type,msg,title,icon){
         },
         warning:{
             title:"Error : ",
-            icon:"<i class='fa fa-meh'></i>"
+            icon:"<i class='fa fa-meh-o'></i>"
         }
     }
     //default values

@@ -26,10 +26,9 @@ var CalEvent = function(event){
     this["categories"] = event.categories || [];
 
     if( event.categories && event.categories.length > 0 && event.categories[0].color)
-      this["color"] = event.categories[0].color; 
-    if(this.length > 0 && this.color)
-      this["background-color"] = this.color;
-
+      this["color"] = event.categories[0].color;  
+    
+    this["borderColor"] = ColorLuminance(this["color"] ? this["color"] : "#3a87ad", -0.35); 
 
     //resources
     if(!this["resource"])this["resource"] =  resConfig[currentRes].parse(event);
@@ -82,48 +81,6 @@ CalEvent.prototype.removeForRefetch = function(){
 };
 
 
-/**
- * add events to EventCollection.eventsToComputeBroCountRange
- * @param CalEvent event to add
- * @param Object   opt   :
- *                  allEventsInDay: add all brothers too 
- */
-CalEvent.prototype.computeCountRange = function(opt){
-        if(this.is_mainconfevent)return;
-        if(!opt)opt={}
-        if(opt.allEventsInDay || opt.allBrosInDay){
-          console.log("#ComputeCountRange all day "+this.id);
-          var bros = calendar_events;
-          // var bros = event.getBros();
-          var dayToRender = {
-            start:moment(this.start).startOf('day')
-            ,end:moment(this.end).endOf('day')
-          };
-          for(var i in bros){
-            var bro = bros[i]; 
-            if(!bro.isOutOf(dayToRender) || !bro.isOutOf(dayToRender) ){
-              if(opt.allBrosInDay !== true || this.isBroOf(bro) ){
-                addEvent(bro);
-              }
-            }
-          }
-        }
-        addEvent(this);
-
-        function addEvent(e){
-
-          if(e.id && $.inArray(e.id, EventCollection.eventsToComputeBroCountRangeIndexes) === -1 && !e.allDay) { 
-            EventCollection.eventsToComputeBroCountRangeIndexes.push(e.id);
-            EventCollection.eventsToComputeBroCountRange.push(e);
-            EventCollection.broCountRange[e.id] = {count:1,range:0};
-            console.debug("#ComputeCountRange "+e.id);
-          }
-          else{ 
-            console.debug("#ComputeCountRange didn't add event "+e.id);
-          }
-        }
-    },
-
 CalEvent.prototype.persist = function(add){ 
   if(this.is_mainconfevent)return;
     var toSend = {
@@ -152,6 +109,79 @@ CalEvent.prototype.persist = function(add){
     );
     bootstrapAlert("info","update request sent ","Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
 };
+
+
+/**
+ * add events to EventCollection.eventsToComputeBroCountRangeIndexes
+ * @param CalEvent event to add
+ * @param Object   opt   :
+ *                  allBrosInDay=true : add all brothers too 
+ *                    
+ *                    * add toppest non allday of the day in the cases that the event itself or its parent is an allDay event 
+ */
+CalEvent.prototype.computeCountRange = function(opt){
+        console.log("#ComputeCountRange allBrosInDay "+this.id);
+        if(!opt)opt={}
+          var bros; 
+        if(opt.allBrosInDay || this.allDay){
+          bros = calendar_events;
+          // var bros = event.getBros();
+          var dayToRender = {
+            start:moment(this.start).startOf('day')
+            ,end:moment(this.end).endOf('day')
+          }; 
+          console.log("#ComputeCountRange allBrosInDay "+this.id,dayToRender);
+          if(Events[this.parent.id] && Events[this.parent.id].allDay){
+            bros = this.getNonAllDayBros();
+            console.log("#ComputeCountRange parent is allDay",bros);
+            for(var i in bros){
+              var bro = bros[i];
+              alert(this.id+" : bro 1 "+bro.id) 
+              if(!bro.isOutOf(dayToRender) || !bro.isOutOf(dayToRender) ){
+              alert(this.id+" : bro 2 "+bro.id)  
+              addEvent(bro.id); 
+              }
+            }
+          }else{
+            for(var i in bros){
+              var bro = bros[i]; 
+              if(!bro.isOutOf(dayToRender) || !bro.isOutOf(dayToRender) ){
+                if(opt.allBrosInDay !== true || this.isBroOf(bro) ){
+                  addEvent(bro.id);
+                }
+              }
+            }
+          }
+        } 
+        addEvent(this.id)
+          function addEvent(id){
+            // var e = Events[id];
+            // if(e.allDay){
+            //   for(var i in e.children ){
+            //     var childId = e.children[i].id; 
+            //     // alert("added "+childId+" when computeCountRange of "+e.id)
+            //     // alert(Events[e.children[i].id])
+            //     addEvent(childId)
+            //   }
+
+            // }else{
+              addNonAllDayEvent(id);
+            // }
+            function addNonAllDayEvent(id){
+
+              if($.inArray(id, EventCollection.eventsToComputeBroCountRangeIndexes) === -1 && !Events[id].allDay) { 
+                EventCollection.eventsToComputeBroCountRangeIndexes.push(id);
+                EventCollection.broCountRange[id] = {count:1,range:0};
+                console.debug("#ComputeCountRange added "+id);
+              }
+              else{ 
+                console.debug("#ComputeCountRange didn't add event "+id);
+              }
+            }
+          } 
+    },
+
+
 
 
 
@@ -262,6 +292,7 @@ CalEvent.prototype.updateChildrenDate = function(){
               child['start'] = childStart;
               child['end'] = childEnd;
               updateChildrenDate(child,{allBrosInDay:true});
+              child.computeCountRange({allBrosInDay:true});   
               child.renderForRefetch();
               child.persist(); 
             }
@@ -429,6 +460,41 @@ CalEvent.prototype.getBrosId = function (){
 
     // return $(Events[this.parent.id].children).map(function(key,value){return value.id!=this.id?value.id:undefined;})
 };
+CalEvent.prototype.getNonAllDayBrosId = function (){ 
+    if(this.id == mainConfEvent.id)
+        return [];  
+    var parent = Events[this.parent.id];
+    var rtn = [];
+    //add toppest non all days
+    if(parent.allDay){
+      // alert("add toppest non all days");
+      for (var i in Events){
+        if(Events[i].id==this.id)continue;
+        if(!Events[i].allDay && Events[Events[i].parent.id].allDay)
+          rtn.push(Events[i].id);
+      } 
+      return rtn
+    }
+    var bros = parent.children;
+    for (var i in bros){ 
+      if(bros[i].id==this.id)continue;
+      if(!Events[bros[i].id].allDay){
+        rtn.push(bros[i].id);
+        continue;
+      }
+    } 
+    return rtn; 
+};
+CalEvent.prototype.getNonAllDayBros = function (){ 
+    if(this.id == mainConfEvent.id)
+        return [];   
+    var brosId = this.getNonAllDayBrosId();
+    var rtn = [];
+    for(var i in brosId){ 
+      rtn.push(Events[brosId[i]]);
+    }
+    return rtn; 
+};
 
 
 /**
@@ -520,3 +586,24 @@ CalEvent.prototype.formatDate = function () {
 CalEvent.prototype.duration = function () {  
     return moment(this.end).diff(this.start);
 };
+
+//set lighter/darker
+function ColorLuminance(hex, lum) {
+
+  // validate hex string
+  hex = String(hex).replace(/[^0-9a-f]/gi, '');
+  if (hex.length < 6) {
+    hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+  }
+  lum = lum || 0;
+
+  // convert to decimal and change luminosity
+  var rgb = "#", c, i;
+  for (i = 0; i < 3; i++) {
+    c = parseInt(hex.substr(i*2,2), 16);
+    c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+    rgb += ("00"+c).substr(c.length);
+  }
+
+  return rgb;
+}

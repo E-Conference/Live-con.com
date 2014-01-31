@@ -80,11 +80,10 @@ var EventCollection = {
       }
     },
 
-    broCountRange:{},
-    eventsToComputeBroCountRange:[],
+    broCountRange:{}, 
     eventsToComputeBroCountRangeIndexes:[],
     refetchEvents : function(refetch,force){ 
-        if(force!==true && (EventCollection.forceMainConfRendering!==true && EventCollection.eventsToComputeBroCountRange.length==0)){ 
+        if(force!==true && (EventCollection.forceMainConfRendering!==true && EventCollection.eventsToComputeBroCountRangeIndexes.length==0)){ 
           console.log("not rendered")
           return; 
         }  
@@ -105,40 +104,41 @@ var EventCollection = {
             var startScript = moment();
             //if there's no EventCollection.eventToRender, calculate for every events
             var done     = []
-                ,brothers= [] 
+                ,brothersIds= [] 
                 ,minLeft 
                 ,bro
                 ,curBro
                 ,baseCount; 
   
-              brothers = EventCollection.eventsToComputeBroCountRange;   
+              brothersIds = EventCollection.eventsToComputeBroCountRangeIndexes;   
             
             // console.log("----------------------------------------------------");
-            console.log("affected = ",brothers); 
+            console.log("affected = ",brothersIds); 
             // console.log("non affected : ",EventCollection.broCountRange);
             // console.log("----------------------------------------------------");
-            computeCountRange(brothers,doChildren);
-            EventCollection.eventsToComputeBroCountRangeIndexes = [];
-            EventCollection.eventsToComputeBroCountRange = [];
-            console.debug("BroCountRange : updated "+brothers.length+" events in "+moment().diff(startScript)+" ms");
-            console.log(EventCollection.broCountRange) 
-            // return EventCollection.broCountRange;
             
-            function computeCountRange(bros,doChildren){
+            computeCountRange(brothersIds,doChildren);
+
+            EventCollection.eventsToComputeBroCountRangeIndexes = []; 
+            console.debug("BroCountRange : updated "+brothersIds.length+" events in "+moment().diff(startScript)+" ms",EventCollection.broCountRange);
+            return EventCollection.eventsToComputeBroCountRangeIndexes;
+            
+            function computeCountRange(brosIds,doChildren){
               //copy array
-              var remaining = bros.slice(0);
-              for (var i in bros){
-                curBro = bros[i];  
+              var remainingIds = brosIds.slice(0);
+              for (var i in brosIds){
+                curBro = Events[brosIds[i]];  
                 // console.log("curBro",curBro.id)
                 //create rtn object for curBro  
                 baseCount = EventCollection.broCountRange[curBro.id].count;
-                var brosId = curBro.getBrosId(); 
-                for (var j in remaining){
-                  bro = remaining[j];  
-                  //ensure the bro is not itself  
+                var brosIdsofcurBro = curBro.getNonAllDayBrosId(); 
+                console.debug("non all day bros of "+curBro.id +" are :",brosIdsofcurBro)
+                for (var j in remainingIds){
+                  bro = Events[ remainingIds[j] ];  
+                  //ensure the bro is not itself or an all day event
                   if(curBro.id===bro.id )continue;  
                   //ensure the bro is a real bro
-                  if(curBro.isOutOf(bro,true) || ($.inArray(bro.id, brosId) === -1))continue;   
+                  if(curBro.isOutOf(bro,true) || ($.inArray(bro.id, brosIdsofcurBro) === -1))continue;   
                   // console.log("curBro ",curBro.id," discovering ",bro.id)  
                   //update self properties  
                   EventCollection.broCountRange[curBro.id]["count"]++; 
@@ -149,7 +149,7 @@ var EventCollection = {
                     range:EventCollection.broCountRange[curBro.id]["range"]+1
                   };  
                 }
-                delete remaining[i] 
+                delete remainingIds[i];
               } 
             } 
         }

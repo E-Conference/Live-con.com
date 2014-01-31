@@ -243,9 +243,9 @@
 
       //init $ vars
       var $modal = $('#modal').hide();
-      var $modalNewEvent = $('#modal-new-event').hide();
-      var $modalSetParent = $('#modal-set-parent').hide();
-      var $modalBody = $modal.find(".modal-body");
+      var $modalNewEvent = $('#modal-new-event').hide().draggable({ handle: ".modal-header" });
+      var $modalSetParent = $('#modal-set-parent').hide().draggable({ handle: ".modal-header" });
+      var $modalBody = $modal.find(".modal-body").draggable({ handle: ".modal-header" });
       var $modalNewEventBody = $modalNewEvent.find(".modal-body"); 
       
       $calendar = $('#calendar');
@@ -474,6 +474,7 @@
                   updateEventArray();  
                   stylizeBlock();
                 console.debug(moment().diff(logtime)+" to updateEventArray & stylizeBlock"); 
+                console.log( "######################################################"); 
               },repositionTime);
                   
           }, 
@@ -488,8 +489,6 @@
               event.allDay = allDay;
               event['start'] = date;
 
-              event.computeCountRange();
-              event.renderForRefetch();
 
               // event = new CalEvent(event); 
               console.log("dropped from sidebar", event);
@@ -503,6 +502,8 @@
 
               event.setParent(mainConfEvent);
               event.updateParentDate(); 
+              event.computeCountRange({allBrosInDay:true});
+              event.renderForRefetch();
               EventCollection.refetchEvents();
               event.persist();
 
@@ -514,7 +515,7 @@
             if(event.allDay){
               return;
             }
-            var width = availWidth + ( currentView == "day" ? 55 : 10 );
+            var width = availWidth + ( currentView == "day" ? 50 : 5 );
             var height = bottom - top;
             var left = leftmost;
             var zindex = 8;
@@ -636,13 +637,13 @@
  
 
      
-                  event.computeCountRange({allEventsInDay:true});
+                  event.computeCountRange({allBrosInDay:true});
                   // event.renderForRefetch();
  
                   EventCollection.refetchEvents(); 
                   event.persist(); 
 
-              },0);
+              },1);
 
  
           },
@@ -814,10 +815,10 @@
 
                                     event.renderForRefetch();
                                     event.computeCountRange({allBrosInDay:true});
-                                    
                                     EventCollection.refetchEvents();
+                                     
                                     draggedEvent.persist(); 
-                                });   
+                                });    
                               },0); 
 
                           }

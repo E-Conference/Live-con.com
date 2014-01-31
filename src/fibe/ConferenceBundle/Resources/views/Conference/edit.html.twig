@@ -4,7 +4,7 @@
 
 {% block centerPanel %}
   {{ parent() }}
-    <div class="page-header">
+    <div class="page-header col-sm-12 col-md-12 col-lg-12">
         <div class="page-header well">
                 
             <div class="row">
@@ -29,8 +29,7 @@
             <a  id="showConfForm" class="btn btn-warning">
                  <i class="fa fa-pencil-square-o"></i> Edit conference
             </a>
-            <div id="conference-edit" class="row">
-                <div class="col-lg-6">
+            <div id="conference-edit" class="row col-sm-12 col-md-12 col-lg-12"> 
                     <h3 class="text-info">Conference info  </h3>
                     <form class="input-append" method="POST" action="" {{ form_enctype(form) }} >
                             {{ form_widget(form) }} 
@@ -40,43 +39,7 @@
                             </button> 
 
                         <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(form) }}</div>  
-                    </form> 
-
-                </div>
-                <div class="col-lg-6">
-                    <h3 class="text-info">Import a Conference from file  </h3>
-                    <form id="EventImportForm"  class="input-append">
-                        <label for="EventImport"> 
-                            Available XML input format are : 
-                                <span class="badge badge-success" ><i class="fa fa-check" ></i>  RDF</span>
-                                <span class="badge badge-success"><i class="fa fa-check" ></i>  OWL</span>
-                                <span class="badge badge-success"><i class="fa fa-check" ></i>  OCS</span> 
-                            {% if not wwwConf.isEmpty() %}<p class="text-warning"><i class="icon-s"></i>Your conference will be emptied first!</p>{% endif %}
-                        </label>
-                        
-                        <div class="input-group">
-                            <input id="EventImport" method="POST" action="/uploadDataset" class="form-control" name="EventImport" value="Choose your file" type="file"/>
-                            <span class="input-group-btn">
-                                <button disabled="disabled" type="submit"class="btn btn-default">
-                                    Process import <i class="icon-arrow-right"></i> 
-                                </button>
-                            </span>
-                        </div><!-- /input-group --> 
-                    </form> 
-
-                    <h3 class="text-info">Action</h3> 
-                    <a  class="empty-conf btn btn-danger btn-xs" 
-                        {% if  wwwConf.isEmpty() %}
-                        disabled="disabled" 
-                        {% else %} 
-                        {% endif %}
-                        href="{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}"> 
-                        <i class="fa fa-trash-o"></i> Empty conference
-                    </a>
-                    
-                    
-
-                </div>
+                    </form>  
             </div><!-- #conference-edit -->    
         </div>
     </div> 
@@ -172,12 +135,14 @@
                 try{
                     initializeMap();
                 }catch(err){
+                    $("#map").hide('fast');
+                    bootstrapAlert("warning", "Failed to load the map plugin.");
                     console.warn("Cannot load Map")
                 } 
 
             /*********       show / hide edit mode          **********/
             $('#conference-edit').hide();  
-            //toggle with 2 functions is deprecated in jquery v8 and suppressed in v10
+            // toggle edit form
            function showForm() { 
                 $('#conference-edit').toggle({duration : 400}); 
                 $(this).html('<i class="icon-arrow-left" ></i> Hide edit mode');
