@@ -21,7 +21,7 @@ use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 class MobileAppPublicController extends Controller
 {
     /**
-     * @Route("/{id}",name="mobileAppPublic_index")
+     * @Route("/rest/{id}",name="mobileAppPublic_index")
      * @Template()
      */
     public function indexAction($id)
@@ -31,10 +31,39 @@ class MobileAppPublicController extends Controller
     	$conference = $em->getRepository('fibeWWWConfBundle:WwwConf')->find($id);
     	$mobile_app_config = $conference->getAppConfig();
         $apiUri = $this->get('router')->generate('idci_exporter_api_homeapi');
-
+        $apiType = "rest";
+        $baseUri ="http://data.live-con.com/resource/conference/"+$conference->getId()+"/"+$conference->getSlug();
 		return array(
             'api_uri' => $apiUri,
+            'api_type' => $apiType,
+            'paper_module' => $conference->getModule()->getPaperModule(),
+            'organization_module' => $conference->getModule()->getOrganizationModule(),
+            'conference_baseUri' => $baseUri,
 		    'mobile_app_config' => $mobile_app_config,
+            'conference' => $conference,
+        );
+    }
+
+    /**
+     * @Route("/sparql/{id}",name="mobileAppPublic_sparql_index")
+     * @Template("fibeMobileAppBundle:MobileAppPublic:index.html.twig")
+     */
+    public function indexSparqlAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $conference = $em->getRepository('fibeWWWConfBundle:WwwConf')->find($id);
+        $mobile_app_config = $conference->getAppConfig();
+        $baseUri ="http://data.live-con.com/resource/conference/".$conference->getId()."/".$conference->getSlug();
+        $apiUri = "http://data.live-con.com/sparql";
+        $apiType = "sparql";
+        return array(
+            'api_uri' => $apiUri,
+            'api_type' => $apiType,
+            'paper_module' => $conference->getModule()->getPaperModule(),
+            'organization_module' => $conference->getModule()->getOrganizationModule(),
+            'conference_baseUri' => $baseUri,
+            'mobile_app_config' => $mobile_app_config,
             'conference' => $conference,
         );
     }

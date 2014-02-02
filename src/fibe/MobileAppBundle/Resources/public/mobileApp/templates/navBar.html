@@ -2,7 +2,7 @@
 	<ul>
 		<li><a href="#schedule/"><i class="fa fa-calendar"></i>    SCHEDULE</a></li> 
 		<li><a href="#search/person"><i class="fa fa-male"></i>    PERSONS</a></li>		
-		<li><a href="#search/publication"><i class="fa fa-book"></i>    PUBLICATIONS</a></li>  
-		<li><a href="#search/organization"><i class="fa fa-users"></i>    ORGANIZATIONS</a></li>  
+		<% if(_.contains(modules, "publications")) { %> <li><a href="#search/publication"><i class="fa fa-book"></i>    PUBLICATIONS</a></li> <% } %> 
+		<% if(_.contains(modules, "organizations")) { %><li><a href="#search/organization"><i class="fa fa-users"></i>    ORGANIZATIONS</a></li>   <% } %> 
 	</ul>
 </nav> 

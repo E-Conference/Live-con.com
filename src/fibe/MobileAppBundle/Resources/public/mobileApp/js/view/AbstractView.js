@@ -10,6 +10,8 @@
 **/
 define(['jquery', 'underscore', 'tpl'], function($, _, tpl){
 	var AbstractView = Backbone.View.extend({
+
+
 		/** Compilation of the templates **/
 		initialize: function (options){
 		
@@ -21,9 +23,9 @@ define(['jquery', 'underscore', 'tpl'], function($, _, tpl){
 			this.navBarTpl = _.template(tpl.get("navBar"));
 			this.settingsPanelTpl = _.template(tpl.get("settingsPanel"));
 			this.bonusPanelTpl = _.template(tpl.get("bonusPanel"));
-			
+
 			this.templateName = options.templateName;
-			
+		
 			if(tpl.get(this.templateName)!== undefined){
 				this.contentTpl = _.template(tpl.get(this.templateName));
 			}else{
@@ -35,8 +37,8 @@ define(['jquery', 'underscore', 'tpl'], function($, _, tpl){
 		/** Rendering of the templates **/
 		render: function(){
 			$(this.el).append(this.headerTpl({conference : this.model, title : this.title} ));
-			$(this.el).append(this.navBarTpl());
-			$(this.el).append(this.contentTpl({conference : this.model}));
+			$(this.el).append(this.navBarTpl({modules : tpl.modules}));
+			$(this.el).append(this.contentTpl({conference : this.model,modules : tpl.modules}));
 			$(this.el).append(this.footerTpl({conference : this.model}));
 			$(this.el).append(this.settingsPanelTpl({conference : this.model}));
 			$(this.el).append(this.bonusPanelTpl({conference : this.model}));

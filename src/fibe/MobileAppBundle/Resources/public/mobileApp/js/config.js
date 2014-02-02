@@ -11,8 +11,8 @@
 				   
 *   Tags:  JSON, ENDPOINT, SPARQL
 **/
-define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandStore','model/GoogleCommandStore','model/swcEventCommandStore', 'model/DPCommandStore'],
-	function(SWDFCommandStore, DBLPCommandStore, DDGoCommandStore, GoogleCommandStore, swcEventCommandStore, DPCommandStore) {
+define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandStore','model/GoogleCommandStore','model/swcEventCommandStore', 'model/DPCommandStore', 'model/liveconSparqlCommandStore'],
+	function(SWDFCommandStore, DBLPCommandStore, DDGoCommandStore, GoogleCommandStore, swcEventCommandStore, DPCommandStore, liveconSparqlCommandStore) {
 		
 		var AppConfig = {
 			"app" : {
@@ -25,8 +25,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 				"name": "Livecon",
 				"acronym": "Livecon",
 				"logoUri": "css/images/banniereTranspBlend.png",
-				"website": "http://www.blendconference.com/",
-				"baseUri": "http://www.blendconference.com/",
+				"website": "http://live-con.com/",
+				"baseUri": "http://live-con.com/",
 				"storage": "off"
 			},
 			
@@ -61,7 +61,7 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 				"eventDatasource" : {
 					"uri" : "http://dataconf.liris.cnrs.fr/simpleschedule-blend/web/api/",
 					"crossDomainMode" : "JSONP",
-					"commands" : swcEventCommandStore
+					"commands" : liveconSparqlCommandStore
 				},
 				"DataPaperDatasource" : {
 					"uri" : "http://dataconf.liris.cnrs.fr:5984/datapaper/_design/public/_view/by_type",
@@ -262,6 +262,20 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					]
 				},
 
+				"Locations" : { 
+					"hash" : "locations",
+					"view" : "locations",
+					"graphView" : "no",
+					"title": "Locations",
+					"commands" : [
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getAllLocations",
+						}
+					]
+				},
+				
+
 				"OrganizationSearch" : {
 					"hash" : "search/organization",
 					"view" : "organizationSearch",
@@ -288,10 +302,10 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"graphView" : "no",
 					"title": "Person",
 					"commands" : [
-						{
-							"datasource" : "GoogleDataSource",
-							"name" : "getAuthorPersonalPage",
-						},
+						// {
+						// 	"datasource" : "GoogleDataSource",
+						// 	"name" : "getAuthorPersonalPage",
+						// },
 						{
 							"datasource" : "eventDatasource",
 							"name" : "getPerson",
@@ -394,6 +408,20 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						},
 					]
 				},
+
+				"Authors" : {
+					"hash" : "authors",
+					"view" : "authors",
+					"graphView" : "no",
+					"title": "Authors",
+					"commands" : [
+						{
+							"datasource" : "eventDatasource",
+							"name" : "getAllAuthors",
+						} 
+					]
+				},
+
 				"ExternPublication" : {
 					"hash" : "externPublication/*uri",
 					"view" : "externPublication",

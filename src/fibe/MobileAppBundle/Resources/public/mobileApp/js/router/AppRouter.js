@@ -26,6 +26,7 @@ define(['backbone', 'jquery', 'config', 'encoder', 'localStorage/localStorageMan
 			this.conference = configuration.conference;
 			//Saving the datasources definition
 			this.datasources = configuration.datasources;
+			
 			//Saving the routes definition
 			this.routes = configuration.routes; 
 

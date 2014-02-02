@@ -1,0 +1,38 @@
+{% extends 'fibeConferenceBundle::base.html.twig' %}
+
+{% block title %}Authorization edit{% endblock title %}
+
+{% block centerPanel %}
+    {{ parent() }}
+
+     <div class="row page-top-header ">
+            <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <span>Edit teamate</span>
+            </div>
+
+            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+            </div>
+            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+            </div>
+      </div>
+      <div class="row page-content">
+                    
+        <h1>{{ entity.user.username }}</h1>
+       
+
+        <form action="{{ path('schedule_authorization_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+            <input type="hidden" name="_method" value="PUT" />
+            <div class="row">
+                   <div class="col-lg-2"></div>
+                   <div class="col-lg-4">
+                    {{ form_widget(edit_form) }}
+                    </br>
+                      <button type="submit" class="btn btn-block btn-success">
+                                <i class="fa fa-check"></i>
+                      </button>
+                </div>
+            </div>
+        </form>
+      </div>
+    
+{% endblock %}
