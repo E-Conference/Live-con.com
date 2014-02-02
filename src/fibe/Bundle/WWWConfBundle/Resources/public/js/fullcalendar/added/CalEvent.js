@@ -135,10 +135,8 @@ CalEvent.prototype.computeCountRange = function(opt){
             bros = this.getNonAllDayBros();
             console.log("#ComputeCountRange parent is allDay",bros);
             for(var i in bros){
-              var bro = bros[i];
-              alert(this.id+" : bro 1 "+bro.id) 
-              if(!bro.isOutOf(dayToRender) || !bro.isOutOf(dayToRender) ){
-              alert(this.id+" : bro 2 "+bro.id)  
+              var bro = bros[i]; 
+              if(!bro.isOutOf(dayToRender) || !bro.isOutOf(dayToRender) ){ 
               addEvent(bro.id); 
               }
             }

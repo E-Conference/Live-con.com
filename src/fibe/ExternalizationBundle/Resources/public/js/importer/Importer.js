@@ -13,11 +13,15 @@ var defaultDate = 'now';
 
 function run(file,mappingConfig,callback,fallback){ 
    
-             
-            // console.log(file);
-            if(file==undefined )
+              
+            if(!file)
             {
-                if(fallback!=undefined)fallback("Empty response"); 
+                if(fallback!=undefined)fallback("Error with the file."); 
+                return;
+            } 
+            if(!mappingConfig)
+            {
+                if(fallback!=undefined)fallback("Error with the mapping config."); 
                 return;
             } 
 

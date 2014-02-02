@@ -28,6 +28,14 @@ body{
 	overflow-x: hidden;
 }
 
+/* bootstrap fix*/
+.row {
+	margin-right: 0px;
+}
+.navbar-nav.navbar-right:last-child {
+	margin-right: 0px;
+}
+
 
 /*-------------------------------------------------------------------------------------
 --------------------------------------MENUNAVBAR----------------------------------------
