@@ -1,4 +1,5 @@
-{% extends 'fibeConferenceBundle::base.html.twig' %}
+{% extends 'fibeWWWConfBundle::base.html.twig' %}
+
 
 {% block title %}Organization{% endblock title %}
 
@@ -18,38 +19,41 @@
             </div>
         </div>
         <div class="row page-content">
-
              <!--    <a type="button" title="documentationTest" href="{{ path('documentation', { 'anchor': 'second' }) }}" class="btn btn-warning">
                     <i class="icon-question"></i>
               </a> -->
-
-            <table class=" table table-hover">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Page</th>
-                        <th>Country</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                 {% for entity in pager.currentPageResults %}
-                    <tr>
-                        <td><a href="{{ path('schedule_organization_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                        <td>{{ entity.name }}</td>
-                        <td>{{ entity.page }}</td>
-                        <td>{{ entity.country }}</td>
-                        <td>
-                            <a class="btn btn-large btn-default" href="{{ path('schedule_organization_show', { 'id': entity.id }) }}"><i class="fa fa-eye"></i></a> 
-                            <a class="btn btn-large btn-warning edit" href="{{ path('schedule_organization_edit', { 'id': entity.id }) }}"><i class="fa fa-pencil"></i></a>
-                        </td> 
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-             <p>
-                {{ pagerfanta(pager, 'twitter_bootstrap') }}
-            </p>
+              <div class="row">
+              <div class="col-lg-1"></div>
+              <div class="col-lg-4 well">
+                <form id ="filter_form" class="form-inline" method="get" role="form" >
+                        {{ form_widget(filters_form) }}
+                        </br>
+                     <a id="submit_form_filter" class="btn btn-default btn-block" onclick="filter()" ><i class="fa fa-filter"></i></a>
+                </form>
+             </div>
+           </div>
+           
+            <div id="organization_list">
+               {% include "fibeWWWConfBundle:Organization:list.html.twig" %}
+            </div>
         </div>
 {% endblock %}
+
+{% block javascripts_page %}
+<script type="text/javascript">
+
+    function filter(){
+        $datas = $("#filter_form").serialize();
+
+        //start send the post request
+         $.post("{{path('schedule_organization_filter')}}",               
+                 $datas, 
+              function(response){
+                     $('#organization_list').html(response);
+                  
+              }, "html");    
+          return false;
+    };
+</script>
+
+{% endblock javascripts_page %}

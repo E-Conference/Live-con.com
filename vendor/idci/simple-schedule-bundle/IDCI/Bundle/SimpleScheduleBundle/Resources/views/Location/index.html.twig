@@ -19,43 +19,40 @@
         </div>
     </div>
     <div class="row page-content">
+    <div class="row">
+              <div class="col-lg-1"></div>
+              <div class="col-lg-4 well">
+                <form id ="filter_form" class="form-inline" method="get" role="form" >
+                        {{ form_widget(filters_form) }}
+                        </br>
+                     <a id="submit_form_filter" class="btn btn-default btn-block" onclick="filter()" ><i class="fa fa-filter"></i></a>
+                </form>
+             </div>
+           </div>
 
-        <table class="table table-hover records_list">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Capacity</th>
-                    <th>Equipments</th>
-                    <th colspan="3">{% trans %}Actions{% endtrans %}</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for entity in pager.currentPageResults %}
-                <tr>
-                    <td><a href="{{ path('schedule_location_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                    <td>{{ entity.name }}</td>
-                    <td>{{ entity.description }}</td>
-                    <td>{{ entity.capacity }}</td>
-                    <td> {% for equipment in entity.getEquipments() %}
-                            <i class="fa fa-{{ equipment.icon }}"></i>
-                        {% endfor %}
-                    </td>
-                    <td>
-                        <a class="btn btn-block btn-default btn-small" href="{{ path('schedule_location_show', { 'id': entity.id }) }}"><i class="fa fa-eye"></i></a>
-                    </td>
-                    <td>
-                        <a class="btn btn-block btn-warning btn-small edit" href="{{ path('schedule_location_edit', { 'id': entity.id }) }}"><i class="fa fa-pencil"></i></a>
-                     </td> 
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div id="location_list">
+           {% include "IDCISimpleScheduleBundle:Location:list.html.twig" %}
+        </div>
 
-        <p>
-            {{ pagerfanta(pager, 'twitter_bootstrap') }}
-        </p>
     </div>
 
 {% endblock %}
+
+{% block javascripts_page %}
+<script type="text/javascript">
+
+    function filter(){
+        $datas = $("#filter_form").serialize();
+
+        //start send the post request
+         $.post("{{path('schedule_location_filter')}}",               
+                 $datas, 
+              function(response){
+                     $('#location_list').html(response);
+                  
+              }, "html");    
+          return false;
+    };
+</script>
+
+{% endblock javascripts_page %}

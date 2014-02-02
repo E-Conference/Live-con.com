@@ -1,24 +1,46 @@
-{% extends 'fibeWWWConfBundle::base.html.twig' %}
-
-{% block title %}Registration{% endblock title %}
-
-{% block centerPanel %}
 
 
-{% trans_default_domain 'FOSUserBundle' %}
 
-    <header class="subhead" id="overview">
-        <div class="page-header">
-            <h1>Register a manager</h1>
-        </div>
-    </header>
-    <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="form-horizontal" > 
+{% block head %}
+  {% block meta %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="shortcut icon" href="{{ asset('bundles/fibehomepage/img/favicon.ico') }}" type="image/vnd.microsoft.icon">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ asset('bundles/fibehomepage/img/ios_icon.jpg') }}" />
+    <title>Livecon UPGRATE YOUR CONFERENCE</title>
+  {% endblock meta %}
+
+  {% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibehomepage/css/homepage.css') }}" /> 
+    <!-- reset -->
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/reset.css') }}" />
+    <!-- grid system 16 -->
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/960_12_col.css') }}" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/style.css') }}" />
+  {% endblock %}
+{% endblock %}
+
+
+{% block body %}
+  
+<div id="login_page">
+  
+  {% if error %}
+    <div class="alert alert-error">{{ error.message }}</div>
+  {% endif %}
+
+<div id="background"></div>
+    <div class="container_12">
+
+      <div id="login" class="grid_4">
+        <a href="http://live-con.com/" title="Livecon UPGRATE YOUR CONFERENCE"><img src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon" /></a>
+       <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="form-horizontal" > 
 
       <div class="row">
            <div class="col-lg-2"></div>
-           <div class="col-lg-4">
+           <div class="col-lg-6">
             <div class="control-group">
-                <label class="control-label" >
+                <label class="control-label stage" >
                     {{ form_label(form.username) }}
                 </label> 
                 <div class="controls">
@@ -39,7 +61,7 @@
                 <label class="control-label" >
                     {{ form_label(form.plainPassword.first) }}
                 </label> 
-                <div class="controls">
+                <div class="controls stage">
                     {{ form_widget(form.plainPassword.first) }}
                     {{ form_errors(form.plainPassword.first) }}
                 </div>
@@ -48,46 +70,38 @@
                 <label class="control-label" >
                     {{ form_label(form.plainPassword.second) }}
                 </label> 
-                <div class="controls">
+                <div class="controls stage">
                     {{ form_widget(form.plainPassword.second) }}
                     {{ form_errors(form.plainPassword.second) }}
                 </div>
-            </div> 
+            </div>
             <div class="control-group">
                 <label class="control-label" >
-                    {{ form_label(form.roles) }}
+                    {{ form_label(form.captcha) }}
                 </label> 
-                <div class="controls">
-                    {{ form_widget(form.roles) }}
-                    {{ form_errors(form.roles) }}
+                <div class="controls stage">
+                    {{ form_widget(form.captcha) }}
+                    {{ form_errors(form.captcha) }}
                 </div>
-            </div>
+            </div> 
+          
             <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
                 {{ form_rest(form  )}}
-            </div> 
-		</div>
-        </div>
-        </br>
-         <div class="row"> 
-            <div class="col-lg-5"></div>
-            <div class="col-lg-4">  
-               <div class="control-group">
+            </div>
+            <div class="control-group">
                     <div class="controls">
                     <button type="submit" class="btn btn-success">
                         <i class="icon-plus icon-white"></i> Register user
                     </button>
                 </div>
-            </div>
         </div>
-		</br>
+        </div>
+        </br>
       </br>
-	</form>
-{% endblock %}
-
-{%  block javascripts %}
-{% endblock %}
-
-
-
-
+    </form>
+      </div>
+    </div>
+</div> 
+ 
+{% endblock %} 
  

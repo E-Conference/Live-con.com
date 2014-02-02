@@ -8,6 +8,7 @@
 namespace fibe\Bundle\WWWConfBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * PaperRepository
@@ -28,7 +29,6 @@ class PaperRepository extends EntityRepository
                 array_push($papers_id,$paper->getId());
             }
         }
-       
      
         $qb = $this->createQueryBuilder('p');
             $qb ->select(array('p.id','p.title'))
@@ -39,10 +39,48 @@ class PaperRepository extends EntityRepository
         return $papers;
     }
 
+
+    public function filtering($params, $currentConf){
+    
+       $entities = array();
+       $qb = $this->createQueryBuilder('p');
+       $qb     
+          ->where('p.conference = :conference_id')
+          ->setParameter('conference_id', $currentConf->getId());
+
+       if(isset($params['id'])) {
+           $qb
+                ->andWhere('p.id = :id')
+                ->setParameter('id', $params['id'])
+            ;
+        }
+
+        if(isset($params['author'])) {
+            $qb
+                ->leftJoin('p.authors', 'au')
+                ->andWhere('au.id = :author_id')
+                ->setParameter('author_id', $params['author'])
+            ;
+        }
+
+         if(isset($params['topic'])) {
+            $qb
+                ->leftJoin('p.topics', 't')
+                ->andWhere('t.id = :topic_id')
+                ->setParameter('topic_id', $params['topic'])
+            ;
+           
+        }
+
+        $query = $qb->getQuery();
+        return  $query->execute();
+
+    }
+
     /**
      * getOrderedQueryBuilder
      *
-     * @return QueryBuilder
+     * @return QueryBuilder 
      */
     public function getOrderedQueryBuilder()
     {

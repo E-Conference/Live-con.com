@@ -70,35 +70,74 @@
                         </ul>
                         </li>
                         <li class="list-group-item"><h5>Events <span class="badge">{{ conference.events|length }}</span></h5></li>
-                        {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
+                        {% if conference.getModule().getPaperModule() == 1 %}
                         <li class="list-group-item"><h5>Papers <span class="badge">{{ conference.papers|length }}</span></h5> </li>
                         {% endif %}
                         <li class="list-group-item"><h5>Locations <span class="badge">{{ conference.locations|length }}</span></h5></li>
                         <li class="list-group-item"><h5>Persons <span class="badge">{{ conference.persons|length }}</span></h5> </li>
                         <li class="list-group-item"><h5>Topics <span class="badge">{{ conference.topics|length }}</span></h5> </li>
-                        {% if app.user.getCurrentConf().getModule().getOrganizationModule() == 1 %}
+                        {% if conference.getModule().getOrganizationModule() == 1 %}
                         <li class="list-group-item"><h5>Organizations <span class="badge">{{ conference.organizations|length }}</span></h5> </li> 
                         {% endif %}
                         <li class="list-group-item"><h5>Conf Managers <span class="badge">{{ conference.confManagers|length }}</span></h5> </li>
                       </ul>
+                      {% if conference.getFlagByManagerId(app.user.id, 'datas') == 1 %}
+                           <a data-url="{{ path('schedule_conference_delete', {id: conference.id}) }}" class="delete_conference btn btn-danger btn-block modal-toggle" data-message ="Are you sur delete '{{ conference.getConfName() }}' ?" data-toggle="modal" data-target="#myModal">
+                                  <i class="fa fa-trash-o"></i>
+                          </a>
+
+                      {% endif %}
                      </div>
+
                   </div>
                   
             </div>
              {% endfor  %}
         </div>
-  </div>
+</div>
+
+
+<!-- Delete Confirmation Modal -->
+
+<div id="deleteConfirmation" class="modal fade bs-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Delete Conference</h4>
+              </div>
+              <div class="modal-body">
+              </div>
+              <div class="modal-footer">
+                 <a href="#" id="confirm" class="btn btn-danger">Yes</a>
+                 <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">Canceled</a>
+              </div>
+          </div>
+      </div>
+    </div>
 {% endblock%}
 
 {%  block javascripts_page %}
     {{parent()}}
-    <script  type="text/javascript" >
-        $(document).ready(function(){
-       
-            //Hide add manager form
-            $("#newConfForm").hide();
+    <script  type="text/javascript">
+
+     $(document).ready(function() {
+                 $('#deleteConfirmation').modal('hide');
+            
+
+        $('.delete_conference').click(function() {
+            var message = $(this).attr('data-message');
+            var deleteUrl = $(this).attr('data-url');
+
+            $('#confirm').attr('href',deleteUrl);
+            $('.modal-body').append("<p>"+message+"</p>");
+
+            $('#deleteConfirmation').modal('show');
+
+        })
 
         });
-        </script>
+   
+    </script>
 {% endblock %}
 

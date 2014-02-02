@@ -216,6 +216,7 @@ class ConfEventController extends Controller
                   'required' => false,
                   'property' => 'name',
                   'multiple' => false,
+                  'choices'=> $topicsForSelect,
                   'label'    => "Select topic" ))
             ->getForm();
 

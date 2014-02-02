@@ -114,4 +114,49 @@ class LocationRepository extends EntityRepository
 
         return is_null($q) ? array() : $q->getResult();
     }
+
+
+    public function filtering($params, $currentConf){
+    
+       $entities = array();
+       $qb = $this->createQueryBuilder('loc');
+       $qb     
+          ->where('loc.conference = :conference_id')
+          ->setParameter('conference_id', $currentConf->getId());
+
+       if(isset($params['id'])) {
+           $qb
+                ->andWhere('loc.id = :id')
+                ->setParameter('id', $params['id'])
+            ;
+        }
+
+        if(isset($params['equipment'])) {
+            $qb
+                ->leftJoin('loc.equipments', 'e')
+                ->andWhere('e.id = :equipment_id')
+                ->setParameter('equipment_id', $params['equipment'])
+            ;
+        }
+
+        if(isset($params['cap_max'])) {
+            $qb
+                ->andWhere('loc.capacity <= :cap_max')
+                ->setParameter('cap_max', $params['cap_max'])
+            ;
+           
+        }
+        if(isset($params['cap_min'])) {
+            $qb
+                ->andWhere('loc.capacity > :cap_min')
+                ->setParameter('cap_min', $params['cap_min'])
+            ;
+           
+        }
+
+        $query = $qb->getQuery();
+        return  $query->execute();
+
+    }
+
 }

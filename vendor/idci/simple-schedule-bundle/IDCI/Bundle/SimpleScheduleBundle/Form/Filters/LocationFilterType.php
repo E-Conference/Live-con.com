@@ -1,0 +1,60 @@
+<?php
+
+namespace IDCI\Bundle\SimpleScheduleBundle\Form\Filters;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+class LocationFilterType extends AbstractType
+{
+
+    private $user;
+
+    public function __construct($user)
+    {
+        $this->user = $user;
+    }
+
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+           ->add('id', 'entity', array(
+                'class' => 'IDCISimpleScheduleBundle:Location',
+                'label'   => 'Name',
+                'choices'=> $this->user->getCurrentConf()->getLocations()->toArray(),
+                'required' => false,
+            ))
+           ->add('equipment', 'entity', array(
+                'class' => 'fibeWWWConfBundle:Equipment',
+                'label'   => 'Equipment',
+                'required' => false,
+            ))
+            ->add('cap_max', 'number',array(
+                'label'   => 'Cap. max',
+                'required' => false,
+            ))
+            ->add('cap_min', 'number',array(
+                'label'   => 'Cap. min',
+                'required' => false,
+            ))
+            
+
+
+        ;
+    }
+
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+         $resolver->setDefaults(array(
+            'csrf_protection'   => false,
+            'validation_groups' => array('filtering') // avoid NotBlank() constraint-related message
+        ));
+    }
+
+    public function getName()
+    {
+        return 'IDCI_bundle_simpleschedulebundle_locationfiltertype';
+    }
+}
