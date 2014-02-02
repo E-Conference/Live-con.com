@@ -304,9 +304,9 @@ class DBImportController extends Controller
                 $isMainConfEvent = false;
                 if(isset($current["mainConferenceEvent"])){
                     $isMainConfEvent = true;
-                    echo "mainConfEvent FOUND";
-                    var_dump($current);
-                    echo "\n";
+                    // echo "mainConfEvent FOUND";
+                    // var_dump($current);
+                    // echo "\n";
                     $entity = $mainConfEvent;
                     // $conference->setMainConfEvent($entity); 
                     // $entity->setIsMainConfEvent(true);

@@ -67,7 +67,7 @@
         z-index       : 2; 
         max-height    : 600px ;
         min-height        : 600px ; 
-        overflow-y    :    auto;
+        /*overflow-y    :    auto;*/
         height        : 100%;  /*sidebar h4 height*/
         min-height    : 15em;
 

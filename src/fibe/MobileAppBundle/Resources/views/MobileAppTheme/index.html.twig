@@ -10,7 +10,7 @@
 
      <div class="row page-top-header ">
             <div class="page-title col-xs-2  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                <span>You app'</span>
+                <span>Your app'</span>
             </div>
 
             <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
@@ -32,10 +32,10 @@
                
               
             </div>
-            <div class="row">
+
               <form action="{{ path('mobileAppTheme_update_conference', { 'id': conference.id })}}" method="post" {{ form_enctype(conference_form) }}>
-              
-                    <div class="col-lg-4 well">
+                <div class="row">
+                    <div class="col-lg-4">
                           <h1> Conference settings</h1> 
                           {{ form_row(conference_form.mainConfEvent.summary) }}
                           {{ form_row(conference_form.mainConfEvent.acronym) }}
@@ -45,7 +45,7 @@
                            <button type="submit" class="btn btn-success edit"><i class="fa fa-pencil-square-o"></i></button>
                           <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(conference_form) }}</div> 
                      </div>
-                    <div class="col-lg-4 well">
+                    <div class="col-lg-4">
                         <h1>Logo</h1>
                         <div class='logo' style="width:300px; height: 100px">
                           <div class="logo-choice"  style="width:300px; height: 100px">
@@ -53,15 +53,15 @@
                           </div>
                        </div>
                      </div>
-                      <div class="col-lg-4 well">
+                      <div class="col-lg-4 ">
                         <h1>Color board</h1> 
                         <div id="palette"> 
                           <a href="#" id="generateTheme" class="btn btn-success"><i class="fa fa-magic"></i>Generate theme</a>
                         </div>
                       </div>
-                
+                  </div>  
               </form>
-            </div>  
+          
         </div>
   {% endblock centerPanel %}
 {% block javascripts_page %}
@@ -72,7 +72,6 @@
 
   <script type="text/javascript">
   $( document ).ready(function() {
-    debugger;
     $("#generateTheme").click(function(){
         generateTheme();
     })

@@ -10,11 +10,13 @@ function Sidebar(){
         var eventHtml =  "<div class='external-event fc-event fc-event-draggable'></div>";
         var $sidebarTmp = $(eventHtml);
 
+
         function populate(url){ 
         $.get(
           url,
           null,
-          function(events) {  
+          function(events) {
+
               var instant_events = [];
               for(var i=0;i<events.length;i++){
 
@@ -22,10 +24,11 @@ function Sidebar(){
                 instant_events.push(Events[events[i]["id"]]); 
               }
               self.setInstantEvents(instant_events); 
-
-              // if(stopRender===true)return;
+              
+              scrollable();
+              
               bootstrapAlert("success",events.length+" dateless events have been well fetched" ); 
-              //$calendar.fullCalendar('renderEvent',e  ); // 3rd arg make the event "stick" 
+              
           },
           'json'
         ).error(function(jqXHR, textStatus, errorThrown) {
@@ -55,6 +58,7 @@ function Sidebar(){
                     $(this).css("border-color","green"); 
                     sidebarEventHtml($sidebarTmp,event);
                     $sidebarTmp.show().css("background-color",event.color || "rgb(58, 135, 173)") ;
+                    // $(".scroller").mCustomScrollbar("update");
                 }
             },
             out: function( event, ui ) {
@@ -82,10 +86,11 @@ function Sidebar(){
         function sidebarDraggable($event,event,prepend){
           if(prepend===true)$event.prependTo($sidebar);
           else $event.appendTo($sidebar);
-          $sidebarTmp.prependTo($sidebar);
+          $sidebarTmp.prependTo($sidebar); 
           // console.log(event);
           sidebarEventHtml($event,event);
-          $event.prepend("<span class='fc-event-id ' style='color:grey;'>"+event.id+"</span>");
+        // scrollable();
+          $event.data("id",event.id);
           //set child drag    
           event['elem'] = $event;
           // console.log(event);
@@ -113,7 +118,8 @@ function Sidebar(){
                         // },1);//event isn't yet updated   
                     } 
                   }) 
-
+          // alert("update")
+          // $(".scroller").mCustomScrollbar("update");
           // store the Event Object in the DOM element so we can get to it later
           return $event;
         }
@@ -132,4 +138,12 @@ function Sidebar(){
                  });  
         }
 
+        var scroller;
+        function scrollable(){
+          if(!scroller){
+            scroller = $(".scroller").mCustomScrollbar({"theme":"dark-thin",advanced:{  updateOnContentResize:true,   updateOnBrowserResize:true  } });
+          }else{
+            scroller.mCustomScrollbar("update");
+          }
+        }
 }

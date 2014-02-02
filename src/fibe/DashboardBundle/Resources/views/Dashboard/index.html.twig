@@ -11,63 +11,73 @@
 
 
 {% block centerPanel %}
- <div class="jumbotron">
-        <h1>Welcome to Livecon {{entity.username}} !</h1>
-        <p>Choose your conference or create a new one for start    
-                <a class="btn btn-info btn-create create"  href="{{ path('schedule_conference_create') }}">
-                    <i class="fa fa-plus"></i>New conference
-                </a></p>
-        <div class="row-fluid">
-        {% for conference  in entity.getConferences()  %}
-        
-        <div class="col-lg-4">
-          <div class="panel panel-default">
-           <div class="panel-heading">  
-                  <a href="{{ path('dashboard_enter_conference', {id: conference.id}) }}" role="button" >
-                    <h4> {{conference.getConfName()}}</h4>
-                  </a>
+     <div class="row page-top-header ">
+            <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <span>Conference list</span>
             </div>
-               <div class="panel-body">
-                    <ul class="list-group">
-                      <li class="list-group-item"> 
-                        <ul class="nav nav-pills nav-stacked">
-                          <li>
-                            <h5>App Manager
-                                {% if conference.getFlagAppByManagerId(entity.id)==1 %}
-                                      <i class="fa fa-check"></i>
-                                 {% else %}
-                                      <span class="glyphicon glyphicon-ban-circle"></span> 
-                                 {% endif %}
-                            </h5>
-                          </li>
-                           <li>
-                            <h5>Schedule Manager
-                                {% if conference.getFlagSchedByManagerId(entity.id)==1 %}
-                                      <i class="fa fa-check"></i>
-                                 {% else %}
+
+            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+            </div>
+            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <a class="btn btn-info btn-create create"  href="{{ path('schedule_conference_create') }}">
+                    <i class="fa fa-plus"></i> New conference
+                </a></p>
+            </div>
+      </div>
+      <div class="row page-content">
+                
+          <div class="row-fluid">
+          {% for conference  in entity.getConferences()  %}
+          
+          <div class="col-lg-4">
+            <div class="panel panel-default">
+             <div class="panel-heading">  
+                    <a href="{{ path('dashboard_enter_conference', {id: conference.id}) }}" role="button" >
+                      <h4> {{conference.getConfName()}}</h4>
+                    </a>
+              </div>
+                 <div class="panel-body">
+                      <ul class="list-group">
+                        <li class="list-group-item"> 
+                          <ul class="nav nav-pills nav-stacked">
+                            <li>
+                              <h5>App Manager
+                                  {% if conference.getFlagAppByManagerId(entity.id)==1 %}
+                                        <i class="fa fa-check"></i>
+                                   {% else %}
                                         <span class="glyphicon glyphicon-ban-circle"></span> 
-                                 {% endif %}
-                            </h5>
-                           </li>
-                           <li>
-                            <h5>Datas Manager
-                                {% if conference.getFlagDatasByManagerId(entity.id)==1 %}
-                                      <i class="fa fa-check"></i>
-                                 {% else %}
-                                      <span class="glyphicon glyphicon-ban-circle"></span> 
-                                 {% endif %}
-                            </h5>
+                                   {% endif %}
+                              </h5>
+                            </li>
+                             <li>
+                              <h5>Schedule Manager
+                                  {% if conference.getFlagSchedByManagerId(entity.id)==1 %}
+                                        <i class="fa fa-check"></i>
+                                   {% else %}
+                                          <span class="glyphicon glyphicon-ban-circle"></span> 
+                                   {% endif %}
+                              </h5>
+                             </li>
+                             <li>
+                              <h5>Datas Manager
+                                  {% if conference.getFlagDatasByManagerId(entity.id)==1 %}
+                                        <i class="fa fa-check"></i>
+                                   {% else %}
+                                        <span class="glyphicon glyphicon-ban-circle"></span> 
+                                   {% endif %}
+                              </h5>
+                            </li>
+                            <li>
+                              <h5>Team Manager
+                                  {% if conference.getFlagByManagerId(entity.id,'team')==1 %}
+                                        <i class="fa fa-check"></i>
+                                   {% else %}
+                                        <span class="glyphicon glyphicon-ban-circle"></span> 
+                                   {% endif %}
+                              </h5>
+                            </li>
+                          </ul>
                           </li>
-                          <li>
-                            <h5>Team Manager
-                                {% if conference.getFlagByManagerId(entity.id,'team')==1 %}
-                                      <i class="fa fa-check"></i>
-                                 {% else %}
-                                      <span class="glyphicon glyphicon-ban-circle"></span> 
-                                 {% endif %}
-                            </h5>
-                          </li>
-                        </ul>
                         </li>
                         <li class="list-group-item"><h5>Events <span class="badge">{{ conference.events|length }}</span></h5></li>
                         {% if conference.getModule().getPaperModule() == 1 %}
@@ -115,6 +125,7 @@
           </div>
       </div>
     </div>
+
 {% endblock%}
 
 {%  block javascripts_page %}

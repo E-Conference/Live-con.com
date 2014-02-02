@@ -8,121 +8,130 @@
 {% block centerPanel %}
   {{ parent() }}
 
-    <h1>Event edit</h1>
-    <div class="row">
-     <div class="col-lg-9"></div>
-          <div class="col-lg-2 btn-group">
-              <a type="button" href="{{ path('schedule_event') }}" class="btn btn-warning">
+     <div class="row page-top-header ">
+            <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <span>Edit event</span>
+            </div>
+
+            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+            </div>
+            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                 <a type="button" href="{{ path('schedule_event') }}" class="btn btn-warning">
                     <i class="fa fa-list"></i>
-              </a>
-               <form action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
-                  <input type="hidden" name="_method" value="DELETE" />
-                    {{ form_widget(delete_form) }}
-                <button type="submit" class="btn btn-danger">
-                    <i class="fa fa-trash-o"></i>
-                </button>
-              </form> 
-          </div>    
-    </div>     
-
-    <form action="{{ path('schedule_confevent_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
-       <input type="hidden" name="_method" value="PUT" />
-       <div class="row">
-           <div class="col-lg-2"></div>
-           <div class="col-lg-4">
-                  {{ form_row(edit_form.summary) }}
-                  {{ form_row(edit_form.acronym) }}
-                  {{ form_row(edit_form.categories) }} 
-                  {{ form_row(edit_form.description) }} 
-                  {{ form_row(edit_form.url) }} 
+                </a>
+                 <form action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
+                    <input type="hidden" name="_method" value="DELETE" />
+                      {{ form_widget(delete_form) }}
+                  <button type="submit" class="btn btn-danger">
+                      <i class="fa fa-trash-o"></i>
+                  </button>
+                </form> 
             </div>
-            <div class="col-lg-4">
-                  {{ form_row(edit_form.comment) }}
-                  {{ form_row(edit_form.organizer) }}
-                  {{ form_row(edit_form.contacts) }}
-                  {{ form_row(edit_form.location) }}  
+      </div>
+      <div class="row page-content">
 
-                  {{ form_errors(edit_form) }}
-                  </br>
-              </div>
-              <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
-                  {{ form_rest(edit_form)}}
-              </div>                       
-        </div> 
-        </br>
-         <div class="row"> 
-            <div class="col-lg-4"></div>
-            <div class="col-lg-4">  
-                 <button type="submit" class="btn btn-block btn-success">
-                          <i class="fa fa-check"></i>
-                </button>
-            </div>
-        </div>
-    </form>
-      
-        </br></br>
+     
 
-         
-            <div class="row">
+        <form action="{{ path('schedule_confevent_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+           <input type="hidden" name="_method" value="PUT" />
+           <div class="row">
                <div class="col-lg-2"></div>
-               <div class="col-lg-8">
-                <h1>Topics</h1>
-                 <a  class="btn btn-link btn-small help"  data-toggle="popover" title="Add topic to the event" data-content="For add a topic to the event, select it in the  select field.">
-                       <i class="icon-question"></i>
-                  </a>    
-                 
-                <div id="topics_related_list">
-                  {% include "fibeWWWConfBundle:ConfEvent:topicRelation.html.twig" %}
+               <div class="col-lg-4">
+                      {{ form_row(edit_form.summary) }}
+                      {{ form_row(edit_form.acronym) }}
+                      {{ form_row(edit_form.categories) }} 
+                      {{ form_row(edit_form.description) }} 
+                      {{ form_row(edit_form.url) }} 
                 </div>
-                 {{ form_widget(topic_form) }}    
-              </div>  
+                <div class="col-lg-4">
+                      {{ form_row(edit_form.comment) }}
+                      {{ form_row(edit_form.organizer) }}
+                      {{ form_row(edit_form.contacts) }}
+                      {{ form_row(edit_form.location) }}  
+
+                      {{ form_errors(edit_form) }}
+                      </br>
+                  </div>
+                  <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
+                      {{ form_rest(edit_form)}}
+                  </div>                       
             </div> 
-         
-        </br></br>
-
-        {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
-            <div class="row">
-               <div class="col-lg-2"></div>
-               <div class="col-lg-8">
-                <h1>Papers Relation</h1>
-                 <a  class="btn btn-link btn-small help" data-toggle="popover" title="Add paper to the event" data-content="For add a paper to the event, select it in the select field.">
-                       <i class="icon-question"></i>
-                    </a>
-                
-                 <div id="paper_related_list">
-                    {% include "fibeWWWConfBundle:ConfEvent:paperRelation.html.twig" %}
+            </br>
+             <div class="row"> 
+                <div class="col-lg-4"></div>
+                <div class="col-lg-4">  
+                     <button type="submit" class="btn btn-block btn-success">
+                              <i class="fa fa-check"></i>
+                    </button>
                 </div>
-                {{ form_widget(paper_form) }}
+            </div>
+        </form>
+          
+            </br></br>
+
+             
+                <div class="row">
+                   <div class="col-lg-2"></div>
+                   <div class="col-lg-8">
+                    <h1>Topics</h1>
+                     <a  class="btn btn-link btn-small help"  data-toggle="popover" title="Add topic to the event" data-content="For add a topic to the event, select it in the  select field.">
+                           <i class="icon-question"></i>
+                      </a>    
+                     
+                    <div id="topics_related_list">
+                      {% include "fibeWWWConfBundle:ConfEvent:topicRelation.html.twig" %}
+                    </div>
+                     {{ form_widget(topic_form) }}    
+                  </div>  
+                </div> 
+             
+            </br></br>
+
+            {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
+                <div class="row">
+                   <div class="col-lg-2"></div>
+                   <div class="col-lg-8">
+                    <h1>Papers Relation</h1>
+                     <a  class="btn btn-link btn-small help" data-toggle="popover" title="Add paper to the event" data-content="For add a paper to the event, select it in the select field.">
+                           <i class="icon-question"></i>
+                        </a>
+                    
+                     <div id="paper_related_list">
+                        {% include "fibeWWWConfBundle:ConfEvent:paperRelation.html.twig" %}
+                    </div>
+                    {{ form_widget(paper_form) }}
+                  </div>
+                </div>
+              {% endif %}
+
+            </br></br>
+
+                <div class="row">
+                   <div class="col-lg-2"></div>
+                   <div class="col-lg-8">
+                      <h1>Persons Relation</h1>
+                      <a  class="btn btn-link btn-small help" data-toggle="popover" title="Add a person to the event" data-content='For add a person to the event, select it in the select field and the role of this person for the event. Then, click on "add person".'>
+                           <i class="icon-question"></i>
+                      </a>
+                    <div id="person_related_list"> 
+                        {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
+                    </div>
+
+                <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
+                     {{ form_widget(role_form) }}
+                     {{ form_errors(role_form) }}
+                     </br>
+                      <button id="role_form_submit"class="btn btn-info" type="button" onclick="addPerson()">
+                        <i class="fa fa-plus"></i> add Person
+                    </button>
+                     </form>
+                     </br>
+                   
               </div>
             </div>
-          {% endif %}
+          </br>
+      </div>
 
-        </br></br>
-
-            <div class="row">
-               <div class="col-lg-2"></div>
-               <div class="col-lg-8">
-                  <h1>Persons Relation</h1>
-                  <a  class="btn btn-link btn-small help" data-toggle="popover" title="Add a person to the event" data-content='For add a person to the event, select it in the select field and the role of this person for the event. Then, click on "add person".'>
-                       <i class="icon-question"></i>
-                  </a>
-                <div id="person_related_list"> 
-                    {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
-                </div>
-
-            <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
-                 {{ form_widget(role_form) }}
-                 {{ form_errors(role_form) }}
-                 </br>
-                  <button id="role_form_submit" class="btn btn-info" type="button" onclick="addPerson()">
-                    <i class="fa fa-plus"></i> add Person
-                </button>
-                 </form>
-                 </br>
-               
-          </div>
-        </div>
-      </br>
 
 {% endblock %}
 

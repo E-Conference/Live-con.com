@@ -1,4 +1,4 @@
-<div class='col-lg-4 well'>
+<div class='col-lg-4'>
 	<form action="{{ path('mobileAppTheme_update_style',  { 'id': mobile_app_config.id }) }}" method="post" {{ form_enctype(mobile_app_form) }}>
 		<input type="hidden" name="_method" value="PUT" />
 		<div id='headerStyle'>
@@ -32,7 +32,7 @@
 		</div>
 		<button type="submit" class="btn btn-success edit-app"><i class="fa fa-pencil-square-o"></i></button>
 		
-			<a class="btn btn-infos" href="{{path('mobileAppPublic_index', { 'id': conference.id })}}"  target="_blank"><i class="fa fa-eye"></i></a>
+		
 		<div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
                 {{ form_rest(mobile_app_form)}}
             </div>

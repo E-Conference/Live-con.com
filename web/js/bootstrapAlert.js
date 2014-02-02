@@ -15,15 +15,15 @@ function bootstrapAlert(type,msg,title,icon){
     var config = {
         success:{
             title:"Success : ",
-            icon:"<i class='icon-ok'></i>"
+            icon:"<i class='fa fa-check'></i>"
         },
         info:{
             title:"Info : ",
-            icon:"<i class='icon-info'></i>"
+            icon:"<i class='fa fa-info'></i>"
         },
         warning:{
             title:"Error : ",
-            icon:"<i class='icon-meh'></i>"
+            icon:"<i class='fa fa-meh-o'></i>"
         }
     }
     //default values
@@ -42,7 +42,7 @@ function bootstrapAlert(type,msg,title,icon){
     $bootstrapAlert.attr("class","")
                    .addClass("alert alert-"+type) 
                    .html('<button type="button" class="close" data-dismiss="alert">&times;</button><strong> '+title+' </strong>'+msg)  
-                   .prepend($(icon).addClass("icon-2x").css("margin-right","0.5em"));
+                   .prepend($(icon).addClass("fa-2x").css("margin-right","0.5em"));
 
     $bootstrapAlert.stop().hide().fadeIn('fast');
     clearTimeout(bootstrapAlertTimeout);

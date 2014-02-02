@@ -20,33 +20,28 @@
 
 
     <div class="col-sm-12 col-md-12 col-lg-12">
-        <div id="page-data-file" class="page">
-             <h2 class="text-info">Step 1 : Please select the file to import</h2>
-            <div class="progress progress-striped">
-              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="width: 10%">
-                <span class="sr-only">10% Complete (success)</span>
-              </div>
-            </div>
-           
-            <form id="EventImportForm"  class="input-append">
-                <label for="EventImport"> 
+
+        <h2 id="desc-header" class="text-info">Step 1 : Please select the file to import</h2>
+        <div id="progress-header" class="progress progress-striped active">
+          <div class="progress-bar progress-bar-success" role="progressbar" style="width: 5%">
+          </div>
+        </div>
+
+        <div id="page-data-file" class="page"> 
+            <form id="datasetFileForm"  class="input-append">
+                <label for="datasetFile"> 
                     Available XML input format are : 
                         <span class="badge badge-success" ><i class="fa fa-check" ></i>  XML</span>
                         <span class="badge badge-success"><i class="fa fa-check" ></i>  XLS</span>
                       
                     {% if not wwwConf.isEmpty() %}<p class="text-warning"><i class="icon-s"></i>Your conference will be emptied first!</p>{% endif %}
-                </label>
-                
-            
+                </label> 
                 <div class="input-group">
     				   <span class="input-group-addon">File to import</span>
-                        <input id="EventImport" method="POST" action="/uploadDataset" class="form-control" name="EventImport" value="Choose your file" type="file"/>
+                        <input id="datasetFile" method="POST" action="/uploadDataset" class="form-control" name="datasetFile" value="Choose your file" type="file"/>
                         <div id="drop">Drag your file here</div>
-                </div>
-
-                 
-            </form> 
-
+                </div> 
+            </form>  
             <h3 class="text-info">Action</h3> 
             <a  class="empty-conf btn btn-danger btn-xs" 
                 {% if  wwwConf.isEmpty() %}
@@ -60,57 +55,44 @@
              <a href="{{path('externalization_import_xls')}}">Test xls import</a>
         </div> 
 
-        <div id="page-mapping-file" class="page" style="display:none;">
-             <h2 class="text-info">Step 2 : Please select a mapping file to use</h2>
-            <div class="progress progress-striped">
-              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                <span class="sr-only">40% Complete (success)</span>
-              </div>
-            </div>
-          
-            <div class="input-group">
-                      <span class="input-group-addon">Mapping file</span>
-                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                    Mapping file <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">OCS format</a></li>
-                    <li><a href="#">SWC format</a></li>
-                  </ul>
-            </div>
-              <span class="input-group-btn">
-                        <button disabled="disabled" type="submit"class="btn btn-default">
-                            Process import <i class="icon-arrow-right"></i> 
-                        </button>
-                    </span>
-            <button  type="submit" class="btn btn-default import"> Import data <i class="icon-arrow-right"></i> </button>
-            <button id="page-step3" type="submit" class="btn btn-default"> New mapping file <i class="icon-arrow-right"></i> </button>
+        <div id="page-mapping-file" data-progress="20" data-desc="Step 2 : Please select a mapping file to use" class="page" style="display:none;">   
+            <form id="form-known-mapping-format">
+                <label> 
+                    Choose a known format :         
+                </label> <br/>
+                <select id="known-mapping-format" required="false">  
+                    <option selected="selected" value="swc">SWC format</option> 
+                    <option value="ocs">OCS format</option> 
+                </select>  
+                <button type="submit" class="btn btn-default "><i class="fa fa-play"></i> Process import</button>
+            </form>
+            <br/>
+            <label> 
+                Or import your own format :
+            </label> <br/>
+            <button id="new-mapping" class="btn btn-default "><i class="fa fa-plus"> </i>  New mapping file </button>
         </div>
 
-        <div id="page-new-mapping-file" class="page" style="display:none;">
-            <h2 class="text-info">Step 3 : Please proceed to the mapping</h2>
-             <div class="progress progress-striped">
-              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                <span class="sr-only">40% Complete (success)</span>
-              </div>
-            </div>
-          
+        <div id="page-new-mapping-file" data-progress="50" data-desc="Step 3 : Please proceed to the mapping"  class="page" style="display:none;"> 
             <div id="datafile-form" class="col-sm-6 col-md-6 col-lg-6"></div>
             <div id="model-form"  class="col-sm-6 col-md-6 col-lg-6"></div>
-            <button type="submit" class="btn btn-default import">Import your data <i class="icon-arrow-right"></i> </button>
-            <button id="test-mapping" type="submit" class="btn btn-default">Test your mapping file <i class="icon-arrow-right"></i> </button>
+            <button id="test-mapping" class="col-sm-6 col-md-6 col-lg-6 btn btn-default"><i class="fa fa-play"></i> Test your mapping file </button>
+            <button id="submit-new-mapping" class="col-sm-6 col-md-6 col-lg-6 btn btn-success import"><i class="fa fa-download"></i> Import your data </button>
         </div>   
 
-        <div id="page-result" class="page" style="display:none;">
-             <h2 class="text-info">final step : Congratulations! you're done</h2>
-             <div class="progress progress-striped">
-              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                <span class="sr-only">100% Complete (success)</span>
-              </div>
-            </div>
+        <div id="page-result" class="page" data-progress="70" data-desc="Final step : send us the dataset"  style="display:none;">
+            <button type="submit" id="send-data" class="btn btn-primary btn-lg "><i class="fa fa-upload"></i> Send </button>
+            <h3 class="text-info">Results</h3>
+            <div id="result-extract"></div>
+        </div>        
+        <div id="page-conf-emptying" class="page" data-progress="90" data-desc="Emptying conference... "  style="display:none;">     
+        </div>        
+        <div id="page-conf-emptied" class="page" data-progress="95" data-desc="Conference emptied, now sending file... "  style="display:none;"> 
+        </div>        
+        <div id="page-end" class="page" data-progress="100" data-desc="You're done !"  style="display:none;"> 
             <h3 class="text-info">Results</h3>
             <div id="result-import"></div>
-        </div>                      
+        </div>            
     </div>
 
 
@@ -157,12 +139,15 @@
 
         $(document).ready(function(){
 
-            /*********      handle schange page workflow  **********/
+            /*********      handle change page workflow  **********/
             Pager.initialize($("#page-data-file"));
-            var dropDataFile = document.getElementById('drop');
-            var selectDataFile = document.getElementById("EventImport");  
-            var selectMappingFile = $('.import');
-            var newMappingFile = document.getElementById('page-step3');
+            var dropDataFile             = document.getElementById('drop');
+            var selectDataFile           = document.getElementById("datasetFile");  
+            var formKnownMappingFormat   = document.getElementById("form-known-mapping-format");  
+            var selectKnownMappingFormat = document.getElementById("known-mapping-format");  
+            var selectMappingFile        = document.getElementById("submit-new-mapping");   
+            var newMappingFile           = document.getElementById('new-mapping'); 
+            var sendData                 = document.getElementById('send-data'); 
             if(dropDataFile.addEventListener) {
                 dropDataFile.addEventListener('dragenter', handleDragover, false);
                 dropDataFile.addEventListener('dragover', handleDragover, false);
@@ -174,7 +159,16 @@
             if(newMappingFile.addEventListener) {
                 newMappingFile.addEventListener('click', handleNewMappingFile, false);
             }
-            selectMappingFile.on('click', handleImport);
+            
+            if(formKnownMappingFormat.addEventListener) {
+                formKnownMappingFormat.addEventListener('click', handleKnownMappingFormat, false);
+            } 
+            if(selectMappingFile.addEventListener) {
+                selectMappingFile.addEventListener('click', handleImport, false);
+            } 
+            if(sendData.addEventListener) {
+                sendData.addEventListener('click', handleSendSerializedConf, false);
+            } 
 
 
 
@@ -186,94 +180,18 @@
             var ConfRdfFile; 
 
 
-            /*********       confirm empty          **********/
+            ///confirm empty 
             $('.empty-conf').click(function(){
                 confirmEmpty(function(){
                     window.location = "{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}";
                 })
                 return false;
             }); 
-
-
-            //parse file
-            var confOwlUriInput = document.getElementById("EventImport");  
-            var dataArray;
-
-            
-
-            // $(confOwlUriInput).off("change").on("change",function(){
-            //     $(this).parent().removeClass('has-success');
-            //     dataArray = undefined;
-            //     $('#EventImportForm [type="submit"]').attr("disabled","disabled")
-            //                                          .removeClass("btn-success")
-            //                                          .addClass("btn-default");
-
-            //     reader.readAsText(this.files[0]); 
-            // })
-
-            //empty conf if needed
-            $('#EventImportForm').submit(function(event) {  
-                if(!dataArray){ 
-                    bootstrapAlert("info",' please, choose a file to import'); 
-                    return false;
-                }
-
-                {% if not wwwConf.isEmpty() %} 
-                    confirmEmpty(function(){
-                        bootstrapAlert("info",' emptying the conference...',"Info : ","<i class='icon-spinner icon-spin'></i>");
-                        $.ajax({ 
-                                type: "GET",
-                                cache: false,  
-                                url: "{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}",
-                                success:function(a,b,c)
-                                {
-                                    bootstrapAlert("success",'conference emptied');
-                                    bootstrapAlert("success",' now sending file...',"conference emptied,","<i class='icon-spinner icon-spin'></i>"); 
-                                    sendSerializedConf(dataArray);
-                                },
-                                error:function(a,b,c)
-                                { 
-                                    console.log("ERROR empting the conf")
-                                    console.log(a)
-                                    console.log(b)
-                                    console.log(c) 
-                                },
-                            });
-                    }) 
-                {% else %} 
-                    bootstrapAlert("info",' sending file...',"Info : ","<i class='icon-spinner icon-spin'></i>");
-                    sendSerializedConf(dataArray);
-                {% endif %}
-                return false;
-            }); 
-
-
-            //send file
-            function sendSerializedConf(dataArray){
-                var data = {dataArray:JSON.stringify(dataArray)};
-                //DBimport
-                $.ajax({ 
-                    type: "POST",
-                    cache: false,  
-                    url: "{{ path('schedule_admin_DBimport') }}",
-                    data: data,
-                    success:function(a,b,c)
-                    {
-                        bootstrapAlert("success",' '+getMsgUl(dataArray,"added")+'Please refresh this page to find out imported items.'); 
-                    },
-                    error:function(a,b,c)
-                    {
-                        bootstrapAlert("warning",'import failed because : '+c);
-                        console.log(a)
-                        console.log(b)
-                        console.log(c)
-                        $(confOwlUriInput).parent().addClass('has-warning');  
-                    },
-                });
-            }
+ 
          }); 
 
-    
+        
+        //confirm with a bootstrap modal then call (or not) callback
         function confirmEmpty(callback){ 
             $('#confirmModal').modal('show');
             $('#confirmModal').one('shown.bs.modal', function() {
@@ -293,6 +211,7 @@
                               });
         }
  
+        //output list in a bootstrapAlert
         function getMsgUl(dataArray,endString){
             var msg = "";
             if(dataArray.conference.setAcronym)msg += dataArray.conference.setAcronym;
@@ -303,6 +222,46 @@
                     msg +="<li>"+dataArray[i].length +" "+i+" "+endString+" !</li>"
 
             return msg + "</ul>";
+        }
+
+        function extractDatas(mapping,data){ 
+            run( data,mapping,function(data,importedLog,notImportedLog){
+                    Pager.changePage('#page-result');
+                    Mapper.setSerialisedDatas(data);
+                    bootstrapAlert("success",getMsgUl(Mapper.getSerialisedDatas(),"found"),"conference parsed : ");
+                    var html='<div class="row"><div class="col-sm-6"><div class="panel panel-default">\
+                                                  <!-- Default panel contents -->\
+                                                  <div class="panel-heading">Imported properties : </div>\
+                                                  <ul class="list-group">'; 
+                    for(var i in importedLog){
+                        html+= '<li class="list-group-item">'+importedLog[i]+"</li>";
+                    } 
+                    html+= '</ul></div></div><div class="col-sm-6"><div class="panel panel-default">\
+                                                  <!-- Default panel contents -->\
+                                                  <div class="panel-heading">Not imported properties : </div>\
+                                                  <ul class="list-group">';
+                    for(var i in notImportedLog){
+                        html+= '<li class="list-group-item">'+notImportedLog[i]+"</li>";
+                    }
+                    html+= '</ul></div></div></div>';
+                    $("#result-extract").html(html);
+                },function(msg)
+                { 
+                    bootstrapAlert("warning", msg || "there was an error during extraction of datas","Error :"); 
+                }
+            ); 
+        }
+
+
+        function handleKnownMappingFormat(e){
+                e.stopPropagation();
+                e.preventDefault(); 
+ 
+                var mapping = Mapper.getKnownMapping($("#known-mapping-format").val()); 
+                Mapper.read("#datafile-form");
+                $(Mapper).on("fileRead",function(ev,data){
+                     extractDatas(mapping,data)
+                })
         }
 
 
@@ -322,23 +281,7 @@
                 }
 
                 Mapper.initialize(file);
-              
-          
-             
-                // reader.onload = function(e) {
-                //     run( this.result,function(data){
-                //         dataArray = data;
-                //         bootstrapAlert("info",' '+getMsgUl(dataArray,"found"),"Info : ");
-                //         $('#EventImportForm [type="submit"]').removeAttr("disabled")
-                //                                              .removeClass("btn-default")
-                //                                              .addClass("btn-success");
-                //         $(confOwlUriInput).parent().addClass('has-success');
-                //     },function(msg)
-                //     {
-                //         $(confOwlUriInput).parent().addClass('has-warning');
-                //         bootstrapAlert("warning", msg || "there was an error importing this file");
-                //     });  
-                // }
+               
                 // for (i = 0, f = files[i]; i != files.length; ++i) {
                 //         var reader = new FileReader();
                 //         var name = f.name;
@@ -364,6 +307,66 @@
                 e.dataTransfer.dropEffect = 'copy';
         }
 
+        function handleSendSerializedConf(e) {
+                e.stopPropagation();
+                e.preventDefault();
+
+                {% if not wwwConf.isEmpty() %} 
+                    confirmEmpty(function(){
+                        bootstrapAlert("info",' emptying the conference...',"Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
+                        Pager.changePage('#page-conf-emptying'); 
+                        $.ajax({ 
+                                type: "GET",
+                                cache: false,  
+                                url: "{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}",
+                                success:function(a,b,c)
+                                { 
+                                    bootstrapAlert("success",' now sending file...',"conference emptied,","<i class='fa-2x fa fa-spinner fa-spin'></i>");
+                                    Pager.changePage('#page-conf-emptied'); 
+                                    sendSerializedConf(Mapper.getSerialisedDatas());
+                                },
+                                error:function(a,b,c)
+                                { 
+                                    bootstrapAlert("warning",'failed empting the conf because : '+c);
+                                    console.log("ERROR empting the conf")
+                                    console.log(a)
+                                    console.log(b)
+                                    console.log(c) 
+                                },
+                            });
+                    }) 
+                {% else %} 
+                    bootstrapAlert("info",' sending file...',"Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
+                    sendSerializedConf(dataArray);
+                {% endif %}
+
+                //send file
+                function sendSerializedConf(dataArray){
+                    var data = {dataArray:JSON.stringify(dataArray)};
+                    //DBimport
+                    $.ajax({ 
+                        type: "POST",
+                        cache: false,  
+                        url: "{{ path('schedule_admin_DBimport') }}",
+                        data: data,
+                        success:function(a,b,c)
+                        {
+                            Pager.changePage('#page-end'); 
+                            bootstrapAlert("success",getMsgUl(Mapper.getSerialisedDatas(),"found"),"Conference imported : ");
+                            $("#result-import").html(getMsgUl(Mapper.getSerialisedDatas(),"found")); 
+                        },
+                        error:function(a,b,c)
+                        {
+                            bootstrapAlert("warning",'import failed because : '+c);
+                            console.log(a)
+                            console.log(b)
+                            console.log(c)
+                            $(confOwlUriInput).parent().addClass('has-warning');  
+                        },
+                    });
+                }
+        }
+
 
          function handleImport(e) {
                 e.stopPropagation();
@@ -378,6 +381,9 @@
 
                 Pager.changePage('#page-new-mapping-file');
                 Mapper.read("#datafile-form");
+                $(Mapper).on("fileRead",function(ev,data){
+                    Mapper.map( data);
+                })
                 Model.modelToTab($("#model-form")) ;
         }
          </script>   
