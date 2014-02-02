@@ -115,4 +115,41 @@ class OrganizationRepository extends EntityRepository
 
         return is_null($q) ? array() : $q->getResult();
     }
+
+
+
+     public function filtering($params, $currentConf){
+    
+       $entities = array();
+       $qb = $this->createQueryBuilder('org');
+       $qb     
+          ->where('org.conference = :conference_id')
+          ->setParameter('conference_id', $currentConf->getId());
+
+       if(isset($params['id'])) {
+           $qb
+                ->andWhere('org.id = :id')
+                ->setParameter('id', $params['id'])
+            ;
+        }
+
+        if(isset($params['member'])) {
+            $qb
+                ->leftJoin('org.members', 'pers')
+                ->andWhere('pers.id = :person_id')
+                ->setParameter('person_id', $params['member'])
+            ;
+        }
+
+         if(isset($params['country'])) {
+            $qb
+                ->andWhere( $qb->expr()->like('org.country', $qb->expr()->literal('%' . $params['country'] . '%')) )
+            ;
+           
+        }
+
+        $query = $qb->getQuery();
+        return  $query->execute();
+
+    }
 }

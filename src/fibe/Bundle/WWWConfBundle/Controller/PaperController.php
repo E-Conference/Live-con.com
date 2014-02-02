@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 use fibe\Bundle\WWWConfBundle\Entity\Paper;
 use fibe\Bundle\WWWConfBundle\Form\PaperType;
+use fibe\Bundle\WWWConfBundle\Form\Filters\PaperFilterType;
 
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
@@ -30,7 +31,8 @@ class PaperController extends Controller
      */
     public function indexAction(Request $request)
     {
-        //Authorization Verification conference datas manager
+        
+          //Authorization Verification conference datas manager
         $user=$this->getUser();
         $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
@@ -49,10 +51,49 @@ class PaperController extends Controller
             throw new NotFoundHttpException();
         }
 
+        $filters =$this->createForm(new PaperFilterType($this->getUser()));
         return array(
             'pager' => $pager,
             'authorized' => $authorization->getFlagconfDatas(),
+            'filters_form' => $filters->createView(),
         );
+    }
+
+
+    /**
+     * Filter paper index list
+     * @Route("/filter", name="schedule_paper_filter")
+     */
+    public function filterAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $conf = $this->getUser()->getCurrentConf();
+        //Filters
+        $filters =$this->createForm(new PaperFilterType($this->getUser()));
+        $filters->bindRequest($this->get('request'));
+
+        if ($filters->isValid())  {
+            // bind values from the request
+          
+             $entities = $em->getRepository('fibeWWWConfBundle:Paper')->filtering($filters->getData(), $conf);
+
+             //Pager
+             $adapter = new ArrayAdapter($entities);
+             $pager = new PagerFanta($adapter);
+             $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
+             try {
+               $pager->setCurrentPage($request->query->get('page', 1));
+             } catch (NotValidCurrentPageException $e) {
+                throw new NotFoundHttpException();
+             }
+
+             return $this->render('fibeWWWConfBundle:Paper:list.html.twig', array(
+                 'pager'  => $pager,
+             ));
+        }
+
     }
 
     /**

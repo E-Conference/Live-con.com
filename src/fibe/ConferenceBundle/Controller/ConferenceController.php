@@ -236,10 +236,6 @@ class ConferenceController extends Controller
              $creatorAuthorization->setFlagTeam(1);
              $em->persist($creatorAuthorization);
 
-             //Create default module TODO
-
-
-
             //Linking app config to conference
             $entity->setAppConfig($defaultAppConfig);
             $entity->setMainConfEvent($mainConfEvent);
@@ -337,6 +333,49 @@ class ConferenceController extends Controller
               'module_form' => $ModuleForm->createView(),
               );
         
+    }
+
+
+     /**
+   * @Route("/{id}/delete", name="schedule_conference_delete") 
+   */
+    public function deleteAction(Request $request,$id)
+    {
+      $em = $this->getDoctrine()->getManager();
+      $user=$this->getUser();
+
+
+      $conference = $user->getCurrentConf();
+
+      if (!$conference) {
+            throw $this->createNotFoundException('Unable to find Conference.');
+        }
+
+      if (!$user->authorizedAccesToConference($conference)) {
+          throw new AccessDeniedException('Look at your conferences !!!');
+      } 
+
+      //Authorization Verification conference datas manager
+      $authorization = $user->getAuthorizationByConference($conference);
+      if(!$authorization->getFlagconfDatas()){
+        throw new AccessDeniedException('Action not authorized !');
+      } 
+    
+      //Change User current Conf
+      $user->setCurrentConf(null);
+      $em->persist($user);
+
+      //Empty conf datas
+      $emptyConf = $this->get('emptyConf');
+      $emptyConf->prepareDeleteConf($conference,$em);
+      $em->remove($conference);
+      $em->flush();
+
+      $this->container->get('session')->getFlashBag()->add(
+                'success',
+                'conference successfully deleted.'
+            );
+      return $this->redirect($this->generateUrl('dashboard_index'));
     }
 
 

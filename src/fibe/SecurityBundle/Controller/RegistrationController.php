@@ -3,6 +3,13 @@
 
 namespace fibe\SecurityBundle\Controller;
 
+
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use FOS\UserBundle\FOSUserEvents;
 use FOS\UserBundle\Event\FormEvent;
 use FOS\UserBundle\Event\GetResponseUserEvent;
@@ -10,6 +17,7 @@ use FOS\UserBundle\Event\UserEvent;
 use FOS\UserBundle\Event\FilterUserResponseEvent;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -22,16 +30,22 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
  *
  * @author Thibault Duplessis <thibault.duplessis@gmail.com>
  * @author Christophe Coevoet <stof@notk.org>
+ * @Route("/register")
  */
 class RegistrationController extends ContainerAware
 {
+    /* Create account 
+     * @Route("/signin", name="security_registration_register")
+     * @Method({"GET", "POST"})
+     * @Template()
+     */
     public function registerAction(Request $request)
     {
-        if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') )
+       /* if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') )
         {
             // Sinon on déclenche une exception "Accès Interdit"
             throw new AccessDeniedHttpException('Access reserved to admin');
-        }
+        }*/
         /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
         $formFactory = $this->container->get('fos_user.registration.form.factory');
         /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
@@ -56,11 +70,9 @@ class RegistrationController extends ContainerAware
                 //     $user->addRole('ROLE_ADMIN');
                 // }
  
-               //$test = $userManager->getUser();
-               $conf =  $this->container->get('security.context')->getToken()->getUser()->getCurrentConf();
-               $user->addConference($conf);
-               $user->setCurrentConf($conf);
-
+        
+               $user->addRole('ROLE_ADMIN');
+            
 
                 $userManager->updateUser($user);
                 if (null === $response = $event->getResponse() ) {
@@ -111,6 +123,7 @@ class RegistrationController extends ContainerAware
 
     /**
      * Receive the confirmation token from user email provider, login the user
+     * @Route("/confirm/{token}", name="security_registration_confirm")
      */
     public function confirmAction(Request $request, $token)
     {
@@ -135,13 +148,30 @@ class RegistrationController extends ContainerAware
         $userManager->updateUser($user);
 
         if (null === $response = $event->getResponse()) {
-            $url = $this->container->get('router')->generate('fos_user_registration_confirmed');
+            $url = $this->container->get('router')->generate('security_registration_confirmed');
             $response = new RedirectResponse($url);
         }
 
         $dispatcher->dispatch(FOSUserEvents::REGISTRATION_CONFIRMED, new FilterUserResponseEvent($user, $request, $response));
 
         return $response;
+    }
+
+      /**
+     * Tell the user his account is now confirmed
+     * @Route("/confirmed", name="security_registration_confirmed")
+     * @Template()
+     */
+    public function confirmedAction()
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        if (!is_object($user) || !$user instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
+
+        return $this->container->get('templating')->renderResponse('fibeSecurityBundle:Registration:confirmed.html.'.$this->getEngine(), array(
+            'user' => $user,
+        ));
     }
 
  

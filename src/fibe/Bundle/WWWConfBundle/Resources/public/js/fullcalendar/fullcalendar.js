@@ -4274,7 +4274,11 @@ function AgendaEventRenderer() {
 		}
 		html +=
 			" class='" + classes.join(' ') + "'" +
-			" style='position:absolute;z-index:8;top:" + seg.top + "px;left:" + seg.left + "px;" + skinCss + "'" +
+			" style='position:absolute;z-index:" + 
+		//ADDED BY BENOITDDLP
+		seg.zindex + 
+		//ADDED BY BENOITDDLP
+			";top:" + seg.top + "px;left:" + seg.left + "px;" + skinCss + "'" +
         //ADDED BY BENOITDDLP
 		"data-id='"+event.id+"' >" +
 		//ADDED BY BENOITDDLP

@@ -37,6 +37,50 @@ class PersonRepository extends EntityRepository
         return $authors; 
     }
 
+     public function filtering($params, $currentConf){
+    
+       $entities = array();
+       $qb = $this->createQueryBuilder('pers');
+       $qb     
+          ->where('pers.conference = :conference_id')
+          ->setParameter('conference_id', $currentConf->getId());
+
+       if(isset($params['id']) ) {
+           $qb
+                ->andWhere('pers.id = :id')
+                ->setParameter('id', $params['id'])
+            ;
+        }
+
+        if(isset($params['email']) ) {
+           $qb
+                ->andWhere('pers.id = :id')
+                ->setParameter('id', $params['email'])
+            ;
+        }
+
+        if(isset($params['organization'])) {
+            $qb
+                ->leftJoin('pers.organizations', 'org')
+                ->andWhere('org.id = :organization_id')
+                ->setParameter('organization_id', $params['organization'])
+            ;
+        }
+
+         if(isset($params['paper'])) {
+            $qb
+                ->leftJoin('pers.papers', 'p')
+                ->andWhere('pers.id = :paper_id')
+                ->setParameter('paper_id', $params['paper'])
+            ;
+           
+        }
+
+        $query = $qb->getQuery();
+        return  $query->execute();
+
+    }
+
 
     /**
      * getOrderedQueryBuilder

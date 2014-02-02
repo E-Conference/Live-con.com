@@ -10,6 +10,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use fibe\Bundle\WWWConfBundle\Entity\Organization;
 use fibe\Bundle\WWWConfBundle\Form\OrganizationType;
 
+//Filter form type
+use fibe\Bundle\WWWConfBundle\Form\Filters\OrganizationFilterType;
+
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Exception\NotValidCurrentPageException;
@@ -52,10 +55,49 @@ class OrganizationController extends Controller
             throw new NotFoundHttpException();
         }
 
+        //Filters Form
+        $filters =$this->createForm(new OrganizationFilterType($this->getUser()));
         return array(
             'pager' => $pager,
-            'authorized' => $authorization->getFlagconfDatas() 
+            'authorized' => $authorization->getFlagconfDatas(),
+            'filters_form' => $filters->createView(),
         );
+    }
+
+    /**
+     * Filter organization index list
+     * @Route("/filter", name="schedule_organization_filter")
+     */
+    public function filterAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $conf = $this->getUser()->getCurrentConf();
+        //Filters
+        $filters =$this->createForm(new OrganizationFilterType($this->getUser()));
+        $filters->bindRequest($this->get('request'));
+
+        if ($filters->isValid())  {
+            // bind values from the request
+          
+             $entities = $em->getRepository('fibeWWWConfBundle:Organization')->filtering($filters->getData(), $conf);
+
+             //Pager
+             $adapter = new ArrayAdapter($entities);
+             $pager = new PagerFanta($adapter);
+             $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
+             try {
+               $pager->setCurrentPage($request->query->get('page', 1));
+             } catch (NotValidCurrentPageException $e) {
+                throw new NotFoundHttpException();
+             }
+
+             return $this->render('fibeWWWConfBundle:Organization:list.html.twig', array(
+                 'pager'  => $pager,
+             ));
+        }
+
     }
 
     /**

@@ -12,7 +12,8 @@ class RegistrationFormType extends BaseType
         parent::buildForm($builder, $options);
 
         // add your custom field
-        $builder->add('roles', 'collection', array(
+        $builder
+        /*  ->add('roles', 'collection', array(
                    'type' => 'choice',
                    'options' => array(
                         'choices'   => array(
@@ -20,7 +21,10 @@ class RegistrationFormType extends BaseType
                             'ROLE_ADMIN_WWWCONF' => 'Admin WWWConf',
                         )
                    )
-               )) ;  
+              ))*/
+
+          ->add('captcha', 'captcha', array( 'required' => true)); 
+          ;  
     }
 
     public function getName()

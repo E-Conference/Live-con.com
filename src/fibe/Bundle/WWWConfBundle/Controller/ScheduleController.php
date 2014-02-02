@@ -196,20 +196,23 @@ class ScheduleController extends Controller
         $roleForm = $this->createForm(new RoleType($this->getUser()), $role);
         $editForm = $this->createForm(new ConfEventType($this->getUser()), $entity);
        
+         $papersForSelect = $this->getUser()->getCurrentConf()->getPapers()->toArray();
          $form_paper = $this->createFormBuilder($entity)
-
             ->add('papers', 'entity', array(
                       'class'    => 'fibeWWWConfBundle:Paper',
                       'property' => 'title',
                       'required' => false,
+                      'choices'=> $papersForSelect,
                       'multiple' => false))
             ->getForm();
 
+         $topicsForSelect = $this->getUser()->getCurrentConf()->getTopics()->toArray();
          $form_topic = $this->createFormBuilder($entity)
             ->add('topics', 'entity', array(
                   'class'    => 'fibeWWWConfBundle:Topic',
                   'required' => false,
                   'property' => 'name',
+                  'choices'=> $topicsForSelect,
                   'multiple' => false))
             ->getForm();
             

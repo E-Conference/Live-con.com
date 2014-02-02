@@ -80,17 +80,13 @@ var EventCollection = {
       }
     },
 
-    broCountRange:{},
-    eventsToComputeBroCountRange:[],
+    broCountRange:{}, 
     eventsToComputeBroCountRangeIndexes:[],
-    refetchEvents : function(refetch,force){
-        // alert(EventCollection.eventsToComputeBroCountRange.length==0)
-        // alert(EventCollection.forceMainConfRendering!==true)
-        if(force!==true && (EventCollection.forceMainConfRendering!==true && EventCollection.eventsToComputeBroCountRange.length==0)){ 
+    refetchEvents : function(refetch,force){ 
+        if(force!==true && (EventCollection.forceMainConfRendering!==true && EventCollection.eventsToComputeBroCountRangeIndexes.length==0)){ 
           console.log("not rendered")
           return; 
-        } 
-        // alert("ok")
+        }  
         EventCollection.forceMainConfRendering = false;
         // function doWork() {
         
@@ -108,40 +104,41 @@ var EventCollection = {
             var startScript = moment();
             //if there's no EventCollection.eventToRender, calculate for every events
             var done     = []
-                ,brothers= [] 
+                ,brothersIds= [] 
                 ,minLeft 
                 ,bro
                 ,curBro
                 ,baseCount; 
   
-              brothers = EventCollection.eventsToComputeBroCountRange;   
+              brothersIds = EventCollection.eventsToComputeBroCountRangeIndexes;   
             
             // console.log("----------------------------------------------------");
-            console.log("affected = ",brothers); 
+            console.log("affected = ",brothersIds); 
             // console.log("non affected : ",EventCollection.broCountRange);
             // console.log("----------------------------------------------------");
-            computeCountRange(brothers,doChildren);
-            EventCollection.eventsToComputeBroCountRangeIndexes = [];
-            EventCollection.eventsToComputeBroCountRange = [];
-            console.debug("BroCountRange : updated "+brothers.length+" events in "+moment().diff(startScript)+" ms");
-            console.log(EventCollection.broCountRange) 
-            // return EventCollection.broCountRange;
             
-            function computeCountRange(bros,doChildren){
+            computeCountRange(brothersIds,doChildren);
+
+            EventCollection.eventsToComputeBroCountRangeIndexes = []; 
+            console.debug("BroCountRange : updated "+brothersIds.length+" events in "+moment().diff(startScript)+" ms",EventCollection.broCountRange);
+            return EventCollection.eventsToComputeBroCountRangeIndexes;
+            
+            function computeCountRange(brosIds,doChildren){
               //copy array
-              var remaining = bros.slice(0);
-              for (var i in bros){
-                curBro = bros[i];  
+              var remainingIds = brosIds.slice(0);
+              for (var i in brosIds){
+                curBro = Events[brosIds[i]];  
                 // console.log("curBro",curBro.id)
                 //create rtn object for curBro  
                 baseCount = EventCollection.broCountRange[curBro.id].count;
-                var brosId = curBro.getBrosId(); 
-                for (var j in remaining){
-                  bro = remaining[j];  
-                  //ensure the bro is not itself  
+                var brosIdsofcurBro = curBro.getNonAllDayBrosId(); 
+                console.debug("non all day bros of "+curBro.id +" are :",brosIdsofcurBro)
+                for (var j in remainingIds){
+                  bro = Events[ remainingIds[j] ];  
+                  //ensure the bro is not itself or an all day event
                   if(curBro.id===bro.id )continue;  
                   //ensure the bro is a real bro
-                  if(curBro.isOutOf(bro,true) || ($.inArray(bro.id, brosId) === -1))continue;   
+                  if(curBro.isOutOf(bro,true) || ($.inArray(bro.id, brosIdsofcurBro) === -1))continue;   
                   // console.log("curBro ",curBro.id," discovering ",bro.id)  
                   //update self properties  
                   EventCollection.broCountRange[curBro.id]["count"]++; 
@@ -152,57 +149,9 @@ var EventCollection = {
                     range:EventCollection.broCountRange[curBro.id]["range"]+1
                   };  
                 }
-                delete remaining[i]
-                // done.push(curBro.id); 
-                
-                // // doChildren
-                // if(doChildren){ 
-                //   computeCountRange(curBro.getBros(),true)
-                // }
+                delete remainingIds[i];
               } 
             } 
-        }
-    },
-    /**
-     * add events to EventCollection.eventsToComputeBroCountRange
-     * @param CalEvent event to add
-     * @param Object   opt   :
-     *                  allEventsInDay: add all brothers too 
-     */
-    addEventToComputeCountRange : function(event,opt){
-        if(event.is_mainconfevent)return;
-        if(!opt)opt={}
-        if(opt.allEventsInDay || opt.allBrosInDay){
-          console.log("#ComputeCountRange all day "+event.id);
-          var bros = calendar_events;
-          // var bros = event.getBros();
-          var dayToRender = {
-            start:moment(event.start).startOf('day')
-            ,end:moment(event.end).endOf('day')
-          };
-          for(var i in bros){
-            var bro = bros[i]; 
-            if(!bro.isOutOf(dayToRender) || !bro.isOutOf(dayToRender) ){
-              if(opt.allBrosInDay !== true || event.isBroOf(bro) ){
-                addEvent(bro);
-              }
-            }
-          }
-        }else{
-          addEvent(event);
-        }
-
-        function addEvent(e){
-
-          if(e.id && $.inArray(e.id, EventCollection.eventsToComputeBroCountRangeIndexes) === -1 && !e.allDay) { 
-            EventCollection.eventsToComputeBroCountRangeIndexes.push(e.id);
-            EventCollection.eventsToComputeBroCountRange.push(e);
-            EventCollection.broCountRange[e.id] = {count:1,range:0};
-            // console.debug("#ComputeCountRange "+e.id);
-          }
-          // else{ 
-          //   console.debug("#ComputeCountRange didn't add event "+e.id);
-          // }
         }
     },
 
@@ -210,97 +159,13 @@ var EventCollection = {
       Events = {};
       EventCollection.eventToRender = undefined;
       EventCollection.refetchEvents(true,true);
-    },
-    
-    //this is now done at server side
-    fitMainConfEvent : function (){
-        // if(!mainConfEvent)return;
-        // var oldStartDate = moment(this.start).format();
-        // var oldEndDate = moment(this.end).format();
-        // var minDate = moment("5000-10-10"),
-        //         maxDate = moment("1990-10-10");
-
-        // var children = EventCollection.getChildren(mainConfEvent, {concat:true,onlyEvent:true,noSidebar : true}); 
-        // for(var i in children){
-        //   var child = children[i];
-        //   if(minDate.isAfter(child.start)) minDate = moment(child.start);
-        //   if(maxDate.isBefore(child.end))  maxDate = moment(child.end); 
-
-        // }
-        // if(!minDate.isSame(moment("5000-10-10"))) mainConfEvent.start = minDate.format();
-        // if(!maxDate.isSame(moment("1990-10-10"))) mainConfEvent.end = maxDate.format();
-
-        // if(oldStartDate !== mainConfEvent.start || oldEndDate !== mainConfEvent.end){
-        //     mainConfEvent.render();
-        //     mainConfEvent.persist(); 
-        // } 
     }, 
 
 
     getToppestParent : function (){ 
-        return EventCollection.getChildren(mainConfEvent, {recursive:false,onlyEvent:true,noSidebar:true}); 
-
-        // var toppestParent = []; 
-
-        // var tmp =  EventCollection.getChildren(mainConfEvent, {recursive:false,onlyEvent:true,noSidebar:true}); 
-        // //ignore allday events
-        // for(var i in tmp){
-        //   var event = tmp[i];
-        //   if(event.allDay === true){
-        //     toppestParent = toppestParent.concat(EventCollection.getToppestNonAllDayChildren(event)); 
-        //   }else{
-        //     toppestParent.push(event);
-        //   }
-        // }
-        // return toppestParent;  
+        return EventCollection.getChildren(mainConfEvent, {recursive:false,onlyEvent:true,noSidebar:true});  
     },
-
-    // getToppestNonAllDayChildren : function(parent)
-    // {
-    //     var toppestNonAllDayChildren = []; 
-    //     var tmp = EventCollection.getChildren(parent, {recursive:false,onlyEvent:true,noSidebar:true});
-    //     for(var i in tmp){
-    //       var event = tmp[i];
-    //       if(event.allDay){
-    //         toppestNonAllDayChildren = toppestNonAllDayChildren.concat(EventCollection.getToppestNonAllDayChildren(event));
-
-    //       }else{ 
-    //         toppestNonAllDayChildren.push(event);
-    //       }
-    //     }
-
-    //     return toppestNonAllDayChildren;
-    // },
-
-    
-
-      // if(EventCollection.eventToRender){ 
-      //     var brothersTmp = EventCollection.getToppestParent();
-      //     var eventToRender = Events[EventCollection.eventToRender.id]; 
-      //     var oldDayToRender = {
-      //       start:moment(EventCollection.eventToRender.oldStart).startOf('day')
-      //       ,end :moment(EventCollection.eventToRender.oldEnd).endOf('day')
-      //     };
-      //     var newDayToRender = {
-      //       start:moment(eventToRender.start).startOf('day')
-      //       ,end:moment(eventToRender.end).endOf('day')
-      //     }; 
-
-      //     //compute affected events
-      //     for(var i in brothersTmp){
-      //       var e = brothersTmp[i]; 
-      //       if( e.id == mainConfEvent.id  )continue; 
-
-      //       if(!e.isOutOf(oldDayToRender) || !e.isOutOf(newDayToRender) ){
-      //         // console.log("#######affecting "+e.id);
-      //         delete EventCollection.broCountRange[e.id];
-      //         brothers.push(e);
-      //       }
-      //     } 
-      // }else{
-      //   brothers = EventCollection.getToppestParent();  
-      // }
-
+ 
     /**
     * @param id : event i
     * get div with with class fc-event and with a hidden div containing event id
@@ -316,6 +181,10 @@ var EventCollection = {
         var id = div.data("id")
         // console.log()
         return Events[id];
+    },
+
+    getIds : function(events){
+      return $(events).map(function(key,val){ return val.id;})
     },
 }
 

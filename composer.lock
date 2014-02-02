@@ -1,5 +1,9 @@
 {
-    "hash": "ec98a2174795f1ca5fb62dcd490d7d9a",
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "3f1c49337e5803b4863d593a8547a070",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -659,6 +663,108 @@
             "time": "2013-05-17 17:32:40"
         },
         {
+            "name": "gregwar/captcha",
+            "version": "v1.0.8",
+            "target-dir": "Gregwar/Captcha",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Gregwar/Captcha.git",
+                "reference": "88bbf9e206957c7870995aabaf8c90afc090c082"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Gregwar/Captcha/zipball/88bbf9e206957c7870995aabaf8c90afc090c082",
+                "reference": "88bbf9e206957c7870995aabaf8c90afc090c082",
+                "shasum": ""
+            },
+            "require": {
+                "ext-gd": "*",
+                "php": ">=5.3.0"
+            },
+            "type": "captcha",
+            "autoload": {
+                "psr-0": {
+                    "Gregwar\\Captcha": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégoire Passault",
+                    "email": "g.passault@gmail.com",
+                    "homepage": "http://www.gregwar.com/"
+                },
+                {
+                    "name": "Jeremy Livingston",
+                    "email": "jeremy.j.livingston@gmail.com"
+                }
+            ],
+            "description": "Captcha generator",
+            "homepage": "https://github.com/Gregwar/Captcha",
+            "keywords": [
+                "bot",
+                "captcha",
+                "spam"
+            ],
+            "time": "2013-08-14 07:42:54"
+        },
+        {
+            "name": "gregwar/captcha-bundle",
+            "version": "dev-master",
+            "target-dir": "Gregwar/CaptchaBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Gregwar/CaptchaBundle.git",
+                "reference": "800643d72c022f6e71d1cdb6e315f3a9c647661e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Gregwar/CaptchaBundle/zipball/800643d72c022f6e71d1cdb6e315f3a9c647661e",
+                "reference": "800643d72c022f6e71d1cdb6e315f3a9c647661e",
+                "shasum": ""
+            },
+            "require": {
+                "gregwar/captcha": "v1.0.8",
+                "php": ">=5.3.0"
+            },
+            "type": "captcha-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Gregwar\\CaptchaBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Grégoire Passault",
+                    "email": "g.passault@gmail.com",
+                    "homepage": "http://www.gregwar.com/"
+                },
+                {
+                    "name": "Jeremy Livingston",
+                    "email": "jeremy.j.livingston@gmail.com"
+                }
+            ],
+            "description": "Captcha bundle",
+            "homepage": "https://github.com/Gregwar/CaptchaBundle",
+            "keywords": [
+                "Symfony2",
+                "bot",
+                "captcha",
+                "code",
+                "security",
+                "spam",
+                "visual"
+            ],
+            "time": "2013-11-25 10:48:00"
+        },
+        {
             "name": "idci/exporter-bundle",
             "version": "dev-master",
             "target-dir": "IDCI/Bundle/ExporterBundle",
@@ -1191,6 +1297,58 @@
                 "minification"
             ],
             "time": "2013-02-24 17:22:20"
+        },
+        {
+            "name": "lexik/form-filter-bundle",
+            "version": "v2.0.0",
+            "target-dir": "Lexik/Bundle/FormFilterBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lexik/LexikFormFilterBundle.git",
+                "reference": "3dd57a9a98affb398183e9610dda48ab01c9abc2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lexik/LexikFormFilterBundle/zipball/3dd57a9a98affb398183e9610dda48ab01c9abc2",
+                "reference": "3dd57a9a98affb398183e9610dda48ab01c9abc2",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/orm": "*",
+                "php": ">=5.3.2",
+                "symfony/form": ">=2.1,<2.4-dev",
+                "symfony/framework-bundle": ">=2.1,<2.4-dev"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Lexik\\Bundle\\FormFilterBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dev Lexik",
+                    "email": "dev@lexik.fr"
+                },
+                {
+                    "name": "Cedric Girard",
+                    "email": "c.girard@lexik.fr"
+                }
+            ],
+            "description": "This bundle aim to provide classes to build some form filters and then build a doctrine query from this form filter.",
+            "homepage": "https://github.com/lexik/LexikFormFilterBundle",
+            "keywords": [
+                "Symfony2",
+                "bundle",
+                "doctrine",
+                "filter",
+                "form"
+            ],
+            "time": "2013-10-24 16:06:49"
         },
         {
             "name": "monolog/monolog",
@@ -2025,7 +2183,8 @@
         "white-october/pagerfanta-bundle": 20,
         "idci/exporter-bundle": 20,
         "idci/simple-schedule-bundle": 20,
-        "friendsofsymfony/user-bundle": 20
+        "friendsofsymfony/user-bundle": 20,
+        "gregwar/captcha-bundle": 20
     },
     "platform": {
         "php": ">=5.3.3"
