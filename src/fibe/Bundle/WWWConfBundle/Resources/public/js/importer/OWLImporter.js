@@ -85,8 +85,8 @@ function run(file,callback,fallback){
             //////////////////////////////////////////////////////////////////////////
             ///////////////////////////  pre processing  /////////////////////////////
             //////////////////////////////////////////////////////////////////////////  
-            if(mappingConfig.action!==undefined){
-                mappingConfig.action(rootNode);
+            if(mappingConfig.preProcess!==undefined){
+                mappingConfig.preProcess(rootNode);
             }
 
 

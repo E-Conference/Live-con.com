@@ -45,7 +45,7 @@ var ocsConfig = {
         };
     },
     //preproccessing of the root node which contains the conference informations
-    action : function(documentRootNode){
+    preProcess : function(documentRootNode){
         conference = { 
             setSummary    : $(documentRootNode).children("name").text(),
             setAcronym    : $(documentRootNode).children("acronym").text(),

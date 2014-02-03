@@ -4142,6 +4142,7 @@ function AgendaEventRenderer() {
 			
 		// calculate position/dimensions, create html
 		for (i=0; i<segCnt; i++) {
+
 			seg = segs[i];
 			event = seg.event;
 			top = timePosition(seg.start, seg.start);
@@ -4154,12 +4155,15 @@ function AgendaEventRenderer() {
 			availWidth = Math.min(availWidth-6, availWidth*.95); // TODO: move this to CSS
 			if (levelI) {
 				// indented and thin
+				// every event but the first
 				outerWidth = availWidth / (levelI + forward + 1);
 			}else{
 				if (forward) {
+					// first event with brothers
 					// moderately wide, aligned left still
 					outerWidth = ((availWidth / (forward + 1)) - (12/2)) * 2; // 12 is the predicted width of resizer =
 				}else{
+					// first event without brothers
 					// can be entire width, aligned left
 					outerWidth = availWidth;
 				}
@@ -4171,6 +4175,7 @@ function AgendaEventRenderer() {
 			seg.left = left;
 			seg.outerWidth = outerWidth;
 			seg.outerHeight = bottom - top;
+			trigger('eventCalculateWidth', event,  seg,leftmost,availWidth,outerWidth,levelI,bottom,top,forward, dis,rtl);
 			html += slotSegHtml(event, seg);
 		}
 		slotSegmentContainer[0].innerHTML = html; // faster than html()
