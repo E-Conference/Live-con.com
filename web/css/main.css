@@ -32,6 +32,9 @@ body{
 .row {
 	margin-right: 0px;
 }
+.content .row .row{
+	margin-right: -15px;
+}
 .navbar-nav.navbar-right:last-child {
 	margin-right: 0px;
 }
