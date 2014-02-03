@@ -69,10 +69,10 @@ class MappingFile
     /**
      * Set mapping
      *
-     * @param \text  $mapping
+     * @param string  $mapping
      * @return MappingFile
      */
-    public function setMapping(text  $mapping)
+    public function setMapping($mapping)
     {
         $this->mapping = $mapping;
     
@@ -82,7 +82,7 @@ class MappingFile
     /**
      * Get mapping
      *
-     * @return \text  
+     * @return string  
      */
     public function getMapping()
     {
