@@ -24,18 +24,22 @@ class PaperFilterType extends AbstractType
                 'label'   => 'Title',
                 'choices'=> $this->user->getCurrentConf()->getPapers()->toArray(),
                 'required' => false,
+                'attr'  => array('placeholder'  => 'Title')
             ))
             ->add('author', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Person',
                 'label'   => 'Author',
                 'choices'=> $this->user->getCurrentConf()->getPersons()->toArray(),
                 'required' => false,
+                'attr'  => array('placeholder'  => 'Author')
             )) 
             ->add('topic', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Topic',
                 'label'   => 'Subject',
                 'choices'=> $this->user->getCurrentConf()->getTopics()->toArray(),
-                'required' => false
+                'required' => false,
+                'attr'  => array('placeholder'  => 'Topic')
+
             ))
         ;
     }

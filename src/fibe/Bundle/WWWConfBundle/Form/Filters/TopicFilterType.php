@@ -24,12 +24,14 @@ class TopicFilterType extends AbstractType
                 'label'   => 'Name',
                 'choices'=> $this->user->getCurrentConf()->getTopics()->toArray(),
                 'required' => false,
+                'attr'  => array('placeholder'  => 'Label')
             ))
             ->add('paper', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Paper',
                 'label'   => 'Paper',
                 'choices'=> $this->user->getCurrentConf()->getPapers()->toArray(),
                 'required' => false,
+                'attr'  => array('placeholder'  => 'Paper')
             )) 
         ;
     }

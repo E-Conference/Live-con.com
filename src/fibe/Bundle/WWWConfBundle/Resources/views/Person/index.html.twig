@@ -19,20 +19,12 @@
             </div>
         </div>
         <div class="row page-content">
-            <div class="row">
-              <div class="col-lg-1"></div>
-              <div class="col-lg-4 well">
-                <form id ="filter_form" class="form-inline" method="get" role="form" >
-                        {{ form_widget(filters_form) }}
-                        </br>
-                     <a id="submit_form_filter" class="btn btn-default btn-block" onclick="filter()" ><i class="fa fa-filter"></i></a>
-                </form>
-             </div>
-           </div>
+          
+            {% include "fibeWWWConfBundle:Filters:filters.html.twig"%}
 
-        <div id="person_list">
-           {% include "fibeWWWConfBundle:Person:list.html.twig" %}
-        </div>
+            <div id="person_list">
+               {% include "fibeWWWConfBundle:Person:list.html.twig" %}
+            </div>
     </div>
 
 {% endblock %}

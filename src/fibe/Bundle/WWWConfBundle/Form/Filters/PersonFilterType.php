@@ -24,6 +24,8 @@ class PersonFilterType extends AbstractType
                 'label'   => 'Name',
                 'choices'=> $this->user->getCurrentConf()->getPersons()->toArray(),
                 'required' => false,
+                'attr'  => array('placeholder'  => 'Name')
+
             ))
              ->add('email', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Person',
@@ -31,18 +33,21 @@ class PersonFilterType extends AbstractType
                 'property' => 'email',
                 'choices'=> $this->user->getCurrentConf()->getPersons()->toArray(),
                 'required' => false,
+                 'attr'  => array('placeholder'  => 'Email')
             ))
             ->add('organization', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Organization',
                 'label'   => 'Organization',
                 'choices'=> $this->user->getCurrentConf()->getOrganizations()->toArray(),
                 'required' => false,
+                'attr'  => array('placeholder'  => 'Organization')
             )) 
             ->add('paper', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Paper',
                 'label'   => 'Publication',
                 'choices'=> $this->user->getCurrentConf()->getPapers()->toArray(),
-                'required' => false
+                'required' => false,
+                'attr'  => array('placeholder'  => 'Publication')
             ))
         ;
     }

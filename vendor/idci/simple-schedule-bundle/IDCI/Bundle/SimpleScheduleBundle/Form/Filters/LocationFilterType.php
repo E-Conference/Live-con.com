@@ -24,19 +24,24 @@ class LocationFilterType extends AbstractType
                 'label'   => 'Name',
                 'choices'=> $this->user->getCurrentConf()->getLocations()->toArray(),
                 'required' => false,
+                'attr'  => array('placeholder'  => 'Label')
             ))
            ->add('equipment', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Equipment',
                 'label'   => 'Equipment',
                 'required' => false,
+                'attr'  => array('placeholder'  => 'Equipment')
+
             ))
             ->add('cap_max', 'number',array(
                 'label'   => 'Cap. max',
                 'required' => false,
+                'attr'  => array('placeholder'  => 'max capacity')
             ))
             ->add('cap_min', 'number',array(
                 'label'   => 'Cap. min',
                 'required' => false,
+               'attr'  => array('placeholder'  => 'min capacity')
             ))
             
 

@@ -24,16 +24,19 @@ class OrganizationFilterType extends AbstractType
                 'label'   => 'Name',
                 'choices'=> $this->user->getCurrentConf()->getOrganizations()->toArray(),
                 'required' => false,
+                'attr'  => array('placeholder'  => 'Organization')
             ))
              ->add('member', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Person',
                 'label'   => 'Person',
                 'choices'=> $this->user->getCurrentConf()->getPersons()->toArray(),
-                'required' => false
+                'required' => false,
+                'attr'  => array('placeholder'  => 'Person')
             ))
              ->add('country', 'text', array(
                 'label'   => 'Country',
-                'required' => false
+                'required' => false,
+                'attr'  => array('placeholder'  => 'Country')
             ))  
         ;
     }
