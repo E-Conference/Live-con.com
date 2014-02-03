@@ -30,16 +30,16 @@ var rdfConfig = {
             nodeUtils : "rdfNodeName", 
         }] 
     }, 
-    parseItemOrder : {
-            "locationMapping" : "locations",
-            "organizationMapping" : "organizations",
-            "personMapping" : "persons",
-            "proceedingMapping" : "proceedings",
-            "eventMapping" : "events",
-            "presenterMapping" : "roles",
-            "chairMapping" : "roles", 
-            "relationMapping" : "events", 
-    },
+    // parseItemOrder : {
+    //         "locationMapping" : "locations",
+    //         "organizationMapping" : "organizations",
+    //         "personMapping" : "persons",
+    //         "proceedingMapping" : "proceedings",
+    //         "eventMapping" : "events",
+    //         "presenterMapping" : "roles",
+    //         "chairMapping" : "roles", 
+    //         "relationMapping" : "events", 
+    // },
 
     mappings : [
         {

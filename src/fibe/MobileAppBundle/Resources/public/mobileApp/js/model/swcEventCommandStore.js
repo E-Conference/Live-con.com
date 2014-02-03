@@ -92,7 +92,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 
 
 		getAllPersons : {
-		    dataType : "JSONP",
+		    dataType : "JSON",
 		    method : "GET", 
 		    serviceUri : "schedule_person.jsonp?",
 		    getQuery : function(parameters){	

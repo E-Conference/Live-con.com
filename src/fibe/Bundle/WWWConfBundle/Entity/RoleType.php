@@ -33,6 +33,15 @@ class RoleType
      */
     protected $name;
 
+
+    /**
+     * label
+     *
+     *
+     * @ORM\Column(type="string", name="label", nullable=false)
+     */
+    protected $label;
+
     /**
      * role
      * Role how have this type
@@ -119,5 +128,29 @@ class RoleType
     public function getName()
     {
         return $this->name;
+    }
+
+
+      /**
+     * Set label
+     *
+     * @param string $label
+     * @return RoleType
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+    
+        return $this;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string 
+     */
+    public function getLabel()
+    {
+        return $this->label;
     }
 }

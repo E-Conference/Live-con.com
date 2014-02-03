@@ -707,7 +707,7 @@ outline: none;
 	}
 
 
-	#login_page input[type=text], #login_page input[type=password]{
+	#login_page input[type=text], #login_page input[type=password], #login_page input[type=email]{
 		background: #f3f3f3;
 		width: 280px;
 		height: 40px;
@@ -736,3 +736,36 @@ outline: none;
 		border: none;
 		left: -40px;
 	}
+
+
+	/*-------------------------------------------------------------------------------------
+--------------------------------------SIGNIN-----------------------------------------
+-------------------------------------------------------------------------------------*/
+
+
+#login_page #signin{
+	position: absolute;
+	background: url(../img/login_bg.png);
+	width: 300px;
+	height: 650px;
+	left: 50%;
+	margin-left: -170px;
+	top: 20%;
+
+	padding: 0px 20px;
+		font-family: Helvetica, Arial sans-serif;
+		font-size: 17px;
+		line-height: 30px;
+		color: #19313b;
+}
+
+#login_page #signin img{
+	margin-left:40px; 
+}
+
+	
+
+	
+
+
+	

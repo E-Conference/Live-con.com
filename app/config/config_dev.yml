@@ -26,11 +26,10 @@ assetic:
     use_controller: true
 
 swiftmailer:
-    delivery_address: flepeutrec@gmail.com
-    transport:  smtp
-    encryption: ssl
-    auth_mode:  login
-    host:       smtp.gmail.com
-    username:   flepeutrec
-    password:   31051989
- 
+    transport:  %mailer_transport%
+    host:       %mailer_host%
+    auth_mode:  %mailer_auth_mode% 
+    encryption: %mailer_encryption%
+    username:   %mailer_username%
+    password:   %mailer_password%
+

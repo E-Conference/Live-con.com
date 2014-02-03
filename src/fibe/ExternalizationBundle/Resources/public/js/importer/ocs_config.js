@@ -3,18 +3,18 @@
 
 
 var ocsConfig = {
-    checkFormat : function(documentRootNode){
+    // checkFormat : function(documentRootNode){
  
-        var formatOk = false;
-        $(documentRootNode).each(function(){
-            if(this.nodeName.toUpperCase()=== "CONFERENCE"){
-                console.log("input file is OCS");
-                formatOk= true;
-            }
-        })
+    //     var formatOk = false;
+    //     $(documentRootNode).each(function(){
+    //         if(this.nodeName.toUpperCase()=== "CONFERENCE"){
+    //             console.log("input file is OCS");
+    //             formatOk= true;
+    //         }
+    //     })
 
-        return formatOk; 
-    },
+    //     return formatOk; 
+    // },
     rootNode : {
         format : [{
             nodeUtils : "node",

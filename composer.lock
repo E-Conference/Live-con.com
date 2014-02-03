@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "3f1c49337e5803b4863d593a8547a070",
+    "hash": "a2bc3ebabf4d67e0409ccc5734ea1b89",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1297,58 +1297,6 @@
                 "minification"
             ],
             "time": "2013-02-24 17:22:20"
-        },
-        {
-            "name": "lexik/form-filter-bundle",
-            "version": "v2.0.0",
-            "target-dir": "Lexik/Bundle/FormFilterBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/lexik/LexikFormFilterBundle.git",
-                "reference": "3dd57a9a98affb398183e9610dda48ab01c9abc2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikFormFilterBundle/zipball/3dd57a9a98affb398183e9610dda48ab01c9abc2",
-                "reference": "3dd57a9a98affb398183e9610dda48ab01c9abc2",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/orm": "*",
-                "php": ">=5.3.2",
-                "symfony/form": ">=2.1,<2.4-dev",
-                "symfony/framework-bundle": ">=2.1,<2.4-dev"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-0": {
-                    "Lexik\\Bundle\\FormFilterBundle": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Dev Lexik",
-                    "email": "dev@lexik.fr"
-                },
-                {
-                    "name": "Cedric Girard",
-                    "email": "c.girard@lexik.fr"
-                }
-            ],
-            "description": "This bundle aim to provide classes to build some form filters and then build a doctrine query from this form filter.",
-            "homepage": "https://github.com/lexik/LexikFormFilterBundle",
-            "keywords": [
-                "Symfony2",
-                "bundle",
-                "doctrine",
-                "filter",
-                "form"
-            ],
-            "time": "2013-10-24 16:06:49"
         },
         {
             "name": "monolog/monolog",

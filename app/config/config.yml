@@ -66,8 +66,12 @@ doctrine:
 swiftmailer:
     transport:  %mailer_transport%
     host:       %mailer_host%
-    username:   %mailer_user%
+    auth_mode:  %mailer_auth_mode% 
+    encryption: %mailer_encryption%
+    username:   %mailer_username%
     password:   %mailer_password%
+
+
 twig:
     form:
         resources:
