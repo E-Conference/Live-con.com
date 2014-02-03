@@ -13,6 +13,34 @@
                 text-align:center;
                 font:20pt bold,"Vollkorn";color:#bbb
         }
+        .col-sm-12 > .panel {
+            margin-top: 1.5em;
+        }
+
+        .popover {
+          position: absolute;
+          top: 0;
+          left: 0;
+          z-index: 1010;
+          display: none;
+          max-width: 600px;
+          min-width: 300px;
+          padding: 1px;
+          text-align: left;
+          white-space: normal;
+          background-color: #ffffff;
+          border: 1px solid #ccc;
+          border: 1px solid rgba(0, 0, 0, 0.2);
+          -webkit-border-radius: 6px;
+             -moz-border-radius: 6px;
+                  border-radius: 6px;
+          -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+             -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+                  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+          -webkit-background-clip: padding-box;
+             -moz-background-clip: padding;
+                  background-clip: padding-box;
+        }
         </style>
     {% endblock %}
 {% block centerPanel %}
@@ -23,12 +51,12 @@
 
         <h2 id="desc-header" class="text-info">Step 1 : Please select the file to import</h2>
         <div id="progress-header" class="progress progress-striped active">
-          <div class="progress-bar progress-bar-success" role="progressbar" style="width: 5%">
+          <div class="progress-bar progress-bar-success" role="progressbar" style="width: 5%;">
           </div>
         </div>
 
-        <div id="page-data-file" class="page"> 
-            <form id="datasetFileForm"  class="input-append">
+        <div id="page-data-file" class="page">
+             <form id="datasetFileForm"  class="input-append">
                 <label for="datasetFile"> 
                     Available XML input format are : 
                         <span class="badge badge-success" ><i class="fa fa-check" ></i>  XML</span>
@@ -73,11 +101,13 @@
             <button id="new-mapping" class="btn btn-default "><i class="fa fa-plus"> </i>  New mapping file </button>
         </div>
 
-        <div id="page-new-mapping-file" data-progress="50" data-desc="Step 3 : Please proceed to the mapping"  class="page" style="display:none;"> 
+        <div id="page-new-mapping-file" data-progress="35" data-desc="Step 3 : Please proceed to the mapping"  class="page" style="display:none;">
+            <div style="margin: 15px;">
+                <button id="test-mapping" class="btn btn-default btn-lg"><i class="fa fa-flask"></i> Test your mapping file </button>
+                <button id="submit-new-mapping" class="btn btn-success btn-lg"><i class="fa fa-play-circle"></i> Import your data </button>
+            </div>
             <div id="datafile-form" class="col-sm-6 col-md-6 col-lg-6"></div>
             <div id="model-form"  class="col-sm-6 col-md-6 col-lg-6"></div>
-            <button id="test-mapping" class="col-sm-6 col-md-6 col-lg-6 btn btn-default"><i class="fa fa-play"></i> Test your mapping file </button>
-            <button id="submit-new-mapping" class="col-sm-6 col-md-6 col-lg-6 btn btn-success import"><i class="fa fa-download"></i> Import your data </button>
         </div>   
 
         <div id="page-result" class="page" data-progress="70" data-desc="Final step : send us the dataset"  style="display:none;">
@@ -85,9 +115,9 @@
             <h3 class="text-info">Results</h3>
             <div id="result-extract"></div>
         </div>        
-        <div id="page-conf-emptying" class="page" data-progress="90" data-desc="Emptying conference... "  style="display:none;">     
+        <div id="page-conf-emptying" class="page" data-progress="80" data-desc="Emptying conference... "  style="display:none;">     
         </div>        
-        <div id="page-conf-emptied" class="page" data-progress="95" data-desc="Conference emptied, now sending file... "  style="display:none;"> 
+        <div id="page-conf-emptied" class="page" data-progress="90" data-desc="Conference emptied, now sending file... "  style="display:none;"> 
         </div>        
         <div id="page-end" class="page" data-progress="100" data-desc="You're done !"  style="display:none;"> 
             <h3 class="text-info">Results</h3>
@@ -126,10 +156,11 @@
 
 
  {%  block javascripts_page %} 
-  <script src="{{ asset('bundles/fibeexternalization/js/moment.min.js') }}" type="text/javascript" ></script>
-    <script src="{{ asset('bundles/fibeexternalization/js/importer/Pager.js') }}" type="text/javascript" ></script>
+        <script type="text/javascript" src="{{ asset('js/jquery-ui.custom.js') }}"></script>
+        <script src="{{ asset('bundles/fibeexternalization/js/moment.min.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeexternalization/js/importer/Pager.js') }}" type="text/javascript" ></script>
         <script src="{{ asset('bundles/fibeexternalization/js/importer/DBMapping/jsonModel.js') }}" type="text/javascript" ></script>
-     <script src="{{ asset('bundles/fibeexternalization/js/importer/Mapper.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeexternalization/js/importer/Mapper.js') }}" type="text/javascript" ></script>
         <script src="{{ asset('bundles/fibeexternalization/js/importer/Importer.js') }}" type="text/javascript" ></script>
         <script src="{{ asset('bundles/fibeexternalization/js/importer/rdf_config.js') }}" type="text/javascript" ></script>
         <script src="{{ asset('bundles/fibeexternalization/js/importer/ocs_config.js') }}" type="text/javascript" ></script>
@@ -212,42 +243,52 @@
         }
  
         //output list in a bootstrapAlert
-        function getMsgUl(dataArray,endString){
+        function getMsgUl(dataArray,endString,panelMode){
             var msg = "";
             if(dataArray.conference.setAcronym)msg += dataArray.conference.setAcronym;
             else if(dataArray.conference.setSummary)msg += dataArray.conference.setSummary;
-            msg += "<ul>"; 
+            msg += "<ul"+(panelMode?' class="list-group" ':'')+">"; 
             for (var i in dataArray) 
                 if(dataArray[i] && dataArray[i].length >0)
-                    msg +="<li>"+dataArray[i].length +" "+i+" "+endString+" !</li>"
+                    msg +="<li"+(panelMode?' class="list-group-item" ':'')+">"+dataArray[i].length +" "+i+" "+endString+" !</li>"
 
             return msg + "</ul>";
         }
 
-        function extractDatas(mapping,data){ 
-            run( data,mapping,function(data,importedLog,notImportedLog){
+        function extractDatas(mapping){ 
+            run( Mapper["data"],mapping,function(data,importedLog,notImportedLog){
                     Pager.changePage('#page-result');
                     Mapper.setSerialisedDatas(data);
                     bootstrapAlert("success",getMsgUl(Mapper.getSerialisedDatas(),"found"),"conference parsed : ");
-                    var html='<div class="row"><div class="col-sm-6"><div class="panel panel-default">\
+
+                    var html='<div class="row"><div class="col-sm-4"><div class="panel panel-primary">\
+                                                  <!-- Default panel contents -->\
+                                                  <div class="panel-heading">Found datas</div>';
+
+                    html+= getMsgUl(Mapper.getSerialisedDatas(),"found",true);
+
+                    html+='</ul></div></div><div class="col-sm-4"><div class="panel panel-info">\
                                                   <!-- Default panel contents -->\
                                                   <div class="panel-heading">Imported properties : </div>\
                                                   <ul class="list-group">'; 
                     for(var i in importedLog){
                         html+= '<li class="list-group-item">'+importedLog[i]+"</li>";
                     } 
-                    html+= '</ul></div></div><div class="col-sm-6"><div class="panel panel-default">\
+
+                    html+= '</ul></div></div><div class="col-sm-4"><div class="panel panel-info">\
                                                   <!-- Default panel contents -->\
                                                   <div class="panel-heading">Not imported properties : </div>\
                                                   <ul class="list-group">';
                     for(var i in notImportedLog){
                         html+= '<li class="list-group-item">'+notImportedLog[i]+"</li>";
                     }
+
                     html+= '</ul></div></div></div>';
                     $("#result-extract").html(html);
                 },function(msg)
                 { 
                     bootstrapAlert("warning", msg || "there was an error during extraction of datas","Error :"); 
+                    // console.log(Mapper["data"],mapping)
                 }
             ); 
         }
@@ -260,7 +301,7 @@
                 var mapping = Mapper.getKnownMapping($("#known-mapping-format").val()); 
                 Mapper.read("#datafile-form");
                 $(Mapper).on("fileRead",function(ev,data){
-                     extractDatas(mapping,data)
+                     extractDatas(mapping)
                 })
         }
 
@@ -312,6 +353,7 @@
                 e.preventDefault();
 
                 {% if not wwwConf.isEmpty() %} 
+                //empty conf if needed
                     confirmEmpty(function(){
                         bootstrapAlert("info",' emptying the conference...',"Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
                         Pager.changePage('#page-conf-emptying'); 
@@ -371,7 +413,8 @@
          function handleImport(e) {
                 e.stopPropagation();
                 e.preventDefault();
-                Pager.changePage('#page-result');
+                var mapping = Mapper.generateMappingFile(); 
+                extractDatas(mapping);
         }
 
         function handleNewMappingFile(e) {

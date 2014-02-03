@@ -1,3 +1,0 @@
-[submodule "vendor/bundles/Gregwar/CaptchaBundle"]
-	path = vendor/bundles/Gregwar/CaptchaBundle
-	url = git://github.com/Gregwar/CaptchaBundle.git

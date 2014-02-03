@@ -2,107 +2,316 @@ Model = {
 	
 
 	"entities" : {
-		"wwwConf" : {
-			label : "event",
+		"Conference" : { 
 			attributes : {
-						 required : ["summary"],
-						 optionnal : [ "url", "description","comment", "organizer", "contacts", "acronym", "logo","location", "events", "persons", "roles",  "organizations",  "topics" ]
-
-			}
+				required : {
+					"summary" : {
+						setter : "setSummary",
+				}},
+				optionnal : { 
+					"url" : {
+						setter : "setUrl",
+					}, 
+					"description" : {
+						setter : "setDescription",
+					},
+					"comment" : {
+						setter : "setComment",
+					}, 
+					"organizer" : {
+						setter : "setOrganizer",
+					}, 
+					"contacts" : {
+						setter : "setContacts",
+					}, 
+					"acronym" : {
+						setter : "setAcronym",
+					}, 
+					"logo" : {
+						setter : "setLogo",
+					},
+					"location" : {
+						setter : "setLocation",
+				}}
+			} 
 		}, 
-
-		"ConfEvent": {
-			label : "conference",
+		"Events" : { 
+            array   :"events",
 			attributes : {
-						required : ["summary"],
-						optionnal : [ "url", "description","comment", "organizer", "contacts", "acronym", "logo","location", "papers", "persons", "roles",  "children",  "topics" ]
-					}
-		},
-
-		"Person":{
-			label : "person",
+				required : {
+					"summary" : {
+						setter : "setSummary",
+				}},
+				optionnal : {  
+					"description" : {
+						setter : "setStartAt",
+					},
+					"description" : {
+						setter : "setEndAt",
+					},
+					"description" : {
+						setter : "setDescription",
+					},
+					"comment" : {
+						setter : "setComment",
+					}, 
+					"organizer" : {
+						setter : "setOrganizer",
+					}, 
+					"contacts" : {
+						setter : "setContacts",
+					}, 
+					"acronym" : {
+						setter : "setAcronym",
+					}, 
+					"logo" : {
+						setter : "setLogo",
+					},
+					"location" : {
+						setter : "setLocation",
+				}}
+			} 
+		}, 
+		"Person" : {
+            array   :"persons",
 			attributes : {
-					required : ["familyName", "firstName"],
-					optionnal : [ "email", "age","img", "page", "organizations", "accounts", "papers"]
-						
-					}
+				required : {
+					"familyName" : {
+						setter : "setFamilyName",
+					}, 
+					"firstName" : {
+						setter : "setFirstName",
+				}},
+				optionnal : { 
+					"email" : {
+						setter : "setEmail",
+					}, 
+					"age" : {
+						setter : "setAge",
+					},
+					"img" : {
+						setter : "setImg",
+					}, 
+					"page" : {
+						setter : "setPage",
+					}, 
+					"organizations" : {
+						setter : "setOrganizations",
+					}, 
+					"accounts" : {
+						setter : "setAccounts",
+					}, 
+					"papers" : {
+						setter : "setPapers",
+				}}
+			}
 		},
 
 	 
-		"Paper": {
-			label : "publication",
+		"Publication" : {
+            array   :"proceedings",
 			attributes : {
-					required : ["title", "abstract"],
-					optionnal : [ "publishdate", "publisher","url", "authors", "subjects", "topics", "events"]
+				required : {
+					"title" : {
+						setter : "setTitle",
+					}, 
+					"abstract" : {
+						setter : "setAbstract",
+				}},
+				optionnal : { 
+					"publishdate" : {
+						setter : "setPublishdate",
+					}, 
+					"publisher" : {
+						setter : "setPublisher",
+					},
+					"url" : {
+						setter : "setUrl",
+					}, 
+					"authors" : {
+						setter : "setAuthors",
+					}, 
+					"subjects" : {
+						setter : "setSubjects",
+					}, 
+					"topics" : {
+						setter : "setTopics",
+					}, 
+					"events" : {
+						setter : "setEvents",
+				}}
 			}
 		},
 
-		"Organization": {
-			label : "publication",
+		"Organization" : {
+            array   : "organizations",
 			attributes : {
-					required : ["name"],
-					optionnal : [ "name", "page","country", "members", "subjects", "topics", "events"]
+				required : {
+					"name" : {
+						setter : "setName",
+				}},
+				optionnal : { 
+					"page" : {
+						setter : "setPage",
+					},
+					"country" : {
+						setter : "setCountry",
+					}, 
+					"members" : {
+						setter : "setMembers",
+					}, 
+					"subjects" : {
+						setter : "setSubjects",
+					}, 
+					"topics" : {
+						setter : "setTopics",
+					}, 
+					"events" : {
+						setter : "setEvents",
+				}} 
 			}
 	  	},
 
-		"SocialServiceAccount": {
-			label : "Social account",
-			attributes : {
-					required : ["accountName"],
-					optionnal : [ "owner", "socialService"]
-			}
+		// "Social Account" : {
+		// 	attributes : {
+		// 		required : {
+		// 			"accountName" : {
+		// 				setter : "setAccountName",
+		// 		}},
+		// 		optionnal : { 
+		// 			"owner" : {  
+		// 				setter : "setOwner",
+		// 			},
+		// 			"socialService" : {
+		// 				setter : "setSocialService",
+		// 		}}
+		// 	}
 
-		},
+		// },
 
 	
-		"Location": {
-			label : "Social account",
+		"Location" : {
+            array   : "locations", 
 			attributes : {
-					required : ["name"],
-					optionnal : [ "capacity", "description", "longitude", "latitude"]
+				required : {
+					"name" : {
+						setter : "setName",
+				}},
+				optionnal : { 
+					"capacity" : {
+						setter : "setCapacity",
+					}, 
+					"description" : {
+						setter : "setDescription",
+					}, 
+					"longitude" : {
+						setter : "setLongitude",
+					}, 
+					"latitude" : {
+						setter : "setLatitude",
+				}}
 			}
 					 
-		 },
-
-
-		"Topic": {
-			label : "Keyword",
+		}, 
+		"Keyword" : {
+            array : "topics", 
 			attributes : {
-					required : ["name"],
-					optionnal : []
+				required : {
+					"name" : {
+						setter : "setName",
+				}},
+				optionnal : {}
+		
 			}		
 		}
 	},
 
 	modelToTab : function($el){
-		$.each(Model.entities, function(index, entity) {
+        var html = Mapper.getPanelHtml("Base model",{panelClass:"panel-primary"}); 
 
-       		var newEntity = Model.generateEntityNode(entity);
-       		$el.append(newEntity);
+		for(var i in Model.entities){
+  			var entity = Model.entities[i];
+        	html += Mapper.getPanelHtml(i,{panelClass:"panel-danger",margin:true,"model-path":i});
 
-       		$.each(entity.attributes.required, function(index, attribute){ 
-	       		var newAttr = Model.generateAttributeNode(attribute, { style : "color : red"});
-	       		newEntity.append(newAttr);
+       		$.each(entity.attributes.required, function(aIndex, attribute){ 
+	       		var newAttr = Model.generateAttributeNode(aIndex, {required:true,"model-path":i+"/"+aIndex});
+	       		// newEntity.append(newAttr);
+       			html += newAttr;
 	       	})
 
-       		$.each(entity.attributes.optionnal, function(index, attribute){ 
-       			var newAttr = Model.generateAttributeNode(attribute, {style : "color : green"});
-       			newEntity.append(newAttr);
+       		$.each(entity.attributes.optionnal, function(aIndex, attribute){ 
+       			var newAttr = Model.generateAttributeNode(aIndex, {required:false,"model-path":i+"/"+aIndex});
+       			html += newAttr;
+       			// newEntity.append(newAttr);
 	       	})
-	       
-        });
-	},
+	        html+= Mapper.getClosingPanelHtml();
+        };
+        html+= Mapper.getClosingPanelHtml();
+        $el.html(html);
 
-	generateEntityNode : function(entity){
-		return $("<div class='well'>"+entity.label+"</div>");
+        //TODO DROPPABLE
+        //TODO DROPPABLE
+        //TODO DROPPABLE
+        
+		$(".model-node").droppable({
+			accept: ".map-node" ,
+            tolerance: "pointer" ,
+			over: function( event, ui ) { 
+		        	if($(this).hasClass("list-group-item-danger")){
+			        	$(this).data("oldStyle","danger")
+			        	$(this).removeClass("list-group-item-danger");
+			        }else if($(this).hasClass("list-group-item-success")){
+			        	$(this).data("oldStyle","success") 
+			        }else{
+			        	$(this).data("oldStyle",false)
+			        }
+			        $(this).addClass("list-group-item-success") 
+			        var $this =$(this); 
+		        		setTimeout(function() {validateParentPanel($this);
+		        	},1);
+			},
+			out: function( event, ui ) { 
+	        	$(this).removeClass("list-group-item-success")
+		        if($(this).data("oldStyle")) {
+		        	$(this).addClass("list-group-item-"+$(this).data("oldStyle")) ;
+		        }
+		        var $this =$(this); 
+	        		setTimeout(function() {validateParentPanel($this);
+	        	},1); 
+			},
+			drop: function( event, ui ) {  
+		        // $(this).removeClass("list-group-item-success")
+		        Mapper.dataLinks[$(this).data("model-path")] = {to : ui.draggable.data("node-path")};
+		        console.log(Mapper.dataLinks);  
+			}
+		});
 
-	},
+		function validateParentPanel($div){
+
+		        var panelDiv = $div.parent().parent(); 
+		        if($div.siblings(".list-group-item-danger").length==0){
+		        	panelDiv.addClass("panel-success")
+		        	panelDiv.removeClass("panel-danger")
+		        }else{
+		        	panelDiv.removeClass("panel-success")
+		        	panelDiv.addClass("panel-danger")
+		        }
+		}
+	}, 
 
 	generateAttributeNode : function(attribute, options){
-		return $("<div class='well' style="+options.style+">"+attribute+"</div>");
+        return '<li class="model-node list-group-item'+(options.required===true?" list-group-item-danger":"")+'" data-required="'+(options.required===true)+'" data-model-path="'+options["model-path"]+'" style="'+options.style+'">'+attribute+'</li>'; 
 
-	}
+	},
 
+	getSetter : function(entityName,attribute){
+        var modelMapping = Model.entities[entityName]; 
+        if(modelMapping.attributes.required[attribute]){
+            return modelMapping.attributes.required[attribute].setter;
+        }else{
+            return modelMapping.attributes.optionnal[attribute].setter;
+        }
+    },
 
 	
 }
