@@ -127,7 +127,7 @@ class WwwConf
     private $logoPath; 
 
     /**
-     * @ORM\OneToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\ConfEvent")
+     * @ORM\OneToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\ConfEvent", cascade="remove")
      **/
      private $mainConfEvent; 
 

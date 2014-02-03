@@ -19,35 +19,39 @@
             </div>
         </div>
         <div class="row page-content">
-        
-            <table class="table table-hover records_list">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for entity in pager.currentPageResults %}
-                    <tr>
-                        <td><a href="{{ path('schedule_topic_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                        <td>{{ entity.name }}</td>
-                        <td>
-                                <a class="btn btn-default" href="{{ path('schedule_topic_show', { 'id': entity.id }) }}">
-                                    <i class="fa fa-eye"></i>
-                                </a>
-                               
-                                <a class="btn btn-warning edit" href="{{ path('schedule_topic_edit', { 'id': entity.id }) }}">
-                                     <i class="fa fa-pencil"></i>
-                                </a>
-                            </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-             </table>
-            <p>
-                {{ pagerfanta(pager, 'twitter_bootstrap') }}
-            </p>
+            <div class="row">
+              <div class="col-lg-1"></div>
+              <div class="col-lg-4 well">
+                <form id ="filter_form" class="form-inline" method="get" role="form" >
+                        {{ form_widget(filters_form) }}
+                        </br>
+                     <a id="submit_form_filter" class="btn btn-default btn-block" onclick="filter()" ><i class="fa fa-filter"></i></a>
+                </form>
+             </div>
+           </div>
+
+        <div id="topic_list">
+           {% include "fibeWWWConfBundle:Topic:list.html.twig" %}
+        </div>
         </div>
 {% endblock %} 
+
+
+{% block javascripts_page %}
+<script type="text/javascript">
+
+    function filter(){
+        $datas = $("#filter_form").serialize();
+
+        //start send the post request
+         $.post("{{path('schedule_topic_filter')}}",               
+                 $datas, 
+              function(response){
+                     $('#topic_list').html(response);
+                  
+              }, "html");    
+          return false;
+    };
+</script>
+
+{% endblock javascripts_page %}

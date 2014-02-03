@@ -124,15 +124,15 @@ define(['jquery'], function($){
 				
 				//show
 				if(currentLabel != remainder){ 
-					var a = $('<a href='+currentHref+' '+(isfilter?' ':'data-corners="true" data-role="button" data-iconpos="right" data-icon="arrow-r" data-mini="true" data-shadow="false"')+'>'+currentLabel+'</a>');
-					
+					var a = $('<a href='+currentHref+' '+(isfilter?' ':'data-corners="true" data-role="button" data-iconpos="right" data-icon="arrow-r" data-mini="true" data-shadow="false"')+'></a>');
+				
 					var img="";
-					if(currentImage != ""){
-						img = $('<img src='+currentImage+'>');
+					if(currentImage){
+						img = $('<div style="height:50px; width:30%"><img style="float:left; width : auto; height : 100%;" src='+currentImage+'><div>');
 					}else{
-						img = $('<img src="css/images/default_avatar.gif">');
+						img = $('<img style="float:left"  src="css/images/default_avatar.gif">');
 					}
-						a.append(img);
+					a.append(img);
 					
 					var li = $('<li class="button"></li>');
 					if(isfilter){
@@ -141,6 +141,7 @@ define(['jquery'], function($){
 						appendToDiv.append(a);
 					}   
 					
+					a.append(currentLabel);
 					
 					
 				}

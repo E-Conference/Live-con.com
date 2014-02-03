@@ -32,6 +32,7 @@ class AppKernel extends Kernel
             new fibe\DataBundle\DataBundle(),
             new fibe\ExternalizationBundle\fibeExternalizationBundle(),
             new fibe\ConferenceBundle\fibeConferenceBundle(),
+            new Gregwar\CaptchaBundle\GregwarCaptchaBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -1,17 +1,46 @@
-{% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block title %}Index{% endblock title %}
+{% block head %}
+  {% block meta %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="shortcut icon" href="{{ asset('bundles/fibehomepage/img/favicon.ico') }}" type="image/vnd.microsoft.icon">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ asset('bundles/fibehomepage/img/ios_icon.jpg') }}" />
+    <title>Livecon UPGRATE YOUR CONFERENCE</title>
+  {% endblock meta %}
+
+  {% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibehomepage/css/homepage.css') }}" /> 
+    <!-- reset -->
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/reset.css') }}" />
+    <!-- grid system 16 -->
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/960_12_col.css') }}" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/style.css') }}" />
+  {% endblock %}
+{% endblock %}
+
+
 {% block body %}
+
+<div id="background"></div>
+    <div class="container_12">
+
+      <div id="login" class="grid_4">
+        <a href="http://live-con.com/" title="Livecon UPGRATE YOUR CONFERENCE"><img src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon" /></a>
+       <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
+		    {% if app.session is not empty %}
+		        {% set targetUrl = app.session.get('_security.' ~ app.security.token.providerKey ~ '.target_path') %}
+		        {% if targetUrl is not empty %}<p><a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a></p>{% endif %}
+		        <button type="submit" class="btn btn-success">
+                       <a  href="{{ path('dashboard_index')}}">Start</a>
+                </button>
+
+		         
+		    {% endif %}
+      </div>
+    </div>
+ {% endblock body %}
  
 
-<p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
-    {% if app.session is not empty %}
-        {% set targetUrl = app.session.get('_security.' ~ app.security.token.providerKey ~ '.target_path') %}
-        {% if targetUrl is not empty %}<p><a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a></p>{% endif %}
-    {% endif %}{% endblock body %}
-
-{%  block javascripts %}
-{% endblock %}
 
 
 

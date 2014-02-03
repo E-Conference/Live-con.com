@@ -44,6 +44,9 @@ security:
         data:
             pattern:   ^/data/
             anonymous: true 
+        register:
+            pattern:   ^/user/register/
+            anonymous: true 
 
 
         main:
@@ -65,3 +68,4 @@ security:
 
     access_control:
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        

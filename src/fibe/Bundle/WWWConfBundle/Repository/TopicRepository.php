@@ -100,4 +100,33 @@ class TopicRepository extends EntityRepository
 
         return is_null($q) ? array() : $q->getResult();
     }
+
+
+     public function filtering($params, $currentConf){
+    
+       $entities = array();
+       $qb = $this->createQueryBuilder('t');
+       $qb     
+          ->where('t.conference = :conference_id')
+          ->setParameter('conference_id', $currentConf->getId());
+
+       if(isset($params['id'])) {
+           $qb
+                ->andWhere('t.id = :id')
+                ->setParameter('id', $params['id'])
+            ;
+        }
+
+        if(isset($params['paper'])) {
+            $qb
+                ->leftJoin('t.papers', 'p')
+                ->andWhere('p.id = :paper_id')
+                ->setParameter('paper_id', $params['paper'])
+            ;
+        }
+
+        $query = $qb->getQuery();
+        return  $query->execute();
+
+    }
 }

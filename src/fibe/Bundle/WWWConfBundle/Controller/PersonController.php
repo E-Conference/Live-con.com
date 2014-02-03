@@ -11,6 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use fibe\Bundle\WWWConfBundle\Entity\Person;
 use fibe\Bundle\WWWConfBundle\Form\PersonType;
+//Filter type form
+use fibe\Bundle\WWWConfBundle\Form\Filters\PersonFilterType;
 
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
@@ -53,10 +55,50 @@ class PersonController extends Controller
             throw new NotFoundHttpException();
         }
 
+        //Form Filter
+        $filters =$this->createForm(new PersonFilterType($this->getUser()));
         return array(
             'pager' => $pager,
             'authorized' => $authorization->getFlagconfDatas(),
+            'filters_form' => $filters->createView(),
         );
+    }
+
+
+    /**
+     * Filter person index list
+     * @Route("/filter", name="schedule_person_filter")
+     */
+    public function filterAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $conf = $this->getUser()->getCurrentConf();
+        //Filters
+        $filters =$this->createForm(new PersonFilterType($this->getUser()));
+        $filters->bindRequest($this->get('request'));
+
+        if ($filters->isValid())  {
+            // bind values from the request
+          
+             $entities = $em->getRepository('fibeWWWConfBundle:Person')->filtering($filters->getData(), $conf);
+
+             //Pager
+             $adapter = new ArrayAdapter($entities);
+             $pager = new PagerFanta($adapter);
+             $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
+             try {
+               $pager->setCurrentPage($request->query->get('page', 1));
+             } catch (NotValidCurrentPageException $e) {
+                throw new NotFoundHttpException();
+             }
+
+             return $this->render('fibeWWWConfBundle:Person:list.html.twig', array(
+                 'pager'  => $pager,
+             ));
+        }
+
     }
 
     /**

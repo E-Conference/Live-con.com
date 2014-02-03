@@ -11,7 +11,7 @@ define(['backbone', 'jquery'], function(Backbone, $){
 	var tpl = {
 		// Hash of preloaded templates for the app
 		templates:{},
-
+		modules:{},
 		/** Template loader function 
 		* It takes an array of name and retrieve the according template found in templates/ directory
 		* names : Array of the template's name to load

@@ -49,18 +49,22 @@ class databaseInitCommand extends ContainerAwareCommand
         //RoleType
         $roleType = new RoleType(); 
         $roleType->setName("Delegate");
+        $roleType->setLabel("Delegate");
         $em->persist($roleType);
 
         $roleType = new RoleType(); 
         $roleType->setName("Chair");
+        $roleType->setLabel("Chair");
         $em->persist($roleType);
 
         $roleType = new RoleType(); 
         $roleType->setName("Presenter");
+        $roleType->setLabel("Presenter");
         $em->persist($roleType);
 
         $roleType = new RoleType(); 
         $roleType->setName("ProgrammeCommitteeMember");
+        $roleType->setLabel("Programme Committee Member");
         $em->persist($roleType);
 
         //Social Service 

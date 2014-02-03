@@ -26,6 +26,9 @@ framework:
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
+    form:
+        ressources:
+            - LexikFormFilterBundle:Form:form_div_layout.html.twig
 
 # Assetic Configuration
 assetic:
@@ -70,7 +73,7 @@ twig:
         resources:
             - 'IDCISimpleScheduleBundle:Form:duration_widget.html.twig'
             - 'fibeWWWConfBundle:Form:my_form_div.html.twig'
-            
+
 
 fos_user:
     db_driver:     orm                              # Le type de BDD à utiliser, nous utilisons l'ORM Doctrine depuis le début
@@ -78,13 +81,21 @@ fos_user:
     user_class:    fibe\SecurityBundle\Entity\User  # La classe de l'entité User que nous utilisons         
     service:
         mailer: fos_user.mailer.twig_swift
-    from_email:
-        address:        noreply@wwwconf.com
-        sender_name:    WWWConf schedule manager
+    resetting:
+        # Permet de définir le template de l'email à envoyer (en html)
+        email:
+              template: fibeSecurityBundle:Registration:registration.email.twig
     registration:
         form:
             type: fibe_user_registration
-#    registration:
-#        confirmation:
-#            enabled:    true # change to true for required email confirmation
+        confirmation:
+             enabled:   true # change to true for required email confirmation
+    from_email:
+         # Adresse de l'expediteur
+         address:      noreply@live-con.com
+         # Nom de l'expediteur
+         sender_name:  Admin Livecon Manager
+       
+
+gregwar_captcha: ~
 

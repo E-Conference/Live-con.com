@@ -58,16 +58,35 @@
               'moment' : 'lib/moment.min',
               'tpl' : 'lib/templateLoader',
               'ajaxLoader' : 'ajaxLoader/AjaxLoader'
-          }
+          } 
 
       });
       
       //Configurations
-      require(['config', 'tpl'], function(configuration, tpl){
+      require(['config', 'tpl', 'model/swcEventCommandStore', 'model/liveconSparqlCommandStore'], function(configuration, tpl, liveconApiCommandStore, liveconSparqlCommandStore){
+
+        if("{{ api_type}}" == "sparql"){
+             configuration.datasources.eventDatasource.commands = liveconSparqlCommandStore;
+        }else{
+             configuration.datasources.eventDatasource.commands = liveconApiCommandStore;
+        }
+
+        var modules = []
+        {% if paper_module == true %}
+          modules.push("publications");
+        {% endif %}
+        {% if organization_module == true %}
+          modules.push("organizations");
+        {% endif %}
+       
+
+        tpl.modules = modules;
+
+ 
         configuration.datasources.eventDatasource.uri = "{{ api_uri }}";
-
         configuration.app.liveconLogo = "{{ asset('img/liveconApp.png') }}";
-
+        //configuration.conference.baseUri = "{{ conference_baseUri }}";
+         configuration.conference.baseUri = "http://data.live-con.com/resource/conference/5/5conference-event";
         configuration.conference.name = {{ conference.mainConfEvent.summary |json_encode|raw }};
         configuration.conference.acronym = {{ conference.mainConfEvent.acronym |json_encode|raw }};
         configuration.conference.id = {{ conference.id |json_encode|raw }};

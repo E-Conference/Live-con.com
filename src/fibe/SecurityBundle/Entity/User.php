@@ -44,6 +44,8 @@ class User extends BaseUser
      * 
      */
      protected $authorizations;
+
+     protected $captcha;
     
     
     /**
