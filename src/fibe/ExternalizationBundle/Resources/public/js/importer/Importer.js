@@ -11,7 +11,7 @@ var objectMap,
 
 var defaultDate = 'now';
 
-function run(file,mappingConfig,callback,fallback){ 
+function run(file,mappingConfig,op,callback,fallback){ 
    
               
             if(!file)
@@ -80,15 +80,23 @@ function run(file,mappingConfig,callback,fallback){
             ///////////////////////////  items Processing  ///////////////////////////
             //////////////////////////////////////////////////////////////////////////
  
+            // for (var i in mappingConfig.mappings){ 
+            //     var itemMapping = mappingConfig.mappings[i];  
+            //     rootNode.children().each(function(index,node){
+            //         // var n = NodeUtils[mappingConfig.getNodeName](node);  
+            //         var n = doFormat(node,mappingConfig.getNodeName.format);     
+
+            //         if(n && n.toLowerCase().indexOf(itemMapping.nodeName)!= -1){
+            //             add(itemMapping.array,itemMapping,this,{name:n});   
+            //         }
+            //     }); 
+            // } 
             for (var i in mappingConfig.mappings){ 
                 var itemMapping = mappingConfig.mappings[i];  
-                rootNode.children().each(function(index,node){
-                    // var n = NodeUtils[mappingConfig.getNodeName](node);  
-                    var n = doFormat(node,mappingConfig.getNodeName.format);     
-
-                    if(n && n.toLowerCase().indexOf(itemMapping.nodeName)!= -1){
-                        add(itemMapping.array,itemMapping,this,{name:n});   
-                    }
+                var collectionNode = doFormat(rootNode,mappingConfig.mappings[i].format); 
+                console.log("mappings...",collectionNode)
+                collectionNode.each(function(index,node){ 
+                    add(itemMapping.array,itemMapping,this);    
                 }); 
             } 
 
@@ -238,25 +246,28 @@ function run(file,mappingConfig,callback,fallback){
              *
              * @param {array} addArray      the array to populate
              * @param {object} mapping      mapping object (defined in config files)
-             * @param {dom elem} node       the xml dom element from the import file
-             * @param {object} arg          arg for the override function
+             * @param {dom elem} node       the xml dom element from the import file 
+             * @param {object} arg          arg for override functions 
              */
-            function add(addArray,mapping,node,arg){
+            function add(addArray,mapping,node){
 
                 //to override this method, write an "override : function(){...}" in the mapping file of the function. 
                 if(mapping.override!==undefined){
-                    return mapping.override(node,addArray,arg);
+                    return mapping.override(node,addArray);
                 }
                 //unwrapped if needed
-                if(mapping.wrapped===true){ 
-                    $(node).children().each(function(){
-                        process(addArray,mapping,this,arg);
-                    });
-                }else{
-                    process(addArray,mapping,node,arg); 
-                }
+                // if(mapping.format){ 
+                //     var nodes = doFormat(node,mapping.format);  
+                //     console.log("node",node);   
+                //     console.log("nodes",nodes);   
+                //     nodes.each(function(){
+                //         process(addArray,mapping,this);
+                //     });
+                // }else{
+                    process(addArray,mapping,node); 
+                // }
 
-                function process(addArray,mapping,node,arg){
+                function process(addArray,mapping,node){
                     var rtnArray = {};  
                     var key = doFormat(node,mappingConfig.getNodeKey.format);     
 
@@ -269,14 +280,14 @@ function run(file,mappingConfig,callback,fallback){
                                 //unwrapped if needed
                                 if(mapping.label[this.localName].wrapped === true){
                                     $(this).children().each(function(){ 
-                                        set(mapping,nodeName,this,arg); 
+                                        set(mapping,nodeName,this); 
                                     });
                                 }else{
-                                    set(mapping,nodeName,this,arg); 
+                                    set(mapping,nodeName,this); 
                                 }
                             }
                         }else{ 
-                            var mappingLake = arg.name+"/"+ this.localName;
+                            var mappingLake = getMappingPath(mapping)+" : "+this.localName; 
                             if($.inArray(mappingLake, notImportedLog) === -1)
                                 notImportedLog.push(mappingLake); 
                         }
@@ -287,8 +298,8 @@ function run(file,mappingConfig,callback,fallback){
                         if(mapping.postProcess(node,rtnArray) === true){
                             //if it was the main conf event
                             //register in the objectmap index
-                            addObjectMap(key,rtnArray); 
                             conference = rtnArray;
+                            addObjectMap(key,rtnArray); 
                             objectsIndexes[key] = {array:"conference"};
 
                             return;
@@ -302,8 +313,8 @@ function run(file,mappingConfig,callback,fallback){
                         addObject(addArray,rtnArray,key); 
                     } 
 
-                    function set(mapping,nodeName,node,arg){
-                        var mappingStr = arg.name+"/"+ nodeName;
+                    function set(mapping,nodeName,node){
+                        var mappingStr  = getMappingPath(mapping)+" : "+nodeName
                         if($.inArray(mappingStr, importedLog) === -1)
                             importedLog.push(mappingStr);  
                         var val = node.textContent;
@@ -311,14 +322,14 @@ function run(file,mappingConfig,callback,fallback){
                         if(mapping.label[nodeName].list){
                             var vals = val.split(mapping.label[nodeName].list.delimiter); 
                             for(var i=0;i<vals.length;i++){  
-                                setWithValue(mapping,nodeName,node,arg,vals[i],true);
+                                setWithValue(mapping,nodeName,node,vals[i],true);
                             }
                         }else{
-                            setWithValue(mapping,nodeName,node,arg,val);    
+                            setWithValue(mapping,nodeName,node,val);    
                         }
 
 
-                        function setWithValue(mapping,nodeName,node,arg,val,splitter){
+                        function setWithValue(mapping,nodeName,node,val,splitter){
 
                             // pre processing
                             if(mapping.label[nodeName].preProcess){
@@ -373,13 +384,11 @@ function run(file,mappingConfig,callback,fallback){
 
                         }
                     }
-                    function addObjectMap(key,rtnArray){
-                        // console.log("objectMap."+key);
+                    function addObjectMap(key,rtnArray){ 
                         objectMap[key] = rtnArray; 
                     } 
                     function addObject(addArray,rtnArray,key) {
-                        objects[addArray].push(rtnArray);
-                        // console.debug("addObject "+key) 
+                        objects[addArray].push(rtnArray); 
                         objectsIndexes[key] = {array:addArray,index:objects[addArray].length-1}; 
                     } 
                 }
@@ -473,6 +482,13 @@ function doFormat(node,format){
     } 
     return node;
 }
+function getMappingPath(mapping){
+    var rtn = [];
+    for(var i in mapping.format){
+        rtn.push(mapping.format[i].arg[0]) ;
+    }
+    return rtn.join("/");
+}
 
 function isFunction(functionToCheck) {
     var getType = {};
@@ -500,9 +516,7 @@ NodeUtils = {
                     uri.push(nodeName[nodeName.length-1]);  
                 }
             } 
-        });
-        // console.log("getNodeName",node.localName)
-        // console.log("uri",uri)
+        }); 
         for(var i in uri){
             var lc = uri[i].toLowerCase();
             if(lc.indexOf('keynotetalk')>-1){
@@ -532,7 +546,7 @@ NodeUtils = {
     //arg[0] must contain the wanted nodeName
     node : function(nodes,arg){
         var rtnNode;
-        childNodeName = arg[0].toLowerCase();
+        var childNodeName = arg[0].toLowerCase();
         $(nodes).each(function(){
             if(this.nodeName.toLowerCase() === childNodeName){
                 rtnNode = $(this);
@@ -544,13 +558,19 @@ NodeUtils = {
     child : function(node,arg){
         // return $(node).children(childNodeName);
         var rtnNode;
-        childNodeName = arg[0].toLowerCase();
+        var childNodeName = arg[0].toLowerCase();
         $(node).children().each(function(){
             if(this.nodeName.toLowerCase() === childNodeName){
                 rtnNode = $(this);
             }
         })
         return rtnNode;
+    },
+    //arg[0] must contain the wanted child nodeName 
+    children : function(node,arg){
+        // return $(node).children(childNodeName); 
+        var childNodeName = arg[0].toLowerCase();
+        return $(node).children(childNodeName);
     },
     
 }

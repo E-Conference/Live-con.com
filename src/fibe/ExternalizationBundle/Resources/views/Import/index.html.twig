@@ -102,16 +102,16 @@
         </div>
 
         <div id="page-new-mapping-file" data-progress="35" data-desc="Step 3 : Please proceed to the mapping"  class="page" style="display:none;">
-            <div style="margin: 15px;">
-                <button id="test-mapping" class="btn btn-default btn-lg"><i class="fa fa-flask"></i> Test your mapping file </button>
-                <button id="submit-new-mapping" class="btn btn-success btn-lg"><i class="fa fa-play-circle"></i> Import your data </button>
+            <div style="margin: 15px;"> 
+                <button id="submit-new-mapping" class="btn btn-success btn-lg"><i class="fa fa-play-circle"></i> Run your mapping </button>
             </div>
             <div id="datafile-form" class="col-sm-6 col-md-6 col-lg-6"></div>
             <div id="model-form"  class="col-sm-6 col-md-6 col-lg-6"></div>
         </div>   
 
         <div id="page-result" class="page" data-progress="70" data-desc="Final step : send us the dataset"  style="display:none;">
-            <button type="submit" id="send-data" class="btn btn-primary btn-lg "><i class="fa fa-upload"></i> Send </button>
+            <button id="back-to-mapping" style="display:none;" type="submit" id="send-data" class="btn btn-primary btn-lg "><i class="fa fa-arrow-left"></i> Back to the mapping </button>
+            <button type="submit" id="send-data" class="btn btn-success btn-lg "><i class="fa fa-upload"></i> Send </button>
             <h3 class="text-info">Results</h3>
             <div id="result-extract"></div>
         </div>        
@@ -178,6 +178,7 @@
             var selectKnownMappingFormat = document.getElementById("known-mapping-format");  
             var selectMappingFile        = document.getElementById("submit-new-mapping");   
             var newMappingFile           = document.getElementById('new-mapping'); 
+            var backToMapping            = document.getElementById('back-to-mapping'); 
             var sendData                 = document.getElementById('send-data'); 
             if(dropDataFile.addEventListener) {
                 dropDataFile.addEventListener('dragenter', handleDragover, false);
@@ -196,6 +197,9 @@
             } 
             if(selectMappingFile.addEventListener) {
                 selectMappingFile.addEventListener('click', handleImport, false);
+            } 
+            if(backToMapping.addEventListener) {
+                backToMapping.addEventListener('click', handleBackToMapping, false);
             } 
             if(sendData.addEventListener) {
                 sendData.addEventListener('click', handleSendSerializedConf, false);
@@ -255,8 +259,10 @@
             return msg + "</ul>";
         }
 
-        function extractDatas(mapping){ 
-            run( Mapper["data"],mapping,function(data,importedLog,notImportedLog){
+        function extractDatas(mapping,op){
+            if(!op)op={}; 
+            console.log("mapping with : ",mapping)
+            run( Mapper["data"],mapping,op,function(data,importedLog,notImportedLog){
                     Pager.changePage('#page-result');
                     Mapper.setSerialisedDatas(data);
                     bootstrapAlert("success",getMsgUl(Mapper.getSerialisedDatas(),"found"),"conference parsed : ");
@@ -300,6 +306,7 @@
  
                 var mapping = Mapper.getKnownMapping($("#known-mapping-format").val()); 
                 Mapper.read("#datafile-form");
+                $("#back-to-mapping").hide();
                 $(Mapper).on("fileRead",function(ev,data){
                      extractDatas(mapping)
                 })
@@ -346,6 +353,12 @@
                 e.stopPropagation();
                 e.preventDefault();
                 e.dataTransfer.dropEffect = 'copy';
+        }
+
+        function handleBackToMapping(e){
+                e.stopPropagation();
+                e.preventDefault();
+                Pager.changePage('#page-new-mapping-file');
         }
 
         function handleSendSerializedConf(e) {
@@ -414,7 +427,8 @@
                 e.stopPropagation();
                 e.preventDefault();
                 var mapping = Mapper.generateMappingFile(); 
-                extractDatas(mapping);
+                extractDatas(mapping);  
+                $("#back-to-mapping").show();
         }
 
         function handleNewMappingFile(e) {

@@ -16,5 +16,8 @@ var Pager = {
         // update header desc and progress
         this.desc.html(this.currentPage.data("desc"));
         this.progress.find(".progress-bar").width(this.currentPage.data("progress")+"%");
-	}
+	},
+    getPage : function(){
+        return this.currentPage;
+    }
 }

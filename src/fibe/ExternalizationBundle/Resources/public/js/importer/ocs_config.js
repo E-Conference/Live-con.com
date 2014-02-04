@@ -74,9 +74,14 @@ var ocsConfig = {
     
     mappings : [
         {
-            array   : "organizations",
-            nodeName: 'organizations',
-            wrapped : true,
+            array   : "organizations", 
+            format : [{
+                nodeUtils : "children",
+                arg : ["organizations"],
+            },{
+                nodeUtils : "children",
+                arg : ["organization"],
+            }], 
             label   : {
                 'name' : {
                     setter : 'setName',
@@ -88,10 +93,15 @@ var ocsConfig = {
 
         },
         {
-            //nodes are wrapped in a collection node
-            wrapped : true,
-            array   :"persons",
-            nodeName: 'persons',
+            //nodes are wrapped in a collection node 
+            array   :"persons", 
+            format : [{
+                nodeUtils : "children",
+                arg : ["persons"],
+            },{
+                nodeUtils : "children",
+                arg : ["person"],
+            }], 
             label   : {
                 'firstname' : {
                     setter : 'setFirstName',
@@ -115,9 +125,14 @@ var ocsConfig = {
             }
         },
         {
-            array   :"proceedings",
-            nodeName: 'papers',
-            wrapped : true,
+            array   :"proceedings", 
+            format : [{
+                nodeUtils : "children",
+                arg : ["papers"],
+            },{
+                nodeUtils : "children",
+                arg : ["paper"],
+            }], 
             label   : {
                 'title' : {
                     setter : 'setTitle',
@@ -157,9 +172,14 @@ var ocsConfig = {
             },
         },
         {  
-            array   : "events",
-            nodeName: 'sessions',
-            wrapped : true,
+            array   : "events", 
+            format : [{
+                nodeUtils : "children",
+                arg : ["sessions"],
+            },{
+                nodeUtils : "children",
+                arg : ["session"],
+            }], 
             label   : {
                 'name' : {
                     setter : 'setSummary'
