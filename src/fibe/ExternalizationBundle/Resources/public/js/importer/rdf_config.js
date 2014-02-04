@@ -29,22 +29,14 @@ var rdfConfig = {
         format : [{
             nodeUtils : "rdfNodeName", 
         }] 
-    }, 
-    // parseItemOrder : {
-    //         "locationMapping" : "locations",
-    //         "organizationMapping" : "organizations",
-    //         "personMapping" : "persons",
-    //         "proceedingMapping" : "proceedings",
-    //         "eventMapping" : "events",
-    //         "presenterMapping" : "roles",
-    //         "chairMapping" : "roles", 
-    //         "relationMapping" : "events", 
-    // },
-
+    },  
     mappings : [
         {
-            array   : "locations", 
-            nodeName : 'meetingroomplace',
+            array   : "locations",  
+            format : [{
+                nodeUtils : "children",
+                arg : ["meetingroomplace",true],
+            }], 
             label : {
                 'rdfs:label' : {
                     setter : 'setName'
@@ -55,8 +47,11 @@ var rdfConfig = {
             },
         },
         {
-            array   : "organizations", 
-            nodeName : 'organization',
+            array   : "organizations",  
+            format : [{
+                nodeUtils : "children",
+                arg : ["organization",true],
+            }], 
             label : {
                 'rdfs:label' : {
                     setter : 'setName'
@@ -68,7 +63,10 @@ var rdfConfig = {
         },
         {
             array   : "persons", 
-            nodeName : 'person',
+            format : [{
+                nodeUtils : "children",
+                arg : ["person",true],
+            }],  
             label : {
 
                 //some dataset use rdfs:label instead of foaf ontology
@@ -121,8 +119,11 @@ var rdfConfig = {
             }
         },
         {
-            array   : "proceedings", 
-            nodeName : 'inproceedings',
+            array   : "proceedings",  
+            format : [{
+                nodeUtils : "children",
+                arg : ["inproceedings",true],
+            }],  
 
             label : {
                 'dc:title' : {
@@ -143,12 +144,15 @@ var rdfConfig = {
                         }],
                         array : "topics",
                         //pointed entity isn't a concrete node in this format and thus, don't contains any index 
-                        //so we must retrieve an index with getArrayId instead of objectMap  
+                        //so we must retrieve an index with getArrayId instead of objectMap 
                         create : "setName",
                     },    
                 },
                 'swrc:listkeyword' : {
                     multiple : true,
+                    //TODO add splitter format
+                    //TODO add splitter format
+                    //TODO add splitter format
                     list : {delimiter:", "},
                     setter : 'addTopic',
                     fk : {
@@ -187,8 +191,11 @@ var rdfConfig = {
             },
         },
         {
-            array   : "events", 
-            nodeName : 'event',
+            array   : "events",  
+            format : [{
+                nodeUtils : "children",
+                arg : ["event",true],
+            }],  
             label : {
                 'rdfs:label' : {
                     setter : 'setSummary'
@@ -326,15 +333,14 @@ var rdfConfig = {
                 var catName
                     ,tmp
                     ,isMainConfEvent = false;
-
                 //3 different ways to get the category name 
-                tmp = node.nodeName.split("swc:").join("").split("&swc;").join("").split("event:").join("");
+                tmp = node[0].nodeName.split("swc:").join("").split("&swc;").join("").split("event:").join("");
                 if(testCatName(tmp))catName = tmp;
      
-                tmp = doFormat(node,rdfConfig.getNodeName.format); 
+                tmp = NodeUtils.getNodeName(node); 
                 if(testCatName(tmp))catName = tmp;
 
-                tmp = doFormat(node,rdfConfig.getNodeName.format).split("&swc;").join("").split("swc:").join("").split("event:").join("");
+                tmp = NodeUtils.getNodeName(node).split("&swc;").join("").split("swc:").join("").split("event:").join("");
                 if(testCatName(tmp))catName = tmp; 
      
                 if(catName){
@@ -367,6 +373,7 @@ var rdfConfig = {
                 return isMainConfEvent;
 
                 function testCatName(catName){
+                    if(!catName)return;
                     var cn = catName.toLowerCase(); 
 
                     return (cn.indexOf("event") !== -1 && cn !== "event")
@@ -379,8 +386,11 @@ var rdfConfig = {
         //TODO DO NOT PERMIT OVERRIDING
         //TODO DO NOT PERMIT OVERRIDING
         {
-            array   : "roles", 
-            nodeName : 'presenter', 
+            array   : "roles",  
+            format : [{
+                nodeUtils : "children",
+                arg : ["presenter",true],
+            }],  
             override : function(node){
 
                 var event ;
@@ -403,8 +413,11 @@ var rdfConfig = {
             }
         },
         {
-            array   : "roles", 
-            nodeName : 'chair',
+            array   : "roles",  
+            format : [{
+                nodeUtils : "children",
+                arg : ["chair",true],
+            }],  
             override : function(node){
 
                 var event ;
@@ -425,24 +438,7 @@ var rdfConfig = {
                     }); 
                 }
             }
-        },
-        // {
-        //     array   : "events", 
-        //     nodeName : 'event',
-        //     override : function(node){  
-        //         var event = doFormat(node,rdfConfig.getNodeKey.format);
-        //         var found=false;
-        //         $(node).children().each(function(){
-        //             if(this.nodeName.toLowerCase()=="swc:issubeventof"){ 
-
-        //             var relatedToEventId = getArrayId("xproperties",'setXValue',$(this).attr('rdf:resource'));
-        //                 if(relatedToEventId){
-        //                     event['setParent']= relatedToEventId;
-        //                 } 
-        //             } 
-        //         });
-        //     }
-        // },  
+        }, 
     ],      
 }
  

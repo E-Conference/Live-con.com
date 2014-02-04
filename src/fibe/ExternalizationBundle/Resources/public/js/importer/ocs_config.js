@@ -145,6 +145,9 @@ var ocsConfig = {
                 'keywords' : {
                     wrapped : true,
                     multiple : true, 
+                    //TODO add splitter format
+                    //TODO add splitter format
+                    //TODO add splitter format
                     list : {delimiter:";"},
                     setter : 'addTopic',
                     //pointed entity isn't a concrete node in this format and thus, don't contains any index 

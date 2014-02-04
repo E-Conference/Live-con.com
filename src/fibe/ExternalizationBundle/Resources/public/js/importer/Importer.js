@@ -11,8 +11,11 @@ var objectMap,
 
 var defaultDate = 'now';
 
-function run(file,mappingConfig,op,callback,fallback){ 
-   
+var mappingConfig;
+
+function run(file,mapping,op,callback,fallback){ 
+            
+            mappingConfig = mapping;
               
             if(!file)
             {
@@ -54,8 +57,15 @@ function run(file,mappingConfig,op,callback,fallback){
             if(mappingConfig.rootNode){ 
                 rootNode = doFormat(file,mappingConfig.rootNode.format); 
             }
+
             if(!rootNode){
                 if(fallback!=undefined)fallback("Wrong root node"); 
+                return;
+            }
+            
+            console.log("rootNode contains "+rootNode.children().length+" children",rootNode)
+            if(rootNode.children().length ==0){
+                if(fallback!=undefined)fallback("Empty root node"); 
                 return;
             }
 
@@ -94,7 +104,11 @@ function run(file,mappingConfig,op,callback,fallback){
             for (var i in mappingConfig.mappings){ 
                 var itemMapping = mappingConfig.mappings[i];  
                 var collectionNode = doFormat(rootNode,mappingConfig.mappings[i].format); 
-                console.log("mappings...",collectionNode)
+                if(collectionNode.length == 0){
+                    console.warn("couln't not have got nodes for the mapping",mappingConfig.mappings[i])
+                }else{
+                    // console.log("mapping a collection",collectionNode)
+                }
                 collectionNode.each(function(index,node){ 
                     add(itemMapping.array,itemMapping,this);    
                 }); 
@@ -191,10 +205,10 @@ function run(file,mappingConfig,op,callback,fallback){
                 if(moment(event['setEndAt']).isAfter(latestEnd))
                     latestEnd = moment(event['setEndAt']);
             }
-            if(earliestStart != moment('6000-10-10') && latestEnd != moment('1000-10-10')){
-                if(earliestStart == latestEnd){
+            if(!( earliestStart.isSame(moment('6000-10-10')) || latestEnd.isSame(moment('1000-10-10')) )){
+                if(earliestStart.isSame(latestEnd)){
                     objects["conference"]['setStartAt'] = moment().hour(0).minute(0).second(0).millisecond(0).format('YYYY-MM-DDTHH:mm:ss Z');
-                    objects["conference"]['setEndAt'] = moment().hour(0).minute(0).second(0).millisecond(0).add('d', 1).format('YYYY-MM-DDTHH:mm:ss Z');
+                    objects["conference"]['setEndAt'] = moment(objects["conference"]['setStartAt']).add('d', 1).format('YYYY-MM-DDTHH:mm:ss Z');
                 }else{
                     objects["conference"]['setStartAt'] = earliestStart; 
                     objects["conference"]['setEndAt']   = latestEnd; 
@@ -255,7 +269,7 @@ function run(file,mappingConfig,op,callback,fallback){
                 if(mapping.override!==undefined){
                     return mapping.override(node,addArray);
                 }
-                //unwrapped if needed
+                //unwrapped if needed (not used anymore here)
                 // if(mapping.format){ 
                 //     var nodes = doFormat(node,mapping.format);  
                 //     console.log("node",node);   
@@ -277,7 +291,8 @@ function run(file,mappingConfig,op,callback,fallback){
                             if(mapping.label[this.localName].setter){
                                 var nodeName = this.localName;
 
-                                //unwrapped if needed
+                                //unwrapped if needed 
+                                //TODO remove this option and use format instead
                                 if(mapping.label[this.localName].wrapped === true){
                                     $(this).children().each(function(){ 
                                         set(mapping,nodeName,this); 
@@ -299,9 +314,10 @@ function run(file,mappingConfig,op,callback,fallback){
                             //if it was the main conf event
                             //register in the objectmap index
                             conference = rtnArray;
+
                             addObjectMap(key,rtnArray); 
                             objectsIndexes[key] = {array:"conference"};
-
+                            objects["conference"] = rtnArray;
                             return;
                         } 
                     }
@@ -472,15 +488,17 @@ function str_format(string){
 
 
 
-function doFormat(node,format){ 
+function doFormat(node,format,log){
+    var rtn = node;
     if(isFunction(format)){
-       return format(node); 
+       rtn = format(node); 
     } 
     for (var i in format){
+        if(log)console.log(i,node,format[i])
         var currentFormat = format[i];
-        node = NodeUtils[currentFormat.nodeUtils](node,currentFormat.arg)
-    } 
-    return node;
+        rtn = NodeUtils[currentFormat.nodeUtils](node,currentFormat.arg,log) 
+    }
+    return rtn;
 }
 function getMappingPath(mapping){
     var rtn = [];
@@ -495,19 +513,31 @@ function isFunction(functionToCheck) {
     return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
 }
 
-//various filter or extractors.
-NodeUtils = {
+//data manipulation
+NodeUtils = { 
+    //*internal* : do not use this function in any format
+    getNodeName : function(node){
+        var nodeName = doFormat(node,mappingConfig.getNodeName.format);
+        // console.warn("undefined nodename for",node)
+        return (nodeName ? nodeName.toLowerCase() : undefined);
+    },
+    /*********************  node manipulation : return a string *******************/
     text : function(node){
         return $(node).text();
     },
     localName : function(node){
         return node.localName;
     },
-    rdfNodeName : function(node){
+    //get a rdf nodeName
+    rdfNodeName : function(node,arg){
+        var node = $(node)[0];
+        if(!node.localName)return;//comment
         var uri=[];
         var rtn;
+
+        //first, look for  <rdf:type> child(ren)
         $(node).children().each(function(){ 
-            if(this.localName.indexOf("rdf:type")!== -1 ){
+            if(this.localName.indexOf("rdf:type")!== -1 ){ 
                 if($(this).attr('rdf:resource').indexOf("#")!== -1 ){ 
                     uri.push($(this).attr('rdf:resource').split('#')[1]); 
                 }
@@ -516,13 +546,13 @@ NodeUtils = {
                     uri.push(nodeName[nodeName.length-1]);  
                 }
             } 
-        }); 
+        });  
         for(var i in uri){
             var lc = uri[i].toLowerCase();
             if(lc.indexOf('keynotetalk')>-1){
                 rtn = 'KeynoteEvent'; 
             }
-        } 
+        }
         var lc = node.localName.toLowerCase();
         if(lc.indexOf('keynotetalk')>-1){
             rtn = 'KeynoteEvent'; 
@@ -535,42 +565,58 @@ NodeUtils = {
         { 
             rtn = node.localName;
         } 
-        return rtn;
+        return rtn.split("swc:").join("").split("&swc;").join("");
     },
     // get a specific attr for the given node
     //arg[0] must contain the wanted attr
     attr : function(node,arg){
         return $(node).attr(arg[0]);
     },
+
+    /********************* nodeSet && node manipulation : return jquery Node or NodeSet *******************/
+    
     // get a specific node in a nodeSet
     //arg[0] must contain the wanted nodeName
     node : function(nodes,arg){
         var rtnNode;
-        var childNodeName = arg[0].toLowerCase();
-        $(nodes).each(function(){
-            if(this.nodeName.toLowerCase() === childNodeName){
+        var seekedNodeName = arg[0].toLowerCase();
+        $(nodes).each(function(){ 
+            var nodeName = NodeUtils.getNodeName(this);  
+            if(nodeName && nodeName.toLowerCase() === seekedNodeName){
                 rtnNode = $(this);
             }
         })
         return rtnNode;
     }, 
+    // get specific children in a nodeSet ( case sensitive )
+    //arg[0] string : must contain the wanted children nodeName 
+    //arg[1] bool   : option to match with substring containment
+    children : function(node,arg){
+        var rtnNodeSet= [];
+        var seekedChildNodeName = arg[0].toLowerCase();
+        var matchTest = arg[1] === true ? function(a,b){return a.indexOf(b) > -1} 
+                                        : function(a,b){return a === b};
+        $(node).children().each(function(){
+            var childNodeName = NodeUtils.getNodeName(this); 
+            if(childNodeName && matchTest(childNodeName,seekedChildNodeName)){
+                rtnNodeSet.push($(this));
+            }
+        })
+        return $(rtnNodeSet);
+    },
+    // get the first specific child in a nodeSet ( case insensitive )
     //arg[0] must contain the wanted child nodeName 
     child : function(node,arg){
         // return $(node).children(childNodeName);
         var rtnNode;
-        var childNodeName = arg[0].toLowerCase();
+        var seekedChildNodeName = arg[0].toLowerCase();
         $(node).children().each(function(){
-            if(this.nodeName.toLowerCase() === childNodeName){
+            if(rtnNode)return;
+            var childNodeName = NodeUtils.getNodeName(this);
+            if(childNodeName && childNodeName === seekedChildNodeName){
                 rtnNode = $(this);
             }
         })
         return rtnNode;
     },
-    //arg[0] must contain the wanted child nodeName 
-    children : function(node,arg){
-        // return $(node).children(childNodeName); 
-        var childNodeName = arg[0].toLowerCase();
-        return $(node).children(childNodeName);
-    },
-    
 }
