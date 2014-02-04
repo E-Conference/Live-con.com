@@ -362,13 +362,13 @@ var rdfConfig = {
                 
                 
                 // store uri via xproperty array to get the event back in the relation loop
-                if(!isMainConfEvent){
-                    var xproperty= {}; 
-                    xproperty['setCalendarEntity']=objects.events.length;
-                    xproperty['setXNamespace']="event_uri";
-                    xproperty['setXValue']=$(node).attr('rdf:about');
-                    objects.xproperties.push(xproperty);
-                }
+                // if(!isMainConfEvent){
+                //     var xproperty= {}; 
+                //     xproperty['setCalendarEntity']=objects.events.length;
+                //     xproperty['setXNamespace']="event_uri";
+                //     xproperty['setXValue']=$(node).attr('rdf:about');
+                //     objects.xproperties.push(xproperty);
+                // }
                 //don't store the original event
                 return isMainConfEvent;
 

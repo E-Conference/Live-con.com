@@ -101,7 +101,6 @@ var EventCollection = {
         // setTimeout(doWork, 1);
 
         function updateBroCountRange(doChildren){ 
-            var startScript = moment();
             //if there's no EventCollection.eventToRender, calculate for every events
             var done     = []
                 ,brothersIds= [] 
@@ -117,10 +116,11 @@ var EventCollection = {
             // console.log("non affected : ",EventCollection.broCountRange);
             // console.log("----------------------------------------------------");
             
+            var startScript = moment();
             computeCountRange(brothersIds,doChildren);
+            console.debug("BroCountRange : updated "+brothersIds.length+" events in "+moment().diff(startScript)+" ms",EventCollection.broCountRange);
 
             EventCollection.eventsToComputeBroCountRangeIndexes = []; 
-            console.debug("BroCountRange : updated "+brothersIds.length+" events in "+moment().diff(startScript)+" ms",EventCollection.broCountRange);
             return EventCollection.eventsToComputeBroCountRangeIndexes;
             
             function computeCountRange(brosIds,doChildren){
@@ -132,7 +132,7 @@ var EventCollection = {
                 //create rtn object for curBro  
                 baseCount = EventCollection.broCountRange[curBro.id].count;
                 var brosIdsofcurBro = curBro.getNonAllDayBrosId(); 
-                console.debug("non all day bros of "+curBro.id +" are :",brosIdsofcurBro)
+                console.debug(curBro.id +" has "+brosIdsofcurBro.length+" non all day bros")
                 for (var j in remainingIds){
                   bro = Events[ remainingIds[j] ];  
                   //ensure the bro is not itself or an all day event
