@@ -1,15 +1,12 @@
 
-
+{% extends 'fibeHomePageBundle::base.html.twig' %}
 
 {% block head %}
-  {% block meta %}
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <link rel="shortcut icon" href="{{ asset('bundles/fibehomepage/img/favicon.ico') }}" type="image/vnd.microsoft.icon">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ asset('bundles/fibehomepage/img/ios_icon.jpg') }}" />
-    <title>Livecon UPGRATE YOUR CONFERENCE</title>
-  {% endblock meta %}
 
-  {% block stylesheets %}
+    {% block title %}Livecon upgrade your conference{% endblock %}
+
+
+  {% block stylesheets_page %}
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibehomepage/css/homepage.css') }}" /> 
     <!-- reset -->
     <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/reset.css') }}" />
@@ -31,8 +28,7 @@
 
 <div id="background"></div>
     <div class="container_12">
-
-      <div id="login" class="grid_4">
+      <div id="signin" class="grid_4">
         <a href="http://live-con.com/" title="Livecon UPGRATE YOUR CONFERENCE"><img src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon" /></a>
        <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="form-horizontal" > 
 
@@ -94,7 +90,7 @@
                         <i class="icon-plus icon-white"></i> Register user
                     </button>
                 </div>
-        </div>
+             </div>
         </div>
         </br>
       </br>

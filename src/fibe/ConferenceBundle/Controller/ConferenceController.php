@@ -67,6 +67,7 @@ class ConferenceController extends Controller
            
               if ($form->isValid()) {
                   $em = $this->getDoctrine()->getManager();
+                  $WwwConf->slugify();
                   $em->persist($wwwConf);
                   $em->flush();
 
@@ -217,6 +218,8 @@ class ConferenceController extends Controller
             $mainConfEvent->setEndAt( $end->add(new \DateInterval('P2D')));
             $mainConfEvent->addCategorie($categorie);
             $mainConfEvent->setConference($entity);
+            $em->persist($mainConfEvent);
+
 
             // conference location
             $mainConfEventLocation = new Location();
@@ -224,6 +227,7 @@ class ConferenceController extends Controller
             $mainConfEventLocation->addLocationAwareCalendarEntitie($mainConfEvent);
             $mainConfEventLocation->setConference($entity);
             $em->persist($mainConfEventLocation);
+            $mainConfEvent->setLocation($mainConfEventLocation);
             $em->persist($mainConfEvent);
 
             //Create authorization
@@ -247,8 +251,11 @@ class ConferenceController extends Controller
 
             $em->persist($user);
             $em->persist($entity); 
+            $em->flush();
 
-
+            //Create slug after persist => visibleon endpoint
+            $entity->slugify();
+            $em->persist($entity); 
             $em->flush();
 
 
@@ -345,7 +352,7 @@ class ConferenceController extends Controller
       $user=$this->getUser();
 
 
-      $conference = $user->getCurrentConf();
+      $conference = $em->getRepository('fibeWWWConfBundle:WwwConf')->find($id);
 
       if (!$conference) {
             throw $this->createNotFoundException('Unable to find Conference.');

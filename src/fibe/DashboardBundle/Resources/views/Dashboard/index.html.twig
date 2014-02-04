@@ -92,7 +92,7 @@
                         <li class="list-group-item"><h5>Conf Managers <span class="badge">{{ conference.confManagers|length }}</span></h5> </li>
                       </ul>
                       {% if conference.getFlagByManagerId(app.user.id, 'datas') == 1 %}
-                           <a data-url="{{ path('schedule_conference_delete', {id: conference.id}) }}" class="delete_conference btn btn-danger btn-block modal-toggle" data-message ="Are you sur delete '{{ conference.getConfName() }}' ?" data-toggle="modal" data-target="#myModal">
+                           <a data-url="{{ path('schedule_conference_delete', {id: conference.id}) }}" class="delete_conference btn btn-danger btn-block modal-toggle" data-message ="Are you sure you want to delete '{{ conference.getConfName() }}' conference ?" data-toggle="modal" data-target="#myModal">
                                   <i class="fa fa-trash-o"></i>
                           </a>
 
@@ -141,7 +141,7 @@
             var deleteUrl = $(this).attr('data-url');
 
             $('#confirm').attr('href',deleteUrl);
-            $('.modal-body').append("<p>"+message+"</p>");
+            $('.modal-body').append("<h5>"+message+"</h5>");
 
             $('#deleteConfirmation').modal('show');
 

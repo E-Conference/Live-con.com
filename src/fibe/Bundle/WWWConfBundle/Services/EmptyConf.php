@@ -10,6 +10,8 @@ class EmptyConf {
     public function emptyConf($conference,$em)
     {
 
+      
+
       //  topics
       $topics = $conference->getTopics();
       foreach ($topics as $topic) {
@@ -25,8 +27,8 @@ class EmptyConf {
       }
 
       //  topics
-      $topics = $conference->getTopics()
- ;     foreach ($topics as $topic) {
+      $topics = $conference->getTopics();
+      foreach ($topics as $topic) {
         $conference->removetopic($topic);
         $em->remove($topic);
       }
@@ -45,13 +47,6 @@ class EmptyConf {
         $em->remove($location);
       }
 
-      //  events
-      $events = $conference->getEvents();
-      foreach ($events as $event) {
-        $conference->removeEvent($event);
-        $em->remove($event);
-      }
-
       //  persons
       $persons = $conference->getPersons();
       foreach ($persons as $person) {
@@ -63,12 +58,11 @@ class EmptyConf {
 
       $newMainConfEvent = new Event();
       $newMainConfEvent->setIsMainConfEvent(true);
-      $newMainConfEvent->setSummary("Conference"); 
+      $newMainConfEvent->setSummary("Livecon Conference"); 
       $newMainConfEvent->setStartAt( new \DateTime('now'));
       $end = new \DateTime('now');
       $newMainConfEvent->setEndAt( $end->add(new \DateInterval('P2D'))); 
       $newMainConfEvent->addCategorie($em->getRepository('IDCISimpleScheduleBundle:Category')->findOneByName("ConferenceEvent"));
-      $newMainConfEvent->setSummary("Conference Event");
       $newMainConfEvent->setConference($conference);
       $conference->setMainConfEvent($newMainConfEvent);
 
@@ -82,6 +76,15 @@ class EmptyConf {
       $em->persist($newMainConfEvent); 
       $em->remove($mainConfEvent);
  
+      $em->persist($conference);
+
+       //  events
+      $events = $conference->getEvents();
+      foreach ($events as $event) {
+        $conference->removeEvent($event);
+        $em->remove($event);
+      }
+
       $em->persist($conference);
       $em->flush();
     }
