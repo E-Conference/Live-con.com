@@ -25,12 +25,6 @@ Mapper = {
     },
 
     defaultNodeReadingConfig : {
-        rootNode : {
-            format : [{
-                nodeUtils : "node",
-                arg : ["RDF:RDF"],
-            }] 
-        }, 
         getNodeKey : {
             format : [{
                 nodeUtils : "attr",
@@ -55,7 +49,7 @@ Mapper = {
         Mapper.knownCollection = {};
         
         var nodePath = "root";
-        var html = Mapper.getPanelHtml("Found datas",{panelClass:"panel-primary"});
+        var html = Mapper.getPanelHtml("Found datas ",{panelClass:"panel-primary"});
 
         generateHtml($data,nodePath,Mapper.knownNodes); 
         function generateHtml($node,nodePath,knownNodes){
@@ -68,7 +62,7 @@ Mapper = {
 
                     if(!Mapper.isNodeKnown(nodePath+ "/"+getNodeName(child))){
                         childTags.push(getNodeName(child));
-                        html+= Mapper.getPanelHtml(getNodeName(child),{panelClass:"panel-success",margin:true,"node-path":nodePath+ "/"+getNodeName(child)});
+                        html+= Mapper.getPanelHtml(getNodeName(child),{panelClass:"panel-success",margin:true,"node-path":nodePath+ "/"+getNodeName(child),collapsible:true});
                         generateHtml($(child),nodePath+ "/"+getNodeName(child),knownNodes)
                         html+= Mapper.getClosingPanelHtml(); 
                     } else{
@@ -97,15 +91,22 @@ Mapper = {
 
 
         html+= Mapper.getClosingPanelHtml();
-        Mapper["el"].html(html);
-
-        //             .children(".collapsible").click(function(){console.log(this);alert("lol");
-        //                 $(this).siblings("ul").collapsible("toggle")
-        //             })
+        Mapper["el"].html(html); 
         
-        var $rootNodeSelect = $('<select><option selected="selected" value="localname">Alabama</option><option value="WY">Wyoming</option></select>').select2();
-        var clickablePopover = Mapper.addClickablePopover($(" <i class='fa fa-cog'> </i> "),"CACA")
-        $('#datafile-form > .panel-primary > .panel-heading').append(clickablePopover);
+
+        // option popover
+        // var $nodeNameSelect = $('<select><option selected="selected" value="localname">Node tag</option>\
+        //                                  <option value="rdfNodeName">Rdf tag</option></select>')
+        //                             .select2()
+        //                             .on("change",function(){
+        //                                 if(localname == "localname"){
+        //                                     Mapper.map(); format = [{
+        //                                         nodeUtils : "localName", 
+        //                                     }] 
+        //                                 }
+        //                             });
+        // var clickablePopover = Mapper.addClickablePopover($(" <i class='fa fa-cog'> </i> "),"CACA")
+        // $('#datafile-form > .panel-primary > .panel-heading > .panel-title').append(clickablePopover);
         
 
         //collection
@@ -374,16 +375,20 @@ Mapper = {
                     (op["model-path"]?' data-model-path="'+op["model-path"]+'"':"")+
                     (op["node-path"]?' data-node-path="'+op["node-path"]+'"':"")+
                     (op.margin===true?' style="margin:15px;"':'')+
-                    '>\
-                  <!-- Default panel contents -->\
-                  <div class="panel-heading"><h3 class="panel-title">'+content+'</h3></div>\
+                    (op.collapsible===true?' ':'')+
+                    '>'+ 
+                  '<!-- Default panel contents -->\
+                  <div class="panel-heading"><h3 class="panel-title">'+
+                        content+
+                        (op.collapsible===true?' <i class="fa fa-chevron-down" style="cursor: pointer;" data-collapsed="false" onclick="!$(this).data(\'collapsed\') ? $(this).removeClass(\'fa-chevron-down\').addClass(\'fa-chevron-up\').parent().parent().siblings(\'ul\').hide(\'slow\') : $(this).removeClass(\'fa-chevron-up\').addClass(\'fa-chevron-down\').parent().parent().siblings(\'ul\').show(\'slow\');$(this).data(\'collapsed\',!$(this).data(\'collapsed\'))"></i> ':'')+
+                    '</h3></div>\
                   <ul class="'+(op.padding===true?"panel-body ":"")+'list-group"> ';
     },
 
     getClosingPanelHtml : function(){
         return ' </ul></div>';
     }, 
-    addClickablePopover : function($div,html){
+    addClickablePopover : function($div,htmlContent){
         //popover qui reste tant que le curseur ne quitte pas la zone bouton+popover (par defaut => disparait quand entre dans le popover...)
         return $div.popover({
             trigger: 'manual', 
@@ -394,7 +399,7 @@ Mapper = {
             template: '<div style="color:#333;" class="popover" onmouseover="clearTimeout(timeoutObj);$(this).mouseleave(function() {$(this).hide();});"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
             }).mouseenter(function(e) {
                 $(this).popover('show');
-                $div.siblings(".popover").find(".preview-popover-content").html(html);
+                $div.siblings(".popover").find(".preview-popover-content").html(htmlContent);
             }).mouseleave(function(e) {
                 var ref = $(this);
                 timeoutObj = setTimeout(function(){

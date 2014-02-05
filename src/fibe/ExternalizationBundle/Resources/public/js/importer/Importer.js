@@ -604,10 +604,10 @@ NodeUtils = {
         var rtnNodeSet= [];
         var seekedChildNodeName = arg[0].toLowerCase();
         var matchTest = arg[1] === true ? function(a,b){return a.indexOf(b) > -1} 
-                                        : function(a,b){return a === b};
+                                        : function(a,b){ return a === b};
         $.each(node,function(){
             $(this).children().each(function(){
-                var childNodeName = NodeUtÔils.getNodeName(this); 
+                var childNodeName = NodeUtils.getNodeName(this); 
                 if(childNodeName && matchTest(childNodeName,seekedChildNodeName)){
                     debugger;
                     rtnNodeSet.push($(this));
