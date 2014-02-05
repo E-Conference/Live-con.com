@@ -250,23 +250,29 @@ class ConfEventController extends Controller
         } 
 
         $em = $this->getDoctrine()->getManager();
-
          //The object have to belongs to the current conf
         $currentConf=$this->getUser()->getCurrentConf();
         $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find ConfEvent entity.');
         }
  
 
         $form = $this->createForm(new ConfEventType($this->getUser()), $entity);
-
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity); 
+            //If is a main confEvent => have to update the slug conference
+            if($entity->getIsMainConfEvent()){
 
+                $conference = $entity->getConference();
+                $conference->slugify();
+                $em->persist($conference); 
+             }
+
+            $em->persist($entity);
             $em->flush();
 
         }

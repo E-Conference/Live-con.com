@@ -333,8 +333,8 @@
 
                     // var orphanChildren= [];
                     //non-blocking loop over events[i]
-                    setTimeout(doWork, 1);
                     var i = 0;
+                    if(events[i])setTimeout(doWork, 1);
                     function doWork() {
                       
                       var known = !!Events[events[i].id];
@@ -578,27 +578,22 @@
               // }
               
               //compute old day too 
-              event.computeCountRange({allBrosInDay:true}); 
-
-              //TODO : parent  has here a wrong start/end updated from somewhere
-              //TODO : parent  has here a wrong start/end updated from somewhere
-              //TODO : parent  has here a wrong start/end updated from somewhere 
-
-
+              //TODO put this in dragstart 
+              event.computeCountRange({allBrosInDay:true});  
+              //TODO : parent  has here a wrong start/end updated from somewhere and need to be computed back :S 
+              //TODO : parent  has here a wrong start/end updated from somewhere and need to be computed back :S  
               dragged = [ ui.helper[0], 
                           event, 
                           {start:moment(event.start),end:moment(event.end)},
                           {start:moment(parent.start),end:moment(parent.end)},
                           $(children).map(function(){return {start:moment(this.start),end:moment(this.end)};})
                         ];  
- 
-              
-              //TODO : parent  has here a wrong start/end updated from somewhere
-              //TODO : parent  has here a wrong start/end updated from somewhere
-              //TODO : parent  has here a wrong start/end updated from somewhere 
+  
               setTimeout(function(){  
                   // event.computeCountRange({allEventsInDay:true}); 
                   var event = dragged[1] 
+              //TODO : parent  has here a wrong start/end updated from somewhere and need to be computed back :S 
+              //TODO : parent  has here a wrong start/end updated from somewhere and need to be computed back :S
                   var parentDate = dragged[3];
                   var childrenDates = dragged[4]; 
                    
@@ -628,12 +623,9 @@
                   if(event.isOutOf(parent,true)){
                     //event dropped out of parent
                     console.log(" #### moved out ####");  
-                    event.setParent(mainConfEvent);
-                    // event.updateParentDate(); 
-                  }else{
-                    //still inside but may need a parent update (to properly contain child) 
-                      event.updateParentDate();  
-                  }  
+                    event.setParent(mainConfEvent); 
+                  } 
+                  event.updateParentDate();  
  
 
      

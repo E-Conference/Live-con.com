@@ -202,6 +202,10 @@ CalEvent.prototype.updateParentDate = function(){
         // //make main conf get a special treatment
         // //to make it fit to its children date
         if(parent.is_mainconfevent){ 
+          if(moment(event.start).startOf("day").isBefore(moment(parent.start).startOf("day"))){
+            parent['start'] = event['start'];
+            parent.renderForRefetch();
+          }
           return;
         }
         if(event.isInsideOf(parent))return;  

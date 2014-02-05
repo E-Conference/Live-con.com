@@ -231,16 +231,16 @@ Model = {
 
 		for(var i in Model.entities){
   			var entity = Model.entities[i];
-        	html += Mapper.getPanelHtml(i,{panelClass:"panel-danger",margin:true,"model-path":i});
+        	html += Mapper.getPanelHtml(i,{panelClass:"panel-danger",margin:true,"model-path":entity.array || i});
 
        		$.each(entity.attributes.required, function(aIndex, attribute){ 
-	       		var newAttr = Model.generateAttributeNode(aIndex, {required:true,"model-path":i+"/"+aIndex});
+	       		var newAttr = Model.generateAttributeNode(aIndex, {required:true,"model-path":entity.array+"/"+aIndex});
 	       		// newEntity.append(newAttr);
        			html += newAttr;
 	       	})
 
        		$.each(entity.attributes.optionnal, function(aIndex, attribute){ 
-       			var newAttr = Model.generateAttributeNode(aIndex, {required:false,"model-path":i+"/"+aIndex});
+       			var newAttr = Model.generateAttributeNode(aIndex, {required:false,"model-path":entity.array+"/"+aIndex});
        			html += newAttr;
        			// newEntity.append(newAttr);
 	       	})
@@ -248,11 +248,7 @@ Model = {
         };
         html+= Mapper.getClosingPanelHtml();
         $el.html(html);
-
-        //TODO DROPPABLE
-        //TODO DROPPABLE
-        //TODO DROPPABLE
-        
+ 
 		$(".model-node").droppable({
 			accept: ".map-node" ,
             tolerance: "pointer" ,
@@ -281,7 +277,7 @@ Model = {
 			},
 			drop: function( event, ui ) {  
 		        // $(this).removeClass("list-group-item-success")
-		        Mapper.dataLinks[$(this).data("model-path")] = {to : ui.draggable.data("node-path")};
+		        Mapper.dataLinks[$(this).data("model-path")] = {nodePath : ui.draggable.data("node-path")};
 		        console.log(Mapper.dataLinks);  
 			}
 		});
@@ -305,12 +301,30 @@ Model = {
 	},
 
 	getSetter : function(entityName,attribute){
-        var modelMapping = Model.entities[entityName]; 
+        var modelMapping = Model.getModelMappingByArrayName(entityName.toLowerCase()); 
         if(modelMapping.attributes.required[attribute]){
             return modelMapping.attributes.required[attribute].setter;
         }else{
             return modelMapping.attributes.optionnal[attribute].setter;
         }
+    },
+
+    getArrayName : function(entityName){
+        for(var i in Model.entities){
+        	debugger
+            if( i.toLowerCase() == entityName.toLowerCase()){
+                return entityName;
+            }
+        }
+    },
+	getModelMappingByArrayName : function(arrayName){
+		if(arrayName=="Conference".toLowerCase())return Model.entities["Conference"];
+	    for(var i in Model.entities){
+	    	if(i == "Conference")continue;
+	        if(Model.entities[i].array.toLowerCase() == arrayName){
+	            return Model.entities[i];
+	        }
+	    }
     },
 
 	

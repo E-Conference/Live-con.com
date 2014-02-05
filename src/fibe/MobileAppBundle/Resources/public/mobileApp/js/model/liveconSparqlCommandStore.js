@@ -381,7 +381,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				var query =   'SELECT DISTINCT ?roleName  ?roleUri WHERE  { ' +
 								'    <'+parameters.conference.baseUri+'> swc:isSuperEventOf ?eventUri.' + 
 								'    ?roleUri  swc:isRoleAt  ?eventUri.' +
-								'    ?roleUri rdf:type ?roleName.' +
+								'    ?roleUri rdfs:label ?roleName.' +
 								'} ORDER BY ASC(?roleName)'; 
 				var  ajaxData = { query : prefix + query, output : "json" };
 				return ajaxData;
@@ -533,7 +533,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							    'PREFIX ical: <http://www.w3.org/2002/12/cal/ical#> 				' +
 							    'PREFIX foaf: <http://xmlns.com/foaf/0.1/>            		        ' ;
 							
-			    var query  =	'SELECT DISTINCT  ?personName ?personHomepage ?personImg ?organizationUri ?organizationName ?publicationUri ?publicationName ?roleUri  ?eventUri ?eventName WHERE  {  ' +
+			    var query  =	'SELECT DISTINCT  ?personName ?personHomepage ?personImg ?organizationUri ?organizationName ?publicationUri ?publicationName ?roleUri ?roleName ?eventUri ?eventName ?accountUri ?accountName WHERE  {  ' +
 							    ' { <'+parameters.uri+'>  foaf:name ?personName.                     ' +
 							    '	OPTIONAL {<'+parameters.uri+'>  foaf:homepage ?personHomepage.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  foaf:img ?personImg.}' +
@@ -543,7 +543,10 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							    '   ?publicationUri  dc:title ?publicationName. ' +
 							    ' } UNION { ?roleUri  swc:heldBy <'+parameters.uri+'>. '+ 
 							    '   ?roleUri  swc:isRoleAt ?eventUri. ' +
-							    '	?eventUri  ical:summary ?eventName. }' +
+							    '   ?roleUri  rdfs:label ?roleName. ' +
+							    '	?eventUri  ical:summary ?eventName.' +
+							    ' } UNION { ?accountUri  foaf:account <'+parameters.uri+'>. '+ 
+							    '   ?accountUri  foaf:accountName ?accountName. }' +
 							    '}';
 				var  ajaxData = { query : prefix + query, output : "json" };
 		      	return ajaxData; 
@@ -553,10 +556,10 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				var JSONToken = {};
 				var results = dataJSON.results.bindings;
 				if(_.size(results) > 0 ){
-					JSONToken.name =  results[0].authorName ? results[0].authorName.value : null;
+					JSONToken.name =  results[0].personName ? results[0].personName.value : null;
 					//JSONToken.description =  results[0].description ? results[0].description : null;
-					JSONToken.homepage = results[0].authorHomepage ? results[0].authorHomepage.value : null;
-					JSONToken.image = results[0].authorImg ? results[0].authorImg.value : null;
+					JSONToken.homepage = results[0].personHomepage ? results[0].personHomepage.value : null;
+					JSONToken.image = results[0].personImg ? results[0].personImg.value : null;
 
 					// JSONToken.roles = {};
 					// var i = 0;
@@ -585,11 +588,12 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							k++;
 						}
 						if(token.hasOwnProperty("roleUri")){
-							if(!JSONToken.roles[token.roleUri.value]){
+							if(!JSONToken.roles[token.roleName.value]){
 								
-								JSONToken.roles[token.roleUri.value] = [];
+								JSONToken.roles[token.roleName.value] = [];
 							}
-					    	JSONToken.roles[token.roleUri.value].push(token);
+
+					    	JSONToken.roles[token.roleName.value].push(token);
 						}
 					});
 
@@ -605,7 +609,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
 							if(parameters.JSONdata.image){
-								parameters.contentEl.append($('<div style="min-height:50px; width:30%"><img style="width:100%;height:auto;" src="'+parameters.JSONdata.image+'"/></div>'));    
+								parameters.contentEl.append($('<div style="min-height:50px; width:20%"><img style="width:100%;height:auto;" src="'+parameters.JSONdata.image+'"/></div>'));    
 							}
 							if(parameters.JSONdata.name){
 								$("[data-role = page]").find("#DataConf").html(parameters.JSONdata.name);
@@ -624,18 +628,13 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							}
 							if(parameters.JSONdata.roles) {
 								
-								for(var roleType in parameters.JSONdata.roles){
-										parameters.JSONdata.roles[roleType];
-										parameters.contentEl.append($('<h2>'+roleType+' at </h2>'));
-										ViewAdapterText.appendList(parameters.JSONdata.roles[roleType],
-														 {baseHref:'#event/',
-														  hrefCllbck:function(str){return Encoder.encode(str["eventName"])+"/"+Encoder.encode(str["eventUri"])},
-														  },
-														 "eventName",
-														 parameters.contentEl,
-														 {type:"Node",labelCllbck:function(str){return "person : "+str["eventUri"];}});
-								};
-
+								for(var roleName in parameters.JSONdata.roles){
+										parameters.JSONdata.roles[roleName];
+										parameters.contentEl.append($('<h2>'+roleName+' at </h2>'));
+										$.each(parameters.JSONdata.roles[roleName], function(i,currentEvent){
+											ViewAdapterText.appendButton(parameters.contentEl,'#event/'+Encoder.encode(currentEvent.eventName.value)+'/'+Encoder.encode(currentEvent.eventUri.value), currentEvent.eventName.value,{tiny : true});
+										});
+								}
 							}
 
 							if(parameters.JSONdata.publications.length > 0){
@@ -1235,7 +1234,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							    'PREFIX swrc: <http://swrc.ontoware.org/ontology#>                  ' +
 							    'PREFIX foaf: <http://xmlns.com/foaf/0.1/>            		        ' ;
 							
-			    var query  =	'SELECT DISTINCT  ?eventSummary ?eventStart ?eventEnd ?eventDesc ?eventComent ?eventUrl ?eventContact ?locationUri ?locationName ?subEventSummary ?subEventUri ?roleUri ?subEventUri ?personUri ?personName WHERE  {  ' +
+			    var query  =	'SELECT DISTINCT  ?eventSummary ?eventStart ?eventEnd ?eventDesc ?eventComent ?eventUrl ?eventContact ?locationUri ?locationName ?subEventSummary ?subEventUri ?roleUri ?roleName ?personUri ?personName WHERE  {  ' +
 							    ' { <'+parameters.uri+'>  ical:summary ?eventSummary. ' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:dtstart ?eventStart.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:dtend ?eventEnd.}' +
@@ -1245,13 +1244,12 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:contact ?eventContact.}' +
 							    ' } UNION {	<'+parameters.uri+'>  swc:hasLocation ?locationUri. '+ 
 							    '   ?locationUri  rdfs:label ?locationName. ' +
-							    ' } UNION { <'+parameters.uri+'>  swc:isSuperEventOf ?subEventUri. '+ 
-							    '   ?subEventUri  foaf:summary ?subEventSummary.  ' +
-							    ' } UNION { <'+parameters.uri+'>  swc:isSuperEventOf ?subEventUri. '+ 
-							    '   ?subEventUri  foaf:summary ?subEventSummary.  ' +
+							    ' } UNION { ?subEventUri  swc:isSubEventOf <'+parameters.uri+'> . '+ 
+							    '   ?subEventUri  ical:summary ?subEventSummary.  ' +
 							    ' } UNION { <'+parameters.uri+'>  swc:hasRole ?roleUri. '+ 
 							    '   ?roleUri  swc:heldBy ?personUri. ' +
-							    '	?personUri  foaf:name ?personame. }' +
+							    '   ?roleUri  rdfs:label ?roleName. ' +
+							    '	?personUri  foaf:name ?personName. }' +
 							    '}';
 				var  ajaxData = { query : prefix + query, output : "json" };
 		      	return ajaxData; 
@@ -1263,7 +1261,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 			 	var results = dataJSON.results.bindings;
 			    if(_.size(results) > 0 ){
 				
-					var JSONToken = {};
+					
 					JSONfile.eventLabel = results[0].eventSummary ? results[0].eventSummary.value : null;
 					JSONfile.eventDescription =   results[0].eventDesc ? results[0].eventDesc.value : null;
 					JSONfile.eventAbstract =   results[0].eventComent ? results[0].eventComent.value : null;
@@ -1283,9 +1281,11 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					n = 0;
 					$.each(results, function(i, token) {
 						if(token.hasOwnProperty("roleUri")){
-							JSONfile.roles[j] =  token;
-							j++;
-						} 
+							if(!JSONfile.roles[token.roleName.value]){
+								JSONfile.roles[token.roleName.value] = [];
+							}
+					    	JSONfile.roles[token.roleName.value].push(token);
+						}
 						if(token.hasOwnProperty("subEventUri")){
 							JSONfile.subEvents[k] =  token;
 							k++;
@@ -1325,6 +1325,24 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							if(eventInfo.eventLabel){ 
 								$("[data-role = page]").find("#DataConf").html(eventInfo.eventLabel);
 							}
+
+							if(eventInfo.eventStart){ 
+								parameters.contentEl.append($('<h2>Starts at :  <span class="inline">'+moment(eventInfo.eventStart).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));
+								isDefined = true;
+							}
+							if(eventInfo.eventEnd){
+								parameters.contentEl.append($('<h2>Ends at : <span class="inline">'+moment(eventInfo.eventEnd).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));  
+							}
+
+							if(_.size(parameters.JSONdata.locations) > 0 ){
+								parameters.contentEl.append($('<h2>Location</h2>'));
+								for(var i = 0; i < parameters.JSONdata.locations.length; i++){ 
+									var location = parameters.JSONdata.locations[i];
+									ViewAdapterText.appendButton(parameters.contentEl,'#schedule/'+Encoder.encode(location.locationName.value),location.locationName.value, {tiny : true});
+								};
+							}
+ 
+
 							if(eventInfo.eventDescription){ 
 								parameters.contentEl.append($('<h2>Description</h2>')); 
 								parameters.contentEl.append($('<p>'+eventInfo.eventDescription+'</p>'));   
@@ -1337,30 +1355,18 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								parameters.contentEl.append($('<h2>Homepage</h2>')); 
 								parameters.contentEl.append($('<a href="'+eventInfo.eventHomepage+'">'+eventInfo.eventHomepage+'</p>'));   
 							}
-							if(eventInfo.eventStart){ 
-								parameters.contentEl.append($('<h2>Starts at :  <span class="inline">'+moment(eventInfo.eventStart).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));
-								isDefined = true;
+						
+						
+							if(parameters.JSONdata.roles) {
+								
+								for(var roleName in parameters.JSONdata.roles){
+										parameters.JSONdata.roles[roleName];
+										parameters.contentEl.append($('<h2>'+roleName+'</h2>'));
+										$.each(parameters.JSONdata.roles[roleName], function(i,currentPerson){
+											ViewAdapterText.appendButton(parameters.contentEl,'#person/'+Encoder.encode(currentPerson.personName.value)+'/'+Encoder.encode(currentPerson.personUri.value), currentPerson.personName.value, {tiny : true});
+										});
+								}
 							}
-							if(eventInfo.eventEnd){
-								parameters.contentEl.append($('<h2>Ends at : <span class="inline">'+moment(eventInfo.eventEnd).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));  
-							} 
-						
-						
-
-							// if(eventInfo.eventThemes && eventInfo.eventThemes.length>0){
-							// 	parameters.contentEl.append('<h2>Themes</h2>'); 
-							// 	$.each(eventInfo.eventThemes, function(i,theme){
-							// 		ViewAdapterText.appendButton(parameters.contentEl,'#topic/'+Encoder.encode(theme.name)+"/"+Encoder.encode(theme.id),theme.name,{tiny : 'true'});
-							// 	});
-							// }
-
-							// if(_.size(parameters.JSONdata.authors) > 0 ){
-							// 	parameters.contentEl.append($('<h2>Authors</h2>'));
-							// 	for(var i = 0; i < parameters.JSONdata.authors.length; i++){ 
-							// 		var author = parameters.JSONdata.authors[i];
-							// 		ViewAdapterText.appendButton(parameters.contentEl,'#person/'+Encoder.encode(author.authorName.value)+'/'+Encoder.encode(author.authorUri.value), author.authorName.value,{tiny : true});
-							// 	};
-							// }
 
 							if(_.size(parameters.JSONdata.topics) > 0 ){
 								parameters.contentEl.append($('<h2>Topics</h2>'));
@@ -1370,19 +1376,12 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								};
 							}
 
-							if(_.size(parameters.JSONdata.locations) > 0 ){
-								parameters.contentEl.append($('<h2>Location</h2>'));
-								for(var i = 0; i < parameters.JSONdata.locations.length; i++){ 
-									var location = parameters.JSONdata.locations[i];
-									ViewAdapterText.appendButton(parameters.contentEl,'#schedule/'+Encoder.encode(location.locationName.value),location.locationName.value, {tiny : true});
-								};
-							}
-
+							
 							if(_.size(parameters.JSONdata.subEvents) > 0 ){
 								parameters.contentEl.append('<h2>Sub events</h2>'); 
-								for(var i = 0; i < parameters.JSONdata.subEents.length; i++){ 
-									var subEvent = parameters.JSONdata.subEents[i];
-									ViewAdapterText.appendButton(parameters.contentEl,'#event/'+Encoder.encode(subEvent.subEventName.value)+"/"+Encoder.encode(subEvent.subEventUri.value),subEvent.subEventName.value,{tiny : 'true'});
+								for(var i = 0; i < parameters.JSONdata.subEvents.length; i++){ 
+									var subEvent = parameters.JSONdata.subEvents[i];
+									ViewAdapterText.appendButton(parameters.contentEl,'#event/'+Encoder.encode(subEvent.subEventSummary.value)+"/"+Encoder.encode(subEvent.subEventUri.value),subEvent.subEventSummary.value,{tiny : 'true'});
 								};
 							}
 						}
