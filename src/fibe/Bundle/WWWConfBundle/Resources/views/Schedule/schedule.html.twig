@@ -562,6 +562,10 @@
             seg.top = top;
             seg.zindex = zindex;
           },
+          eventAfterRender : function( event, element, view ) {
+            if(Events[event.id].hide === true)
+              $(element).hide();
+          },
           eventDragStart: function( event, jsEvent, ui, view ) { 
               dragged = [ ui.helper[0], event ];
               setTimeout(function(){   
@@ -591,9 +595,10 @@
   
               setTimeout(function(){  
                   // event.computeCountRange({allEventsInDay:true}); 
+                  //TODO : parent  has here a wrong start/end updated from somewhere and need to be computed back :S 
+                  //TODO : parent  has here a wrong start/end updated from somewhere and need to be computed back :S 
+                  if(moment(dragged[1].start).isSame(dragged[2].start))return;
                   var event = dragged[1] 
-              //TODO : parent  has here a wrong start/end updated from somewhere and need to be computed back :S 
-              //TODO : parent  has here a wrong start/end updated from somewhere and need to be computed back :S
                   var parentDate = dragged[3];
                   var childrenDates = dragged[4]; 
                    
@@ -638,12 +643,7 @@
               },1);
 
  
-          },
-          // eventDrop : function(event,dayDelta,minuteDelta,allDay,revert,ev,ui,resource ){
-          //     //TODO : parent  has here a wrong start/end updated from somewhere
-          //     //TODO : parent  has here a wrong start/end updated from somewhere
-          //     //TODO : parent  has here a wrong start/end updated from somewhere 
-          //   },
+          }, 
       };
 
       //launch calendar
@@ -682,7 +682,7 @@
             } 
           } 
           var foundElem = []; 
-          $(".fc-view-"+(isClassicView ? viewBtns[currentView].classic : viewBtns[currentView].resource)+" .fc-event:visible").each(function(i){ 
+          $(".fc-view-"+(isClassicView ? viewBtns[currentView].classic : viewBtns[currentView].resource)+" .fc-event").each(function(i){ 
             var id = parseInt($(this).data("id"));  
             foundElem.push(id)
             if(Events[id])Events[id]['elem'] = $(this);
@@ -837,7 +837,7 @@
                     });
               }//end stylize only event in the calendar
 
-              /*************** hover : change border color  *****************/
+              /*************** hover : change border color and set opacity to  *****************/
               element.hover(function(){
                     //enter
                     $(this).animate({"border-color":"#3F3F3F"},{queue:false});
@@ -845,8 +845,8 @@
                     var elemEvent = EventCollection.getEventByDiv($(this));
                     var childrenDiv = EventCollection.getChildren(elemEvent,{concat:true,onlyEvent:true});
                     for (var j in childrenDiv){
-                      var curChildDiv = EventCollection.getDivById(childrenDiv[j].id);
-                      if(!curChildDiv)continue;
+                      var curChildDiv = childrenDiv[j].elem;
+                      if(!curChildDiv || childrenDiv[j].hide)continue;
                       curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false});
                     }
                 },function(){
@@ -854,8 +854,8 @@
                     var elemEvent = EventCollection.getEventByDiv($(this));
                     var childrenDiv = EventCollection.getChildren(elemEvent,{concat:true,onlyEvent:true});
                     for (var j in childrenDiv){
-                      var curChildDiv = EventCollection.getDivById(childrenDiv[j].id );
-                      if(!curChildDiv)continue;
+                      var curChildDiv = childrenDiv[j].elem;
+                      if(!curChildDiv || childrenDiv[j].hide)continue;
                       curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
                     }
                 });    
@@ -968,12 +968,19 @@
       }).on("changed", function(ev,ids){
         bootstrapAlert("success",ids.length+" events have been well fetched" );
         ids.push(mainConfEvent.id)
-        var calendarEvents = $calendar.fullCalendar('clientEvents'); //loop only on calendar events
+        var calendarEvents = $calendar.fullCalendar('clientEvents'); //loop only on calendar events 
         for(var i in calendarEvents){
-          if($.inArray(calendarEvents[i].id, ids) === -1 ){
-            Events[calendarEvents[i].id].elem.fadeOut('fast');
+          console.log("calendarEvents : ",calendarEvents)
+          console.log("ids : ",ids)
+          if($.inArray(calendarEvents[i].id, ids) === -1 ){ 
+            Events[calendarEvents[i].id].elem.animate({ opacity: 0, "margin-top": "-10px" },{duration:'slow',queue:false});
+            Events[calendarEvents[i].id]["hide"] = true;
+          }else if(Events[calendarEvents[i].id].hide === true){
+            Events[calendarEvents[i].id].elem.css("margin-top", "-10px");
+            Events[calendarEvents[i].id].elem.animate({ opacity: 1, "margin-top": "0px" },{duration:'slow',queue:false});
+            Events[calendarEvents[i].id]["hide"] = false;
           }else{
-            Events[calendarEvents[i].id].elem.fadeIn('fast');
+            Events[calendarEvents[i].id].elem.show();
           }
 
         }
