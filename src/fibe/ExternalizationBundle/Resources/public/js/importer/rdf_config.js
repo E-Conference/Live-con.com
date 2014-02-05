@@ -7,24 +7,18 @@
 var rdfConfig = {
     isRDF : false,
 
-    rootNode : {
-        format : [{
-            nodeUtils : "node",
-            arg : ["RDF:RDF"],
-        }] 
-    }, 
+    // rootNode : {
+    //     format : [{
+    //         nodeUtils : "node",
+    //         arg : ["RDF:RDF"],
+    //     }] 
+    // }, 
     getNodeKey : {
         format : [{
             nodeUtils : "attr",
             arg : ["rdf:about"],
         }] 
-    },
-    rootNode : {
-        format : [{
-            nodeUtils : "node",
-            arg : ["RDF:RDF"],
-        }] 
-    },
+    }, 
     getNodeName : {
         format : [{
             nodeUtils : "rdfNodeName", 

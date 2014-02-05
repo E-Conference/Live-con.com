@@ -26,7 +26,8 @@ function run(file,mapping,op,callback,fallback){
             {
                 if(fallback!=undefined)fallback("Error with the mapping config."); 
                 return;
-            } 
+            }  
+            console.log("mapping with : ",mapping)
 
 
             var confName ;
@@ -54,15 +55,22 @@ function run(file,mapping,op,callback,fallback){
 
 
             var rootNode = file; 
-            if(mappingConfig.rootNode){ 
-                rootNode = doFormat(file,mappingConfig.rootNode.format); 
-            }
+            // if(mappingConfig.rootNode){
+            //     rootNode = doFormat(file,mappingConfig.rootNode.format); 
+            // }
+            
+            // get the most populated node
+            var maxChildren = 0;
+            $(file).each(function(i,node){
+                var nbChildren = $(node).children().length;
+                if( nbChildren > maxChildren){rootNode=$(node);maxChildren = nbChildren}
+            });
 
+            //check root node
             if(!rootNode){
                 if(fallback!=undefined)fallback("Wrong root node"); 
                 return;
             }
-            
             console.log("rootNode contains "+rootNode.children().length+" children",rootNode)
             if(rootNode.children().length ==0){
                 if(fallback!=undefined)fallback("Empty root node"); 
@@ -72,7 +80,7 @@ function run(file,mapping,op,callback,fallback){
             //////////////////////////////////////////////////////////////////////////
             ////////////////////  pre process the root node  /////////////////////////
             //////////////////////////////////////////////////////////////////////////  
-            if(mappingConfig.parseConference !== undefined){
+            if(mappingConfig.parseConference){
 
                 for ( var i in mappingConfig.parseConference){
                     var confInfoMapping = mappingConfig.parseConference[i];
@@ -106,6 +114,7 @@ function run(file,mapping,op,callback,fallback){
                 var collectionNode = doFormat(rootNode,mappingConfig.mappings[i].format); 
                 if(collectionNode.length == 0){
                     console.warn("couln't not have got nodes for the mapping",mappingConfig.mappings[i])
+                    console.warn("with rootNode : ",rootNode)
                 }else{
                     // console.log("mapping a collection",collectionNode)
                 }
@@ -491,12 +500,12 @@ function str_format(string){
 function doFormat(node,format,log){
     var rtn = node;
     if(isFunction(format)){
-       rtn = format(node); 
+       return format(rtn); 
     } 
-    for (var i in format){
-        if(log)console.log(i,node,format[i])
+    for (var i in format){ 
         var currentFormat = format[i];
-        rtn = NodeUtils[currentFormat.nodeUtils](node,currentFormat.arg,log) 
+        rtn = NodeUtils[currentFormat.nodeUtils](rtn,currentFormat.arg,log) 
+        console.log(i)
     }
     return rtn;
 }
@@ -565,7 +574,7 @@ NodeUtils = {
         { 
             rtn = node.localName;
         } 
-        return rtn.split("swc:").join("").split("&swc;").join("");
+        return rtn;
     },
     // get a specific attr for the given node
     //arg[0] must contain the wanted attr
@@ -596,11 +605,14 @@ NodeUtils = {
         var seekedChildNodeName = arg[0].toLowerCase();
         var matchTest = arg[1] === true ? function(a,b){return a.indexOf(b) > -1} 
                                         : function(a,b){return a === b};
-        $(node).children().each(function(){
-            var childNodeName = NodeUtils.getNodeName(this); 
-            if(childNodeName && matchTest(childNodeName,seekedChildNodeName)){
-                rtnNodeSet.push($(this));
-            }
+        $.each(node,function(){
+            $(this).children().each(function(){
+                var childNodeName = NodeUtÔils.getNodeName(this); 
+                if(childNodeName && matchTest(childNodeName,seekedChildNodeName)){
+                    debugger;
+                    rtnNodeSet.push($(this));
+                } 
+            })
         })
         return $(rtnNodeSet);
     },

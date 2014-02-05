@@ -261,7 +261,6 @@
 
         function extractDatas(mapping,op){
             if(!op)op={}; 
-            console.log("mapping with : ",mapping)
             run( Mapper["data"],mapping,op,function(data,importedLog,notImportedLog){
                     Pager.changePage('#page-result');
                     Mapper.setSerialisedDatas(data);
