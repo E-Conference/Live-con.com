@@ -27,43 +27,78 @@ Mapper = {
 	map : function($data){
 		 
         if (!$data)$data = Mapper["data"];
-
-        var html = Mapper.getPanelHtml("Found datas",{panelClass:"panel-primary"});
+        var nodePath = "root";
+        var html = Mapper.getPanelHtml("Found datas",{panelClass:"panel-primary","node-path":nodePath});
 
         console.log($data);
+        Mapper.dataLinks= {};
         Mapper.knownNodes = {};
-        generateHtml($data,"root",Mapper.knownNodes); 
+        Mapper.knownCollection = {};
+        generateHtml($data,nodePath,Mapper.knownNodes); 
         function generateHtml($node,nodePath,knownNodes){
 
             html+= Mapper.getAttributesHtml($node,nodePath); 
 
             if($node.children().length != 0 ){
-                $node.children().each(function(index,child){ 
+                var childTags = [];
+                $node.children().each(function(index,child){
 
-                    if(!Mapper.isNodeKnown(nodePath+ "/"+child.tagName.toLowerCase())){
-                        html+= Mapper.getPanelHtml(child.tagName,{panelClass:"panel-success",margin:true});
-                        generateHtml($(child),nodePath+ "/"+child.tagName.toLowerCase(),knownNodes)
+                    if(!Mapper.isNodeKnown(nodePath+ "/"+getNodeName(child))){
+                        childTags.push(getNodeName(child));
+                        html+= Mapper.getPanelHtml(child.tagName,{panelClass:"panel-success",margin:true,"node-path":nodePath+ "/"+getNodeName(child)});
+                        generateHtml($(child),nodePath+ "/"+getNodeName(child),knownNodes)
                         html+= Mapper.getClosingPanelHtml(); 
                     } else{
                         //already mapped
                     } 
-                    generateHtml($(child),nodePath+ "/"+child.tagName.toLowerCase(),knownNodes);
+                    generateHtml($(child),nodePath+ "/"+getNodeName(child),knownNodes);
 
                 });
+                if(childTags.length==1)addMappingCollection(nodePath,childTags); 
             }else{
                 html+= Mapper.generateNode($node,nodePath); 
+            }
+
+            function addMappingCollection(nodePath,childTags){
+                console.log("childTags of "+ nodePath, childTags);
+                Mapper.knownCollection[nodePath] = {};
+            }
+            function getNodeName(node){
+                return node.tagName.toLowerCase();
             }
         }
 
 
         html+= Mapper.getClosingPanelHtml();
-        Mapper["el"].html(html)
+        Mapper["el"].html(html);
         //             .children(".collapsible").click(function(){console.log(this);alert("lol");
         //                 $(this).siblings("ul").collapsible("toggle")
         //             })
+        
+
+        //collection
+        $('#datafile-form .panel').each(function(){
+            var nodePath = $(this).data("node-path"); 
+            if(Mapper.knownCollection[nodePath]){
+                Mapper.knownCollection[nodePath] = $(this);
+                var collectionNodeName = $(this).find("> .panel-heading").text();
+                $(this).find("> .panel-heading").remove();
+                var childPanel = $(this).find("> .list-group > .panel-success ")
+                childPanel.data("collection",nodePath)
+                          // .insertBefore($(this))
+                          .find("> .panel-heading > .panel-title")
+                             .prepend('<i title=" collection node of '+collectionNodeName+' " class="fa fa-bars"></i> ');
+                // $(this).remove();
+            }
+        })
+
         $('.map-node').each(function(){
             var nodePath = $(this).data("node-path");
-            var samples = Mapper.knownNodes[nodePath];
+
+            Mapper.knownNodes[nodePath]["div"] = $(this);
+
+            //popover
+            var samples = Mapper.knownNodes[nodePath].samples;
             var content = "<ul>";
             for(var i = 0; i < samples.length && i < 10;i++){
                 content += "<li>"+samples[i]+"</li>";
@@ -76,31 +111,16 @@ Mapper = {
                 title : ' <b>'+nodePath+'</b>',
                 content : content,
             });
+
+            //draggable
             $(this).draggable({
-                    zIndex: 999,
-                    revert: true,      // will cause the event to go back to its
-                    revertDuration: 0,  //  original position after the drag
-                    helper: 'clone',
-                    start : function (ev,ui){
-                        // $(this).hide();   
-                        // dragged = [ ui.helper[0], event ];
-                        // setTimeout(function(){ //bug... event isn't yet updated  
-                        //   $(self).trigger("drag",[event]); 
-                        // },1);//event isn't yet updated   
-                    },
-                    stop: function(a,b,c){   
-                        // // setTimeout(function(){ //bug... event isn't yet updated   
-                        //   if(calendar_events_indexes[event.id] === undefined){
-                        //     $(this).show()
-                        //   }else{
-                        //     // $(this).hide()
-                        //   } 
-                        // // },1);//event isn't yet updated   
-                    } 
-                  }) ;
+                zIndex: 999,
+                revert: true,      // will cause the event to go back to its
+                revertDuration: 0,  //  original position after the drag
+                helper: 'clone'
+            });
         })
 	},
-    dataLinks:{},
 
     generateMappingFile : function(){
         console.log("############### generateMappingFile starts")
@@ -109,7 +129,7 @@ Mapper = {
                 format : [{
                     nodeUtils : "node",
                     arg : ["conference"],
-                }] 
+                }]
             },
             getNodeKey : {
                 format : [{
@@ -125,82 +145,143 @@ Mapper = {
         };
         //loop only on validated mapping
         $("#model-form .panel-success").each(function(iPanel,panel){
-            var entityName = $(panel).data("model-path");
-            var entityMappingObj = getEntityMappingObj(entityName);
+            var modelName = $(panel).data("model-path");
             // get the corresponding model mapping config
             $(panel).find(".list-group-item-success").each(function(){ 
-                var entityMapping;
+                var leftEntityMapping;
                 for (var i in Mapper.dataLinks){
                     if(i == $(this).data("model-path")){
-                        entityMapping = Mapper.dataLinks[i];
+                        leftEntityMapping = Mapper.dataLinks[i];
                     }
-                } 
-                // if(!entityMapping){
-                //     //not mapped
-                //     // console.log("mappingPath "+mappingPath+" not found in : ",Mapper.dataLinks) 
-                //     return;
-                // }
-                console.log("entityMapping:",entityMapping)
-                var setter = Model.getSetter(entityName,$(this).data("model-path").split("/")[1])
-                //check if this is the conference mapping
-                
-                if(entityName=="Conference"){ 
+                }
+                console.log("leftEntityMapping:",leftEntityMapping)
 
-                    var parseConferenceSetter = entityMappingObj[setter]={
-                        format : [], 
-                    }
-                    extractFormat(parseConferenceSetter.format,entityMapping);
+                var leftCollectionPath = getLeftCollectionPath(leftEntityMapping.nodePath);
+
+
+                var modelSetter = Model.getSetter(modelName,$(this).data("model-path").split("/")[1])
+                
+                
+                //check if this is the conference mapping
+                if(modelName=="Conference"){
+                    //the conference mapping has a different mapping object
+                    var mappingObj = getOrCreateConferenceMappingObj(modelName);
+                    mappingObj[modelSetter]={};
+                    mappingObj[modelSetter]["format"] = extractMappingFormat(leftEntityMapping.nodePath);
                     
                 }else{ 
-                     entityMappingObj.label[setter]={
-                        format : [], 
-                    };
-                    extractFormat(entityMappingObj.label[setter].format,entityMapping);
+                    var nodePtyPath = leftEntityMapping.nodePath.split(leftCollectionPath).join(""); 
+                    var nodeName = nodePtyPath.split("/")[0] != "" ?nodePtyPath.split("/")[0] : nodePtyPath.split("/")[1];
 
-                    entityMappingObj["nodeName"] = entityMapping.to.split("/")[1];
-                    //TODO investigate for "wrapped"
-                    // if(entityMapping.wrapped==true)alert("wrapped")
+                    var mappingObj = getOrCreateMappingObjFromFormat(extractMappingFormat(leftCollectionPath,true),modelName); 
+
+                    mappingObj.label[nodeName]={setter:modelSetter};
+                    mappingObj.label[nodeName]["format"] = extractMappingFormat(nodePtyPath.split(nodeName).join(""));
+
+                    //TODO add another mapping object in case of a new nodeName
+                    //TODO add another mapping object in case of a new nodeName
+                    // mappingObj["nodeName"] = leftEntityMapping.nodePath.split("/")[1];
                 } 
             }) 
         });
         console.log("############### generateMappingFile ended, returning : ",mappingConfig)
         return mappingConfig;
         
-        function getEntityMappingObj(entityName){
-            if(entityName=="Conference"){
-                if(!mappingConfig['parseConference'])
-                    mappingConfig['parseConference']={} 
-                return mappingConfig['parseConference']
-            }else{
+        /**
+         * Get or create the conference mapping object  
+         * @return {[type]}            [description]
+         */
+        function getOrCreateConferenceMappingObj(){  
+            if(!mappingConfig['parseConference'])
+                mappingConfig['parseConference']={} 
+            return mappingConfig['parseConference']
+        }
+        
+        /**
+         * Get or create the mapping in the "under generating mappingConfig file" phase corresponding to the array key  
+         * @param  {object} format  the format to find
+         * @param  {string} array   the array to link with in case of a not found format
+         * @return {[type]}         the existing or new mapping
+         */
+        function getOrCreateMappingObjFromFormat(format,array){  
                 if(!mappingConfig['mappings'])
                     mappingConfig['mappings']=[];
+   
+                 //look if its already registered
+                    console.log("getOrCreateMappingObjFromFormat ",format)
                 for(var i in mappingConfig['mappings']){
-                    if(mappingConfig['mappings'][i].array == entityName.toLowerCase() ){
+                    console.log("getOrCreateMappingObjFromFormat ",mappingConfig['mappings'][i].format)
+                    alert(mappingConfig['mappings'][i].format ==  format)
+                    if(mappingConfig['mappings'][i].format ==  format){
                         return mappingConfig['mappings'][i];
                     }
                 }
-                mappingConfig['mappings'].push({array:entityName.toLowerCase(),label:{}});
-                return mappingConfig['mappings'][mappingConfig['mappings'].length-1];
-            }
+
+                //add if not found
+                var newMapping = {array: array,label:{},format:format};
+                mappingConfig['mappings'].push(newMapping);
+                return newMapping;
         }
         
-        function extractFormat(format,mapping){
-            var splittedEntityMapping = mapping.to.split("/");
+        /**
+         * split mapping path to generate a format object (ignore "root" and "" values)
+         * @param  {String} mapping           the mapping path to parse
+         * @param  {bool} collectionMapping   is it a collection ?
+         * 
+         * @return {object} format            the generated format
+         */
+        function extractMappingFormat(mapping,collectionMapping){
+            var format = [];
+            var splittedEntityMapping = mapping.split("/"); 
             for(var i in splittedEntityMapping){
-                if(i==0)continue;
+                if(splittedEntityMapping[i]=="root" || splittedEntityMapping[i]=="")continue;//don't add rootNode
                 if(splittedEntityMapping[i]=="text"){
                     format.push({
                         nodeUtils : "text"
                     })
-                }else{
+                }else if(collectionMapping){
+                    var label = splittedEntityMapping[i]
+                    format.push({
+                        nodeUtils : "children",
+                        arg : [label],
+                    })
+                }else {
                     var label = splittedEntityMapping[i]
                     format.push({
                         nodeUtils : "child",
                         arg : [label],
                     })
-                }
-
+                } 
             }
+            return format;
+        }
+
+        /**
+         * loop recursively over parents to find the closest collection node 
+         * @param  {String} nodePath                   node path
+         * @return {String} collectionNodePath         the closest parent collection node path
+         */
+        function getLeftCollectionPath(nodePath){
+            if(Mapper.knownCollection[nodePath])
+                return nodePath;
+            var $node = Mapper.knownNodes[nodePath].div;
+            if($node){
+                var found = false;
+                while(true){
+                    var parent = $node.parent();
+                    if(parent.length==0){
+                        return false; //stop loop if no more parent
+                    }else{
+                        var parentPath = parent.data("node-path");
+                        if(parentPath && Mapper.knownCollection[parentPath])
+                            return nodePath;
+                        $node = parent;
+                        nodePath = parentPath || nodePath;
+                    }
+
+                }
+            }
+
         }
     },
 
@@ -208,7 +289,7 @@ Mapper = {
     isNodeKnown : function(nodePath,sample){
         if(!Mapper.knownNodes[nodePath]){ 
             console.log("adding "+nodePath);
-            Mapper.knownNodes[nodePath] = [];
+            Mapper.knownNodes[nodePath] = {samples:[]};
             addSample(nodePath,sample);
             return false;
         }
@@ -217,8 +298,8 @@ Mapper = {
         return true;
 
         function addSample(nodePath,sample){
-            if(sample && $.inArray(sample, Mapper.knownNodes[nodePath]) === -1){
-                Mapper.knownNodes[nodePath].push(sample);  
+            if(sample && $.inArray(sample, Mapper.knownNodes[nodePath].samples) === -1){
+                Mapper.knownNodes[nodePath].samples.push(sample);  
             } 
 
         }
@@ -279,6 +360,7 @@ Mapper = {
         return '<div class="panel '+
                     (op.panelClass || "panel-default")+'"'+
                     (op["model-path"]?' data-model-path="'+op["model-path"]+'"':"")+
+                    (op["node-path"]?' data-node-path="'+op["node-path"]+'"':"")+
                     (op.margin===true?' style="margin:15px;"':'')+
                     '>\
                   <!-- Default panel contents -->\
