@@ -597,7 +597,7 @@
                   // event.computeCountRange({allEventsInDay:true}); 
                   //TODO : parent  has here a wrong start/end updated from somewhere and need to be computed back :S 
                   //TODO : parent  has here a wrong start/end updated from somewhere and need to be computed back :S 
-                  if(moment(dragged[1].start).isSame(dragged[2].start))return;
+                  if(!dragged[1].allDay && moment(dragged[1].start).isSame(dragged[2].start))return;
                   var event = dragged[1] 
                   var parentDate = dragged[3];
                   var childrenDates = dragged[4]; 

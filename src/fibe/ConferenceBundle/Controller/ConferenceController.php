@@ -67,7 +67,7 @@ class ConferenceController extends Controller
            
               if ($form->isValid()) {
                   $em = $this->getDoctrine()->getManager();
-                  $WwwConf->slugify();
+                  $wwwConf->slugify();
                   $em->persist($wwwConf);
                   $em->flush();
 

@@ -441,7 +441,7 @@ class Person
     public function setEmail($email)
     {
         $this->email = $email;
-    
+        $this->emailSha1 = sha1($email);
         return $this;
     }
 
@@ -464,7 +464,7 @@ class Person
     public function setEmailSha1($emailSha1)
     {
         $this->emailSha1 = $emailSha1;
-    
+        
         return $this;
     }
 
