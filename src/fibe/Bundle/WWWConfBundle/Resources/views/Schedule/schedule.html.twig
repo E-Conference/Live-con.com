@@ -973,11 +973,13 @@
           console.log("calendarEvents : ",calendarEvents)
           console.log("ids : ",ids)
           if($.inArray(calendarEvents[i].id, ids) === -1 ){ 
-            Events[calendarEvents[i].id].elem.animate({ opacity: 0, "margin-top": "-10px" },{duration:'slow',queue:false});
+            Events[calendarEvents[i].id].elem.animate({ opacity: 0, "margin-top": "-10px" },
+                                                      {duration:'slow',queue:false,complete:function(){$(this).hide()}});
             Events[calendarEvents[i].id]["hide"] = true;
           }else if(Events[calendarEvents[i].id].hide === true){
             Events[calendarEvents[i].id].elem.css("margin-top", "-10px");
-            Events[calendarEvents[i].id].elem.animate({ opacity: 1, "margin-top": "0px" },{duration:'slow',queue:false});
+            Events[calendarEvents[i].id].elem.show().animate({ opacity: 1, "margin-top": "0px" },
+                                                             {duration:'slow',queue:false});
             Events[calendarEvents[i].id]["hide"] = false;
           }else{
             Events[calendarEvents[i].id].elem.show();

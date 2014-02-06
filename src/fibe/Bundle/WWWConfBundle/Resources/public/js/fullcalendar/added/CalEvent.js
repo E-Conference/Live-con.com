@@ -471,7 +471,7 @@ CalEvent.prototype.getNonAllDayBrosId = function (){
     if(parent.allDay){
       // alert("add toppest non all days");
       for (var i in Events){
-        if(Events[i].id==this.id)continue;
+        if(Events[i].id==this.id || !Events[Events[i].parent.id])continue;
         if(!Events[i].allDay && Events[Events[i].parent.id].allDay)
           rtn.push(Events[i].id);
       } 

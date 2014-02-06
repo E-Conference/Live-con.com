@@ -62,7 +62,7 @@ Mapper = {
 
                     if(!Mapper.isNodeKnown(nodePath+ "/"+getNodeName(child))){
                         childTags.push(getNodeName(child));
-                        html+= Mapper.getPanelHtml(getNodeName(child),{panelClass:"panel-success",margin:true,"node-path":nodePath+ "/"+getNodeName(child),collapsible:true});
+                        html+= Mapper.getPanelHtml(getNodeName(child),{panelClass:"panel-success",margin:true,"node-path":nodePath+ "/"+getNodeName(child),collapsible:true,collapsed:true});
                         generateHtml($(child),nodePath+ "/"+getNodeName(child),knownNodes)
                         html+= Mapper.getClosingPanelHtml(); 
                     } else{
@@ -380,9 +380,9 @@ Mapper = {
                   '<!-- Default panel contents -->\
                   <div class="panel-heading"><h3 class="panel-title">'+
                         content+
-                        (op.collapsible===true?' <i class="fa fa-chevron-down" style="cursor: pointer;" data-collapsed="false" onclick="!$(this).data(\'collapsed\') ? $(this).removeClass(\'fa-chevron-down\').addClass(\'fa-chevron-up\').parent().parent().siblings(\'ul\').hide(\'slow\') : $(this).removeClass(\'fa-chevron-up\').addClass(\'fa-chevron-down\').parent().parent().siblings(\'ul\').show(\'slow\');$(this).data(\'collapsed\',!$(this).data(\'collapsed\'))"></i> ':'')+
+                        (op.collapsible===true?' <i class="fa '+(op.collapsed===true?'fa-chevron-up':'fa-chevron-down')+'" style="cursor: pointer;" '+(op.collapsed===true?'data-collapsed="true"':'data-collapsed="false"')+'" onclick="!$(this).data(\'collapsed\') ? $(this).removeClass(\'fa-chevron-down\').addClass(\'fa-chevron-up\').parent().parent().siblings(\'ul\').hide(\'slow\') : $(this).removeClass(\'fa-chevron-up\').addClass(\'fa-chevron-down\').parent().parent().siblings(\'ul\').show(\'slow\');$(this).data(\'collapsed\',!$(this).data(\'collapsed\'))"></i> ':'')+
                     '</h3></div>\
-                  <ul class="'+(op.padding===true?"panel-body ":"")+'list-group"> ';
+                  <ul class="'+(op.padding===true?"panel-body ":"")+'list-group" '+(op.collapsed===true?'style="display:none;"':'')+'> ';
     },
 
     getClosingPanelHtml : function(){
