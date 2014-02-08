@@ -317,6 +317,10 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						{
 							"datasource" : "DblpDatasource",
 							"name" : "getAuthorPublications",
+						},
+						{
+							"datasource" : "DataPaperDatasource",
+							"name" : "getDataPaperAuthor",
 						}
 
 					]

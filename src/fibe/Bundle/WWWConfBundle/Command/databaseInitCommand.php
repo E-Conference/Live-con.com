@@ -153,24 +153,26 @@ class databaseInitCommand extends ContainerAwareCommand
         //               ->setColor("#57A5C9")
         //               ->setParent($OrganisedEvent);
         // $em->persist($AcademicEvent);
-
         // non academic
         $SocialEvent = new Category(); 
-        $SocialEvent->setName("SocialEvent")
-                    ->setColor("#B186D7")
+        $SocialEvent->setName("SocialEvent");
+         $SocialEvent->setLabel("Social event")
+                     ->setColor("#B186D7")
                     // ->setParent($NonAcademicEvent)
                     ;
         $em->persist($SocialEvent);
          
         $MealEvent = new Category(); 
-        $MealEvent->setName("MealEvent")
+        $MealEvent->setName("MealEvent");
+        $MealEvent->setLabel("Meal Event")
                   ->setColor("#00a2e0")
                   // ->setParent($NonAcademicEvent)
                   ;
         $em->persist($MealEvent);
         
         $BreakEvent = new Category(); 
-        $BreakEvent->setName("BreakEvent")
+        $BreakEvent->setName("BreakEvent");
+        $BreakEvent->setLabel("Break event")
                   ->setColor("#00a2e0")
                   // ->setParent($NonAcademicEvent)
                   ;
@@ -179,49 +181,56 @@ class databaseInitCommand extends ContainerAwareCommand
         // academic
 
         $KeynoteEvent = new Category();
-        $KeynoteEvent->setName("KeynoteEvent")
+        $KeynoteEvent->setName("KeynoteEvent");
+        $KeynoteEvent->setLabel("Keynote event")
                  ->setColor("#afcbe0")
                   // ->setParent($AcademicEvent)
                   ;
         $em->persist($KeynoteEvent);
 
         $TrackEvent = new Category();
-        $TrackEvent->setName("TrackEvent")
+        $TrackEvent->setName("TrackEvent");
+        $TrackEvent->setLabel("Track event")
                   ->setColor("#afcbe0")
                   // ->setParent($AcademicEvent)
                   ;
         $em->persist($TrackEvent);
 
         $PanelEvent = new Category(); 
-        $PanelEvent->setName("PanelEvent")
+        $PanelEvent->setName("PanelEvent");
+        $PanelEvent->setLabel("Panel event")
                   ->setColor("#e7431e")
                   // ->setParent($AcademicEvent)
                   ;
         $em->persist($PanelEvent);
 
         $ConferenceEvent = new Category(); 
-        $ConferenceEvent->setName("ConferenceEvent")
+        $ConferenceEvent->setName("ConferenceEvent");
+        $ConferenceEvent->setLabel("Conference event")
                   ->setColor("#b0ca0f")
                   // ->setParent($AcademicEvent)
                   ;
         $em->persist($ConferenceEvent);
 
         $WorkshopEvent = new Category(); 
-        $WorkshopEvent->setName("WorkshopEvent")
+        $WorkshopEvent->setName("WorkshopEvent");
+         $WorkshopEvent->setLabel("Workshop event")
                   ->setColor("#EBD94E")
                   // ->setParent($AcademicEvent)
                   ;
         $em->persist($WorkshopEvent);
 
         $SessionEvent = new Category(); 
-        $SessionEvent->setName("SessionEvent")
+        $SessionEvent->setName("SessionEvent");
+         $SessionEvent->setLabel("Session event")
                   ->setColor("#8F00FF")
                   // ->setParent($AcademicEvent)
                   ;
         $em->persist($SessionEvent);
 
         $TalkEvent = new Category(); 
-        $TalkEvent->setName("TalkEvent")
+        $TalkEvent->setName("TalkEvent");
+        $TalkEvent->setLabel("Talk event")
                   ->setColor("#FF5A45")
                   // ->setParent($AcademicEvent)
                   ;
