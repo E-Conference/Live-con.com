@@ -51,7 +51,7 @@ class Organization
     protected $country;
 
      /**
-     * @ORM\ManyToMany(targetEntity="Person",  mappedBy="organizations", cascade={"persist","merge"})
+     * @ORM\ManyToMany(targetEntity="Person",  mappedBy="organizations", cascade={"persist","merge","remove"})
      */
     protected $members;
 

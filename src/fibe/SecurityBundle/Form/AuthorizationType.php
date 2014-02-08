@@ -10,10 +10,12 @@ class AuthorizationType extends AbstractType
 {
     
     private $user;
+    private $disabled;
 
-    public function __construct($user)
+    public function __construct($user, $disabled)
     {
         $this->user = $user;
+        $this->disabled = $disabled;
     }
 
 
@@ -50,7 +52,7 @@ class AuthorizationType extends AbstractType
                                
             );
 
-            if(count($this->user->getCurrentConf()->getConfManagers()) <= 1){
+            if(count($this->user->getCurrentConf()->getConfManagers()) <= 1 && $this->disabled){
                 $builder
                   ->add('flagTeam','checkbox', array(
                                   'required' => false,

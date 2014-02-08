@@ -106,7 +106,9 @@ CalEvent.prototype.persist = function(add){
         }
       },
       'json'
-    );
+    ).fail(function(a,b,c) { 
+        bootstrapAlert("warning","Could not have been able to update the event.",c+" : "); 
+    });;
     bootstrapAlert("info","update request sent ","Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
 };
 
@@ -201,12 +203,16 @@ CalEvent.prototype.updateParentDate = function(){
 
         // //make main conf get a special treatment
         // //to make it fit to its children date
-        if(parent.is_mainconfevent){ 
+        if(parent.is_mainconfevent){
+          var newStart = parent.start,
+              newEnd   = parent.end;
           if(moment(event.start).startOf("day").isBefore(moment(parent.start).startOf("day"))){
-            parent['start'] = event['start'];
-            parent.renderForRefetch();
+            newStart = moment(event['start']).format(); 
           }
-          return;
+          if(moment(event.end).startOf("day").isAfter(moment(parent.end).startOf("day"))){
+            newEnd = moment(event['end']).format(); 
+          }
+          return EventCollection.updateMainConfEvent(newStart,newEnd);
         }
         if(event.isInsideOf(parent))return;  
 
@@ -471,7 +477,7 @@ CalEvent.prototype.getNonAllDayBrosId = function (){
     if(parent.allDay){
       // alert("add toppest non all days");
       for (var i in Events){
-        if(Events[i].id==this.id)continue;
+        if(Events[i].id==this.id || !Events[Events[i].parent.id])continue;
         if(!Events[i].allDay && Events[Events[i].parent.id].allDay)
           rtn.push(Events[i].id);
       } 

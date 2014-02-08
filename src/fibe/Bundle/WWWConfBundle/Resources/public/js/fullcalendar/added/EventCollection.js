@@ -64,6 +64,7 @@ var EventCollection = {
           }); 
           return children; 
     },
+
     forceMainConfRendering : true,
     updateMainConfEvent : function(newStart,newEnd){
     if(moment(mainConfEvent.start).dayOfYear() !== moment(newStart).dayOfYear() ||
@@ -83,7 +84,7 @@ var EventCollection = {
     broCountRange:{}, 
     eventsToComputeBroCountRangeIndexes:[],
     refetchEvents : function(refetch,force){ 
-        if(force!==true && (EventCollection.forceMainConfRendering!==true && EventCollection.eventsToComputeBroCountRangeIndexes.length==0)){ 
+        if(force!==true && refetch!==true && (EventCollection.forceMainConfRendering!==true && EventCollection.eventsToComputeBroCountRangeIndexes.length==0)){ 
           console.log("not rendered")
           return; 
         }  

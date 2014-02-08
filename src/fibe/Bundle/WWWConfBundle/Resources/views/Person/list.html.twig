@@ -5,7 +5,9 @@
                     <th>Id</th>
                     <th>Name</th>
                     <th>Email</th>
+                    {% if app.user.getCurrentConf().getModule().getOrganizationModule() == 1 %}
                     <th>Organizations</th>
+                    {% endif %}
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -15,18 +17,16 @@
                     <td><a href="{{ path('schedule_person_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                     <td>{{ entity.name }}</td>
                     <td>{{ entity.email }}</td>
+                    {% if app.user.getCurrentConf().getModule().getOrganizationModule() == 1 %}
                     <td> {% for organization in entity.organizations  %}
                             <li>
-                           {% if app.user.getCurrentConf().getModule().getOrganizationModule() == 1 %}
                                   <a href="{{ path('schedule_organization_show', { 'id': organization.id }) }}">
                                      {{ organization.name|e }}
                                   </a>
-                                {% else %}
-                                     {{ organization.name|e }}
-                                {% endif %}
                             </li>
-                         {% endfor %}
+                        {% endfor %}
                     </td>
+                    {% endif %}
                     <td>
                         <a class="btn btn-default" href="{{ path('schedule_person_show', { 'id': entity.id }) }}">
                             <i class="fa fa-eye"></i>

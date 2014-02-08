@@ -40,13 +40,16 @@
               <a style="padding-right:5px;"   href="{{ path('schedule_conference_edit') }}"  >
                 <i class="fa  fa-search-plus fa-3x"></i> Overview
               </a>
+               {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')== 1 %}
               <a style="padding-right:5px;"   href="{{ path('conference_team_list') }}"  >
                 <i class="fa fa-users fa-3x"></i> Team
               </a>
+              {% endif %}
+              {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
               <a style="padding-right:5px;"   href="{{ path('schedule_conference_settings') }}"  >
                 <i class="fa fa-inbox fa-3x"></i> Modules manager
               </a>
-             
+              {% endif %}
             </li> 
             </li>
           </ul>

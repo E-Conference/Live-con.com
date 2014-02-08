@@ -49,7 +49,7 @@ class MobileAppThemeController extends Controller
             'conference_form' => $conference_form->createView(),
 		    'mobile_app_config' => $mobile_app_config,
             'conference' => $conference,
-            'authorized' => $authorization->getFlagSched(),
+            'authorized' => $authorization->getFlagApp(),
 		    
 		));
 	}

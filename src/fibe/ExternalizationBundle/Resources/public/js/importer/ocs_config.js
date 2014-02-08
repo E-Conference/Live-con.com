@@ -15,12 +15,12 @@ var ocsConfig = {
 
     //     return formatOk; 
     // },
-    rootNode : {
-        format : [{
-            nodeUtils : "node",
-            arg : ["conference"],
-        }] 
-    },
+    // rootNode : {
+    //     format : [{
+    //         nodeUtils : "node",
+    //         arg : ["conference"],
+    //     }] 
+    // },
 
     getNodeKey : {
         format : [{
