@@ -52,7 +52,7 @@ class TopicController extends Controller
          $filters =$this->createForm(new TopicFilterType($this->getUser()));
         return array(
             'pager' => $pager,
-            'authorized' => $authorization->getFlagSched(),
+            'authorized' => $authorization->getFlagconfDatas(),
             'filters_form' => $filters->createView(),
         );
     }

@@ -43,7 +43,7 @@ class AuthorizationController extends Controller
         }
         $entity  = new Authorization();
 
-        $form = $this->createForm(new AuthorizationType($this->getUser()), $entity);
+        $form = $this->createForm(new AuthorizationType($this->getUser(),false), $entity);
 
         $form->bind($request);
 
@@ -65,7 +65,7 @@ class AuthorizationController extends Controller
        }
 
 
-        return $this->redirect($this->generateUrl('schedule_user_list'));
+        return $this->redirect($this->generateUrl('conference_team_list'));
     }
 
 
@@ -94,7 +94,7 @@ class AuthorizationController extends Controller
             throw $this->createNotFoundException('Unable to find authorization entity.');
         }
 
-        $editForm = $this->createForm(new UserAuthorizationType($this->getUser()), $entity);
+        $editForm = $this->createForm(new UserAuthorizationType($this->getUser(),true), $entity);
       
 
         return $this->render('fibeConferenceBundle:Authorization:edit.html.twig', array(
@@ -128,7 +128,7 @@ class AuthorizationController extends Controller
             throw $this->createNotFoundException('Unable to find authorization entity.');
         }
 
-        $editForm = $this->createForm(new UserAuthorizationType($this->getUser()), $entity);
+        $editForm = $this->createForm(new UserAuthorizationType($this->getUser(), true), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
