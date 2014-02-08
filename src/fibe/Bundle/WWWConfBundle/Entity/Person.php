@@ -80,7 +80,7 @@ class Person
      * Paper
      * Paper made by this person
      *   
-     * @ORM\ManyToMany(targetEntity="Paper",  mappedBy="authors", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Paper",  mappedBy="authors", cascade={"remove","persist","merge"})
      */
     private $papers;
 
@@ -88,7 +88,7 @@ class Person
      * Organizations
      * 
      *
-     * @ORM\ManyToMany(targetEntity="Organization", inversedBy="members", cascade={"persist","merge"})
+     * @ORM\ManyToMany(targetEntity="Organization", inversedBy="members", cascade={"remove","persist","merge"})
      * @ORM\JoinTable(name="member",
      *     joinColumns={@ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="Cascade")},
      *     inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="Cascade")})

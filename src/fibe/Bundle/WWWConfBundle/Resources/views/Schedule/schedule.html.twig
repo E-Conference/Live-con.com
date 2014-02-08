@@ -252,7 +252,7 @@
       $sidebar = $('#external-events');
 
       // get first day
-      var firstDay = moment('{{currentConf.mainConfEvent.startAt|date("Y-m-d")}}').subtract("days",1);
+      var firstDay = moment('{{currentConf.mainConfEvent.startAt|date("Y-m-d")}}');
       var initing = true;
 
 
@@ -266,7 +266,7 @@
  
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------------- fullcalendar options ------------------------------------------*/
-      /*-----------------------------------------------------------------------------------------------------*/ 
+      /*-----------------------------------------------------------------------------------------------------*/
       calendarOption = { 
           header: {
               left: 'prev,next',
@@ -301,7 +301,7 @@
               //compute dates to filter
               if(initing){ 
                 op.data['before']=moment(firstDay).endOf('week').add("days",firstWeekDay).format();
-                op.data['after']=moment(firstDay).startOf('week').add("days",firstWeekDay).format();
+                op.data['after']=moment(firstDay).startOf('week').add("days",firstWeekDay-1).format();
                 initing = false;
               }else{
                 op.data['before']=moment(end).format();
@@ -444,7 +444,7 @@
                       $modal.off('shown.bs.modal').on('shown.bs.modal', function () {
                           // rerender if changed
                         $modalBody.find("#eventForm,#delete-event-form").submit(function(){
-                          $modal.off('hide.bs.modal').on('hide.bs.modal', function () {
+                          $modal.off('hidden.bs.modal').on('hidden.bs.modal', function () {
                             EventCollection.refetchEvents(true);
                             // $calendar.fullCalendar( 'refetchEvents' );
                           })
@@ -652,11 +652,13 @@
       //launch calendar
       $calendar.fullCalendar(calendarOption);  
       $calendar.fullCalendar('changeView', viewBtns[currentView].classic );
+      //additional boutons first day and refresh
       $('.fc-header-left')
           .append(
             $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"> First day</button>')
               .click(function(e){ 
                 $calendar.fullCalendar( 'gotoDate', firstDay.year(), firstDay.month(), firstDay.date() ) 
+                EventCollection.refetchEvents();
               })
           ).append(
             $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"><span class="fa fa-refresh"></span></button>')
