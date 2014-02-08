@@ -330,10 +330,15 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    getQuery : function(parameters){	
 		    	var prefix =   'PREFIX swc: <http://data.semanticweb.org/ns/swc/ontology#> PREFIX foaf: <http://xmlns.com/foaf/0.1/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> ';
 				var query =   'SELECT DISTINCT ?organizationName  ?organizationUri WHERE  { ' +
-								'    <'+parameters.conference.baseUri+'> swc:hasRelatedDocument ?uriPubli.' + 
+								' {   <'+parameters.conference.baseUri+'> swc:hasRelatedDocument ?uriPubli.' + 
 								'   ?authorUri foaf:made ?uriPubli.  ' +
-								'   ?authorUri swc:memberOf ?organizationUri.' +
+								'   ?authorUri foaf:member ?organizationUri.' +
 								'   ?organizationUri rdfs:label ?organizationName.' +
+								' } UNION {  <'+parameters.conference.baseUri+'> swc:isSuperEventOf ?eventUri.' + 
+								'   ?roleUri swc:isRoleAt ?eventUri.  ' +
+								'   ?roleUri swc:heldBy ?personUri.		'+
+								'	?personUri foaf:member ?organizationUri.  '+
+								'	?organizationUri rdfs:label ?organizationName. } '+								
 								'} ORDER BY ASC(?organizationName) '; 
 				var  ajaxData = { query : prefix + query, output : "json" };
 				return ajaxData;
@@ -343,8 +348,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				var JSONfile = {};
 				$.each(dataJSON.results.bindings,function(i){  
 					var JSONToken = {};
-					JSONToken.uri =  this.organizationName.value || "";
-					JSONToken.name =  this.name || "";
+					JSONToken.uri =  this.organizationUri ? this.organizationUri.value : "";
+					JSONToken.name = this.organizationName ? this.organizationName.value : "";
 					JSONfile[i] = JSONToken;
 				});
 					console.log(JSONfile);
@@ -638,7 +643,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							}
 
 							if(parameters.JSONdata.publications.length > 0){
-								parameters.contentEl.append($('<h2>'+parameters.conference.acronym+' Publications</h2>'));
+								parameters.contentEl.append($('<h2>Conference publications</h2>'));
 								for(var i = 0; i < parameters.JSONdata.publications.length; i++){ 
 									var publication = parameters.JSONdata.publications[i];
 									ViewAdapterText.appendButton(parameters.contentEl,'#publication/'+Encoder.encode(publication.publicationName.value)+'/'+Encoder.encode(publication.publicationUri.value), publication.publicationName.value,{tiny : false});
@@ -1121,7 +1126,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					var JSONToken = {};
 					JSONfile.eventLabel = results[0].eventSummary ? results[0].eventSummary.value : null;
 					JSONfile.eventDescription =   results[0].eventDesc ? results[0].eventDesc.value : null;
-					JSONfile.eventAbstract =   results[0].eventComent ? results[0].eventComent.value : null;
+					JSONfile.eventComment =   results[0].eventComent ? results[0].eventComent.value : null;
 					JSONfile.eventHomepage =  results[0].eventUrl ? results[0].eventUrl.value : null;
 					JSONfile.eventStart = results[0].eventStart ? results[0].eventStart.value : null;
 					JSONfile.eventEnd = results[0].eventEnd ? results[0].eventEnd.value : null;
@@ -1164,18 +1169,20 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							if(eventInfo.eventLabel){ 
 								$("[data-role = page]").find("#DataConf").html(eventInfo.eventLabel);
 							}
+							
 							if(eventInfo.eventDescription){ 
 								parameters.contentEl.append($('<h2>Description</h2>')); 
 								parameters.contentEl.append($('<p>'+eventInfo.eventDescription+'</p>'));   
 							}
-							if(eventInfo.eventAbstract){ 
-								parameters.contentEl.append($('<h2>Abstract</h2>')); 
+							if(eventInfo.eventComment){ 
+								parameters.contentEl.append($('<h2>Comment</h2>')); 
 								parameters.contentEl.append($('<p>'+eventInfo.eventAbstract+'</p>'));   
 							}
 							if(eventInfo.eventHomepage){ 
 								parameters.contentEl.append($('<h2>Homepage</h2>')); 
 								parameters.contentEl.append($('<a href="'+eventInfo.eventHomepage+'">'+eventInfo.eventHomepage+'</p>'));   
 							}
+
 							if(eventInfo.eventStart){ 
 								parameters.contentEl.append($('<h2>Starts at :  <span class="inline">'+moment(eventInfo.eventStart).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));
 								isDefined = true;
@@ -1183,6 +1190,10 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							if(eventInfo.eventEnd){
 								parameters.contentEl.append($('<h2>Ends at : <span class="inline">'+moment(eventInfo.eventEnd).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));  
 							} 
+							if(eventInfo.eventEnd && eventInfo.eventStart){
+								parameters.contentEl.append($('<h2>Duration : <span class="inline">'+ moment(eventInfo.eventStart).from(moment(eventInfo.eventEnd),true)+'</span></h2>'));  
+							}
+							
 						
 						
 
@@ -1332,6 +1343,10 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							}
 							if(eventInfo.eventEnd){
 								parameters.contentEl.append($('<h2>Ends at : <span class="inline">'+moment(eventInfo.eventEnd).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));  
+							}
+
+							if(eventInfo.eventEnd && eventInfo.eventStart){
+								parameters.contentEl.append($('<h2>Duration : <span class="inline">'+ moment(eventInfo.eventStart).from(moment(eventInfo.eventEnd),true)+'</span></h2>'));  
 							}
 
 							if(_.size(parameters.JSONdata.locations) > 0 ){
