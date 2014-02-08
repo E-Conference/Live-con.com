@@ -79,7 +79,7 @@ class ScheduleController extends Controller
                 'currentConf' => $conf,
                 'categories'  => $categories,
                 'locations'  => $locations,
-                'topics'   => $topics,
+                'topics'     => $topics,
                 'authorized' => $authorization->getFlagSched(),
             );     
     
@@ -93,7 +93,7 @@ class ScheduleController extends Controller
     public function getEventsAction(Request $request)
     {
 
-        //TODO secure that (injection & csrf)
+        //TODO secure that (injection & csrf) 
     
         $em = $this->getDoctrine()->getManager();
     
@@ -123,18 +123,18 @@ class ScheduleController extends Controller
         }
 
         //resource(s)
-        if(isset($postData['resource'])){
-            $resources =  $postData['resource'];
-            $currentRes = $resConfig[$postData['currentRes']];
-            if(count($resources)==1){  
-                $repo = $em->getRepository('IDCISimpleScheduleBundle:'.$currentRes["name"]);
-                if(!$repo) $repo = $em->getRepository('fibeWWWConfBundle:'.$currentRes["name"]);
-                if($repo){
-                    $value = $repo->find($resources[0]) ;
-                    call_user_func_array(array($event, $currentRes["methodName"]), array($value));  
-                }
-            }
-        }
+        // if(isset($postData['resource'])){
+        //     $resources =  $postData['resource'];
+        //     $currentRes = $resConfig[$postData['currentRes']];
+        //     if(count($resources)==1){  
+        //         $repo = $em->getRepository('IDCISimpleScheduleBundle:'.$currentRes["name"]);
+        //         if(!$repo) $repo = $em->getRepository('fibeWWWConfBundle:'.$currentRes["name"]);
+        //         if($repo){
+        //             $value = $repo->find($resources[0]) ;
+        //             call_user_func_array(array($event, $currentRes["methodName"]), array($value));  
+        //         }
+        //     }
+        // }
         
         $event->setConference($conf) ;
         $event->setStartAt( new \DateTime($postData['start']));

@@ -106,7 +106,9 @@ CalEvent.prototype.persist = function(add){
         }
       },
       'json'
-    );
+    ).fail(function(a,b,c) { 
+        bootstrapAlert("warning","Could not have been able to update the event.",c+" : "); 
+    });;
     bootstrapAlert("info","update request sent ","Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
 };
 

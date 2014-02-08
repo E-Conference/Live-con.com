@@ -252,11 +252,7 @@
       $sidebar = $('#external-events');
 
       // get first day
-      var firstDay = moment('5000-10-10'); 
-      if(moment('{{currentConf.mainConfEvent.startAt|date("Y-m-d")}}').isBefore(firstDay)){
-          firstDay = moment('{{currentConf.mainConfEvent.startAt|date("Y-m-d")}}');
-      }   
-      if(firstDay.isSame(moment('5000-10-10'))) firstDay = moment(); 
+      var firstDay = moment('{{currentConf.mainConfEvent.startAt|date("Y-m-d")}}').subtract("days",1);
       var initing = true;
 
 
@@ -266,7 +262,7 @@
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------- render events from json datasource -----------------------------------*/
       /*-----------------------------------------------------------------------------------------------------*/
-  
+   
  
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------------- fullcalendar options ------------------------------------------*/
@@ -278,7 +274,6 @@
               right: '' // computed in resource view
           },   
           aspectRatio: 1.6,
-          editable: true,
           firstDay: firstWeekDay,         
           year: firstDay.year(), 
           month: firstDay.month(),
@@ -368,7 +363,77 @@
               });
               bootstrapAlert("info","event request sent","","<i class='fa-2x fa fa-spinner fa-spin'></i>");
           },
-          eventClick: function(calEvent, jsEvent, view) {  
+          eventAfterAllRender: function( view ) { 
+              //avoid repeating this function 10 times... 
+              if(!mainConfEvent || stopRender)return;
+              clearTimeout(repositionTimeout);
+              repositionTimeout=setTimeout(function(){    
+                logtime = moment()
+                  updateEventArray();  
+                  stylizeBlock();
+                console.debug(moment().diff(logtime)+" to updateEventArray & stylizeBlock"); 
+                console.log( "######################################################"); 
+              },repositionTime);
+                  
+          }, 
+          eventCalculateWidth : function(event, seg, leftmost, availWidth, outerWidth, levelI, bottom, top, forward, dis,view) {  
+            if(event.allDay){
+              return;
+            }
+            var width = availWidth + ( currentView == "day" ? 50 : 5 );
+            var height = bottom - top;
+            var left = leftmost;
+            var zindex = 8;
+
+            var Hmargin = 5;
+            var Wmargin = 3;
+
+            //go to the parent place
+            var parentId = event.parent.id;
+            while(!Events[parentId].allDay){ 
+                var parentCount   = EventCollection.broCountRange[parentId].count,
+                    parentRange   = EventCollection.broCountRange[parentId].range; 
+
+              // console.log("## eventCalculateWidth"+event.id+" : parent : "+parentId+" count "+count+" range "+range)
+                width /= parentCount;
+                left += width*parentRange;
+
+                left   += Wmargin;
+                // width  -= (2*Wmargin);
+                if(moment(Events[parentId].start).isSame(moment(event.start))){
+                  top    += Hmargin/2;
+                  height -= Hmargin/2;
+                } 
+                if(moment(Events[parentId].end).isSame(moment(event.end))){ 
+                  height -= Hmargin;
+                }
+                // height -= (2*Hmargin);
+
+                zindex +=100
+
+                parentId = Events[parentId].parent.id;
+            }
+
+            var count   = EventCollection.broCountRange[event.id].count,
+                range   = EventCollection.broCountRange[event.id].range; 
+
+            width = width/count;
+            left = left+(width*range);
+
+
+            seg.outerWidth = width;
+            seg.left = left;
+            seg.outerHeight = height;
+            seg.top = top;
+            seg.zindex = zindex;
+          },
+          eventAfterRender : function( event, element, view ) {
+            if(Events[event.id].hide === true)
+              $(element).hide();
+          },
+      {% if authorized == 1 %} 
+          editable: true,
+          eventClick: function(calEvent, jsEvent, view) {  // edit modal
               $.ajax({
                   url: op.updateUrl+"?id="+calEvent.id,  
                   success: function(doc) {
@@ -426,7 +491,9 @@
                             EventCollection.refetchEvents(); 
                         },
                         'json'
-                    );
+                    ).fail(function(a,b,c) { 
+                      bootstrapAlert("warning","Could not have been able to add the event.",c+" : "); 
+                    });
                     bootstrapAlert("info","add request sent","Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
                     $modalNewEvent.modal("hide");
                 }else{
@@ -465,19 +532,7 @@
           //   if(mainConfEvent)
           //   mainConfEvent.computeCountRange({allEventsInDay:true});
           // },
-          eventAfterAllRender: function( view ) { 
-              //avoid repeating this function 10 times... 
-              if(!mainConfEvent || stopRender)return;
-              clearTimeout(repositionTimeout);
-              repositionTimeout=setTimeout(function(){    
-                logtime = moment()
-                  updateEventArray();  
-                  stylizeBlock();
-                console.debug(moment().diff(logtime)+" to updateEventArray & stylizeBlock"); 
-                console.log( "######################################################"); 
-              },repositionTime);
-                  
-          }, 
+          
           droppable: true, // allows things to be dropped into the calendar
           drop: function(date, allDay) { //drop from sidebar
           
@@ -511,61 +566,7 @@
               // render the event on the calendar  
                 
           },
-          eventCalculateWidth : function(event, seg, leftmost, availWidth, outerWidth, levelI, bottom, top, forward, dis,view) {  
-            if(event.allDay){
-              return;
-            }
-            var width = availWidth + ( currentView == "day" ? 50 : 5 );
-            var height = bottom - top;
-            var left = leftmost;
-            var zindex = 8;
 
-            var Hmargin = 5;
-            var Wmargin = 3;
-
-            //go to the parent place
-            var parentId = event.parent.id;
-            while(!Events[parentId].allDay){ 
-                var parentCount   = EventCollection.broCountRange[parentId].count,
-                    parentRange   = EventCollection.broCountRange[parentId].range; 
-
-              // console.log("## eventCalculateWidth"+event.id+" : parent : "+parentId+" count "+count+" range "+range)
-                width /= parentCount;
-                left += width*parentRange;
-
-                left   += Wmargin;
-                // width  -= (2*Wmargin);
-                if(moment(Events[parentId].start).isSame(moment(event.start))){
-                  top    += Hmargin/2;
-                  height -= Hmargin/2;
-                } 
-                if(moment(Events[parentId].end).isSame(moment(event.end))){ 
-                  height -= Hmargin;
-                }
-                // height -= (2*Hmargin);
-
-                zindex +=100
-
-                parentId = Events[parentId].parent.id;
-            }
-
-            var count   = EventCollection.broCountRange[event.id].count,
-                range   = EventCollection.broCountRange[event.id].range; 
-
-            width = width/count;
-            left = left+(width*range);
-
-
-            seg.outerWidth = width;
-            seg.left = left;
-            seg.outerHeight = height;
-            seg.top = top;
-            seg.zindex = zindex;
-          },
-          eventAfterRender : function( event, element, view ) {
-            if(Events[event.id].hide === true)
-              $(element).hide();
-          },
           eventDragStart: function( event, jsEvent, ui, view ) { 
               dragged = [ ui.helper[0], event ];
               setTimeout(function(){   
@@ -643,7 +644,9 @@
               },1);
 
  
-          }, 
+          },
+      {% endif %} 
+      {# end autorized #}
       };
 
       //launch calendar
@@ -724,6 +727,8 @@
 
                 
                 if($.inArray(event.id, calendarEventsIds) !== -1 ){ //stylize only event in the calendar
+
+          {% if authorized == 1 %} 
                     element.droppable({ 
                         tolerance: "pointer" ,
                         over: function( ev, ui ) {
@@ -816,6 +821,7 @@
                           }
                         }
                     }); 
+          {% endif %}   
 
                     /*************** popover *****************/
                     element.popover({
@@ -869,6 +875,7 @@
 
 
 
+  {% if authorized == 1 %} 
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------------- start/end drag ------------------------------------------------*/
       /*-----------------------------------------------------------------------------------------------------*/
@@ -918,9 +925,11 @@
       /*------------------------------------- initialize sidebar ----------------------------------------*/
       /*-------------------------------------------------------------------------------------------------*/
       
-      var sidebar = new Sidebar('#external-events');
+  {% endif %}   
+      var sidebar = new Sidebar({% if authorized != 1 %}true{% else %}false{% endif %});
       sidebar.populate(op.getDatalessUrl);
 
+  {% if authorized == 1 %} 
       //dropped from calendar to sidebar;
       $(sidebar).on("dropped",function(ev,calEvent){  
           console.log("dropped",calEvent)
@@ -953,6 +962,7 @@
       }).on("drag",function(ev,event){ 
           dragChildren(event);
       });  
+  {% endif %}   
 
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------------- initialize filters --------------------------------------------*/
@@ -970,15 +980,13 @@
         ids.push(mainConfEvent.id)
         var calendarEvents = $calendar.fullCalendar('clientEvents'); //loop only on calendar events 
         for(var i in calendarEvents){
-          console.log("calendarEvents : ",calendarEvents)
-          console.log("ids : ",ids)
           if($.inArray(calendarEvents[i].id, ids) === -1 ){ 
-            Events[calendarEvents[i].id].elem.animate({ opacity: 0, "margin-top": "-10px" },
+            Events[calendarEvents[i].id].elem.stop( true, true ).animate({ opacity: 0, "margin-top": "-10px" },
                                                       {duration:'slow',queue:false,complete:function(){$(this).hide()}});
             Events[calendarEvents[i].id]["hide"] = true;
           }else if(Events[calendarEvents[i].id].hide === true){
             Events[calendarEvents[i].id].elem.css("margin-top", "-10px");
-            Events[calendarEvents[i].id].elem.show().animate({ opacity: 1, "margin-top": "0px" },
+            Events[calendarEvents[i].id].elem.stop( true, true ).show().animate({ opacity: 1, "margin-top": "0px" },
                                                              {duration:'slow',queue:false});
             Events[calendarEvents[i].id]["hide"] = false;
           }else{

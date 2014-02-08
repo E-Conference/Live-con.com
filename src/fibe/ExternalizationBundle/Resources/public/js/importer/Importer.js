@@ -608,8 +608,7 @@ NodeUtils = {
         $.each(node,function(){
             $(this).children().each(function(){
                 var childNodeName = NodeUtils.getNodeName(this); 
-                if(childNodeName && matchTest(childNodeName,seekedChildNodeName)){
-                    debugger;
+                if(childNodeName && matchTest(childNodeName,seekedChildNodeName)){ 
                     rtnNodeSet.push($(this));
                 } 
             })
