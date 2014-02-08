@@ -90,8 +90,8 @@ class Person
      *
      * @ORM\ManyToMany(targetEntity="Organization", inversedBy="members", cascade={"remove","persist","merge"})
      * @ORM\JoinTable(name="member",
-     *     joinColumns={@ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="Cascade")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="Cascade")})
+     *     joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="Cascade")})
+     *     inverseJoinColumns={@ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="Cascade")},
      */
     private $organizations;
 
