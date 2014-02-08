@@ -180,6 +180,7 @@
     var stopRender = false;
     var fetched = false;
     var firstWeekDay = 1;
+    var firstDay = moment('{{currentConf.mainConfEvent.startAt|date("Y-m-d")}}');
 
     var logtime;
     //path
@@ -252,7 +253,7 @@
       $sidebar = $('#external-events');
 
       // get first day
-      var firstDay = moment('{{currentConf.mainConfEvent.startAt|date("Y-m-d")}}');
+      
       var initing = true;
 
 
@@ -387,6 +388,7 @@
 
             var Hmargin = 5;
             var Wmargin = 3;
+            try{
 
             //go to the parent place
             var parentId = event.parent.id;
@@ -425,7 +427,11 @@
             seg.left = left;
             seg.outerHeight = height;
             seg.top = top;
-            seg.zindex = zindex;
+            seg.zindex = zindex; 
+            // .animate({boxShadow: '-30px 0 30px #699, 30px 0 30px #969, 0 -30px 30px #996, 0 30px 30px #669'})
+            }catch(e){
+              console.warn("broCountRange not computed for "+event.id) 
+            }
           },
           eventAfterRender : function( event, element, view ) {
             if(Events[event.id].hide === true)
@@ -437,19 +443,23 @@
               $.ajax({
                   url: op.updateUrl+"?id="+calEvent.id,  
                   success: function(doc) {
-                      $modal.modal("show");
                       $modalBody.html(doc);
                       bootstrapAlert("success","Options for event : <b>"+calEvent['title']+"</b> has been well fetched"); 
 
                       $modal.off('shown.bs.modal').on('shown.bs.modal', function () {
-                          // rerender if changed
-                        $modalBody.find("#eventForm,#delete-event-form").submit(function(){
-                          $modal.off('hidden.bs.modal').on('hidden.bs.modal', function () {
-                            EventCollection.refetchEvents(true);
-                            // $calendar.fullCalendar( 'refetchEvents' );
+                          // rerender if changed 
+                        $modalBody.find("form").each(function(){
+                          $(this).submit(function(){
+                            setTimeout(function(){    
+                              $modal.off('hidden.bs.modal').on('hidden.bs.modal', function () {
+                                EventCollection.refetchEvents(true); 
+                              })
+                              $modal.modal("hide");
+                            },0);
                           })
                         }) 
                       }) 
+                      $modal.modal("show");
                   }
               }); 
               bootstrapAlert("info","edit <b>"+(calEvent['title'] || calEvent['name'])+"</b> request sent","Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");  
