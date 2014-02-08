@@ -33,7 +33,7 @@
               
             </div>
 
-              <form action="{{ path('mobileAppTheme_update_conference', { 'id': conference.id })}}" method="post" {{ form_enctype(conference_form) }}>
+              <form class="edit-app" action="{{ path('mobileAppTheme_update_conference', { 'id': conference.id })}}" method="post" {{ form_enctype(conference_form) }}>
                 <div class="row">
                     <div class="col-lg-4">
                           <h1> Conference settings</h1> 
@@ -56,7 +56,7 @@
                       <div class="col-lg-4 ">
                         <h1>Color board</h1> 
                         <div id="palette"> 
-                          <a href="#" id="generateTheme" class="btn btn-success"><i class="fa fa-magic"></i>Generate theme</a>
+                          <a href="#" id="generateTheme" class="edit btn btn-success"><i class="fa fa-magic"></i>Generate theme</a>
                         </div>
                       </div>
                   </div>  

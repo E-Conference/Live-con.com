@@ -93,6 +93,12 @@ class ScheduleController extends Controller
     public function getEventsAction(Request $request)
     {
 
+        //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        if(!$user->getAuthorizationByConference($user->getCurrentConf())->getFlagSched()){
+            throw new AccessDeniedException('Action not authorized !');
+        }
+
         //TODO secure that (injection & csrf) 
     
         $em = $this->getDoctrine()->getManager();
@@ -101,8 +107,7 @@ class ScheduleController extends Controller
         $methodParam = $getData->get('method', '');
         $postData = $request->request->all();
 
-        $currentManager=$this->get('security.context')->getToken()->getUser();
-        $conf =$currentManager->getCurrentConf();
+        $conf=$this->get('security.context')->getToken()->getUser()->getCurrentConf();
         $mainConfEvent = $conf->getMainConfEvent();
         
         $JSONArray = array(); 
@@ -114,9 +119,9 @@ class ScheduleController extends Controller
         ); 
 
         $event;
-        if( $methodParam=="add" )
-        {  
-                $event= new Event();    
+        if( $methodParam=="add"){
+             $event= new Event();    
+
         }else if( $methodParam=="update")
         {  
             $event = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['id']);  
@@ -245,6 +250,10 @@ class ScheduleController extends Controller
 
         if(!$authorization->getFlagSched()){
             throw new AccessDeniedException('Action not authorized !');
+            $this->container->get('session')->getFlashBag()->add(
+                     'error',
+                     'You not authorized to modify the schedule'
+                     );
         }
 
       $JSONArray = array();

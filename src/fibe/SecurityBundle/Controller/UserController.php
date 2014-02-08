@@ -54,7 +54,7 @@ class UserController extends Controller
         $update_forms= array();
 
 
-        $authorizationForm = $this->createForm(new AuthorizationType(), new Authorization());
+        $authorizationForm = $this->createForm(new AuthorizationType($this->getUser(),false), new Authorization());
 
         foreach($entities as $entity ){
             $delete_forms[] = $this->createDeleteForm($entity->getId())->createView();

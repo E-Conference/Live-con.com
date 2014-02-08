@@ -54,37 +54,32 @@
                         <th>Email</th>
                         <td>{{ entity.email }}</td>
                     </tr>
+                    {% if app.user.getCurrentConf().getModule().getOrganizationModule() == 1 %}
                     <tr>
                         <th>Organization</th>
                         <td> {% for organization in entity.organizations %}
                               <li>
-                                {% if app.user.getCurrentConf().getModule().getOrganizationModule() == 1 %}
                                   <a href="{{ path('schedule_organization_show', { 'id': organization.id }) }}">
                                      {{ organization.name|e }}
                                   </a>
-                                {% else %}
-                                     {{ organization.name|e }}
-                                {% endif %}
                               </li>
                               {% endfor %}
                         </td>
                     </tr>
+                     {% endif %}
+                     {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
                      <tr>
                         <th>Papers</th>
                         <td> {% for paper in entity.papers %}
-
                                   <li>
-                                    {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
                                       <a href="{{ path('schedule_paper_show', { 'id': paper.id }) }}">
                                           {{ paper.title|e }}
                                       </a>
-                                    {% else %}
-                                          {{ paper.title|e }}
-                                    {% endif %}
                                   </li>
-                                  {% endfor %}
+                            {% endfor %}
                         </td>
                     </tr>
+                     {% endif %}
                     <tr>
                         <th>Social Accounts</th>
                         <td> {% for account in entity.accounts %}

@@ -87,7 +87,7 @@ function Sidebar(readOnly){
           else $event.appendTo($sidebar);
 
           $sidebarTmp.prependTo($sidebar); 
-          
+
           sidebarEventHtml($event,event);
 
           $event.data("id",event.id);
@@ -119,7 +119,7 @@ function Sidebar(readOnly){
                         } 
                       }) 
               // alert("update")
-          }   
+          } else{$event.css("cursor","default")}  
           // $(".scroller").mCustomScrollbar("update");
           // store the Event Object in the DOM element so we can get to it later
           return $event;
