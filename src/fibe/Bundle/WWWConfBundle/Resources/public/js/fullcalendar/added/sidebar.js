@@ -1,16 +1,16 @@
 
 
-function Sidebar(){
+function Sidebar(readOnly){ 
 
         var self = this;
         this.populate = populate; 
         this.setInstantEvents = setInstantEvents; 
         this.setSidebarEvent = setSidebarEvent; 
  
-        var eventHtml =  "<div class='external-event fc-event fc-event-draggable'></div>";
+        var eventHtml =  "<div class='external-event fc-event"+(readOnly?" fc-event-draggable":"")+"'></div>";
         var $sidebarTmp = $(eventHtml);
-
-
+ 
+        var readOnly = readOnly ;
         function populate(url){ 
         $.get(
           url,
@@ -44,81 +44,82 @@ function Sidebar(){
             // if(!isInstant(instant_events[i])) continue;
             var $event = $(eventHtml);
             $event = sidebarDraggable($event,instant_events[i]);
-          }
-// external-event fc-event               fc-event-draggable                                          ui-draggable                     
-//                fc-event fc-event-vert fc-event-draggable fc-event-start fc-event-end ui-droppable ui-draggable ui-resizable
-          //set sidebar droppable
-          $sidebar.droppable({
-            accept: ".fc-event-start" ,
-            over: function( event, ui ) {
-                if( $(ui.draggable).hasClass("fc-event")) {
-                    var event = Events[dragged[1].id];
-                    if(!event)return;
-                    // console.log("dropped into sidebar",event);
-                    $(this).css("border-color","green"); 
-                    sidebarEventHtml($sidebarTmp,event);
-                    $sidebarTmp.show().css("background-color",event.color || "rgb(58, 135, 173)") ;
-                    // $(".scroller").mCustomScrollbar("update");
-                }
-            },
-            out: function( event, ui ) {
-                if($(ui.draggable).hasClass("fc-event")) {
-                    $(this).css("border","solid 1px #ccc"); 
+          } 
+          if (!readOnly){ 
+              $sidebar.droppable({
+                accept: ".fc-event-start" ,
+                over: function( event, ui ) {
+                    if( $(ui.draggable).hasClass("fc-event")) {
+                        var event = Events[dragged[1].id];
+                        if(!event)return;
+                        // console.log("dropped into sidebar",event);
+                        $(this).css("border-color","green"); 
+                        sidebarEventHtml($sidebarTmp,event);
+                        $sidebarTmp.show().css("background-color",event.color || "rgb(58, 135, 173)") ;
+                        // $(".scroller").mCustomScrollbar("update");
+                    }
+                },
+                out: function( event, ui ) {
+                    if($(ui.draggable).hasClass("fc-event")) {
+                        $(this).css("border","solid 1px #ccc"); 
+                        $sidebarTmp.hide();
+                    } 
+                },
+                drop: function( event, ui ) { 
+                  if ( $(ui.draggable).hasClass("fc-event")){
+                    //update ui
                     $sidebarTmp.hide();
-                } 
-            },
-            drop: function( event, ui ) { 
-              if ( $(ui.draggable).hasClass("fc-event")){
-                //update ui
-                $sidebarTmp.hide();
-                $(this).css("border","solid 1px #ccc"); 
+                    $(this).css("border","solid 1px #ccc"); 
 
-                // console.log("end Drag to sidebar");
+                    // console.log("end Drag to sidebar");
 
-                var event = Events[dragged[1].id] ;
-                    if(!event)return;
-                $(self).trigger("dropped",[event]);
-              }
-            }
-          });
-        }
+                    var event = Events[dragged[1].id] ;
+                        if(!event)return;
+                    $(self).trigger("dropped",[event]);
+                  }
+                }
+              });
+          }
+        } 
 
         function sidebarDraggable($event,event,prepend){
           if(prepend===true)$event.prependTo($sidebar);
           else $event.appendTo($sidebar);
+
           $sidebarTmp.prependTo($sidebar); 
-          // console.log(event);
+
           sidebarEventHtml($event,event);
-        // scrollable();
+
           $event.data("id",event.id);
-          //set child drag    
           event['elem'] = $event;
-          // console.log(event);
-          $event.draggable({
-                    zIndex: 999,
-                    revert: true,      // will cause the event to go back to its
-                    revertDuration: 0,  //  original position after the drag
-                    appendTo: 'body',
-                    containment: 'window', 
-                    helper: 'clone',
-                    start : function (ev,ui){
-                        $(this).hide();   
-                        dragged = [ ui.helper[0], event ];
-                        setTimeout(function(){ //bug... event isn't yet updated  
-                          $(self).trigger("drag",[event]); 
-                        },1);//event isn't yet updated   
-                    },
-                    stop: function(a,b,c){   
-                        // setTimeout(function(){ //bug... event isn't yet updated   
-                          if(calendar_events_indexes[event.id] === undefined){
-                            $(this).show()
-                          }else{
-                            // $(this).hide()
-                          } 
-                        // },1);//event isn't yet updated   
-                    } 
-                  }) 
-          // alert("update")
+          //set child drag     
+          if (!readOnly){  
+              $event.draggable({
+                        zIndex: 999,
+                        revert: true,      // will cause the event to go back to its
+                        revertDuration: 0,  //  original position after the drag
+                        appendTo: 'body',
+                        containment: 'window', 
+                        helper: 'clone',
+                        start : function (ev,ui){
+                            $(this).hide();   
+                            dragged = [ ui.helper[0], event ];
+                            setTimeout(function(){ //bug... event isn't yet updated  
+                              $(self).trigger("drag",[event]); 
+                            },1);//event isn't yet updated   
+                        },
+                        stop: function(a,b,c){   
+                            // setTimeout(function(){ //bug... event isn't yet updated   
+                              if(calendar_events_indexes[event.id] === undefined){
+                                $(this).show()
+                              }else{
+                                // $(this).hide()
+                              } 
+                            // },1);//event isn't yet updated   
+                        } 
+                      }) 
+              // alert("update")
+          } else{$event.css("cursor","default")}  
           // $(".scroller").mCustomScrollbar("update");
           // store the Event Object in the DOM element so we can get to it later
           return $event;

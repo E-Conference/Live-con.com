@@ -24,16 +24,33 @@ Mapper = {
         Mapper["serialisedDatas"] = datas;
     },
 
-	map : function($data){
+    defaultNodeReadingConfig : {
+        getNodeKey : {
+            format : [{
+                nodeUtils : "attr",
+                arg : ["rdf:about"],
+            }] 
+        }, 
+        getNodeName : {
+            format : [{
+                nodeUtils : "rdfNodeName", 
+            }] 
+        },  
+    },
+	map : function($data,baseConfig){
+
+        //TODO make this dynamic
+        Mapper["mappingConfig"] = baseConfig || Mapper.defaultNodeReadingConfig;
 		 
         if (!$data)$data = Mapper["data"];
-        var nodePath = "root";
-        var html = Mapper.getPanelHtml("Found datas",{panelClass:"panel-primary","node-path":nodePath});
-
         console.log($data);
         Mapper.dataLinks= {};
         Mapper.knownNodes = {};
         Mapper.knownCollection = {};
+        
+        var nodePath = "root";
+        var html = Mapper.getPanelHtml("Found datas ",{panelClass:"panel-primary"});
+
         generateHtml($data,nodePath,Mapper.knownNodes); 
         function generateHtml($node,nodePath,knownNodes){
 
@@ -45,11 +62,12 @@ Mapper = {
 
                     if(!Mapper.isNodeKnown(nodePath+ "/"+getNodeName(child))){
                         childTags.push(getNodeName(child));
-                        html+= Mapper.getPanelHtml(child.tagName,{panelClass:"panel-success",margin:true,"node-path":nodePath+ "/"+getNodeName(child)});
+                        html+= Mapper.getPanelHtml(getNodeName(child),{panelClass:"panel-success",margin:true,"node-path":nodePath+ "/"+getNodeName(child),collapsible:true,collapsed:true});
                         generateHtml($(child),nodePath+ "/"+getNodeName(child),knownNodes)
                         html+= Mapper.getClosingPanelHtml(); 
                     } else{
                         //already mapped
+                        // addMappingCollection(nodePath); 
                     } 
                     generateHtml($(child),nodePath+ "/"+getNodeName(child),knownNodes);
 
@@ -64,16 +82,31 @@ Mapper = {
                 Mapper.knownCollection[nodePath] = {};
             }
             function getNodeName(node){
-                return node.tagName.toLowerCase();
+                
+                var nodeName = doFormat(node,Mapper.mappingConfig.getNodeName.format);
+                
+                return (nodeName ? nodeName.toLowerCase() : console.log("undefined nodename for",node));
             }
         }
 
 
         html+= Mapper.getClosingPanelHtml();
-        Mapper["el"].html(html);
-        //             .children(".collapsible").click(function(){console.log(this);alert("lol");
-        //                 $(this).siblings("ul").collapsible("toggle")
-        //             })
+        Mapper["el"].html(html); 
+        
+
+        // option popover
+        // var $nodeNameSelect = $('<select><option selected="selected" value="localname">Node tag</option>\
+        //                                  <option value="rdfNodeName">Rdf tag</option></select>')
+        //                             .select2()
+        //                             .on("change",function(){
+        //                                 if(localname == "localname"){
+        //                                     Mapper.map(); format = [{
+        //                                         nodeUtils : "localName", 
+        //                                     }] 
+        //                                 }
+        //                             });
+        // var clickablePopover = Mapper.addClickablePopover($(" <i class='fa fa-cog'> </i> "),"CACA")
+        // $('#datafile-form > .panel-primary > .panel-heading > .panel-title').append(clickablePopover);
         
 
         //collection
@@ -82,7 +115,7 @@ Mapper = {
             if(Mapper.knownCollection[nodePath]){
                 Mapper.knownCollection[nodePath] = $(this);
                 var collectionNodeName = $(this).find("> .panel-heading").text();
-                $(this).find("> .panel-heading").remove();
+                // $(this).find("> .panel-heading").remove();
                 var childPanel = $(this).find("> .list-group > .panel-success ")
                 childPanel.data("collection",nodePath)
                           // .insertBefore($(this))
@@ -124,25 +157,7 @@ Mapper = {
 
     generateMappingFile : function(){
         console.log("############### generateMappingFile starts")
-        var mappingConfig = {
-            rootNode : {
-                format : [{
-                    nodeUtils : "node",
-                    arg : ["conference"],
-                }]
-            },
-            getNodeKey : {
-                format : [{
-                    nodeUtils : "attr",
-                    arg : ["id"],
-                }]
-            },
-            getNodeName : {
-                format : [{
-                    nodeUtils : "localName",
-                }]
-            }, 
-        };
+        
         //loop only on validated mapping
         $("#model-form .panel-success").each(function(iPanel,panel){
             var modelName = $(panel).data("model-path");
@@ -178,48 +193,45 @@ Mapper = {
                     mappingObj.label[nodeName]={setter:modelSetter};
                     mappingObj.label[nodeName]["format"] = extractMappingFormat(nodePtyPath.split(nodeName).join(""));
 
-                    //TODO add another mapping object in case of a new nodeName
-                    //TODO add another mapping object in case of a new nodeName
-                    // mappingObj["nodeName"] = leftEntityMapping.nodePath.split("/")[1];
                 } 
             }) 
         });
-        console.log("############### generateMappingFile ended, returning : ",mappingConfig)
-        return mappingConfig;
+        console.log("############### generateMappingFile ended, returning : ",Mapper.mappingConfig)
+        return Mapper.mappingConfig;
         
         /**
          * Get or create the conference mapping object  
          * @return {[type]}            [description]
          */
         function getOrCreateConferenceMappingObj(){  
-            if(!mappingConfig['parseConference'])
-                mappingConfig['parseConference']={} 
-            return mappingConfig['parseConference']
+            if(!Mapper.mappingConfig['parseConference'])
+                Mapper.mappingConfig['parseConference']={} 
+            return Mapper.mappingConfig['parseConference']
         }
         
         /**
-         * Get or create the mapping in the "under generating mappingConfig file" phase corresponding to the array key  
+         * Get or create the mapping in the "under generating Mapper.mappingConfig file" phase corresponding to the array key  
          * @param  {object} format  the format to find
          * @param  {string} array   the array to link with in case of a not found format
          * @return {[type]}         the existing or new mapping
          */
         function getOrCreateMappingObjFromFormat(format,array){  
-                if(!mappingConfig['mappings'])
-                    mappingConfig['mappings']=[];
+                if(!Mapper.mappingConfig['mappings'])
+                    Mapper.mappingConfig['mappings']=[];
    
                  //look if its already registered
                     console.log("getOrCreateMappingObjFromFormat ",format)
-                for(var i in mappingConfig['mappings']){
-                    console.log("getOrCreateMappingObjFromFormat ",mappingConfig['mappings'][i].format)
-                    alert(mappingConfig['mappings'][i].format ==  format)
-                    if(mappingConfig['mappings'][i].format ==  format){
-                        return mappingConfig['mappings'][i];
+                for(var i in Mapper.mappingConfig['mappings']){
+                    console.log("getOrCreateMappingObjFromFormat ",Mapper.mappingConfig['mappings'][i].format)
+                    alert(Mapper.mappingConfig['mappings'][i].format ==  format)
+                    if(Mapper.mappingConfig['mappings'][i].format ==  format){
+                        return Mapper.mappingConfig['mappings'][i];
                     }
                 }
 
                 //add if not found
                 var newMapping = {array: array,label:{},format:format};
-                mappingConfig['mappings'].push(newMapping);
+                Mapper.mappingConfig['mappings'].push(newMapping);
                 return newMapping;
         }
         
@@ -335,6 +347,7 @@ Mapper = {
 
 
     generateNode : function(node,nodePath){
+        if(!node.text() || node.text() == "")return"";
         var rtn = "";
 
         if(!Mapper.isNodeKnown(nodePath + "/text",node.text())){ 
@@ -362,14 +375,36 @@ Mapper = {
                     (op["model-path"]?' data-model-path="'+op["model-path"]+'"':"")+
                     (op["node-path"]?' data-node-path="'+op["node-path"]+'"':"")+
                     (op.margin===true?' style="margin:15px;"':'')+
-                    '>\
-                  <!-- Default panel contents -->\
-                  <div class="panel-heading"><h3 class="panel-title">'+content+'</h3></div>\
-                  <ul class="'+(op.padding===true?"panel-body ":"")+'list-group"> ';
+                    (op.collapsible===true?' ':'')+
+                    '>'+ 
+                  '<!-- Default panel contents -->\
+                  <div class="panel-heading"><h3 class="panel-title">'+
+                        content+
+                        (op.collapsible===true?' <i class="fa '+(op.collapsed===true?'fa-chevron-up':'fa-chevron-down')+'" style="cursor: pointer;" '+(op.collapsed===true?'data-collapsed="true"':'data-collapsed="false"')+'" onclick="!$(this).data(\'collapsed\') ? $(this).removeClass(\'fa-chevron-down\').addClass(\'fa-chevron-up\').parent().parent().siblings(\'ul\').hide(\'slow\') : $(this).removeClass(\'fa-chevron-up\').addClass(\'fa-chevron-down\').parent().parent().siblings(\'ul\').show(\'slow\');$(this).data(\'collapsed\',!$(this).data(\'collapsed\'))"></i> ':'')+
+                    '</h3></div>\
+                  <ul class="'+(op.padding===true?"panel-body ":"")+'list-group" '+(op.collapsed===true?'style="display:none;"':'')+'> ';
     },
 
     getClosingPanelHtml : function(){
         return ' </ul></div>';
-    },
-
+    }, 
+    addClickablePopover : function($div,htmlContent){
+        //popover qui reste tant que le curseur ne quitte pas la zone bouton+popover (par defaut => disparait quand entre dans le popover...)
+        return $div.popover({
+            trigger: 'manual', 
+            placement:"right",
+            html:"true",
+            title:"<i class='fa fa-cog'></i> file reader options",
+            content:"<p class='preview-popover-content'>The preview may not be up to date because it isn't saved.</p>",
+            template: '<div style="color:#333;" class="popover" onmouseover="clearTimeout(timeoutObj);$(this).mouseleave(function() {$(this).hide();});"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title"></h3><div class="popover-content"><p></p></div></div></div>'
+            }).mouseenter(function(e) {
+                $(this).popover('show');
+                $div.siblings(".popover").find(".preview-popover-content").html(htmlContent);
+            }).mouseleave(function(e) {
+                var ref = $(this);
+                timeoutObj = setTimeout(function(){
+                    ref.popover('hide');
+                }, 50);
+            });
+    }
 }

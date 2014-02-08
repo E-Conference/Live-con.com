@@ -34,22 +34,30 @@ class PersonFilterType extends AbstractType
                 'choices'=> $this->user->getCurrentConf()->getPersons()->toArray(),
                 'required' => false,
                  'attr'  => array('placeholder'  => 'Email')
-            ))
+            ));
+
+        if($this->user->getCurrentConf()->getModule()->getOrganizationModule()==1){
+            $builder
             ->add('organization', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Organization',
                 'label'   => 'Organization',
                 'choices'=> $this->user->getCurrentConf()->getOrganizations()->toArray(),
                 'required' => false,
                 'attr'  => array('placeholder'  => 'Organization')
-            )) 
+            ));
+        }
+        if($this->user->getCurrentConf()->getModule()->getPaperModule()==1){
+            $builder
             ->add('paper', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Paper',
                 'label'   => 'Publication',
                 'choices'=> $this->user->getCurrentConf()->getPapers()->toArray(),
                 'required' => false,
                 'attr'  => array('placeholder'  => 'Publication')
-            ))
-        ;
+            ));
+
+        }
+        
     }
 
 

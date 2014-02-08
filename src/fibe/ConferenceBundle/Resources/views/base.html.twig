@@ -119,9 +119,15 @@
                    <ul class="nav breadcrum nav-tabs">
                           
                           <li class="schedule_conference_edit"><a href="{{ path('schedule_conference_edit') }}">Overview</a></li>
+                          {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
                           <li class="schedule_conference_settings"><a href="{{ path('schedule_conference_settings') }}">Modules</a></li>
+                          {% endif %}
+                          {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')== 1 %}
                           <li class="conference_team_list"><a href="{{ path('conference_team_list') }}">Team</a></li>
+                          {% endif %}
+                          {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
                           <li class="externalization_import_index"><a href="{{ path('externalization_import_index') }}">Import/export</a></li>
+                          {% endif %}
                            {% block menu_page%} 
                            {% endblock menu_page %}
                       

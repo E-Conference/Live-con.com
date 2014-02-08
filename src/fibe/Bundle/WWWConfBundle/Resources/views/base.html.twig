@@ -122,8 +122,12 @@
                           <li class="schedule_event schedule_event_new schedule_event_edit schedule_event_show"><a href="{{ path('schedule_event') }}">Events</a></li>
                           <li class="schedule_person_index schedule_person_edit schedule_person_new schedule_person_show"><a href="{{ path('schedule_person_index') }}">Persons</a></li>
                           <li class="schedule_location schedule_location_edit schedule_location_new schedule_location_show"><a href="{{ path('schedule_location') }}">Locations</a></li>
+                          {% if app.user.getCurrentConf().getModule().getOrganizationModule()== true %}
                           <li class="schedule_organization_index  schedule_organization_new schedule_organization_edit schedule_organization_show"><a href="{{ path('schedule_organization_index') }}">Organizations</a></li>
-                          <li class="schedule_paper schedule_paper_edit schedule_paper_new schedule_paper_show"><a href="{{ path('schedule_paper') }}">Publications</a></li>
+                          {% endif %}
+                          {% if app.user.getCurrentConf().getModule().getPaperModule()== true %}
+                            <li class="schedule_paper schedule_paper_edit schedule_paper_new schedule_paper_show"><a href="{{ path('schedule_paper') }}">Publications</a></li>
+                          {% endif %}
                           <li class="schedule_category schedule_category_new schedule_category_edit schedule_category_show"><a href="{{ path('schedule_category') }}" >Categories</a></li>
                           <li class="schedule_topic schedule_topic_new  schedule_topic_edit schedule_topic_show"><a href="{{ path('schedule_topic') }}">Topics</a></li>
                            {% block menu_page%} 

@@ -306,7 +306,7 @@ class ConferenceController extends Controller
             );
         }
         
-         return $this->redirect($this->generateUrl('schedule_user_list'));
+         return $this->redirect($this->generateUrl('conference_team_list'));
 
     }
 

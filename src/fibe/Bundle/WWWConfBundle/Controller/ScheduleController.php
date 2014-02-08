@@ -79,7 +79,7 @@ class ScheduleController extends Controller
                 'currentConf' => $conf,
                 'categories'  => $categories,
                 'locations'  => $locations,
-                'topics'   => $topics,
+                'topics'     => $topics,
                 'authorized' => $authorization->getFlagSched(),
             );     
     
@@ -93,7 +93,13 @@ class ScheduleController extends Controller
     public function getEventsAction(Request $request)
     {
 
-        //TODO secure that (injection & csrf)
+        //Authorization Verification conference sched manager
+        $user=$this->getUser();
+        if(!$user->getAuthorizationByConference($user->getCurrentConf())->getFlagSched()){
+            throw new AccessDeniedException('Action not authorized !');
+        }
+
+        //TODO secure that (injection & csrf) 
     
         $em = $this->getDoctrine()->getManager();
     
@@ -101,8 +107,7 @@ class ScheduleController extends Controller
         $methodParam = $getData->get('method', '');
         $postData = $request->request->all();
 
-        $currentManager=$this->get('security.context')->getToken()->getUser();
-        $conf =$currentManager->getCurrentConf();
+        $conf=$this->get('security.context')->getToken()->getUser()->getCurrentConf();
         $mainConfEvent = $conf->getMainConfEvent();
         
         $JSONArray = array(); 
@@ -114,27 +119,27 @@ class ScheduleController extends Controller
         ); 
 
         $event;
-        if( $methodParam=="add" )
-        {  
-                $event= new Event();    
+        if( $methodParam=="add"){
+             $event= new Event();    
+
         }else if( $methodParam=="update")
         {  
             $event = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['id']);  
         }
 
         //resource(s)
-        if(isset($postData['resource'])){
-            $resources =  $postData['resource'];
-            $currentRes = $resConfig[$postData['currentRes']];
-            if(count($resources)==1){  
-                $repo = $em->getRepository('IDCISimpleScheduleBundle:'.$currentRes["name"]);
-                if(!$repo) $repo = $em->getRepository('fibeWWWConfBundle:'.$currentRes["name"]);
-                if($repo){
-                    $value = $repo->find($resources[0]) ;
-                    call_user_func_array(array($event, $currentRes["methodName"]), array($value));  
-                }
-            }
-        }
+        // if(isset($postData['resource'])){
+        //     $resources =  $postData['resource'];
+        //     $currentRes = $resConfig[$postData['currentRes']];
+        //     if(count($resources)==1){  
+        //         $repo = $em->getRepository('IDCISimpleScheduleBundle:'.$currentRes["name"]);
+        //         if(!$repo) $repo = $em->getRepository('fibeWWWConfBundle:'.$currentRes["name"]);
+        //         if($repo){
+        //             $value = $repo->find($resources[0]) ;
+        //             call_user_func_array(array($event, $currentRes["methodName"]), array($value));  
+        //         }
+        //     }
+        // }
         
         $event->setConference($conf) ;
         $event->setStartAt( new \DateTime($postData['start']));
@@ -245,6 +250,10 @@ class ScheduleController extends Controller
 
         if(!$authorization->getFlagSched()){
             throw new AccessDeniedException('Action not authorized !');
+            $this->container->get('session')->getFlashBag()->add(
+                     'error',
+                     'You not authorized to modify the schedule'
+                     );
         }
 
       $JSONArray = array();
