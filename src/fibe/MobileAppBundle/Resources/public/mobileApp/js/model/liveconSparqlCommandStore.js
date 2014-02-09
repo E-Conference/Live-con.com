@@ -19,14 +19,12 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    getQuery : function(parameters){	
 	    		var prefix =   'PREFIX dc: <http://purl.org/dc/elements/1.1/> PREFIX swc: <http://data.semanticweb.org/ns/swc/ontology#> PREFIX foaf: <http://xmlns.com/foaf/0.1/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> ';
 					
-				var query =	'SELECT DISTINCT ?topicLabel  ?topicUri WHERE  {\
+				var query =	'SELECT DISTINCT ?topicLabel  WHERE  {\
 							 {	<'+parameters.uri+'>    swc:isSuperEventOf    ?eventUri.\
-							  	?eventUri dc:subject ?topicUri.\
-							  	?topicUri rdfs:label ?topicLabel.\
+							  	?eventUri dc:subject ?topicLabel.\
 							 } UNION { \
 							 	<'+parameters.uri+'>    swc:hasRelatedDocument ?publiUri.\
-							  	?publiUri dc:subject ?topicUri.\
-							  	?topicUri rdfs:label ?topicLabel. }\
+							  	?publiUri dc:subject ?topicLabel.}\
 							 } ORDER BY ASC(?topicLabel) '; 
 	
 				var  ajaxData = { query : prefix + query, output : "json"};
@@ -38,7 +36,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				var JSONfile = {};
 				$.each(dataJSON.results.bindings,function(i){  
 					var JSONToken = {};
-					JSONToken.uri = this.topicUri ? this.topicUri.value  : null;
+					JSONToken.uri = this.topicLabel ? this.topicLabel.value : null;
 					JSONToken.name =  this.topicLabel ? this.topicLabel.value : null;
 					JSONfile[i] = JSONToken;
 				});
@@ -470,31 +468,48 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		getTopic : {
 			dataType : "JSONP",
 		    method : "GET", 
-		    serviceUri : "schedule_topic.jsonp?",
+		    serviceUri : "",
 		    getQuery : function(parameters){	
-			  var conferenceUri = parameters.conferenceUri;
-		      var ajaxData = { id : parameters.uri} ;
-		      return ajaxData; 
+				var prefix =   'PREFIX dc: <http://purl.org/dc/elements/1.1/> PREFIX ical: <http://www.w3.org/2002/12/cal/ical#> PREFIX swc: <http://data.semanticweb.org/ns/swc/ontology#> PREFIX foaf: <http://xmlns.com/foaf/0.1/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX swc: <http://data.semanticweb.org/ns/swc/ontology#> ';
+					
+				var query =	'SELECT DISTINCT ?eventUri  ?eventSummary ?publiUri ?publiTitle WHERE  {\
+							 {	 <'+parameters.conference.baseUri+'> swc:isSuperEventOf ?eventUri.\
+							  	?eventUri dc:subject  "'+parameters.uri+'".\
+							  	?eventUri ical:summary ?eventSummary.\
+							 } UNION { \
+							 	<'+parameters.conference.baseUri+'> swc:hasRelatedDocument ?publiUri.\
+							  	?publiUri dc:subject  "'+parameters.uri+'".\
+							  	?publiUri dc:title ?publiTitle. }\
+							 } '; 
+	
+				var  ajaxData = { query : prefix + query, output : "json"};
+				return ajaxData;
 		    }, 
 		    
-		    ModelCallBack : function(dataXML,conferenceUri,datasourceUri, currentUri){
+		    ModelCallBack : function(dataJSON,conferenceUri,datasourceUri, currentUri){
 				var JSONToken = {};
-				if(_.size(dataXML) > 0 ){
-					JSONToken.name =  dataXML[0].name || null;
-					JSONToken.id =  dataXML[0].id || null;
-
-					JSONToken.publications = [];
-					for(var j=0;j<dataXML[0].papers.length;j++){
-					  	JSONToken.publications[j]=  dataXML[0].papers[j];
-					}
+				var results = dataJSON.results.bindings;
+				if(_.size(results) > 0 ){
+				
 
 					JSONToken.events = [];
-					for(j=0;j<dataXML[0].events.length;j++){
-					  	JSONToken.events[j] =  dataXML[0].events[j];
-					}
+					JSONToken.publications = [];
+					j = 0;
+					k = 0;
+					$.each(results, function(i, token) {
+						if(token.hasOwnProperty("eventUri")){
+							JSONToken.events[j] =  token;
+							j++;
+						} 
+						if(token.hasOwnProperty("publiUri")){
+							JSONToken.publications[k]=  token;
+							k++;
+						}
+					});
+
 				}
 				console.log(JSONToken);
-				//StorageManager.pushCommandToStorage(currentUri,"getTopic",JSONToken);
+				StorageManager.pushCommandToStorage(currentUri,"getTopic",JSONToken);
 				return JSONToken;
 			},
 				
@@ -503,22 +518,25 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				if(parameters.JSONdata != null){
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
-							if(parameters.JSONdata.name){
-								$("[data-role = page]").find("#DataConf").html(parameters.JSONdata.name);
+
+							if(parameters.JSONdata.events.length > 0){
+								parameters.contentEl.append($('<h2>Related events</h2>'));
+								for(var i = 0; i < parameters.JSONdata.events.length; i++){ 
+									var eventtoken = parameters.JSONdata.events[i];
+									ViewAdapterText.appendButton(parameters.contentEl,'#event/'+Encoder.encode(eventtoken.eventSummary.value)+'/'+Encoder.encode(eventtoken.eventUri.value), eventtoken.eventSummary.value,{tiny : false});
+								};
 							}
-							if(_.size(parameters.JSONdata.publications) > 0 ){
-								parameters.contentEl.append($('<h2>Related publication(s)</h2>'));
-								$.each(parameters.JSONdata.publications, function(i,publication){
-									ViewAdapterText.appendButton(parameters.contentEl,'#publication/'+Encoder.encode(publication.name)+'/'+Encoder.encode(publication.id), publication.name,{tiny : true});
-								});
-								
+
+							if(parameters.JSONdata.publications.length > 0){
+								parameters.contentEl.append($('<h2>Related publications</h2>'));
+								for(var i = 0; i < parameters.JSONdata.publications.length; i++){ 
+									var publication = parameters.JSONdata.publications[i];
+									ViewAdapterText.appendButton(parameters.contentEl,'#publication/'+Encoder.encode(publication.publiTitle.value)+'/'+Encoder.encode(publication.publiUri.value), publication.publiTitle.value,{tiny : false});
+									
+
+								};
 							}
-							if(_.size(parameters.JSONdata.events) > 0 ){
-								parameters.contentEl.append($('<h2>Related event(s)</h2>'));
-								$.each(parameters.JSONdata.events, function(i,ev){
-									ViewAdapterText.appendButton(parameters.contentEl,'#event/'+Encoder.encode(ev.name)+'/'+Encoder.encode(ev.id), ev.name, {tiny : true});
-								});
-							}
+
 						}
 					}
 				} 
@@ -542,7 +560,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							    ' { <'+parameters.uri+'>  foaf:name ?personName.                     ' +
 							    '	OPTIONAL {<'+parameters.uri+'>  foaf:homepage ?personHomepage.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  foaf:img ?personImg.}' +
-							    ' } UNION { ?organizationUri swrc:hasMember  <'+parameters.uri+'> . '+ 
+							    ' } UNION {  <'+parameters.uri+'>  foaf:member ?organizationUri . '+ 
 							    '   ?organizationUri  rdfs:label ?organizationName.  ' +
 							    ' } UNION { ?publicationUri foaf:maker  <'+parameters.uri+'> . '+ 
 							    '   ?publicationUri  dc:title ?publicationName. ' +
@@ -642,16 +660,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								}
 							}
 
-							if(parameters.JSONdata.publications.length > 0){
-								parameters.contentEl.append($('<h2>Conference publications</h2>'));
-								for(var i = 0; i < parameters.JSONdata.publications.length; i++){ 
-									var publication = parameters.JSONdata.publications[i];
-									ViewAdapterText.appendButton(parameters.contentEl,'#publication/'+Encoder.encode(publication.publicationName.value)+'/'+Encoder.encode(publication.publicationUri.value), publication.publicationName.value,{tiny : false});
-									
-
-								};
-							}
-
+					
 
 							if(parameters.JSONdata.organizations.length > 0){
 								parameters.contentEl.append($('<h2>Organizations</h2>'));
@@ -661,6 +670,15 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								};
 							}
 
+							if(parameters.JSONdata.publications.length > 0){
+								parameters.contentEl.append($('<h2>Conference publications</h2>'));
+								for(var i = 0; i < parameters.JSONdata.publications.length; i++){ 
+									var publication = parameters.JSONdata.publications[i];
+									ViewAdapterText.appendButton(parameters.contentEl,'#publication/'+Encoder.encode(publication.publicationName.value)+'/'+Encoder.encode(publication.publicationUri.value), publication.publicationName.value,{tiny : false});
+									
+
+								};
+							}
 
 						}
 					}
@@ -672,26 +690,40 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		getOrganization : {
 		    dataType : "JSONP",
 		    method : "GET", 
-		    serviceUri : "schedule_organization.jsonp?",
+		    serviceUri : "",
 		    getQuery : function(parameters){	
-			  var conferenceUri = parameters.conferenceUri;
-		      var ajaxData = { id : parameters.uri} ;
-		      return ajaxData; 
+			   var prefix =	'PREFIX swc: <http://data.semanticweb.org/ns/swc/ontology#>         ' +
+							    'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>               ' +
+							    'PREFIX dc: <http://purl.org/dc/elements/1.1/>                      ' +
+							    'PREFIX swrc: <http://swrc.ontoware.org/ontology#>                  ' +
+							    'PREFIX foaf: <http://xmlns.com/foaf/0.1/>            		        ' ;
+							
+			    var query  =	'SELECT DISTINCT   ?orgaName ?orgaHomepage ?orgaBased ?personUri ?personName WHERE  {  ' +
+							    '  {<'+parameters.uri+'>  rdfs:label ?orgaName.            ' +
+							    '	OPTIONAL {<'+parameters.uri+'>  foaf:based_near ?orgaBased.}' +
+						        '	OPTIONAL {<'+parameters.uri+'>  foaf:homepage ?orgaHomepage.}' +
+							    '	 } UNION { ?personUri foaf:member <'+parameters.uri+'> .'+ 
+							    '   ?personUri  foaf:name ?personName.  }' +
+							    '}';
+				var  ajaxData = { query : prefix + query, output : "json" };
+		      	return ajaxData; 
 		    },
 		    
-		    ModelCallBack : function(dataXML,conferenceUri,datasourceUri, currentUri){
+		    ModelCallBack : function(dataJSON,conferenceUri,datasourceUri, currentUri){
 				var JSONToken = {};
-				if(_.size(dataXML) > 0 ){
-					JSONToken.name =  dataXML[0].name || "";
-					JSONToken.page =  dataXML[0].page || "";
-					JSONToken.country =  dataXML[0].country || "";
-					JSONToken.id =  dataXML[0].id || "";
-
+				var results = dataJSON.results.bindings;
+				if(_.size(results) > 0 ){
+					JSONToken.name =  results[0].orgaName ? results[0].orgaName.value : null;
+					JSONToken.homepage =  results[0].orgaHomepage ? results[0].orgaHomepage.value : null;
+					JSONToken.based_near =  results[0].orgaBased ? results[0].orgaBased.value : null;
 					JSONToken.members = [];
-					for(var j=0;j<dataXML[0].members.length;j++){
-					  	JSONToken.members[j]=  dataXML[0].members[j];
-					}
-
+					j = 0;
+					$.each(results, function(i, token) {
+						if(token.hasOwnProperty("personUri")){
+							JSONToken.members[j] =  token;
+							j++;
+						} 
+					});
 				}
 				console.log(JSONToken);
 				StorageManager.pushCommandToStorage(currentUri,"getOrganization",JSONToken);
@@ -703,27 +735,28 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				if(parameters.JSONdata != null){
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
-							if(parameters.JSONdata.name){
-								$("[data-role = page]").find("#DataConf").html(parameters.JSONdata.name);
+							if(parameters.JSONdata.orgaName){
+								$("[data-role = page]").find("#DataConf").html(parameters.JSONdata.orgaName);
 							}
-							if(parameters.JSONdata.page){
+							if(parameters.JSONdata.homepage){
 								parameters.contentEl.append($('<h2>Page</h2>'));
-								parameters.contentEl.append($('<a href='+parameters.JSONdata.page+'>'+parameters.JSONdata.page+'</a>')); 
+								parameters.contentEl.append($('<a href='+parameters.JSONdata.page+'>'+parameters.JSONdata.homepage+'</a>')); 
 								
 							}
-							if(parameters.JSONdata.country){
+							if(parameters.JSONdata.based_near){
 								parameters.contentEl.append($('<h2>Country</h2>'));
-								parameters.contentEl.append($('<p>'+parameters.JSONdata.country+'</p>'));      
+								parameters.contentEl.append($('<p>'+parameters.JSONdata.based_near+'</p>'));      
 							}
 
-							if(_.size(parameters.JSONdata.members) > 0 ){
+							if(parameters.JSONdata.members.length > 0){
 								parameters.contentEl.append($('<h2>Members</h2>'));
-								$.each(parameters.JSONdata.members, function(i,member){
-									ViewAdapterText.appendButton(parameters.contentEl,'#person/'+Encoder.encode(member.name)+'/'+Encoder.encode(member.id), member.name,{tiny : true});
-								});
-								
+								for(var i = 0; i < parameters.JSONdata.members.length; i++){ 
+									var member = parameters.JSONdata.members[i];
+									ViewAdapterText.appendButton(parameters.contentEl,'#person/'+Encoder.encode(member.personName.value)+'/'+Encoder.encode(member.personUri.value), member.personName.value,{tiny : true});
+									
+
+								};
 							}
-						
 
 						}
 					}
@@ -1142,7 +1175,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							j++;
 						} 
 						if(token.hasOwnProperty("locationUri")){
-							JSONfile.locations[m] =  token;
+							JSONfile.locations[k] =  token;
 							k++;
 						}
 
@@ -1176,7 +1209,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							}
 							if(eventInfo.eventComment){ 
 								parameters.contentEl.append($('<h2>Comment</h2>')); 
-								parameters.contentEl.append($('<p>'+eventInfo.eventAbstract+'</p>'));   
+								parameters.contentEl.append($('<p>'+eventInfo.eventComment+'</p>'));   
 							}
 							if(eventInfo.eventHomepage){ 
 								parameters.contentEl.append($('<h2>Homepage</h2>')); 
