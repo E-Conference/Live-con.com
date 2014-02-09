@@ -75,8 +75,7 @@ var EventCollection = {
          mainConfEvent.end = moment(newEnd, "YYYY-MM-DD HH:mmZ").format(); 
 
          bootstrapAlert("success","conference event "+mainConfEvent.title+" have been updated") 
-         mainConfEvent.renderForRefetch(); 
-         alert("updated firstDay")
+         mainConfEvent.renderForRefetch();  
          firstDay = moment(mainConfEvent.start);
          EventCollection.forceMainConfRendering = true;
       }
