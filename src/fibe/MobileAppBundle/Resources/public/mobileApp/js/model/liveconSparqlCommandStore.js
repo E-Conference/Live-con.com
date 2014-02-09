@@ -426,11 +426,10 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    serviceUri : "",
 		    getQuery : function(parameters){	
 			 	var prefix =  'PREFIX swc: <http://data.semanticweb.org/ns/swc/ontology#> PREFIX foaf: <http://xmlns.com/foaf/0.1/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>';
-				var query =   'SELECT DISTINCT ?categoryUri  ?categoryName WHERE  { ' +
+				var query =   'SELECT DISTINCT ?categoryUri  WHERE  { ' +
 								'    <'+parameters.conference.baseUri+'> swc:isSuperEventOf ?eventUri.' + 
 								'    ?eventUri  rdf:type  ?categoryUri.' +
-								'    ?roleUri rdf:type ?roleName.' +
-								'} ORDER BY ASC(?roleName)'; 
+								'} ORDER BY ASC(?categoryUri)'; 
 				var  ajaxData = { query : prefix + query, output : "json" };
 				return ajaxData;
 		    },
@@ -439,7 +438,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				var JSONfile = {};
 				$.each(dataJSON.results.bindings,function(i){  
 					var JSONToken = {};
-					JSONToken.name =  this.categoryName ? this.categoryName.value : "";
+					JSONToken.name =  this.categoryUri ? this.categoryUri.value : "";
 					JSONToken.uri =  this.categoryUri ? this.categoryUri.value : "";
 					JSONfile[i] = JSONToken;
 				});
@@ -452,13 +451,16 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				if(parameters.JSONdata != null){
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
-							ViewAdapterText.appendList(parameters.JSONdata,
-													 {baseHref:'#event-by-category/',
-													  hrefCllbck:function(str){return Encoder.encode(str["uri"])+'/'+Encoder.encode(str["uri"])},
-													  },
-													 "uri",
-													 parameters.contentEl,
-													 {type:"Node",labelCllbck:function(str){return "Categories : "+str["uri"];}});
+
+							for(var i = 0; i < _.size(parameters.JSONdata); i++){ 
+								var eventType = parameters.JSONdata[i];
+								if(eventType.uri != "http://data.semanticweb.org/ns/swc/ontology#ConferenceEvent" ){
+									var categoryName = eventType.uri.split('#')[1];
+									ViewAdapterText.appendButton(parameters.contentEl,'#event-by-category/'+Encoder.encode(categoryName)+'/'+Encoder.encode(eventType.uri),categoryName,{tiny : false});
+								}
+
+							};
+						
 						}
 					}
 				} 
@@ -1083,22 +1085,27 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		getEventByCategory : {
 		    dataType : "JSONP",
 		    method : "GET", 
-		    serviceUri : "schedule_event.jsonp?",
-		    getQuery : function(parameters){	
-		      var ajaxData = { category_id : parameters.uri } ;
-		      return ajaxData; 
+		    serviceUri : "",
+  		    getQuery : function(parameters){	
+			 	var prefix =  'PREFIX swc: <http://data.semanticweb.org/ns/swc/ontology#> PREFIX ical: <http://www.w3.org/2002/12/cal/ical#>  PREFIX foaf: <http://xmlns.com/foaf/0.1/> PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>';
+				var query =   'SELECT DISTINCT ?eventUri ?eventName WHERE  { ' +
+								'    <'+parameters.conference.baseUri+'> swc:isSuperEventOf ?eventUri.' + 
+								'    ?eventUri  rdf:type  <'+parameters.uri+'>.' +
+								'    ?eventUri  ical:summary  ?eventName.' +
+								'} ORDER BY ASC(?eventName)'; 
+				var  ajaxData = { query : prefix + query, output : "json" };
+				return ajaxData;
 		    },
 		    
-		    
-		     ModelCallBack : function(dataJSON,conferenceUri,datasourceUri, currentUri){
+		    ModelCallBack : function(dataJSON,conferenceUri,datasourceUri, currentUri){
 				var JSONfile = {};
-				$.each(dataJSON,function(i){  
+				$.each(dataJSON.results.bindings,function(i){  
 					var JSONToken = {};
-					JSONToken.id = this.id || null;
-					JSONToken.name = this.name || null;
+					JSONToken.eventUri =  this.eventUri ? this.eventUri.value : "";
+					JSONToken.eventName =  this.eventName ? this.eventName.value : "";
 					JSONfile[i] = JSONToken;
 				});
-				console.log(JSONfile);
+					console.log(JSONfile);
 				StorageManager.pushCommandToStorage(currentUri,"getEventByCategory",JSONfile);
 				return JSONfile;
 			},
@@ -1107,13 +1114,14 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				if(parameters.JSONdata != null){
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
-							ViewAdapterText.appendList(parameters.JSONdata,
-													 {baseHref:'#event/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])},
-													  },
-													 "name",
-													 parameters.contentEl,
-													 {type:"Node",labelCllbck:function(str){return "event : "+str["name"];}});
+
+							for(var i = 0; i < _.size(parameters.JSONdata); i++){ 
+								var eventType = parameters.JSONdata[i];
+
+									ViewAdapterText.appendButton(parameters.contentEl,'#event/'+Encoder.encode(eventType.eventName)+'/'+Encoder.encode(eventType.eventUri), eventType.eventName,{tiny : false});
+
+							};
+						
 						}
 					}
 				} 
@@ -1466,7 +1474,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							    '	OPTIONAL {?eventUri rdf:type ?eventType.}' +
 							    '   OPTIONAL {?eventUri  swc:hasLocation ?locationUri. '+ 
 							    '   ?locationUri  rdfs:label ?locationName. }' +
-							    '}';
+							    '}ORDER BY ASC(?eventStart)';
 
 				var  ajaxData = { query : prefix + query, output : "json" };
 		      	return ajaxData; 
@@ -1493,9 +1501,9 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						  currentStartSlot = JSONfile[currentStartSlot];
 						  
 					    //retrieve current End Slot
-						  var currentEndSlot =  event.eventEnd.value;
-						  if(!currentStartSlot[currentEndSlot]) currentStartSlot[currentEndSlot] = {bigEvents:{},events:[]}; 
-						  currentEndSlot = currentStartSlot[currentEndSlot];
+						var currentEndSlot =  event.eventEnd.value;
+						if(!currentStartSlot[currentEndSlot]) currentStartSlot[currentEndSlot] = {bigEvents:{},events:[]}; 
+						currentEndSlot = currentStartSlot[currentEndSlot];
 						  
 						
 						  //retrieve current eventType slot
