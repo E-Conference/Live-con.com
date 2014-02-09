@@ -86,7 +86,7 @@
         configuration.datasources.eventDatasource.uri = "{{ api_uri }}";
         configuration.app.liveconLogo = "{{ asset('img/liveconApp.png') }}";
         configuration.conference.baseUri = "{{ conference_baseUri }}";
-
+         //configuration.conference.baseUri = "http://data.live-con.com/resource/conference/6/6final-test";
         configuration.conference.name = {{ conference.mainConfEvent.summary |json_encode|raw }};
         configuration.conference.acronym = {{ conference.mainConfEvent.acronym |json_encode|raw }};
         configuration.conference.id = {{ conference.id |json_encode|raw }};
@@ -94,7 +94,6 @@
         configuration.conference.logoUri = "{{ asset('uploads/')}}{{conference.logoPath}}";
         configuration.routes.Home.title = {{ conference.mainConfEvent.acronym |json_encode|raw }};
         tpl.uri = "{{ asset('bundles/fibemobileapp/mobileApp/templates/') }}";
-        debugger;
       });
       
       //Entry point

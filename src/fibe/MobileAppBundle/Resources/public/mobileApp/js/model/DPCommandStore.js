@@ -19,14 +19,14 @@
 			},
 											
 			ModelCallBack : function (dataJSON,conferenceUri,datasourceUri, currentUri){
-				var JSONfile = {};
+
 				var JSONToken = {};
 				if(dataJSON.rows.length>0){
 					JSONToken.ressource  = dataJSON.rows[0].value;
 				}
-				JSONfile[0] = JSONToken;
-				//StorageManager.pushCommandToStorage(currentUri,"getDataPaperAuthor",JSONfile);
-				return JSONfile;
+
+				StorageManager.pushCommandToStorage(currentUri,"getDataPaperRessource",JSONToken);
+				return JSONToken;
 			},
 				
 				
@@ -34,8 +34,8 @@
 				if( parameters.JSONdata!= null){
 					var dataPaper = parameters.JSONdata;
 
-					if(dataPaper[0].hasOwnProperty("ressource")){
-						var resourcesList = parameters.JSONdata[0].ressource || null;
+					if(dataPaper.hasOwnProperty("ressource")){
+						var resourcesList = parameters.JSONdata.ressource || null;
 							for(var resource in resourcesList ){
 								if(resourcesList[resource]){
 
@@ -72,20 +72,20 @@
 						return ajaxData;
 			},							
 			ModelCallBack : function (dataJSON,conferenceUri,datasourceUri, currentUri){
-				var JSONfile = {};
+
 				var JSONToken = {};
 				if(dataJSON.rows.length>0){
 					JSONToken.ressource  = dataJSON.rows[0].value;
 				}
-				JSONfile[0] = JSONToken;
-				//StorageManager.pushCommandToStorage(currentUri,"getDataPaperAuthor",JSONfile);
-				return JSONfile;
+
+				StorageManager.pushCommandToStorage(currentUri,"getDataPaperAuthor",JSONToken);
+				return JSONToken;
 			},	
 			ViewCallBack : function(parameters){
 	
 				if( parameters.JSONdata!= null){
 					var dataPaper = parameters.JSONdata;
-					if(dataPaper[0].hasOwnProperty("ressource")){
+					if(dataPaper.hasOwnProperty("ressource")){
 						// if(dataPaper[0].ressource.length>0){
 						// 	if(parameters.mode == "text"){
 						// 		// var out="<table>";
@@ -102,7 +102,7 @@
 						// 		// parameters.contentEl.append('<h2>Contact</h2>');
 						// 		// parameters.contentEl.append(out);	
 						// 	}
-							var resourcesList = parameters.JSONdata[0].ressource || null;
+							var resourcesList = parameters.JSONdata.ressource || null;
 							for(var resource in resourcesList ){
 			
 								if(resourcesList[resource]){
