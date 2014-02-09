@@ -1175,7 +1175,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							j++;
 						} 
 						if(token.hasOwnProperty("locationUri")){
-							JSONfile.locations[m] =  token;
+							JSONfile.locations[k] =  token;
 							k++;
 						}
 
@@ -1209,7 +1209,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							}
 							if(eventInfo.eventComment){ 
 								parameters.contentEl.append($('<h2>Comment</h2>')); 
-								parameters.contentEl.append($('<p>'+eventInfo.eventAbstract+'</p>'));   
+								parameters.contentEl.append($('<p>'+eventInfo.eventComment+'</p>'));   
 							}
 							if(eventInfo.eventHomepage){ 
 								parameters.contentEl.append($('<h2>Homepage</h2>')); 
