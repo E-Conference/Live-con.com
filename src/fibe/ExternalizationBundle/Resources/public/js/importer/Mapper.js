@@ -17,11 +17,26 @@ Mapper = {
         } 
         reader.readAsText(Mapper["file"]);  
 	},
+
     getSerialisedDatas : function(){
         return Mapper["serialisedDatas"];
     },
     setSerialisedDatas : function(datas){
         Mapper["serialisedDatas"] = datas;
+    },
+
+    getImportedLog : function(){
+        return Mapper["importedLog"];
+    },
+    setImportedLog : function(importedLog){
+        Mapper["importedLog"] = importedLog;
+    },
+
+    getNotImportedLog : function(){
+        return Mapper["notImportedLog"];
+    },
+    setNotImportedLog : function(notImportedLog){
+        Mapper["notImportedLog"] = notImportedLog;
     },
 
     defaultNodeReadingConfig : {
@@ -222,8 +237,7 @@ Mapper = {
                  //look if its already registered
                     console.log("getOrCreateMappingObjFromFormat ",format)
                 for(var i in Mapper.mappingConfig['mappings']){
-                    console.log("getOrCreateMappingObjFromFormat ",Mapper.mappingConfig['mappings'][i].format)
-                    alert(Mapper.mappingConfig['mappings'][i].format ==  format)
+                    console.log("getOrCreateMappingObjFromFormat ",Mapper.mappingConfig['mappings'][i].format) 
                     if(Mapper.mappingConfig['mappings'][i].format ==  format){
                         return Mapper.mappingConfig['mappings'][i];
                     }
@@ -369,7 +383,7 @@ Mapper = {
     },
     
     getPanelHtml : function(content,op){
-        if(!op)op={};
+        if(!op)op={};debugger;
         return '<div class="panel '+
                     (op.panelClass || "panel-default")+'"'+
                     (op["model-path"]?' data-model-path="'+op["model-path"]+'"':"")+
@@ -377,12 +391,18 @@ Mapper = {
                     (op.margin===true?' style="margin:15px;"':'')+
                     (op.collapsible===true?' ':'')+
                     '>'+ 
-                  '<!-- Default panel contents -->\
-                  <div class="panel-heading"><h3 class="panel-title">'+
+                  '<!-- Default panel contents -->'+
+                  '<div class="panel-heading" '+
+                  (op.collapsible===true?
+                        (op.collapsed===true?'data-collapsed="true"':'data-collapsed="false"')
+                        +'style="cursor: pointer;" onclick="(!$(this).data(\'collapsed\') ? $(this).find(\'> .panel-title i\').removeClass(\'fa-chevron-down\').addClass(\'fa-chevron-up\').parent().parent().siblings(\'ul\').hide(\'slow\')\
+                                                                  : $(this).find(\'> .panel-title i\').removeClass(\'fa-chevron-up\').addClass(\'fa-chevron-down\').parent().parent().siblings(\'ul\').show(\'slow\'));$(this).data(\'collapsed\',!$(this).data(\'collapsed\'));"> ':'')+
+                  
+                  '<h3 class="panel-title">'+
                         content+
-                        (op.collapsible===true?' <i class="fa '+(op.collapsed===true?'fa-chevron-up':'fa-chevron-down')+'" style="cursor: pointer;" '+(op.collapsed===true?'data-collapsed="true"':'data-collapsed="false"')+'" onclick="!$(this).data(\'collapsed\') ? $(this).removeClass(\'fa-chevron-down\').addClass(\'fa-chevron-up\').parent().parent().siblings(\'ul\').hide(\'slow\') : $(this).removeClass(\'fa-chevron-up\').addClass(\'fa-chevron-down\').parent().parent().siblings(\'ul\').show(\'slow\');$(this).data(\'collapsed\',!$(this).data(\'collapsed\'))"></i> ':'')+
-                    '</h3></div>\
-                  <ul class="'+(op.padding===true?"panel-body ":"")+'list-group" '+(op.collapsed===true?'style="display:none;"':'')+'> ';
+                        (op.collapsible===true?' <i class="fa '+(op.collapsed===true?'fa-chevron-up':'fa-chevron-down')+'"/> ':'')+
+                    '</h3></div>'+
+                  '<ul class="'+(op.padding===true?"panel-body ":"")+'list-group" '+(op.collapsed===true?'style="display:none;"':'')+'> ';
     },
 
     getClosingPanelHtml : function(){

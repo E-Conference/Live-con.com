@@ -76,6 +76,7 @@ var EventCollection = {
 
          bootstrapAlert("success","conference event "+mainConfEvent.title+" have been updated") 
          mainConfEvent.renderForRefetch(); 
+         alert("updated firstDay")
          firstDay = moment(mainConfEvent.start);
          EventCollection.forceMainConfRendering = true;
       }
@@ -113,7 +114,7 @@ var EventCollection = {
               brothersIds = EventCollection.eventsToComputeBroCountRangeIndexes;   
             
             // console.log("----------------------------------------------------");
-            console.log("affected = ",brothersIds); 
+            console.log("affected "+brothersIds.length+" :",brothersIds); 
             // console.log("non affected : ",EventCollection.broCountRange);
             // console.log("----------------------------------------------------");
             
@@ -133,7 +134,7 @@ var EventCollection = {
                 //create rtn object for curBro  
                 baseCount = EventCollection.broCountRange[curBro.id].count;
                 var brosIdsofcurBro = curBro.getNonAllDayBrosId(); 
-                console.debug(curBro.id +" has "+brosIdsofcurBro.length+" non all day bros")
+                // console.debug(curBro.id +" has "+brosIdsofcurBro.length+" non all day bros")
                 for (var j in remainingIds){
                   bro = Events[ remainingIds[j] ];  
                   //ensure the bro is not itself or an all day event

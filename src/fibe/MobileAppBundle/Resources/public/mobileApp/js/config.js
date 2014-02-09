@@ -307,6 +307,10 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						// 	"name" : "getAuthorPersonalPage",
 						// },
 						{
+							"datasource" : "DataPaperDatasource",
+							"name" : "getDataPaperAuthor",
+						},
+						{
 							"datasource" : "eventDatasource",
 							"name" : "getPerson",
 						},
@@ -317,11 +321,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						{
 							"datasource" : "DblpDatasource",
 							"name" : "getAuthorPublications",
-						},
-						{
-							"datasource" : "DataPaperDatasource",
-							"name" : "getDataPaperAuthor",
 						}
+						
 
 					]
 					
