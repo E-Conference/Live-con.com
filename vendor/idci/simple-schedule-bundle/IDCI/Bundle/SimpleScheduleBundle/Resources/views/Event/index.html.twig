@@ -29,8 +29,7 @@
                         <th>Startat</th>
                         <th>Duration</th>
                         <th>Endat</th>
-                        <th>Summary</th>
-                       <!-- <th>Rrule</th> -->
+                        <th>Summary</th> 
                         <th colspan="3">{% trans %}Actions{% endtrans %}</th>
                     </tr>
                 </thead>
@@ -47,12 +46,7 @@
                         <td>{% if entity.startAt %}{{ entity.startAt|date('Y-m-d H:i:s') }}{% endif %}</td>
                         <td>{{ entity.duration }}</td>
                         <td>{% if entity.endAt %}{{ entity.endAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-                        <td>{{ entity.summary }}</td>
-                     <!--   <td>
-                        {% if entity.includedRule %}
-                            {{ entity.includedRule }}
-                        {% endif %}
-                        </td>-->
+                        <td>{{ entity.summary }}</td> 
                         <td>
                             <a class="btn btn-block btn-default" href="{{ path('schedule_confevent_show', { 'id': entity.id }) }}"><i class="fa fa-eye"></i></a>
                         </td>
