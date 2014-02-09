@@ -75,6 +75,7 @@
     $("#generateTheme").click(function(){
         generateTheme();
     })
+  
 
       var initPalette = ["{{ mobile_app_config.TitleColorHeader}}", "{{ mobile_app_config.BGColorNavBar}}", "{{ mobile_app_config.BGColorContent}}", "{{ mobile_app_config.TitleColorContent}}", "{{ mobile_app_config.BGColorNavBar}}", "{{ mobile_app_config.BGColorFooter}}", " {{ mobile_app_config.TitleColorFooter}}", "{{ mobile_app_config.BGColorButton}}"]
        $(".color").spectrum({
@@ -97,18 +98,42 @@
         selectionPalette: initPalette || []
      });
 
-      var image = new Image();
-      image.src = "{{ asset('uploads/')}}{{conference.logoPath}}";
-      var colorThief = new ColorThief();
-      var palette = colorThief.getPalette(image, 6);
-      var paletteTab = [];
+      var imageObjet = new Image();
+      imageObjet.onload = function() {
 
-      $.each(palette, function(i, colorRow){
-          var colorText = colorToHex(colorRow[0], colorRow[1], colorRow[2]);
-          var newColorBox = $("<input class='color form-control' value='"+colorText+"'/>");
-          $("#palette").prepend(newColorBox);
-          paletteTab.push(colorText);
-      })
+     
+          var colorThief = new ColorThief();
+          var palette = colorThief.getPalette(this, 6);
+          var paletteTab = [];
+
+          $.each(palette, function(i, colorRow){
+              var colorText = colorToHex(colorRow[0], colorRow[1], colorRow[2]);
+              var newColorBox = $("<input class='color form-control' value='"+colorText+"'/>");
+              $("#palette").prepend(newColorBox);
+              paletteTab.push(colorText);
+          })
+
+           $(".color").spectrum({
+              flat: false,
+              showInput: true,
+              showInitial: true,
+              showAlpha: false,
+              disabled: false,
+              localStorageKey: "color",
+              showPalette: true,
+              showPaletteOnly: false,
+              showSelectionPalette: true,
+              clickoutFiresChange: false,
+              cancelText: "cancelText",
+              chooseText: "choose",
+              className: "colorpicker",
+              preferredFormat: "hex",
+              maxSelectionSize: 12,
+              palette: [paletteTab],
+              selectionPalette: paletteTab || []
+          });
+      };
+       imageObjet.src = "{{ asset('uploads/')}}{{conference.logoPath}}";
 
 
 
@@ -118,25 +143,7 @@
           return '#' + rgb.toString(16);
       };
 
-      $(".color").spectrum({
-        flat: false,
-        showInput: true,
-        showInitial: true,
-        showAlpha: false,
-        disabled: false,
-        localStorageKey: "color",
-        showPalette: true,
-        showPaletteOnly: false,
-        showSelectionPalette: true,
-        clickoutFiresChange: false,
-        cancelText: "cancelText",
-        chooseText: "choose",
-        className: "colorpicker",
-        preferredFormat: "hex",
-        maxSelectionSize: 12,
-        palette: [paletteTab],
-        selectionPalette: paletteTab || []
-    });
+     
   });
 
   function generateTheme(){
