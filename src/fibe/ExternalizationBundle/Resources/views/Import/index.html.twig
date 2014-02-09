@@ -245,32 +245,13 @@
                                     }
                               });
         }
- 
-        //output list in a bootstrapAlert
-        function getMsgUl(dataArray,endString,panelMode){
-            var msg = "";
-            if(dataArray.conference.setAcronym)msg += dataArray.conference.setAcronym;
-            else if(dataArray.conference.setSummary)msg += dataArray.conference.setSummary;
-            msg += "<ul"+(panelMode?' class="list-group" ':'')+">"; 
-            for (var i in dataArray) 
-                if(dataArray[i] && dataArray[i].length >0)
-                    msg +="<li"+(panelMode?' class="list-group-item" ':'')+">"+dataArray[i].length +" "+i+" "+endString+" !</li>"
-
-            return msg + "</ul>";
-        }
-
-        function extractDatas(mapping,op){
-            if(!op)op={}; 
-            run( Mapper["data"],mapping,op,function(data,importedLog,notImportedLog){
-                    Pager.changePage('#page-result');
-                    Mapper.setSerialisedDatas(data);
-                    bootstrapAlert("success",getMsgUl(Mapper.getSerialisedDatas(),"found"),"conference parsed : ");
-
-                    var html='<div class="row"><div class="col-sm-4"><div class="panel panel-primary">\
+        //output results of import
+        function getHtmlResultDiv(data,importedLog,notImportedLog,endMsg){
+            var html='<div class="row"><div class="col-sm-4"><div class="panel panel-primary">\
                                                   <!-- Default panel contents -->\
-                                                  <div class="panel-heading">Found datas</div>';
+                                                  <div class="panel-heading">'+(data.conference.setSummary?data.conference.setSummary:'Found datas')+'</div>';
 
-                    html+= getMsgUl(Mapper.getSerialisedDatas(),"found",true);
+                    html+= getMsgUl(Mapper.getSerialisedDatas(),endMsg || "found",true);
 
                     html+='</ul></div></div><div class="col-sm-4"><div class="panel panel-info">\
                                                   <!-- Default panel contents -->\
@@ -288,8 +269,31 @@
                         html+= '<li class="list-group-item">'+notImportedLog[i]+"</li>";
                     }
 
-                    html+= '</ul></div></div></div>';
-                    $("#result-extract").html(html);
+                    return html + '</ul></div></div></div>';
+        }
+        // output imported object
+        function getMsgUl(dataArray,endString,panelMode){
+            var msg = "";
+            // if(dataArray.conference.setAcronym)msg += dataArray.conference.setAcronym;
+            // else if(dataArray.conference.setSummary)msg += dataArray.conference.setSummary;
+            msg += "<ul"+(panelMode?' class="list-group" ':'')+">"; 
+            for (var i in dataArray) 
+                if(dataArray[i] && dataArray[i].length >0)
+                    msg +="<li"+(panelMode?' class="list-group-item" ':'')+">"+dataArray[i].length +" "+i+" "+endString+" !</li>"
+
+            return msg + "</ul>";
+        }
+
+        function extractDatas(mapping,op){
+            if(!op)op={}; 
+            run( Mapper["data"],mapping,op,function(data,importedLog,notImportedLog){
+                    Pager.changePage('#page-result');
+                    Mapper.setSerialisedDatas(data);
+                    Mapper.setImportedLog(importedLog);
+                    Mapper.setNotImportedLog(notImportedLog);
+
+                    $("#result-extract").html(getHtmlResultDiv(data,importedLog,notImportedLog,"extracted"));
+                    bootstrapAlert("success",getMsgUl(Mapper.getSerialisedDatas(),"extracted"),"conference parsed : "); 
                 },function(msg)
                 { 
                     bootstrapAlert("warning", msg || "there was an error during extraction of datas","Error :"); 
@@ -405,9 +409,12 @@
                         data: data,
                         success:function(a,b,c)
                         {
-                            Pager.changePage('#page-end'); 
-                            bootstrapAlert("success",getMsgUl(Mapper.getSerialisedDatas(),"found"),"Conference imported : ");
-                            $("#result-import").html(getMsgUl(Mapper.getSerialisedDatas(),"found")); 
+                            Pager.changePage('#page-end');  
+                            
+                            $("#result-import").html(
+                                getHtmlResultDiv(Mapper.getSerialisedDatas(),Mapper.getImportedLog(),Mapper.getNotImportedLog())
+                            );
+                            bootstrapAlert("success",getMsgUl(Mapper.getSerialisedDatas(),"imported"),"Conference imported : "); 
                         },
                         error:function(a,b,c)
                         {

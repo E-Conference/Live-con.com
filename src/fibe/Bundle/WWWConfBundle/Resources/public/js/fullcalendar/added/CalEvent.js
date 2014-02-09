@@ -122,7 +122,7 @@ CalEvent.prototype.persist = function(add){
  *                    * add toppest non allday of the day in the cases that the event itself or its parent is an allDay event 
  */
 CalEvent.prototype.computeCountRange = function(opt){
-        console.log("#ComputeCountRange allBrosInDay "+this.id);
+        // console.log("#ComputeCountRange allBrosInDay "+this.id);
         if(!opt)opt={}
           var bros; 
         if(opt.allBrosInDay || this.allDay){
@@ -132,10 +132,10 @@ CalEvent.prototype.computeCountRange = function(opt){
             start:moment(this.start).startOf('day')
             ,end:moment(this.end).endOf('day')
           }; 
-          console.log("#ComputeCountRange allBrosInDay "+this.id,dayToRender);
+          // console.log("#ComputeCountRange allBrosInDay "+this.id,dayToRender);
           if(Events[this.parent.id] && Events[this.parent.id].allDay){
             bros = this.getNonAllDayBros();
-            console.log("#ComputeCountRange parent is allDay",bros);
+            // console.log("#ComputeCountRange parent is allDay",bros);
             for(var i in bros){
               var bro = bros[i]; 
               if(!bro.isOutOf(dayToRender) || !bro.isOutOf(dayToRender) ){ 
@@ -158,24 +158,21 @@ CalEvent.prototype.computeCountRange = function(opt){
             // var e = Events[id];
             // if(e.allDay){
             //   for(var i in e.children ){
-            //     var childId = e.children[i].id; 
-            //     // alert("added "+childId+" when computeCountRange of "+e.id)
-            //     // alert(Events[e.children[i].id])
+            //     var childId = e.children[i].id;  
             //     addEvent(childId)
-            //   }
-
+            //   } 
             // }else{
               addNonAllDayEvent(id);
             // }
             function addNonAllDayEvent(id){
 
-              if($.inArray(id, EventCollection.eventsToComputeBroCountRangeIndexes) === -1 && !Events[id].allDay) { 
+              if($.inArray(id, EventCollection.eventsToComputeBroCountRangeIndexes) === -1 && !Events[id].allDay && !Events[id].isInstant()) { 
                 EventCollection.eventsToComputeBroCountRangeIndexes.push(id);
                 EventCollection.broCountRange[id] = {count:1,range:0};
-                console.debug("#ComputeCountRange added "+id);
+                // console.debug("#ComputeCountRange added "+id);
               }
               else{ 
-                console.debug("#ComputeCountRange didn't add event "+id);
+                // console.debug("#ComputeCountRange didn't add event "+id);
               }
             }
           } 
@@ -204,13 +201,13 @@ CalEvent.prototype.updateParentDate = function(){
         // //make main conf get a special treatment
         // //to make it fit to its children date
         if(parent.is_mainconfevent){
-          var newStart = parent.start,
-              newEnd   = parent.end;
+          var newStart = moment(parent.start),
+              newEnd   = moment(parent.end);
           if(moment(event.start).startOf("day").isBefore(moment(parent.start).startOf("day"))){
-            newStart = moment(event['start']).format(); 
+            newStart = moment(event['start']) ; 
           }
           if(moment(event.end).startOf("day").isAfter(moment(parent.end).startOf("day"))){
-            newEnd = moment(event['end']).format(); 
+            newEnd = moment(event['end']) ; 
           }
           return EventCollection.updateMainConfEvent(newStart,newEnd);
         }
