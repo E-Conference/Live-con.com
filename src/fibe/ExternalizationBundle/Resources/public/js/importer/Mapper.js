@@ -87,6 +87,9 @@ Mapper = {
                     generateHtml($(child),nodePath+ "/"+getNodeName(child),knownNodes);
 
                 });
+                //TODO : review the to find collections
+                //TODO : review the to find collections
+                //TODO : review the to find collections
                 if(childTags.length==1)addMappingCollection(nodePath,childTags); 
             }else{
                 html+= Mapper.generateNode($node,nodePath); 
@@ -271,6 +274,12 @@ Mapper = {
                         nodeUtils : "children",
                         arg : [label],
                     })
+                }else if(splittedEntityMapping[i].charAt(0) == "@"){
+                    var label = splittedEntityMapping[i] 
+                    format.push({
+                        nodeUtils : "attr",
+                        arg : [label.substring(1)],
+                    })
                 }else {
                     var label = splittedEntityMapping[i]
                     format.push({
@@ -383,7 +392,7 @@ Mapper = {
     },
     
     getPanelHtml : function(content,op){
-        if(!op)op={};debugger;
+        if(!op)op={}; 
         return '<div class="panel '+
                     (op.panelClass || "panel-default")+'"'+
                     (op["model-path"]?' data-model-path="'+op["model-path"]+'"':"")+
