@@ -241,7 +241,7 @@ Mapper = {
                     console.log("getOrCreateMappingObjFromFormat ",format)
                 for(var i in Mapper.mappingConfig['mappings']){
                     console.log("getOrCreateMappingObjFromFormat ",Mapper.mappingConfig['mappings'][i].format) 
-                    if(Mapper.mappingConfig['mappings'][i].format ==  format){
+                    if(isSameFormat(Mapper.mappingConfig['mappings'][i].format,format)){ 
                         return Mapper.mappingConfig['mappings'][i];
                     }
                 }
@@ -317,6 +317,16 @@ Mapper = {
                 }
             }
 
+        }
+
+        function isSameFormat(f1,f2){
+            for(var i in f1){
+                if(f1[i].nodeUtils != f2[i].nodeUtils)return false;
+                for (var j in f1[i].arg){
+                    if(f1[i].arg[j] != f2[i].arg[j])return false;
+                }
+            }
+            return true;
         }
     },
 
