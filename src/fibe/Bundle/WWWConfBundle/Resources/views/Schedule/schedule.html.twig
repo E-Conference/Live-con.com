@@ -456,14 +456,17 @@
                           })
                         }
 
+                        //refetch if changed
                         $modalBody.find("form").each(function(){
                           $(this).submit(function(){
                             rerender();
                           })
                         }) 
+                        //refetch if changed
                         $modalBody.find("a").click(function(){
                             rerender();
                         }) 
+                        // close and refetch event 
                         $modalBody.find("#eventForm, #delete-event-form").each(function(){
                           $(this).submit(function(){
                             rerender();
