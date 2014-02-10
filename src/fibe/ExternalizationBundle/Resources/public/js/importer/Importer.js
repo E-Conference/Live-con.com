@@ -504,8 +504,7 @@ function doFormat(node,format,log){
     } 
     for (var i in format){ 
         var currentFormat = format[i];
-        rtn = NodeUtils[currentFormat.nodeUtils](rtn,currentFormat.arg,log) 
-        console.log(i)
+        rtn = NodeUtils[currentFormat.nodeUtils](rtn,currentFormat.arg,log)  
     }
     return rtn;
 }

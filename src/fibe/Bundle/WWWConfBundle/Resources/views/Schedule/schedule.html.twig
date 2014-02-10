@@ -447,15 +447,30 @@
                       bootstrapAlert("success","Options for event : <b>"+calEvent['title']+"</b> has been well fetched"); 
 
                       $modal.off('shown.bs.modal').on('shown.bs.modal', function () {
-                          // rerender if changed 
+                        $modal.off('hidden.bs.modal');
+
+                          // rerender if changed
+                        var rerender = function(){    
+                          $modal.on('hidden.bs.modal', function () {
+                            setTimeout(function(){EventCollection.refetchEvents(true)},10); 
+                          })
+                        }
+
+                        //refetch if changed
                         $modalBody.find("form").each(function(){
                           $(this).submit(function(){
-                            setTimeout(function(){    
-                              $modal.off('hidden.bs.modal').on('hidden.bs.modal', function () {
-                                EventCollection.refetchEvents(true); 
-                              })
-                              $modal.modal("hide");
-                            },0);
+                            rerender();
+                          })
+                        }) 
+                        //refetch if changed
+                        $modalBody.find("a").click(function(){
+                            rerender();
+                        }) 
+                        // close and refetch event 
+                        $modalBody.find("#eventForm, #delete-event-form").each(function(){
+                          $(this).submit(function(){
+                            rerender();
+                            $modal.modal("hide");
                           })
                         }) 
                       }) 
