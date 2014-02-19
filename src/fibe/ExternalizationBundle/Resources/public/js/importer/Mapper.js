@@ -87,6 +87,9 @@ Mapper = {
                     generateHtml($(child),nodePath+ "/"+getNodeName(child),knownNodes);
 
                 });
+                //TODO : review the to find collections
+                //TODO : review the to find collections
+                //TODO : review the to find collections
                 if(childTags.length==1)addMappingCollection(nodePath,childTags); 
             }else{
                 html+= Mapper.generateNode($node,nodePath); 
@@ -238,7 +241,7 @@ Mapper = {
                     console.log("getOrCreateMappingObjFromFormat ",format)
                 for(var i in Mapper.mappingConfig['mappings']){
                     console.log("getOrCreateMappingObjFromFormat ",Mapper.mappingConfig['mappings'][i].format) 
-                    if(Mapper.mappingConfig['mappings'][i].format ==  format){
+                    if(isSameFormat(Mapper.mappingConfig['mappings'][i].format,format)){ 
                         return Mapper.mappingConfig['mappings'][i];
                     }
                 }
@@ -270,6 +273,12 @@ Mapper = {
                     format.push({
                         nodeUtils : "children",
                         arg : [label],
+                    })
+                }else if(splittedEntityMapping[i].charAt(0) == "@"){
+                    var label = splittedEntityMapping[i] 
+                    format.push({
+                        nodeUtils : "attr",
+                        arg : [label.substring(1)],
                     })
                 }else {
                     var label = splittedEntityMapping[i]
@@ -308,6 +317,16 @@ Mapper = {
                 }
             }
 
+        }
+
+        function isSameFormat(f1,f2){
+            for(var i in f1){
+                if(f1[i].nodeUtils != f2[i].nodeUtils)return false;
+                for (var j in f1[i].arg){
+                    if(f1[i].arg[j] != f2[i].arg[j])return false;
+                }
+            }
+            return true;
         }
     },
 
@@ -383,7 +402,7 @@ Mapper = {
     },
     
     getPanelHtml : function(content,op){
-        if(!op)op={};debugger;
+        if(!op)op={}; 
         return '<div class="panel '+
                     (op.panelClass || "panel-default")+'"'+
                     (op["model-path"]?' data-model-path="'+op["model-path"]+'"':"")+
