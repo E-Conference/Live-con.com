@@ -31,7 +31,7 @@ var CalEvent = function(event){
     this["borderColor"] = ColorLuminance(this["color"] ? this["color"] : "#3a87ad", -0.35); 
 
     //resources
-    if(!this["resource"])this["resource"] =  resConfig[currentRes].parse(event);
+    // if(!this["resource"])this["resource"] =  resConfig[currentRes].parse(event);
     // if(this.location && this.location.id!= ""){
     //   this["resource"].push(this.location.id);
     // }else{
@@ -91,8 +91,8 @@ CalEvent.prototype.persist = function(add){
       parent    : this['parent'],
       end       : this['end'],
       start     : this['start'],
-      resource  : this['resource'],
-      currentRes: currentRes,
+      // resource  : this['resource'],
+      // currentRes: currentRes,
     }  
     $.post(
       add === true ? op.quickAddUrl : op.quickUpdateUrl,
