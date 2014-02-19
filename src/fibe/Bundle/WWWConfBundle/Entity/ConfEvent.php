@@ -79,6 +79,12 @@ class ConfEvent extends Event
      * @ORM\Column(type="string", length=128, nullable=true)
      */
     protected $acronym;
+
+
+     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $attach;
  
 
     /**
@@ -271,6 +277,29 @@ class ConfEvent extends Event
     public function getUrl()
     {
         return $this->url;
+    }
+
+      /**
+     * Set Attach
+     *
+     * @param string $attach
+     * @return ConfEvent
+     */
+    public function setAttach($attach)
+    {
+        $this->attach = $attach;
+    
+        return $this;
+    }
+
+    /**
+     * Get Attach
+     *
+     * @return string 
+     */
+    public function getAttach()
+    {
+        return $this->attach;
     }
    
     /**
