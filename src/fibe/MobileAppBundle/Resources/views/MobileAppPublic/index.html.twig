@@ -37,6 +37,13 @@
                   'jquery',
               ]
           },
+          'twttr' :{
+            exports : 'widget',
+            init: function () {
+             
+                return this.twttr;
+            }
+           },
           'underscore': {
             exports: '_'
           }
@@ -45,6 +52,7 @@
               jquery: 'lib/jquery',
               backbone: 'lib/backbone',
               underscore : 'lib/underscore-min',
+              twttr :'lib/widget',
               'socialite': 'lib/socialite.min',
               'jqueryMobile.config' : 'lib/jquerymobile.config',
               'jsw' : 'reasoner/jsw',
@@ -85,8 +93,8 @@
  
         configuration.datasources.eventDatasource.uri = "{{ api_uri }}";
         configuration.app.liveconLogo = "{{ asset('img/liveconApp.png') }}";
-        configuration.conference.baseUri = "{{ conference_baseUri }}";
-         //configuration.conference.baseUri = "http://data.live-con.com/resource/conference/6/6final-test";
+       // configuration.conference.baseUri = "{{ conference_baseUri }}";
+         configuration.conference.baseUri = "http://data.live-con.com/resource/conference/1/1iswc3013";
         configuration.conference.name = {{ conference.mainConfEvent.summary |json_encode|raw }};
         configuration.conference.acronym = {{ conference.mainConfEvent.acronym |json_encode|raw }};
         configuration.conference.id = {{ conference.id |json_encode|raw }};
@@ -275,6 +283,7 @@
         }
 
     </style>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
   </head>
   <body>
     

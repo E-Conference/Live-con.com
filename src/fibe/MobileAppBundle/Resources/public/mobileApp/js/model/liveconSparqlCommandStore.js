@@ -1142,13 +1142,15 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							    'PREFIX swrc: <http://swrc.ontoware.org/ontology#>                  ' +
 							    'PREFIX foaf: <http://xmlns.com/foaf/0.1/>            		        ' ;
 							
-			    var query  =	'SELECT DISTINCT  ?eventSummary ?eventStart ?eventEnd ?eventDesc ?eventComent ?eventUrl ?eventContact ?locationUri ?locationName ?subEventSummary ?subEventUri ?roleUri ?subEventUri ?personUri ?personName WHERE  {  ' +
-							    ' { <'+parameters.uri+'>  ical:summary ?eventSummary. ' +
-							    '	OPTIONAL {<'+parameters.uri+'>  ical:dtstart ?eventStart.}' +
+
+			    var query  =	'SELECT DISTINCT  ?eventSummary ?eventStart ?eventEnd ?eventDesc ?eventComent ?eventUrl ?eventContact ?locationUri ?locationName ?subEventSummary ?subEventUri ?roleUri ?subEventUri ?personUri ?personName ?eventTwitterWidgetUrl ?eventTwitterWidgetToken WHERE  {  ' +
+							    '{ OPTIONAL {<'+parameters.uri+'>  ical:dtstart ?eventStart.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:dtend ?eventEnd.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:description ?eventDesc.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:comment ?eventComent.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:url ?eventUrl.}' +
+							    '	OPTIONAL {<'+parameters.uri+'>  ical:resources ?eventTwitterWidgetUrl.}' +
+								'	OPTIONAL {<'+parameters.uri+'>  ical:attach ?eventTwitterWidgetToken.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:contact ?eventContact.}' +
 							    ' } UNION {	<'+parameters.uri+'>  swc:hasLocation ?locationUri. '+ 
 							    '   ?locationUri  rdfs:label ?locationName. ' +
@@ -1167,6 +1169,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					var JSONToken = {};
 					JSONfile.eventLabel = results[0].eventSummary ? results[0].eventSummary.value : null;
 					JSONfile.eventDescription =   results[0].eventDesc ? results[0].eventDesc.value : null;
+					JSONfile.eventTwitterWidgetUrl =   results[0].eventTwitterWidgetUrl ? results[0].eventTwitterWidgetUrl.value : null;
+					JSONfile.eventTwitterWidgetToken =   results[0].eventTwitterWidgetToken ? results[0].eventTwitterWidgetToken.value : null;
 					JSONfile.eventComment =   results[0].eventComent ? results[0].eventComent.value : null;
 					JSONfile.eventHomepage =  results[0].eventUrl ? results[0].eventUrl.value : null;
 					JSONfile.eventStart = results[0].eventStart ? results[0].eventStart.value : null;
@@ -1234,25 +1238,6 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							if(eventInfo.eventEnd && eventInfo.eventStart){
 								parameters.contentEl.append($('<h2>Duration : <span class="inline">'+ moment(eventInfo.eventStart).from(moment(eventInfo.eventEnd),true)+'</span></h2>'));  
 							}
-							
-						
-						
-
-							// if(eventInfo.eventThemes && eventInfo.eventThemes.length>0){
-							// 	parameters.contentEl.append('<h2>Themes</h2>'); 
-							// 	$.each(eventInfo.eventThemes, function(i,theme){
-							// 		ViewAdapterText.appendButton(parameters.contentEl,'#topic/'+Encoder.encode(theme.name)+"/"+Encoder.encode(theme.id),theme.name,{tiny : 'true'});
-							// 	});
-							// }
-
-							// if(_.size(parameters.JSONdata.authors) > 0 ){
-							// 	parameters.contentEl.append($('<h2>Authors</h2>'));
-							// 	for(var i = 0; i < parameters.JSONdata.authors.length; i++){ 
-							// 		var author = parameters.JSONdata.authors[i];
-							// 		ViewAdapterText.appendButton(parameters.contentEl,'#person/'+Encoder.encode(author.authorName.value)+'/'+Encoder.encode(author.authorUri.value), author.authorName.value,{tiny : true});
-							// 	};
-							// }
-
 						
 						
 							if(_.size(parameters.JSONdata.locations) > 0 ){
@@ -1263,8 +1248,11 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								};
 							}
 
+	
+							if(eventInfo.eventTwitterWidgetToken){
+								ViewAdapterText.appendTwitterTimeline(parameters.contentEl,eventInfo.eventTwitterWidgetToken, {});	
+							} 
 
-						
 						}
 					}
 				}
@@ -1286,12 +1274,14 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							    'PREFIX swrc: <http://swrc.ontoware.org/ontology#>                  ' +
 							    'PREFIX foaf: <http://xmlns.com/foaf/0.1/>            		        ' ;
 							
-			    var query  =	'SELECT DISTINCT  ?eventSummary ?eventStart ?eventEnd ?eventDesc ?eventComent ?eventUrl ?eventContact ?locationUri ?locationName ?subEventSummary ?subEventUri ?roleUri ?roleName ?personUri ?personName WHERE  {  ' +
+			    var query  =	'SELECT DISTINCT  ?eventSummary ?eventStart ?eventEnd ?eventDesc ?eventComent  ?eventTwitterWidgetUrl ?eventTwitterWidgetToken ?eventUrl ?eventContact ?locationUri ?locationName ?subEventSummary ?subEventUri ?roleUri ?roleName ?personUri ?personName WHERE  {  ' +
 							    ' { <'+parameters.uri+'>  ical:summary ?eventSummary. ' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:dtstart ?eventStart.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:dtend ?eventEnd.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:description ?eventDesc.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:comment ?eventComent.}' +
+							     '	OPTIONAL {<'+parameters.uri+'>  ical:resources ?eventTwitterWidgetUrl.}' +
+								'	OPTIONAL {<'+parameters.uri+'>  ical:attach ?eventTwitterWidgetToken.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:url ?eventUrl.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:contact ?eventContact.}' +
 							    ' } UNION {	<'+parameters.uri+'>  swc:hasLocation ?locationUri. '+ 
@@ -1320,6 +1310,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					JSONfile.eventHomepage =  results[0].eventUrl ? results[0].eventUrl.value : null;
 					JSONfile.eventStart = results[0].eventStart ? results[0].eventStart.value : null;
 					JSONfile.eventEnd = results[0].eventEnd ? results[0].eventEnd.value : null;
+					JSONfile.eventTwitterWidgetUrl =  results[0].eventTwitterWidgetUrl ? results[0].eventTwitterWidgetUrl.value : null;
+					JSONfile.eventTwitterWidgetToken = results[0].eventTwitterWidgetToken ? results[0].eventTwitterWidgetToken.value : null;
 
 					JSONfile.roles = [];
 					JSONfile.subEvents = [];
@@ -1439,6 +1431,10 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 									var subEvent = parameters.JSONdata.subEvents[i];
 									ViewAdapterText.appendButton(parameters.contentEl,'#event/'+Encoder.encode(subEvent.subEventSummary.value)+"/"+Encoder.encode(subEvent.subEventUri.value),subEvent.subEventSummary.value,{tiny : 'true'});
 								};
+							}
+
+							if(eventInfo.eventTwitterWidgetToken){ 
+								ViewAdapterText.appendTwitterTimeline(parameters.contentEl,eventInfo.eventTwitterWidgetToken, {});	   
 							}
 						}
 					}
