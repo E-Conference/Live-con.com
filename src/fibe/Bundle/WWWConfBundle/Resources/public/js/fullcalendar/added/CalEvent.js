@@ -14,12 +14,11 @@ var CalEvent = function(event){
                                 event.is_allday ? 
                                         event.is_allday ==="true" : 
                                         event.allDay ==="true" ;
-    this["is_mainconfevent"]     = (event.is_mainconfevent === true || event.is_mainconfevent === false) ?  
+    this["is_mainconfevent"]     = (event.is_mainconfevent === true || event.is_mainconfevent === false) ?
                                 event.is_mainconfevent : 
                                 event.is_mainconfevent ==="true" ;
     if(this["is_mainconfevent"]){
       mainConfEvent = this;
-      this["editable"] = false
     }
     this["parent"]     = event.parent;
     this["children"]   = event.children;
@@ -108,7 +107,7 @@ CalEvent.prototype.persist = function(add){
       'json'
     ).fail(function(a,b,c) { 
         bootstrapAlert("warning","Could not have been able to update the event.",c+" : "); 
-    });;
+    });
     bootstrapAlert("info","update request sent ","Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
 };
 
