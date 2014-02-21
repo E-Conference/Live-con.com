@@ -1214,6 +1214,10 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							if(eventInfo.eventLabel){ 
 								$("[data-role = page]").find("#DataConf").html(eventInfo.eventLabel);
 							}
+
+							if(eventInfo.eventStart &&  eventInfo.eventEnd) {
+								parameters.contentEl.append($('<p style="text-align:center">From '+moment(eventInfo.eventStart).format('MMMM Do YYYY, h:mm:ss a')+' to '+moment(eventInfo.eventEnd).format('MMMM Do YYYY, h:mm:ss a')+'</p>'));
+							}
 							
 							if(eventInfo.eventDescription){ 
 								parameters.contentEl.append($('<h2>Description</h2>')); 
@@ -1228,23 +1232,16 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								parameters.contentEl.append($('<a href="'+eventInfo.eventHomepage+'">'+eventInfo.eventHomepage+'</p>'));   
 							}
 
-							if(eventInfo.eventStart){ 
-								parameters.contentEl.append($('<h2>Starts at :  <span class="inline">'+moment(eventInfo.eventStart).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));
-								isDefined = true;
-							}
-							if(eventInfo.eventEnd){
-								parameters.contentEl.append($('<h2>Ends at : <span class="inline">'+moment(eventInfo.eventEnd).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));  
-							} 
-							if(eventInfo.eventEnd && eventInfo.eventStart){
-								parameters.contentEl.append($('<h2>Duration : <span class="inline">'+ moment(eventInfo.eventStart).from(moment(eventInfo.eventEnd),true)+'</span></h2>'));  
-							}
+							// if( && eventInfo.eventStart){
+							// 	parameters.contentEl.append($('<h2>Duration : <span class="inline">'+ moment(eventInfo.eventStart).from(moment(eventInfo.eventEnd),true)+'</span></h2>'));  
+							// }
 						
 						
 							if(_.size(parameters.JSONdata.locations) > 0 ){
 								parameters.contentEl.append($('<h2>Location</h2>'));
 								for(var i = 0; i < parameters.JSONdata.locations.length; i++){ 
 									var location = parameters.JSONdata.locations[i];
-									ViewAdapterText.appendButton(parameters.contentEl,'#schedule/'+Encoder.encode(location.locationName.value)+'/'+Encoder.encode(location.locationUri.value),location.locationName.value, {tiny : true});
+									parameters.contentEl.append($('<p>'+location.locationName.value+'</p>')); 
 								};
 							}
 

@@ -116,7 +116,9 @@ class WwwConf
 
      /**
      * @var UploadedFile
-     * @Assert\File(maxSize="6000000")
+     * @Assert\File(maxSize="2M",
+     * mimeTypes = {"image/jpeg", "image/png", "image/gif", "image/jpg"},
+     * mimeTypesMessage = "The file must be an image")
      */
     private $logo;
 

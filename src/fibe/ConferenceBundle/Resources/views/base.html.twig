@@ -120,7 +120,7 @@
                           
                           <li class="schedule_conference_edit"><a href="{{ path('schedule_conference_edit') }}">Overview</a></li>
                           {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
-                          <li class="schedule_conference_settings"><a href="{{ path('schedule_conference_settings') }}">Modules</a></li>
+                          <li class="schedule_conference_settings"><a href="{{ path('schedule_conference_settings') }}">Modules managment</a></li>
                           {% endif %}
                           {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')== 1 %}
                           <li class="conference_team_list"><a href="{{ path('conference_team_list') }}">Team</a></li>
