@@ -75,8 +75,6 @@ CalEvent.prototype.removeForRefetch = function(){
       }
       delete calendar_events_indexes[this.id] ;
     }
-    // console.log(calendar_events);
-    // console.log(calendar_events_indexes); 
 };
 
 

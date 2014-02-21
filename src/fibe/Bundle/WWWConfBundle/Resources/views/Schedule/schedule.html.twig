@@ -957,6 +957,7 @@
           event.formatDate();
           // remove event from calendar 
           event.removeForRefetch();
+              $calendar.fullCalendar('removeEvents',event.id);  
           // $calendar.fullCalendar('removeEvents',event.id); 
           event.persist();
 
