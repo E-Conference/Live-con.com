@@ -134,7 +134,7 @@ class WwwConf
      private $mainConfEvent; 
 
       /**
-     * @ORM\Column(type="string", length=128, nullable=true)
+     * @ORM\Column(type="string", length=256, nullable=true)
      */
     protected $slug;
 

@@ -115,6 +115,30 @@ class MobileAppConfig
      * @ORM\Column(type="boolean", name="IsPublished", nullable=true)
      */
     protected $IsPublished;
+
+
+
+    /**
+     *  
+     * @ORM\Column(type="boolean",options={"default" = 1})
+     *
+     */
+    private $dblpDatasource;
+
+    /**
+     *  
+     * @ORM\Column(type="boolean",options={"default" = 1})
+     *
+     */
+    private $googleDatasource;
+
+     /**
+     *  
+     * @ORM\Column(type="boolean",options={"default" = 1})
+     *
+     */
+    private $duckduckgoDatasource;
+
         
 
 
@@ -128,6 +152,81 @@ class MobileAppConfig
     {
         return $this->id;
     }
+
+    /**
+     * Set dblpDatasource
+     *
+     * @param boolean $dblpDatasource
+     * @return MobileAppConfig
+     */
+    public function setDblpDatasource($dblpDatasource)
+    {
+        $this->dblpDatasource = $dblpDatasource;
+    
+        return $this;
+    }
+
+    /**
+     * Get dblpDatasource
+     *
+     * @return boolean 
+     */
+    public function getDblpDatasource()
+    {
+        return $this->dblpDatasource;
+    }
+
+
+     /**
+     * Set googleDatasource
+     *
+     * @param boolean $googleDatasource
+     * @return MobileAppConfig
+     */
+    public function setGoogleDatasource($googleDatasource)
+    {
+        $this->googleDatasource = $googleDatasource;
+    
+        return $this;
+    }
+
+    /**
+     * Get googleDatasource
+     *
+     * @return boolean 
+     */
+    public function getGoogleDatasource()
+    {
+        return $this->googleDatasource;
+    }
+
+
+      /**
+     * Set duckduckgoDatasource
+     *
+     * @param boolean $duckduckgoDatasource
+     * @return MobileAppConfig
+     */
+    public function setDuckduckgoDatasource($duckduckgoDatasource)
+    {
+        $this->duckduckgoDatasource = $duckduckgoDatasource;
+    
+        return $this;
+    }
+
+    /**
+     * Get duckduckgoDatasource
+     *
+     * @return boolean 
+     */
+    public function getDuckduckgoDatasource()
+    {
+        return $this->duckduckgoDatasource;
+    }
+
+
+
+
 
     /**
      * Set BGColorContent

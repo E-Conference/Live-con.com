@@ -1564,14 +1564,16 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		                          	if(parameters.name && parameters.name!="null" && parameters.name!=""){
 		                              	LocationHtml = '<p>'+parameters.name+'</p>';
 		                            }else{
-			                             // LocationHtml = '<p>'+bigEvents[eventType][i].locationLabel+'</p>';
+			                            if(bigEvents[eventType][i].locationLabel){ 
+
 			                              LocationHtml += '<p><a href="#schedule/'+Encoder.encode(bigEvents[eventType][i].locationLabel)+'" data-role="button" data-icon="search" data-inline="true">'+bigEvents[eventType][i].locationLabel+'</a></p>';
+		                           		}
 		                            }
 
 		                            var newLi = $('<li data-inset="true" ></li>');
 		                            var newEventlink = $('<a href="#event/'+Encoder.encode(bigEvents[eventType][i].eventLabel)+'/'+Encoder.encode(bigEvents[eventType][i].eventUri)+'">');
 		                            var newLabel = $('<h3>'+bigEvents[eventType][i].eventLabel+'</h3>');
-		                            var newCategory = $('<p>'+bigEvents[eventType][i].eventType+'</p>');
+		                            var newCategory = $('<p>'+bigEvents[eventType][i].eventType.split("#")[1]+'</p>');
 		                            var newLast = $('<p>last : <strong>'+lasts+'</strong></p>');
 
 		                            newEventlink.append(newLabel);
@@ -1694,34 +1696,121 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 
 	    /** Command used to get and display the name, the start and end time and location of a given event  **/ 
 	    getEventIcs : {
-		    dataType : "text",
-		    method : "GET",
-		    serviceUri : "schedule_event.ics?", 
-		    getQuery : function(parameters){	
-		    
-			   var conferenceUri = parameters.conferenceUri;
-		      var ajaxData = { conference_id : parameters.conference.id, id : parameters.uri} ; 
-		      return ajaxData; 
+		   	dataType : "JSONP", 
+			method : "GET",
+			serviceUri : "",  
+		     getQuery : function(parameters){	
+		    	  
+			    var prefix =	'PREFIX swc: <http://data.semanticweb.org/ns/swc/ontology#>         ' +
+							    'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>               ' +
+							    'PREFIX dc: <http://purl.org/dc/elements/1.1/>                      ' +
+							    'PREFIX ical: <http://www.w3.org/2002/12/cal/ical#> 				' +
+							    'PREFIX swrc: <http://swrc.ontoware.org/ontology#>                  ' +
+							    'PREFIX foaf: <http://xmlns.com/foaf/0.1/>            		        ' ;
+							
+			    var query  =	'SELECT DISTINCT  ?eventSummary ?eventStart ?eventEnd ?eventDesc ?eventComent  ?eventUrl ?eventContact ?locationUri ?locationName ?subEventSummary ?subEventUri ?roleUri ?roleName ?personUri ?personName WHERE  {  ' +
+							    ' { <'+parameters.uri+'>  ical:summary ?eventSummary. ' +
+							    '	OPTIONAL {<'+parameters.uri+'>  ical:dtstart ?eventStart.}' +
+							    '	OPTIONAL {<'+parameters.uri+'>  ical:dtend ?eventEnd.}' +
+							    '	OPTIONAL {<'+parameters.uri+'>  ical:description ?eventDesc.}' +
+							    '	OPTIONAL {<'+parameters.uri+'>  ical:comment ?eventComent.}' +
+							    '	OPTIONAL {<'+parameters.uri+'>  ical:url ?eventUrl.}' +
+							    '	OPTIONAL {<'+parameters.uri+'>  ical:contact ?eventContact.}' +
+							    ' } UNION {	<'+parameters.uri+'>  swc:hasLocation ?locationUri. '+ 
+							    '   ?locationUri  rdfs:label ?locationName. }' +
+							    '}';
+				var  ajaxData = { query : prefix + query, output : "json" };
+		      	return ajaxData; 
 			      
 		    },
 		    
-		    ModelCallBack : function(dataXML,conferenceUri,datasourceUri, currentUri){
-			 	var JSONfile = {"ics": dataXML}; 
-		   
-				//StorageManager.pushCommandToStorage(currentUri,"getEvent",JSONfile);
+		    ModelCallBack : function(dataJSON,conferenceUri,datasourceUri, currentUri){
+			 	var JSONfile = {}; 
+			 	var results = dataJSON.results.bindings;
+			    if(_.size(results) > 0 ){
+				
+					JSONfile.eventLabel = results[0].eventSummary ? results[0].eventSummary.value : null;
+					JSONfile.eventDescription =   results[0].eventDesc ? results[0].eventDesc.value : null;
+					JSONfile.eventAbstract =   results[0].eventComent ? results[0].eventComent.value : null;
+					JSONfile.eventHomepage =  results[0].eventUrl ? results[0].eventUrl.value : null;
+					JSONfile.eventStart = results[0].eventStart ? results[0].eventStart.value : null;
+					JSONfile.eventEnd = results[0].eventEnd ? results[0].eventEnd.value : null;
+					JSONfile.eventLocationName = "";
+					j = 0;
+
+					$.each(results, function(i, token) {
+						if(token.hasOwnProperty("locationUri")){
+							JSONfile.locations +=  token.locationName.value;
+							n++;
+						}
+					});
+				}
+
+				StorageManager.pushCommandToStorage(currentUri,"getEventIcs",JSONfile);
 				return JSONfile;
 				
 			}, 
 
 			ViewCallBack : function(parameters){
-				var JSONdata = parameters.JSONdata;
+								var JSONdata = parameters.JSONdata;
+				var conferenceUri = parameters.conferenceUri;
 
-				var icsButton = $('<button data-role="button" data-inline="true"><i class="fa fa-download"></i>  Add to calendar</button>');
-				icsButton.click(function(){
-					var blob = new Blob([JSONdata.ics], {type: "text/calendar;charset=utf-8"});
-					saveAs(blob, "icsEvent.ics");
-				});
-				$("#bonusPanel").append(icsButton);
+				if(parameters.JSONdata != null){
+					
+					var eventInfo = parameters.JSONdata;
+						
+					if(_.size(eventInfo) > 0 ){
+						if(parameters.mode == "text"){
+							var eventLabel  = eventInfo.eventLabel;				
+							var eventHomepage  = eventInfo.eventHomepage;
+							var eventDescription  = eventInfo.eventDescription;
+							var eventAbstract  = eventInfo.eventAbstract;							
+							var locationName  = eventInfo.eventLocationName;	
+							var eventStart  = eventInfo.eventStart;	
+							var eventEnd  = eventInfo.eventEnd;
+							var eventStartICS  = moment(eventInfo.eventStart,"YYY-MM-DD HH:mm:ss").format("YYYYMMDDTHHmmss");	
+							var eventEndICS  = moment(eventInfo.eventEnd ,"YYY-MM-DD HH:mm:ss").format("YYYYMMDDTHHmmss");	
+
+							var icsEvent="BEGIN:VCALENDAR\n"+
+									"VERSION:2.0\n"+
+									'PRODID: //'+parameters.conferenceUri+'//ES//EN\n'+
+									"BEGIN:VTIMEZONE\n"+
+									"TZID:Europe/Paris\n"+
+									"BEGIN:DAYLIGHT\n"+
+									"TZOFFSETFROM:+0100\n"+
+									"RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\n"+
+									"DTSTART:19810329T020000\n"+
+									"TZNAME:GMT+02:00\n"+
+									"TZOFFSETTO:+0200\n"+
+									"END:DAYLIGHT\n"+
+									"BEGIN:STANDARD\n"+
+									"TZOFFSETFROM:+0200\n"+
+									"RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU\n"+
+									"DTSTART:19961027T030000\n"+
+									"TZNAME:GMT+01:00\n"+
+									"TZOFFSETTO:+0100\n"+
+									"END:STANDARD\n"+
+									"END:VTIMEZONE\n"+
+									"BEGIN:VEVENT\n"+
+									"CATEGORIES:"+eventLabel+"\n"+
+									"DTSTART;TZID=Europe/Paris:"+eventStartICS+"\n"+
+									"DTEND;TZID=Europe/Paris:"+eventEndICS+"\n"+
+									"SUMMARY:"+eventLabel+"\n"+
+									"DESCRIPTION:"+eventAbstract+"\n"+
+									"LOCATION:"+locationName+"\n"+
+									"END:VEVENT\n"+
+									"END:VCALENDAR";
+							var JSONdata = parameters.JSONdata;
+
+							var icsButton = $('<button data-role="button" data-inline="true"><i class="fa fa-download"></i>  Add to calendar</button>');
+							icsButton.click(function(){
+								var blob = new Blob([icsEvent], {type: "text/calendar;charset=utf-8"});
+								saveAs(blob, "icsEvent.ics");
+							});
+							$("#bonusPanel").append(icsButton);
+						}
+					}
+				}	
 				
 			}
 	    },

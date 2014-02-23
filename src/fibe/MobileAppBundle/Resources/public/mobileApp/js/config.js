@@ -35,39 +35,35 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 			// crossDomainMode : "CORS" or "JSONP" explicits the cross domain technique to be used on the service 
 			// commands : Name of the json var that implements all the commands that can be used on the service
 			"datasources" : {
-				"SemanticWebConferenceDatasource" : {
-					"uri" : "http://poster.www2012.org/endpoint/eswc2013/sparql/",
-					"crossDomainMode" : "CORS",
-					"commands" : SWDFCommandStore
-				},
+
 				
 				"DblpDatasource" : {
+					"activated" : true,
 					"uri" : "http://dblp.rkbexplorer.com/sparql/",
 					"crossDomainMode" : "CORS",
 					"commands" : DBLPCommandStore
 				},
 
 				"DuckDuckGoDatasource" : {   
+					"activated" : true,
 					"uri" : "http://api.duckduckgo.com/",
 					"crossDomainMode" : "JSONP",
 					"commands" : DDGoCommandStore
 				},
 				
-				"GoogleDataSource" : {   
+				"GoogleDataSource" : {  
+					"activated" : true, 
 					"uri" : "https://ajax.googleapis.com/ajax/services/search/web",
 					"crossDomainMode" : "JSONP",
 					"commands" : GoogleCommandStore
 				},
 				"eventDatasource" : {
+					"activated" : true,
 					"uri" : "http://dataconf.liris.cnrs.fr/simpleschedule-blend/web/api/",
 					"crossDomainMode" : "JSONP",
 					"commands" : liveconSparqlCommandStore
-				},
-				"DataPaperDatasource" : {
-					"uri" : "http://dataconf.liris.cnrs.fr:5984/datapaper/_design/public/_view/by_type",
-					"crossDomainMode" : "JSONP",
-					"commands" : DPCommandStore
 				}
+				
 			}, 
 			//Declaration of all the routes to be used by the router
 			// hash : url to be catched by the router
@@ -217,11 +213,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						{
 							"datasource" : "eventDatasource",
 							"name" : "getPublication",
-						},
-						{
-							"datasource" : "DataPaperDatasource",
-							"name" : "getDataPaperRessource",
 						}
+						
 					]
 				},
 				"EventSearch" : {
@@ -302,13 +295,9 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"graphView" : "no",
 					"title": "Person",
 					"commands" : [
-						// {
-						// 	"datasource" : "GoogleDataSource",
-						// 	"name" : "getAuthorPersonalPage",
-						// },
 						{
-							"datasource" : "DataPaperDatasource",
-							"name" : "getDataPaperAuthor",
+							"datasource" : "GoogleDataSource",
+							"name" : "getAuthorPersonalPage",
 						},
 						{
 							"datasource" : "eventDatasource",

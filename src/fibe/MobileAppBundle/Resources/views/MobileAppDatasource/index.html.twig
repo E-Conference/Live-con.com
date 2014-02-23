@@ -1,0 +1,33 @@
+{% extends 'fibeMobileAppBundle::base.html.twig' %}
+
+{% block title %}Mobile App' theme{% endblock title %}
+
+{% block stylesheets_page %}
+<link rel="stylesheet" type="text/css" href="{{ asset('css/spectrum/spectrum.css')}}" />  
+{% endblock stylesheets_page %}
+
+ {% block centerPanel %}
+
+     <div class="row page-top-header ">
+            <div class="page-title col-xs-2  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <span>Datasources</span>
+            </div>
+
+            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+            </div>
+        </div>
+        <div class="row page-content">
+            <div class="row">
+               <div class="row-fluid">
+                   {% include "fibeMobileAppBundle:MobileAppDatasource:edit.html.twig" %}
+                </div>
+            </div>
+        </div>
+  {% endblock centerPanel %}
+{% block javascripts_page %}
+
+{% endblock%}
+
+
+
+

@@ -79,6 +79,7 @@
              configuration.datasources.eventDatasource.commands = liveconApiCommandStore;
         }
 
+        //Modules configuration
         var modules = []
         {% if paper_module == true %}
           modules.push("publications");
@@ -87,6 +88,16 @@
           modules.push("organizations");
         {% endif %}
        
+        //Chosen datasource configuration
+         {% if mobile_app_config.dblpDatasource == false %}
+            configuration.datasources.DblpDatasource.activated = false;
+         {% endif %}
+         {% if mobile_app_config.googleDatasource == false %}
+            configuration.datasources.GoogleDataSource.activated = false;
+         {% endif %}
+         {% if mobile_app_config.duckduckgoDatasource == false %}
+            configuration.datasources.DuckDuckGoDatasource.activated = false;
+         {% endif %}
 
         tpl.modules = modules;
 
@@ -94,7 +105,7 @@
         configuration.datasources.eventDatasource.uri = "{{ api_uri }}";
         configuration.app.liveconLogo = "{{ asset('img/liveconApp.png') }}";
        // configuration.conference.baseUri = "{{ conference_baseUri }}";
-         configuration.conference.baseUri = "http://data.live-con.com/resource/conference/1/1iswc3013";
+        configuration.conference.baseUri = "http://data.live-con.com/resource/conference/1/1iswc3013";
         configuration.conference.name = {{ conference.mainConfEvent.summary |json_encode|raw }};
         configuration.conference.acronym = {{ conference.mainConfEvent.acronym |json_encode|raw }};
         configuration.conference.id = {{ conference.id |json_encode|raw }};
@@ -270,7 +281,7 @@
             border-right: none;
             background: rgba(0,0,0,.5);
             margin: -1px 0;
-            color: {{ mobile_app_config.BGColorNavBar}};
+            color: rgb(250, 252, 253);
         }
 
         #bonusPanel {
@@ -279,7 +290,7 @@
             border-right: none;
             background: rgba(0,0,0,.5);
             margin: -1px 0;
-            color: {{ mobile_app_config.BGColorNavBar}};
+            color:  rgb(250, 252, 253);
         }
 
     </style>

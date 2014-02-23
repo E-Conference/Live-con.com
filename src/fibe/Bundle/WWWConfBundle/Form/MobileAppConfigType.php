@@ -61,7 +61,34 @@ class MobileAppConfigType extends AbstractType
                                     'required'  => true,
                                     'label'     => 'Footer titles',
                                     'attr'  => array('class'   => 'color form-control TitleColorFooter')
-            ))    
+            ))
+           ->add('googleDatasource', 'checkbox', array(
+                                    'required'  => false,
+                                    'label'     => 'activated :',
+                                     'attr'      => array('class' => 'switch switch-small',
+                                          'data-on-label' => "<i class='fa fa-check fa-white'>",
+                                          'data-off-label' => "<i class='fa fa-ban'>",
+                                      
+                                                                        ),
+            ))
+            ->add('duckduckgoDatasource', 'checkbox', array(
+                                    'required'  => false,
+                                    'label'     => 'activated :',
+                                    'attr'      => array('class' => 'switch switch-small',
+                                          'data-on-label' => "<i class='fa fa-check fa-white'>",
+                                          'data-off-label' => "<i class='fa fa-ban'>",
+                                      
+                                                                        ),
+            ))   
+           ->add('dblpDatasource', 'checkbox', array(
+                                    'required'  => false,
+                                    'label'     => 'activated :',
+                                    'attr'      => array('class' => 'switch switch-small',
+                                          'data-on-label' => "<i class='fa fa-check fa-white'>",
+                                          'data-off-label' => "<i class='fa fa-ban'>",
+                                      
+                                                                        )
+            ))     
               
               
               
