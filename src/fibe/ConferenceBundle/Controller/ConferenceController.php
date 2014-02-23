@@ -69,6 +69,7 @@ class ConferenceController extends Controller
                   $em = $this->getDoctrine()->getManager();
                   $wwwConf->slugify();
                   $em->persist($wwwConf);
+                  $wwwConf->uploadLogo();
                   $em->flush();
 
                   $this->container->get('session')->getFlashBag()->add(
