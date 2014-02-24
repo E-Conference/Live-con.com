@@ -376,6 +376,7 @@ class DBImportController extends Controller
                                     $val->setType($chairRoleType);
                                     $val->setPerson($personEntities[$chair]);
                                     $val->setEvent($entity);
+                                    $val->setConference($this->getUser()->getCurrentConf());
                                     $entity->addRole($val);
  
                             }  
@@ -387,6 +388,7 @@ class DBImportController extends Controller
                                     $val->setType($presenterRoleType);
                                     $val->setPerson($personEntities[$presenter]);
                                     $val->setEvent($entity);
+                                    $val->setConference($this->getUser()->getCurrentConf());
                                     $entity->addRole($val);
                             }   
                         }else {

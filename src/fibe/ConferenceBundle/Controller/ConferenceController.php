@@ -205,6 +205,9 @@ class ConferenceController extends Controller
             $defaultAppConfig->setBGColorfooter("#305c6b");
             $defaultAppConfig->setTitleColorFooter("#f3f6f6");
             $defaultAppConfig->setIsPublished(true);
+            $defaultAppConfig->setDblpDatasource(true);
+            $defaultAppConfig->setGoogleDatasource(true);
+            $defaultAppConfig->setDuckduckgoDatasource(true);
            
             $em->persist($defaultAppConfig);
 
