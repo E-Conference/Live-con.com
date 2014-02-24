@@ -88,9 +88,14 @@ class MobileAppConfigType extends AbstractType
                                           'data-off-label' => "<i class='fa fa-ban'>",
                                       
                                                                         )
-            ))     
+            ))    
+             ->add('lang', 'text', array(
+                                    'required'  => true,
+                                    'label'     => 'Language (FR / EN)',
+                                    'attr'  => array('class'   => 'color form-control')
+            )) 
               
-              
+            
               
         ;
     }

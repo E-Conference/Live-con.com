@@ -140,7 +140,12 @@ class MobileAppConfig
     private $duckduckgoDatasource;
 
         
-
+     /**
+     * Lang
+     *
+     * @ORM\Column(type="string", nullable=false, options={"default"= "EN"})
+     */
+    protected $lang;
 
 
   /**
@@ -482,6 +487,30 @@ class MobileAppConfig
     public function getTitleColorButton()
     {
         return $this->TitleColorButton;
+    }
+
+    /**
+     * Set lang
+     *
+     * @param string $lang
+     * @return MobileAppConfig
+     */
+    public function setLang($lang)
+    {
+        if($lang == "EN" || $lang == "FR")
+        $this->lang = $lang;
+    
+        return $this;
+    }
+
+     /**
+     * Get lang
+     *
+     * @return string 
+     */
+    public function getLang()
+    {
+        return $this->lang;
     }
 
     

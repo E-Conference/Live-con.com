@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-    <title>ESWC'2013 - DataConf</title>
+    <title>{{ conference.mainConfEvent.summary |json_encode|raw  }}</title>
     <link rel="shortcut icon" type="image/x-icon" href="http://liris.cnrs.fr/dataconf/images/Logo_DataConf_ico.png">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -61,6 +61,7 @@
               'encoder': 'lib/encoder',
               'blob': 'lib/blob',
               'fileSaver' : 'lib/FileSaver',
+              'labels' : 'i18n/labels',
               'jqueryMobile' : 'lib/jquery.mobile-1.4.0-rc.1.min',
               'jStorage' : 'lib/jstorage.min',
               'moment' : 'lib/moment.min',
@@ -113,6 +114,7 @@
         configuration.conference.logoUri = "{{ asset('uploads/')}}{{conference.logoPath}}";
         configuration.routes.Home.title = {{ conference.mainConfEvent.acronym |json_encode|raw }};
         tpl.uri = "{{ asset('bundles/fibemobileapp/mobileApp/templates/') }}";
+        configuration.conference.lang = {{ mobile_app_config.lang |json_encode|raw }} || 'EN';
       });
       
       //Entry point
@@ -182,7 +184,7 @@
           width : 0px;
         }
 
-        #DataConf{
+        #header-title{
           text-align :center;
         }
 
