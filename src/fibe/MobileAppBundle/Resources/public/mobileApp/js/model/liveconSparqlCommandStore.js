@@ -1659,7 +1659,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							}
 						}
 					});
-					//StorageManager.pushCommandToStorage(currentUri,"getWhatsNext",JSONfile);
+					StorageManager.pushCommandToStorage(currentUri,"getWhatsNext",JSONfile);
 					return JSONfile;
 				}
 				return null;
