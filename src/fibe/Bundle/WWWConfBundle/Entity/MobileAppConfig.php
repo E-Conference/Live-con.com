@@ -120,21 +120,21 @@ class MobileAppConfig
 
     /**
      *  
-     * @ORM\Column(type="boolean",options={"default" = 1})
+     * @ORM\Column(type="boolean",nullable=false,options={"default" = true})
      *
      */
     private $dblpDatasource;
 
     /**
      *  
-     * @ORM\Column(type="boolean",options={"default" = 1})
+     * @ORM\Column(type="boolean",nullable=false,options={"default" = true})
      *
      */
     private $googleDatasource;
 
      /**
      *  
-     * @ORM\Column(type="boolean",options={"default" = 1})
+     * @ORM\Column(type="boolean",nullable=false, options={"default"= true})
      *
      */
     private $duckduckgoDatasource;

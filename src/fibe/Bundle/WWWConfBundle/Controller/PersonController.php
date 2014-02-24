@@ -284,7 +284,7 @@ class PersonController extends Controller
 
             foreach($paperToAdd as $paper) { 
                 $paper->addAuthor($entity);
-                //$entity->addMember($person);
+                $entity->addMember($person);
                 $em->persist($paper);
             }
 
