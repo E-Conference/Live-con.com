@@ -16,6 +16,7 @@ use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
  *
  * @ORM\Entity
  * @ORM\Table(name="conference") 
+ * @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\WwwConfRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class WwwConf

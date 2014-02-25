@@ -1,0 +1,22 @@
+{% block centerPanel %}
+   
+    <div class="row page-content">          
+     
+          {% for conference  in entities  %}
+            <div class="col-lg-3">
+              <div class="panel panel-livecon">
+              
+                  <div class="panel-heading">  
+                         <h4> {{conference.getConfName()}}</h4>
+                  </div>
+                  <div class="panel-body">
+                           <img src="{{ asset('uploads/')}}{{conference.logoPath}}" style="height:80px;width:auto;display: block;max-width: 100%;" class="img-rounded show_dataconf" data-url="{{ path('mobileAppPublic_index', {slug: conference.slug} ) }}"/>                         
+                  </div>
+                </div>
+            </div>
+            {% endfor  %}
+            
+     
+    </div>
+
+{% endblock%}
