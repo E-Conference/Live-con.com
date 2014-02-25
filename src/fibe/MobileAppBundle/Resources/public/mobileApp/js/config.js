@@ -247,7 +247,7 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"hash" : "publications",
 					"view" : "publications",
 					"graphView" : "no",
-					"title": "allublication",
+					"title": "allPublication",
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
