@@ -96,6 +96,8 @@ define([],function() {
 				'TrackEvent' : "Tracks",
 				'TalkEvent' : "Talks",
 				'PanelEvent' : "Panels",
+				'MealEvent' : "Meal",
+				'SocialEvent' : "Social event",
 				'WorkshopEvent' : "Workshops",
 				'BreakEvent' : "Breaks"
 			},
@@ -244,14 +246,15 @@ define([],function() {
 			},
 
 			'category' : {
-
-				'SessionEvent' : "Session",
-				'ConferenceEvent' : "Conference",
-				'TrackEvent' : "Track",
-				'TalkEvent' : "Talk",
-				'PanelEvent' : "Table ronde",
-				'WorkshopEvent' : "Workshop",
-				'BreakEvent' : "Break"
+				'SessionEvent' : "Sessions",
+				'ConferenceEvent' : "Conferences",
+				'TrackEvent' : "Tracks",
+				'TalkEvent' : "Talks",
+				'PanelEvent' : "Panels",
+				'MealEvent' : "Meal",
+				'SocialEvent' : "Social event",
+				'WorkshopEvent' : "Workshops",
+				'BreakEvent' : "Breaks"
 			},
 
 			'search' : {
