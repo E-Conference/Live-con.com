@@ -278,6 +278,7 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 					]
 				},
+				
 				"Persons" : {
 					"hash" : "persons",
 					"view" : "persons",
