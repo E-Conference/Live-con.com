@@ -57,6 +57,7 @@ define([],function() {
 			'event' : {
 				
 				'startAt' : 'Starts at',
+				'startAtLe' : 'Starts at',
 				'endAt' : 'Ends at',
 				'subEvent' : 'Sub events',
 				'duration' : 'Duration',
@@ -147,6 +148,10 @@ define([],function() {
 				'searchPublication' : 'Search a publication',
 				'searchEvent' :'Search an event'
 
+			},
+
+			'specialButtons' : {
+				'addToCal' : 'Add to my cal'
 			}
 
 			
@@ -204,9 +209,9 @@ define([],function() {
 
 			},
 			'event' : {
-				'allEvent' : 'Evènements', 
 				'startAt' : 'Débute à',
-				'endAt' : 'Fini à',
+				'startAtLe' : 'Débute le',
+				'endAt' : 'Fini le',
 				'subEvent' : 'Sous évènements',
 				'duration' : 'Durée',
 				'location' : 'Salle',
@@ -295,7 +300,10 @@ define([],function() {
 				'searchOrganization' : 'Rechercher une organisation',
 				'searchPublication' : 'Rechercher une publication',
 				'searchEvent' :'Filtrer les évènements'
+			},
 
+			'specialButtons' : {
+				'addToCal' : 'Ajouter à mon calendrier'
 			}
 
 

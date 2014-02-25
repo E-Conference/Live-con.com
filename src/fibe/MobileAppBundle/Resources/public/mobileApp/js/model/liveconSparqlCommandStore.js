@@ -1220,7 +1220,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							}
 
 							if(eventInfo.eventStart &&  eventInfo.eventEnd) {
-								parameters.contentEl.append($('<p style="text-align:center">'+labels[parameters.conference.lang].event.from +' '+ moment(eventInfo.eventStart).format('MMMM Do YYYY, h:mm:ss a')+' '+labels[parameters.conference.lang].event.to +' '+moment(eventInfo.eventEnd).format('MMMM Do YYYY, h:mm:ss a')+'</p>'));
+								parameters.contentEl.append($('<p style="text-align:center">'+labels[parameters.conference.lang].event.from +' '+ moment(eventInfo.eventStart).format('LLLL')+' '+labels[parameters.conference.lang].event.to +' '+moment(eventInfo.eventEnd).format('LLLL')+'</p>'));
 							}
 							
 							if(eventInfo.eventDescription){ 
@@ -1372,11 +1372,11 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							}
 
 							if(eventInfo.eventStart){ 
-								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.startAt +' : <span class="inline">'+moment(eventInfo.eventStart).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.startAtLe +' : <span class="inline">'+moment(eventInfo.eventStart).format('LLLL')+'</span></h2>'));
 								isDefined = true;
 							}
 							if(eventInfo.eventEnd){
-								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.endAt +' : <span class="inline">'+moment(eventInfo.eventEnd).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));  
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.endAt +' : <span class="inline">'+moment(eventInfo.eventEnd).format('LLLL')+'</span></h2>'));  
 							}
 
 							if(eventInfo.eventEnd && eventInfo.eventStart){
@@ -1547,7 +1547,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					      
 					      //if the day has changed
 					      if(currentDay != moment(startAt).format('MMMM Do YYYY')){
-					          currentCollabsible = $('<div data-role="collapsible" data-theme="d" ><h2>'+moment(startAt).format('MMMM Do YYYY')+'</h2></div>');
+					          currentCollabsible = $('<div data-role="collapsible" data-theme="d" ><h2>'+moment(startAt).format('LL')+'</h2></div>');
 					          currentUl = $('<ul data-role="listview" data-inset="true" ></ul>');
 					          //content.append(currentUl);
 					          content.append(currentCollabsible); 
@@ -1557,9 +1557,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					      
 					      var startTime = moment(startAt).format('h:mm a');
 					      
-	              currentUl.append("<li data-role='list-divider' >\
-	                                    starts at "+startTime+"\
-	                                </li>");
+	            	 currentUl.append("<li data-role='list-divider' >"+labels[parameters.conference.lang].event.startAt+" "+startTime+"</li>");
 	                                
 				        for (var endAt in parameters.JSONdata[startAt]) {
 				         
@@ -1816,12 +1814,12 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 									"END:VCALENDAR";
 							var JSONdata = parameters.JSONdata;
 
-							var icsButton = $('<button data-role="button" data-inline="true"><i class="fa fa-download"></i>  Add to calendar</button>');
+							var icsButton = $('<button data-role="button" data-inline="true" data-mini="true"><i class="fa fa-download"></i>  '+labels[parameters.conference.lang].specialButtons.addToCal+'</button>');
 							icsButton.click(function(){
 								var blob = new Blob([icsEvent], {type: "text/calendar;charset=utf-8"});
 								saveAs(blob, "icsEvent.ics");
 							});
-							$("#bonusPanel").append(icsButton);
+							parameters.contentEl.prepend(icsButton);
 						}
 					}
 				}	

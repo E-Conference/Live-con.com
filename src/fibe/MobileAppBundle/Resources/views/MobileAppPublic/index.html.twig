@@ -72,7 +72,7 @@
       });
       
       //Configurations
-      require(['config', 'tpl', 'model/swcEventCommandStore', 'model/liveconSparqlCommandStore'], function(configuration, tpl, liveconApiCommandStore, liveconSparqlCommandStore){
+      require(['config', 'tpl', 'model/swcEventCommandStore', 'model/liveconSparqlCommandStore','moment'], function(configuration, tpl, liveconApiCommandStore, liveconSparqlCommandStore, moment){
 
         if("{{ api_type}}" == "sparql"){
              configuration.datasources.eventDatasource.commands = liveconSparqlCommandStore;
@@ -114,7 +114,13 @@
         configuration.conference.logoUri = "{{ asset('uploads/')}}{{conference.logoPath}}";
         configuration.routes.Home.title = {{ conference.mainConfEvent.acronym |json_encode|raw }};
         tpl.uri = "{{ asset('bundles/fibemobileapp/mobileApp/templates/') }}";
+        
+        //Language configuration
+        moment.lang({{ mobile_app_config.lang |json_encode|raw }});
         configuration.conference.lang = {{ mobile_app_config.lang |json_encode|raw }} || 'EN';
+
+
+
       });
       
       //Entry point
