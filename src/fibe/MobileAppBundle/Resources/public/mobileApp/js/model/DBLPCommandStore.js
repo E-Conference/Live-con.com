@@ -9,7 +9,7 @@
 *   Version: 1.2
 *   Tags:  JSON, SPARQL, AJAX
 **/
-define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterText', 'localStorage/localStorageManager' ], function($, _, Encoder, ViewAdapter, ViewAdapterText, StorageManager){
+define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterText', 'localStorage/localStorageManager','labels' ], function($, _, Encoder, ViewAdapter, ViewAdapterText, StorageManager, labels){
 	var DBLPCommandStore = {
 	 
 		getAuthorPublications : {
@@ -47,7 +47,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				if(parameters.JSONdata != null){
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
-							parameters.contentEl.append('<h2>Other Publications</h2>');
+							parameters.contentEl.append('<h2>'+labels[parameters.conference.lang].person.otherPublications+'</h2>');
 							ViewAdapterText.appendList(parameters.JSONdata,
 														 {baseHref:'#externPublication/',
 														  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])},}, 
@@ -94,7 +94,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				if(parameters.JSONdata != null){
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
-							parameters.contentEl.append('<h2>Authors</h2>');
+							parameters.contentEl.append('<h2>'+labels[parameters.conference.lang].otherPublication.authors+'</h2>');
 							$.each(parameters.JSONdata, function(i,auhtor){
 								ViewAdapterText.appendButton(parameters.contentEl,'#person/'+Encoder.encode(auhtor.authorName)+'/'+Encoder.encode(auhtor.authorUri),auhtor.authorName,{tiny : true});
 							});
@@ -156,23 +156,23 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							
 						
 							if(title != ""){  
-								parameters.contentEl.append('<h2>Title</h2>');
+								parameters.contentEl.append('<h2>'+labels[parameters.conference.lang].otherPublication.title+'</h2>');
 								parameters.contentEl.append('<p>'+title+'</p>'); 
 							} 
 							if(resume != ""){  
-								parameters.contentEl.append('<h2>Reference</h2>');
+								parameters.contentEl.append('<h2>'+labels[parameters.conference.lang].otherPublication.reference+'</h2>');
 								parameters.contentEl.append('<p>'+resume+'</p>'); 
 							} 
 							if(link != ""){ 
-								parameters.contentEl.append('<h2>Link</h2>');
+								parameters.contentEl.append('<h2>'+labels[parameters.conference.lang].otherPublication.link+'</h2>');
 								parameters.contentEl.append('<a href="'+link+'">'+link+'</p>');
 							}
 							if(year != ""){ 
-								parameters.contentEl.append('<h2>Year</h2>');
+								parameters.contentEl.append('<h2>'+labels[parameters.conference.lang].otherPublication.year+'</h2>');
 								parameters.contentEl.append('<p>'+year+'</p>'); 
 							}
 							if(publisher !=""){ 
-								parameters.contentEl.append('<h2>Publisher</h2>');
+								parameters.contentEl.append('<h2>'+labels[parameters.conference.lang].otherPublication.publisher+'</h2>');
 								parameters.contentEl.append('<p>'+publisher+'</p>'); 
 							}
 						}

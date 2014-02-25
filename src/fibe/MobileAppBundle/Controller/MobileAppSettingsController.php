@@ -15,14 +15,14 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Mobile app controller.
  *
- * @Route("app/datasources")
+ * @Route("app/settings")
  */
-class MobileAppDatasourceController extends Controller
+class MobileAppSettingsController extends Controller
 {
 
 
 	/**
-     * @Route("/",name="mobileAppDatasource_index")
+     * @Route("/",name="mobileAppSettings_index")
      * @Template()
      */
     public function indexAction()
@@ -35,7 +35,7 @@ class MobileAppDatasourceController extends Controller
         $mobile_app_config =$user->getCurrentConf()->getAppConfig();
         $mobile_app_form = $this->createForm(new MobileAppConfigType(), $mobile_app_config);
 
-		return $this->render('fibeMobileAppBundle:MobileAppDatasource:index.html.twig', array(
+		return $this->render('fibeMobileAppBundle:MobileAppSettings:index.html.twig', array(
             'mobile_app_form' => $mobile_app_form->createView(),
 		    'mobile_app_config' => $mobile_app_config,
             'authorized' => $authorization->getFlagApp()
@@ -45,7 +45,7 @@ class MobileAppDatasourceController extends Controller
 
 
 	 /**
-     * @Route("/{id}/update/datasource",name="mobileAppTheme_update_datasource")
+     * @Route("/{id}/update/setting",name="mobileAppTheme_update_settings")
      * @Template()
      */
     public function updateAction(Request $request, $id)
@@ -73,7 +73,7 @@ class MobileAppDatasourceController extends Controller
             $em->flush();
         }
         
-        return $this->redirect($this->generateUrl('mobileAppDatasource_index'));
+        return $this->redirect($this->generateUrl('mobileAppSettings_index'));
     }
 
 
