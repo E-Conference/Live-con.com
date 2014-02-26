@@ -30,7 +30,7 @@ define([],function() {
 			},
 			'person' : {
 				'website' : 'Website',
-				
+				'description' : 'Description',
 				'organizations' : 'Organizations',
 				'publications' :'Conference publication(s)',
 				'otherPublications' :'Other publication(s)'
@@ -190,6 +190,7 @@ define([],function() {
 			},
 			'person' : {
 				'website' : 'Site web',
+				'description' : 'Description',
 				'organizations' : 'Organisations',
 				'publications' :'Publication(s) de la conférence',
 				'otherPublications' :'Autre publication(s)'
