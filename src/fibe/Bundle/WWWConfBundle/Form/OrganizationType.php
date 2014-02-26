@@ -20,7 +20,7 @@ class OrganizationType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('page')
+             ->add('page', 'text', array('required' => false, 'label' => 'Homepage'))
             ->add('country')
             ->add('members', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Person',

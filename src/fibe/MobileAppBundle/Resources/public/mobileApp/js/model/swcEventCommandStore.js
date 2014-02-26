@@ -404,7 +404,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
 							if(parameters.JSONdata.image){
-								parameters.contentEl.append($('<img src="'+parameters.JSONdata.image+'"/>'));    
+								parameters.contentEl.prepend($('<div style="min-height:50px; width:20%"><img style="width:100%;height:auto;" src="'+parameters.JSONdata.image+'"/></div>'));     
 							}
 							if(parameters.JSONdata.name){
 								$("[data-role = page]").find("#header-title").html(parameters.JSONdata.name);

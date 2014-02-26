@@ -19,7 +19,7 @@ class PaperType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('abstract', 'text', array( 'required' => true))
+            ->add('abstract', 'textarea', array( 'required' => true))
             ->add('publishDate')
             ->add('url')
             ->add('topics', 'entity', array(

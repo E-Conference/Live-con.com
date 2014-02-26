@@ -255,7 +255,7 @@ class PaperController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('schedule_paper', array('id' => $id)));
+            return $this->redirect($this->generateUrl('schedule_paper_show', array('id' => $id)));
         }
 
         return $this->render('fibeWWWConfBundle:Paper:edit.html.twig', array(
