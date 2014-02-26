@@ -1,6 +1,10 @@
 Model = {
 	
 
+	initialize : function(mapper){
+		Model.mapper = mapper;
+	},
+
 	"entities" : {
 		"Conference" : { 
 			attributes : {
@@ -35,7 +39,7 @@ Model = {
 				}}
 			} 
 		}, 
-		"Events" : { 
+		"Event" : { 
             array   :"events",
 			attributes : {
 				required : {
@@ -160,15 +164,7 @@ Model = {
 					"members" : {
 						setter : "setMembers",
 					}, 
-					"subjects" : {
-						setter : "setSubjects",
-					}, 
-					"topics" : {
-						setter : "setTopics",
-					}, 
-					"events" : {
-						setter : "setEvents",
-				}} 
+				} 
 			}
 	  	},
 
@@ -213,7 +209,7 @@ Model = {
 			}
 					 
 		}, 
-		"Keyword" : {
+		"Topic" : {
             array : "topics", 
 			attributes : {
 				required : {
@@ -231,7 +227,7 @@ Model = {
 
 		for(var i in Model.entities){
   			var entity = Model.entities[i];
-        	html += Mapper.getPanelHtml(i,{panelClass:"panel-danger",margin:true,"model-path":entity.array || i});
+        	html += Mapper.getPanelHtml(i,{panelClass:"panel-danger",margin:true,"model-path":entity.array || i, collapsible:true,collapsed:true});
 
        		$.each(entity.attributes.required, function(aIndex, attribute){ 
 	       		var newAttr = Model.generateAttributeNode(aIndex, {required:true,"model-path":entity.array+"/"+aIndex});
@@ -277,8 +273,8 @@ Model = {
 			},
 			drop: function( event, ui ) {  
 		        // $(this).removeClass("list-group-item-success")
-		        Mapper.dataLinks[$(this).data("model-path")] = {nodePath : ui.draggable.data("node-path")};
-		        console.log(Mapper.dataLinks);  
+		        Model.mapper.dataLinks[$(this).data("model-path")] = {nodePath : ui.draggable.data("node-path")};
+		        console.log(Model.mapper.dataLinks);  
 			}
 		});
 

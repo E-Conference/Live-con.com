@@ -39,16 +39,15 @@
 
  {%  block javascripts_page %} 
 
-        <script src="{{ asset('bundles/fibewwwconf/js/importer/xls/jszip.js') }}" type="text/javascript" ></script>
-        <script src="{{ asset('bundles/fibewwwconf/js/importer/xls/xlsx.js') }}" type="text/javascript" ></script>
-          <script src="{{ asset('bundles/fibewwwconf/js/importer/xls/xlsxworker.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeexternalization/js/importer/xls/jszip.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeexternalization/js/importer/xls/xlsx.js') }}" type="text/javascript" ></script>
+
 
 <script>
 
  $(document).ready(function(){
 	function xlsxworker(data, cb) {
-		debugger;
-	        var worker = new Worker("{{ asset('bundles/fibewwwconf/js/importer/xls/xlsxworker.js') }}");
+	        var worker = new Worker("{{ asset('bundles/fibeexternalization/js/importer/xls/xlsxworker.js') }}");
 	        worker.onmessage = function(e) {
 	                switch(e.data.t) {
 	                        case 'ready': break;

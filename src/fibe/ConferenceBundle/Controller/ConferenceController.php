@@ -208,6 +208,7 @@ class ConferenceController extends Controller
             $defaultAppConfig->setDblpDatasource(true);
             $defaultAppConfig->setGoogleDatasource(true);
             $defaultAppConfig->setDuckduckgoDatasource(true);
+            $defaultAppConfig->setLang("EN");
            
             $em->persist($defaultAppConfig);
 
