@@ -313,3 +313,23 @@ background: #315F73;
 }
 
 
+	/*-------------------------------------------------------------------------------------
+--------------------------------------Datas Bundle Conferences-----------------------------------------
+-------------------------------------------------------------------------------------*/
+.panel-livecon-dashboard{
+	border-color:#397087
+	}
+
+.panel-livecon-dashboard>.panel-heading{
+	color:#fff;
+	background-color:#397087;
+	border-color:#397087
+	}
+
+.panel-livecon-dashboard>.panel-heading+.panel-collapse 
+.panel-body{border-top-color:#397087}
+.panel-livecon-dashboard>.panel-footer+.panel-collapse 
+.panel-body{border-bottom-color:#397087}
+
+
+
