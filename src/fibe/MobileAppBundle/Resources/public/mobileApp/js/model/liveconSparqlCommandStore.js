@@ -1580,10 +1580,11 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		                           		}
 		                            }
 
+		                            var labelCategory = labels[parameters.conference.lang].category[bigEvents[eventType][i].eventType.split("#")[1]] || "";
 		                            var newLi = $('<li data-inset="true" ></li>');
 		                            var newEventlink = $('<a href="#event/'+Encoder.encode(bigEvents[eventType][i].eventLabel)+'/'+Encoder.encode(bigEvents[eventType][i].eventUri)+'">');
 		                            var newLabel = $('<h3>'+bigEvents[eventType][i].eventLabel+'</h3>');
-		                            var newCategory = $('<p>'+labels[parameters.conference.lang].category[bigEvents[eventType][i].eventType.split("#")[1]]+'</p>');
+		                            var newCategory = $('<p>'+labelCategory+'</p>');
 		                            var newLast = $('<p>'+labels[parameters.conference.lang].event.last+' : <strong>'+lasts+'</strong></p>');
 
 		                            newEventlink.append(newLabel);

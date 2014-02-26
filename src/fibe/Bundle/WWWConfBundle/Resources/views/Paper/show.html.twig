@@ -45,7 +45,7 @@
                     </tr>
                     <tr>
                         <th>Abstract</th>
-                        <td>{{ entity.abstract }}</td>
+                        <td><textarea  style="width:100%; height:50px;" disabled="true">{{ entity.abstract }}</textarea></td>
                     </tr>
                     <tr>
                         <th>Publish Date</th>
@@ -60,7 +60,7 @@
                         <td>{{ entity.url}}</td>
                     </tr>
                     <tr>
-                        <th>Subjects</th>
+                        <th>Topics</th>
                         <td> 
                              {% for topic in entity.topics %}
                                 <li>{{ topic.name }}</li>

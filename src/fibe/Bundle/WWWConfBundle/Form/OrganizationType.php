@@ -24,7 +24,7 @@ class OrganizationType extends AbstractType
             ->add('country')
             ->add('members', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Person',
-                'label'   => 'Person',
+                'label'   => 'Members',
                 'multiple' => true,
                 'choices'=> $this->user->getCurrentConf()->getPersons()->toArray(),
                 'required' => false

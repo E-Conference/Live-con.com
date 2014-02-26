@@ -59,6 +59,7 @@ define([],function() {
 				'startAt' : 'Starts at',
 				'startAtLe' : 'Starts at',
 				'endAt' : 'Ends at',
+				'endAtLe' : 'Ends at',
 				'subEvent' : 'Sub events',
 				'duration' : 'Duration',
 				'location' : 'Location',
@@ -91,15 +92,16 @@ define([],function() {
 
 			'category' : {
 				
-				'SessionEvent' : "Sessions",
-				'ConferenceEvent' : "Conferences",
-				'TrackEvent' : "Tracks",
-				'TalkEvent' : "Talks",
-				'PanelEvent' : "Panels",
+				'SessionEvent' : "Session",
+				'ConferenceEvent' : "Conference",
+				'TrackEvent' : "Track",
+				'TalkEvent' : "Talk",
+				'PanelEvent' : "Panel",
 				'MealEvent' : "Meal",
 				'SocialEvent' : "Social event",
-				'WorkshopEvent' : "Workshops",
-				'BreakEvent' : "Breaks"
+				'WorkshopEvent' : "Workshop",
+				'KeynoteEvent' : "Keynote",
+				'BreakEvent' : "Break"
 			},
 
 			'search' : {
@@ -214,7 +216,8 @@ define([],function() {
 			'event' : {
 				'startAt' : 'Débute à',
 				'startAtLe' : 'Débute le',
-				'endAt' : 'Fini le',
+				'endAt' : 'Fini à',
+				'endAtLe' : 'Fini le',
 				'subEvent' : 'Sous évènements',
 				'duration' : 'Durée',
 				'location' : 'Salle',
@@ -246,15 +249,16 @@ define([],function() {
 			},
 
 			'category' : {
-				'SessionEvent' : "Sessions",
-				'ConferenceEvent' : "Conferences",
-				'TrackEvent' : "Tracks",
-				'TalkEvent' : "Talks",
-				'PanelEvent' : "Panels",
+				'SessionEvent' : "Session",
+				'ConferenceEvent' : "Conference",
+				'TrackEvent' : "Track",
+				'TalkEvent' : "Talk",
+				'PanelEvent' : "Panel",
 				'MealEvent' : "Meal",
 				'SocialEvent' : "Social event",
-				'WorkshopEvent' : "Workshops",
-				'BreakEvent' : "Breaks"
+				'WorkshopEvent' : "Workshop",
+				'KeynoteEvent' : "Keynote",
+				'BreakEvent' : "Break"
 			},
 
 			'search' : {
