@@ -112,19 +112,33 @@ body{
 	border-bottom:none;
 }
 
+.breadcrum>li {
+	padding:1px;
+	
+}
+
 
 .breadcrum > li > a{
 	background-color:#999;
 	color :  #f2f2f2; 
+	-o-text-overflow: ellipsis; /* pour Opera 9 */
+  	text-overflow: ellipsis; /* pour le reste du monde */
+	overflow : hidden;
+	text-align:center;
 }
 
 .breadcrum > li > a:hover{
 	background-color:#999;
- 
+
 }
 
-.breadcrum > li .active {
+.breadcrum  li.active {
 	background-color : #eeeeee;
+	margin-bottom: -4px;
+	border-bottom: 4px solid #eeeeee;
+	border-left: solid 2px #19313b;
+	border-top: solid 2px #19313b;
+	border-right: solid 2px #19313b;
 }
 
 

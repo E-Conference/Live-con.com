@@ -11,9 +11,8 @@
 
 
       <button class="btn btn-default btn-lg dropdown-toggle btn-conf" type="button" data-toggle="dropdown">
-         {{ app.user.getCurrentConf().getConfName() }}
+         {{ app.user.getCurrentConf().getConfName() }} 
       </button>
-     
 
       
   </div> 
@@ -34,7 +33,7 @@
           </a>
           <ul class="dropdown-menu">
             
-           <li> 
+            <li> 
               <a style="padding-right:5px;"   href="{{ path('schedule_conference_edit') }}"  >
                 <i class="fa  fa-search-plus fa-3x"></i> Overview
               </a>
@@ -50,7 +49,7 @@
               {% endif %}
              {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
                  <a href="{{ path('externalization_import_index') }}">
-                   <i class="fa fa-exchange fa-3x"></i> Import/export
+                   <i class="fa fa-exchange fa-3x"></i> Import
                  </a>
               {% endif %}
 
@@ -67,33 +66,40 @@
             
             <li> 
 
-                <a style="padding-right:5px;"   href="{{ path('schedule_confevent') }}"  >
+               <a style="padding-right:5px;"   href="{{ path('schedule_confevent') }}"  >
                 <i class="fa fa-calendar-o fa-3x"></i> Events
                </a>
 
+          
                <a style="padding-right:5px;"   href="{{ path('schedule_person_index') }}"  >
                 <i class="fa fa-user fa-3x"></i> Persons
                </a>
               
                 {% if app.user.getCurrentConf().getModule().getPaperModule()== true %}
                 <a style="padding-right:5px;"   href="{{ path('schedule_paper') }}"  >
-                <i class="fa fa-book fa-3x"></i> Publications
-               </a>
+                 <i class="fa fa-book fa-3x"></i> Publications
+                </a>
                {% endif %}
+               
+                {% if app.user.getCurrentConf().getModule().getOrganizationModule()== true %}
+               <a style="padding-right:5px;"   href="{{ path('schedule_organization_index') }}"  >
+                <i class="fa fa-users fa-3x"></i> Organizations
+              </a>
+              {% endif %}
 
               <a style="padding-right:5px;"   href="{{ path('schedule_location') }}"  >
                 <i class="fa fa-map-marker fa-3x"></i> Locations
               </a>
-               <a style="padding-right:5px;"   href="{{ path('schedule_organization_index') }}"  >
-                <i class="fa fa-users fa-3x"></i> Organizations
-              </a>
+             
               <a style="padding-right:5px;"   href="{{ path('schedule_category') }}"  >
                 <i class="fa fa-sort-amount-asc fa-3x"></i> Categories
               </a>
                <a style="padding-right:5px;"   href="{{ path('schedule_topic') }}"  >
                 <i class="fa fa-crosshairs fa-3x"></i> Topics
               </a>
-
+              
+              
+        
             </li>
           </ul>
         </li> 
@@ -106,10 +112,24 @@
        </li>
 
 
-        <li>
-              <a href="{{ path('mobileAppTheme_index') }}" style="padding-right:5px;">
+        <li class="dropdown">
+              <a href="{{ path('mobileAppTheme_index') }}" style="padding-right:5px;" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-mobile fa-3x"></i> Mobile app'
+                 <b class="caret"></b>
               </a>
+               <ul class="dropdown-menu">
+            
+                <li> 
+
+                   <a   style="padding-right:5px;" href="{{ path('mobileAppTheme_index') }}">
+                   <i class="fa fa-pencil  fa-3x"></i> Theme builder 
+                   </a>
+
+                   <a  style="padding-right:5px;" href="{{ path('mobileAppSettings_index') }}">
+                    <i class="fa fa-wrench fa-3x"></i> Settings 
+                  </a>
+
+                </li>
        </li>
 
       
