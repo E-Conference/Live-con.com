@@ -30,13 +30,16 @@ var CalEvent = function(event){
     this["borderColor"] = ColorLuminance(this["color"] ? this["color"] : "#3a87ad", -0.35); 
 
     //resources
-    // if(!this["resource"])this["resource"] =  resConfig[currentRes].parse(event);
-    // if(this.location && this.location.id!= ""){
-    //   this["resource"].push(this.location.id);
-    // }else{
-    //   //TODO put to a "not defined yet" resource
-    //   //TODO put to a "not defined yet" resource
-    // }
+    if(resourceView){
+      if(!this["resource"])this["resource"] =  resConfig[currentRes].parse(event);
+      if(this.location && this.location.id!= ""){
+        this["resourceId"] = this.location.id;
+      }else{
+        // set the resource as not defined
+        this["resourceId"] = 0; 
+      }
+    }
+
     this.renderForRefetch();
     // if(!calendar_events_indexes[this.id]){
     //   calendar_events.push(this);
@@ -67,19 +70,21 @@ CalEvent.prototype.renderForRefetch = function(){
 
 CalEvent.prototype.removeForRefetch = function(){    
     if(calendar_events_indexes[this.id]!== undefined){
-      calendar_events.splice(calendar_events_indexes[this.id],1); 
-      for(var i in calendar_events_indexes){
-        if(calendar_events_indexes[i]>=calendar_events_indexes[this.id]){
-          calendar_events_indexes[i]--;
+      for(var i in calendar_events_indexes){ 
+        if(calendar_events_indexes[i]>calendar_events_indexes[this.id]){
+          calendar_events_indexes[i] = calendar_events_indexes[i]-1;
         }
       }
+      calendar_events.splice(calendar_events_indexes[this.id],1); 
       delete calendar_events_indexes[this.id] ;
     }
+    // console.log("removeForRefetch",calendar_events_indexes);
+    // console.log("removeForRefetch",calendar_events);
 };
 
 
 CalEvent.prototype.persist = function(add){ 
-  if(this.is_mainconfevent)return;
+    if(this.is_mainconfevent)return;
     var toSend = {
       parent    : this['parent'],
       id        : this['id'],
@@ -88,8 +93,10 @@ CalEvent.prototype.persist = function(add){
       parent    : this['parent'],
       end       : this['end'],
       start     : this['start'],
-      // resource  : this['resource'],
-      // currentRes: currentRes,
+    }
+    if(resourceView){ 
+      toSend['resource'] = this['resource'];
+      toSend['currentRes'] = currentRes;
     }  
     $.post(
       add === true ? op.quickAddUrl : op.quickUpdateUrl,
@@ -347,13 +354,15 @@ CalEvent.prototype.SetRecurDate = function(){
 
         child['end']  = moment(lastMoment).format();    
         // child.elem.remove();  
-
+        child.computeCountRange()
         child.renderForRefetch();
         child.persist();
       } 
 };
 
 CalEvent.prototype.fitToDay = function (oldStart,oldEnd){
+  oldStart = moment(oldStart),
+  oldEnd   = moment(oldEnd);
   var duration = moment(this.end).diff(moment(this.start));
   var midnightLimit = moment(this.end).startOf("day");
   if(duration >= moment().add("d",1).diff(moment())){
