@@ -35,6 +35,11 @@
         <div class="col-md-3" id="leftCol">
               
                 <ul class="nav nav-stacked" id="sidebar">
+                  <li><a href="#Generalities"><i class="fa fa-search"></i> Generalities</a></li>
+                  <li><a href="#Conference"><i class="fa fa-cogs"></i> Conference</a></li>
+                  <li><a href="#Import_Export"><i class="fa fa-exchange"></i> Import/Export</a></li>
+                  <li><a href="#Mobil_App"><i class="fa fa-mobile"></i> Mobile App'</a></li>
+                  <li><a href="#Schedule"><i class="fa fa-calendar"></i> Schedule</a></li>
                   <li><a href="#Collaborative"><i class="fa fa-code-fork"></i> Collaborative</a></li>
                   <li><a href="#Authorizations"><i class="fa fa-gavel"></i> Authorizations</a></li>
                   <li><a href="#Modules"><i class="fa fa-archive"></i> Modules</a></li>
@@ -52,9 +57,352 @@
           </div>  
           <div class="col-md-9">
 
+              <!-- Generalities -->
+              <i class="fa fa-search fa-3x"></i><h2 id="Generalities" style="color :#19313b; display:inline;">  Generalities</h2> 
+              <hr class="col-md-12" style="border-color: #19313b;">
+                  </br>
+
+                     <!-- Icons -->
+                   <i class="fa fa-th fa-3x"></i><h3 style="color :#19313b; display:inline;"> Icons</h3>
+                    </br>
+                   <hr class="col-md-6" style="border-color: #19313b;">
+                    <div class="row">
+                          <div class="col-md-7">
+                            <div class="panel panel-default">
+                              <div class="panel-body">
+                                <ul class="list-group">
+                                  <li class="list-group-item"> 
+                                      <ul class="nav nav-pills nav-stacked">
+                                         <li><i class="fa fa-plus"></i> : New.</li>
+                                         <li><i class="fa fa-eye-open"></i> : Details.</li>
+                                         <li><i class="fa fa-pencil"></i> : Edit.</li>
+                                         <li><i class="fa fa-check"></i> : Validate.</li>
+                                         <li><i class="fa fa-trash-o"></i> : Delete.</li>
+                                         <li><i class="fa fa-sign-in"></i> : Enter in a conference.</li>
+                                         <li><i class="fa fa-home"></i> : Dashboard.</li>
+                                         <li><i class="fa fa-user"></i> : Profile.</li>
+                                         <li><i class="fa fa-logout"></i> : Log out.</li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                              
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+
+                        </br>
+                   <!-- Dashboard -->                 
+                    <i class="fa fa-ellipsis-h fa-3x"></i><h3 style="color :#19313b; display:inline;"> Dashboard</h3>
+                    </br>
+                    <hr class="col-md-6" style="border-color: #19313b;">
+                    <p>
+                     
+                    </p>
+
+                    <div class="row">
+                          <div class="col-md-10">
+                            <div class="panel panel-default">
+                              <div class="panel-body">
+                                <ul class="list-group">
+                                  <li class="list-group-item"> 
+                                      <ul class="nav nav-pills nav-stacked">
+                                         <li><img src="{{ asset('img/Documentation/dashboard.png') }}" class="img-responsive well"/>
+                                              In the dashboard, retrieve all your conferences. In this section you create, delete conference.</li>
+                                         <li><p><span class="badge">1</span> <strong>Create a new conference</strong>(See <a href="#Conference">Conference</a>)</p> </li>
+                                         <li><p><span class="badge">2</span> <strong>Enter in  conference</strong>(See <a href="#Conference">Conference</a>)</p> </li>
+                                         <li><p><span class="badge">3</span> <strong>Delete the conference</strong>(See <a href="#Conference">Conference</a>)</p> </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                              
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    
 
 
+                   <!-- Main Menu -->
+                   <i class="fa fa-ellipsis-h fa-3x"></i><h3 style="color :#19313b; display:inline;"> Main Menu</h3>
+                   <hr class="col-md-6" style="border-color: #19313b;"> 
+
+                     <div class="row">
+                          <div class="col-md-10">
+                            <div class="panel panel-default">
+                              <div class="panel-body">
+                                <ul class="list-group">
+                                  <li class="list-group-item"> 
+                                      <ul class="nav nav-pills nav-stacked">
+                                         <li><img src="{{ asset('img/Documentation/menu.png') }}" class="img-responsive well"/></li>
+                                         <li><span class="badge">1</span> <strong>Home</strong> : Redirect To the dashboard.</li>
+                                         <li>
+                                              <span class="badge">2</span> <strong>Profile</strong> : Consult and edit your profile information.
+                                              <img src="{{ asset('img/Documentation/profile.png') }}" class="img-responsive"/>
+                                         </li>
+                                         <li><span class="badge">3</span> <strong>Logout</strong> : Logout.</a>. </li>
+                                      </ul>
+                                    </li>
+                                  </ul>
+                              
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                     <!-- Second Conference Menu -->
+                     <i class="fa fa-cogs fa-3x"></i><h3 style="color :#19313b; display:inline;"> Conference Menu</h3>
+                     <hr class="col-md-6" style="border-color: #19313b;">
+                       <div class="row">
+                            <div class="col-md-10">
+                              <div class="panel panel-default">
+                                <div class="panel-body">
+                                  <ul class="list-group">
+                                    <li class="list-group-item"> 
+                                        <ul class="nav nav-pills nav-stacked">
+                                           <li><img src="{{ asset('img/Documentation/conference_menu.png') }}" class="img-responsive well"/></li>
+                                           <li><span class="badge">1</span> <strong>Overview</strong> : Redirect to the conference overview.</li>
+                                           <li><p><span class="badge">2</span> <strong> Modules Manager</strong> : Redirect to the module manager (See <a href="#Modules">Modules</a>)</li></p>
+                                           <li><p><span class="badge">3</span> <strong> Team</strong> : Redirect to the team manager section (See <a href="#Collaborative">Collaborative</a>).</p></li>
+                                           <li><p><span class="badge">4</span> <strong> Import/Export</strong> : Redirect to the Import/Export section. In this section import or export your datas in several format(See <a href="#Import_Export">Import/Export</a>).</p></li>
+                                        </ul>
+                                      </li>
+                                    </ul>
+                                
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+
+                     <!-- Second modules Menu -->
+                     <i class="fa fa-archive fa-3x"></i><h3 style="color :#19313b; display:inline;"> Modules Menu</h3>
+                     <hr class="col-md-6" style="border-color: #19313b;">
+                       <div class="row">
+                            <div class="col-md-10">
+                              <div class="panel panel-default">
+                                <div class="panel-body">
+                                  <ul class="list-group">
+                                    <li class="list-group-item"> 
+                                        <ul class="nav nav-pills nav-stacked">
+                                           <li><img src="{{ asset('img/Documentation/modules_menu.png') }}" class="img-responsive well"/></li>
+                                           <li><p><span class="badge">1</span> <strong>Events</strong> : Acces to the events section (See <a href="#Event">Event</a>).</p></li>
+                                           <li><p><span class="badge">2</span> <strong>Persons</strong> : Acces to the persons section (See <a href="#Person">Person</a>).</p></li>
+                                           <li><p><span class="badge">3</span> <strong>Publications</strong> : Acces to the paper section (See <a href="#Paper">Paper</a>).</p></li>
+                                           <li><p><span class="badge">4</span> <strong>Organizations</strong> : Acces to the organization section (See <a href="#Organization">Organization</a>).</p></li>
+                                           <li><p><span class="badge">5</span> <strong>Locations</strong> : Acces to the location section (See <a href="#Location">Location</a>).</p></li>
+                                           <li><p><span class="badge">6</span> <strong>Categories</strong> : Acces to the category section (See <a href="#Category">Category</a>).</p></li>
+                                           <li><p><span class="badge">7</span> <strong>Topics</strong> : Acces to the topic section (See <a href="#Topic">Topic</a>).</p></li>
+                                        </ul>
+                                      </li>
+                                    </ul>
+                                
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                      <!-- Schedule -->
+                     <i class="fa fa-calendar fa-3x"></i><h3 style="color :#19313b; display:inline;"> Schedule</h3>
+                      <hr class="col-md-6" style="border-color: #19313b;">
+                       <div class="row">
+                            <div class="col-md-10">
+                              <div class="panel panel-default">
+                                <div class="panel-body">
+                                  <ul class="list-group">
+                                    <li class="list-group-item"> 
+                                        <ul class="nav nav-pills nav-stacked">
+                                           <li><img src="{{ asset('img/Documentation/schedule_menu.png') }}" class="img-responsive well"/></li>
+                                           <li><p> Redirect to the visual user friendly schedule. (See <a href="#Schedule">Schedule</a>).</p></li>
+                                           <li><img src="{{ asset('img/Documentation/schedule.png') }}" class="img-responsive well"/></li>
+                                        </ul>
+                                      </li>
+                                    </ul>
+                                
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+
+                      <!-- Second mobil app Menu -->
+                     <i class="fa fa-mobile fa-3x"></i><h3 style="color :#19313b; display:inline;"> Mobile App' Menu</h3>
+                      <hr class="col-md-6" style="border-color: #19313b;">
+                       <div class="row">
+                            <div class="col-md-10">
+                              <div class="panel panel-default">
+                                <div class="panel-body">
+                                  <ul class="list-group">
+                                    <li class="list-group-item"> 
+                                        <ul class="nav nav-pills nav-stacked">
+                                           <li><img src="{{ asset('img/Documentation/mobilapp_menu.png') }}" class="img-responsive well"/></li>
+                                           <li><p><span class="badge">1</span> <strong>Theme Builder</strong> : Build your own theme for the mobile app'.(See <a href="#Mobil_App">Mobil_App</a>).</p></li>
+                                           <li><p><span class="badge">2</span> <strong>Settings</strong> : Set mobil app' parameter like dataources.(See <a href="#Mobil_App">Mobil_App</a>).</p></li>
+                                        </ul>
+                                      </li>
+                                    </ul>
+                                
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                
+
+
+              <!-- Conference -->
+              <i class="fa fa-cog fa-3x"></i><h2 id="Conference" style="color :#19313b; display:inline;">  Conference</h2> 
+              <hr class="col-md-12" style="border-color: #19313b;">
+                   <h3>Overview</h3>
+                   <p>
+                       The conference is the main element fo Livecon. Create and manage several conferences.
+                       A conference is composed in part by :
+                        <ul>
+                          <li><strong>Summary</strong> : Name of your conference.</li>
+                          <li><strong>Logo</strong> : Logo of the conference. Is also used for mobil app' design settings (See <a href="#Mobil_App">Mobil App')</a>. </li>
+                          <li><strong>Url</strong> : Site web url of the conference .</li>
+                          <li><strong>First Name</strong> : First name of the person.</li>
+                          <li><strong>Description</strong> : Description about tha conference.</li>
+                          <li><strong>Comment</strong> : Comment about the conference.</li>
+                          <li><strong>Organizer</strong> : Organizer of the conference.</li>
+                          <li><strong>Contacts</strong> :  Contacts of the conference.</li>
+                          <li><strong>Acronym</strong> : Acronym of the conference</li>
+                          <li><strong>Twitter widget id</strong> : Id of the conference's twitter widget.</li>
+                          <li><strong>Conference Location</strong> :  Location of the conference (See <a href="#Location">Location</a>). Set also the location's longitude et latitude with the map in 'Conference Overview' </li>
+                        </ul>
+
+                        All modules are related to a conference, except Categories.
+                    </p>
+
+
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="panel panel-default">
+                            <div class="panel-heading"><h3 style="color :#19313b; display:inline;">Your Conferences  </h3><i class="fa fa-list fa-2x"></i></div>
+                            <div class="panel-body">
+                              <ul class="list-group">
+                                <li class="list-group-item"> 
+                                    <ul class="nav nav-pills nav-stacked">
+                                      <li>
+                                         <p>
+                                           <span class="badge">1</span>
+                                           After connection, you arrive on the 'Dashboard' page where you retrieve all your conferences created by you or shared with you.
+                                           This page is accessible also by clicking on the <i class="fa fa-home"></i> in the main menu.
+                                           For each conference, informations like number of papers, persons, events...and <a href="#Authorization">authorization</a>.
+                                        </p>
+                                      </li>
+                                      <li>
+                                       <img src="{{ asset('img/Documentation/dashboard.png') }}" class="img-responsive"/>
+                                      </li>
+                                    </ul>
+                                  </li>
+                                </ul>
+                            
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="panel panel-default">
+                            <div class="panel-heading"><h3 style="display:inline">Create a new conference  </h3><i class="fa fa-plus fa-2x"></i></div>
+                            <div class="panel-body"> 
+                               <ul class="list-group">
+                                <li class="list-group-item"> 
+                                    <ul class="nav nav-pills nav-stacked">
+                                      <li>
+                                        <span class="badge">1</span>
+                                         Go to the dashboard(see above).
+                                      </li>
+                                      <li>
+                                       <span class="badge">2</span>
+                                         Click on '<i class="fa fa-plus"></i> New Conference'.
+                                      </li>    
+                                      <li>
+                                       <span class="badge">3</span>
+                                        You will redirect to the conference's overview.
+                                      </li>
+                                    </ul>
+                                  </li>
+                                </ul>
+                            </div>
+                          </div>
+                        </div>
+                         <div class="col-md-6">
+                            <div class="panel panel-default">
+                            <div class="panel-heading"><h3 style="display:inline">Manage a conference </h3><i class="fa fa-wrench fa-2x"></i></div>
+                            <div class="panel-body">
+                              <ul class="list-group">
+                                <li class="list-group-item"> 
+                                    <ul class="nav nav-pills nav-stacked">
+                                      <li>
+                                        <span class="badge">1</span>
+                                         Go to the dashboard(see above).
+                                      </li>
+                                      <li>
+                                       <span class="badge">2</span>
+                                         Click on '<i class="fa fa-sign-in"></i>' button of the conference choosed.
+                                      </li>
+                                      <li>
+                                        <p>
+                                          <span class="badge">3</span>
+                                          You will redirect to the conference's overview. Manage the schedule and datas(See <a href="#Generalities">Generalities</a>).
+                                        </p>
+                                      </li>
+                                      <li>    
+                                        <p>
+                                         <span class="badge">3</span>
+                                          For edit conference component, go to the conference overview and click on '<i class="fa fa-edit"></i> edit conference'.
+                                        </p>
+                                      <li>
+                                       <span class="badge">4</span>
+                                        Click on <i class="fa fa-check"></i> for validate.
+                                      </li>
+                                    </ul>
+                                  </li>
+                                </ul> 
+                            </div>
+                          </div>
+                        </div>
+                         <div class="col-md-6">
+                            <div class="panel panel-default">
+                            <div class="panel-heading"><h3 style="display:inline">Delete a conference </h3><i class="fa fa-trash-o fa-2x"></i></div>
+                            <div class="panel-body">
+                              <ul class="list-group">
+                                <li class="list-group-item"> 
+                                    <ul class="nav nav-pills nav-stacked">
+                                      <li>
+                                        <span class="badge">1</span>
+                                         Go to the dashboard(see above).
+                                      </li>
+                                      <li>
+                                       <span class="badge">2</span>
+                                         Click on '<i class="fa fa-trash-o"></i>' button of the conference choosed.
+                                      </li>
+                                    </ul>
+                                  </li>
+                                </ul> 
+                            </div>
+                          </div>
+                        </div>  
+                      </div>
+
+
+
+             <!-- Import/Export -->
+              <i class="fa fa-exchange fa-3x"></i><h2 id="Import_Export" style="color :#19313b; display:inline;">  Import/Export</h2> 
+              <hr class="col-md-12" style="border-color: #19313b;">
+                   <h3>Overview</h3>
+
+             <!-- Mobil App' -->
+              <i class="fa fa-mobile fa-3x"></i><h2 id="Mobil_App" style="color :#19313b; display:inline;">  mobile App'</h2> 
+              <hr class="col-md-12" style="border-color: #19313b;">
+                   <h3>Overview</h3>
+
+            <!-- Schedule -->
+              <i class="fa fa-calendar fa-3x"></i><h2 id="Schedule" style="color :#19313b; display:inline;">  Schedule</h2> 
+              <hr class="col-md-12" style="border-color: #19313b;">
+                   <h3>Overview</h3>
+
+
+
 
 
              <!-- Collaborative -->
@@ -495,7 +843,7 @@
                 <hr class="col-md-12" style="border-color: #19313b;">
                    <h3>Overview</h3>
                    <p>
-                       Topic is one module of Livecon. Organize your papers(See <a href="#Paper">Paper</a>) and events(See <a href="#Event">Event</a>). You can create topics or import them(See <a href="#Import/Export">Import/Export</a> )
+                       Topic is one module of Livecon. Organize your papers(See <a href="#Paper">Paper</a>) and events(See <a href="#Event">Event</a>). You can create topics or import them(See <a href="#Import_Export">Import/Export</a> )
                        An Topic is composed by :
                         <ul>
                           <li><strong>Label</strong> : Topic subject.</li>
@@ -601,7 +949,7 @@
                 </p>
                 <div class="row">
                   <div class="col-md-6">
-                    <div class="panel panel-primary">
+                    <div class="panel panel-default">
                       <div class="panel-heading"><h3 style="color :#19313b; display:inline;">Organization List  </h3><i class="fa fa-list fa-2x"></i></div>
                       <div class="panel-body">  
                               <ul class="list-group">
@@ -788,7 +1136,7 @@
                    <h3>Overview</h3>
                    <p>
                        Location is one module of Livecon. It represent the room where taking place speech or the conference's place.
-                       You can located your conference with a map in conference edit(See Conference). Locate your event(See <a href="#Event">Event</a>) thanks to your created or imported(See Import/Export) locations.
+                       You can located your conference with a map in conference edit(See Conference). Locate your event(See <a href="#Event">Event</a>) thanks to your created or imported(See  <a href="#Import_Export">Import/Export</a>) locations.
                        A location is composed by :
                         <ul>
                           <li><strong>Name</strong> : Name of the location(room nalme and number, building...).</li>
