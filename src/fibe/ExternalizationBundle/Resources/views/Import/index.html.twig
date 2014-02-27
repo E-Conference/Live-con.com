@@ -175,6 +175,7 @@
         <script src="{{ asset('bundles/fibeexternalization/js/importer/xls/xlsxMapper.js') }}" type="text/javascript" ></script>
         <script type="text/javascript" >
 
+        var mapper = null;
         $(document).ready(function(){
 
             /*********      handle change page workflow  **********/
@@ -423,7 +424,7 @@
          function handleImport(e) {
                 e.stopPropagation();
                 e.preventDefault();
-                var mapping = Mapper.generateMappingFile(); 
+                var mapping = mapper.generateMappingFile(); 
                 extractDatas(mapping);  
                 $("#back-to-mapping").show();
         }
@@ -432,11 +433,9 @@
 
                 e.stopPropagation();
                 e.preventDefault();
-
-                var mapper = null;
  
                 if($("#file-format").val() == "xml"){
-                   mapper = Mapper;
+                    mapper = Mapper;
                 }else{
                     mapper = xlsxMapper;
                 }
@@ -444,8 +443,8 @@
                 Pager.changePage('#page-new-mapping-file');
                 mapper.read("#datafile-form");
                 $(mapper).on("fileRead",function(ev,data){
-                    mapper.map( data);
-                    Model.initialize(mapper);
+                    this.map( data);
+                    Model.initialize(this);
                 })
 
 

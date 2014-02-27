@@ -278,8 +278,8 @@ define([],function() {
 
 			'settingsPanel' : {
 				'storage' : 'Storage',
-				'on' : 'Activé',
-				'off' : 'Désactivé'
+				'on' : 'Activer',
+				'off' : 'Désactiver'
 			},
 
 			'pageTitles' : {

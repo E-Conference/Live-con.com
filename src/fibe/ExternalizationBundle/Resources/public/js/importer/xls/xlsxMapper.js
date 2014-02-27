@@ -6,6 +6,7 @@ xlsxMapper = {
         xlsxMapper.knownNodes = [];
         xlsxMapper.dataLinks = [];
         xlsxMapper.worker = worker;
+        xlsxMapper.jsonFile = {};
     },
 
 	read : function(el){
@@ -75,7 +76,7 @@ xlsxMapper = {
                             case 'xlsx': cb(JSON.parse(e.data.d)); break;
                     }
             };
-        var arr = btoa(String.fromCharCode.apply(null, new Uint8Array(data)));
+            var arr = btoa(String.fromCharCode.apply(null, new Uint8Array(data)));
             xlsxMapper.worker.postMessage(arr);
     },
 
@@ -157,6 +158,7 @@ xlsxMapper = {
             var globalPanel = xlsxMapper.getPanelHtml("Found data",{panelClass:"panel-primary",margin:false,collapsible:false,collapsed:false});
                
             xlsxMapper.knownNodes = [];
+            xlsxMapper.file = output.Sheet1;
             //Viewing all lines in the json return file  
              for(var i = 0; i < output.Sheet1.length; i++){
                 var currentLine = output.Sheet1[i];
@@ -174,10 +176,7 @@ xlsxMapper = {
                 }
             }
             xlsxMapper["el"].append(globalPanel);
-             xlsxMapper.addDraggableHandler();
-           
-
-           
+            xlsxMapper.addDraggableHandler();
 
             return output;
     },
@@ -206,5 +205,36 @@ xlsxMapper = {
             });
         })
     },
+
+     generateMappingFile : function(){
+        console.log("############### generateMappingFile starts")
+        
+          //loop only on validated mapping
+        var mappedModel = $("#model-form .panel-success");
+
+        if(mappedModel.length == 0) bootstrapAlert("Error",'Your mapping is incomplete ...',"Error : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
+
+        var mappingFile = [];
+        mappedModel.each(function(iPanel,panel){
+            var modelName = $(panel).data("model-path");
+            var mappingObj = {'modelId': modelName};
+            var mappedProperties = [];
+            $(panel).find(".list-group-item-success").each(function(){ 
+                var propertyName = $(this).data("model-path").split('/')[1];
+                var nodePath = $(this).data("node-path");
+                var modelSetter = $(this).data("model-setter");
+
+                var mappingProperty = {'modelSetter':modelSetter, 'nodePath' : nodePath }; 
+
+                mappedProperties.push(mappingProperty);
+                
+            }) 
+            mappingObj.mappedProperties = mappedProperties;
+            mappingFile.push(mappingObj);
+        });
+
+        console.log("Mapped properties : ");
+        console.log(mappingFile);
+    }
 
 }
