@@ -181,7 +181,7 @@
 			</div>
 		</div>
 
-		<div id="lastConferences">
+	
 			<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 				  <!-- Indicators -->
 				  <ol class="carousel-indicators">
@@ -195,13 +195,27 @@
 				  <div class="carousel-inner">
 				      <div class="item active">		           				 
 				        <h4> {{conferences[0].getConfName()}}</h4>
-		                        <img src="{{ asset('uploads/')}}{{conferences[1].logoPath}}" style="height:auto;width:auto;display: block;max-width: 100%;" class="img-rounded show_dataconf" />
+		                        <img src="{{ asset('uploads/')}}{{conferences[0].logoPath}}" alt="{{conferences[0].getConfName()}}">
 				      </div>
-				     <div class="item" style="">
-		                     <h4> {{conferences[1].getConfName()}}</h4>
-	                        <img src="{{ asset('uploads/')}}{{conferences[0].logoPath}}" style="height:auto;width:auto;display: block;max-width: 100%;" class="img-rounded show_dataconf" />                         
-				    </div>
-				    </div>
+				      <div class="item" style="">
+	                         <img src="{{ asset('uploads/')}}{{conferences[1].logoPath}}" alt="{{conferences[1].getConfName()}}" >
+	                        <div class="carousel-caption">
+       							  <h4> {{conferences[1].getConfName()}}</h4>
+      						</div>                         
+				      </div>
+				      <div class="item" style="">
+	                        <img src="{{ asset('uploads/')}}{{conferences[2].logoPath}}" alt="{{conferences[2].getConfName()}}" >		 
+	                        <div class="carousel-caption">
+       							  {{conferences[2].getConfName()}}
+      						</div>                        
+				      </div>
+				      <div class="item" style="">
+	                        <img src="{{ asset('uploads/')}}{{conferences[3].logoPath}}" alt="{{conferences[3].getConfName()}}" > 
+	                        <div class="carousel-caption">
+       							  {{conferences[3].getConfName()}}
+      						</div>                          
+				      </div>
+				  </div>
 
 				  <!-- Controls -->
 				  <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
@@ -211,7 +225,7 @@
 				    <span class="glyphicon glyphicon-chevron-right"></span>
 				  </a>
 			</div>
-		</div>
+		
 
 		<div id="app">
 			<div class="container_12">
