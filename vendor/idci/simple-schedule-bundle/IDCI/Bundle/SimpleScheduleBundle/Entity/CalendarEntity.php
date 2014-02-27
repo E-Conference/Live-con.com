@@ -102,7 +102,7 @@ class CalendarEntity
      * This property provides a more complete description of the
      * calendar component, than that provided by the "SUMMARY" property.
      *
-     * @ORM\Column(type="text", length=1023, nullable=true)
+     * @ORM\Column(type="text", length=4095, nullable=true)
      */
     protected $description;
 

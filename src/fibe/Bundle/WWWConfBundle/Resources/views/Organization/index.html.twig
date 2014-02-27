@@ -6,21 +6,21 @@
     {{ parent() }}
         <div class="row page-top-header ">
             <div class="page-title  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                <span>List</span>
+                <span>Organization list</span>
             </div>
 
             <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
             </div>
             <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
                 <a class="btn btn-info btn-create create" href="{{ path('schedule_organization_new') }}" title="Add an organization">
-                     <i class="fa fa-plus"></i>
+                     <i class="fa fa-plus"></i> New organization
                 </a>
             </div>
         </div>
         <div class="row page-content">
 
             {% include "fibeWWWConfBundle:Filters:filters.html.twig"%}
-            <div id="organization_list">
+            <div id="organization_list" class="table-responsive">
                {% include "fibeWWWConfBundle:Organization:list.html.twig" %}
             </div>
         </div>

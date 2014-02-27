@@ -115,8 +115,37 @@ class MobileAppConfig
      * @ORM\Column(type="boolean", name="IsPublished", nullable=true)
      */
     protected $IsPublished;
-        
 
+
+
+    /**
+     *  
+     * @ORM\Column(type="boolean",nullable=false,options={"default" = true})
+     *
+     */
+    private $dblpDatasource;
+
+    /**
+     *  
+     * @ORM\Column(type="boolean",nullable=false,options={"default" = true})
+     *
+     */
+    private $googleDatasource;
+
+     /**
+     *  
+     * @ORM\Column(type="boolean",nullable=false, options={"default"= true})
+     *
+     */
+    private $duckduckgoDatasource;
+
+        
+     /**
+     * Lang
+     *
+     * @ORM\Column(type="string", nullable=false, options={"default"= "EN"})
+     */
+    protected $lang;
 
 
   /**
@@ -128,6 +157,81 @@ class MobileAppConfig
     {
         return $this->id;
     }
+
+    /**
+     * Set dblpDatasource
+     *
+     * @param boolean $dblpDatasource
+     * @return MobileAppConfig
+     */
+    public function setDblpDatasource($dblpDatasource)
+    {
+        $this->dblpDatasource = $dblpDatasource;
+    
+        return $this;
+    }
+
+    /**
+     * Get dblpDatasource
+     *
+     * @return boolean 
+     */
+    public function getDblpDatasource()
+    {
+        return $this->dblpDatasource;
+    }
+
+
+     /**
+     * Set googleDatasource
+     *
+     * @param boolean $googleDatasource
+     * @return MobileAppConfig
+     */
+    public function setGoogleDatasource($googleDatasource)
+    {
+        $this->googleDatasource = $googleDatasource;
+    
+        return $this;
+    }
+
+    /**
+     * Get googleDatasource
+     *
+     * @return boolean 
+     */
+    public function getGoogleDatasource()
+    {
+        return $this->googleDatasource;
+    }
+
+
+      /**
+     * Set duckduckgoDatasource
+     *
+     * @param boolean $duckduckgoDatasource
+     * @return MobileAppConfig
+     */
+    public function setDuckduckgoDatasource($duckduckgoDatasource)
+    {
+        $this->duckduckgoDatasource = $duckduckgoDatasource;
+    
+        return $this;
+    }
+
+    /**
+     * Get duckduckgoDatasource
+     *
+     * @return boolean 
+     */
+    public function getDuckduckgoDatasource()
+    {
+        return $this->duckduckgoDatasource;
+    }
+
+
+
+
 
     /**
      * Set BGColorContent
@@ -383,6 +487,30 @@ class MobileAppConfig
     public function getTitleColorButton()
     {
         return $this->TitleColorButton;
+    }
+
+    /**
+     * Set lang
+     *
+     * @param string $lang
+     * @return MobileAppConfig
+     */
+    public function setLang($lang)
+    {
+        if($lang == "EN" || $lang == "FR")
+        $this->lang = $lang;
+    
+        return $this;
+    }
+
+     /**
+     * Get lang
+     *
+     * @return string 
+     */
+    public function getLang()
+    {
+        return $this->lang;
     }
 
     

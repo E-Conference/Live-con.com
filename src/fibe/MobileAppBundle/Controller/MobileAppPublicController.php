@@ -16,19 +16,19 @@ use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 /**
  * Mobile app controller.
  *
- * @Route("/MobileApplicationPublic")
+ * @Route("/apps")
  */
 class MobileAppPublicController extends Controller
 {
     /**
-     * @Route("/rest/{id}",name="mobileAppPublic_index")
+     * @Route("/rest/{slug}",name="mobileAppPublic_index")
      * @Template()
      */
-    public function indexAction($id)
+    public function indexAction($slug)
     {
     	$em = $this->getDoctrine()->getManager();
 
-    	$conference = $em->getRepository('fibeWWWConfBundle:WwwConf')->find($id);
+    	$conference = $em->getRepository('fibeWWWConfBundle:WwwConf')->findOneBySlug($slug);
     	$mobile_app_config = $conference->getAppConfig();
         $apiUri = $this->get('router')->generate('idci_exporter_api_homeapi');
         $apiType = "rest";
@@ -45,14 +45,17 @@ class MobileAppPublicController extends Controller
     }
 
     /**
-     * @Route("/sparql/{id}",name="mobileAppPublic_sparql_index")
+     * @Route("/{slug}",name="mobileAppPublic_sparql_index")
      * @Template("fibeMobileAppBundle:MobileAppPublic:index.html.twig")
      */
-    public function indexSparqlAction($id)
+    public function indexSparqlAction($slug)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $conference = $em->getRepository('fibeWWWConfBundle:WwwConf')->find($id);
+        $conference = $em->getRepository('fibeWWWConfBundle:WwwConf')->findOneBySlug($slug);
+        if(!$conference){
+            throw new NotFoundHttpException();
+        }
         $mobile_app_config = $conference->getAppConfig();
         $baseUri ="http://data.live-con.com/resource/conference/".$conference->getId()."/".$conference->getSlug();
         $apiUri = "http://data.live-con.com/sparql";

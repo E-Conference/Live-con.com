@@ -21,6 +21,9 @@ class HomePageController extends Controller
     {
          $form = $this->createForm(new ContactType());
 
+         $em = $this->getDoctrine()->getManager();
+         $conferences = $em->getRepository('fibeWWWConfBundle:WwwConf')->findOrderByDate();
+
     if ($request->isMethod('POST')) {
         $form->bind($request);
 
@@ -54,7 +57,8 @@ class HomePageController extends Controller
     }
 
     return array(
-        'form_contact' => $form->createView()
+        'form_contact' => $form->createView(),
+        'conferences' => $conferences
     );
        
 	}

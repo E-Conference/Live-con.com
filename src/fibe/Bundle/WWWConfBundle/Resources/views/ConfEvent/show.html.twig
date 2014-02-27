@@ -7,10 +7,34 @@
 
 {% block centerPanel %}
   {{ parent() }}
-     <h1>Event</h1>
-      <div class="row">
-            <div class="col-lg-1"></div>
-            <div class="col-lg-6">
+
+         <div class="row page-top-header ">
+            <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <span>Event details</span>
+            </div>
+
+            <div class="col-xs-2 col-sm-4 col-md-6 col-lg-8">
+            </div>
+            <div class="page-btn-list col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                 <a type="button" href="{{ path('schedule_confevent') }}" class="btn btn-warning">
+                        <i class="fa fa-list"></i>
+                  </a>
+                   <a href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}" class="btn btn-success edit-event">
+                         <i class="fa fa-pencil"></i>
+                   </a>
+                   <form action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
+                      <input type="hidden" name="_method" value="DELETE" />
+                        {{ form_widget(delete_form) }}
+                    <button type="submit" class="btn btn-danger delete-event">
+                        <i class="fa fa-trash-o"></i>
+                    </button>
+                  </form> 
+            </div>
+      </div>
+      <div class="row page-content">
+
+
+            <div class="col-lg-12">
                 <h2> {{ entity.summary }}</h2>
                 <table class="table table-hover">
                     <tbody>
@@ -106,53 +130,29 @@
                         
                     </tbody>
                 </table>
+                <div class="row">
+                    <h2>Event Relations</h2>
+                    <div class="col-lg-12">
+                          <h3>Topics</h3></br>
+                          {% include "fibeWWWConfBundle:ConfEvent:topicRelation.html.twig" %}
+                     </div>
+               </div>
+
+              <div class="row">
+                     <div class="col-lg-12">
+                          <h3>Publication</h3></br>
+                          {% include "fibeWWWConfBundle:ConfEvent:paperRelation.html.twig" %}
+                    </div>
+              </div>
+
+              <div class="row">
+                     <div class="col-lg-12">
+                          <h3>Person</h3></br>
+                          {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
+                     </div>
+              </div>
             </div>
+           
         </div>
 
-      <div class="row">
-         <div class="col-lg-6"></div>
-              <div class="col-lg-2 btn-group">
-                  <a type="button" href="{{ path('schedule_event') }}" class="btn btn-warning">
-                        <i class="fa fa-list"></i>
-                  </a>
-                   <a href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}" class="btn btn-success edit-event">
-                         <i class="fa fa-pencil"></i>
-                   </a>
-                   <form action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
-                      <input type="hidden" name="_method" value="DELETE" />
-                        {{ form_widget(delete_form) }}
-                    <button type="submit" class="btn btn-danger delete-event">
-                        <i class="fa fa-trash-o"></i>
-                    </button>
-                  </form> 
-              </div>    
-        </div>     
-        </br>
-
-   
-      <div class="row">
-       <h2>Event Relations</h2>
-           <div class="col-lg-1"></div>
-           <div class="col-lg-8">
-                <h3>Topics</h3></br>
-                {% include "fibeWWWConfBundle:ConfEvent:topicRelation.html.twig" %}
-           </div>
-     </div>
-
-    <div class="row">
-           <div class="col-lg-1"></div>
-           <div class="col-lg-8">
-                <h3>Paper</h3></br>
-                {% include "fibeWWWConfBundle:ConfEvent:paperRelation.html.twig" %}
-          </div>
-    </div>
-
-    <div class="row">
-           <div class="col-lg-1"></div>
-           <div class="col-lg-8">
-                <h3>Person</h3></br>
-                {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
-           </div>
-    </div>
-          </br> 
 {% endblock %}

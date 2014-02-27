@@ -35,6 +35,7 @@ class ConfEventType extends EventType
                                             'label'     => 'Acronym',
                                             'attr'  => array('placeholder'   => 'Acronym')))
                  ->add('categories',null,array('required' => false)) 
+                 ->add('attach','text',array('required' => false, 'label'   => 'Twitter widget id')) 
                 //  ->add('startAt', 'datetime', array(  
                 //     'widget' =>'single_text',
                 //     'format' =>'dd/MM/yyyy HH:mm', 

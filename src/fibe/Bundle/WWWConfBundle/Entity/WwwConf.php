@@ -16,6 +16,7 @@ use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
  *
  * @ORM\Entity
  * @ORM\Table(name="conference") 
+ * @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\WwwConfRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class WwwConf
@@ -116,7 +117,9 @@ class WwwConf
 
      /**
      * @var UploadedFile
-     * @Assert\File(maxSize="6000000")
+     * @Assert\File(maxSize="2M",
+     * mimeTypes = {"image/jpeg", "image/png", "image/gif", "image/jpg"},
+     * mimeTypesMessage = "The file must be an image")
      */
     private $logo;
 
@@ -132,7 +135,7 @@ class WwwConf
      private $mainConfEvent; 
 
       /**
-     * @ORM\Column(type="string", length=128, nullable=true)
+     * @ORM\Column(type="string", length=256, nullable=true)
      */
     protected $slug;
 

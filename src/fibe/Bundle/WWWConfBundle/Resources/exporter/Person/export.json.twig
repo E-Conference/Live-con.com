@@ -1,18 +1,18 @@
 {
-    "id"          : "{{ entity.id }}",
+    "id"          : "{% autoescape 'js' %}{{ entity.id }}{% endautoescape %}",
     "email"       : "{% autoescape 'js' %}{{ entity.email }}{% endautoescape %}",
     "created_at"  : "{{ entity.createdAt | date('Y-m-d H:i') }}",
-    "agent"       : "{{ entity.agent  }}",
+    "agent"       : "{% autoescape 'js' %}{{ entity.agent  }}{% endautoescape %}",
     "title"       : "{% autoescape 'js' %}{{ entity.title  }}{% endautoescape %}",
     "first_name"  : "{% autoescape 'js' %}{{ entity.firstName }}{% endautoescape %}",
     "last_name"   : "{% autoescape 'js' %}{{ entity.lastName }}{% endautoescape %}",
     "name"        : "{% autoescape 'js' %}{{ entity.name }}{% endautoescape %}",
     "given_name"  : "{% autoescape 'js' %}{{ entity.givenName }}{% endautoescape %}",
-    "slug"        : "{{ entity.slug }}",
+    "slug"        : "{% autoescape 'js' %}{{ entity.slug }}{% endautoescape %}",
     "description" : "{% autoescape 'js' %}{{ entity.description }}{% endautoescape %}",
     "homepage"    : "{% autoescape 'js' %}{{ entity.homepage }}{% endautoescape %}",
-    "based_near"  : "{{ entity.based_near }}",
-    "image"       : "{{ entity.image }}",
+    "based_near"  : "{% autoescape 'js' %}{{ entity.based_near }}{% endautoescape %}",
+    "image"       : "{% autoescape 'js' %}{{ entity.img }}{% endautoescape %}",
     {% spaceless %}
     "roles":
     [
@@ -20,7 +20,7 @@
         {% if loop.first %}{% else %},{% endif %}
         { 
             "id": "{{ role.id }}", 
-            "type": "{{ role.type.name }}", 
+            "type": "{% autoescape 'js' %}{{ role.type.name }}{% endautoescape %}", 
             "event": {
                 "id"  : "{{ role.event.id }}",
                 "name": "{% autoescape 'js' %}{{ role.event.summary }}{% endautoescape %}"
@@ -34,9 +34,9 @@
             [
             {% for organization in entity.organizations %}
                 {% if loop.first %}
-                { "id": "{{ organization.id }}", "name": "{{ organization.name}}"}
+                { "id": "{{ organization.id }}", "name": "{% autoescape 'js' %}{{ organization.name}}{% endautoescape %}"}
                 {% else %}
-                ,{ "id": "{{ organization.id }}", "name": "{{ organization.name}}"}
+                ,{ "id": "{{ organization.id }}", "name": "{% autoescape 'js' %}{{ organization.name}}{% endautoescape %}"}
                 {% endif %}
             {% endfor %}
             ] 

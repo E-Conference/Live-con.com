@@ -62,7 +62,7 @@
                         <span class="badge badge-success" ><i class="fa fa-check" ></i>  XML</span>
                         <span class="badge badge-success"><i class="fa fa-check" ></i>  XLS</span>
                       
-                    {% if not wwwConf.isEmpty() %}<p class="text-warning"><i class="icon-s"></i>Your conference will be emptied first!</p>{% endif %}
+                    
                 </label> 
                 <div class="input-group">
     				   <span class="input-group-addon">File to import</span>
@@ -93,11 +93,16 @@
                     <option value="ocs">OCS format</option> 
                 </select>  
                 <button type="submit" class="btn btn-default "><i class="fa fa-play"></i> Process import</button>
+                {% if not wwwConf.isEmpty() %}<p class="text-warning"><i class="icon-s"></i>Your conference will be emptied first!</p>{% endif %}
             </form>
             <br/>
             <label> 
                 Or import your own format :
             </label> <br/>
+             <select id="file-format" required="false">  
+                    <option selected="selected" value="xml">xml</option> 
+                    <option value="xlsx">xlsx</option> 
+                </select>  
             <button id="new-mapping" class="btn btn-default "><i class="fa fa-plus"> </i>  New mapping file </button>
         </div>
 
@@ -164,10 +169,13 @@
         <script src="{{ asset('bundles/fibeexternalization/js/importer/Importer.js') }}" type="text/javascript" ></script>
         <script src="{{ asset('bundles/fibeexternalization/js/importer/rdf_config.js') }}" type="text/javascript" ></script>
         <script src="{{ asset('bundles/fibeexternalization/js/importer/ocs_config.js') }}" type="text/javascript" ></script>
-
-
+        
+        <script src="{{ asset('bundles/fibeexternalization/js/importer/xls/jszip.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeexternalization/js/importer/xls/xlsx.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeexternalization/js/importer/xls/xlsxMapper.js') }}" type="text/javascript" ></script>
         <script type="text/javascript" >
 
+        var mapper = null;
         $(document).ready(function(){
 
             /*********      handle change page workflow  **********/
@@ -176,6 +184,7 @@
             var selectDataFile           = document.getElementById("datasetFile");  
             var formKnownMappingFormat   = document.getElementById("form-known-mapping-format");  
             var selectKnownMappingFormat = document.getElementById("known-mapping-format");  
+            var selectFileFormat = document.getElementById("file-format");  
             var selectMappingFile        = document.getElementById("submit-new-mapping");   
             var newMappingFile           = document.getElementById('new-mapping'); 
             var backToMapping            = document.getElementById('back-to-mapping'); 
@@ -286,7 +295,8 @@
 
         function extractDatas(mapping,op){
             if(!op)op={}; 
-            run( Mapper["data"],mapping,op,function(data,importedLog,notImportedLog){
+
+              run( Mapper["data"],mapping,op,function(data,importedLog,notImportedLog){
                     Pager.changePage('#page-result');
                     Mapper.setSerialisedDatas(data);
                     Mapper.setImportedLog(importedLog);
@@ -300,6 +310,21 @@
                     // console.log(Mapper["data"],mapping)
                 }
             ); 
+              
+            // run( Mapper["data"],mapping,op,function(data,importedLog,notImportedLog){
+            //         Pager.changePage('#page-result');
+            //         Mapper.setSerialisedDatas(data);
+            //         Mapper.setImportedLog(importedLog);
+            //         Mapper.setNotImportedLog(notImportedLog);
+
+            //         $("#result-extract").html(getHtmlResultDiv(data,importedLog,notImportedLog,"extracted"));
+            //         bootstrapAlert("success",getMsgUl(Mapper.getSerialisedDatas(),"extracted"),"conference parsed : "); 
+            //     },function(msg)
+            //     { 
+            //         bootstrapAlert("warning", msg || "there was an error during extraction of datas","Error :"); 
+            //         // console.log(Mapper["data"],mapping)
+            //     }
+            // ); 
         }
 
 
@@ -330,26 +355,10 @@
                 }else{
                     file = this.files[0];
                 }
-
                 Mapper.initialize(file);
+                var worker = new Worker("{{ asset('bundles/fibeexternalization/js/importer/xls/xlsxworker.js') }}");
+                xlsxMapper.initialize(worker, file);
                
-                // for (i = 0, f = files[i]; i != files.length; ++i) {
-                //         var reader = new FileReader();
-                //         var name = f.name;
-                //         reader.onload = function(e) {
-                //                 var data = e.target.result;
-                //                 if(typeof Worker !== 'undefined') {
-                //                         xlsxworker(data, process_wb);
-                //                 } else {
-                //                         //var wb = XLSX.read(data, {type: 'binary'});
-                //                         var arr = String.fromCharCode.apply(null, new Uint8Array(data));
-                //                         var wb = XLSX.read(btoa(arr), {type: 'base64'});
-                //                         process_wb(wb);
-                //                 }
-                //         };
-                //         //reader.readAsBinaryString(f);
-                //         reader.readAsArrayBuffer(f);
-                // }
         }
 
         function handleDragover(e) {
@@ -431,7 +440,7 @@
          function handleImport(e) {
                 e.stopPropagation();
                 e.preventDefault();
-                var mapping = Mapper.generateMappingFile(); 
+                var mapping = mapper.generateMappingFile(); 
                 extractDatas(mapping);  
                 $("#back-to-mapping").show();
         }
@@ -440,14 +449,27 @@
 
                 e.stopPropagation();
                 e.preventDefault();
+ 
+                if($("#file-format").val() == "xml"){
+                    mapper = Mapper;
+                }else{
+                    mapper = xlsxMapper;
+                }
 
                 Pager.changePage('#page-new-mapping-file');
-                Mapper.read("#datafile-form");
-                $(Mapper).on("fileRead",function(ev,data){
-                    Mapper.map( data);
+                mapper.read("#datafile-form");
+                $(mapper).on("fileRead",function(ev,data){
+                    this.map( data);
+                    Model.initialize(this);
                 })
+
+
                 Model.modelToTab($("#model-form")) ;
         }
+
+
+
          </script>   
+
 {% endblock %}
 

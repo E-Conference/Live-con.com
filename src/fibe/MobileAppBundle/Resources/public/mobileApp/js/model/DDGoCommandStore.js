@@ -9,7 +9,7 @@
 *   Version: 1.2
 *   Tags:  JSON, SPARQL, AJAX
 **/
-define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterText', 'localStorage/localStorageManager'], function($, _, Encoder, ViewAdapter, ViewAdapterText, StorageManager){
+define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterText', 'localStorage/localStorageManager', 'labels'], function($, _, Encoder, ViewAdapter, ViewAdapterText, StorageManager, labels){
 	var DDGoCommandStore = {
 	 
 		getResultOrganization : {
@@ -58,11 +58,11 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								parameters.contentEl.append('<p>'+Heading+'</p>'); 
 							}
 							if(AbstractText != ""){ 
-	 							parameters.contentEl.append('<h2>Abstract</h2>');
+	 							parameters.contentEl.append('<h2>'+labels[parameters.conference.lang].organization.abstract+'</h2>');
 								parameters.contentEl.append('<p>'+AbstractText+'</p>'); 
 							}
 							if(FirstURL !== undefined){ 
-	 							parameters.contentEl.append('<h2>Homepage</h2>');
+	 							parameters.contentEl.append('<h2>'+labels[parameters.conference.lang].organization.homepage+'</h2>');
 								parameters.contentEl.append('<a href="'+FirstURL+'">'+FirstURL+'</a>'); 
 							}
 						}else{

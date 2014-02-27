@@ -64,7 +64,7 @@ Mapper = {
         Mapper.knownCollection = {};
         
         var nodePath = "root";
-        var html = Mapper.getPanelHtml("Found datas ",{panelClass:"panel-primary"});
+        var html = Mapper.getPanelHtml("Found data ",{panelClass:"panel-primary"});
 
         generateHtml($data,nodePath,Mapper.knownNodes); 
         function generateHtml($node,nodePath,knownNodes){
