@@ -295,7 +295,8 @@
 
         function extractDatas(mapping,op){
             if(!op)op={}; 
-            run( Mapper["data"],mapping,op,function(data,importedLog,notImportedLog){
+
+              run( Mapper["data"],mapping,op,function(data,importedLog,notImportedLog){
                     Pager.changePage('#page-result');
                     Mapper.setSerialisedDatas(data);
                     Mapper.setImportedLog(importedLog);
@@ -309,6 +310,21 @@
                     // console.log(Mapper["data"],mapping)
                 }
             ); 
+              
+            // run( Mapper["data"],mapping,op,function(data,importedLog,notImportedLog){
+            //         Pager.changePage('#page-result');
+            //         Mapper.setSerialisedDatas(data);
+            //         Mapper.setImportedLog(importedLog);
+            //         Mapper.setNotImportedLog(notImportedLog);
+
+            //         $("#result-extract").html(getHtmlResultDiv(data,importedLog,notImportedLog,"extracted"));
+            //         bootstrapAlert("success",getMsgUl(Mapper.getSerialisedDatas(),"extracted"),"conference parsed : "); 
+            //     },function(msg)
+            //     { 
+            //         bootstrapAlert("warning", msg || "there was an error during extraction of datas","Error :"); 
+            //         // console.log(Mapper["data"],mapping)
+            //     }
+            // ); 
         }
 
 

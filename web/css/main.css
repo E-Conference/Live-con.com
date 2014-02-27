@@ -114,18 +114,27 @@ body{
 
 .breadcrum>li {
 	padding:1px;
-	
+
 }
 
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+}
 
 .breadcrum > li > a{
 	background-color:#999;
 	color :  #f2f2f2; 
-	-o-text-overflow: ellipsis; /* pour Opera 9 */
-  	text-overflow: ellipsis; /* pour le reste du monde */
-	overflow : hidden;
+
+
 	text-align:center;
 }
+
+
+
 
 .breadcrum > li > a:hover{
 	background-color:#999;
