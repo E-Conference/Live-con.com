@@ -112,19 +112,42 @@ body{
 	border-bottom:none;
 }
 
+.breadcrum>li {
+	padding:1px;
+
+}
+
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+}
 
 .breadcrum > li > a{
 	background-color:#999;
 	color :  #f2f2f2; 
+
+
+	text-align:center;
 }
+
+
+
 
 .breadcrum > li > a:hover{
 	background-color:#999;
- 
+
 }
 
-.breadcrum > li .active {
+.breadcrum  li.active {
 	background-color : #eeeeee;
+	margin-bottom: -4px;
+	border-bottom: 4px solid #eeeeee;
+	border-left: solid 2px #19313b;
+	border-top: solid 2px #19313b;
+	border-right: solid 2px #19313b;
 }
 
 

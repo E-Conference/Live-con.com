@@ -1,6 +1,10 @@
 Model = {
 	
 
+	initialize : function(mapper){
+		Model.mapper = mapper;
+	},
+
 	"entities" : {
 		"Conference" : { 
 			attributes : {
@@ -9,7 +13,7 @@ Model = {
 						setter : "setSummary",
 				}},
 				optionnal : { 
-					"url" : {
+					"homepage" : {
 						setter : "setUrl",
 					}, 
 					"description" : {
@@ -35,7 +39,7 @@ Model = {
 				}}
 			} 
 		}, 
-		"Events" : { 
+		"Event" : { 
             array   :"events",
 			attributes : {
 				required : {
@@ -160,15 +164,7 @@ Model = {
 					"members" : {
 						setter : "setMembers",
 					}, 
-					"subjects" : {
-						setter : "setSubjects",
-					}, 
-					"topics" : {
-						setter : "setTopics",
-					}, 
-					"events" : {
-						setter : "setEvents",
-				}} 
+				} 
 			}
 	  	},
 
@@ -213,7 +209,7 @@ Model = {
 			}
 					 
 		}, 
-		"Keyword" : {
+		"Topic" : {
             array : "topics", 
 			attributes : {
 				required : {
@@ -231,16 +227,16 @@ Model = {
 
 		for(var i in Model.entities){
   			var entity = Model.entities[i];
-        	html += Mapper.getPanelHtml(i,{panelClass:"panel-danger",margin:true,"model-path":entity.array || i});
+        	html += Mapper.getPanelHtml(i,{panelClass:"panel-danger",margin:true,"model-path":entity.array || i, collapsible:true,collapsed:true});
 
        		$.each(entity.attributes.required, function(aIndex, attribute){ 
-	       		var newAttr = Model.generateAttributeNode(aIndex, {required:true,"model-path":entity.array+"/"+aIndex});
+	       		var newAttr = Model.generateAttributeNode(aIndex, {required:true,"model-path":entity.array+"/"+aIndex, "model-setter":attribute.setter});
 	       		// newEntity.append(newAttr);
        			html += newAttr;
 	       	})
 
        		$.each(entity.attributes.optionnal, function(aIndex, attribute){ 
-       			var newAttr = Model.generateAttributeNode(aIndex, {required:false,"model-path":entity.array+"/"+aIndex});
+       			var newAttr = Model.generateAttributeNode(aIndex, {required:false,"model-path":entity.array+"/"+aIndex, "model-setter":attribute.setter});
        			html += newAttr;
        			// newEntity.append(newAttr);
 	       	})
@@ -277,8 +273,17 @@ Model = {
 			},
 			drop: function( event, ui ) {  
 		        // $(this).removeClass("list-group-item-success")
-		        Mapper.dataLinks[$(this).data("model-path")] = {nodePath : ui.draggable.data("node-path")};
-		        console.log(Mapper.dataLinks);  
+		        mapper.dataLinks[$(this).data("model-path")] = {nodePath : ui.draggable.data("node-path")};
+		        $(this).attr("data-node-path", ui.draggable.data("node-path"));
+
+		        var indicator = $("<a href='#' style='float:right' class='btn-danger btn'><i class='fa fa-trash-o'></i>"+ui.draggable.data("node-path")+"</a>");
+		        indicator.click({target : $(this)}, function(ev){
+		        	mapper.dataLinks[$(this).data("model-path")] = null;
+		        	target.attr("data-node-path", "");
+		        	target.removeClass("list-group-item-success");
+		        })
+		        $(this).append(indicator);
+		        console.log(Model.mapper.dataLinks);  
 			}
 		});
 
@@ -296,7 +301,7 @@ Model = {
 	}, 
 
 	generateAttributeNode : function(attribute, options){
-        return '<li class="model-node list-group-item'+(options.required===true?" list-group-item-danger":"")+'" data-required="'+(options.required===true)+'" data-model-path="'+options["model-path"]+'" style="'+options.style+'">'+attribute+'</li>'; 
+        return '<li class="model-node list-group-item'+(options.required===true?" list-group-item-danger":"")+'" data-required="'+(options.required===true)+'" data-model-path="'+options["model-path"]+'" data-model-setter="'+options["model-setter"]+'" style="'+options.style+'">'+attribute+'</li>'; 
 
 	},
 
@@ -311,7 +316,6 @@ Model = {
 
     getArrayName : function(entityName){
         for(var i in Model.entities){
-        	debugger
             if( i.toLowerCase() == entityName.toLowerCase()){
                 return entityName;
             }

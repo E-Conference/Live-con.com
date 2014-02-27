@@ -98,13 +98,13 @@
 {% block body %} 
     {{ parent() }}
     {% block navBar %} 
-        {% include "fibeWWWConfBundle::mainNavBar.html.twig" %}
+        {% include "::mainNavBar.html.twig" %}
     {% endblock navBar%}
 
 
     {% if app.user.getCurrentConf() %} 
       {% block menuNavBar %} 
-          {% include "fibeWWWConfBundle::menuNavBar.html.twig" %}
+          {% include "::menuNavBar.html.twig" %}
       {% endblock menuNavBar%}
     {% endif %}
 
@@ -116,17 +116,17 @@
 
             <div class="col-xs-10 col-sm-10  col-md-10 col-lg-10 ">
                  <div class="row ">
-                   <ul class="nav breadcrum nav-tabs">
+                    <ul class="nav breadcrum nav-tabs">
                           
-                          <li class="schedule_conference_edit"><a href="{{ path('schedule_conference_edit') }}">Overview</a></li>
+                          <li class="schedule_conference_edit col-xs-2 col-sm-2  col-mg-3 col-lg-3"><a href="{{ path('schedule_conference_edit') }}" class='ellipsis'><i class="fa  fa-search-plus fa-1x"></i><span> Overview </span></a></li>
                           {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
-                          <li class="schedule_conference_settings"><a href="{{ path('schedule_conference_settings') }}">Modules managment</a></li>
+                          <li class="schedule_conference_settings col-xs-2 col-sm-2  col-mg-3 col-lg-3"><a href="{{ path('schedule_conference_settings') }}" class='ellipsis'> <i class="fa fa-inbox fa-1x"></i><span> Modules  </span></a></li>
                           {% endif %}
                           {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')== 1 %}
-                          <li class="conference_team_list"><a href="{{ path('conference_team_list') }}">Team</a></li>
+                          <li class="conference_team_list col-xs-2 col-sm-2  col-mg-3 col-lg-3"><a href="{{ path('conference_team_list') }}" class='ellipsis'><i class="fa fa-users fa-1x"></i><span> Team   </span></a></li>
                           {% endif %}
                           {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
-                          <li class="externalization_import_index"><a href="{{ path('externalization_import_index') }}">Import/export</a></li>
+                          <li class="externalization_import_index col-xs-2 col-sm-2 col-mg-3 col-lg-3"><a href="{{ path('externalization_import_index') }}" class='ellipsis'><i class="fa fa-exchange fa-1x"></i><span> Import </span></a></li>
                           {% endif %}
                            {% block menu_page%} 
                            {% endblock menu_page %}

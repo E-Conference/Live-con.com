@@ -93,7 +93,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 
 
 		getAllPersons : {
-		    dataType : "JSON",
+		    dataType : "JSONP",
 		    method : "GET", 
 		    serviceUri : "schedule_person.jsonp?",
 		    getQuery : function(parameters){	
@@ -404,7 +404,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
 							if(parameters.JSONdata.image){
-								parameters.contentEl.append($('<img src="'+parameters.JSONdata.image+'"/>'));    
+								parameters.contentEl.prepend($('<div style="min-height:50px; width:20%"><img style="width:100%;height:auto;" src="'+parameters.JSONdata.image+'"/></div>'));     
 							}
 							if(parameters.JSONdata.name){
 								$("[data-role = page]").find("#header-title").html(parameters.JSONdata.name);
@@ -933,11 +933,11 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 						
 							if(eventInfo.eventStart){ 
-								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.startAt +' :  <span class="inline">'+moment(eventInfo.eventStart).format('LLLL')+'</span></h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.startAtLe +' :  <span class="inline">'+moment(eventInfo.eventStart).format('LLLL')+'</span></h2>'));
 								isDefined = true;
 							}
 							if(eventInfo.eventEnd){
-								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.endAt +' : <span class="inline">'+moment(eventInfo.eventEnd).format('LLLL')+'</span></h2>'));  
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.endAtLe +' : <span class="inline">'+moment(eventInfo.eventEnd).format('LLLL')+'</span></h2>'));  
 							} 
 
 							if(eventInfo.eventEnd && eventInfo.eventStart){
@@ -1106,13 +1106,16 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		                              	LocationHtml = '<p>'+parameters.name+'</p>';
 		                            }else{
 			                             // LocationHtml = '<p>'+bigEvents[eventType][i].locationLabel+'</p>';
+			                             if(bigEvents[eventType][i].locationLabel){
 			                              LocationHtml += '<p><a href="#schedule/'+Encoder.encode(bigEvents[eventType][i].locationLabel)+'" data-role="button" data-icon="search" data-inline="true">'+bigEvents[eventType][i].locationLabel+'</a></p>';
+		                           		}
 		                            }
-
+		        
+		                            var labelCategory = labels[parameters.conference.lang].category[bigEvents[eventType][i].eventType] || "";
 		                            var newLi = $('<li data-inset="true" ></li>');
 		                            var newEventlink = $('<a href="#event/'+Encoder.encode(bigEvents[eventType][i].eventLabel)+'/'+Encoder.encode(bigEvents[eventType][i].eventId)+'">');
 		                            var newLabel = $('<h3>'+bigEvents[eventType][i].eventLabel+'</h3>');
-		                            var newCategory = $('<p>'+labels[parameters.conference.lang].category[bigEvents[eventType][i].eventType]+'</p>');
+		                            var newCategory = $('<p>'+labelCategory+'</p>');
 		                            var newLast = $('<p>'+labels[parameters.conference.lang].event.last+' : <strong>'+lasts+'</strong></p>');
 
 		                            newEventlink.append(newLabel);

@@ -296,7 +296,7 @@ class LocationController extends Controller
             ))
         );
 
-        return $this->redirect($this->generateUrl('schedule_location_edit', array('id' => $id)));
+        return $this->redirect($this->generateUrl('schedule_location_show', array('id' => $id)));
         
         }
 
