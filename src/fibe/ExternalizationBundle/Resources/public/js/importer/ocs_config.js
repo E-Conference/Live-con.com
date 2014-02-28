@@ -3,6 +3,8 @@
 
 
 var ocsConfig = {
+
+    // choosed by the user in the select format
     // checkFormat : function(documentRootNode){
  
     //     var formatOk = false;
@@ -13,73 +15,70 @@ var ocsConfig = {
     //         }
     //     })
 
-    //     return formatOk; 
-    // },
-    // rootNode : {
-    //     format : [{
-    //         nodeUtils : "node",
-    //         arg : ["conference"],
-    //     }] 
-    // },
-
+    //     return formatOk;  
+    // }
+    
+    //the parsing util function set
+    util : "xmlUtil",
     getNodeKey : {
         format : [{
-            nodeUtils : "attr",
+            fn : "attr",
             arg : ["id"],
         }]
     },
-    
+
     getNodeName : {
         format : [{
-            nodeUtils : "localName",
+            fn : "localName",
         }]
     }, 
-    //preproccessing of the root node which contains the conference informations
-    
+
+    //preproccessing of the root node which contains the conference informations 
     parseConference : {
         //conference mapping
         setSummary : {
             format : [{
-                nodeUtils : "child",
+                fn : "child",
                 arg : ["name"],
             },{
-                nodeUtils : "text",
+                fn : "text",
             }] 
         },
         setAcronym : {
             format : [{
-                nodeUtils : "child",
+                fn : "child",
                 arg : ["acronym"],
             },{
-                nodeUtils : "text",
+                fn : "text",
             }] 
         },
         setDescription : {
             format : [{
-                nodeUtils : "child",
+                fn : "child",
                 arg : ["description"],
             },{
-                nodeUtils : "text",
+                fn : "text",
             }] 
         },
         setUrl : {
             format : [{
-                nodeUtils : "child",
+                fn : "child",
                 arg : ["homepage"],
             },{
-                nodeUtils : "text",
+                fn : "text",
             }] 
         },
     },
     
+    //
     mappings : [
         {
             array   : "organizations", 
             format : [{
-                nodeUtils : "children",
+                fn : "children",
                 arg : ["organizations"],
             },{
-                nodeUtils : "children",
+                fn : "children",
                 arg : ["organization"],
             }], 
             label   : {
@@ -96,10 +95,10 @@ var ocsConfig = {
             //nodes are wrapped in a collection node 
             array   :"persons", 
             format : [{
-                nodeUtils : "children",
+                fn : "children",
                 arg : ["persons"],
             },{
-                nodeUtils : "children",
+                fn : "children",
                 arg : ["person"],
             }], 
             label   : {
@@ -117,7 +116,7 @@ var ocsConfig = {
                     setter : 'addOrganization',
                     fk : {
                         format : [{
-                            nodeUtils : "text",
+                            fn : "text",
                         }],
                         array : "organizations",
                     },  
@@ -127,10 +126,10 @@ var ocsConfig = {
         {
             array   :"proceedings", 
             format : [{
-                nodeUtils : "children",
+                fn : "children",
                 arg : ["papers"],
             },{
-                nodeUtils : "children",
+                fn : "children",
                 arg : ["paper"],
             }], 
             label   : {
@@ -154,7 +153,7 @@ var ocsConfig = {
                     //so we must retrieve an index with getArrayId instead of objectMap 
                     fk : {
                         format : [{
-                            nodeUtils : "text",
+                            fn : "text",
                         }],
                         array : "topics", 
                         create : "setName",
@@ -167,7 +166,7 @@ var ocsConfig = {
                     setter : 'addAuthor',
                     fk : {
                         format : [{
-                            nodeUtils : "text",
+                            fn : "text",
                         }],
                         array : "persons",
                     },
@@ -177,10 +176,10 @@ var ocsConfig = {
         {  
             array   : "events", 
             format : [{
-                nodeUtils : "children",
+                fn : "children",
                 arg : ["sessions"],
             },{
-                nodeUtils : "children",
+                fn : "children",
                 arg : ["session"],
             }], 
             label   : {
@@ -193,7 +192,7 @@ var ocsConfig = {
                     setter : 'addPaper',
                     fk : {
                         format : [{
-                            nodeUtils : "text",
+                            fn : "text",
                         }],
                         array : "proceedings",
                     },  
@@ -204,24 +203,24 @@ var ocsConfig = {
                     setter : 'addChair',
                     fk : {
                         format : [{
-                            nodeUtils : "text",
+                            fn : "text",
                         }],
                         array : "persons",
                     }, 
                 }
             },
             // set all events to sessionEvent
-            postProcess : function(node,event){
-                var catName = "SessionEvent";
-                var catId = getArrayId("categories",'setName',catName);
-                if(catId==-1){
-                  var category= {}; 
-                  category['setName']=catName;
-                  objects.categories.push(category);
-                  catId = objects.categories.length-1;
-                }
-                event['addCategorie']=catId; 
-            },
+            // postProcess : function(node,event){
+            //     var catName = "SessionEvent";
+            //     var catId = getArrayId("categories",'setName',catName);
+            //     if(catId==-1){
+            //       var category= {}; 
+            //       category['setName']=catName;
+            //       objects.categories.push(category);
+            //       catId = objects.categories.length-1;
+            //     }
+            //     event['addCategorie']=catId; 
+            // },
         },
 
     ],

@@ -57,6 +57,10 @@
         margin        : 0;
         vertical-align: middle;
     } 
+        
+    .fc-event-sidebar {
+        min-height: 2em;
+    } 
 
     #external-events{
         border        : 1px solid #ccc;

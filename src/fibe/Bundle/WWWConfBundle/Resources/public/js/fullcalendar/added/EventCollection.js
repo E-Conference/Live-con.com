@@ -113,7 +113,7 @@ var EventCollection = {
               brothersIds = EventCollection.eventsToComputeBroCountRangeIndexes;   
             
             // console.log("----------------------------------------------------");
-            console.log("affected "+brothersIds.length+" :",brothersIds); 
+            console.log(brothersIds.length+" affected :",brothersIds); 
             // console.log("non affected : ",EventCollection.broCountRange);
             // console.log("----------------------------------------------------");
             
@@ -125,24 +125,23 @@ var EventCollection = {
             return EventCollection.eventsToComputeBroCountRangeIndexes;
             
             function computeCountRange(brosIds,doChildren){
-              //copy array
-              var remainingIds = brosIds.slice(0);
+              
+              var remainingIds = brosIds.slice(0); //array copy 
               for (var i in brosIds){
                 curBro = Events[brosIds[i]];  
+                if(curBro.allDay)continue;
                 // console.log("curBro",curBro.id)
-                //create rtn object for curBro  
                 baseCount = EventCollection.broCountRange[curBro.id].count;
                 var brosIdsofcurBro = curBro.getNonAllDayBrosId(); 
                 // console.debug(curBro.id +" has "+brosIdsofcurBro.length+" non all day bros")
                 for (var j in remainingIds){
+
                   bro = Events[ remainingIds[j] ];  
-                  //ensure the bro is not itself or an all day event
-                  if(curBro.id===bro.id )continue;  
-                  //ensure the bro is a real bro
-                  if(curBro.isOutOf(bro,true) || ($.inArray(bro.id, brosIdsofcurBro) === -1))continue;   
-                  // console.log("curBro ",curBro.id," discovering ",bro.id)  
-                  //update self properties  
-                  EventCollection.broCountRange[curBro.id]["count"]++; 
+                  
+                  if(curBro.id===bro.id || bro.allDay )continue;   //ensure the bro is not itself or an all day event
+                  
+                  if(curBro.isOutOf(bro,true) || ($.inArray(bro.id, brosIdsofcurBro) === -1))continue;    //ensure the bro is a real bro 
+                  EventCollection.broCountRange[curBro.id]["count"]++;  //update self properties  
 
                   //register bro as bro of curBro
                   EventCollection.broCountRange[bro.id] = {

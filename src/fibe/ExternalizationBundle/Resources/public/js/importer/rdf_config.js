@@ -6,29 +6,24 @@
 
 var rdfConfig = {
     isRDF : false,
-
-    // rootNode : {
-    //     format : [{
-    //         nodeUtils : "node",
-    //         arg : ["RDF:RDF"],
-    //     }] 
-    // }, 
+ 
+    util : "xmlUtil",
     getNodeKey : {
         format : [{
-            nodeUtils : "attr",
+            fn : "attr",
             arg : ["rdf:about"],
         }] 
     }, 
     getNodeName : {
         format : [{
-            nodeUtils : "rdfNodeName", 
+            fn : "rdfNodeName", 
         }] 
     },  
     mappings : [
         {
             array   : "locations",  
             format : [{
-                nodeUtils : "children",
+                fn : "children",
                 arg : ["meetingroomplace",true],
             }], 
             label : {
@@ -43,7 +38,7 @@ var rdfConfig = {
         {
             array   : "organizations",  
             format : [{
-                nodeUtils : "children",
+                fn : "children",
                 arg : ["organization",true],
             }], 
             label : {
@@ -58,7 +53,7 @@ var rdfConfig = {
         {
             array   : "persons", 
             format : [{
-                nodeUtils : "children",
+                fn : "children",
                 arg : ["person",true],
             }],  
             label : {
@@ -104,7 +99,7 @@ var rdfConfig = {
                     setter : 'addOrganization',
                     fk : {
                         format : [{
-                            nodeUtils : "attr",
+                            fn : "attr",
                             arg : ["rdf:resource"],
                         }],
                         array : "organizations",
@@ -115,7 +110,7 @@ var rdfConfig = {
         {
             array   : "proceedings",  
             format : [{
-                nodeUtils : "children",
+                fn : "children",
                 arg : ["inproceedings",true],
             }],  
 
@@ -134,7 +129,7 @@ var rdfConfig = {
                     setter : 'addTopic', 
                     fk : {
                         format : [{
-                            nodeUtils : "text",
+                            fn : "text",
                         }],
                         array : "topics",
                         //pointed entity isn't a concrete node in this format and thus, don't contains any index 
@@ -151,7 +146,7 @@ var rdfConfig = {
                     setter : 'addTopic',
                     fk : {
                         format : [{
-                            nodeUtils : "text",
+                            fn : "text",
                         }],
                         array : "topics",
                         //pointed entity isn't a concrete node in this format and thus, don't contains any index 
@@ -165,7 +160,7 @@ var rdfConfig = {
                     setter : 'addAuthor',
                     fk : {
                         format : [{
-                            nodeUtils : "attr",
+                            fn : "attr",
                             arg : ["rdf:resource"],
                         }],
                         array : "persons",
@@ -176,7 +171,7 @@ var rdfConfig = {
                     setter : 'addAuthor',
                     fk : {
                         format : [{
-                            nodeUtils : "attr",
+                            fn : "attr",
                             arg : ["rdf:resource"],
                         }],
                         array : "persons",
@@ -187,7 +182,7 @@ var rdfConfig = {
         {
             array   : "events",  
             format : [{
-                nodeUtils : "children",
+                fn : "children",
                 arg : ["event",true],
             }],  
             label : {
@@ -202,7 +197,7 @@ var rdfConfig = {
                 'swc:haslogo' : {
                     setter : 'setLogoPath',
                     format : [{
-                        nodeUtils : "attr",
+                        fn : "attr",
                         arg : ["rdf:resource"],
                     }], 
                 },
@@ -257,7 +252,7 @@ var rdfConfig = {
                     setter : 'addTopic',
                     fk : {
                         format : [{
-                            nodeUtils : "text",
+                            fn : "text",
                         }],
                         array : "topics", 
                         create : "setName",
@@ -306,7 +301,7 @@ var rdfConfig = {
                 'foaf:homepage' : {
                     setter : 'setUrl',
                     format : [{
-                        nodeUtils : "attr",
+                        fn : "attr",
                         arg : ["rdf:resource"],
                     }],  
                 },
@@ -314,7 +309,7 @@ var rdfConfig = {
                     setter : 'setParent',
                     fk : {
                         format : [{
-                            nodeUtils : "attr",
+                            fn : "attr",
                             arg : ["rdf:resource"]
                         }],
                         array : "events",
@@ -331,10 +326,10 @@ var rdfConfig = {
                 tmp = node[0].nodeName.split("swc:").join("").split("&swc;").join("").split("event:").join("");
                 if(testCatName(tmp))catName = tmp;
      
-                tmp = NodeUtils.getNodeName(node); 
+                tmp = fn.getNodeName(node); 
                 if(testCatName(tmp))catName = tmp;
 
-                tmp = NodeUtils.getNodeName(node).split("&swc;").join("").split("swc:").join("").split("event:").join("");
+                tmp = fn.getNodeName(node).split("&swc;").join("").split("swc:").join("").split("event:").join("");
                 if(testCatName(tmp))catName = tmp; 
      
                 if(catName){
@@ -382,7 +377,7 @@ var rdfConfig = {
         {
             array   : "roles",  
             format : [{
-                nodeUtils : "children",
+                fn : "children",
                 arg : ["presenter",true],
             }],  
             override : function(node){
@@ -409,7 +404,7 @@ var rdfConfig = {
         {
             array   : "roles",  
             format : [{
-                nodeUtils : "children",
+                fn : "children",
                 arg : ["chair",true],
             }],  
             override : function(node){

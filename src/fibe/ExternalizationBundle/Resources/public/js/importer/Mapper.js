@@ -40,15 +40,16 @@ Mapper = {
     },
 
     defaultNodeReadingConfig : {
+        util : "xmlUtil",
         getNodeKey : {
             format : [{
-                nodeUtils : "attr",
+                fn : "attr",
                 arg : ["rdf:about"],
             }] 
         }, 
         getNodeName : {
             format : [{
-                nodeUtils : "rdfNodeName", 
+                fn : "rdfNodeName", 
             }] 
         },  
     },
@@ -56,9 +57,9 @@ Mapper = {
 
         //TODO make this dynamic
         Mapper["mappingConfig"] = baseConfig || Mapper.defaultNodeReadingConfig;
-		 
+		Importer().setMappingConfig(Mapper["mappingConfig"]);
         if (!$data)$data = Mapper["data"];
-        console.log($data);
+        console.log("mapping : ",$data);
         Mapper.dataLinks= {};
         Mapper.knownNodes = {};
         Mapper.knownCollection = {};
@@ -101,7 +102,7 @@ Mapper = {
             }
             function getNodeName(node){
                 
-                var nodeName = doFormat(node,Mapper.mappingConfig.getNodeName.format);
+                var nodeName = Importer().doFormat(node,Mapper.mappingConfig.getNodeName.format);
                 
                 return (nodeName ? nodeName.toLowerCase() : console.log("undefined nodename for",node));
             }
@@ -173,6 +174,7 @@ Mapper = {
         })
 	},
 
+    //loop over the model panels  to build a mapping file
     generateMappingFile : function(){
         console.log("############### generateMappingFile starts")
         
