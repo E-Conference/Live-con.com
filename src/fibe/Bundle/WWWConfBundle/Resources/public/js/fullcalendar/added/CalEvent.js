@@ -488,7 +488,7 @@ CalEvent.prototype.getNonAllDayBrosId = function (){
     }
     var bros = parent.children;
     for (var i in bros){ 
-      if(bros[i].id==this.id)continue;
+      if(bros[i].id==this.id || !Events[bros[i].id])continue;
       if(!Events[bros[i].id].allDay){
         rtn.push(bros[i].id);
         continue;

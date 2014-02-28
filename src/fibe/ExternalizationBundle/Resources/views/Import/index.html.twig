@@ -296,7 +296,7 @@
         function extractDatas(mapping,op){
             if(!op)op={}; 
 
-              run( Mapper["data"],mapping,op,function(data,importedLog,notImportedLog){
+              Importer().run( Mapper["data"],mapping,op,function(data,importedLog,notImportedLog){
                     Pager.changePage('#page-result');
                     Mapper.setSerialisedDatas(data);
                     Mapper.setImportedLog(importedLog);
@@ -376,36 +376,9 @@
         function handleSendSerializedConf(e) {
                 e.stopPropagation();
                 e.preventDefault();
-
-                {% if not wwwConf.isEmpty() %} 
-                //empty conf if needed
-                    confirmEmpty(function(){
-                        bootstrapAlert("info",' emptying the conference...',"Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
-                        Pager.changePage('#page-conf-emptying'); 
-                        $.ajax({ 
-                                type: "GET",
-                                cache: false,  
-                                url: "{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}",
-                                success:function(a,b,c)
-                                { 
-                                    bootstrapAlert("success",' now sending file...',"conference emptied,","<i class='fa-2x fa fa-spinner fa-spin'></i>");
-                                    Pager.changePage('#page-conf-emptied'); 
-                                    sendSerializedConf(Mapper.getSerialisedDatas());
-                                },
-                                error:function(a,b,c)
-                                { 
-                                    bootstrapAlert("warning",'failed empting the conf because : '+c);
-                                    console.log("ERROR empting the conf")
-                                    console.log(a)
-                                    console.log(b)
-                                    console.log(c) 
-                                },
-                            });
-                    }) 
-                {% else %} 
+ 
                     bootstrapAlert("info",' sending file...',"Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
-                    sendSerializedConf(dataArray);
-                {% endif %}
+                    sendSerializedConf(Mapper.getSerialisedDatas()); 
 
                 //send file
                 function sendSerializedConf(dataArray){
