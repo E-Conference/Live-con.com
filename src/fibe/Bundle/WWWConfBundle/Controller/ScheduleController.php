@@ -112,7 +112,7 @@ class ScheduleController extends Controller
         $methodParam = $getData->get('method', '');
         $postData = $request->request->all();
 
-        $conf=$this->get('security.context')->getToken()->getUser()->getCurrentConf();
+        $conf=$this->getUser()->getCurrentConf();
         $mainConfEvent = $conf->getMainConfEvent();
         
         $JSONArray = array(); 
