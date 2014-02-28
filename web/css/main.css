@@ -412,3 +412,34 @@ background: #315F73;
 	
 
 }
+
+
+/*-------------------------------------------------------------------------------------
+--------------------------------------Button color Livecon-----------------------------------------
+-------------------------------------------------------------------------------------*/
+
+.btn-livecon
+{   color:#fff;
+	background-color:#2B5566;
+	border-color:#2B5566;
+}
+.btn-livecon:hover,.btn-livecon:focus,.btn-livecon:active,.btn-livecon.active,.open .dropdown-toggle.btn-livecon{
+	color:#fff;
+	background-color:#19313b;
+	border-color:#19313b
+}
+.btn-livecon:active,.btn-livecon.active,.open .dropdown-toggle.btn-livecon{
+	background-image:none
+	}
+.btn-livecon.disabled,.btn-livecon[disabled],
+fieldset[disabled] .btn-livecon,.btn-livecon.disabled:hover,.btn-livecon[disabled]:hover,
+fieldset[disabled] .btn-livecon:hover,.btn-livecon.disabled:focus,.btn-livecon[disabled]:focus,
+fieldset[disabled] .btn-livecon:focus,.btn-livecon.disabled:active,.btn-livecon[disabled]:active,
+fieldset[disabled] .btn-livecon:active,.btn-livecon.disabled.active,.btn-livecon[disabled].active,
+fieldset[disabled] .btn-livecon.active
+{
+	background-color:#19313b;border-color:#19313b
+}
+.btn-livecon .badge{
+	color:#428bca;
+	background-color:#2B5566}
