@@ -1,3 +1,8 @@
+documentation:
+    resource: "@DocumentationBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 fibe_conference:
     resource: "@fibeConferenceBundle/Controller/"
     type:     annotation
