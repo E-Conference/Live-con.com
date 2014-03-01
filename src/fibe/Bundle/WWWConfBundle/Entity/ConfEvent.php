@@ -17,7 +17,7 @@ use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
  *
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity
- * @ORM\Entity(repositoryClass="IDCI\Bundle\SimpleScheduleBundle\Repository\EventRepository")
+ * @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\ConfEventRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class ConfEvent extends Event

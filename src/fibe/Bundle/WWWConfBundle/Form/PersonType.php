@@ -23,9 +23,10 @@ class PersonType extends AbstractType
             ->add('familyName', 'text', array('label' => "Family Name"))
             ->add('email','text', array('required' => false))
             ->add('age', 'text', array('required' => false))
-            ->add('page', 'text', array('required' => false))
-            ->add('img', 'text', array('required' => false))
+            ->add('page', 'text', array('required' => false, 'label' => 'Homepage'))
+            ->add('img', 'text', array('required' => false, 'label' => 'Image'))
             ->add('openId', 'text', array('required' => false))
+            ->add('description', 'textarea', array('required' => false, 'label' => 'Description'))
             // ->add('nick', 'text', array('required' => false))
             ->add('organizations', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Organization',
@@ -36,7 +37,7 @@ class PersonType extends AbstractType
             ))
             ->add('papers', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Paper',
-                'label'   => 'Papers',
+                'label'   => 'Publications',
                 'choices'=> $this->user->getCurrentConf()->getPapers()->toArray(),
                 'required' => false,
                 'multiple'  => true

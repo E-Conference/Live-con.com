@@ -69,6 +69,7 @@ class ConferenceController extends Controller
                   $em = $this->getDoctrine()->getManager();
                   $wwwConf->slugify();
                   $em->persist($wwwConf);
+                  $wwwConf->uploadLogo();
                   $em->flush();
 
                   $this->container->get('session')->getFlashBag()->add(
@@ -204,6 +205,10 @@ class ConferenceController extends Controller
             $defaultAppConfig->setBGColorfooter("#305c6b");
             $defaultAppConfig->setTitleColorFooter("#f3f6f6");
             $defaultAppConfig->setIsPublished(true);
+            $defaultAppConfig->setDblpDatasource(true);
+            $defaultAppConfig->setGoogleDatasource(true);
+            $defaultAppConfig->setDuckduckgoDatasource(true);
+            $defaultAppConfig->setLang("EN");
            
             $em->persist($defaultAppConfig);
 

@@ -170,19 +170,19 @@
     
   <script src="{{ asset('bundles/fibewwwconf/js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
   <script type="text/javascript">
-    var Events = {};
-    var calendar_events_indexes   = {}; 
-    var calendar_events   = []; 
-    var mainConfEvent;
-    var dragged = null;
-    var $sidebar;
-    var $calendar;
-    var stopRender = false;
-    var fetched = false;
-    var firstWeekDay = 1;
-    var firstDay = moment('{{currentConf.mainConfEvent.startAt|date("Y-m-d")}}');
+    var Events = {}; // every events hashmap (calendar and sidebar)
+    var calendar_events   = []; //calendar evnt array
+    var calendar_events_indexes   = {};  // calendar event indexes
+    var mainConfEvent; // the main conf event
+    var dragged = null; //the last dragged object
+    var $sidebar; //$div containing the sidebar
+    var $calendar; //$div containing the calendar
+    var stopRender = false; //$div containing the sidebar
+    var fetched = false; // are the event fresh in memory ? if not nwe need a fetch request
+    var firstWeekDay = 1; // avoid first day to be sunday
+    var firstDay = moment('{{currentConf.mainConfEvent.startAt|date("Y-m-d")}}'); // supposed to point the first mainconfevent day
 
-    var logtime;
+    var logtime; // global benchmark var
     //path
     var DATA_FEED_URL = "{{ path('schedule_view_event_get') }}";
     var op = {  
@@ -193,52 +193,53 @@
         quickUpdateUrl: DATA_FEED_URL + "?method=update",
         quickDeleteUrl: DATA_FEED_URL + "?method=remove", 
         resFeedURL    : "",
-        data          : {}
+        data          : {} // request parameters
     }; 
-
-    //top right button
-    var isClassicView = true;
-    var viewBtns = {
-      month:{
-        classic:"month",
-        resource:"resourceMonth",
-        elem:$('<span class="fc-button fc-state-default fc-corner-left" unselectable="on">month</span>')},
-      week:{
-        classic:"agendaWeek",
-        resource:"resourceWeek",
-        elem:$('<span class="fc-button fc-state-default fc-state-active" unselectable="on">week</span>')},
-      day:{
-        classic:"agendaDay",
-        resource:"resourceDay",
-        elem:$('<span class="fc-button fc-state-default fc-corner-right" unselectable="on">day</span>')},
-    };
+    var startView = "agendaWeek";
+    var resourceView = false;
+    // //top right button
+    // var isClassicView = true;
+    // var viewBtns = {
+    //   month:{
+    //     classic:"month",
+    //     resource:"resourceMonth",
+    //     elem:$('<span class="fc-button fc-state-default fc-corner-left" unselectable="on">month</span>')},
+    //   week:{
+    //     classic:"agendaWeek",
+    //     resource:"resourceWeek",
+    //     elem:$('<span class="fc-button fc-state-default fc-state-active" unselectable="on">week</span>')},
+    //   day:{
+    //     classic:"agendaDay",
+    //     resource:"resourceDay",
+    //     elem:$('<span class="fc-button fc-state-default fc-corner-right" unselectable="on">day</span>')},
+    // };
 
     // resources view
-    var currentView = "week"; 
-    var resConfig = {
-      location : {
-        url : "{{ path('exporter_api', { 'entity_reference': 'schedule_location','_format': 'json' }) }}?conference_id={{currentConf.id}}",
-        parse : function(e){ 
-          if(e.location && e.location.id!= ""){
-            return e.location.id;
-          }else{
-            return "other";
-          }
-        }
-      },category : {
-        url : "{{ path('exporter_api', { 'entity_reference': 'schedule_category','_format': 'json' }) }}?conference_id={{currentConf.id}}",
-        parse : function(e){
-          console.log(e)
-          if( e.categories && e.categories.length < 1) return "other" ; 
-          for(var i in e.categories){
-            var c = e.categories[i];
-            rtn.push(c.id);
-          } 
-          return rtn;
-        }
-      }
-    };
-    var currentRes = "location";
+    // var startView = "week"; 
+    // var resConfig = {
+    //   location : {
+    //     url : "{{ path('exporter_api', { 'entity_reference': 'schedule_location','_format': 'json' }) }}?conference_id={{currentConf.id}}",
+    //     parse : function(e){ 
+    //       if(e.location && e.location.id!= ""){
+    //         return e.location.id;
+    //       }else{
+    //         return "other";
+    //       }
+    //     }
+    //   },category : {
+    //     url : "{{ path('exporter_api', { 'entity_reference': 'schedule_category','_format': 'json' }) }}?conference_id={{currentConf.id}}",
+    //     parse : function(e){
+    //       console.log(e)
+    //       if( e.categories && e.categories.length < 1) return "other" ; 
+    //       for(var i in e.categories){
+    //         var c = e.categories[i];
+    //         rtn.push(c.id);
+    //       } 
+    //       return rtn;
+    //     }
+    //   }
+    // };
+    // var currentRes = "location";
 
     $(document).ready(function() {    
 
@@ -246,19 +247,12 @@
       var $modal = $('#modal').hide();
       var $modalNewEvent = $('#modal-new-event').hide().draggable({ handle: ".modal-header" });
       var $modalSetParent = $('#modal-set-parent').hide().draggable({ handle: ".modal-header" });
-      var $modalBody = $modal.find(".modal-body").draggable({ handle: ".modal-header" });
-      var $modalNewEventBody = $modalNewEvent.find(".modal-body"); 
+      var $modalBody = $modal.find(".modal-body");
       
       $calendar = $('#calendar');
-      $sidebar = $('#external-events');
-
-      // get first day
+      $sidebar = $('#external-events'); 
       
-      var initing = true;
-
-
-
-
+      var initing = true; 
 
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------- render events from json datasource -----------------------------------*/
@@ -272,21 +266,22 @@
           header: {
               left: 'prev,next',
               center: 'title',
-              right: '' // computed in resource view
+              right: 'month,agendaWeek,agendaDay' // computed in resource view
           },   
           aspectRatio: 1.6,
           firstDay: firstWeekDay,         
           year: firstDay.year(), 
           month: firstDay.month(),
           date: firstDay.date(), 
-          resources : resConfig[currentRes].url,
-          // windowResize: function(view) { 
-          // }, 
+          // resources : resConfig[currentRes].url,
           //get events
+          // viewRender : function(a,b,c,d,e,f,g){ 
+          //   startView =a.name;
+          // },
           events : function(start, end, callback) { 
-              //events have already been fetched
               
               if(fetched === true ){
+                //events have already been fetched
                 fetched = false;
                 stopRender = false;  
                 // console.log("fetched",calendar_events_indexes) 
@@ -369,8 +364,7 @@
               if(!mainConfEvent || stopRender)return;
               clearTimeout(repositionTimeout);
               repositionTimeout=setTimeout(function(){    
-                logtime = moment()
-                  updateEventArray();  
+                logtime = moment() 
                   stylizeBlock();
                 console.debug(moment().diff(logtime)+" to updateEventArray & stylizeBlock"); 
                 console.log( "######################################################"); 
@@ -381,65 +375,72 @@
             if(event.allDay){
               return;
             }
-            var width = availWidth + ( currentView == "day" ? 50 : 5 );
+            // alert(startView)
+            var width = availWidth 
+                        + ( $calendar.fullCalendar('getView').name == "agendaDay" ? 30 : 10 );
             var height = bottom - top;
             var left = leftmost;
             var zindex = 8;
 
             var Hmargin = 5;
-            var Wmargin = 3;
+            var Wmargin = 2;
             try{
 
-            //go to the parent place
-            var parentId = event.parent.id;
-            while(!Events[parentId].allDay){ 
-                var parentCount   = EventCollection.broCountRange[parentId].count,
-                    parentRange   = EventCollection.broCountRange[parentId].range; 
+                //go to the parent place
+                var parentId = event.parent.id,
+                    count    = EventCollection.broCountRange[event.id].count,
+                    range    = EventCollection.broCountRange[event.id].range
+                    shifted  = false; 
+ 
+                while(!Events[parentId].allDay){ 
+                    var parentCount   = EventCollection.broCountRange[parentId].count,
+                        parentRange   = EventCollection.broCountRange[parentId].range; 
 
-              // console.log("## eventCalculateWidth"+event.id+" : parent : "+parentId+" count "+count+" range "+range)
-                width /= parentCount;
-                left += width*parentRange;
+                    range += (parentRange*count);
+                    count *= parentCount;
+                     
+                    // width-=Wmargin*2;
+                    left+=Wmargin; 
+ 
+                    if(moment(Events[parentId].start).isSame(moment(event.start))){
+                      top    += Hmargin/2;
+                      height -= Hmargin/2;
+                    } 
+                    if(moment(Events[parentId].end).isSame(moment(event.end))){ 
+                      height -= Hmargin;
+                    }
+                    // height -= (2*Hmargin);
 
-                left   += Wmargin;
-                // width  -= (2*Wmargin);
-                if(moment(Events[parentId].start).isSame(moment(event.start))){
-                  top    += Hmargin/2;
-                  height -= Hmargin/2;
-                } 
-                if(moment(Events[parentId].end).isSame(moment(event.end))){ 
-                  height -= Hmargin;
+                    zindex +=100
+
+                    parentId = Events[parentId].parent.id;
                 }
-                // height -= (2*Hmargin);
-
-                zindex +=100
-
-                parentId = Events[parentId].parent.id;
-            }
-
-            var count   = EventCollection.broCountRange[event.id].count,
-                range   = EventCollection.broCountRange[event.id].range; 
-
-            width = width/count;
-            left = left+(width*range);
 
 
-            seg.outerWidth = width;
-            seg.left = left;
-            seg.outerHeight = height;
-            seg.top = top;
-            seg.zindex = zindex; 
-            // .animate({boxShadow: '-30px 0 30px #699, 30px 0 30px #969, 0 -30px 30px #996, 0 30px 30px #669'})
+                width = width/count;
+                left = left+(width*range);
+
+
+                seg.outerWidth = width;
+                seg.left = left;
+                seg.outerHeight = height;
+                seg.top = top;
+                seg.zindex = zindex;
             }catch(e){
               console.warn("broCountRange not computed for "+event.id) 
             }
           },
-          eventAfterRender : function( event, element, view ) {
+          eventAfterRender : function( event, element, view ) { // hide filtered events
             if(Events[event.id].hide === true)
               $(element).hide();
+
+            Events[event.id]["elem"] = $(element)
           },
-      {% if authorized == 1 %} 
+
+
+      {% if authorized == 1 %} //editing function that require schedule flag
           editable: true,
-          eventClick: function(calEvent, jsEvent, view) {  // edit modal
+          eventClick: function(calEvent, jsEvent, view) {  // get the full edit form
               $.ajax({
                   url: op.updateUrl+"?id="+calEvent.id,  
                   success: function(doc) {
@@ -452,7 +453,7 @@
                           // rerender if changed
                         var rerender = function(){    
                           $modal.on('hidden.bs.modal', function () {
-                            setTimeout(function(){EventCollection.refetchEvents(true)},10); 
+                            setTimeout(function(){EventCollection.resetEvents()},10); 
                           })
                         }
 
@@ -482,10 +483,10 @@
           selectable: true,
           selectHelper: true,
           select: function(start, end, allDay) { //new event
-              $modalNewEvent.modal("show")
-                            .on('shown.bs.modal', function() {
+              $modalNewEvent.off('shown.bs.modal').on('shown.bs.modal', function() {
                                 $(this).find("#name").val("").focus();
-                            });
+                            })
+                            .modal("show");
 
               $modalNewEvent.find("form").off("submit").submit(function(e){
                 var title = $(this).find("#name").val();
@@ -530,17 +531,22 @@
               // $calendar.fullCalendar('unselect');
               
           },
-          //resizing events in calendar
+          //resizing events in calendar (only the end date is changed)
           eventResize: function(event,dayDelta,minuteDelta,revertFunc){ 
 
+              if(!event["end"] && event.allDay){ //event now ends before it starts :S
+                  //fit the end date thanks to children
+                  // event["end"] = moment(event["start"]).add("hours",1).format();
+                   revertFunc();
+              }
               var oldEnd = moment(event["end"]).subtract({'d':dayDelta,'m':minuteDelta});
 
-              setTimeout(function(){   
+              // setTimeout(function(){   
                   console.log(dayDelta,minuteDelta,event); 
-                  if(!event.isOneDayLong() && !event.allDay){ 
-                    // event.allDay = true;
-                    event.fitToDay( event["start"],oldEnd.format());  
-                  }
+                  // if(!event.isOneDayLong() && !event.allDay){ 
+                  //   // event.allDay = true;
+                  //   event.fitToDay( event["start"],oldEnd.format());  
+                  // }
 
                   event.updateParentDate();
                   event.updateChildrenDate(); 
@@ -548,18 +554,13 @@
                   event.computeCountRange({allBrosInDay:true}); 
                   event.renderForRefetch();
 
-                  EventCollection.refetchEvents(false,true);
+                  EventCollection.refetchEvents();
                   event.persist(); 
-              },0);
-          },  
-          // viewRender : function( view, element ){
-          //   // fetched = false; 
-          //   if(mainConfEvent)
-          //   mainConfEvent.computeCountRange({allEventsInDay:true});
-          // },
+              // },0);
+          },
           
           droppable: true, // allows things to be dropped into the calendar
-          drop: function(date, allDay) { //drop from sidebar
+          drop: function(date, allDay) { //drop from SIDEBAR
           
               // retrieve the dropped element's stored Event Object 
               var event = dragged[1]; 
@@ -586,10 +587,7 @@
               event.renderForRefetch();
               EventCollection.refetchEvents();
               event.persist();
-
-
               // render the event on the calendar  
-                
           },
 
           eventDragStart: function( event, jsEvent, ui, view ) { 
@@ -601,11 +599,9 @@
           eventDragStop: function( event, jsEvent, ui, view ) {  
               // var parent = EventCollection.find(event.parent.id,{noSidebar:true});  
               var event = Events[event.id]
+              if(mainConfEvent.id==event.id && !event.allDay)return;
               var parent = EventCollection.find(event.parent.id,{noSidebar:true}); 
-              var children = EventCollection.getChildren(event,{concat:true,onlyEvent:true});
-              // if(isClassicView !== true ){
-              //   console.log("ressources changed ! "+ event.resource)
-              // }
+              var children = EventCollection.getChildren(event,{concat:true,onlyEvent:true}); 
               
               //compute old day too 
               //TODO put this in dragstart 
@@ -614,70 +610,68 @@
               //TODO : parent  has here a wrong start/end updated from somewhere and need to be computed back :S  
               dragged = [ ui.helper[0], 
                           event, 
-                          {start:moment(event.start),end:moment(event.end)},
-                          {start:moment(parent.start),end:moment(parent.end)},
+                          {start:moment(event.start), end:moment(event.end)},
+                          (parent?{start:moment(parent.start),end:moment(parent.end)}:{}),
                           $(children).map(function(){return {start:moment(this.start),end:moment(this.end)};})
-                        ];  
-  
-              setTimeout(function(){  
+                        ];   
+
+ 
+          },
+          eventDrop : function( event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) {
                   // event.computeCountRange({allEventsInDay:true}); 
                   //TODO : parent  has here a wrong start/end updated from somewhere and need to be computed back :S 
                   //TODO : parent  has here a wrong start/end updated from somewhere and need to be computed back :S 
-                  if(!dragged[1].allDay && moment(dragged[1].start).isSame(dragged[2].start))return;
-                  var event = dragged[1] 
-                  var parentDate = dragged[3];
-                  var childrenDates = dragged[4]; 
-                   
-                  var parent = EventCollection.find(event.parent.id,{noSidebar:true});
-                  var children = EventCollection.getChildren(event,{concat:true,onlyEvent:true});
-                  parent.start = parentDate.start.format(); 
-                  parent.end = parentDate.end.format(); 
-                  stopRender = true;
-                  //get diff
+
+                  var event = dragged[1];
                   var diff = moment(dragged[2].start).diff(moment(event['start']));
+                  if( (diff==0 && !event.allDay)  || 
+                      (mainConfEvent.id==event.id && !event.allDay) 
+                       )
+                      return revertFunc();
+
+                  var parent = EventCollection.find(event.parent.id,{noSidebar:true});
+
+                  stopRender = true;
+                  // if(!event.isOneDayLong())event["allDay"]
  
-                  //apply to children  
+                  //apply to children   
+                  var childrenDates = dragged[4]; 
+                  var children = EventCollection.getChildren(event,{concat:true,onlyEvent:true});
                   $.each(children,function(i,child){ 
-                    // var startScript = moment();
                     child['start']  = moment(childrenDates[i]['start']).subtract(diff);
                     child['end']  = moment(childrenDates[i]['end']).subtract(diff);
            
                     child.computeCountRange();
                     child.renderForRefetch();
-                    child.formatDate() 
-                    child.persist() 
-                    // console.debug(moment().diff(startScript)+" to affect one child"); 
-                  }); 
-                  // console.debug(moment().diff(startScript)+" to affect children");
+                    child.formatDate();
+                    child.persist();
+                  });  
  
                   //apply to parent 
-                  if(event.isOutOf(parent,true)){
-                    //event dropped out of parent
-                    console.log(" #### moved out ####");  
-                    event.setParent(mainConfEvent); 
-                  } 
-                  event.updateParentDate();  
- 
-
-     
+                  if(parent){
+                    var parentDate = dragged[3];
+                    parent.start = parentDate.start.format(); 
+                    parent.end = parentDate.end.format(); 
+                    if(event.isOutOf(parent,true)){
+                      //event dropped out of parent
+                      console.log(" #### moved out ####");  
+                      event.setParent(mainConfEvent); 
+                    } 
+                    event.updateParentDate();  
+                  }
                   event.computeCountRange({allBrosInDay:true});
-                  // event.renderForRefetch();
  
                   EventCollection.refetchEvents(); 
                   event.persist(); 
-
-              },1);
-
- 
           },
-      {% endif %} 
-      {# end autorized #}
+      {% endif %}{# end autorized #}
       };
 
       //launch calendar
       $calendar.fullCalendar(calendarOption);  
-      $calendar.fullCalendar('changeView', viewBtns[currentView].classic );
-      //additional boutons first day and refresh
+      $calendar.fullCalendar('changeView', startView );
+
+      //additional schedule controls : first day and refresh
       $('.fc-header-left')
           .append(
             $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"> First day</button>')
@@ -690,36 +684,7 @@
               .click(function(e){ 
                 EventCollection.resetEvents();
               })
-          ) 
-
-      /*-------------------------------------------------------------------------------------------------*/
-      /*------------------------------------- update function -------------------------------------------*/
-      /*-------------------------------------------------------------------------------------------------*/
-
-      /**
-       * function triggered when all events have been rendered 
-       */
-      function updateEventArray(){ 
-
-          var startScript = moment();
-          // calendar_events = [];
-          var calendarEvents = $calendar.fullCalendar('clientEvents'); //loop only on calendar events
-
-          for (var i in calendarEvents){
-            var calendarEvent = calendarEvents[i];
-            if(Events[calendarEvent.id]){
-              Events[calendarEvent.id] = calendarEvent;
-            } 
-          } 
-          var foundElem = []; 
-          $(".fc-view-"+(isClassicView ? viewBtns[currentView].classic : viewBtns[currentView].resource)+" .fc-event").each(function(i){ 
-            var id = parseInt($(this).data("id"));  
-            foundElem.push(id)
-            if(Events[id])Events[id]['elem'] = $(this);
-          });
-          // console.debug(moment().diff(startScript)+" to updateEventArray");
-          // console.log("event array updated",Events);
-      }
+          ); 
 
 
       /*-----------------------------------------------------------------------------------------------------*/
@@ -747,7 +712,7 @@
                 var element = event.elem; 
                 if(!element)  continue; //event is in another view
 
-                //action on hovered by another dragging event  
+                //action on hovered by another dragged event  
                 element.data("border-color",element.css("border-color"))
                        // .data("background-color",element.css("background-color"))
                        .data("prop",getProp(element)); 
@@ -755,7 +720,31 @@
                 
                 if($.inArray(event.id, calendarEventsIds) !== -1 ){ //stylize only event in the calendar
 
-          {% if authorized == 1 %} 
+                    /*************** popover *****************/
+                    element.popover({
+                        trigger : 'hover',
+                        html : true,
+                        placement : function( context,source){
+                          var popoverProp = getProp($(context));
+                          var eventProp = getProp(source);
+                          var calendarProp = getProp($calendar);
+                          // console.log(popoverProp,eventProp,calendarProp)
+                          if(eventProp.x + eventProp.w + popoverWidth < calendarProp.x + calendarProp.w )
+                            return "right";
+                          if(eventProp.x - popoverWidth > calendarProp.x)
+                            return "left";
+                          return "bottom";
+                        },
+                        title : ' <b><span class="muted">#'+event.id+'</span> '+event.title+'</b>',
+                        content : event.getPopoverContent(),
+                    });
+
+          {% if authorized == 1 %}
+                    //the main conf event isnt resizable
+                    if(event.id==mainConfEvent.id){
+                      element.find(".ui-resizable-handle").remove();
+                    }
+                    //droppable = set as child
                     element.droppable({ 
                         tolerance: "pointer" ,
                         over: function( ev, ui ) {
@@ -849,28 +838,9 @@
                         }
                     }); 
           {% endif %}   
-
-                    /*************** popover *****************/
-                    element.popover({
-                        trigger : 'hover',
-                        html : true,
-                        placement : function( context,source){
-                          var popoverProp = getProp($(context));
-                          var eventProp = getProp(source);
-                          var calendarProp = getProp($calendar);
-                          // console.log(popoverProp,eventProp,calendarProp)
-                          if(eventProp.x + eventProp.w + popoverWidth < calendarProp.x + calendarProp.w )
-                            return "right";
-                          if(eventProp.x - popoverWidth > calendarProp.x)
-                            return "left";
-                          return "bottom";
-                        },
-                        title : ' <b><span class="muted">#'+event.id+'</span> '+event.title+'</b>',
-                        content : event.getPopoverContent(),
-                    });
               }//end stylize only event in the calendar
 
-              /*************** hover : change border color and set opacity to  *****************/
+              /*************** hover : change border color and fade children *****************/
               element.hover(function(){
                     //enter
                     $(this).animate({"border-color":"#3F3F3F"},{queue:false});
@@ -944,6 +914,7 @@
           }
         }); 
       } 
+  {% endif %}   
  
 
 
@@ -952,7 +923,6 @@
       /*------------------------------------- initialize sidebar ----------------------------------------*/
       /*-------------------------------------------------------------------------------------------------*/
       
-  {% endif %}   
       var sidebar = new Sidebar({% if authorized != 1 %}true{% else %}false{% endif %});
       sidebar.populate(op.getDatalessUrl);
 
@@ -967,17 +937,17 @@
           event['end'] = moment(event['start']);
           event.formatDate();
           // remove event from calendar 
+          event.computeCountRange({allBrosInDay:true}); 
           event.removeForRefetch();
+          $calendar.fullCalendar('removeEvents',event.id);  
           // $calendar.fullCalendar('removeEvents',event.id); 
-          event.persist();
 
           //affect children
           var children = EventCollection.getChildren(event, {concat:true,onlyEvent:true} ); 
           $.each(children,function(i,child){
               //set as instant event 
               child['end'] = moment(child['start']);
-              child.formatDate();
-              // remove event from calendar 
+              child.formatDate(); 
               child.removeForRefetch(); 
               $calendar.fullCalendar('removeEvents',child.id);  
               sidebar.setSidebarEvent(child,true); 
@@ -986,6 +956,7 @@
           //set as sidebar draggable 
           sidebar.setSidebarEvent(event,true);
           EventCollection.refetchEvents(); 
+          event.persist();
       }).on("drag",function(ev,event){ 
           dragChildren(event);
       });  
@@ -1028,51 +999,51 @@
       /*------------------------------------- resources view ------------------------------------------------*/
       /*-----------------------------------------------------------------------------------------------------*/ 
       
-      initViewsBtns(viewBtns);
-      $('#resourceView select').change(function(e){ 
-        isClassicView = $(this).val() == "classic";
-        if(isClassicView){ //render the classic view   
-          // $('.fc-event').remove();
-          $calendar.fullCalendar('changeView', viewBtns[currentView].classic );
-          EventCollection.refetchEvents(); 
-          // $calendar.fullCalendar( 'renderEvent', Events);
-          // $calendar.trigger("stopRender");
-          // fetch = false;
-          // $calendar.fullCalendar('refetchEvents');   
-        }else{ //render a resource view
+      // initViewsBtns(viewBtns);
+      // $('#resourceView select').change(function(e){ 
+      //   isClassicView = $(this).val() == "classic";
+      //   if(isClassicView){ //render the classic view   
+      //     // $('.fc-event').remove();
+      //     $calendar.fullCalendar('changeView', viewBtns[startView].classic );
+      //     EventCollection.refetchEvents(); 
+      //     // $calendar.fullCalendar( 'renderEvent', Events);
+      //     // $calendar.trigger("stopRender");
+      //     // fetch = false;
+      //     // $calendar.fullCalendar('refetchEvents');   
+      //   }else{ //render a resource view
 
-          var resource = $(this).val();
-            currentRes = resource;
-          op.resFeedURL = resConfig[resource].url; 
-          // $('.fc-event').remove();
-          //  
-          $calendar.fullCalendar('changeView', viewBtns[currentView].resource );
-          EventCollection.refetchEvents(); 
-          // $calendar.fullCalendar('refetchEvents');
-          // $calendar.fullCalendar('refetchResources');
+      //     var resource = $(this).val();
+      //       currentRes = resource;
+      //     op.resFeedURL = resConfig[resource].url; 
+      //     // $('.fc-event').remove();
+      //     //  
+      //     $calendar.fullCalendar('changeView', viewBtns[startView].resource );
+      //     EventCollection.refetchEvents(); 
+      //     // $calendar.fullCalendar('refetchEvents');
+      //     // $calendar.fullCalendar('refetchResources');
 
 
           
-          //seems to be useless...
-          //can fetch resources but can't go back to classic view when we destroy calendar
-          // $calendar.fullCalendar( 'destroy' ); 
-          // $calendar.fullCalendar(calendarOption);
+      //     //seems to be useless...
+      //     //can fetch resources but can't go back to classic view when we destroy calendar
+      //     // $calendar.fullCalendar( 'destroy' ); 
+      //     // $calendar.fullCalendar(calendarOption);
 
 
-        }
-        initViewsBtns(viewBtns); 
-      })
-      function initViewsBtns(viewBtns){
-        for( var i in viewBtns){
-          viewBtns[i].elem.appendTo(".fc-header-right").off("click").click({i:i},function(e){ 
-                  currentView = e.data.i;
-                  $(this).siblings().removeClass("fc-state-active");
-                  $(this).addClass("fc-state-active"); 
-                  // EventCollection.refetchEvents();
-                  $calendar.fullCalendar('changeView', (isClassicView ? viewBtns[currentView].classic : viewBtns[currentView].resource)); 
-          })
-        }
-      }
+      //   }
+      //   initViewsBtns(viewBtns); 
+      // })
+      // function initViewsBtns(viewBtns){
+      //   for( var i in viewBtns){
+      //     viewBtns[i].elem.appendTo(".fc-header-right").off("click").click({i:i},function(e){ 
+      //             startView = e.data.i;
+      //             $(this).siblings().removeClass("fc-state-active");
+      //             $(this).addClass("fc-state-active"); 
+      //             // EventCollection.refetchEvents();
+      //             $calendar.fullCalendar('changeView', (isClassicView ? viewBtns[startView].classic : viewBtns[startView].resource)); 
+      //     })
+      //   }
+      // }
 
       /*-----------------------------------------------------------------------------------------------------*/
       /*------------------------------------- History -------------------------------------------------------*/

@@ -33,7 +33,7 @@ class TopicFilterType extends AbstractType
                 'label'   => 'Paper',
                 'choices'=> $this->user->getCurrentConf()->getPapers()->toArray(),
                 'required' => false,
-                'attr'  => array('placeholder'  => 'Paper')
+                'attr'  => array('placeholder'  => 'Publication')
             ));
         }
              

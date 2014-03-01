@@ -112,19 +112,42 @@ body{
 	border-bottom:none;
 }
 
+.breadcrum>li {
+	padding:1px;
+
+}
+
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    -ms-text-overflow: ellipsis;
+}
 
 .breadcrum > li > a{
 	background-color:#999;
 	color :  #f2f2f2; 
+
+
+	text-align:center;
 }
+
+
+
 
 .breadcrum > li > a:hover{
 	background-color:#999;
- 
+
 }
 
-.breadcrum > li .active {
+.breadcrum  li.active {
 	background-color : #eeeeee;
+	margin-bottom: -4px;
+	border-bottom: 4px solid #eeeeee;
+	border-left: solid 2px #19313b;
+	border-top: solid 2px #19313b;
+	border-right: solid 2px #19313b;
 }
 
 
@@ -313,3 +336,110 @@ background: #315F73;
 }
 
 
+	/*-------------------------------------------------------------------------------------
+--------------------------------------Datas Bundle Conferences-----------------------------------------
+-------------------------------------------------------------------------------------*/
+.panel-livecon-dashboard{
+	border-color:#397087
+	}
+
+.panel-livecon-dashboard>.panel-heading{
+	color:#fff;
+	background-color:#397087;
+	border-color:#397087
+	}
+
+.panel-livecon-dashboard>.panel-heading+.panel-collapse 
+.panel-body{border-top-color:#397087}
+.panel-livecon-dashboard>.panel-footer+.panel-collapse 
+.panel-body{border-bottom-color:#397087}
+
+
+	/*-------------------------------------------------------------------------------------
+--------------------------------------Template Documentation-----------------------------------------
+-------------------------------------------------------------------------------------*/
+
+
+#masthead {
+	min-height:250px;
+}
+
+#masthead h1 {
+	font-size: 30px;
+	line-height: 1;
+  	padding-top:20px;
+}
+
+#masthead .well {
+	margin-top:8%;
+}
+
+@media screen and (min-width: 768px) {
+	#masthead h1 {
+		font-size: 50px;
+	}
+}
+
+.navbar-bright {
+	background-color:#111155;
+    color:#fff;
+}
+
+.affix-top,.affix{
+	position: static;
+}
+
+@media (min-width: 979px) {
+  #sidebar.affix-top {
+    position: static;
+  	margin-top:30px;
+  	width:228px;
+  }
+  
+  #sidebar.affix {
+    position: fixed;
+    top:70px;
+    width:228px;
+  }
+}
+
+#sidebar li.active {
+  	border:0 #eee solid;
+  	border-right-width:4px;
+}
+
+.container-documentation {
+	
+
+}
+
+
+/*-------------------------------------------------------------------------------------
+--------------------------------------Button color Livecon-----------------------------------------
+-------------------------------------------------------------------------------------*/
+
+.btn-livecon
+{   color:#fff;
+	background-color:#2B5566;
+	border-color:#2B5566;
+}
+.btn-livecon:hover,.btn-livecon:focus,.btn-livecon:active,.btn-livecon.active,.open .dropdown-toggle.btn-livecon{
+	color:#fff;
+	background-color:#19313b;
+	border-color:#19313b
+}
+.btn-livecon:active,.btn-livecon.active,.open .dropdown-toggle.btn-livecon{
+	background-image:none
+	}
+.btn-livecon.disabled,.btn-livecon[disabled],
+fieldset[disabled] .btn-livecon,.btn-livecon.disabled:hover,.btn-livecon[disabled]:hover,
+fieldset[disabled] .btn-livecon:hover,.btn-livecon.disabled:focus,.btn-livecon[disabled]:focus,
+fieldset[disabled] .btn-livecon:focus,.btn-livecon.disabled:active,.btn-livecon[disabled]:active,
+fieldset[disabled] .btn-livecon:active,.btn-livecon.disabled.active,.btn-livecon[disabled].active,
+fieldset[disabled] .btn-livecon.active
+{
+	background-color:#19313b;border-color:#19313b
+}
+.btn-livecon .badge{
+	color:#428bca;
+	background-color:#2B5566}

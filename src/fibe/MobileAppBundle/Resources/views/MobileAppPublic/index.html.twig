@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
     <head>
-    <title>ESWC'2013 - DataConf</title>
+    <title>{{ conference.mainConfEvent.summary |json_encode|raw  }}</title>
     <link rel="shortcut icon" type="image/x-icon" href="http://liris.cnrs.fr/dataconf/images/Logo_DataConf_ico.png">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -61,6 +61,7 @@
               'encoder': 'lib/encoder',
               'blob': 'lib/blob',
               'fileSaver' : 'lib/FileSaver',
+              'labels' : 'i18n/labels',
               'jqueryMobile' : 'lib/jquery.mobile-1.4.0-rc.1.min',
               'jStorage' : 'lib/jstorage.min',
               'moment' : 'lib/moment.min',
@@ -71,7 +72,7 @@
       });
       
       //Configurations
-      require(['config', 'tpl', 'model/swcEventCommandStore', 'model/liveconSparqlCommandStore'], function(configuration, tpl, liveconApiCommandStore, liveconSparqlCommandStore){
+      require(['config', 'tpl', 'model/swcEventCommandStore', 'model/liveconSparqlCommandStore','moment'], function(configuration, tpl, liveconApiCommandStore, liveconSparqlCommandStore, moment){
 
         if("{{ api_type}}" == "sparql"){
              configuration.datasources.eventDatasource.commands = liveconSparqlCommandStore;
@@ -79,6 +80,7 @@
              configuration.datasources.eventDatasource.commands = liveconApiCommandStore;
         }
 
+        //Modules configuration
         var modules = []
         {% if paper_module == true %}
           modules.push("publications");
@@ -87,6 +89,16 @@
           modules.push("organizations");
         {% endif %}
        
+        //Chosen datasource configuration
+         {% if mobile_app_config.dblpDatasource == false %}
+            configuration.datasources.DblpDatasource.activated = false;
+         {% endif %}
+         {% if mobile_app_config.googleDatasource == false %}
+            configuration.datasources.GoogleDataSource.activated = false;
+         {% endif %}
+         {% if mobile_app_config.duckduckgoDatasource == false %}
+            configuration.datasources.DuckDuckGoDatasource.activated = false;
+         {% endif %}
 
         tpl.modules = modules;
 
@@ -94,7 +106,7 @@
         configuration.datasources.eventDatasource.uri = "{{ api_uri }}";
         configuration.app.liveconLogo = "{{ asset('img/liveconApp.png') }}";
        // configuration.conference.baseUri = "{{ conference_baseUri }}";
-         configuration.conference.baseUri = "http://data.live-con.com/resource/conference/1/1iswc3013";
+        configuration.conference.baseUri = "http://data.live-con.com/resource/conference/1/1iswc3013";
         configuration.conference.name = {{ conference.mainConfEvent.summary |json_encode|raw }};
         configuration.conference.acronym = {{ conference.mainConfEvent.acronym |json_encode|raw }};
         configuration.conference.id = {{ conference.id |json_encode|raw }};
@@ -102,6 +114,13 @@
         configuration.conference.logoUri = "{{ asset('uploads/')}}{{conference.logoPath}}";
         configuration.routes.Home.title = {{ conference.mainConfEvent.acronym |json_encode|raw }};
         tpl.uri = "{{ asset('bundles/fibemobileapp/mobileApp/templates/') }}";
+        
+        //Language configuration
+        moment.lang({{ mobile_app_config.lang |json_encode|raw }});
+        configuration.conference.lang = {{ mobile_app_config.lang |json_encode|raw }} || 'EN';
+
+
+
       });
       
       //Entry point
@@ -112,6 +131,9 @@
 
         /********************  global **********************/
         
+        body *{
+           text-shadow : none !important;
+        }
         H1 , H2 {
           font-size : 14pt !important;
         }
@@ -132,6 +154,7 @@
 
         a, span {
           font-size : 10pt !important;
+
         }
 
         p{
@@ -171,7 +194,7 @@
           width : 0px;
         }
 
-        #DataConf{
+        #header-title{
           text-align :center;
         }
 
@@ -270,7 +293,7 @@
             border-right: none;
             background: rgba(0,0,0,.5);
             margin: -1px 0;
-            color: {{ mobile_app_config.BGColorNavBar}};
+            color: rgb(250, 252, 253);
         }
 
         #bonusPanel {
@@ -279,11 +302,11 @@
             border-right: none;
             background: rgba(0,0,0,.5);
             margin: -1px 0;
-            color: {{ mobile_app_config.BGColorNavBar}};
+            color:  rgb(250, 252, 253);
         }
 
     </style>
-    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
   </head>
   <body>
     

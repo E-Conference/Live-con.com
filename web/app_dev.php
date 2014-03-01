@@ -15,7 +15,7 @@ if (isset($_SERVER['HTTP_CLIENT_IP'])
     header('HTTP/1.0 403 Forbidden');
     exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
 }
-ini_set('memory_limit', '256M');
+ini_set('memory_limit', '512M');
 $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 require_once __DIR__.'/../app/AppKernel.php';
 

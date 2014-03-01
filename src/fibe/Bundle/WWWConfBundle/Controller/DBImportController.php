@@ -112,7 +112,7 @@ class DBImportController extends Controller
                 $current = $topics[$i];  
                 $existsTest = $this->getDoctrine()
                                    ->getRepository('fibeWWWConfBundle:Topic')
-                                   ->findOneBy(array('name' => $current['setName']));
+                                   ->findOneBy(array('name' => $current['setName'], 'conference' => $conference->getId()));
                 if($existsTest!=null){
                   array_push($topicEntities,$existsTest); 
                   continue; //skip existing topic
@@ -136,7 +136,7 @@ class DBImportController extends Controller
                 $current = $locations[$i];  
                 $existsTest = $this->getDoctrine()
                                    ->getRepository('IDCISimpleScheduleBundle:Location')
-                                   ->findOneBy(array('name' => $current['setName']));
+                                   ->findOneBy(array('name' => $current['setName'], 'conference' => $conference->getId()));
                 if($existsTest!=null){
                   array_push($locationEntities,$existsTest); 
                   continue; //skip existing location
@@ -160,7 +160,7 @@ class DBImportController extends Controller
                 $current = $organizations[$i];  
                 $existsTest = $this->getDoctrine()
                                    ->getRepository('fibeWWWConfBundle:Organization')
-                                   ->findOneBy(array('name' => $current['setName']));
+                                   ->findOneBy(array('name' => $current['setName'], 'conference' =>  $conference->getId()));
                 if($existsTest!=null){
                   array_push($organizationEntities,$existsTest);
                   continue; //skip existing organization
@@ -226,7 +226,7 @@ class DBImportController extends Controller
                 $current = $proceedings[$i];  
                 $existsTest = $this->getDoctrine()
                                    ->getRepository('fibeWWWConfBundle:Paper')
-                                   ->findOneBy(array('title' => $current['setTitle']));
+                                   ->findOneBy(array('title' => $current['setTitle'], 'conference' => $conference->getId()));
                 if($existsTest!=null){
                   array_push($proceedingEntities,$existsTest); 
                   continue; //skip existing paper
@@ -376,6 +376,7 @@ class DBImportController extends Controller
                                     $val->setType($chairRoleType);
                                     $val->setPerson($personEntities[$chair]);
                                     $val->setEvent($entity);
+                                    $val->setConference($this->getUser()->getCurrentConf());
                                     $entity->addRole($val);
  
                             }  
@@ -387,6 +388,7 @@ class DBImportController extends Controller
                                     $val->setType($presenterRoleType);
                                     $val->setPerson($personEntities[$presenter]);
                                     $val->setEvent($entity);
+                                    $val->setConference($this->getUser()->getCurrentConf());
                                     $entity->addRole($val);
                             }   
                         }else {

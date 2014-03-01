@@ -3,8 +3,8 @@
 {% block head %}
 	{% block title %}Livecon upgrade your conference{% endblock %}
 	{% block stylesheets_page %}
-	  <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibehomepage/css/homepage.css') }}" /> 
-	  <!-- reset -->
+	    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibehomepage/css/homepage.css') }}" /> 
+	    <!-- reset -->
 		<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/reset.css') }}" />
 		<!-- grid system 16 -->
 		<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/960_12_col.css') }}" />
@@ -23,6 +23,7 @@
 					<ul>
 						<li><a href="#overview" title="Overview The Livecon Solution">Overview</a></li>
 						<li><a href="#app" title="The LiveCon App">Demo</a></li>
+						<li><a href="{{path('datas_conferences_list')}}" title="The Livecon Conferences">Conferences</a></li>
 						<li><a href="#getstarted" title="Get Started the Livecon Solution">Get Started</a></li>
 						<li><a href="#contact" title="Contact Livecon Team">Contact</a></li>
 						<li><a href="{{ path('login') }}" title="Login">Login</a></li>
@@ -51,7 +52,7 @@
 				<div id="t_before" class="clearfix">
 					<a href="#before" title="Before Conference">
 					<div class="grid_6">
-						<h2>Before Conference</h2>
+						<h2>Before your conference</h2>
 					</div>
 					<div class="grid_6 alpha elements">
 						<div class="element element01">
@@ -68,7 +69,7 @@
 				<div id="t_during" class="clearfix">
 					<a href="#during" title="During Conference">
 					<div class="grid_6">
-						<h2>During Conference</h2>
+						<h2>During your conference</h2>
 					</div>
 					<div class="grid_6 alpha elements">
 						<div class="element element01">
@@ -85,7 +86,7 @@
 				<div id="t_after" class="clearfix">
 					<a href="#after" title="After Conference">
 					<div class="grid_6">
-						<h2>After Conference</h2>
+						<h2>After your conference</h2>
 					</div>
 					<div class="grid_6 alpha elements">
 						<div class="element element01">
@@ -104,7 +105,7 @@
 
 		<div id="before">
 			<div class="container_12">
-				<h1>Before Conference</h1>
+				<h1>Before your conference</h1>
 				<div class="illustration"></div>
 				<div id="overview01" class="clearfix">
 					<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/import.png') }}" /></div>
@@ -129,7 +130,7 @@
 
 		<div id="during">
 			<div class="container_12">
-				<h1>During Conference</h1>
+				<h1>During your conference</h1>
 				<div class="grid_5 alpha omega">
 					<div id="overview03" class="clearfix">
 						<div class="clearfix">
@@ -157,7 +158,7 @@
 
 		<div id="after">
 			<div class="container_12">
-				<h1>After Conference</h1>
+				<h1>After your conference</h1>
 				<div class="grid_6"><img src="{{ asset('bundles/fibehomepage/img/illustration/after.png') }}" /></div>
 				<div class="grid_6 overview_after">
 					<div id="overview05" class="clearfix">
@@ -179,6 +180,52 @@
 				</div>
 			</div>
 		</div>
+
+	
+			<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+				  <!-- Indicators -->
+				  <ol class="carousel-indicators">
+				    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+		            <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+		            <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+		            <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+				  </ol>
+
+			      <!-- Wrapper for slides -->
+				  <div class="carousel-inner">
+				      <div class="item active">		           				 
+				        <h4> {{conferences[0].getConfName()}}</h4>
+		                        <img src="{{ asset('uploads/')}}{{conferences[0].logoPath}}" alt="{{conferences[0].getConfName()}}">
+				      </div>
+				      <div class="item" style="">
+	                         <img src="{{ asset('uploads/')}}{{conferences[1].logoPath}}" alt="{{conferences[1].getConfName()}}" >
+	                        <div class="carousel-caption">
+       							  <h4> {{conferences[1].getConfName()}}</h4>
+      						</div>                         
+				      </div>
+				      <div class="item" style="">
+	                        <img src="{{ asset('uploads/')}}{{conferences[2].logoPath}}" alt="{{conferences[2].getConfName()}}" >		 
+	                        <div class="carousel-caption">
+       							  {{conferences[2].getConfName()}}
+      						</div>                        
+				      </div>
+				      <div class="item" style="">
+	                        <img src="{{ asset('uploads/')}}{{conferences[3].logoPath}}" alt="{{conferences[3].getConfName()}}" > 
+	                        <div class="carousel-caption">
+       							  {{conferences[3].getConfName()}}
+      						</div>                          
+				      </div>
+				  </div>
+
+				  <!-- Controls -->
+				  <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+				    <span class="glyphicon glyphicon-chevron-left"></span>
+				  </a>
+				  <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+				    <span class="glyphicon glyphicon-chevron-right"></span>
+				  </a>
+			</div>
+		
 
 		<div id="app">
 			<div class="container_12">

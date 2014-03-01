@@ -123,9 +123,9 @@ define(['jquery','twttr'], function($,Twttr){
 				
 					var img="";
 					if(currentImage){
-						img = $('<div style="height:50px; width:30%"><img style="float:left; width : auto; height : 100%;" src='+currentImage+'><div>');
+						img = $('<img style="float:left; width: auto; height : 67px;" src='+currentImage+'><div>');
 					}else{
-						img = $('<img style="float:left"  src="css/images/default_avatar.gif">');
+						img = $('<img style="float:left"  src="http://png.findicons.com/files/icons/560/fast_icon_users/128/offline_user.png">');
 					}
 					a.append(img);
 					
