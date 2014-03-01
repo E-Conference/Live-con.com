@@ -227,9 +227,9 @@ class ConfEvent extends Event
      */
     public function computeIsAllDay()
     {      
-        $start = $this->getStartAt();
-        $end = $this->getEndAt(); 
-        $this->setIsAllDay($start->format('d')!=$end->format('d'));
+        // $start = $this->getStartAt();
+        // $end = $this->getEndAt(); 
+        // $this->setIsAllDay($start->format('d')!=$end->format('d'));
     }
     
     /**
