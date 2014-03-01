@@ -19,9 +19,13 @@ class DocumentationController extends Controller
      */
     public function documentationAction($anchor)
     {
-        return $this->render('DocumentationBundle:Documentation:documentation.html.twig', array(
+        
+
+        $this->redirect($this->generateUrl('documentation', array('anchor' => $anchor)) . '#'.$anchor);
+
+        /*return $this->render('DocumentationBundle:Documentation:documentation.html.twig', array(
             'anchor' => $anchor,
-        ));
+        ));*/
 
     }
 
