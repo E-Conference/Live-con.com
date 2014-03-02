@@ -1312,13 +1312,13 @@
       }
    });
 
-var $body   = $(document.body);
-var navHeight = $('.navbar').outerHeight(true);
+  var $body   = $(document.body);
+  var navHeight = $('.navbar').outerHeight(true);
 
-$body.scrollspy({
-  target: '#leftCol',
-  offset: navHeight
-});
+  $body.scrollspy({
+    target: '#leftCol',
+    offset: navHeight
+  });
 
 /* smooth scrolling sections */
 $('a[href*=#]:not([href=#])').click(function() {
@@ -1327,17 +1327,18 @@ $('a[href*=#]:not([href=#])').click(function() {
       target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
       if (target.length) {
         $('html,body').animate({
-          scrollTop: target.offset().top 
+          scrollTop: target.offset().top -50 
         }, 1000);
         return false;
       }
     }
 });
    
-       $('html,body').animate({
-          scrollTop: $('#{{anchor}}').offset().top 
-        }, 1000);
 
+       /*$('html,body').animate({
+          scrollTop: $('#{{anchor}}').offset().left 
+        }, 1000);*/
+        $('a[href="#{{anchor}}"]').trigger('click');
 
 });
      	

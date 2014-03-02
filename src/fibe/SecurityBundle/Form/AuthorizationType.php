@@ -5,6 +5,7 @@ namespace fibe\SecurityBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
 
 class AuthorizationType extends AbstractType
 {
@@ -24,7 +25,13 @@ class AuthorizationType extends AbstractType
     {
 
            $builder
-            ->add('user')
+            ->add('user', 'entity', array(
+                            'class' => 'fibeSecurityBundle:User',
+                            'query_builder' => function(EntityRepository $er) {
+                                              return $er->ManagerForSelectTeamQuery($this->user->getCurrentConf());
+           
+                                              },
+              ))
             ->add('flagApp','checkbox', array(
                               'required' => false,
                               'label' => 'Mobile Application Manager',
