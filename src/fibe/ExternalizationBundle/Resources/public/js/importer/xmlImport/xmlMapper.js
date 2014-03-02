@@ -65,12 +65,12 @@ xmlMapper = {
         xmlMapper.knownCollection = {};
         
         var nodePath = "root";
-        var globalPanel = Pager.getPanelHtml("Found data ",{panelClass:"panel-primary"});
+        var globalPanel = Pager.getPanelHtml("Found data ",{panelClass:"panel-primary"}).appendTo(xmlMapper["el"]);
         var tempPanel = null;
-        generateHtml($data,nodePath,xmlMapper.knownNodes); 
-        function generateHtml($node,nodePath,knownNodes){
-
-            contentEl= $(xmlMapper.getAttributesHtml($node,nodePath)); 
+        generateHtml($data,nodePath,globalPanel,xmlMapper.knownNodes); 
+        function generateHtml($node,nodePath,$el,knownNodes){
+ 
+            $el = $el.find("> ul");
 
             if($node.children().length != 0 ){
                 var childTags = [];
@@ -79,13 +79,13 @@ xmlMapper = {
                     if(!xmlMapper.isNodeKnown(nodePath+ "/"+getNodeName(child))){
                         childTags.push(getNodeName(child));
                         tempPanel = Pager.getPanelHtml(getNodeName(child),{panelClass:"panel-success",margin:true,"node-path":nodePath+ "/"+getNodeName(child),collapsible:true,collapsed:true});
-                        globalPanel.append(panel);
-                        generateHtml($(child),nodePath+ "/"+getNodeName(child),knownNodes) 
+                        $el.append(tempPanel);
+                        generateHtml($(child),nodePath+ "/"+getNodeName(child),tempPanel,knownNodes) 
                     } else{
                         //already mapped
                         // addMappingCollection(nodePath); 
                     } 
-                    generateHtml($(child),nodePath+ "/"+getNodeName(child),knownNodes);
+                    generateHtml($(child),nodePath+ "/"+getNodeName(child),$el,knownNodes);
 
                 });
                 //TODO : review the to find collections
@@ -93,7 +93,7 @@ xmlMapper = {
                 //TODO : review the to find collections
                 if(childTags.length==1)addMappingCollection(nodePath,childTags); 
             }else{
-                contentEl.append($(xmlMapper.generateNode($node,nodePath))); 
+                $el.append($(xmlMapper.generateNode($node,nodePath))); 
 
             }
 
@@ -111,7 +111,7 @@ xmlMapper = {
 
 
 
-        xmlMapper["el"].append(globalPanel); 
+         
         
 
         // option popover
@@ -269,24 +269,24 @@ xmlMapper = {
                 if(splittedEntityMapping[i]=="root" || splittedEntityMapping[i]=="")continue;//don't add rootNode
                 if(splittedEntityMapping[i]=="text"){
                     format.push({
-                        nodeUtils : "text"
+                        fn : "text"
                     })
                 }else if(collectionMapping){
                     var label = splittedEntityMapping[i]
                     format.push({
-                        nodeUtils : "children",
+                        fn : "children",
                         arg : [label],
                     })
                 }else if(splittedEntityMapping[i].charAt(0) == "@"){
                     var label = splittedEntityMapping[i] 
                     format.push({
-                        nodeUtils : "attr",
+                        fn : "attr",
                         arg : [label.substring(1)],
                     })
                 }else {
                     var label = splittedEntityMapping[i]
                     format.push({
-                        nodeUtils : "child",
+                        fn : "child",
                         arg : [label],
                     })
                 } 
