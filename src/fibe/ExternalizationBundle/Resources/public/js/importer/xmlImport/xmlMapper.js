@@ -201,7 +201,7 @@ xmlMapper = {
                 //check if this is the conference mapping
                 if(modelName=="Conference"){
                     //the conference mapping has a different mapping object
-                    var mappingObj = getOrCreateConferenceMappingObj(modelName);
+                    var mappingObj = getOrCreateParseConference(modelName);
                     mappingObj[modelSetter]={};
                     mappingObj[modelSetter]["format"] = extractMappingFormat(leftEntityMapping.nodePath);
                     
@@ -224,7 +224,7 @@ xmlMapper = {
          * Get or create the conference mapping object  
          * @return {[type]}            [description]
          */
-        function getOrCreateConferenceMappingObj(){  
+        function getOrCreateParseConference(){  
             if(!xmlMapper.mappingConfig['parseConference'])
                 xmlMapper.mappingConfig['parseConference']={} 
             return xmlMapper.mappingConfig['parseConference']

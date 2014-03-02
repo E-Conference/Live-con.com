@@ -59,36 +59,7 @@ class ScheduleController extends Controller
                 'locations'  => $locations,
                 'topics'     => $topics,
             );
-    }
-
-/**
- *  Affiche la vue fullcalendar
- *  @Route("/resources", name="resource_view")
- *  @Template()
- */
-    public function resourcesAction()
-    {
-
-          //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-        $em = $this->getDoctrine();
-        $conf =$this->getUser()->getCurrentConf();
-
-        //filters
-        $categories = $em->getRepository('IDCISimpleScheduleBundle:Category')->getOrdered();
-        $locations = $this->getUser()->getCurrentConf()->getLocations();
-        $topics = $this->getUser()->getCurrentConf()->getTopics();
-
-        return array(
-                'currentConf' => $conf,
-                'authorized' => $authorization->getFlagSched(),
-                'categories'  => $categories,
-                'locations'  => $locations,
-                'topics'     => $topics,
-            );
-    }
+    } 
   
  
 /**
