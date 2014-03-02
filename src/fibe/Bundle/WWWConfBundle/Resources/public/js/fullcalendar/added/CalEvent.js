@@ -165,7 +165,7 @@ CalEvent.prototype.computeCountRange = function(opt){
 
       if($.inArray(id, EventCollection.eventsToComputeBroCountRangeIndexes) === -1 && !Events[id].allDay && !Events[id].isInstant()) { 
         EventCollection.eventsToComputeBroCountRangeIndexes.push(id);
-        EventCollection.broCountRange[id] = {count:1,range:0};
+        EventCollection.broCountRange[id] = {count:1,range:0,resCount:1,resRange:0};
         // console.debug("#ComputeCountRange added "+id);
       }
       else{ 
@@ -184,17 +184,19 @@ CalEvent.prototype.calculateWidth = function(seg, leftmost, availWidth, outerWid
 
     var Hmargin = 5;
     var Wmargin = 2;
+
+    var isResView = $calendar.fullCalendar('getView')["name"] == "resourceDay";
     try{
 
         //go to the parent place
         var parentId = this.parent.id,
-            count    = EventCollection.broCountRange[this.id].count,
-            range    = EventCollection.broCountRange[this.id].range
+            count    = !isResView ? EventCollection.broCountRange[this.id].count : EventCollection.broCountRange[this.id].resCount,
+            range    = !isResView ? EventCollection.broCountRange[this.id].range : EventCollection.broCountRange[this.id].resRange
             shifted  = false; 
 
         while(!Events[parentId].allDay){ 
-            var parentCount   = EventCollection.broCountRange[parentId].count,
-                parentRange   = EventCollection.broCountRange[parentId].range; 
+            var parentCount   = !isResView ? EventCollection.broCountRange[parentId].count : EventCollection.broCountRange[parentId].resCount,
+                parentRange   = !isResView ? EventCollection.broCountRange[parentId].range : EventCollection.broCountRange[parentId].resRange; 
 
             range += (parentRange*count);
             count *= parentCount;

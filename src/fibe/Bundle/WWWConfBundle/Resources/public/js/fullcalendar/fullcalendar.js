@@ -4438,7 +4438,7 @@ function AgendaEventRenderer() {
 		eventElement.draggable({
 			zIndex: 9,
 			scroll: false,
-			// grid: [colWidth, snapHeight],
+			// grid: [colWidth, snapHeight],//COMMENTED BY benoitddlp
 			// axis: colCnt==1 ? 'y' : false,
 			opacity: opt('dragOpacity'),
 			revertDuration: opt('dragRevertDuration'),
@@ -4448,7 +4448,7 @@ function AgendaEventRenderer() {
 				origPosition = eventElement.position();
 				minuteDelta = prevMinuteDelta = 0;
 				hoverListener.start(function(cell, origCell, rowDelta, colDelta) {
-					eventElement.draggable('option', 'revert', !cell);//COMMENTED BY benoitddlp
+					eventElement.draggable('option', 'revert', !cell); 
 					clearOverlays();
 					if (cell) {
 						dayDelta = colDelta * dis;

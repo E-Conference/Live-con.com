@@ -4278,7 +4278,7 @@ function AgendaEventRenderer() {
 				eventElement
 					.width(origWidth)
 					.height('')
-					// .draggable('option', 'grid', null);//COMMENTED BY benoitddlp
+					.draggable('option', 'grid', null);
 				allDay = true;
 			}
 		}
@@ -4322,7 +4322,7 @@ function AgendaEventRenderer() {
 								// convert to temporary all-day event
 								allDay = true;
 								timeElement.hide();
-								// eventElement.draggable('option', 'grid', null);//COMMENTED BY benoitddlp
+								eventElement.draggable('option', 'grid', null); 
 							}
 							renderDayOverlay(
 								addDays(cloneDate(event.start), dayDelta),
@@ -4857,11 +4857,16 @@ function DayEventRenderer() {
 				rightCol = dayOfWeekCol(seg.start.getDay());
 				left = seg.isEnd ? colContentLeft(leftCol) : minLeft;
 				right = seg.isStart ? colContentRight(rightCol) : maxLeft;
+			}else if(isResourceView && event.resource){ // ADDED BY BENOITDDLP
+				leftCol = event.resource._col; // ADDED BY BENOITDDLP
+				rightCol = event.resource._col; // ADDED BY BENOITDDLP
+				left = colContentLeft(leftCol); // ADDED BY BENOITDDLP
+				right = colContentRight(rightCol);  // ADDED BY BENOITDDLP
 			}else{
-				leftCol = dayOfWeekCol(seg.start.getDay());
+				leftCol  = dayOfWeekCol(seg.start.getDay());
 				rightCol = dayOfWeekCol(seg.end.getDay()-1);
 				left = seg.isStart ? colContentLeft(leftCol) : minLeft;
-				right = seg.isEnd ? colContentRight(rightCol) : maxLeft;
+				right = seg.isEnd  ? colContentRight(rightCol) : maxLeft;
 			}
 			classes = classes.concat(event.className);
 			if (event.source) {
@@ -5581,6 +5586,7 @@ function ResourceEventRenderer() {
 			setHeight(); // no params means set to viewHeight
 		}
 		renderSlotSegs(compileSlotSegs(slotEvents), modifiedEventId);
+		trigger('eventAfterAllRender'); //ADDED BY BENOITDDLP
 	}
 	
 	
@@ -5850,7 +5856,7 @@ function ResourceEventRenderer() {
 			">" +
 			"<div class='fc-event-inner'>" +
 			"<div class='fc-event-time'>" +
-			htmlEscape(formatDates(event.start, event.end, opt('timeFormat'))) +
+			htmlEscape(formatDates(event.start, event.end, "h:mm{ - h:mm}")) + //modified by benoitddlp
 			"</div>" +
 			"<div class='fc-event-title'>" +
 			htmlEscape(event.title) +
@@ -5982,7 +5988,6 @@ function ResourceEventRenderer() {
 					if (event.resource) {
     					var newColumn = event.resource._col + columnDelta;
     					var resources = calendar.getResources();
-    					console.log("resource changed !!!"+event.resource._col+" to "+newColumn)
     					if(newColumn>=0){
 						    event.resource = resources[newColumn];
 						    event.resource._col = newColumn;
@@ -5999,7 +6004,7 @@ function ResourceEventRenderer() {
 				eventElement
 					.width(origWidth)
 					.height('')
-					// .draggable('option', 'grid', null);//COMMENTED BY benoitddlp
+					.draggable('option', 'grid', null);
 				allDay = true;
 			}
 		}
@@ -6025,7 +6030,7 @@ function ResourceEventRenderer() {
 		eventElement.draggable({
 			zIndex: 9,
 			scroll: false,
-			// grid: [colWidth, snapHeight],
+			// grid: [colWidth, snapHeight],//COMMENTED BY benoitddlp
 			axis: colCnt==1 ? 'y' : false,
 			opacity: opt('dragOpacity'),
 			revertDuration: opt('dragRevertDuration'),
@@ -6047,7 +6052,7 @@ function ResourceEventRenderer() {
 								// convert to temporary all-day event
 								allDay = true;
 								timeElement.hide();
-								// eventElement.draggable('option', 'grid', null);//COMMENTED BY benoitddlp
+								eventElement.draggable('option', 'grid', null); 
 							}
 							
 							renderResourceOverlay(newColumn);
@@ -6120,7 +6125,7 @@ function ResourceEventRenderer() {
 			handles: {
 				s: '.ui-resizable-handle'
 			},
-			// grid: snapHeight,
+			// grid: snapHeight,//COMMENTED BY benoitddlp
 			start: function(ev, ui) {
 				snapDelta = prevSnapDelta = 0;
 				hideEvents(event, eventElement);
