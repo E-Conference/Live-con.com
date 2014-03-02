@@ -4858,10 +4858,13 @@ function DayEventRenderer() {
 				left = seg.isEnd ? colContentLeft(leftCol) : minLeft;
 				right = seg.isStart ? colContentRight(rightCol) : maxLeft;
 			}else if(isResourceView && event.resource){ // ADDED BY BENOITDDLP
-				leftCol = event.resource._col; // ADDED BY BENOITDDLP
-				rightCol = event.resource._col; // ADDED BY BENOITDDLP
-				left = colContentLeft(leftCol); // ADDED BY BENOITDDLP
-				right = colContentRight(rightCol);  // ADDED BY BENOITDDLP
+				try{									// ADDED BY BENOITDDLP
+					leftCol = event.resource._col; 		// ADDED BY BENOITDDLP
+					rightCol = event.resource._col; 	// ADDED BY BENOITDDLP
+					left = colContentLeft(leftCol); 	// ADDED BY BENOITDDLP
+					right = colContentRight(rightCol);  // ADDED BY BENOITDDLP
+				}catch(e){								// ADDED BY BENOITDDLP
+				}										// ADDED BY BENOITDDLP
 			}else{
 				leftCol  = dayOfWeekCol(seg.start.getDay());
 				rightCol = dayOfWeekCol(seg.end.getDay()-1);

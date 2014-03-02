@@ -568,6 +568,7 @@ var EventCollection = {
                     bootstrapAlert("success","event <b>"+tmp['title']+"</b> has been well added");
                     tmp.id =response.id;
                     var ev = new CalEvent(tmp);   
+                    debugger;
                     ev.setParent(mainConfEvent)  
                     ev.renderForRefetch(); 
                     ev.computeCountRange({allBrosInDay:true});  

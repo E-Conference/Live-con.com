@@ -41,7 +41,7 @@
 
           <h4>Filter by categories</h4>
           <div class="filter">
-            <select multiple class="form-control" data-filter="category_ids">
+            <select multiple class="form-control" data-res="category" data-filter="category_ids">
               {% for category in categories %}
                 <option data-color="{{category.color}};" value="{{category.id}}">{{category.name}}</option>
               {% endfor %}
@@ -50,7 +50,7 @@
 
           <h4>Filter by locations</h4>
           <div class="filter">
-            <select multiple class="form-control" data-filter="location_ids">
+            <select multiple class="form-control" data-res="location" data-filter="location_ids">
               {% for location in locations %}
                 <option value="{{location.id}}">{{location.name}}</option>
               {% endfor %}
@@ -59,7 +59,7 @@
 
           <h4>Filter by topic</h4>
           <div class="filter">
-            <select multiple class="form-control" data-filter="topic_ids">
+            <select multiple class="form-control" data-res="topic" data-filter="topic_ids">
               {% for topic in topics %}
                 <option value="{{topic.id}}">{{topic.name}}</option>
               {% endfor %}
@@ -281,46 +281,59 @@
         }
       };
       currentRes = "location";
-
-      var res;
-      function getResources(callback){ 
+      var res,
+          allRes,
+          unknownRes = {
+              name: "Not defined",
+              id  : "0"
+            };
+      function fetchAllResources(callback){ 
         $.ajax({
           url:resConfig[currentRes].url,
           data :  op.data, 
           success :  function(events) {
+            events.push(unknownRes)
+            allRes = events.slice(0);
             res = events;
-            res.push({
-              name: "Not defined",
-              id  : "0"
-            })
             if(callback)callback(res); 
           },
         });
+      }
+      function filterResourcesByIds(ids){
+        if(!ids || ids.length == 0)return $calendar.fullCalendar('setResources',allRes);
+        var filteredRes = [];
+        for(var i  = 0; i < res.length; i ++){
+          if($.inArray(res[i].id, ids) !== -1 )
+            filteredRes.push(res[i])
+        }
+            filteredRes.push(unknownRes)
+        $calendar.fullCalendar('setResources',filteredRes);
       }
 
       calendarOption.header.right = "month agendaWeek agendaDay,resourceDay";
       calendarOption["buttonText"] = {resourceDay:currentRes};
       resourceView = true;
-      getResources(function(){
-        calendarOption["eventResources"] = res;
-        //launch calendar
-        $calendar.fullCalendar(calendarOption);  
-        $calendar.fullCalendar('changeView', startView );
 
-      //additional schedule controls : first day and refresh
-      $('.fc-header-left')
-          .append(
-            $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"> First day</button>')
-              .click(function(e){ 
-                $calendar.fullCalendar( 'gotoDate', firstDay.year(), firstDay.month(), firstDay.date() ) 
-                EventCollection.refetchEvents();
-              })
-          ).append(
-            $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"><span class="fa fa-refresh"></span></button>')
-              .click(function(e){ 
-                EventCollection.resetEvents();
-              })
-          );  
+      fetchAllResources(function(){
+          calendarOption["eventResources"] = res;
+          //launch calendar
+          $calendar.fullCalendar(calendarOption);  
+          $calendar.fullCalendar('changeView', startView );
+
+          //additional schedule controls : first day and refresh
+          $('.fc-header-left')
+            .append(
+              $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"> First day</button>')
+                .click(function(e){ 
+                  $calendar.fullCalendar( 'gotoDate', firstDay.year(), firstDay.month(), firstDay.date() ) 
+                  EventCollection.refetchEvents();
+                })
+            ).append(
+              $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"><span class="fa fa-refresh"></span></button>')
+                .click(function(e){ 
+                  EventCollection.resetEvents();
+                })
+            );  
       }); 
 
 
@@ -353,11 +366,14 @@
 
       //init filters
       filter = new initFilter(op.getOrderedUrl);
-      $(filter).on("change", function(ev,key,val){
+      $(filter).on("change", function(ev,key,val,res){
           bootstrapAlert("info","event request sent","","<i class='fa-2x fa fa-spinner fa-spin'></i>");
-      }).on("changed", function(ev,ids){
+          if(res == currentRes)filterResourcesByIds(val);
+      }).on("changed", function(ev,data,ids){
           bootstrapAlert("success",ids.length+" events have been well fetched" );
           ids.push(mainConfEvent.id)
+
+          //hide filtered event
           var calendarEvents = $calendar.fullCalendar('clientEvents'); //loop only on calendar events 
           for(var i in calendarEvents){
             if($.inArray(calendarEvents[i].id, ids) === -1 ){ 

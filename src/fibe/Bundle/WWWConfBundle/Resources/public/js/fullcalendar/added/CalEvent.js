@@ -31,11 +31,16 @@ var CalEvent = function(event){ //constructor
 
     //resources
     if(resourceView){
-      if(this.location && this.location.id!= ""){
-        this["resourceId"] = this.location.id;
+      if(event["resourceId"]){
+        this["resourceId"]  = event.resourceId; 
       }else{
-        // set the resource as not defined
-        this["resourceId"] = "0"; 
+
+        if(this.location && this.location.id!= ""){
+          this["resourceId"] = this.location.id;
+        }else{
+          // set the resource as not defined
+          this["resourceId"] = "0"; 
+        }
       }
     }
 
