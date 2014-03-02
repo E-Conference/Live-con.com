@@ -223,27 +223,27 @@ Model = {
 	},
 
 	modelToTab : function($el){
-        var html = Mapper.getPanelHtml("Base model",{panelClass:"panel-primary"}); 
-
+        var mainPanel = Pager.getPanelHtml("Base model",{panelClass:"panel-primary"}); 
+		$el.append(mainPanel);
 		for(var i in Model.entities){
   			var entity = Model.entities[i];
-        	html += Mapper.getPanelHtml(i,{panelClass:"panel-danger",margin:true,"model-path":entity.array || i, collapsible:true,collapsed:true});
+        	modelPanel = Pager.getPanelHtml(i,{panelClass:"panel-danger",margin:true,"model-path":entity.array || i, collapsible:true,collapsed:true});
 
        		$.each(entity.attributes.required, function(aIndex, attribute){ 
-	       		var newAttr = Model.generateAttributeNode(aIndex, {required:true,"model-path":entity.array+"/"+aIndex, "model-setter":attribute.setter});
+	       		var newAttr = $(Model.generateAttributeNode(aIndex, {required:true,"model-path":entity.array+"/"+aIndex, "model-setter":attribute.setter}));
 	       		// newEntity.append(newAttr);
-       			html += newAttr;
+       			modelPanel.children("ul").append(newAttr);
 	       	})
 
        		$.each(entity.attributes.optionnal, function(aIndex, attribute){ 
-       			var newAttr = Model.generateAttributeNode(aIndex, {required:false,"model-path":entity.array+"/"+aIndex, "model-setter":attribute.setter});
-       			html += newAttr;
+       			var newAttr = $(Model.generateAttributeNode(aIndex, {required:false,"model-path":entity.array+"/"+aIndex, "model-setter":attribute.setter}));
+       			modelPanel.children("ul").append(newAttr);
        			// newEntity.append(newAttr);
 	       	})
-	        html+= Mapper.getClosingPanelHtml();
+	        mainPanel.append(modelPanel);
         };
-        html+= Mapper.getClosingPanelHtml();
-        $el.html(html);
+        
+        
  
 		$(".model-node").droppable({
 			accept: ".map-node" ,

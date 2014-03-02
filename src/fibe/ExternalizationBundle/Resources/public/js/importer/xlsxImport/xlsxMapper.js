@@ -42,29 +42,7 @@ xlsxMapper = {
 
 
 
-   getPanelHtml : function(content,op){
-        if(!op)op={}; 
-        return  $('<div class="panel '+
-                    (op.panelClass || "panel-default")+'"'+
-                    (op["model-path"]?' data-model-path="'+op["model-path"]+'"':"")+
-                    (op["node-path"]?' data-node-path="'+op["node-path"]+'"':"")+
-                    (op.margin===true?' style="margin:15px;"':'')+
-                    (op.collapsible===true?' ':'')+
-                    '>'+ 
-                  '<!-- Default panel contents -->'+
-                  '<div class="panel-heading" '+
-                  (op.collapsible===true?
-                        (op.collapsed===true?'data-collapsed="true"':'data-collapsed="false"')
-                        +'style="cursor: pointer;" onclick="(!$(this).data(\'collapsed\') ? $(this).find(\'> .panel-title i\').removeClass(\'fa-chevron-down\').addClass(\'fa-chevron-up\').parent().parent().siblings(\'ul\').hide(\'slow\')\
-                                                                  : $(this).find(\'> .panel-title i\').removeClass(\'fa-chevron-up\').addClass(\'fa-chevron-down\').parent().parent().siblings(\'ul\').show(\'slow\'));$(this).data(\'collapsed\',!$(this).data(\'collapsed\'));"> ':'')+
-                  
-                  '<h3 class="panel-title">'+
-                        content+
-                        (op.collapsible===true?' <i class="fa '+(op.collapsed===true?'fa-chevron-up':'fa-chevron-down')+'"/> ':'')+
-                    '</h3></div>'+
-                  '<ul class="'+(op.padding===true?"panel-body ":"")+'list-group" '+(op.collapsed===true?'style="display:none;"':'')+'>');
-    },
-
+   
 
 
 	xlsxworker : function(data, cb) {
@@ -155,7 +133,7 @@ xlsxMapper = {
                     default:
                     output = to_csv(wb);
             }
-            var globalPanel = xlsxMapper.getPanelHtml("Found data",{panelClass:"panel-primary",margin:false,collapsible:false,collapsed:false});
+            var globalPanel = Pager.getPanelHtml("Found data",{panelClass:"panel-primary",margin:false,collapsible:false,collapsed:false});
                
             xlsxMapper.knownNodes = [];
             xlsxMapper.file = output.Sheet1;
@@ -168,7 +146,7 @@ xlsxMapper = {
                     if(tab != "__rowNum__" && !xlsxMapper.knownNodes[tab]){
 
                         xlsxMapper.knownNodes[tab] = currentLine[tab];
-                        var panel = xlsxMapper.getPanelHtml(tab,{panelClass:"panel-success",margin:true,collapsible:false,collapsed:false});
+                        var panel = Pager.getPanelHtml(tab,{panelClass:"panel-success",margin:true,collapsible:false,collapsed:false});
                         var node = $(xlsxMapper.generateNode(tab));
                         panel.append(node);
                         globalPanel.append(panel);

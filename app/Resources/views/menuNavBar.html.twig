@@ -65,19 +65,19 @@
           <ul class="dropdown-menu">
             
             <li> 
-
+             <div class="row">
                <a style="padding-right:5px;"   href="{{ path('schedule_confevent') }}"  >
-                <i class="fa fa-calendar-o fa-3x"></i> Events
+                <i class="fa fa-calendar-o fa-3x"></i>Events
                </a>
-
+              </div>
           
                <a style="padding-right:5px;"   href="{{ path('schedule_person_index') }}"  >
-                <i class="fa fa-user fa-3x"></i> Persons
+                <i class="fa fa-user fa-3x"></i>Persons
                </a>
               
                 {% if app.user.getCurrentConf().getModule().getPaperModule()== true %}
                 <a style="padding-right:5px;"   href="{{ path('schedule_paper') }}"  >
-                 <i class="fa fa-book fa-3x"></i> Publications
+                 <i class="fa fa-book fa-3x"></i>Publications
                 </a>
                {% endif %}
                
@@ -88,14 +88,14 @@
               {% endif %}
 
               <a style="padding-right:5px;"   href="{{ path('schedule_location') }}"  >
-                <i class="fa fa-map-marker fa-3x"></i> Locations
+                <i class="fa fa-map-marker fa-3x"></i>Locations
               </a>
              
               <a style="padding-right:5px;"   href="{{ path('schedule_category') }}"  >
-                <i class="fa fa-sort-amount-asc fa-3x"></i> Categories
+                <i class="fa fa-sort-amount-asc fa-3x"></i>Categories
               </a>
                <a style="padding-right:5px;"   href="{{ path('schedule_topic') }}"  >
-                <i class="fa fa-crosshairs fa-3x"></i> Topics
+                <i class="fa fa-crosshairs fa-3x"></i>      Topics
               </a>
               
               

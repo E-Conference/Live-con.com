@@ -1,6 +1,6 @@
 {% extends 'fibeExternalizationBundle::base.html.twig' %}
 
-{% block title %}Equipment edit{% endblock title %}
+{% block title %}Import data{% endblock title %}
 {% block stylesheets_page %}
 
         <style>
@@ -164,15 +164,15 @@
         <script type="text/javascript" src="{{ asset('js/jquery-ui.custom.js') }}"></script>
         <script src="{{ asset('bundles/fibeexternalization/js/moment.min.js') }}" type="text/javascript" ></script>
         <script src="{{ asset('bundles/fibeexternalization/js/importer/Pager.js') }}" type="text/javascript" ></script>
-        <script src="{{ asset('bundles/fibeexternalization/js/importer/DBMapping/jsonModel.js') }}" type="text/javascript" ></script>
-        <script src="{{ asset('bundles/fibeexternalization/js/importer/Mapper.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeexternalization/js/importer/dbMapping/jsonModel.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeexternalization/js/importer/xmlImport/xmlMapper.js') }}" type="text/javascript" ></script>
         <script src="{{ asset('bundles/fibeexternalization/js/importer/Importer.js') }}" type="text/javascript" ></script>
-        <script src="{{ asset('bundles/fibeexternalization/js/importer/rdf_config.js') }}" type="text/javascript" ></script>
-        <script src="{{ asset('bundles/fibeexternalization/js/importer/ocs_config.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeexternalization/js/importer/xmlImport/rdf_config.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeexternalization/js/importer/xmlImport/ocs_config.js') }}" type="text/javascript" ></script>
         
-        <script src="{{ asset('bundles/fibeexternalization/js/importer/xls/jszip.js') }}" type="text/javascript" ></script>
-        <script src="{{ asset('bundles/fibeexternalization/js/importer/xls/xlsx.js') }}" type="text/javascript" ></script>
-        <script src="{{ asset('bundles/fibeexternalization/js/importer/xls/xlsxMapper.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeexternalization/js/importer/xlsxImport/jszip.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeexternalization/js/importer/xlsxImport/xlsx.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeexternalization/js/importer/xlsxImport/xlsxMapper.js') }}" type="text/javascript" ></script>
         <script type="text/javascript" >
 
         var mapper = null;
@@ -260,7 +260,7 @@
                                                   <!-- Default panel contents -->\
                                                   <div class="panel-heading">'+(data.conference.setSummary?data.conference.setSummary:'Found datas')+'</div>';
 
-                    html+= getMsgUl(Mapper.getSerialisedDatas(),endMsg || "found",true);
+                    html+= getMsgUl(xmlMapper.getSerialisedDatas(),endMsg || "found",true);
 
                     html+='</ul></div></div><div class="col-sm-4"><div class="panel panel-info">\
                                                   <!-- Default panel contents -->\
@@ -296,14 +296,14 @@
         function extractDatas(mapping,op){
             if(!op)op={}; 
 
-              Importer().run( Mapper["data"],mapping,op,function(data,importedLog,notImportedLog){
+              Importer().run( xmlMapper["data"],mapping,op,function(data,importedLog,notImportedLog){
                     Pager.changePage('#page-result');
-                    Mapper.setSerialisedDatas(data);
-                    Mapper.setImportedLog(importedLog);
-                    Mapper.setNotImportedLog(notImportedLog);
+                    xmlMapper.setSerialisedDatas(data);
+                    xmlMapper.setImportedLog(importedLog);
+                    xmlMapper.setNotImportedLog(notImportedLog);
 
                     $("#result-extract").html(getHtmlResultDiv(data,importedLog,notImportedLog,"extracted"));
-                    bootstrapAlert("success",getMsgUl(Mapper.getSerialisedDatas(),"extracted"),"conference parsed : "); 
+                    bootstrapAlert("success",getMsgUl(xmlMapper.getSerialisedDatas(),"extracted"),"conference parsed : "); 
                 },function(msg)
                 { 
                     bootstrapAlert("warning", msg || "there was an error during extraction of datas","Error :"); 
@@ -355,8 +355,8 @@
                 }else{
                     file = this.files[0];
                 }
-                Mapper.initialize(file);
-                var worker = new Worker("{{ asset('bundles/fibeexternalization/js/importer/xls/xlsxworker.js') }}");
+                xmlMapper.initialize(file);
+                var worker = new Worker("{{ asset('bundles/fibeexternalization/js/importer/xlsxImport/xlsxWorker.js') }}");
                 xlsxMapper.initialize(worker, file);
                
         }
@@ -394,9 +394,9 @@
                             Pager.changePage('#page-end');  
                             
                             $("#result-import").html(
-                                getHtmlResultDiv(Mapper.getSerialisedDatas(),Mapper.getImportedLog(),Mapper.getNotImportedLog())
+                                getHtmlResultDiv(xmlMapper.getSerialisedDatas(),xmlMapper.getImportedLog(),xmlMapper.getNotImportedLog())
                             );
-                            bootstrapAlert("success",getMsgUl(Mapper.getSerialisedDatas(),"imported"),"Conference imported : "); 
+                            bootstrapAlert("success",getMsgUl(xmlMapper.getSerialisedDatas(),"imported"),"Conference imported : "); 
                         },
                         error:function(a,b,c)
                         {
@@ -424,7 +424,7 @@
                 e.preventDefault();
  
                 if($("#file-format").val() == "xml"){
-                    mapper = Mapper;
+                    mapper = xmlMapper;
                 }else{
                     mapper = xlsxMapper;
                 }

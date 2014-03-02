@@ -10,8 +10,9 @@ use fibe\SecurityBundle\Entity\Authorization;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="fibe\SecurityBundle\Repository\UserRepository")
  * @ORM\Table(name="manager")
+*
  */
 class User extends BaseUser
 {
