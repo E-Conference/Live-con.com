@@ -306,7 +306,7 @@
           if($.inArray(res[i].id, ids) !== -1 )
             filteredRes.push(res[i])
         }
-            filteredRes.push(unknownRes)
+        filteredRes.push(unknownRes)
         $calendar.fullCalendar('setResources',filteredRes);
       }
 
@@ -351,7 +351,7 @@
 
       {% if authorized == 1 %} 
           //dropped from calendar to sidebar;
-          $(sidebar).on("dropped",function(ev,calEvent){  
+          $(sidebar).on("dropped",function(ev,calEvent){
               console.log("dropped",calEvent)
               Events[calEvent.id].dropFromSidebar();  
           }).on("drag",function(ev,event){ 
@@ -368,7 +368,7 @@
       filter = new initFilter(op.getOrderedUrl);
       $(filter).on("change", function(ev,key,val,res){
           bootstrapAlert("info","event request sent","","<i class='fa-2x fa fa-spinner fa-spin'></i>");
-          if(res == currentRes)filterResourcesByIds(val);
+          if(res == currentRes)filterResourcesByIds(val); //ADDED FOR RESOURCES
       }).on("changed", function(ev,data,ids){
           bootstrapAlert("success",ids.length+" events have been well fetched" );
           ids.push(mainConfEvent.id)

@@ -226,10 +226,8 @@ class ConfEvent extends Event
      *  @ORM\PrePersist() 
      */
     public function computeIsAllDay()
-    {      
-        // $start = $this->getStartAt();
-        // $end = $this->getEndAt(); 
-        // $this->setIsAllDay($start->format('d')!=$end->format('d'));
+    {       
+        if($this->isMainConfEvent)$this->setIsAllDay(true);
     }
     
     /**

@@ -103,23 +103,23 @@ class ScheduleController extends Controller
             )
         ); 
         if(isset($postData['resourceId'])){
-            $resources =  $postData['resourceId'];
-            $currentRes = $resConfig[$postData['currentRes']];
-            if(count($resources)==1){  
-                $repo = $em->getRepository('IDCISimpleScheduleBundle:'.$currentRes["name"]);
-                if(!$repo) $repo = $em->getRepository('fibeWWWConfBundle:'.$currentRes["name"]);
-                if($repo){
-                    if($resources[0]==0){
-                        $value = null;
-                    }else{
-                        $value = $repo->find($resources[0]) ;
-                    }
-                    call_user_func_array(array($event, $currentRes["methodName"]), array($value));  
-                    
+            $resource =  $postData['resourceId'];
+            $currentRes = $resConfig[$postData['currentRes']]; 
+
+            $repo = $em->getRepository('IDCISimpleScheduleBundle:'.$currentRes["name"]);
+            if(!$repo) $repo = $em->getRepository('fibeWWWConfBundle:'.$currentRes["name"]); 
+
+            if($repo){
+                if($resource==0){
+                    $value = null;
                 }else{
-                    //resource repo not found
-                }
-            }
+                    $value = $repo->find($resource) ; 
+                } 
+                call_user_func_array(array($event, $currentRes["methodName"]), array($value));   
+                
+            }else{
+                //resource repo not found
+            } 
         }
         
         $event->setConference($conf) ;
