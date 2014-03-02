@@ -63,7 +63,7 @@
             <div class="row">
                <div class="col-lg-2"></div>
                <div class="col-lg-8">
-               <h1>Topics</h1>
+               <h1>Topics</h1><div id="loader_topics" style="visibility: hidden; display:inline;"><img src="{{ asset('img/ajax-loader.gif') }}"/></div>
                 <div id="topics_related_list">
                   {% include "fibeWWWConfBundle:ConfEvent:topicRelation.html.twig" %}
                 </div>
@@ -77,7 +77,7 @@
             <div class="row">
                <div class="col-lg-2"></div>
                <div class="col-lg-8">
-                <h1>Papers Relation</h1>
+                <h1>Papers Relation</h1><div id="loader_papers" style="visibility: hidden; display:inline;"><img src="{{ asset('img/ajax-loader.gif') }}"/></div>
                  <div id="paper_related_list">
                     {% include "fibeWWWConfBundle:ConfEvent:paperRelation.html.twig" %}
                 </div>
@@ -91,7 +91,7 @@
             <div class="row">
                <div class="col-lg-2"></div>
                <div class="col-lg-8">
-                  <h1>Persons Relation</h1>
+                  <h1>Persons Relation</h1><div id="loader_persons" style="visibility: hidden; display:inline;"><img src="{{ asset('img/ajax-loader.gif') }}"/></div>
                 <div id="person_related_list"> 
                     {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
                 </div>
@@ -148,12 +148,13 @@
      $("select[id='form_papers']").change(function(){
         //get the url for the form
         var id_paper= $(this).val();
-    
+        $('#loader_papers').show();
         //start send the post request
          $.post('{{path("schedule_confevent_addPaper") }}',               
                   {id_entity : '{{entity.id}}', id_paper: id_paper},
               function(response){
                      $('#paper_related_list').html(response);
+                     $('#loader_papers').hide();
                   
               }, "html");    
          });
@@ -162,13 +163,13 @@
      $("select[id='form_topics']").change(function(){
         //get the url for the form
         var id_topic= $(this).val();
-    
+         $('#loader_topics').show();
         //start send the post request
          $.post('{{path("schedule_confevent_addTopic") }}',               
                   {id_entity : '{{entity.id}}', id_topic: id_topic}, 
               function(response){
                      $('#topics_related_list').html(response);
-                  
+                     $('#loader_topics').hide();
               }, "html");    
          });
 
@@ -176,11 +177,13 @@
         //get the url for the form
         var id_person = $('#fibe_bundle_wwwconfbundle_roletype_person').val();
         var id_type = $('#fibe_bundle_wwwconfbundle_roletype_type').val();
+        $('#loader_persons').show();
         //start send the post request
          $.post("{{path('schedule_confevent_addPerson')}}",               
                  {id_person : id_person, id_type:id_type, id: "{{entity.id }}"} , 
               function(response){
                      $('#person_related_list').html(response);
+                     $('#loader_persons').show();
                   
               }, "html");    
           return false;

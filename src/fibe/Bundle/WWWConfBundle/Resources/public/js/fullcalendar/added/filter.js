@@ -4,27 +4,30 @@
     function initFilter(endPointUrl){
       var self = this;
       var endPointUrl = endPointUrl;
-      $('#filters').find("select").each(function(){ 
+      var currentFilter= {};
+      this.getFilters = function(){ return currentFilter;}
+
+      $('#filters').find("select").each(function(){
         $(this).select2("destroy").select2({
                     closeOnSelect : false,
                     formatSelectionCssClass : function(obj,ctn){ 
-                      var elem = $(obj.element);
-                      console.log(obj);
+                      var elem = $(obj.element); 
                       obj.css = {"background":elem.data("color")};
                     },
                 })
                 .change(function(){  
-                    //update fullcalendar getEvent 's url 
+
                     $(this).each(function(){ 
-                      $(self).trigger("change", [$(this).data("filter"),$(this).val()]);
+                      $(self).trigger("change", [$(this).data("filter"),$(this).val(),$(this).data("res")]);
                       op.data[$(this).data("filter")] = $(this).val(); 
+                      currentFilter[$(this).data("filter")] = $(this).val();
                     });
   
                     $.get(
                           endPointUrl,
                           op.data,
-                          function(events) {    
-                            $(self).trigger("changed",[EventCollection.getIds(events)]); 
+                          function(data) {    
+                            $(self).trigger("changed",[data,EventCollection.getIds(data)]); 
                           },
                           'json'
                         ).error(function(jqXHR, textStatus, errorThrown) {

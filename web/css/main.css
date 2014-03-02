@@ -75,24 +75,31 @@ body{
 }
 
 .navbar-inverse .navbar-nav>li>a{
-		color:#f2f2f2 !important ;
+	color:#f2f2f2 !important ;
 }
 
 
 #menu-navbar .dropdown-menu>li>a {
-		background:#19313b !important ;
-		color:#f2f2f2 !important ;
+	background:#19313b !important ;
+	color:#f2f2f2 !important ;
 
 }
 
 #menu-navbar .dropdown-menu > li :hover{
-			background:#f2f2f2!important ;
-		color: #19313b !important ;
+	background:#f2f2f2!important ;
+	color: #19313b !important ;
 }
 
 #menu-navbar li :focus{
-		background:#19313b !important ;
-		color:#f2f2f2 !important ;
+	background:#19313b !important ;
+	color:#f2f2f2 !important ;
+}
+
+.dropdown-menu>li>a>i {
+	width: 45px; 
+}
+.dropdown-menu>li>a {
+	padding-left:10px;
 }
 
 /*-------------------------------------------------------------------------------------

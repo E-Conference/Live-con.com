@@ -59,36 +59,7 @@ class ScheduleController extends Controller
                 'locations'  => $locations,
                 'topics'     => $topics,
             );
-    }
-
-/**
- *  Affiche la vue fullcalendar
- *  @Route("/resources", name="resource_view")
- *  @Template()
- */
-    public function resourcesAction()
-    {
-
-          //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-        $em = $this->getDoctrine();
-        $conf =$this->getUser()->getCurrentConf();
-
-        //filters
-        $categories = $em->getRepository('IDCISimpleScheduleBundle:Category')->getOrdered();
-        $locations = $this->getUser()->getCurrentConf()->getLocations();
-        $topics = $this->getUser()->getCurrentConf()->getTopics();
-
-        return array(
-                'currentConf' => $conf,
-                'authorized' => $authorization->getFlagSched(),
-                'categories'  => $categories,
-                'locations'  => $locations,
-                'topics'     => $topics,
-            );
-    }
+    } 
   
  
 /**
@@ -115,35 +86,40 @@ class ScheduleController extends Controller
         $conf=$this->getUser()->getCurrentConf();
         $mainConfEvent = $conf->getMainConfEvent();
         
-        $JSONArray = array(); 
-        $resConfig = array(
-            "location"=>array(
-                "name"=>"Location",
-                "methodName"=>"setLocation",
-            )
-        ); 
 
         $event;
         if( $methodParam=="add"){
-             $event= new Event();    
-
+             $event= new Event();  
         }else if( $methodParam=="update")
         {  
             $event = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['id']);  
         }
 
         //resource(s)
-        if(isset($postData['resource'])){
-            $resources =  $postData['resource'];
-            $currentRes = $resConfig[$postData['currentRes']];
-            if(count($resources)==1){  
-                $repo = $em->getRepository('IDCISimpleScheduleBundle:'.$currentRes["name"]);
-                if(!$repo) $repo = $em->getRepository('fibeWWWConfBundle:'.$currentRes["name"]);
-                if($repo){
-                    $value = $repo->find($resources[0]) ;
-                    call_user_func_array(array($event, $currentRes["methodName"]), array($value));  
-                }
-            }
+        $resConfig = array(
+            "location"=>array(
+                "name"=>"Location",
+                "methodName"=>"setLocation",
+            )
+        ); 
+        if(isset($postData['resourceId'])){
+            $resource =  $postData['resourceId'];
+            $currentRes = $resConfig[$postData['currentRes']]; 
+
+            $repo = $em->getRepository('IDCISimpleScheduleBundle:'.$currentRes["name"]);
+            if(!$repo) $repo = $em->getRepository('fibeWWWConfBundle:'.$currentRes["name"]); 
+
+            if($repo){
+                if($resource==0){
+                    $value = null;
+                }else{
+                    $value = $repo->find($resource) ; 
+                } 
+                call_user_func_array(array($event, $currentRes["methodName"]), array($value));   
+                
+            }else{
+                //resource repo not found
+            } 
         }
         
         $event->setConference($conf) ;
@@ -151,12 +127,13 @@ class ScheduleController extends Controller
         $event->setEndAt( new \DateTime($postData['end'] ) );
         $event->setParent( ($postData['parent']['id']!= "" ? $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['parent']['id']) : $mainConfEvent) );
         $event->setSummary( $postData['title'] ); 
-        $event->setIsAllDay($postData['allDay']=="true") ;
+        $event->setIsAllDay($postData['allDay']=="true");
         $mainConfEvent->setParent(null);
 
         $em->persist($event); 
         $em->flush(); 
 
+        $JSONArray = array(); 
         $JSONArray['id'] = $event->getId();
         $JSONArray['IsSuccess'] = true;
         $JSONArray['Msg'] = $methodParam . " success"; 

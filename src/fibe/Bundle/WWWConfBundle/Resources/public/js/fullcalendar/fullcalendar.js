@@ -1419,7 +1419,6 @@ function ResourceManager(options) {
                     cache: false,
                     success: function(res) {
                         res = res || [];
-                        res.push({id:"other",name:"Other"});//ADDED BY benoitddlp
                         resources = res;
                     },
                     error: function() {
@@ -4275,13 +4274,7 @@ function AgendaEventRenderer() {
 		html +=
 			" class='" + classes.join(' ') + "'" +
 			" style='position:absolute;z-index:" + 
-		//ADDED BY BENOITDDLP
-		seg.zindex + 
-		//ADDED BY BENOITDDLP
-			";top:" + seg.top + "px;left:" + seg.left + "px;" + skinCss + "'" +
-        //ADDED BY BENOITDDLP
-		"data-id='"+event.id+"' >" +
-		//ADDED BY BENOITDDLP
+			";top:" + seg.top + "px;left:" + seg.left + "px;" + skinCss + "'  >" + 
 			"<div class='fc-event-inner'>" + 
 			"<div class='fc-event-time'>" +
 			htmlEscape(formatDates(event.start, event.end, opt('timeFormat'))) +
@@ -4445,7 +4438,7 @@ function AgendaEventRenderer() {
 		eventElement.draggable({
 			zIndex: 9,
 			scroll: false,
-			// grid: [colWidth, snapHeight],
+			// grid: [colWidth, snapHeight],//COMMENTED BY benoitddlp
 			// axis: colCnt==1 ? 'y' : false,
 			opacity: opt('dragOpacity'),
 			revertDuration: opt('dragRevertDuration'),
@@ -4455,7 +4448,7 @@ function AgendaEventRenderer() {
 				origPosition = eventElement.position();
 				minuteDelta = prevMinuteDelta = 0;
 				hoverListener.start(function(cell, origCell, rowDelta, colDelta) {
-					// eventElement.draggable('option', 'revert', !cell);//COMMENTED BY benoitddlp
+					eventElement.draggable('option', 'revert', !cell); 
 					clearOverlays();
 					if (cell) {
 						dayDelta = colDelta * dis;
@@ -6430,10 +6423,7 @@ function DayEventRenderer() {
 			}
 			html +=
 				" class='" + classes.join(' ') + "'" +
-				" style='position:absolute;z-index:8;left:"+left+"px;" + skinCss + "'" +
-		        //ADDED BY BENOITDDLP
-				"data-id='"+event.id+"' >" +
-				//ADDED BY BENOITDDLP
+				" style='position:absolute;z-index:8;left:"+left+"px;" + skinCss + "' >" + 
 				"<div class='fc-event-inner'" +
 				(skinCss ? " style='" + skinCss + "'" : "") +
 				">"

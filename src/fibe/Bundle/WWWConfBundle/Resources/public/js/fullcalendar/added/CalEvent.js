@@ -1,5 +1,5 @@
 
-var CalEvent = function(event){
+var CalEvent = function(event){ //constructor
 
     this["id"]          = event.id; 
     this["description"] = event.description;
@@ -31,12 +31,16 @@ var CalEvent = function(event){
 
     //resources
     if(resourceView){
-      if(!this["resource"])this["resource"] =  resConfig[currentRes].parse(event);
-      if(this.location && this.location.id!= ""){
-        this["resourceId"] = this.location.id;
+      if(event["resourceId"]){
+        this["resourceId"]  = event.resourceId; 
       }else{
-        // set the resource as not defined
-        this["resourceId"] = 0; 
+
+        if(this.location && this.location.id!= ""){
+          this["resourceId"] = this.location.id;
+        }else{
+          // set the resource as not defined
+          this["resourceId"] = "0"; 
+        }
       }
     }
 
@@ -52,38 +56,8 @@ var CalEvent = function(event){
     Events[this["id"]] = this; 
  
 }; 
-
-CalEvent.prototype.renderForRefetch = function(){   
-    // console.log("##renderForRefetch",this);
-    if(this.isInstant())return;
-    if(calendar_events_indexes[this.id]=== undefined){
-      // console.debug("#renderForRefetch rendering "+this.id);
-      calendar_events.push(this);
-      calendar_events_indexes[this.id]=calendar_events.length-1; 
-    }
-    else{
-      // console.debug("#renderForRefetch updating "+this.id);
-      calendar_events.splice(calendar_events_indexes[this.id],1,this); 
-    } 
-    // console.log("",calendar_events[calendar_events_indexes[this.id]]);
-};
-
-CalEvent.prototype.removeForRefetch = function(){    
-    if(calendar_events_indexes[this.id]!== undefined){
-      for(var i in calendar_events_indexes){ 
-        if(calendar_events_indexes[i]>calendar_events_indexes[this.id]){
-          calendar_events_indexes[i] = calendar_events_indexes[i]-1;
-        }
-      }
-      calendar_events.splice(calendar_events_indexes[this.id],1); 
-      delete calendar_events_indexes[this.id] ;
-    }
-    // console.log("removeForRefetch",calendar_events_indexes);
-    // console.log("removeForRefetch",calendar_events);
-};
-
-
-CalEvent.prototype.persist = function(add){ 
+ 
+CalEvent.prototype.persist = function(add){ //persist at server side
     if(this.is_mainconfevent)return;
     var toSend = {
       parent    : this['parent'],
@@ -94,10 +68,10 @@ CalEvent.prototype.persist = function(add){
       end       : this['end'],
       start     : this['start'],
     }
-    if(resourceView){ 
-      toSend['resource'] = this['resource'];
+    if(resourceView && this.resource){  
       toSend['currentRes'] = currentRes;
-    }  
+      toSend['resourceId'] = this.resource.id;
+    } 
     $.post(
       add === true ? op.quickAddUrl : op.quickUpdateUrl,
       toSend,
@@ -116,6 +90,40 @@ CalEvent.prototype.persist = function(add){
     bootstrapAlert("info","update request sent ","Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
 };
 
+/*--------------------------------------------------------------------------------------------------*/
+/*------------------------------------- rendering functions ----------------------------------------*/
+/*--------------------------------------------------------------------------------------------------*/
+
+CalEvent.prototype.renderForRefetch = function(){   
+    // console.log("##renderForRefetch",this);
+    if(this.isInstant())return;
+    if(calendar_events_indexes[this.id]=== undefined){
+      // console.debug("#renderForRefetch rendering "+this.id);
+      calendar_events.push(this);
+      calendar_events_indexes[this.id]=calendar_events.length-1; 
+    }
+    else{
+      // console.debug("#renderForRefetch updating "+this.id);
+      calendar_events.splice(calendar_events_indexes[this.id],1,this); 
+    } 
+    // console.log("",calendar_events[calendar_events_indexes[this.id]]);
+};
+
+CalEvent.prototype.removeForRefetch = function(){
+    if(calendar_events_indexes[this.id]!== undefined){
+      for(var i in calendar_events_indexes){
+        if(calendar_events_indexes[i]>calendar_events_indexes[this.id]){
+          calendar_events_indexes[i] = calendar_events_indexes[i]-1;
+        }
+      }
+      calendar_events.splice(calendar_events_indexes[this.id],1); 
+      delete calendar_events_indexes[this.id] ;
+    }
+    $calendar.fullCalendar('removeEvents',this.id); 
+    // console.log("removeForRefetch",calendar_events_indexes);
+    // console.log("removeForRefetch",calendar_events);
+};
+
 
 /**
  * add events to EventCollection.eventsToComputeBroCountRangeIndexes
@@ -126,66 +134,170 @@ CalEvent.prototype.persist = function(add){
  *                    * add toppest non allday of the day in the cases that the event itself or its parent is an allDay event 
  */
 CalEvent.prototype.computeCountRange = function(opt){
-        // console.log("#ComputeCountRange allBrosInDay "+this.id);
-        if(!opt)opt={}
-          var bros; 
-        if(opt.allBrosInDay || this.allDay){
-          bros = calendar_events;
-          // var bros = event.getBros();
-          var dayToRender = {
-            start:moment(this.start).startOf('day')
-            ,end:moment(this.end).endOf('day')
-          }; 
-          // console.log("#ComputeCountRange allBrosInDay "+this.id,dayToRender);
-          if(Events[this.parent.id] && Events[this.parent.id].allDay){
-            bros = this.getNonAllDayBros();
-            // console.log("#ComputeCountRange parent is allDay",bros);
-            for(var i in bros){
-              var bro = bros[i]; 
-              if(!bro.isOutOf(dayToRender) || !bro.isOutOf(dayToRender) ){ 
-              addEvent(bro.id); 
-              }
-            }
-          }else{
-            for(var i in bros){
-              var bro = bros[i]; 
-              if(!bro.isOutOf(dayToRender) || !bro.isOutOf(dayToRender) ){
-                if(opt.allBrosInDay !== true || this.isBroOf(bro) ){
-                  addEvent(bro.id);
-                }
-              }
+    // console.log("#ComputeCountRange allBrosInDay "+this.id);
+    if(!opt)opt={}
+      var bros; 
+    if(opt.allBrosInDay || this.allDay){
+      bros = calendar_events;
+      // var bros = event.getBros();
+      var dayToRender = {
+        start:moment(this.start).startOf('day')
+        ,end:moment(this.end).endOf('day')
+      }; 
+      // console.log("#ComputeCountRange allBrosInDay "+this.id,dayToRender);
+      if(Events[this.parent.id] && Events[this.parent.id].allDay){
+        bros = this.getNonAllDayBros();
+        // console.log("#ComputeCountRange parent is allDay",bros);
+        for(var i in bros){
+          var bro = bros[i]; 
+          if(!bro.isOutOf(dayToRender) || !bro.isOutOf(dayToRender) ){ 
+          addEvent(bro.id); 
+          }
+        }
+      }else{
+        for(var i in bros){
+          var bro = bros[i]; 
+          if(!bro.isOutOf(dayToRender) || !bro.isOutOf(dayToRender) ){
+            if(opt.allBrosInDay !== true || this.isBroOf(bro) ){
+              addEvent(bro.id);
             }
           }
-        } 
-        addEvent(this.id)
-          function addEvent(id){
-            // var e = Events[id];
-            // if(e.allDay){
-            //   for(var i in e.children ){
-            //     var childId = e.children[i].id;  
-            //     addEvent(childId)
-            //   } 
-            // }else{
-              addNonAllDayEvent(id);
-            // }
-            function addNonAllDayEvent(id){
+        }
+      }
+    } 
+    addEvent(this.id) 
+    function addEvent(id){
 
-              if($.inArray(id, EventCollection.eventsToComputeBroCountRangeIndexes) === -1 && !Events[id].allDay && !Events[id].isInstant()) { 
-                EventCollection.eventsToComputeBroCountRangeIndexes.push(id);
-                EventCollection.broCountRange[id] = {count:1,range:0};
-                // console.debug("#ComputeCountRange added "+id);
-              }
-              else{ 
-                // console.debug("#ComputeCountRange didn't add event "+id);
-              }
+      if($.inArray(id, EventCollection.eventsToComputeBroCountRangeIndexes) === -1 && !Events[id].allDay && !Events[id].isInstant()) { 
+        EventCollection.eventsToComputeBroCountRangeIndexes.push(id);
+        EventCollection.broCountRange[id] = {count:1,range:0,resCount:1,resRange:0};
+        // console.debug("#ComputeCountRange added "+id);
+      }
+      else{ 
+        // console.debug("#ComputeCountRange didn't add event "+id);
+      }
+    }
+}
+
+
+CalEvent.prototype.calculateWidth = function(seg, leftmost, availWidth, outerWidth, levelI, bottom, top, forward, dis,rtl){  
+    var width = availWidth + (($calendar.fullCalendar('getView').getColWidth()/20));
+                // + ( $calendar.fullCalendar('getView').name == "agendaDay" ? $calendar.fullCalendar('getView').getColWidth()/20 : 10 );
+    var height = bottom - top;
+    var left = leftmost;
+    var zindex = 8;
+
+    var Hmargin = 5;
+    var Wmargin = 2;
+
+    var isResView = $calendar.fullCalendar('getView')["name"] == "resourceDay";
+    try{
+
+        //go to the parent place
+        var parentId = this.parent.id,
+            count    = !isResView ? EventCollection.broCountRange[this.id].count : EventCollection.broCountRange[this.id].resCount,
+            range    = !isResView ? EventCollection.broCountRange[this.id].range : EventCollection.broCountRange[this.id].resRange
+            shifted  = false; 
+
+        while(!Events[parentId].allDay){ 
+            var parentCount   = !isResView ? EventCollection.broCountRange[parentId].count : EventCollection.broCountRange[parentId].resCount,
+                parentRange   = !isResView ? EventCollection.broCountRange[parentId].range : EventCollection.broCountRange[parentId].resRange; 
+
+            range += (parentRange*count);
+            count *= parentCount;
+             
+            // width-=Wmargin*2;
+            left+=Wmargin; 
+
+            if(moment(Events[parentId].start).isSame(moment(this.start))){
+              top    += Hmargin/2;
+              height -= Hmargin/2;
+            } 
+            if(moment(Events[parentId].end).isSame(moment(this.end))){ 
+              height -= Hmargin;
             }
-          } 
-    },
+            // height -= (2*Hmargin);
+
+            zindex +=100
+
+            parentId = Events[parentId].parent.id;
+        }
 
 
+        width = width/count;
+        left = left+(width*range);
 
 
+        seg.outerWidth = width;
+        seg.left = left;
+        seg.outerHeight = height;
+        seg.top = top;
+        EventCollection.broCountRange[this.id].zindex = zindex; 
+    }catch(e){
+      console.warn("broCountRange not computed for "+this.id) 
+    }
+};
 
+CalEvent.prototype.dropFromSidebar = function(){
+
+    //set as instant event 
+    this['end'] = moment(this['start']);
+    this.formatDate();
+    // remove event from calendar 
+    this.computeCountRange({allBrosInDay:true}); 
+    this.removeForRefetch(); 
+    // $calendar.fullCalendar('removeEvents',this.id); 
+
+    //affect children
+    var children = EventCollection.getChildren(this, {concat:true,onlyEvent:true} ); 
+    $.each(children,function(i,child){
+        //set as instant this 
+        child['end'] = moment(child['start']);
+        child.formatDate(); 
+        child.removeForRefetch();  
+        sidebar.setSidebarEvent(child,true); 
+        child.persist();
+    });
+    //set as sidebar draggable 
+    sidebar.setSidebarEvent(this,true);
+    EventCollection.refetchEvents(); 
+    this.persist();
+}
+
+/*--------------------------------------------------------------------------------------------------*/
+/*------------------------------------- hierarchy function -----------------------------------------*/
+/*--------------------------------------------------------------------------------------------------*/
+
+
+CalEvent.prototype.dragChildren = function(){ 
+    var children = EventCollection.getChildren(this,{concat:true}),
+        draggedStart = moment(this['start']),
+        draggedProp = getProp(this.elem),
+        newdraggedProp,
+        diff,
+        childProp;
+
+    //update helper
+    $(this.elem).mousemove( function(ev){ 
+      newdraggedProp = getProp(this); 
+      diff = { 
+        x : (draggedProp.x - newdraggedProp.x) , 
+        y : (draggedProp.y - newdraggedProp.y)
+      };
+      if(diff.x !== 0  || diff.y !== 0 ){
+        draggedProp =  newdraggedProp;  
+
+        $.each(children,function(i,child){ 
+          childProp = getProp(child.elem); 
+          $(child.elem).css("left",childProp.x-diff.x+"px")
+                       .css("top" ,childProp.y-diff.y+"px");
+        });
+      }
+    }); 
+    $(this.elem).mouseup(function(){
+      $(this).off("mousemove").off("mouseup")
+    })
+}
 
 /**
  * child date has changed, update parent's one to fit
@@ -360,35 +472,6 @@ CalEvent.prototype.SetRecurDate = function(){
       } 
 };
 
-CalEvent.prototype.fitToDay = function (oldStart,oldEnd){
-  oldStart = moment(oldStart),
-  oldEnd   = moment(oldEnd);
-  var duration = moment(this.end).diff(moment(this.start));
-  var midnightLimit = moment(this.end).startOf("day");
-  if(duration >= moment().add("d",1).diff(moment())){
-    this.allDay = true;
-    return;
-  } 
-  if(oldStart.isSame(midnightLimit) ||oldEnd.isSame(midnightLimit)){
-    this.start = oldStart.format();
-    this.end = oldEnd.format();
-    return false;
-  }
-  if(moment(this.start).diff(midnightLimit) > midnightLimit.diff(this.end)){
-  // if(this.start < oldStart){
-    
-    //we put the event to the next day
-    this.start = midnightLimit.format();
-    this.end = moment(this.start).add(duration).format(); 
-
-  }else{
-    //we put the event to the previous day
-    this.end = midnightLimit.format();
-    // this.end = moment(midnightLimit).subtract("s",1).format();
-    this.start = moment(this.end).subtract(duration).format(); 
-  }
-}
-
 // remove relation with old parent if exists
 // and update relation with new parent (render event but dont persist changes to db)
 CalEvent.prototype.setParent = function (parent){
@@ -550,8 +633,39 @@ CalEvent.prototype.getPopoverContent = function(){
 
 
 /*--------------------------------------------------------------------------------------------------*/
-/*------------------------------------- utils functions --------------------------------------------*/
+/*-------------------------------- date utils functions --------------------------------------------*/
 /*--------------------------------------------------------------------------------------------------*/
+
+
+
+CalEvent.prototype.fitToDay = function (oldStart,oldEnd){
+  oldStart = moment(oldStart),
+  oldEnd   = moment(oldEnd);
+  var duration = moment(this.end).diff(moment(this.start));
+  var midnightLimit = moment(this.end).startOf("day");
+  if(duration >= moment().add("d",1).diff(moment())){
+    this.allDay = true;
+    return;
+  } 
+  if(oldStart.isSame(midnightLimit) ||oldEnd.isSame(midnightLimit)){
+    this.start = oldStart.format();
+    this.end = oldEnd.format();
+    return false;
+  }
+  if(moment(this.start).diff(midnightLimit) > midnightLimit.diff(this.end)){
+  // if(this.start < oldStart){
+    
+    //we put the event to the next day
+    this.start = midnightLimit.format();
+    this.end = moment(this.start).add(duration).format(); 
+
+  }else{
+    //we put the event to the previous day
+    this.end = midnightLimit.format();
+    // this.end = moment(midnightLimit).subtract("s",1).format();
+    this.start = moment(this.end).subtract(duration).format(); 
+  }
+}
 
 /**
  * whether the event is out of the given arg event
@@ -597,6 +711,10 @@ CalEvent.prototype.formatDate = function () {
 CalEvent.prototype.duration = function () {  
     return moment(this.end).diff(this.start);
 };
+ 
+/*--------------------------------------------------------------------------------------------------*/
+/*------------------------------------- global utils function --------------------------------------*/
+/*--------------------------------------------------------------------------------------------------*/
 
 //set lighter/darker
 function ColorLuminance(hex, lum) {
@@ -617,4 +735,20 @@ function ColorLuminance(hex, lum) {
   }
 
   return rgb;
+}
+
+jQuery.fn.cssNumber = function(prop){
+    var v = parseInt(this.css(prop),10);
+    return isNaN(v) ? 0 : v;
+};
+
+//get css positionning properties from an event $div (see EventCollection.getDivById) 
+function getProp(elem){
+  rtn={
+    x: $(elem).cssNumber("left"),
+    y: $(elem).cssNumber("top"),
+    w: $(elem).cssNumber("width"),
+    h: $(elem).cssNumber("height")
+  }; 
+  return rtn;
 }
