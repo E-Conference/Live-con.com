@@ -121,7 +121,7 @@ class TopicController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('schedule_topic_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('schedule_topic'));
         }
 
         return array(
@@ -262,7 +262,7 @@ class TopicController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('schedule_topic_show', array('id' => $id)));
+            return $this->redirect($this->generateUrl('schedule_topic'));
         }
 
         return array(
