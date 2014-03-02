@@ -9,7 +9,7 @@
 {% trans_default_domain 'FOSUserBundle' %}
      <div class="row page-top-header ">
             <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                <span>Team managment</span>
+                <span>Team management</span>
             </div>
 
             <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
@@ -18,7 +18,7 @@
       <div class="row page-content">
 
              
-
+          <div id="team_list" class="table-responsive">
             <table class="records_list table table-striped table-hover">
                 <thead>
                     <tr>
@@ -137,6 +137,7 @@
                 {% endfor %}
                 </tbody>
             </table>
+          </div>
             <!--<a class="btn btn-info" href="{{ path('fos_user_registration_register') }}">
                 <i class="icon-plus icon-white"> </i> Add user in conference
             </a>-->
