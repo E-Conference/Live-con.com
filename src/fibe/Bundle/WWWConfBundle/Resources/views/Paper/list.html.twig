@@ -14,7 +14,7 @@
                     <tr>
                         <td><a href="{{ path('schedule_paper_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                         <td>{{ entity.title }}</td>
-                        <td width="40%"><p>{{ entity.abstract }}</p></td>
+                        <td><textarea disabled="true">{{ entity.abstract }}</textarea></td>
                         <td>
                              {% for author in entity.authors %}
                                 <li>
