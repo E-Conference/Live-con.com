@@ -41,7 +41,7 @@
 
           <h4>Filter by categories</h4>
           <div class="filter">
-            <select multiple class="form-control" data-res="category" data-filter="category_ids">
+            <select multiple class="form-control" data-filter="category_ids">
               {% for category in categories %}
                 <option data-color="{{category.color}};" value="{{category.id}}">{{category.name}}</option>
               {% endfor %}
@@ -50,7 +50,7 @@
 
           <h4>Filter by locations</h4>
           <div class="filter">
-            <select multiple class="form-control" data-res="location" data-filter="location_ids">
+            <select multiple class="form-control" data-filter="location_ids">
               {% for location in locations %}
                 <option value="{{location.id}}">{{location.name}}</option>
               {% endfor %}
@@ -59,7 +59,7 @@
 
           <h4>Filter by topic</h4>
           <div class="filter">
-            <select multiple class="form-control" data-res="topic" data-filter="topic_ids">
+            <select multiple class="form-control" data-filter="topic_ids">
               {% for topic in topics %}
                 <option value="{{topic.id}}">{{topic.name}}</option>
               {% endfor %}
@@ -160,7 +160,7 @@
   <script src="{{ asset('bundles/fibewwwconf/js/moment.min.js') }}" type="text/javascript" ></script>
        
   <script type="text/javascript" src="{{ asset('js/jquery-ui.custom.js') }}"></script>
-  <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar_res.js') }}"></script>
+  <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.js') }}"></script>
 
   <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/added/filter.js') }}"></script>
   <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/added/sidebar.js') }}"></script>
@@ -205,7 +205,7 @@
           data          : {} // request parameters
         }; 
 
-    $(document).ready(function() {
+    $(document).ready(function() {    
 
       //init $ vars
       $modal = $('#modal').hide();
@@ -218,7 +218,7 @@
        
 
       /*-----------------------------------------------------------------------------------------------------*/
-      /*------------------------------------- fullcalendar options ------------------------------------------*/
+      /*--------------------------------------------- fullcalendar ------------------------------------------*/
       /*-----------------------------------------------------------------------------------------------------*/
       calendarOption = { 
           header: {
@@ -226,121 +226,52 @@
               center: 'title',
               right: 'month,agendaWeek,agendaDay' // computed in resource view
           },
-          aspectRatio        : 1.6,
-          firstDay           : firstWeekDay,         
-          year               : firstDay.year(), 
-          month              : firstDay.month(),
-          date               : firstDay.date(),
-          events             : EventCollection.events, //fetch event
+          aspectRatio: 1.6,
+          firstDay: firstWeekDay,         
+          year: firstDay.year(), 
+          month: firstDay.month(),
+          date: firstDay.date(),
+          events : EventCollection.events, //fetch event
           eventAfterAllRender: EventCollection.eventAfterAllRender,  
-          eventCalculateWidth: EventCollection.eventCalculateWidth,
-          eventAfterRender   : EventCollection.eventAfterRender, 
+          eventCalculateWidth : EventCollection.eventCalculateWidth,
+          eventAfterRender : EventCollection.eventAfterRender, 
 
           {% if authorized == 1 %} //editing function that require schedule flag
-              editable      : true,
-              eventClick    : EventCollection.eventClick,
-              selectable    : true,
-              selectHelper  : true,
-              select        : EventCollection.eventCreate,
+              editable: true,
+              eventClick: EventCollection.eventClick,
+              selectable: true,
+              selectHelper: true,
+              select: EventCollection.eventCreate,
               //resizing events in calendar (only the end date is changed)
-              eventResize   : EventCollection.eventResize,
+              eventResize: EventCollection.eventResize,
               
-              droppable     : true, // allows things to be dropped into the calendar
-              drop          : EventCollection.eventSidebarDrop,
-              
+              droppable: true, // allows things to be dropped into the calendar
+              drop: EventCollection.eventSidebarDrop,
+
               eventDragStart: EventCollection.eventDragStart,
-              eventDragStop : EventCollection.eventDragStop,
-              eventDrop     : EventCollection.eventDrop,
+              eventDragStop: EventCollection.eventDragStop,
+              eventDrop : EventCollection.eventDrop,
           {% endif %}
       };
 
-      /*----------------------------------------------------------------------------------------*/
-      /*------------------------------------- resources ----------------------------------------*/
-      /*----------------------------------------------------------------------------------------*/
-      var resConfig = {
-        location : {
-          url : "{{ path('exporter_api', { 'entity_reference': 'schedule_location','_format': 'json' }) }}?conference_id={{currentConf.id}}",
-          parse : function(e){ 
-            if(e.location && e.location.id!= ""){
-              return e.location.id;
-            }else{
-              return "other";
-            }
-          }
-        },category : {
-          url : "{{ path('exporter_api', { 'entity_reference': 'schedule_category','_format': 'json' }) }}?conference_id={{currentConf.id}}",
-          parse : function(e){
-            console.log(e)
-            if( e.categories && e.categories.length < 1) return "other" ; 
-            for(var i in e.categories){
-              var c = e.categories[i];
-              rtn.push(c.id);
-            } 
-            return rtn;
-          }
-        }
-      };
-      currentRes = "location";
-      var res,
-          allRes,
-          unknownRes = {
-              name: "Not defined",
-              id  : "0"
-            };
-      function fetchAllResources(callback){ 
-        $.ajax({
-          url:resConfig[currentRes].url,
-          data :  op.data, 
-          success :  function(events) {
-            events.push(unknownRes)
-            allRes = events.slice(0);
-            res = events;
-            if(callback)callback(res); 
-          },
-        });
-      }
-      function filterResourcesByIds(ids){
-        if(!ids || ids.length == 0)return $calendar.fullCalendar('setResources',allRes);
-        var filteredRes = [];
-        for(var i  = 0; i < res.length; i ++){
-          if($.inArray(res[i].id, ids) !== -1 )
-            filteredRes.push(res[i])
-        }
-        filteredRes.push(unknownRes)
-        $calendar.fullCalendar('setResources',filteredRes);
-      }
+      //launch calendar
+      $calendar.fullCalendar(calendarOption);  
+      $calendar.fullCalendar('changeView', startView );
 
-      calendarOption.header.right = "month agendaWeek agendaDay,resourceDay";
-      calendarOption["buttonText"] = {resourceDay:currentRes};
-      resourceView = true;
-
-      fetchAllResources(function(){
-          calendarOption["eventResources"] = res;
-          //launch calendar
-          $calendar.fullCalendar(calendarOption);  
-          $calendar.fullCalendar('changeView', startView );
-
-          //additional schedule controls : first day and refresh
-          $('.fc-header-left')
-            .append(
-              $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"> First day</button>')
-                .click(function(e){ 
-                  $calendar.fullCalendar( 'gotoDate', firstDay.year(), firstDay.month(), firstDay.date() ) 
-                  EventCollection.refetchEvents();
-                })
-            ).append(
-              $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"><span class="fa fa-refresh"></span></button>')
-                .click(function(e){ 
-                  EventCollection.resetEvents();
-                })
-            );  
-      }); 
-
-
-      /*----------------------------------------------------------------------------------------*/
-      /*------------------------------------- end resources ------------------------------------*/
-      /*----------------------------------------------------------------------------------------*/
-
+      //additional schedule controls : first day and refresh
+      $('.fc-header-left')
+          .append(
+            $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"> First day</button>')
+              .click(function(e){ 
+                $calendar.fullCalendar( 'gotoDate', firstDay.year(), firstDay.month(), firstDay.date() ) 
+                EventCollection.refetchEvents();
+              })
+          ).append(
+            $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"><span class="fa fa-refresh"></span></button>')
+              .click(function(e){ 
+                EventCollection.resetEvents();
+              })
+          );  
 
       /*-------------------------------------------------------------------------------------------------*/
       /*------------------------------------- initialize sidebar ----------------------------------------*/
@@ -351,7 +282,7 @@
 
       {% if authorized == 1 %} 
           //dropped from calendar to sidebar;
-          $(sidebar).on("dropped",function(ev,calEvent){
+          $(sidebar).on("dropped",function(ev,calEvent){  
               console.log("dropped",calEvent)
               Events[calEvent.id].dropFromSidebar();  
           }).on("drag",function(ev,event){ 
@@ -366,14 +297,11 @@
 
       //init filters
       filter = new initFilter(op.getOrderedUrl);
-      $(filter).on("change", function(ev,key,val,res){
+      $(filter).on("change", function(ev,key,val){
           bootstrapAlert("info","event request sent","","<i class='fa-2x fa fa-spinner fa-spin'></i>");
-          if(res == currentRes)filterResourcesByIds(val); //ADDED FOR RESOURCES
-      }).on("changed", function(ev,data,ids){
+      }).on("changed", function(ev,ids){
           bootstrapAlert("success",ids.length+" events have been well fetched" );
           ids.push(mainConfEvent.id)
-
-          //hide filtered event
           var calendarEvents = $calendar.fullCalendar('clientEvents'); //loop only on calendar events 
           for(var i in calendarEvents){
             if($.inArray(calendarEvents[i].id, ids) === -1 ){ 
@@ -392,7 +320,6 @@
       });
 
 });//end $document.ready()  
-  </script>    
-  
+  </script>
 {% endblock javascripts_page %}
 
