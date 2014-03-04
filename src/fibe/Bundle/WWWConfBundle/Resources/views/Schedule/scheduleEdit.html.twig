@@ -1,22 +1,17 @@
 
-   <div class="row page-top-header ">
-            <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                <span>Edit event</span>
-            </div>
-
-            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
-            </div>
-            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                   <a type="button" href="{{ path('schedule_event') }}" class="btn btn-warning">
-                    <i class="fa fa-list"></i>
-                 </a>
-                   <form  id="delete-event-form" action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
-                  <input type="hidden" name="_method" value="DELETE" />
-                    {{ form_widget(delete_form) }}
-                  <button type="submit" class="btn btn-danger">
-                    <i class="fa fa-trash-o"></i>
-                  </button>
-                 </form> 
+   <div class="row page-top-header " style="margin-top:-1.5em;position: relative;"> 
+ 
+            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2" style="float: right;margin-right: -35px;">
+              <a type="button" target="_blank" href="{{ path('schedule_event_edit', { 'id': entity.id }) }}" class="btn btn-warning">
+                <i class="fa fa-search"></i>
+              </a>
+              <form  id="delete-event-form" action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
+                <input type="hidden" name="_method" value="DELETE" />
+                {{ form_widget(delete_form) }}
+                <button type="submit" class="btn btn-danger">
+                  <i class="fa fa-trash-o"></i>
+                </button>
+              </form> 
             </div>
       </div>
       <div class="row page-content">
@@ -24,15 +19,14 @@
    
     <form id="eventForm" action="{{ path('schedule_confevent_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
        <input type="hidden" name="_method" value="PUT" />
-       <div class="row">
-           <div class="col-lg-2"></div>
-           <div class="col-lg-4">
+       <div class="row"> 
+           <div class="col-sm-6">
                   {{ form_row(edit_form.summary) }}
                   {{ form_row(edit_form.categories) }} 
                   {{ form_row(edit_form.description) }} 
                   {{ form_row(edit_form.url) }} 
               </div>
-              <div class="col-lg-4">
+              <div class="col-sm-6">
                    
                   {{ form_row(edit_form.comment) }}
                   {{ form_row(edit_form.organizer) }}
@@ -47,9 +41,8 @@
               </div>                       
         </div> 
         </br>
-         <div class="row"> 
-            <div class="col-lg-4"></div>
-            <div class="col-lg-4">  
+         <div class="row">  
+            <div class="col-lg-12">  
                  <button type="submit" class="btn btn-block btn-success">
                           <i class="fa fa-check"></i>
                 </button>
@@ -60,37 +53,29 @@
         </br></br>
 
          
-            <div class="row">
-               <div class="col-lg-2"></div>
-               <div class="col-lg-8">
+            <div class="row">  
                <h1>Topics</h1><div id="loader_topics" style="visibility: hidden; display:inline;"><img src="{{ asset('img/ajax-loader.gif') }}"/></div>
                 <div id="topics_related_list">
                   {% include "fibeWWWConfBundle:ConfEvent:topicRelation.html.twig" %}
                 </div>
-                 {{ form_widget(topic_form) }}    
-              </div>  
+                 {{ form_widget(topic_form) }}     
             </div> 
          
         </br></br>
           
           {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
-            <div class="row">
-               <div class="col-lg-2"></div>
-               <div class="col-lg-8">
+            <div class="row"> 
                 <h1>Papers Relation</h1><div id="loader_papers" style="visibility: hidden; display:inline;"><img src="{{ asset('img/ajax-loader.gif') }}"/></div>
                  <div id="paper_related_list">
                     {% include "fibeWWWConfBundle:ConfEvent:paperRelation.html.twig" %}
                 </div>
-                {{ form_widget(paper_form) }}
-              </div>
+                {{ form_widget(paper_form) }} 
             </div>
           {% endif %}
 
         </br></br>
 
-            <div class="row">
-               <div class="col-lg-2"></div>
-               <div class="col-lg-8">
+            <div class="row"> 
                   <h1>Persons Relation</h1><div id="loader_persons" style="visibility: hidden; display:inline;"><img src="{{ asset('img/ajax-loader.gif') }}"/></div>
                 <div id="person_related_list"> 
                     {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
@@ -103,10 +88,7 @@
                 <button id="role_form_submit"class="btn btn-info" type="submit">
                     <i class="fa fa-plus"></i> add Person
                 </button>
-                </form>
-                
-      
-          </div>
+              </form> 
         </div>
       </br>
 </div>

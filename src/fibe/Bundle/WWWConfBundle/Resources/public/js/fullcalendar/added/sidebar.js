@@ -44,7 +44,7 @@ function Sidebar(readOnly){
  
           if (!readOnly){ 
               $sidebar.droppable({
-                accept: ".fc-event-start :not(.main-conf-event)",
+                accept: ".fc-event-start:not(.main-conf-event)",
                 tolerance: "pointer" ,
                 over: function( event, ui ) {
                     if( $(ui.draggable).hasClass("fc-event")) {

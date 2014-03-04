@@ -8,6 +8,15 @@ var EventCollection = {
     broCountRange:{}, 
     eventsToComputeBroCountRangeIndexes:[],  
 
+    checkIsLoginPage : function (html){
+      if(Object.prototype.toString.call(html) == '[object String]' && html.substring(0,9)=="<!DOCTYPE"){
+        alert("Session expired :(\n\n\t you have to reconnect to continue!")
+        return true;
+      }
+      return false;
+      
+    },
+
     refetchEvents : function(refetch,force){ 
         if(force!==true && refetch!==true && (EventCollection.forceMainConfRendering!==true && EventCollection.eventsToComputeBroCountRangeIndexes.length==0)){ 
           console.log("not rendered")
@@ -420,6 +429,8 @@ var EventCollection = {
           op.data,
           function(events) {  
               // if(stopRender===true)return;
+              if(EventCollection.checkIsLoginPage(events))return;
+              
               console.log(events) 
               if(events.length!=0)bootstrapAlert("success",events.length+" events have been well fetched" );
               else {bootstrapAlert("info","no event found");}
@@ -503,7 +514,8 @@ var EventCollection = {
     eventClick : function(calEvent, jsEvent, view) {  // get the full edit form
       $.ajax({
           url: op.updateUrl+"?id="+calEvent.id,  
-          success: function(doc) {
+          success: function(doc,b,c) { 
+            if(EventCollection.checkIsLoginPage(doc))return;
               $modalBody.html(doc);
               bootstrapAlert("success","Options for event : <b>"+calEvent['title']+"</b> has been well fetched"); 
 
@@ -567,6 +579,7 @@ var EventCollection = {
                 op.quickAddUrl,
                 $.extend( {} , tmp ),
                 function(response) {  
+                    if(EventCollection.checkIsLoginPage(response))return; 
                     bootstrapAlert("success","event <b>"+tmp['title']+"</b> has been well added");
                     tmp.id =response.id;
                     var ev = new CalEvent(tmp);    
@@ -617,8 +630,8 @@ var EventCollection = {
       EventCollection.refetchEvents();
       event.persist();  
     },
-    eventSidebarDrop : function(date, allDay) { //drop from SIDEBAR
-  
+    eventSidebarDrop : function(date, allDay, ev, ui, resource) { //drop from SIDEBAR
+
       // retrieve the dropped element's stored Event Object 
       var event = dragged[1]; 
       // var event = $.extend({},dragged[1]);  
@@ -626,6 +639,7 @@ var EventCollection = {
       // delete event.elem;
       event.allDay = allDay;
       event['start'] = date;
+      event['resourceId'] = resource.id || "0";
 
 
       // event = new CalEvent(event); 

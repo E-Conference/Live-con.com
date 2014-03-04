@@ -76,6 +76,7 @@ CalEvent.prototype.persist = function(add){ //persist at server side
       add === true ? op.quickAddUrl : op.quickUpdateUrl,
       toSend,
       function(response) {  
+        if(EventCollection.checkIsLoginPage(response))return;
         bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well "+ (add=== true ? "added" : "updated")); 
         // console.log(toSend.id+" persisted",toSend); 
         if(response.mainConfEvent){
