@@ -182,12 +182,12 @@
         firstWeekDay = 1, // avoid first day to be sunday
         firstDay = moment('{{currentConf.mainConfEvent.startAt|date("Y-m-d")}}'), //first mainconfevent day
         authorized = {% if authorized == 1 %}true{% else %}false{% endif %}, 
-        filter,
-        sidebar,
+        filter, // filter.js
+        sidebar, //sidebar.js
         logtime, // global benchmark var 
         startView = "agendaWeek",
         resourceView = false,  
-        //init $ vars
+        //bootstrap modals
         $modal,
         $modalNewEvent,
         $modalSetParent,
