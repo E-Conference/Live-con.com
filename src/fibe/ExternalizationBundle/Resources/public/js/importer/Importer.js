@@ -14,7 +14,16 @@ function Importer() {
  
 
 
-    var objects = {};
+    this.util = {}; 
+    this.mappingConfig = {};
+    this.objects = objects = {};
+
+    this.setMappingConfig = setMappingConfig;
+    this.run = run;
+
+    this.doFormat = doFormat;
+    this.getArrayId = getArrayId;
+
 
     var notImportedLog,
         importedLog,
@@ -24,15 +33,12 @@ function Importer() {
         fkMapIndexes,
         defaultDate = 'now';
 
-    this.util = {}; 
-    this.mappingConfig = {};
-    this.setMappingConfig = function(mappingConfig){
+    function setMappingConfig(mappingConfig){
         this.mappingConfig = mappingConfig;
         this.util = utils[mappingConfig.util]; 
     }
-    this.doFormat = doFormat;
 
-    this.run = function(file,mapping,op,callback,fallback){ 
+    function run(file,mapping,op,callback,fallback){ 
         
         var mappingConfig = mapping; 
         this.setMappingConfig(mappingConfig)
@@ -78,21 +84,24 @@ function Importer() {
         //     rootNode = Importer().doFormat(file,mappingConfig.rootNode.format); 
         // }
         
-        // get the most populated node
+        // get the most populated node as rootNode
         var maxChildren = 0;
         $(file).each(function(i,node){
             var nbChildren = $(node).children().length;
-            if( nbChildren > maxChildren){rootNode=$(node);maxChildren = nbChildren}
+            if( nbChildren > maxChildren){
+                rootNode=$(node);
+                maxChildren = nbChildren
+            }
         });
 
         //check root node
         if(!rootNode){
-            if(fallback!=undefined)fallback("Wrong root node"); 
+            if(fallback)fallback("Wrong root node"); 
             return;
         }
         console.log("rootNode contains "+rootNode.children().length+" children",rootNode)
         if(rootNode.children().length ==0){
-            if(fallback!=undefined)fallback("Empty root node"); 
+            if(fallback)fallback("Empty root node"); 
             return;
         }
 
@@ -117,17 +126,7 @@ function Importer() {
         ///////////////////////////  items Processing  ///////////////////////////
         //////////////////////////////////////////////////////////////////////////
 
-        // for (var i in mappingConfig.mappings){ 
-        //     var itemMapping = mappingConfig.mappings[i];  
-        //     rootNode.children().each(function(index,node){
-        //         // var n = NodeUtils[mappingConfig.getNodeName](node);  
-        //         var n = Importer().doFormat(node,mappingConfig.getNodeName.format);     
-
-        //         if(n && n.toLowerCase().indexOf(itemMapping.nodeName)!= -1){
-        //             add(itemMapping.array,itemMapping,this,{name:n});   
-        //         }
-        //     }); 
-        // } 
+        //loop over all mappingConfig.mappings
         for (var i in mappingConfig.mappings){ 
             var itemMapping = mappingConfig.mappings[i];  
             var collectionNode = Importer().doFormat(rootNode,mappingConfig.mappings[i].format); 
@@ -145,6 +144,8 @@ function Importer() {
         //////////////////////////////////////////////////////////////////////////
         ///////////////////////////  fk Processing  ///////////////////////////
         //////////////////////////////////////////////////////////////////////////
+
+        //loop over all foreign key map obj
         for (var i in fkMap){ 
             var fk = fkMap[i];
             var fks = objectMap[fk.entity][fk.setter];
@@ -155,22 +156,13 @@ function Importer() {
             }else{
                 computeFk(fks, fk)
             }
-          
-            // var addArray = objects[itemMapping.array];
-            // rootNode.children().each(function(index,node){
-            //     // var n = NodeUtils[mappingConfig.getNodeName](node);  
-            //     var n = Importer().doFormat(node,mappingConfig.getNodeName.format);     
-
-            //     if(n && n.toLowerCase().indexOf(itemMapping.nodeName)!= -1){
-            //         add(addArray,itemMapping,this,{name:n});   
-            //     }
-            // }); 
         }
 
         //////////////////////////////////////////////////////////////////////////
         ///////////////////////////// startAt less  //////////////////////////////
         //////////////////////////////////////////////////////////////////////////
-         
+        
+        //compute at the same time the mainConfEvent date
         var earliestStart = moment('6000-10-10');
         var latestEnd = moment('1000-10-10');
         for(var i=0;i<objects.events.length;i++){
@@ -195,11 +187,7 @@ function Importer() {
                 }else
                 {
                     delete event['setParent'];
-                    event['setEndAt'] = event['setStartAt'] = defaultDate; 
-
-                    // if(event['mainConferenceEvent'] ){
-                    //     event['setEndAt'] = moment().hour(0).minute(0).second(0).millisecond(0).add('d', 1).format('YYYY-MM-DDTHH:mm:ss Z');
-                    // }
+                    event['setEndAt'] = event['setStartAt'] = defaultDate;
                 }
             }
             if(moment(event['setStartAt']).isBefore(earliestStart))
@@ -258,6 +246,10 @@ function Importer() {
         console.log(notImportedLog);
    
         // workflow run end
+        // workflow run end
+        
+        
+
         /**  function add() : process node given the config file 
          *
          * @param {array} addArray      the array to populate
@@ -271,7 +263,7 @@ function Importer() {
             if(mapping.override!==undefined){
                 return mapping.override(node,addArray);
             }
-            //unwrapped if needed (not used anymore here)
+            //unwrapped if needed (not used anymore)
             // if(mapping.format){ 
             //     var nodes = Importer().doFormat(node,mapping.format);  
             //     console.log("node",node);   
