@@ -150,38 +150,12 @@ function Importer() {
             var fks = objectMap[fk.entity][fk.setter];
             if(typeof fks === 'object'){
                 for(var j in fks){
-                    computeFk(fks[j],j); 
+                    computeFk(fks[j],fk, j); 
                 }
             }else{
-                computeFk(fks)
+                computeFk(fks, fk)
             }
-            function computeFk(fkKey,index){
-                // console.log("computeFk : "+fk,addArray);
-                var objInd = objectsIndexes[fkKey];
-                if(!objInd ){
-                    console.log("error while retreiving fk "+fk.entity+"-"+fk.setter+" : cannot find "+fkKey);
-                    deleteKey(); 
-                    return; 
-                }else if(objInd.array == "conference"){
-                    deleteKey(); 
-                    // console.log("parent is mainConfEvent",objectMap[fk.entity][fk.setter]);
-                    return;
-                } 
-                else {
-                    if(index){
-                        objectMap[fk.entity][fk.setter][index] = objInd.index;
-                    }else{
-                        objectMap[fk.entity][fk.setter] = objInd.index; 
-                    } 
-                } 
-                function deleteKey(){
-                    if(index){
-                        delete fks[index];
-                    }else{
-                        delete objectMap[fk.entity][fk.setter]; 
-                    } 
-                }
-            }
+          
             // var addArray = objects[itemMapping.array];
             // rootNode.children().each(function(index,node){
             //     // var n = NodeUtils[mappingConfig.getNodeName](node);  
@@ -437,8 +411,37 @@ function Importer() {
                 } 
             }
         }
+
+         
     } // this.run end
 
+     function computeFk(fkKey, fk, index){
+                // console.log("computeFk : "+fk,addArray);
+                var objInd = objectsIndexes[fkKey];
+                if(!objInd ){
+                    console.log("error while retreiving fk "+fk.entity+"-"+fk.setter+" : cannot find "+fkKey);
+                    deleteKey(); 
+                    return; 
+                }else if(objInd.array == "conference"){
+                    deleteKey(); 
+                    // console.log("parent is mainConfEvent",objectMap[fk.entity][fk.setter]);
+                    return;
+                } 
+                else {
+                    if(index){
+                        objectMap[fk.entity][fk.setter][index] = objInd.index;
+                    }else{
+                        objectMap[fk.entity][fk.setter] = objInd.index; 
+                    } 
+                } 
+                function deleteKey(){
+                    if(index){
+                        delete fks[index];
+                    }else{
+                        delete objectMap[fk.entity][fk.setter]; 
+                    } 
+                }
+        }
 
     /**
      * utils function to get arrays index

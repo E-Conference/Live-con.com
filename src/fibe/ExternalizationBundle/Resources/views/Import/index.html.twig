@@ -332,10 +332,10 @@
                 e.stopPropagation();
                 e.preventDefault(); 
  
-                var mapping = Mapper.getKnownMapping($("#known-mapping-format").val()); 
-                Mapper.read("#datafile-form");
+                var mapping = xmlMapper.getKnownMapping($("#known-mapping-format").val()); 
+                xmlMapper.read("#datafile-form");
                 $("#back-to-mapping").hide();
-                $(Mapper).on("fileRead",function(ev,data){
+                $(xmlMapper).on("fileRead",function(ev,data){
                      extractDatas(mapping)
                 })
         }
@@ -378,7 +378,7 @@
                 e.preventDefault();
  
                     bootstrapAlert("info",' sending file...',"Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
-                    sendSerializedConf(Mapper.getSerialisedDatas()); 
+                    sendSerializedConf(xmlMapper.getSerialisedDatas()); 
 
                 //send file
                 function sendSerializedConf(dataArray){
