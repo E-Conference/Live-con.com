@@ -617,8 +617,8 @@ var EventCollection = {
       EventCollection.refetchEvents();
       event.persist();  
     },
-    eventSidebarDrop : function(date, allDay) { //drop from SIDEBAR
-  
+    eventSidebarDrop : function(date, allDay, ev, ui, resource) { //drop from SIDEBAR
+
       // retrieve the dropped element's stored Event Object 
       var event = dragged[1]; 
       // var event = $.extend({},dragged[1]);  
@@ -626,6 +626,7 @@ var EventCollection = {
       // delete event.elem;
       event.allDay = allDay;
       event['start'] = date;
+      event['resourceId'] = resource.id || "0";
 
 
       // event = new CalEvent(event); 
