@@ -6,33 +6,33 @@
 {% block body %}
 
 {% include "fibeHomePageBundle::topBar.html.twig" %}
-  
-<!-- Conferences List -->
-<div id="background"></div>
-<div id="entete">
-<h3>Find your conference !</h3>
-  <div class="container_7">
-    <div class="grid_7">
-      <input type="text" class="form-control" placeholder="Conference Name" id="conference_filter_name"/>
-    </div>
-  </div> 
 
-  <div id="conferences_list">
-        {% include "DataBundle:Conference:conferencesList.html.twig" %}
-  </div>
-</div>
+    <div id="background"></div>
+        <div id="entete">
+          <h3>Find your conference !</h3>
+            <div class="container_7">
+              <div class="grid_7">
+                <input type="text" class="form-control" placeholder="Conference Name" id="conference_filter_name"/>
+              </div>
+            </div> 
 
+            <div id="conferences_list">
+                  {% include "DataBundle:Conference:conferencesList.html.twig" %}
+            </div>
+          </div>
 
 
-<!-- DataConf show Modal -->
 
-<div id="dataconf_iframe" class="modal fade" tabindex="-1" aria-hidden="true" role="dialog" >
-  <div class="modal-dialog">
-      <div class="modal-content">
-              <iframe src="" width="1000px" height="600px" ></iframe>
-      </div>
-  </div>
-</div>
+        <!-- DataConf show Modal -->
+
+        <div id="dataconf_iframe" class="modal fade" tabindex="-1" aria-hidden="true" role="dialog" >
+          <div class="modal-dialog">
+              <div class="modal-content">
+                      <iframe src="" width="1000px" height="600px" ></iframe>
+              </div>
+          </div>
+        </div>
+    
 
 {% endblock body %}
 
