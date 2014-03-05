@@ -14,26 +14,7 @@
 {% endblock %}
 
 {% block body %}
-
-
-		<div id="header">
-			<div class="container_12">
-				<div class="grid_3"><a href="#entete" title="Livecon UPGRATE YOUR CONFERENCE"><img src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon" /></a></div>
-				<div class="grid_9" id="menu">
-					<ul>
-						<li><a href="#overview" title="Overview The Livecon Solution">Overview</a></li>
-						<li><a href="#app" title="The LiveCon App">Demo</a></li>
-						<li><a href="{{path('datas_conferences_list')}}" title="The Livecon Conferences">Conferences</a></li>
-						<li><a href="#getstarted" title="Get Started the Livecon Solution">Get Started</a></li>
-						<li><a href="#contact" title="Contact Livecon Team">Contact</a></li>
-						<li><a href="{{ path('login') }}" title="Login">Login</a></li>
-						<li><a href="{{ path('fos_user_registration_register') }}" title="Signup">Sign up</a></li>
-					</ul>
-				</div>
-
-			</div>
-		</div>
-
+{% include "fibeHomePageBundle::topBar.html.twig" %}
 		<div id="entete">
 			<div class="container_12">
 				<div class="grid_5 omega">

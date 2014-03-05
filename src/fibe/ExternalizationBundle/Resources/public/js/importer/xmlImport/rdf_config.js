@@ -133,7 +133,7 @@ var rdfConfig = {
                         }],
                         array : "topics",
                         //pointed entity isn't a concrete node in this format and thus, don't contains any index 
-                        //so we must retrieve an index with getArrayId instead of objectMap 
+                        //so we must retrieve an index with Importer().getArrayId instead of objectMap 
                         create : "setName",
                     },    
                 },
@@ -150,7 +150,7 @@ var rdfConfig = {
                         }],
                         array : "topics",
                         //pointed entity isn't a concrete node in this format and thus, don't contains any index 
-                        //so we must retrieve an index with getArrayId instead of objectMap 
+                        //so we must retrieve an index with Importer().getArrayId instead of objectMap 
                         create : "setName",
                     },    
                 },
@@ -269,7 +269,7 @@ var rdfConfig = {
                             locationName = key.split("/");
                             locationName = locationName[locationName.length -1 ];
                         }
-                        return getArrayId("locations",'setName',locationName)  
+                        return Importer().getArrayId("locations",'setName',locationName)  
                         // return getLocationIdFromName(locationName);
                     },
                     preProcess : function(node){
@@ -280,7 +280,7 @@ var rdfConfig = {
                             locationName = key.split("/");
                             locationName = locationName[locationName.length -1 ];
                         }  
-                        if(getArrayId("locations",'setName',locationName) === -1 ){
+                        if(Importer().getArrayId("locations",'setName',locationName) === -1 ){
                             locations.push({setDescription:"",setName:str_format(locationName)});  
                         }
                     }
@@ -295,7 +295,7 @@ var rdfConfig = {
                             locationName = key.split("/");
                             locationName = locationName[locationName.length -1 ];
                         }
-                        return getArrayId("locations",'setName',locationName) ;
+                        return Importer().getArrayId("locations",'setName',locationName) ;
                     },
                 },
                 'foaf:homepage' : {
@@ -325,15 +325,15 @@ var rdfConfig = {
                 //3 different ways to get the category name 
                 tmp = node[0].nodeName.split("swc:").join("").split("&swc;").join("").split("event:").join("");
                 if(testCatName(tmp))catName = tmp;
-     
-                tmp = fn.getNodeName(node); 
+
+                tmp = utils[rdfConfig.util].getNodeName(node); 
                 if(testCatName(tmp))catName = tmp;
 
-                tmp = fn.getNodeName(node).split("&swc;").join("").split("swc:").join("").split("event:").join("");
+                tmp = utils[rdfConfig.util].getNodeName(node).split("&swc;").join("").split("swc:").join("").split("event:").join("");
                 if(testCatName(tmp))catName = tmp; 
      
                 if(catName){
-                    var catId = getArrayId("categories","setName",catName) 
+                    var catId = Importer().getArrayId("categories","setName",catName) 
                     if(catId==-1){ 
                         var category= {}; 
                         category['setName']=catName;
@@ -343,8 +343,8 @@ var rdfConfig = {
                             console.debug("mainconference event is ",event)
                             defaultDate = event['setStartAt'] || defaultDate;
                         }
-                        objects.categories.push(category);
-                        catId = objects.categories.length-1;
+                        Importer().objects.categories.push(category);
+                        catId = Importer().objects.categories.length-1;
                     }
                     if(!isMainConfEvent)event['addCategorie']=catId;
                 }
@@ -353,10 +353,10 @@ var rdfConfig = {
                 // store uri via xproperty array to get the event back in the relation loop
                 // if(!isMainConfEvent){
                 //     var xproperty= {}; 
-                //     xproperty['setCalendarEntity']=objects.events.length;
+                //     xproperty['setCalendarEntity']=Importer().objects.events.length;
                 //     xproperty['setXNamespace']="event_uri";
                 //     xproperty['setXValue']=$(node).attr('rdf:about');
-                //     objects.xproperties.push(xproperty);
+                //     Importer().objects.xproperties.push(xproperty);
                 // }
                 //don't store the original event
                 return isMainConfEvent;

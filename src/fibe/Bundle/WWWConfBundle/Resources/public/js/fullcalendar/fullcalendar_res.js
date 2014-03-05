@@ -4303,7 +4303,7 @@ function AgendaEventRenderer() {
 			zIndex: 9,
 			scroll: false,
 			// grid: [colWidth, snapHeight],
-			axis: colCnt==1 ? 'y' : false,
+			// axis: colCnt==1 ? 'y' : false,
 			opacity: opt('dragOpacity'),
 			revertDuration: opt('dragRevertDuration'),
 			start: function(ev, ui) {

@@ -19,7 +19,7 @@
 
 
 {% block body %}
-  
+{% include "fibeHomePageBundle::topBar.html.twig" %}
 <div id="login_page">
   
   {% if error %}
@@ -32,14 +32,19 @@
         <a href="http://live-con.com/" title="Livecon UPGRATE YOUR CONFERENCE"><img src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon" id="logo" /></a>
        <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="form-horizontal" > 
 
-     
+      <div class="row">
+           <div class="col-lg-2"></div>
+           <div class="col-lg-6">
             <div class="control-group">
                 <label class="control-label stage" >
                     {{ form_label(form.username) }}
                 </label> 
                 <div class="controls">
+                <div style="color:#811B06">
+                      {{ form_errors(form.username) }}
+                   </div>
                     {{ form_widget(form.username) }}
-                    {{ form_errors(form.username) }}
+                    
                 </div>
             </div>
             <div class="control-group">
@@ -47,8 +52,10 @@
                     {{ form_label(form.email) }}
                 </label> 
                 <div class="controls">
+                   <div style="color:#811B06">
+                        <strong>{{ form_errors(form.email) }}</strong>
+                   </div>
                     {{ form_widget(form.email) }}
-                    {{ form_errors(form.email) }}
                 </div>
             </div>
             <div class="control-group">
@@ -56,8 +63,10 @@
                     {{ form_label(form.plainPassword.first) }}
                 </label> 
                 <div class="controls stage">
+                   <div style="color:#811B06">
+                        <strong>{{ form_errors(form.plainPassword.first) }}</strong>
+                   </div>
                     {{ form_widget(form.plainPassword.first) }}
-                    {{ form_errors(form.plainPassword.first) }}
                 </div>
             </div>
             <div class="control-group">
@@ -65,8 +74,10 @@
                     {{ form_label(form.plainPassword.second) }}
                 </label> 
                 <div class="controls stage">
+                     <div style="color:#811B06">
+                        <strong>{{ form_errors(form.plainPassword.second) }}</strong>
+                     </div>
                     {{ form_widget(form.plainPassword.second) }}
-                    {{ form_errors(form.plainPassword.second) }}
                 </div>
             </div>
             <div class="control-group">
@@ -75,8 +86,10 @@
                     <a onclick="location.reload()" ><i class="fa fa-refresh"></i></a>
                 </label> 
                 <div class="controls stage">
+                     <div style="color:#811B06">
+                        <strong>{{ form_errors(form.captcha) }}</strong>
+                     </div>
                     {{ form_widget(form.captcha) }}
-                    {{ form_errors(form.captcha) }}
                 </div>
             </div> 
           
