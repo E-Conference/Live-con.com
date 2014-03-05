@@ -8,7 +8,7 @@
 *	 Version: 1.2		   
 *   Tags:  TEMPLATE
 **/
-define(['jquery', 'underscore', 'tpl'], function($, _, tpl){
+define(['jquery', 'underscore', 'tpl','labels'], function($, _, tpl, labels){
 	var AbstractView = Backbone.View.extend({
 
 
@@ -18,7 +18,7 @@ define(['jquery', 'underscore', 'tpl'], function($, _, tpl){
 			this.title = options.title;
 
 			this.model = options.model;
-		
+
 			this.headerTpl = _.template(tpl.get("header"));
 			this.navBarTpl = _.template(tpl.get("navBar"));
 			this.settingsPanelTpl = _.template(tpl.get("settingsPanel"));
@@ -36,12 +36,13 @@ define(['jquery', 'underscore', 'tpl'], function($, _, tpl){
 
 		/** Rendering of the templates **/
 		render: function(){
-			$(this.el).append(this.headerTpl({conference : this.model, title : this.title} ));
-			$(this.el).append(this.navBarTpl({modules : tpl.modules}));
-			$(this.el).append(this.contentTpl({conference : this.model,modules : tpl.modules}));
-			$(this.el).append(this.footerTpl({conference : this.model}));
-			$(this.el).append(this.settingsPanelTpl({conference : this.model}));
-			$(this.el).append(this.bonusPanelTpl({conference : this.model}));
+			var titleTrans = labels[this.model.lang].pageTitles[this.title] || this.title;
+			$(this.el).append(this.headerTpl({conference : this.model, title : titleTrans, labels : labels[this.model.lang]} ));
+			$(this.el).append(this.navBarTpl({modules : tpl.modules,  labels : labels[this.model.lang]}));
+			$(this.el).append(this.contentTpl({conference : this.model,modules : tpl.modules,  labels : labels[this.model.lang]}));
+			$(this.el).append(this.footerTpl({conference : this.model,  labels : labels[this.model.lang]}));
+			$(this.el).append(this.settingsPanelTpl({conference : this.model, labels : labels[this.model.lang]}));
+			$(this.el).append(this.bonusPanelTpl({conference : this.model,  labels : labels[this.model.lang]}));
 		}
 	});
 	return AbstractView;

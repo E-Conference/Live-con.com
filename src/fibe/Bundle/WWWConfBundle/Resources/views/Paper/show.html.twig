@@ -7,6 +7,9 @@
     <div class="row page-top-header ">
             <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
                 <span>Publication details</span>
+                <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Paper' }) }}" title="Help">
+                     <i class="fa fa-question"></i> 
+                </a>
             </div>
 
             <div class="col-xs-2 col-sm-4 col-md-6 col-lg-8">
@@ -30,8 +33,8 @@
       <div class="row page-content">
 
     <div class="row">
-        <div class="col-lg-1"></div>
-        <div class="col-lg-6">
+
+        <div class="col-lg-12">
             <h2> {{ entity.title }}</h2>
             <table class="table table-hover">
                 <tbody>
@@ -45,7 +48,7 @@
                     </tr>
                     <tr>
                         <th>Abstract</th>
-                        <td>{{ entity.abstract }}</td>
+                        <td><textarea  style="width:100%; height:50px;" disabled="true">{{ entity.abstract }}</textarea></td>
                     </tr>
                     <tr>
                         <th>Publish Date</th>
@@ -60,7 +63,7 @@
                         <td>{{ entity.url}}</td>
                     </tr>
                     <tr>
-                        <th>Subjects</th>
+                        <th>Topics</th>
                         <td> 
                              {% for topic in entity.topics %}
                                 <li>{{ topic.name }}</li>
@@ -78,6 +81,18 @@
                                 </li>
                              {% endfor %}
                         </td>
+                    </tr>
+                    <tr>
+                      <th>Presented At </th> 
+                      <td>
+                          {% for event in entity.events %} 
+                              <li>
+                                <a  href="{{ path('schedule_confevent_show', { 'id': event.id }) }}">
+                                   {{ event.getSummary() }}
+                                </a> 
+                              </li>
+                          {% endfor %}
+                      </td>
                     </tr>
                 </tbody>
             </table>

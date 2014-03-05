@@ -9,6 +9,7 @@
                 
             <div class="row">
                 <div class="col-lg-4">
+                    <img src="{{ asset('uploads/')}}{{wwwConf.logoPath}}" style="height:100px;width:auto;"/>
                     <h1>{{ wwwConf.mainConfEvent.summary }}</h1> 
                     <ul>
                         <li> {{ wwwConf.events|length }} events </li>
@@ -122,7 +123,13 @@
             marker = L.marker([{{location.latitude}}, {{location.longitude}}]).addTo(map);
         {% else %}
             map.setView(new L.LatLng(40,10),1);
+            $.get("http://ipinfo.io", function(response) {
 
+                var lat = response.loc.split(",")[0];
+                var lng = response.loc.split(",")[1];
+                var latlng = L.latLng(lat, lng);
+                map.setView(latlng, 4, {animate: true});
+            }, "jsonp");
         {% endif %}
         }
         var marker;
@@ -175,86 +182,9 @@
 
 
 
-            /*********       run the importer and send the serialized obj to php   **********/
-             
-            
-            var ConfRdfFile; 
+       
 
 
-            /*********       confirm empty          **********/
-            $('.empty-conf').click(function(){
-                confirmEmpty(function(){
-                    window.location = "{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}";
-                })
-                return false;
-            }); 
-
-
-            //parse file
-            var confOwlUriInput = document.getElementById("EventImport");  
-            var dataArray;
-
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                run( this.result,function(data){
-                    dataArray = data;
-                    bootstrapAlert("info",' '+getMsgUl(dataArray,"found"),"Info : ");
-                    $('#EventImportForm [type="submit"]').removeAttr("disabled")
-                                                         .removeClass("btn-default")
-                                                         .addClass("btn-success");
-                    $(confOwlUriInput).parent().addClass('has-success');
-                },function(msg)
-                {
-                    $(confOwlUriInput).parent().addClass('has-warning');
-                    bootstrapAlert("warning", msg || "there was an error importing this file");
-                });  
-            }
-
-            $(confOwlUriInput).off("change").on("change",function(){
-                $(this).parent().removeClass('has-success');
-                dataArray = undefined;
-                $('#EventImportForm [type="submit"]').attr("disabled","disabled")
-                                                     .removeClass("btn-success")
-                                                     .addClass("btn-default");
-
-                reader.readAsText(this.files[0]); 
-            })
-
-            //empty conf if needed
-            $('#EventImportForm').submit(function(event) {  
-                if(!dataArray){ 
-                    bootstrapAlert("info",' please, choose a file to import'); 
-                    return false;
-                }
-
-                {% if not wwwConf.isEmpty() %} 
-                    confirmEmpty(function(){
-                        bootstrapAlert("info",' emptying the conference...',"Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
-                        $.ajax({ 
-                                type: "GET",
-                                cache: false,  
-                                url: "{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}",
-                                success:function(a,b,c)
-                                {
-                                    bootstrapAlert("success",'conference emptied');
-                                    bootstrapAlert("success",' now sending file...',"conference emptied,","<i class='fa-2x fa fa-spinner fa-spin'></i>"); 
-                                    sendSerializedConf(dataArray);
-                                },
-                                error:function(a,b,c)
-                                { 
-                                    console.log("ERROR empting the conf")
-                                    console.log(a)
-                                    console.log(b)
-                                    console.log(c) 
-                                },
-                            });
-                    }) 
-                {% else %} 
-                    bootstrapAlert("info",' sending file...',"Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
-                    sendSerializedConf(dataArray);
-                {% endif %}
-                return false;
-            }); 
 
 
             //send file
@@ -283,24 +213,7 @@
          }); 
 
     
-        function confirmEmpty(callback){ 
-            $('#confirmModal').modal('show');
-            $('#confirmModal').one('shown.bs.modal', function() {
-                $(this).find("input").first().focus();
-            }) 
-            $('#confirmModal').find("form").one("submit",function(e){
-                                    if($('#confirmEmptyInput').val() === "Empty !"){
-                                        callback();
-                                        $('#confirmModal').modal('hide');
-                                        return false;
-                                    }
-                                    else{
-                                        bootstrapAlert("info",' Conference clear cancelled.');
-                                        $('#confirmModal').modal('hide');
-                                        return false;
-                                    }
-                              });
-        }
+     
  
         function getMsgUl(dataArray,endString){
             var msg = "";

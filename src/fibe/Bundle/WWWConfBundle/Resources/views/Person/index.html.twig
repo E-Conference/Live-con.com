@@ -7,14 +7,17 @@
 
          <div class="row page-top-header ">
             <div class="page-title  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                <span>List</span>
+                <span>Person list</span>
+                <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Person' }) }}" target="_blank" title="Help">
+                     <i class="fa fa-question"></i> 
+                </a>
             </div>
 
             <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
             </div>
             <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
                 <a class="btn btn-info btn-create create" href="{{ path('schedule_person_new') }}" title="Add a person">
-                     <i class="fa fa-plus"></i>
+                     <i class="fa fa-plus"></i> New person
                 </a>
             </div>
         </div>
@@ -22,7 +25,7 @@
           
             {% include "fibeWWWConfBundle:Filters:filters.html.twig"%}
 
-            <div id="person_list">
+            <div id="person_list" class="table-responsive">
                {% include "fibeWWWConfBundle:Person:list.html.twig" %}
             </div>
     </div>

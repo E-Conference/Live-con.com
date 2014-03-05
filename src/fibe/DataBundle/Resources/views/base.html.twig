@@ -1,0 +1,42 @@
+{% extends '::base.html.twig' %}
+
+{% block meta %}
+	{% block meta_page %}
+	{% endblock meta_page %}
+{% endblock meta %}
+
+{% block title %}{% endblock title %}
+
+{% block stylesheets %}
+ {{ parent() }}
+ 	{% block stylesheets_page %}
+ 	
+ 	 <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibehomepage/css/homepage.css') }}" /> 
+    <!-- reset -->
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/reset.css') }}" />
+    <!-- grid system 16 -->
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/960_12_col.css') }}" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/style.css') }}" />
+	{% endblock%}
+{% endblock%}
+
+{% block javascripts %}
+{{parent()}}
+	<script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('bundles/fibehomepage/js/jquery.easing.1.3.js') }}"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script> 
+    <script type="text/javascript" src="{{ asset('bundles/fibehomepage/js/greensock/TweenMax.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/fibehomepage/js/jquery.superscrollorama.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/fibehomepage/js/jquery.plusanchor.js') }}"></script>
+	{% block javascripts_page %}
+	{% endblock%}
+{% endblock%}
+
+
+{% block body %}
+	{% block footer %}
+	{% endblock %}
+
+{% endblock body %}
+

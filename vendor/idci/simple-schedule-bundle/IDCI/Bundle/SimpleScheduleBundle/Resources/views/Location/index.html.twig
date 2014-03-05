@@ -1,26 +1,29 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block title %}Location{% endblock title %}
+{% block title %}Locations{% endblock title %}
 
 {% block centerPanel %}
   {{ parent() }}
 
    <div class="row page-top-header ">
         <div class="page-title  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-            <span>List</span>
+            <span>Location list</span>
+             <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Location' }) }}" target="_blank" title="Help">
+                     <i class="fa fa-question"></i> 
+            </a>
         </div>
 
         <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
         </div>
         <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-            <a class="btn btn-info btn-create create" href="{{ path('schedule_location_new') }}" title="Add a location">
-                 <i class="fa fa-plus"></i>
+            <a class="btn btn-info btn-create create" href="{{ path('schedule_location_new') }}"  title="Add a location">
+                 <i class="fa fa-plus"></i> New location
             </a>
         </div>
     </div>
     <div class="row page-content">
           {% include "fibeWWWConfBundle:Filters:filters.html.twig"%}
-        <div id="location_list">
+        <div id="location_list" class="table-responsive">
            {% include "IDCISimpleScheduleBundle:Location:list.html.twig" %}
         </div>
 

@@ -19,12 +19,13 @@ class PaperType extends AbstractType
     {
         $builder
             ->add('title')
-            ->add('abstract', 'text', array( 'required' => true))
-            ->add('publishDate')
+            ->add('abstract', 'textarea', array( 'required' => true))
+            ->add('publisher', 'text',array( 'label' => 'Publisheur', 'required' => false) )
+            ->add('publishDate', 'text',array( 'label' => 'Published date', 'required' => false) )
             ->add('url')
             ->add('topics', 'entity', array(
                 'class' => 'fibeWWWConfBundle:Topic',
-                'label'   => 'Subjects',
+                'label'   => 'Topics',
                 'choices'=> $this->user->getCurrentConf()->getTopics()->toArray(),
                 'multiple'  => true,
                 'required' => false

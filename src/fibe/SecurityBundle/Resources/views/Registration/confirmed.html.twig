@@ -1,12 +1,8 @@
 
-{% extends 'fibeHomePageBundle::base.html.twig' %}
+
 
 {% block head %}
-
-    {% block title %}Livecon upgrade your conference{% endblock %}
-
-
-  {% block stylesheets_page %}
+  {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibehomepage/css/homepage.css') }}" /> 
     <!-- reset -->
     <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/reset.css') }}" />
@@ -19,28 +15,38 @@
 
 
 {% block body %}
-
+  
+<div id="login_page">
+  
+  {% if error %}
+    <div class="alert alert-error">{{ error.message }}</div>
+  {% endif %}
+{% trans_default_domain 'FOSUserBundle' %}
 <div id="background"></div>
     <div class="container_12">
 
       <div id="login" class="grid_4">
         <a href="http://live-con.com/" title="Livecon UPGRATE YOUR CONFERENCE"><img src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon" /></a>
-       <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
-		    {% if app.session is not empty %}
-		        {% set targetUrl = app.session.get('_security.' ~ app.security.token.providerKey ~ '.target_path') %}
-		        {% if targetUrl is not empty %}<p><a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a></p>{% endif %}
-		        <button type="submit" class="btn btn-success">
-                       <a  href="{{ path('dashboard_index')}}">Start</a>
-                </button>
 
-		         
-		    {% endif %}
+      <div class="row">
+                <p>{{ 'registration.confirmed'|trans({'%username%': user.username}) }}</p>
+                   {% if app.session is not empty %}
+                       {% set targetUrl = app.session.get('_security.' ~ app.security.token.providerKey ~ '.target_path') %}
+                       {% if targetUrl is not empty %}<p><a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a></p>{% endif %}
+                             <button type="submit" class="btn btn-success">
+                               <a style="color:white;" href="{{ path('dashboard_index')}}">Start</a>
+                             </button>
+                       {% endif %}
       </div>
+      </div>
+                       
+                   
+      </div>
+        </br>
+       
     </div>
- {% endblock body %}
  
-
-
+{% endblock %} 
 
 
 

@@ -7,6 +7,9 @@
     <div class="row page-top-header ">
             <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
                 <span>Edit organization</span>
+                <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Organization' }) }}" title="Help">
+                     <i class="fa fa-question"></i> 
+                </a>
             </div>
 
             <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
@@ -30,8 +33,8 @@
         <form action="{{ path('schedule_organization_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
             <input type="hidden" name="_method" value="PUT" />
                 <div class="row">
-                   <div class="col-lg-2"></div>
-                   <div class="col-lg-4">
+
+                   <div class="col-lg-12">
                      {{ form_widget(edit_form) }}
                      {{ form_errors(edit_form) }}
                      </br>
