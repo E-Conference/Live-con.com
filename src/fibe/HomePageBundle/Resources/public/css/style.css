@@ -822,19 +822,7 @@ outline: none;
 	margin-left:30px; 
 }
 
-#signin input[type=text], #signin input[type=password], #signin input[type=email]{
-		background: #f3f3f3;
-		width: 280px;
-		height: 40px;
-		font-family: Helvetica, Arial sans-serif;
-		font-size: 14px;
-		line-height: 40px;
-		color: #19313b;
-		border: 1px solid #cccccc;
-		border-radius: 3px;
-		padding: 0px 10px;
-		margin-bottom: 17px;
-	}
+
 
 
 #login_page .btn, .btn-success{
@@ -852,6 +840,21 @@ outline: none;
 	box-shadow: 0 4px #44585f;
 	margin-left: 50px;
 }
+
+#login_page input[type=text], #login_page input[type=password], #login_page input[type=email]{
+		background: #f3f3f3;
+		width: 280px;
+		height: 40px;
+		font-family: Helvetica, Arial sans-serif;
+		font-size: 14px;
+		line-height: 40px;
+		color: #19313b;
+		border: 1px solid #cccccc;
+		border-radius: 3px;
+		padding: 0px 10px;
+		margin-bottom: 17px;
+	}
+
 
 #login_page.btn:hover, #login_page.btn:focus, #login_page.btn-success:hover, #login_page.btn-success:focus{
 	border: none;
