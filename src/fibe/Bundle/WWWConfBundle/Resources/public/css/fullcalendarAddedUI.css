@@ -20,6 +20,9 @@
         float  : left;
     }
 
+    .calendar-container{
+        padding:0px;
+    }
     /****  sidebar *****/
 
     #sidebar {
@@ -27,6 +30,10 @@
         padding   : 0 10px;
         z-index   : 1;
         float     : right;
+    }
+
+    .sidebar-container{
+        padding:0px;
     }
         
     .bordered{
@@ -142,4 +149,11 @@
         -webkit-line-clamp: N; /* number of lines to show */
         -webkit-box-orient: vertical;
     }
+}
+
+
+/** FILTER BOX **/
+#filters{
+    background-color: #f2f2f2;
+    padding:20px;
 }
