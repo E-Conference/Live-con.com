@@ -106,6 +106,62 @@
                         <th>Open id</th>
                         <td>{{ entity.openId }}</td>
                     </tr>
+                    <tr>
+                        <th>Presenter At </th> 
+                        <td>
+                          {% for role in entity.roles %} 
+                            {% if role.getType() == "Presenter" %}
+                              <li>
+                                  <a  href="{{ path('schedule_confevent_show', { 'id': role.getEvent().getId() }) }}">
+                                    {{ role.getEvent().getSummary() }}
+                                  </a>
+                              </li>
+                            {% endif %}
+                          {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                      <th>Chair At </th> 
+                       <td>
+                          {% for role in entity.roles %} 
+                            {% if role.getType() == "Chair" %}
+                              <li>
+                                  <a  href="{{ path('schedule_confevent_show', { 'id': role.getEvent().getId() }) }}">
+                                    {{ role.getEvent().getSummary() }}
+                                  </a>
+                              </li>
+                            {% endif %}
+                          {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Delegate At </th> 
+                          <td>
+                          {% for role in entity.roles %} 
+                            {% if role.getType() == "Delegate" %}
+                              <li>
+                                <a  href="{{ path('schedule_confevent_show', { 'id': role.getEvent().getId() }) }}">
+                                  {{ role.getEvent().getSummary() }}
+                                </a>
+                              </li>
+                            {% endif %}
+                          {% endfor %}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Program Committee Member At </th> 
+                      <td>
+                        {% for role in entity.roles %} 
+                          {% if role.getType() == "ProgrammeCommitteeMember" %}
+                            <li>
+                              <a  href="{{ path('schedule_confevent_show', { 'id': role.getEvent().getId() }) }}">
+                                {{ role.getEvent().getSummary() }}
+                              </a>
+                            </li>
+                          {% endif %}
+                        {% endfor %}
+                       </td>
+                  </tr>
                 </tbody>
             </table>
         </div>
