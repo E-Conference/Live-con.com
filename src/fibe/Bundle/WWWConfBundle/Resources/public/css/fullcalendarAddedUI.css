@@ -13,30 +13,28 @@
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
     }
-
-    #calendar {  
-        width  : 100%; 
+    #calendar {
         margin-top : 15px;
         margin : 0;
         padding: 1em;
-        background: #f2f2f2;
-        border : solid 2px #19313b;
-        float  : left
+        float  : left;
     }
 
     /****  sidebar *****/
-        
-    #sidebar {   
+
+    #sidebar {
         padding   : 1em 0.5em;
-        /*height  : 100%; */
-        width     : 100%;
-        padding   : 0 10px; 
-        background: #f2f2f2;
-        border    : solid 2px #19313b;
+        padding   : 0 10px;
         z-index   : 1;
         float     : right;
     }
         
+    .bordered{
+        background: #f2f2f2;
+        width     : 100%;
+        border    : solid 2px #19313b;
+    }
+
     #sidebar h4 {
         font-size  : 16px;
         margin-top : 0;
