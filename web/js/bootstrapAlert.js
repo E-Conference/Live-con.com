@@ -22,6 +22,10 @@ function bootstrapAlert(type,msg,title,icon){
             icon:"<i class='fa fa-info'></i>"
         },
         warning:{
+            title:"Warning : ",
+            icon:"<i class='fa fa-meh-o'></i>"
+        },
+        error:{
             title:"Error : ",
             icon:"<i class='fa fa-meh-o'></i>"
         }

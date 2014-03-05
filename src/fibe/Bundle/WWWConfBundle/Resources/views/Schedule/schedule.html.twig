@@ -12,13 +12,41 @@
 {% endblock %}
 
 
-<div class="content" id="schedule-view">
+<div class="content" id="schedule-view"> 
+  <div id="filters" class="row">  
+ 
+    <div class="filter col-sm-4">
+      <select multiple class="form-control" data-res="category" placeholder="Filter by categories" data-filter="category_ids">
+        {% for category in categories %}
+          <option data-color="{{category.color}};" value="{{category.id}}">{{category.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+ 
+    <div class="filter col-sm-4">
+      <select multiple class="form-control" data-res="location" placeholder="Filter by locations" data-filter="location_ids">
+        {% for location in locations %}
+          <option value="{{location.id}}">{{location.name}}</option>
+        {% endfor %}
+      </select>
+    </div> 
+ 
+    <div class="filter col-sm-4">
+      <select multiple class="form-control" data-res="topic" placeholder="Filter by topics" data-filter="topic_ids">
+        {% for topic in topics %}
+          <option value="{{topic.id}}">{{topic.name}}</option>
+        {% endfor %}
+      </select>  
+    </div>
+
+  </div> 
+
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
-        <div id='calendar'></div> 
+        <div id='calendar' class="bordered"></div> 
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-      <div id="sidebar">  
+      <div id="sidebar" class="bordered">
         {# <div class="checkbox">
           <label>
             <input id="reposition" checked="checked" type="checkbox"> Reposition parent/child <small>(<i>need performance</i>)</small>
@@ -66,7 +94,7 @@
             </select>  
           </div>
         </div>
-
+        <hr/>
         <h4>Dateless Events</h4>
         <div id='external-events' class='scroller'>
         </div> 
@@ -110,7 +138,7 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
-   
+    
   <div id="modal-set-parent"  class="modal">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -169,6 +197,8 @@
   <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/added/EventCollection.js') }}"></script>
     
   <script src="{{ asset('bundles/fibewwwconf/js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+
+  <script src ="{{ asset('js/loginModal.js') }}" type="text/javascript" ></script> 
   <script type="text/javascript">
     var Events = {}, // every events hashmap (calendar and sidebar)
         calendar_events   = [], //calendar evnt array
