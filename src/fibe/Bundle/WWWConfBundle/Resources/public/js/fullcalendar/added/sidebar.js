@@ -7,7 +7,7 @@ function Sidebar(readOnly){
         this.setInstantEvents = setInstantEvents; 
         this.setSidebarEvent = setSidebarEvent; 
  
-        var eventHtml =  "<div class='external-event fc-event"+(readOnly?" fc-event-draggable":"")+"'></div>";
+        var eventHtml =  "<div class='external-event fc-event"+(readOnly?" fc-event-draggable":"")+" fc-event-sidebar'></div>";
         var $sidebarTmp = $(eventHtml);
  
         var readOnly = readOnly ;
@@ -16,14 +16,8 @@ function Sidebar(readOnly){
           url,
           null,
           function(events) {
-
-              var instant_events = [];
-              for(var i=0;i<events.length;i++){
-
-                var event = new CalEvent(events[i]); 
-                instant_events.push(Events[events[i]["id"]]); 
-              }
-              self.setInstantEvents(instant_events); 
+ 
+              self.setInstantEvents(events); 
               
               scrollable();
               
@@ -43,11 +37,15 @@ function Sidebar(readOnly){
           for (var i in instant_events){ 
             // if(!isInstant(instant_events[i])) continue;
             var $event = $(eventHtml);
-            $event = sidebarDraggable($event,instant_events[i]);
+            var event = new CalEvent(instant_events[i]); 
+            $event = sidebarDraggable($event,event); 
+            Events[event.id]['elem'] = $event;
           } 
+ 
           if (!readOnly){ 
               $sidebar.droppable({
-                accept: ".fc-event-start" ,
+                accept: ".fc-event-start:not(.main-conf-event)",
+                tolerance: "pointer" ,
                 over: function( event, ui ) {
                     if( $(ui.draggable).hasClass("fc-event")) {
                         var event = Events[dragged[1].id];

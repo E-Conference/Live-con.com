@@ -17,7 +17,7 @@ use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
  *
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity
- * @ORM\Entity(repositoryClass="IDCI\Bundle\SimpleScheduleBundle\Repository\EventRepository")
+ * @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\ConfEventRepository")
  * @ORM\HasLifecycleCallbacks
  */
 class ConfEvent extends Event
@@ -226,10 +226,8 @@ class ConfEvent extends Event
      *  @ORM\PrePersist() 
      */
     public function computeIsAllDay()
-    {      
-        $start = $this->getStartAt();
-        $end = $this->getEndAt(); 
-        $this->setIsAllDay($start->format('d')!=$end->format('d'));
+    {       
+        if($this->isMainConfEvent)$this->setIsAllDay(true);
     }
     
     /**

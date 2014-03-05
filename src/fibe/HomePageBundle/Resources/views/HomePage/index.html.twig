@@ -3,8 +3,8 @@
 {% block head %}
 	{% block title %}Livecon upgrade your conference{% endblock %}
 	{% block stylesheets_page %}
-	  <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibehomepage/css/homepage.css') }}" /> 
-	  <!-- reset -->
+	    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibehomepage/css/homepage.css') }}" /> 
+	    <!-- reset -->
 		<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/reset.css') }}" />
 		<!-- grid system 16 -->
 		<link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/960_12_col.css') }}" />
@@ -14,25 +14,7 @@
 {% endblock %}
 
 {% block body %}
-
-
-		<div id="header">
-			<div class="container_12">
-				<div class="grid_3"><a href="#entete" title="Livecon UPGRATE YOUR CONFERENCE"><img src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon" /></a></div>
-				<div class="grid_9" id="menu">
-					<ul>
-						<li><a href="#overview" title="Overview The Livecon Solution">Overview</a></li>
-						<li><a href="#app" title="The LiveCon App">Demo</a></li>
-						<li><a href="#getstarted" title="Get Started the Livecon Solution">Get Started</a></li>
-						<li><a href="#contact" title="Contact Livecon Team">Contact</a></li>
-						<li><a href="{{ path('login') }}" title="Login">Login</a></li>
-						<li><a href="{{ path('fos_user_registration_register') }}" title="Signup">Sign up</a></li>
-					</ul>
-				</div>
-
-			</div>
-		</div>
-
+{% include "fibeHomePageBundle::topBar.html.twig" %}
 		<div id="entete">
 			<div class="container_12">
 				<div class="grid_5 omega">
@@ -51,7 +33,7 @@
 				<div id="t_before" class="clearfix">
 					<a href="#before" title="Before Conference">
 					<div class="grid_6">
-						<h2>Before Conference</h2>
+						<h2>Before your conference</h2>
 					</div>
 					<div class="grid_6 alpha elements">
 						<div class="element element01">
@@ -68,7 +50,7 @@
 				<div id="t_during" class="clearfix">
 					<a href="#during" title="During Conference">
 					<div class="grid_6">
-						<h2>During Conference</h2>
+						<h2>During your conference</h2>
 					</div>
 					<div class="grid_6 alpha elements">
 						<div class="element element01">
@@ -85,7 +67,7 @@
 				<div id="t_after" class="clearfix">
 					<a href="#after" title="After Conference">
 					<div class="grid_6">
-						<h2>After Conference</h2>
+						<h2>After your conference</h2>
 					</div>
 					<div class="grid_6 alpha elements">
 						<div class="element element01">
@@ -104,7 +86,7 @@
 
 		<div id="before">
 			<div class="container_12">
-				<h1>Before Conference</h1>
+				<h1>Before your conference</h1>
 				<div class="illustration"></div>
 				<div id="overview01" class="clearfix">
 					<div class="grid_1"><img src="{{ asset('bundles/fibehomepage/img/picto/import.png') }}" /></div>
@@ -129,7 +111,7 @@
 
 		<div id="during">
 			<div class="container_12">
-				<h1>During Conference</h1>
+				<h1>During your conference</h1>
 				<div class="grid_5 alpha omega">
 					<div id="overview03" class="clearfix">
 						<div class="clearfix">
@@ -157,7 +139,7 @@
 
 		<div id="after">
 			<div class="container_12">
-				<h1>After Conference</h1>
+				<h1>After your conference</h1>
 				<div class="grid_6"><img src="{{ asset('bundles/fibehomepage/img/illustration/after.png') }}" /></div>
 				<div class="grid_6 overview_after">
 					<div id="overview05" class="clearfix">
@@ -180,6 +162,7 @@
 			</div>
 		</div>
 
+
 		<div id="app">
 			<div class="container_12">
 				<h1>The <span class="logoname"><b>Live</b>con</span> App</h1>
@@ -195,7 +178,7 @@
 		<div id="getstarted">
 			<div class="container_12">
 				<h1>Get Started</h1>
-				<div class="grid_8 push_2 suffix_2">
+				<div class="grid_10 push_2 suffix_2">
 					<div class="grid_3 alpha"><img src="{{ asset('bundles/fibehomepage/img/illustration/getstarted.png') }}" /></div>
 					<div class="grid_5 omega"><p>To get started you have to request an account directly from the form. We will personnaly take care of providing you an account on our service within 24h. You can start managing your conference and customize your web application. <br/><br/>During your organisation process, we  will be alway available to support you.</p></div>
 				</div>
@@ -207,7 +190,7 @@
 			<div class="container_12">
 				<h1>Contact us</h1>
 				<div id="contactWrapper">
-					<form action="{{ path('homePage_index') }}" method="post">
+					<form action="{{ path('homePage_index') }}" method="post" id="contactform">
                       <input type="hidden" name="POST" value="" />
 						<div class="grid_5">
 							<div class="stage">

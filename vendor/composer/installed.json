@@ -2082,33 +2082,33 @@
     },
     {
         "name": "gregwar/captcha",
-        "version": "v1.0.8",
-        "version_normalized": "1.0.8.0",
+        "version": "v1.0.10",
+        "version_normalized": "1.0.10.0",
         "target-dir": "Gregwar/Captcha",
         "source": {
             "type": "git",
             "url": "https://github.com/Gregwar/Captcha.git",
-            "reference": "88bbf9e206957c7870995aabaf8c90afc090c082"
+            "reference": "0a4555768cf0a5f277e2419d4e3483625fbbfdae"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Gregwar/Captcha/zipball/88bbf9e206957c7870995aabaf8c90afc090c082",
-            "reference": "88bbf9e206957c7870995aabaf8c90afc090c082",
+            "url": "https://api.github.com/repos/Gregwar/Captcha/zipball/0a4555768cf0a5f277e2419d4e3483625fbbfdae",
+            "reference": "0a4555768cf0a5f277e2419d4e3483625fbbfdae",
             "shasum": ""
         },
         "require": {
             "ext-gd": "*",
             "php": ">=5.3.0"
         },
-        "time": "2013-08-14 07:42:54",
+        "time": "2013-11-27 09:12:31",
         "type": "captcha",
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-0": {
                 "Gregwar\\Captcha": ""
             }
         },
-        "notification-url": "https://packagist.org/downloads/",
+        "notification-url": "http://packagist.org/downloads/",
         "license": [
             "MIT"
         ],
@@ -2139,19 +2139,19 @@
         "source": {
             "type": "git",
             "url": "https://github.com/Gregwar/CaptchaBundle.git",
-            "reference": "800643d72c022f6e71d1cdb6e315f3a9c647661e"
+            "reference": "8199d20092753adbfba430e3c167823693635fa2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Gregwar/CaptchaBundle/zipball/800643d72c022f6e71d1cdb6e315f3a9c647661e",
-            "reference": "800643d72c022f6e71d1cdb6e315f3a9c647661e",
+            "url": "https://api.github.com/repos/Gregwar/CaptchaBundle/zipball/8199d20092753adbfba430e3c167823693635fa2",
+            "reference": "8199d20092753adbfba430e3c167823693635fa2",
             "shasum": ""
         },
         "require": {
-            "gregwar/captcha": "v1.0.8",
+            "gregwar/captcha": "v1.0.10",
             "php": ">=5.3.0"
         },
-        "time": "2013-11-25 10:48:00",
+        "time": "2014-02-14 10:29:31",
         "type": "captcha-bundle",
         "installation-source": "source",
         "autoload": {
@@ -2159,7 +2159,7 @@
                 "Gregwar\\CaptchaBundle": ""
             }
         },
-        "notification-url": "https://packagist.org/downloads/",
+        "notification-url": "http://packagist.org/downloads/",
         "license": [
             "MIT"
         ],

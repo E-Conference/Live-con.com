@@ -99,13 +99,13 @@
 {% block body %} 
     {{ parent() }}
     {% block navBar %} 
-        {% include "fibeWWWConfBundle::mainNavBar.html.twig" %}
+        {% include "::mainNavBar.html.twig" %}
     {% endblock navBar%}
 
 
     {% if app.user.getCurrentConf() %} 
       {% block menuNavBar %} 
-          {% include "fibeWWWConfBundle::menuNavBar.html.twig" %}
+          {% include "::menuNavBar.html.twig" %}
       {% endblock menuNavBar%}
     {% endif %}
 
@@ -118,7 +118,8 @@
                  <div class="row ">
                    <ul class="nav breadcrum nav-tabs">
                           
-                          <li class="mobileAppTheme_index"><a href="{{ path('mobileAppTheme_index') }}">Theme builder</a></li>
+                        <li class="mobileAppTheme_index  col-xs-3 col-sm-3 col-mg-3 col-lg-3"><a href="{{ path('mobileAppTheme_index') }}" class='ellipsis'><i class="fa fa-pencil  fa-1x"></i><span> Theme builder </span> </a></li>
+                        <li class="mobileAppSettings_index   col-xs-3 col-sm-3 col-mg-3 col-lg-3"><a href="{{ path('mobileAppSettings_index') }}" class='ellipsis'> <i class="fa fa-wrench fa-1x"></i><span> Settings </span></a></li>
                         
                            {% block menu_page%} 
                            {% endblock menu_page %}

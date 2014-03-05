@@ -22,7 +22,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 /**
  * Mobile app controller.
  *
- * @Route("/MobileApplicationTheme")
+ * @Route("/app/theme")
  */
 class MobileAppThemeController extends Controller
 {

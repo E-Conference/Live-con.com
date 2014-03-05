@@ -9,7 +9,7 @@
 *   Version: 1.1
 *   Tags:  JSON, SPARQL, AJAX
 **/
-define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterText', 'localStorage/localStorageManager','moment', 'lib/FileSaver'], function($, _, Encoder, ViewAdapter, ViewAdapterText, StorageManager, moment, FileSaver){
+define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterText', 'localStorage/localStorageManager','moment', 'lib/FileSaver', 'labels'], function($, _, Encoder, ViewAdapter, ViewAdapterText, StorageManager, moment, FileSaver, labels){
 	var liveconSparqlCommandStore = { 
 
 		getAllTopics : {
@@ -49,6 +49,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				if(parameters.JSONdata != null){
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
+
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#topic/',
 													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["uri"])},
@@ -98,6 +99,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				if(parameters.JSONdata != null){
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
+	
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#schedule/',
 													  hrefCllbck:function(str){return Encoder.encode(str["name"])},
@@ -259,6 +261,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				if(parameters.JSONdata != null){
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
+
 							ViewAdapterText.appendListImage(parameters.JSONdata,
 													 {baseHref:'#person/',
 													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["uri"])},
@@ -308,6 +311,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				if(parameters.JSONdata != null){
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
+	
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#publication/',
 													  hrefCllbck:function(str){return Encoder.encode(str["title"])+"/"+Encoder.encode(str["uri"])},
@@ -456,7 +460,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								var eventType = parameters.JSONdata[i];
 								if(eventType.uri != "http://data.semanticweb.org/ns/swc/ontology#ConferenceEvent" ){
 									var categoryName = eventType.uri.split('#')[1];
-									ViewAdapterText.appendButton(parameters.contentEl,'#event-by-category/'+Encoder.encode(categoryName)+'/'+Encoder.encode(eventType.uri),categoryName,{tiny : false});
+									ViewAdapterText.appendButton(parameters.contentEl,'#event-by-category/'+Encoder.encode(categoryName)+'/'+Encoder.encode(eventType.uri),labels[parameters.conference.lang].category[categoryName],{tiny : false});
 								}
 
 							};
@@ -522,7 +526,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 
 							if(parameters.JSONdata.events.length > 0){
-								parameters.contentEl.append($('<h2>Related events</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].topic.relatedEvents+'</h2>'));
 								for(var i = 0; i < parameters.JSONdata.events.length; i++){ 
 									var eventtoken = parameters.JSONdata.events[i];
 									ViewAdapterText.appendButton(parameters.contentEl,'#event/'+Encoder.encode(eventtoken.eventSummary.value)+'/'+Encoder.encode(eventtoken.eventUri.value), eventtoken.eventSummary.value,{tiny : false});
@@ -530,7 +534,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							}
 
 							if(parameters.JSONdata.publications.length > 0){
-								parameters.contentEl.append($('<h2>Related publications</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].topic.relatedPublications+'</h2>'));
 								for(var i = 0; i < parameters.JSONdata.publications.length; i++){ 
 									var publication = parameters.JSONdata.publications[i];
 									ViewAdapterText.appendButton(parameters.contentEl,'#publication/'+Encoder.encode(publication.publiTitle.value)+'/'+Encoder.encode(publication.publiUri.value), publication.publiTitle.value,{tiny : false});
@@ -637,25 +641,22 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								parameters.contentEl.append($('<div style="min-height:50px; width:20%"><img style="width:100%;height:auto;" src="'+parameters.JSONdata.image+'"/></div>'));    
 							}
 							if(parameters.JSONdata.name){
-								$("[data-role = page]").find("#DataConf").html(parameters.JSONdata.name);
+								$("[data-role = page]").find("#header-title").html(parameters.JSONdata.name);
 							}
 							if(parameters.JSONdata.description){
-								parameters.contentEl.append($('<h2>Description</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].person.description+'</h2>'));
 								parameters.contentEl.append($('<p>'+parameters.JSONdata.description+'</p>'));    
 							}
 							if(parameters.JSONdata.homepage){
-								parameters.contentEl.append($('<h2>Homepage</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].person.homepage+'</h2>'));
 								parameters.contentEl.append($('<a href='+parameters.JSONdata.homepage+'>'+parameters.JSONdata.homepage+'</a>'));    
 							}
-							if(parameters.JSONdata.twitter){
-								parameters.contentEl.append($('<h2>Twitter</h2>'));
-								parameters.contentEl.append($('<a href='+parameters.JSONdata.twitter+'>'+parameters.JSONdata.twitter+'</a>'));    
-							}
+						
 							if(parameters.JSONdata.roles) {
 								
 								for(var roleName in parameters.JSONdata.roles){
 										parameters.JSONdata.roles[roleName];
-										parameters.contentEl.append($('<h2>'+roleName+' at </h2>'));
+										parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].role[roleName]+' at </h2>'));
 										$.each(parameters.JSONdata.roles[roleName], function(i,currentEvent){
 											ViewAdapterText.appendButton(parameters.contentEl,'#event/'+Encoder.encode(currentEvent.eventName.value)+'/'+Encoder.encode(currentEvent.eventUri.value), currentEvent.eventName.value,{tiny : true});
 										});
@@ -665,7 +666,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					
 
 							if(parameters.JSONdata.organizations.length > 0){
-								parameters.contentEl.append($('<h2>Organizations</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].person.organizations+'</h2>'));
 								for(var i = 0; i < parameters.JSONdata.organizations.length; i++){ 
 									var organization = parameters.JSONdata.organizations[i];
 									ViewAdapterText.appendButton(parameters.contentEl,'#organization/'+Encoder.encode(organization.organizationName.value)+'/'+Encoder.encode(organization.organizationUri.value), organization.organizationName.value,{tiny : true});
@@ -673,7 +674,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							}
 
 							if(parameters.JSONdata.publications.length > 0){
-								parameters.contentEl.append($('<h2>Conference publications</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].person.publications+'</h2>'));
 								for(var i = 0; i < parameters.JSONdata.publications.length; i++){ 
 									var publication = parameters.JSONdata.publications[i];
 									ViewAdapterText.appendButton(parameters.contentEl,'#publication/'+Encoder.encode(publication.publicationName.value)+'/'+Encoder.encode(publication.publicationUri.value), publication.publicationName.value,{tiny : false});
@@ -738,20 +739,20 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
 							if(parameters.JSONdata.orgaName){
-								$("[data-role = page]").find("#DataConf").html(parameters.JSONdata.orgaName);
+								$("[data-role = page]").find("#header-title").html(parameters.JSONdata.orgaName);
 							}
 							if(parameters.JSONdata.homepage){
-								parameters.contentEl.append($('<h2>Page</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].organization.homepage+'</h2>'));
 								parameters.contentEl.append($('<a href='+parameters.JSONdata.page+'>'+parameters.JSONdata.homepage+'</a>')); 
 								
 							}
 							if(parameters.JSONdata.based_near){
-								parameters.contentEl.append($('<h2>Country</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].organization.country+'</h2>'));
 								parameters.contentEl.append($('<p>'+parameters.JSONdata.based_near+'</p>'));      
 							}
 
 							if(parameters.JSONdata.members.length > 0){
-								parameters.contentEl.append($('<h2>Members</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].organization.members+'</h2>'));
 								for(var i = 0; i < parameters.JSONdata.members.length; i++){ 
 									var member = parameters.JSONdata.members[i];
 									ViewAdapterText.appendButton(parameters.contentEl,'#person/'+Encoder.encode(member.personName.value)+'/'+Encoder.encode(member.personUri.value), member.personName.value,{tiny : true});
@@ -802,6 +803,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				if(parameters.JSONdata != null){
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
+							$("[data-role = page]").find("#header-title").html(labels[parameters.conference.lang].role[parameters.uri]);
+						
 							ViewAdapterText.appendListImage(parameters.JSONdata,
 													 {baseHref:'#person/',
 													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["uri"])},
@@ -898,7 +901,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    ModelCallBack : function(dataJSON,conferenceUri,datasourceUri, currentUri){
 				var JSONToken = {};
 				var results = dataJSON.results.bindings;
-				if(_.size(dataJSON) > 0 ){
+				if(_.size(results) > 0 ){
 					JSONToken.title =  results[0].publiTitle ? results[0].publiTitle.value : null;
 					JSONToken.abstract =  results[0].publiAbstract ?  results[0].publiAbstract.value : null;
 					JSONToken.publishDate =  results[0].publiPublishDate ? results[0].publiPublishDate .value : null;
@@ -933,27 +936,27 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
 							if(parameters.JSONdata.title){
-								$("[data-role = page]").find("#DataConf").html(parameters.JSONdata.title);
+								$("[data-role = page]").find("#header-title").html(parameters.JSONdata.title);
 							}
 							if(parameters.JSONdata.abstract){
-								parameters.contentEl.append($('<h2>Abstract</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].publication.abstract+'</h2>'));
 								parameters.contentEl.append($('<p>'+parameters.JSONdata.abstract+'</p>'));
 							}
 							if(parameters.JSONdata.publishDate){
-								parameters.contentEl.append($('<h2>Published date</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].publication.publishDate+'</h2>'));
 								parameters.contentEl.append($('<p>'+parameters.JSONdata.publishDate+'</p>'));    
 							}
 							if(parameters.JSONdata.url){
-								parameters.contentEl.append($('<h2>Url</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].publication.url+'</h2>'));
 								parameters.contentEl.append($('<a href='+parameters.JSONdata.url+'>'+parameters.JSONdata.url+'</a>'));    
 							}
 							if(parameters.JSONdata.publisher){
-								parameters.contentEl.append($('<h2>Published by</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].publication.publishBy+'</h2>'));
 								parameters.contentEl.append($('<a href='+parameters.JSONdata.publisher+'>'+parameters.JSONdata.publisher+'</a>'));    
 							}
 
 							if(_.size(parameters.JSONdata.authors) > 0 ){
-								parameters.contentEl.append($('<h2>Authors</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].publication.authors+'</h2>'));
 								for(var i = 0; i < parameters.JSONdata.authors.length; i++){ 
 									var author = parameters.JSONdata.authors[i];
 									ViewAdapterText.appendButton(parameters.contentEl,'#person/'+Encoder.encode(author.authorName.value)+'/'+Encoder.encode(author.authorUri.value), author.authorName.value,{tiny : true});
@@ -961,7 +964,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								
 							}
 							if(_.size(parameters.JSONdata.keywords) > 0 ){
-								parameters.contentEl.append($('<h2>Keywords</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].publication.topics+'</h2>'));
 								for(var i = 0; i < parameters.JSONdata.keywords.length; i++){ 
 									var keyword = parameters.JSONdata.keywords[i];
 									ViewAdapterText.appendButton(parameters.contentEl,'#topic/'+Encoder.encode(keyword.keywordLabel.value)+'/'+Encoder.encode(keyword.keywordUri.value),keyword.keywordLabel.value, {tiny : true});
@@ -1115,6 +1118,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					if(_.size(parameters.JSONdata) > 0 ){
 						if(parameters.mode == "text"){
 
+							$("[data-role = page]").find("#header-title").html(labels[parameters.conference.lang].category[parameters.name]);
 							for(var i = 0; i < _.size(parameters.JSONdata); i++){ 
 								var eventType = parameters.JSONdata[i];
 
@@ -1142,13 +1146,15 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							    'PREFIX swrc: <http://swrc.ontoware.org/ontology#>                  ' +
 							    'PREFIX foaf: <http://xmlns.com/foaf/0.1/>            		        ' ;
 							
-			    var query  =	'SELECT DISTINCT  ?eventSummary ?eventStart ?eventEnd ?eventDesc ?eventComent ?eventUrl ?eventContact ?locationUri ?locationName ?subEventSummary ?subEventUri ?roleUri ?subEventUri ?personUri ?personName WHERE  {  ' +
-							    ' { <'+parameters.uri+'>  ical:summary ?eventSummary. ' +
-							    '	OPTIONAL {<'+parameters.uri+'>  ical:dtstart ?eventStart.}' +
+
+			    var query  =	'SELECT DISTINCT  ?eventSummary ?eventStart ?eventEnd ?eventDesc ?eventComent ?eventUrl ?eventContact ?locationUri ?locationName ?subEventSummary ?subEventUri ?roleUri ?subEventUri ?personUri ?personName ?eventTwitterWidgetUrl ?eventTwitterWidgetToken WHERE  {  ' +
+							    '{ OPTIONAL {<'+parameters.uri+'>  ical:dtstart ?eventStart.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:dtend ?eventEnd.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:description ?eventDesc.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:comment ?eventComent.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:url ?eventUrl.}' +
+							    '	OPTIONAL {<'+parameters.uri+'>  ical:resources ?eventTwitterWidgetUrl.}' +
+								'	OPTIONAL {<'+parameters.uri+'>  ical:attach ?eventTwitterWidgetToken.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:contact ?eventContact.}' +
 							    ' } UNION {	<'+parameters.uri+'>  swc:hasLocation ?locationUri. '+ 
 							    '   ?locationUri  rdfs:label ?locationName. ' +
@@ -1167,6 +1173,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					var JSONToken = {};
 					JSONfile.eventLabel = results[0].eventSummary ? results[0].eventSummary.value : null;
 					JSONfile.eventDescription =   results[0].eventDesc ? results[0].eventDesc.value : null;
+					JSONfile.eventTwitterWidgetUrl =   results[0].eventTwitterWidgetUrl ? results[0].eventTwitterWidgetUrl.value : null;
+					JSONfile.eventTwitterWidgetToken =   results[0].eventTwitterWidgetToken ? results[0].eventTwitterWidgetToken.value : null;
 					JSONfile.eventComment =   results[0].eventComent ? results[0].eventComent.value : null;
 					JSONfile.eventHomepage =  results[0].eventUrl ? results[0].eventUrl.value : null;
 					JSONfile.eventStart = results[0].eventStart ? results[0].eventStart.value : null;
@@ -1208,63 +1216,44 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 						
 							if(eventInfo.eventLabel){ 
-								$("[data-role = page]").find("#DataConf").html(eventInfo.eventLabel);
+								$("[data-role = page]").find("#header-title").html(eventInfo.eventLabel);
+							}
+
+							if(eventInfo.eventStart &&  eventInfo.eventEnd) {
+								parameters.contentEl.append($('<p style="text-align:center">'+labels[parameters.conference.lang].event.from +' '+ moment(eventInfo.eventStart).format('LLLL')+' '+labels[parameters.conference.lang].event.to +' '+moment(eventInfo.eventEnd).format('LLLL')+'</p>'));
 							}
 							
 							if(eventInfo.eventDescription){ 
-								parameters.contentEl.append($('<h2>Description</h2>')); 
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].conference.description+'</h2>')); 
 								parameters.contentEl.append($('<p>'+eventInfo.eventDescription+'</p>'));   
 							}
 							if(eventInfo.eventComment){ 
-								parameters.contentEl.append($('<h2>Comment</h2>')); 
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].conference.comment+'</h2>')); 
 								parameters.contentEl.append($('<p>'+eventInfo.eventComment+'</p>'));   
 							}
 							if(eventInfo.eventHomepage){ 
-								parameters.contentEl.append($('<h2>Homepage</h2>')); 
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].conference.homepage+'</h2>')); 
 								parameters.contentEl.append($('<a href="'+eventInfo.eventHomepage+'">'+eventInfo.eventHomepage+'</p>'));   
 							}
 
-							if(eventInfo.eventStart){ 
-								parameters.contentEl.append($('<h2>Starts at :  <span class="inline">'+moment(eventInfo.eventStart).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));
-								isDefined = true;
-							}
-							if(eventInfo.eventEnd){
-								parameters.contentEl.append($('<h2>Ends at : <span class="inline">'+moment(eventInfo.eventEnd).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));  
-							} 
-							if(eventInfo.eventEnd && eventInfo.eventStart){
-								parameters.contentEl.append($('<h2>Duration : <span class="inline">'+ moment(eventInfo.eventStart).from(moment(eventInfo.eventEnd),true)+'</span></h2>'));  
-							}
-							
-						
-						
-
-							// if(eventInfo.eventThemes && eventInfo.eventThemes.length>0){
-							// 	parameters.contentEl.append('<h2>Themes</h2>'); 
-							// 	$.each(eventInfo.eventThemes, function(i,theme){
-							// 		ViewAdapterText.appendButton(parameters.contentEl,'#topic/'+Encoder.encode(theme.name)+"/"+Encoder.encode(theme.id),theme.name,{tiny : 'true'});
-							// 	});
+							// if( && eventInfo.eventStart){
+							// 	parameters.contentEl.append($('<h2>Duration : <span class="inline">'+ moment(eventInfo.eventStart).from(moment(eventInfo.eventEnd),true)+'</span></h2>'));  
 							// }
-
-							// if(_.size(parameters.JSONdata.authors) > 0 ){
-							// 	parameters.contentEl.append($('<h2>Authors</h2>'));
-							// 	for(var i = 0; i < parameters.JSONdata.authors.length; i++){ 
-							// 		var author = parameters.JSONdata.authors[i];
-							// 		ViewAdapterText.appendButton(parameters.contentEl,'#person/'+Encoder.encode(author.authorName.value)+'/'+Encoder.encode(author.authorUri.value), author.authorName.value,{tiny : true});
-							// 	};
-							// }
-
 						
 						
 							if(_.size(parameters.JSONdata.locations) > 0 ){
-								parameters.contentEl.append($('<h2>Location</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].conference.location+'</h2>'));
 								for(var i = 0; i < parameters.JSONdata.locations.length; i++){ 
 									var location = parameters.JSONdata.locations[i];
-									ViewAdapterText.appendButton(parameters.contentEl,'#schedule/'+Encoder.encode(location.locationName.value)+'/'+Encoder.encode(location.locationUri.value),location.locationName.value, {tiny : true});
+									parameters.contentEl.append($('<p>'+location.locationName.value+'</p>')); 
 								};
 							}
 
+	
+							if(eventInfo.eventTwitterWidgetToken){
+								ViewAdapterText.appendTwitterTimeline(parameters.contentEl,eventInfo.eventTwitterWidgetToken, {});	
+							} 
 
-						
 						}
 					}
 				}
@@ -1286,12 +1275,14 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							    'PREFIX swrc: <http://swrc.ontoware.org/ontology#>                  ' +
 							    'PREFIX foaf: <http://xmlns.com/foaf/0.1/>            		        ' ;
 							
-			    var query  =	'SELECT DISTINCT  ?eventSummary ?eventStart ?eventEnd ?eventDesc ?eventComent ?eventUrl ?eventContact ?locationUri ?locationName ?subEventSummary ?subEventUri ?roleUri ?roleName ?personUri ?personName WHERE  {  ' +
+			    var query  =	'SELECT DISTINCT  ?eventSummary ?eventStart ?eventEnd ?eventDesc ?eventComent  ?eventTwitterWidgetUrl ?eventTwitterWidgetToken ?eventUrl ?eventContact ?locationUri ?locationName ?subEventSummary ?subEventUri ?roleUri ?roleName ?personUri ?personName WHERE  {  ' +
 							    ' { <'+parameters.uri+'>  ical:summary ?eventSummary. ' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:dtstart ?eventStart.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:dtend ?eventEnd.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:description ?eventDesc.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:comment ?eventComent.}' +
+							     '	OPTIONAL {<'+parameters.uri+'>  ical:resources ?eventTwitterWidgetUrl.}' +
+								'	OPTIONAL {<'+parameters.uri+'>  ical:attach ?eventTwitterWidgetToken.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:url ?eventUrl.}' +
 							    '	OPTIONAL {<'+parameters.uri+'>  ical:contact ?eventContact.}' +
 							    ' } UNION {	<'+parameters.uri+'>  swc:hasLocation ?locationUri. '+ 
@@ -1320,6 +1311,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					JSONfile.eventHomepage =  results[0].eventUrl ? results[0].eventUrl.value : null;
 					JSONfile.eventStart = results[0].eventStart ? results[0].eventStart.value : null;
 					JSONfile.eventEnd = results[0].eventEnd ? results[0].eventEnd.value : null;
+					JSONfile.eventTwitterWidgetUrl =  results[0].eventTwitterWidgetUrl ? results[0].eventTwitterWidgetUrl.value : null;
+					JSONfile.eventTwitterWidgetToken = results[0].eventTwitterWidgetToken ? results[0].eventTwitterWidgetToken.value : null;
 
 					JSONfile.roles = [];
 					JSONfile.subEvents = [];
@@ -1375,23 +1368,23 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 						
 							if(eventInfo.eventLabel){ 
-								$("[data-role = page]").find("#DataConf").html(eventInfo.eventLabel);
+								$("[data-role = page]").find("#header-title").html(eventInfo.eventLabel);
 							}
 
 							if(eventInfo.eventStart){ 
-								parameters.contentEl.append($('<h2>Starts at :  <span class="inline">'+moment(eventInfo.eventStart).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.startAtLe +' : <span class="inline">'+moment(eventInfo.eventStart).format('LLLL')+'</span></h2>'));
 								isDefined = true;
 							}
 							if(eventInfo.eventEnd){
-								parameters.contentEl.append($('<h2>Ends at : <span class="inline">'+moment(eventInfo.eventEnd).format('MMMM Do YYYY, h:mm:ss a')+'</span></h2>'));  
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.endAt +' : <span class="inline">'+moment(eventInfo.eventEnd).format('LLLL')+'</span></h2>'));  
 							}
 
 							if(eventInfo.eventEnd && eventInfo.eventStart){
-								parameters.contentEl.append($('<h2>Duration : <span class="inline">'+ moment(eventInfo.eventStart).from(moment(eventInfo.eventEnd),true)+'</span></h2>'));  
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.duration +' : <span class="inline">'+ moment(eventInfo.eventStart).from(moment(eventInfo.eventEnd),true)+'</span></h2>'));  
 							}
 
 							if(_.size(parameters.JSONdata.locations) > 0 ){
-								parameters.contentEl.append($('<h2>Location</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.location+'</h2>'));
 								for(var i = 0; i < parameters.JSONdata.locations.length; i++){ 
 									var location = parameters.JSONdata.locations[i];
 									ViewAdapterText.appendButton(parameters.contentEl,'#schedule/'+Encoder.encode(location.locationName.value),location.locationName.value, {tiny : true});
@@ -1400,15 +1393,15 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
  
 
 							if(eventInfo.eventDescription){ 
-								parameters.contentEl.append($('<h2>Description</h2>')); 
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.description+'</h2>')); 
 								parameters.contentEl.append($('<p>'+eventInfo.eventDescription+'</p>'));   
 							}
 							if(eventInfo.eventAbstract){ 
-								parameters.contentEl.append($('<h2>Abstract</h2>')); 
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.abstract+'</h2>')); 
 								parameters.contentEl.append($('<p>'+eventInfo.eventAbstract+'</p>'));   
 							}
 							if(eventInfo.eventHomepage){ 
-								parameters.contentEl.append($('<h2>Homepage</h2>')); 
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.homepage+'</h2>')); 
 								parameters.contentEl.append($('<a href="'+eventInfo.eventHomepage+'">'+eventInfo.eventHomepage+'</p>'));   
 							}
 						
@@ -1417,7 +1410,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								
 								for(var roleName in parameters.JSONdata.roles){
 										parameters.JSONdata.roles[roleName];
-										parameters.contentEl.append($('<h2>'+roleName+'</h2>'));
+										parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].role[roleName]+'</h2>'));
 										$.each(parameters.JSONdata.roles[roleName], function(i,currentPerson){
 											ViewAdapterText.appendButton(parameters.contentEl,'#person/'+Encoder.encode(currentPerson.personName.value)+'/'+Encoder.encode(currentPerson.personUri.value), currentPerson.personName.value, {tiny : true});
 										});
@@ -1425,20 +1418,32 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							}
 
 							if(_.size(parameters.JSONdata.topics) > 0 ){
-								parameters.contentEl.append($('<h2>Topics</h2>'));
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.topic+'</h2>'));
 								for(var i = 0; i < parameters.JSONdata.topics.length; i++){ 
 									var topic = parameters.JSONdata.topics[i];
 									ViewAdapterText.appendButton(parameters.contentEl,'#topic/'+Encoder.encode(topic.topicName.value)+'/'+Encoder.encode(topic.topicUri.value),topic.topicName.value, {tiny : true});
 								};
 							}
 
+							if(_.size(parameters.JSONdata.publications) > 0 ){
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.relatedDocument+'</h2>'));
+								for(var i = 0; i < parameters.JSONdata.publications.length; i++){ 
+									var publication = parameters.JSONdata.publications[i];
+									ViewAdapterText.appendButton(parameters.contentEl,'#publication/'+Encoder.encode(publication.publiName.value)+'/'+Encoder.encode(publication.publiUri.value),publication.publiName.value, {tiny : true});
+								};
+							}
+
 							
 							if(_.size(parameters.JSONdata.subEvents) > 0 ){
-								parameters.contentEl.append('<h2>Sub events</h2>'); 
+								parameters.contentEl.append('<h2>'+labels[parameters.conference.lang].event.subEvent+'</h2>'); 
 								for(var i = 0; i < parameters.JSONdata.subEvents.length; i++){ 
 									var subEvent = parameters.JSONdata.subEvents[i];
 									ViewAdapterText.appendButton(parameters.contentEl,'#event/'+Encoder.encode(subEvent.subEventSummary.value)+"/"+Encoder.encode(subEvent.subEventUri.value),subEvent.subEventSummary.value,{tiny : 'true'});
 								};
+							}
+
+							if(eventInfo.eventTwitterWidgetToken){ 
+								ViewAdapterText.appendTwitterTimeline(parameters.contentEl,eventInfo.eventTwitterWidgetToken, {});	   
 							}
 						}
 					}
@@ -1535,14 +1540,14 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 
 				if(parameters.JSONdata != null){
 					if(_.size(parameters.JSONdata) > 0 ){
-					  if(parameters.name!="null" && parameters.name!="")$("[data-role = page]").find("#DataConf").html(parameters.name);
+					  if(parameters.name!="null" && parameters.name!="")$("[data-role = page]").find("#header-title").html(parameters.name);
 					  var content=$("<div data-role='collapsible-set' data-inset='false'></div>");
 					  var currentDay,currentUl ;
 					  for (var startAt in parameters.JSONdata) {
 					      
 					      //if the day has changed
 					      if(currentDay != moment(startAt).format('MMMM Do YYYY')){
-					          currentCollabsible = $('<div data-role="collapsible" data-theme="d" ><h2>'+moment(startAt).format('MMMM Do YYYY')+'</h2></div>');
+					          currentCollabsible = $('<div data-role="collapsible" data-theme="d" ><h2>'+moment(startAt).format('LL')+'</h2></div>');
 					          currentUl = $('<ul data-role="listview" data-inset="true" ></ul>');
 					          //content.append(currentUl);
 					          content.append(currentCollabsible); 
@@ -1552,9 +1557,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					      
 					      var startTime = moment(startAt).format('h:mm a');
 					      
-	              currentUl.append("<li data-role='list-divider' >\
-	                                    starts at "+startTime+"\
-	                                </li>");
+	            	 currentUl.append("<li data-role='list-divider' >"+labels[parameters.conference.lang].event.startAt+" "+startTime+"</li>");
 	                                
 				        for (var endAt in parameters.JSONdata[startAt]) {
 				         
@@ -1571,15 +1574,18 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		                          	if(parameters.name && parameters.name!="null" && parameters.name!=""){
 		                              	LocationHtml = '<p>'+parameters.name+'</p>';
 		                            }else{
-			                             // LocationHtml = '<p>'+bigEvents[eventType][i].locationLabel+'</p>';
+			                            if(bigEvents[eventType][i].locationLabel){ 
+
 			                              LocationHtml += '<p><a href="#schedule/'+Encoder.encode(bigEvents[eventType][i].locationLabel)+'" data-role="button" data-icon="search" data-inline="true">'+bigEvents[eventType][i].locationLabel+'</a></p>';
+		                           		}
 		                            }
 
+		                            var labelCategory = labels[parameters.conference.lang].category[bigEvents[eventType][i].eventType.split("#")[1]] || "";
 		                            var newLi = $('<li data-inset="true" ></li>');
 		                            var newEventlink = $('<a href="#event/'+Encoder.encode(bigEvents[eventType][i].eventLabel)+'/'+Encoder.encode(bigEvents[eventType][i].eventUri)+'">');
 		                            var newLabel = $('<h3>'+bigEvents[eventType][i].eventLabel+'</h3>');
-		                            var newCategory = $('<p>'+bigEvents[eventType][i].eventType+'</p>');
-		                            var newLast = $('<p>last : <strong>'+lasts+'</strong></p>');
+		                            var newCategory = $('<p>'+labelCategory+'</p>');
+		                            var newLast = $('<p>'+labels[parameters.conference.lang].event.last+' : <strong>'+lasts+'</strong></p>');
 
 		                            newEventlink.append(newLabel);
 		                            newEventlink.append(newCategory);
@@ -1593,7 +1599,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 			              	}
 				        } 
 					  }
-					  parameters.contentEl.append('<h2>Schedule</h2>'); 
+					  parameters.contentEl.append('<h2>'+labels[parameters.conference.lang].pageTitles.schedule+'</h2>'); 
 					  parameters.contentEl.append(content);
 					}
 				}
@@ -1664,7 +1670,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							}
 						}
 					});
-					//StorageManager.pushCommandToStorage(currentUri,"getWhatsNext",JSONfile);
+				//	StorageManager.pushCommandToStorage(currentUri,"getWhatsNext",JSONfile);
 					return JSONfile;
 				}
 				return null;
@@ -1673,6 +1679,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 			ViewCallBack : function(parameters){
 				if(parameters.JSONdata != null){
 					if(_.size(parameters.JSONdata) > 0 ){
+						$("[data-role = page]").find("#header-title").html(labels[parameters.conference.lang].schedule.whatsnext);
+
 						var content=$("<div data-role='collapsible-set' data-inset='false'></div>");
 						var currentDay,currentUl ;
 						$.each(parameters.JSONdata, function(i,location){  
@@ -1686,8 +1694,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							currentUl.append('<li data-inset="true"  ><a href="#event/'+Encoder.encode(location.event.eventLabel)+'/'+Encoder.encode(location.event.eventUri)+'">\
 							                <h3>'+location.event.eventLabel+'</h3>\
 							                <p>'+location.event.eventType+'</p>\
-							                <p>Start at : <strong>'+formatedStart+'</p>\
-											<p>last : <strong>'+lasts+'</strong></p>\
+							                <p>'+labels[parameters.conference.lang].event.startAt+' : <strong>'+formatedStart+'</p>\
+											<p>'+labels[parameters.conference.lang].event.last+' : <strong>'+lasts+'</strong></p>\
 							                </a></li>'); 
 					  	})
 
@@ -1701,34 +1709,121 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 
 	    /** Command used to get and display the name, the start and end time and location of a given event  **/ 
 	    getEventIcs : {
-		    dataType : "text",
-		    method : "GET",
-		    serviceUri : "schedule_event.ics?", 
-		    getQuery : function(parameters){	
-		    
-			   var conferenceUri = parameters.conferenceUri;
-		      var ajaxData = { conference_id : parameters.conference.id, id : parameters.uri} ; 
-		      return ajaxData; 
+		   	dataType : "JSONP", 
+			method : "GET",
+			serviceUri : "",  
+		     getQuery : function(parameters){	
+		    	  
+			    var prefix =	'PREFIX swc: <http://data.semanticweb.org/ns/swc/ontology#>         ' +
+							    'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>               ' +
+							    'PREFIX dc: <http://purl.org/dc/elements/1.1/>                      ' +
+							    'PREFIX ical: <http://www.w3.org/2002/12/cal/ical#> 				' +
+							    'PREFIX swrc: <http://swrc.ontoware.org/ontology#>                  ' +
+							    'PREFIX foaf: <http://xmlns.com/foaf/0.1/>            		        ' ;
+							
+			    var query  =	'SELECT DISTINCT  ?eventSummary ?eventStart ?eventEnd ?eventDesc ?eventComent  ?eventUrl ?eventContact ?locationUri ?locationName ?subEventSummary ?subEventUri ?roleUri ?roleName ?personUri ?personName WHERE  {  ' +
+							    ' { <'+parameters.uri+'>  ical:summary ?eventSummary. ' +
+							    '	OPTIONAL {<'+parameters.uri+'>  ical:dtstart ?eventStart.}' +
+							    '	OPTIONAL {<'+parameters.uri+'>  ical:dtend ?eventEnd.}' +
+							    '	OPTIONAL {<'+parameters.uri+'>  ical:description ?eventDesc.}' +
+							    '	OPTIONAL {<'+parameters.uri+'>  ical:comment ?eventComent.}' +
+							    '	OPTIONAL {<'+parameters.uri+'>  ical:url ?eventUrl.}' +
+							    '	OPTIONAL {<'+parameters.uri+'>  ical:contact ?eventContact.}' +
+							    ' } UNION {	<'+parameters.uri+'>  swc:hasLocation ?locationUri. '+ 
+							    '   ?locationUri  rdfs:label ?locationName. }' +
+							    '}';
+				var  ajaxData = { query : prefix + query, output : "json" };
+		      	return ajaxData; 
 			      
 		    },
 		    
-		    ModelCallBack : function(dataXML,conferenceUri,datasourceUri, currentUri){
-			 	var JSONfile = {"ics": dataXML}; 
-		   
-				//StorageManager.pushCommandToStorage(currentUri,"getEvent",JSONfile);
+		    ModelCallBack : function(dataJSON,conferenceUri,datasourceUri, currentUri){
+			 	var JSONfile = {}; 
+			 	var results = dataJSON.results.bindings;
+			    if(_.size(results) > 0 ){
+				
+					JSONfile.eventLabel = results[0].eventSummary ? results[0].eventSummary.value : null;
+					JSONfile.eventDescription =   results[0].eventDesc ? results[0].eventDesc.value : null;
+					JSONfile.eventAbstract =   results[0].eventComent ? results[0].eventComent.value : null;
+					JSONfile.eventHomepage =  results[0].eventUrl ? results[0].eventUrl.value : null;
+					JSONfile.eventStart = results[0].eventStart ? results[0].eventStart.value : null;
+					JSONfile.eventEnd = results[0].eventEnd ? results[0].eventEnd.value : null;
+					JSONfile.eventLocationName = "";
+					j = 0;
+
+					$.each(results, function(i, token) {
+						if(token.hasOwnProperty("locationUri")){
+							JSONfile.locations +=  token.locationName.value;
+							n++;
+						}
+					});
+				}
+
+				StorageManager.pushCommandToStorage(currentUri,"getEventIcs",JSONfile);
 				return JSONfile;
 				
 			}, 
 
 			ViewCallBack : function(parameters){
-				var JSONdata = parameters.JSONdata;
+								var JSONdata = parameters.JSONdata;
+				var conferenceUri = parameters.conferenceUri;
 
-				var icsButton = $('<button data-role="button" data-inline="true"><i class="fa fa-download"></i>  Add to calendar</button>');
-				icsButton.click(function(){
-					var blob = new Blob([JSONdata.ics], {type: "text/calendar;charset=utf-8"});
-					saveAs(blob, "icsEvent.ics");
-				});
-				$("#bonusPanel").append(icsButton);
+				if(parameters.JSONdata != null){
+					
+					var eventInfo = parameters.JSONdata;
+						
+					if(_.size(eventInfo) > 0 ){
+						if(parameters.mode == "text"){
+							var eventLabel  = eventInfo.eventLabel;				
+							var eventHomepage  = eventInfo.eventHomepage;
+							var eventDescription  = eventInfo.eventDescription;
+							var eventAbstract  = eventInfo.eventAbstract;							
+							var locationName  = eventInfo.eventLocationName;	
+							var eventStart  = eventInfo.eventStart;	
+							var eventEnd  = eventInfo.eventEnd;
+							var eventStartICS  = moment(eventInfo.eventStart,"YYY-MM-DD HH:mm:ss").format("YYYYMMDDTHHmmss");	
+							var eventEndICS  = moment(eventInfo.eventEnd ,"YYY-MM-DD HH:mm:ss").format("YYYYMMDDTHHmmss");	
+
+							var icsEvent="BEGIN:VCALENDAR\n"+
+									"VERSION:2.0\n"+
+									'PRODID: //'+parameters.conferenceUri+'//ES//EN\n'+
+									"BEGIN:VTIMEZONE\n"+
+									"TZID:Europe/Paris\n"+
+									"BEGIN:DAYLIGHT\n"+
+									"TZOFFSETFROM:+0100\n"+
+									"RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\n"+
+									"DTSTART:19810329T020000\n"+
+									"TZNAME:GMT+02:00\n"+
+									"TZOFFSETTO:+0200\n"+
+									"END:DAYLIGHT\n"+
+									"BEGIN:STANDARD\n"+
+									"TZOFFSETFROM:+0200\n"+
+									"RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU\n"+
+									"DTSTART:19961027T030000\n"+
+									"TZNAME:GMT+01:00\n"+
+									"TZOFFSETTO:+0100\n"+
+									"END:STANDARD\n"+
+									"END:VTIMEZONE\n"+
+									"BEGIN:VEVENT\n"+
+									"CATEGORIES:"+eventLabel+"\n"+
+									"DTSTART;TZID=Europe/Paris:"+eventStartICS+"\n"+
+									"DTEND;TZID=Europe/Paris:"+eventEndICS+"\n"+
+									"SUMMARY:"+eventLabel+"\n"+
+									"DESCRIPTION:"+eventAbstract+"\n"+
+									"LOCATION:"+locationName+"\n"+
+									"END:VEVENT\n"+
+									"END:VCALENDAR";
+							var JSONdata = parameters.JSONdata;
+
+							var icsButton = $('<button data-role="button" data-inline="true" data-mini="true"><i class="fa fa-download"></i>  '+labels[parameters.conference.lang].specialButtons.addToCal+'</button>');
+							icsButton.click(function(){
+								var blob = new Blob([icsEvent], {type: "text/calendar;charset=utf-8"});
+								saveAs(blob, "icsEvent.ics");
+							});
+							parameters.contentEl.prepend(icsButton);
+						}
+					}
+				}	
 				
 			}
 	    },

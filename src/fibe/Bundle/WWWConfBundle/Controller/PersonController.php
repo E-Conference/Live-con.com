@@ -133,7 +133,7 @@ class PersonController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('schedule_person_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('schedule_person_index'));
 
         }
         var_dump($form->getErrors());
@@ -278,14 +278,19 @@ class PersonController extends Controller
 
         $editForm->bind($request);
         $paperToAdd = $entity->getPapers();
+        $organizationToAdd = $entity->getOrganizations();
         // $accountToAdd = $entity->getAccounts();
 
         if ($editForm->isValid()) {
 
             foreach($paperToAdd as $paper) { 
                 $paper->addAuthor($entity);
-                //$entity->addMember($person);
                 $em->persist($paper);
+            }
+
+            foreach($organizationToAdd as $organization) { 
+                $organization->addMember($entity);
+                $em->persist($organization);
             }
 
             foreach ($entity->getAccounts() as $account) {

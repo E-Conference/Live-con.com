@@ -41,11 +41,13 @@
 $(".delete_paper").click(function(){
 
       var id_paper = $(this).attr('id');
+       $('#loader_papers').show();
       //start send the post request
        $.post("{{path('schedule_confevent_deletePaper')}}",               
                {id_paper : id_paper, id_entity: "{{ entity.id }}"} , 
             function(response){
                    $('#paper_related_list').html(response);
+                   $('#loader_papers').hide();
             }, "html");    
        });
 

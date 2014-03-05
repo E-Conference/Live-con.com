@@ -135,7 +135,7 @@ class OrganizationController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('schedule_organization_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('schedule_organization_index'));
         }
 
         return array(
@@ -295,8 +295,6 @@ class OrganizationController extends Controller
             $em->persist($entity);
             $em->flush();
             return $this->redirect($this->generateUrl('schedule_organization_index'));
-
-            //return $this->redirect($this->generateUrl('schedule_organization_edit', array('id' => $id)));
         }
 
         return array(

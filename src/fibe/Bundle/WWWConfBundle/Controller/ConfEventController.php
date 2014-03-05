@@ -14,6 +14,8 @@ use fibe\Bundle\WWWConfBundle\Entity\Role;
 use fibe\Bundle\WWWConfBundle\Entity\Topic;
 use fibe\Bundle\WWWConfBundle\Form\RoleType as RoleType;
 use fibe\Bundle\WWWConfBundle\Form\TopicType as TopicType;
+//Filter type form
+use fibe\Bundle\WWWConfBundle\Form\Filters\ConfEventFilterType;
 
 use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;  
 
@@ -31,7 +33,8 @@ class ConfEventController extends Controller
 {
     /**
      * Lists all ConfEvent entities.
-     * @Route(name="schedule_confevent")
+     * @Route("/",name="schedule_confevent")
+     *@Template()
      */
     public function indexAction(Request $request)
     {
@@ -53,10 +56,50 @@ class ConfEventController extends Controller
             throw new NotFoundHttpException();
         }
 
+        //Form Filter
+        $filters =$this->createForm(new ConfEventFilterType($this->getUser()));
+        
         return array(
             'pager' => $pager,
-            'authorized' => $authorization->getFlagSched()
+            'authorized' => $authorization->getFlagSched(),
+            'filters_form' => $filters->createView()
         );
+    }
+
+     /**
+     * Filter confevent
+     * @Route("/filter", name="schedule_confevent_filter")
+     */
+    public function filterAction(Request $request)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+
+        $conf = $this->getUser()->getCurrentConf();
+        //Filters
+        $filters =$this->createForm(new ConfEventFilterType($this->getUser()));
+        $filters->bindRequest($this->get('request'));
+
+        if ($filters->isValid())  {
+            // bind values from the request
+          
+             $entities = $em->getRepository('fibeWWWConfBundle:ConfEvent')->filtering($filters->getData(), $conf);
+
+             //Pager
+             $adapter = new ArrayAdapter($entities);
+             $pager = new PagerFanta($adapter);
+             $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
+             try {
+               $pager->setCurrentPage($request->query->get('page', 1));
+             } catch (NotValidCurrentPageException $e) {
+                throw new NotFoundHttpException();
+             }
+
+             return $this->render('fibeWWWConfBundle:ConfEvent:list.html.twig', array(
+                 'pager'  => $pager,
+             ));
+        }
+
     }
 
     /**
