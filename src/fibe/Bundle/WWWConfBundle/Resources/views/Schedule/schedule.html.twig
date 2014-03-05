@@ -42,59 +42,11 @@
   </div> 
 
   <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+    <div class="calendar-container col-xs-12 col-sm-12 col-md-12 col-lg-9">
         <div id='calendar' class="bordered"></div> 
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+    <div class="sidebar-container col-xs-12 col-sm-12 col-md-12 col-lg-3">
       <div id="sidebar" class="bordered">
-        {# <div class="checkbox">
-          <label>
-            <input id="reposition" checked="checked" type="checkbox"> Reposition parent/child <small>(<i>need performance</i>)</small>
-          </label>
-        </div> 
-        <div class="history ">
-          <button id="backwardBtn" class="btn btn-default" disabled="disabled" ><i class="icon-undo"></i></button>
-          <button id="forewardBtn" class="btn btn-default" disabled="disabled" ><i class="icon-repeat"></i></button>
-        </div> #}
-        {# <div id="resourceView">
-            <select class="form-control"> 
-                <option value="classic">Calendar</option> 
-                <optgroup label="Ressources views">
-                  <option value="location" >Location</option> 
-                  <option value="category" >Category</option>
-                </optgroup>
-            </select>
-        </div> #}
-        <div id="filters">  
-
-          <h4>Filter by categories</h4>
-          <div class="filter">
-            <select multiple class="form-control" data-res="category" data-filter="category_ids">
-              {% for category in categories %}
-                <option data-color="{{category.color}};" value="{{category.id}}">{{category.name}}</option>
-              {% endfor %}
-            </select>
-          </div>
-
-          <h4>Filter by locations</h4>
-          <div class="filter">
-            <select multiple class="form-control" data-res="location" data-filter="location_ids">
-              {% for location in locations %}
-                <option value="{{location.id}}">{{location.name}}</option>
-              {% endfor %}
-            </select>
-          </div> 
-
-          <h4>Filter by topic</h4>
-          <div class="filter">
-            <select multiple class="form-control" data-res="topic" data-filter="topic_ids">
-              {% for topic in topics %}
-                <option value="{{topic.id}}">{{topic.name}}</option>
-              {% endfor %}
-            </select>  
-          </div>
-        </div>
-        <hr/>
         <h4>Dateless Events</h4>
         <div id='external-events' class='scroller'>
         </div> 
