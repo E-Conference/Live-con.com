@@ -8,9 +8,11 @@ var EventCollection = {
     broCountRange:{}, 
     eventsToComputeBroCountRangeIndexes:[],  
 
-    checkIsLoginPage : function (html){
+    isLoginPage : function (html){
       if(Object.prototype.toString.call(html) == '[object String]' && html.substring(0,9)=="<!DOCTYPE"){
-        alert("Session expired :(\n\n\t you have to reconnect to continue!")
+        alert("Session expired :(\n\n\t refresh the page to reconnect!")
+        bootstrapAlert("warning","you must reconnect to continue!")
+          
         return true;
       }
       return false;
@@ -429,7 +431,7 @@ var EventCollection = {
           op.data,
           function(events) {  
               // if(stopRender===true)return;
-              if(EventCollection.checkIsLoginPage(events))return;
+              if(EventCollection.isLoginPage(events))return;
               
               console.log(events) 
               if(events.length!=0)bootstrapAlert("success",events.length+" events have been well fetched" );
@@ -515,7 +517,7 @@ var EventCollection = {
       $.ajax({
           url: op.updateUrl+"?id="+calEvent.id,  
           success: function(doc,b,c) { 
-            if(EventCollection.checkIsLoginPage(doc))return;
+            if(EventCollection.isLoginPage(doc))return;
               $modalBody.html(doc);
               bootstrapAlert("success","Options for event : <b>"+calEvent['title']+"</b> has been well fetched"); 
 
@@ -579,7 +581,7 @@ var EventCollection = {
                 op.quickAddUrl,
                 $.extend( {} , tmp ),
                 function(response) {  
-                    if(EventCollection.checkIsLoginPage(response))return; 
+                    if(EventCollection.isLoginPage(response))return; 
                     bootstrapAlert("success","event <b>"+tmp['title']+"</b> has been well added");
                     tmp.id =response.id;
                     var ev = new CalEvent(tmp);    
