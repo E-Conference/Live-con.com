@@ -5,25 +5,10 @@
 
 {% block body %}
 
-<!-- HomePage Menu -->
-
-    <div id="header">
-      <div class="container_12">
-        <div class="grid_2"><a href="#entete" title="Livecon UPGRATE YOUR CONFERENCE"><img src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon" /></a></div>
-        <div class="grid_10" id="menu">
-          <ul>
-            <li><a href="{{ path('login') }}" title="Login">Login</a></li>
-            <li><a href="{{ path('fos_user_registration_register') }}" title="Signup">Sign up</a></li>
-          </ul>
-        </div>
-
-      </div>
-    </div>
-
-
-
+{% include "fibeHomePageBundle::topBar.html.twig" %}
+  
 <!-- Conferences List -->
-
+<div id="background"></div>
 <div id="entete">
 <h3>Find your conference !</h3>
   <div class="container_7">
