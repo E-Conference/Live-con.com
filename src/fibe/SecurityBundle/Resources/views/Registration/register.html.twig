@@ -31,11 +31,6 @@
       <div id="signin" class="grid_4">
         <a href="http://live-con.com/" title="Livecon UPGRATE YOUR CONFERENCE"><img src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon" id="logo"/></a>
        <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="form-horizontal" > 
-
-      <div class="row">
-           <div class="col-lg-2"></div>
-           <div class="col-lg-6">
-            <div class="control-group">
                 <label class="control-label stage" >
                     {{ form_label(form.username) }}
                 </label> 
@@ -46,8 +41,6 @@
                     {{ form_widget(form.username) }}
                     
                 </div>
-            </div>
-            <div class="control-group">
                 <label class="control-label" >
                     {{ form_label(form.email) }}
                 </label> 
@@ -57,8 +50,6 @@
                    </div>
                     {{ form_widget(form.email) }}
                 </div>
-            </div>
-            <div class="control-group">
                 <label class="control-label" >
                     {{ form_label(form.plainPassword.first) }}
                 </label> 
@@ -68,8 +59,6 @@
                    </div>
                     {{ form_widget(form.plainPassword.first) }}
                 </div>
-            </div>
-            <div class="control-group">
                 <label class="control-label" >
                     {{ form_label(form.plainPassword.second) }}
                 </label> 
@@ -79,8 +68,6 @@
                      </div>
                     {{ form_widget(form.plainPassword.second) }}
                 </div>
-            </div>
-            <div class="control-group">
                 <label class="control-label" >
                     {{ form_label(form.captcha) }}
                     <a onclick="location.reload()" ><i class="fa fa-refresh"></i></a>
@@ -90,8 +77,7 @@
                         <strong>{{ form_errors(form.captcha) }}</strong>
                      </div>
                     {{ form_widget(form.captcha) }}
-                </div>
-            </div> 
+                </div> 
           
             <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
                 {{ form_rest(form  )}}
