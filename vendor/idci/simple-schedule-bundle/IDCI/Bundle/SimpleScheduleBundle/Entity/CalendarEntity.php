@@ -1062,4 +1062,14 @@ class CalendarEntity
     {
         return $this->children;
     }
+
+    /**
+     * Has children
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function hasChildren()
+    {
+        return count($this->children) != 0;
+    }
 }

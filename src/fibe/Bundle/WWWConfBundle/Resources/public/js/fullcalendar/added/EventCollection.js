@@ -480,38 +480,49 @@ var EventCollection = {
         //avoid repeating this function 10 times... 
         if(!mainConfEvent || stopRender)return;
 
-        setTimeout(function(){    
+        // setTimeout(function(){    
           logtime = moment() 
           EventCollection.stylizeBlocks();
           console.debug(moment().diff(logtime)+" to stylizeBlocks"); 
           console.log( "######################################################"); 
-        },0);
+        // },0);
             
+      // hide events that aren't a leaf in the hierarchy in resource mode 
+      if($calendar.fullCalendar('getView').name == "resourceDay" && mainConfEvent.hasChild() ) 
+        $(mainConfEvent.elem).hide();
+    },
+
+    eventAfterRender : function( event, element, view ) { //each event
+      event = Events[event.id];
+      //if the event is longer than a day, multiple divs can represent one event
+      if(event["elem"] && event["elem"].is(":visible"))
+        event["elem"].push(element)
+      else
+        event["elem"] = element; 
+
+      // add id in the dom 
+      $(element).data("id",event.id)
+
+      //add class to the mainConfEvent
+      if(event.id == mainConfEvent.id)return $(element).addClass("main-conf-event");
+
+      // hide filtered events
+      if(event.hide === true) 
+        $(element).hide();
+      
+      //set z-index calculated in calculateWidth
+      if(!event.allDay)
+        $(element).css("z-index",EventCollection.broCountRange[event.id].zindex)
+      
+      // hide events that aren't a leaf in the hierarchy in resource mode 
+      if($calendar.fullCalendar('getView').name == "resourceDay" && event.hasChild() ) 
+        $(element).hide();
     },
     eventCalculateWidth : function(event, seg, leftmost, availWidth, outerWidth, levelI, bottom, top, forward, dis,rtl) {  
       if(event.allDay){
         return;
       }
       event.calculateWidth(seg, leftmost, availWidth, outerWidth, levelI, bottom, top, forward, dis,rtl); 
-    },
-    eventAfterRender : function( event, element, view ) { //each event
-
-      //if the event is longer than a day, multiple div can represent one event
-      if(Events[event.id]["elem"] && Events[event.id]["elem"].is(":visible"))
-        Events[event.id]["elem"].push(element)
-      else
-        Events[event.id]["elem"] = element; 
-      // console.log("2",Events[event.id]["elem"]) 
-      $(element).data("id",event.id)
-
-      if(event.id == mainConfEvent.id)return $(element).addClass("main-conf-event");
-
-      if(Events[event.id].hide === true) // hide filtered events
-        $(element).hide();
-      
-      if(event.allDay)return;
-      $(element).css("z-index",EventCollection.broCountRange[event.id].zindex)
-      
     },
     eventClick : function(calEvent, jsEvent, view) {  // get the full edit form
       $.ajax({
@@ -572,7 +583,7 @@ var EventCollection = {
                 allDay   : allDay
             };
  
-            if(resourceView && resourceObj){  
+            if( resourceObj){  
               tmp['currentRes'] = currentRes;
               tmp['resourceId'] = resourceObj.id;
             } 
@@ -712,8 +723,7 @@ var EventCollection = {
           child.renderForRefetch();
           child.formatDate();
           child.persist();
-      });  
-      console.log("eventDrop2")
+      });   
 
       //apply to parent 
       if(parent){
@@ -726,8 +736,7 @@ var EventCollection = {
           event.setParent(mainConfEvent); 
         } 
         event.updateParentDate();  
-      }
-      console.log("eventDrop3")
+      } 
       event.computeCountRange({allBrosInDay:true});
 
       EventCollection.refetchEvents(false,true); 

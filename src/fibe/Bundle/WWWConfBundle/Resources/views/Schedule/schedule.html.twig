@@ -161,8 +161,8 @@
         </div> 
         
         <div class="modal-footer row-fluid">
-          <div class="col-xs-6"><button class="col-md-6 btn btn-default btn-block no" data-dismiss="modal"><i class='fa-remove'></i> no</button></div>
-          <div class="col-xs-6"><button class="col-md-6 btn btn-success btn-block yes" data-dismiss="modal"><i class='fa-ok'></i> ok</button></div>
+          <div class="col-xs-6"><button class="col-sm-6 btn btn-default btn-block no" data-dismiss="modal"><i class='fa-remove'></i> no</button></div>
+          <div class="col-xs-6"><button class="col-sm-6 btn btn-success btn-block yes" data-dismiss="modal"><i class='fa-ok'></i> ok</button></div>
         </div>
 
       </div><!-- /.modal-content -->
@@ -215,8 +215,7 @@
         filter, // filter.js
         sidebar, //sidebar.js
         logtime, // global benchmark var 
-        startView = "agendaWeek",
-        resourceView = false,  
+        startView = "agendaWeek", 
         //bootstrap modals
         $modal,
         $modalNewEvent,
@@ -341,14 +340,13 @@
       }
 
       calendarOption.header.right = "month agendaWeek agendaDay,resourceDay";
-      calendarOption["buttonText"] = {resourceDay:currentRes};
-      resourceView = true;
+      calendarOption["buttonText"] = {resourceDay:currentRes}; 
 
       fetchAllResources(function(){
           calendarOption["eventResources"] = res;
           //launch calendar
           $calendar.fullCalendar(calendarOption);  
-          $calendar.fullCalendar('changeView', startView );
+          $calendar.fullCalendar('changeView', startView ); 
 
           //additional schedule controls : first day and refresh
           $('.fc-header-left')

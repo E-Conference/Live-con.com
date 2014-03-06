@@ -29,8 +29,7 @@ var CalEvent = function(event){ //constructor
     
     this["borderColor"] = ColorLuminance(this["color"] ? this["color"] : "#3a87ad", -0.35); 
 
-    //resources
-    if(resourceView){
+    //resources 
       if(event["resourceId"]){
         this["resourceId"]  = event.resourceId; 
       }else{
@@ -40,8 +39,7 @@ var CalEvent = function(event){ //constructor
         }else{
           // set the resource as not defined
           this["resourceId"] = "0"; 
-        }
-      }
+        } 
     }
 
     this.renderForRefetch();
@@ -68,7 +66,7 @@ CalEvent.prototype.persist = function(add){ //persist at server side
       end       : this['end'],
       start     : this['start'],
     }
-    if(resourceView && this.resource){  
+    if( this.resource){  
       toSend['currentRes'] = currentRes;
       toSend['resourceId'] = this.resource.id;
     } 

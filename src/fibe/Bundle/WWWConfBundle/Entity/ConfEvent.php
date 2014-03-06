@@ -137,16 +137,14 @@ class ConfEvent extends Event
     {
         $this->slugify();
         $this->setIsInstant($this->getEndAt()->format('U') == $this->getStartAt()->format('U'));
+ 
+        //events that aren't leaf in the hierarchy can't have a location
+        if($this->hasChildren() && $this->getLocation() != null){
+            $this->setLocation(null);
+        }
 
-        // if($this->isMainConfEvent){
-        //     foreach ($this->getChildren() as $child) { 
-        //         if($child->getStartAt() < $this->getStartAt())$this->setStartAt($child->getStartAt());
-        //         if($child->getEndAt()   > $this->getEndAt()  )$this->setEndAt(  $child->getEndAt()  );
-        //     }
-        // }
-
+        //ensure main conf has correct properties 
         if($this->isMainConfEvent){
-            //ensure main conf event fits its children dates 
             $this->fitChildrenDate(true);
             if ($this->getEndAt()->getTimestamp() <=  $this->getStartAt()->getTimestamp()) {
                 $endAt = clone $this->getStartAt() ; 
