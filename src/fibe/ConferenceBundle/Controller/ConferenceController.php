@@ -50,7 +50,7 @@ class ConferenceController extends Controller
         $wwwConf = $this->getUser()->getCurrentConf();
         //main conf event MUST have a location
         $mainConfEvent = $wwwConf->getMainConfEvent(); 
-        $form = $this->createForm(new WwwConfType($this->getUser()), $wwwConf);
+        $form = $this->createForm(new WwwConfType($this->getUser(),$mainConfEvent), $wwwConf);
 
       //Authorization Verification conference datas manager
         $user=$this->getUser();

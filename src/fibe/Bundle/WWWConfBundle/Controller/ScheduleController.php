@@ -181,7 +181,7 @@ class ScheduleController extends Controller
 
         $role = new Role();
         $roleForm = $this->createForm(new RoleType($this->getUser()), $role);
-        $editForm = $this->createForm(new ConfEventType($this->getUser()), $entity);
+        $editForm = $this->createForm(new ConfEventType($this->getUser(),$entity), $entity);
        
          $papersForSelect = $this->getUser()->getCurrentConf()->getPapers()->toArray();
          $form_paper = $this->createFormBuilder($entity)

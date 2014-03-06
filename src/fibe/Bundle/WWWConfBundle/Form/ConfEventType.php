@@ -12,10 +12,12 @@ use IDCI\Bundle\SimpleScheduleBundle\Entity\Location;
 class ConfEventType extends EventType
 {
    private $user;
+   private $entity;
 
-    public function __construct($user)
+    public function __construct($user,$entity)
     {
-        $this->user = $user;
+        $this->user   = $user;
+        $this->entity = $entity;
     }
 
 
@@ -36,23 +38,9 @@ class ConfEventType extends EventType
                                             'attr'  => array('placeholder'   => 'Acronym')))
                  ->add('categories',null,array('required' => false)) 
                  ->add('attach','text',array('required' => false, 'label'   => 'Twitter widget id')) 
-                //  ->add('startAt', 'datetime', array(  
-                //     'widget' =>'single_text',
-                //     'format' =>'dd/MM/yyyy HH:mm', 
-                  
-                // ))
-                // ->add('endAt', 'datetime', array(  
-                //     'widget' =>'single_text',
-                //     'format' =>'dd/MM/yyyy HH:mm', 
-                 
-                // ))     
-                ->add('location', 'entity', array(
-                    'class' => 'IDCISimpleScheduleBundle:Location',
-                    'label'   => 'Location',
-                    'choices'=> $this->user->getCurrentConf()->getLocations()->toArray(),
-                    'empty_data'  => null,
-                    'required' => false,
-                ))  
+                 ->remove('startAt' )
+                 ->remove('endAt')
+                 ->remove('parent')
                 //  ->add('parent', 'entity', array(
                 //     'class' => 'IDCISimpleScheduleBundle:Event',
                 //     'label'   => 'Parent',
@@ -60,7 +48,20 @@ class ConfEventType extends EventType
                 //     'empty_data'  => null,
                 //     'required' => false,
                 // ))
-            ;        
+            ;    
+
+            if($this->entity->hasChildren()){
+                // $builder->add('location', 'entity', array(
+                //     'class' => 'IDCISimpleScheduleBundle:Location',
+                //     'label'   => 'Location',
+                //     'choices'=> $this->user->getCurrentConf()->getLocations()->toArray(),
+                //     'empty_data'  => null,
+                //     'required' => false,
+                //     // not working probably due to a twig behavior
+                //     // 'attr' => array('onload' => "$(this).parent().remove();")
+                // ));  
+                $builder->remove('location');
+            }
         }else{
 
              parent::buildForm($builder, $options);

@@ -9,20 +9,21 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class WwwConfType extends AbstractType
 {
-    private $user;
+   private $user;
+   private $entity;
 
-    public function __construct($user)
+    public function __construct($user,$entity)
     {
-        $this->user = $user;
+        $this->user   = $user;
+        $this->entity = $entity;
     }
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('logo', 'file',  array('required' => false, 
                                         'label'     => 'Logo (jpeg - png - 2MO)',
                                         'attr'  => array('placeholder'   => 'logoPath')))
-            ->add('mainConfEvent', new WwwConfEventType($this->user),array(
+            ->add('mainConfEvent', new WwwConfEventType($this->user,$this->entity),array(
                                         'label' => 'Conference event',
                                         'attr'  => array('class'   => 'well'))) 
         ;

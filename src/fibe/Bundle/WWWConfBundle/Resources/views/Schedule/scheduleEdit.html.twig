@@ -25,18 +25,10 @@
                   {{ form_row(edit_form.categories) }} 
                   {{ form_row(edit_form.description) }} 
                   {{ form_row(edit_form.url) }} 
+                  {{ form_row(edit_form.comment) }}
               </div>
               <div class="col-sm-6">
-                   
-                  {{ form_row(edit_form.comment) }}
-                  {{ form_row(edit_form.organizer) }}
-                  {{ form_row(edit_form.contacts) }}
-                  {{ form_row(edit_form.location) }} 
-
-                  {{ form_errors(edit_form) }}
-                  </br>
-              </div>
-              <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
+                      
                   {{ form_rest(edit_form)}}
               </div>                       
         </div> 

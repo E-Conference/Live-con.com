@@ -120,7 +120,7 @@ class ConfEventController extends Controller
         return $this->redirect($this->generateUrl('schedule_view'));
 
         $entity  = new ConfEvent();
-        $form = $this->createForm(new ConfEventType($this->getUser()), $entity);
+        $form = $this->createForm(new ConfEventType($this->getUser(),$entity), $entity);
 
         $form->bind($request);
 
@@ -170,7 +170,7 @@ class ConfEventController extends Controller
             throw new AccessDeniedException('Action not authorized !');
           } 
         $entity = new ConfEvent();
-        $form   = $this->createForm(new ConfEventType($this->getUser()), $entity);
+        $form   = $this->createForm(new ConfEventType($this->getUser(),$entity), $entity);
 
 
         return $this->render('fibeWWWConfBundle:ConfEvent:new.html.twig', array(
@@ -239,7 +239,7 @@ class ConfEventController extends Controller
 
         $role = new Role();
         $roleForm = $this->createForm(new RoleType($this->getUser()), $role);
-        $editForm = $this->createForm(new ConfEventType($this->getUser()), $entity);
+        $editForm = $this->createForm(new ConfEventType($this->getUser(),$entity), $entity);
 
         $papersForSelect = $this->getUser()->getCurrentConf()->getPapers()->toArray();
         $form_paper = $this->createFormBuilder($entity)
@@ -302,7 +302,7 @@ class ConfEventController extends Controller
         }
  
 
-        $form = $this->createForm(new ConfEventType($this->getUser()), $entity);
+        $form = $this->createForm(new ConfEventType($this->getUser(),$entity), $entity);
         $form->bind($request);
 
         if ($form->isValid()) {

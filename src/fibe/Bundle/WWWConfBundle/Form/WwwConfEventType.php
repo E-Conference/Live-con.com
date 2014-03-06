@@ -9,6 +9,13 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class WwwConfEventType extends ConfEventType
 {
+   private $user;
+   private $entity;
+
+    public function __construct($user,$entity)
+    {
+       parent::__construct($user,$entity); 
+    }
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
