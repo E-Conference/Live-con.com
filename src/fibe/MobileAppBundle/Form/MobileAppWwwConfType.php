@@ -14,9 +14,10 @@ class MobileAppWwwConfType extends AbstractType
 {
     private $user;
 
-    public function __construct($user)
+    public function __construct($user, $entity)
     {
         $this->user = $user;
+         $this->entity = $entity;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -25,7 +26,7 @@ class MobileAppWwwConfType extends AbstractType
             ->add('logo', 'file',  array('required' => false, 
                                         'label'     => 'Logo (jpeg - png - 2MO)',
                                         'attr'  => array('placeholder'   => 'logoPath')))
-            ->add('mainConfEvent', new MobileAppWwwConfEventType($this->user),array(
+            ->add('mainConfEvent', new MobileAppWwwConfEventType($this->user, $this->entity),array(
                                         'label' => 'Conference event',
                                         'attr'  => array('class'   => 'well'))) 
         ;
