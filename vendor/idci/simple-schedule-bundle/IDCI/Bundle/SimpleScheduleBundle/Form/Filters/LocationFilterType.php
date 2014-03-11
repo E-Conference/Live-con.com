@@ -33,16 +33,17 @@ class LocationFilterType extends AbstractType
                 'attr'  => array('placeholder'  => 'Equipment')
 
             ))
+             ->add('cap_min', 'number',array(
+                'label'   => 'Cap. min',
+                'required' => false,
+               'attr'  => array('placeholder'  => 'min capacity')
+            ))
             ->add('cap_max', 'number',array(
                 'label'   => 'Cap. max',
                 'required' => false,
                 'attr'  => array('placeholder'  => 'max capacity')
             ))
-            ->add('cap_min', 'number',array(
-                'label'   => 'Cap. min',
-                'required' => false,
-               'attr'  => array('placeholder'  => 'min capacity')
-            ))
+          
             
 
 
