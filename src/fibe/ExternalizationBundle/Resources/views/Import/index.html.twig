@@ -5,13 +5,17 @@
 
         <style>
         #drop{
-                border:2px dashed #bbb;
+                border:4px dashed #bbb;
                 -moz-border-radius:5px;
                 -webkit-border-radius:5px;
                 border-radius:5px;
                 padding:25px;
                 text-align:center;
-                font:20pt bold,"Vollkorn";color:#bbb
+                font:20pt bold,"Vollkorn";
+                color:#bbb;
+        }
+        #drop > span{
+            display: block;
         }
         .col-sm-12 > .panel {
             margin-top: 1.5em;
@@ -66,8 +70,11 @@
                 </label> 
                 <div class="input-group">
     				   <span class="input-group-addon">File to import</span>
-                        <input id="datasetFile" method="POST" action="/uploadDataset" class="form-control" name="datasetFile" value="Choose your file" type="file"/>
-                        <div id="drop">Drag your file here</div>
+                        
+                        <div id="drop">
+                            <span>Drag your file here <br/> or </span>
+                            <input id="datasetFile" class="btn btn-primary " title="Search for a file to add" type="file"/>
+                        </div>
                 </div> 
             </form>  
             <h3 class="text-info">Action</h3> 
@@ -107,7 +114,7 @@
 
         <div id="page-new-mapping-file" data-progress="35" data-desc="Step 3 : Please proceed to the mapping"  class="page" style="display:none;">
             <div style="margin: 15px;"> 
-                <button id="submit-new-mapping" class="btn btn-success btn-lg"><i class="fa fa-play-circle"></i> Run your mapping </button>
+                <button id="submit-new-mapping" class="btn btn-success btn-lg"><i class="fa fa-play-circle"></i> Try your mapping </button>
             </div>
             <div id="datafile-form" class="col-sm-6 col-md-6 col-lg-6"></div>
             <div id="model-form"  class="col-sm-6 col-md-6 col-lg-6"></div>
@@ -118,11 +125,11 @@
             <button type="submit" id="send-data" class="btn btn-success btn-lg "><i class="fa fa-upload"></i> Send </button>
             <h3 class="text-info">Results</h3>
             <div id="result-extract"></div>
-        </div>        
-        <div id="page-conf-emptying" class="page" data-progress="80" data-desc="Emptying conference... "  style="display:none;">     
-        </div>        
-        <div id="page-conf-emptied" class="page" data-progress="90" data-desc="Conference emptied, now sending file... "  style="display:none;"> 
-        </div>        
+        </div>  
+
+        <div id="page-sending-file" class="page" data-progress="90" data-desc="Sending file... "  style="display:none;"> 
+        </div>   
+
         <div id="page-end" class="page" data-progress="100" data-desc="You're done !"  style="display:none;"> 
             <h3 class="text-info">Results</h3>
             <div id="result-import"></div>
@@ -165,6 +172,7 @@
 
         <script src="{{ asset('bundles/fibeexternalization/js/importer/Pager.js') }}" type="text/javascript" ></script>
         
+        <script src="{{ asset('bundles/fibeexternalization/js/importer/Mapper.js') }}" type="text/javascript" ></script>
         <script src="{{ asset('bundles/fibeexternalization/js/importer/Importer.js') }}" type="text/javascript" ></script>
         <script src="{{ asset('bundles/fibeexternalization/js/importer/dbMapping/jsonModel.js') }}" type="text/javascript" ></script>
 
@@ -177,9 +185,11 @@
         <script src="{{ asset('bundles/fibeexternalization/js/importer/xmlImport/rdf_config.js') }}" type="text/javascript" ></script>
         <script src="{{ asset('bundles/fibeexternalization/js/importer/xmlImport/ocs_config.js') }}" type="text/javascript" ></script>
 
+        <script src="{{ asset('js/bootstrap-file-input/bootstrap.file-input.js') }}"></script>  
+
         <script type="text/javascript" >
 
-        var mapper = null;
+        var mapper = new Mapper();
         $(document).ready(function(){
 
             /*********      handle change page workflow  **********/
@@ -188,14 +198,15 @@
             var selectDataFile           = document.getElementById("datasetFile");  
             var formKnownMappingFormat   = document.getElementById("form-known-mapping-format");  
             var selectKnownMappingFormat = document.getElementById("known-mapping-format");  
-            var selectFileFormat = document.getElementById("file-format");  
+            var selectFileFormat         = document.getElementById("file-format");  
             var selectMappingFile        = document.getElementById("submit-new-mapping");   
             var newMappingFile           = document.getElementById('new-mapping'); 
             var backToMapping            = document.getElementById('back-to-mapping'); 
             var sendData                 = document.getElementById('send-data'); 
             if(dropDataFile.addEventListener) {
-                dropDataFile.addEventListener('dragenter', handleDragover, false);
-                dropDataFile.addEventListener('dragover', handleDragover, false);
+                dropDataFile.addEventListener('dragenter', handleDragover, false); 
+                dropDataFile.addEventListener('dragover', handleDragover, false); 
+                dropDataFile.addEventListener('dragleave', handleDragleave, false);
                 dropDataFile.addEventListener('drop', handleDataFileChange, false);
             }
             if(selectDataFile.addEventListener) {
@@ -219,9 +230,11 @@
             } 
 
 
-
-
-
+            // prevent misdrop
+            $(document).bind('drop dragover', function (e) {
+                e.preventDefault();
+            });  
+            $("#datasetFile").bootstrapFileInput();
 
 
             /*********       run the importer and send the serialized obj to php   **********/ 
@@ -239,109 +252,20 @@
          }); 
 
         
-        //confirm with a bootstrap modal then call (or not) callback
-        function confirmEmpty(callback){ 
-            $('#confirmModal').modal('show');
-            $('#confirmModal').one('shown.bs.modal', function() {
-                $(this).find("input").first().focus();
-            }) 
-            $('#confirmModal').find("form").one("submit",function(e){
-                                    if($('#confirmEmptyInput').val() === "Empty !"){
-                                        callback();
-                                        $('#confirmModal').modal('hide');
-                                        return false;
-                                    }
-                                    else{
-                                        bootstrapAlert("info",' Conference clear cancelled.');
-                                        $('#confirmModal').modal('hide');
-                                        return false;
-                                    }
-                              });
-        }
-        //output results of import
-        function getHtmlResultDiv(data,importedLog,notImportedLog,endMsg){
-            var html='<div class="row"><div class="col-sm-4"><div class="panel panel-primary">\
-                                                  <!-- Default panel contents -->\
-                                                  <div class="panel-heading">'+(data.conference.setSummary?data.conference.setSummary:'Found datas')+'</div>';
-
-                    html+= getMsgUl(xmlMapper.getSerialisedDatas(),endMsg || "found",true);
-
-                    html+='</ul></div></div><div class="col-sm-4"><div class="panel panel-info">\
-                                                  <!-- Default panel contents -->\
-                                                  <div class="panel-heading">Imported properties : </div>\
-                                                  <ul class="list-group">'; 
-                    for(var i in importedLog){
-                        html+= '<li class="list-group-item">'+importedLog[i]+"</li>";
-                    } 
-
-                    html+= '</ul></div></div><div class="col-sm-4"><div class="panel panel-info">\
-                                                  <!-- Default panel contents -->\
-                                                  <div class="panel-heading">Not imported properties : </div>\
-                                                  <ul class="list-group">';
-                    for(var i in notImportedLog){
-                        html+= '<li class="list-group-item">'+notImportedLog[i]+"</li>";
-                    }
-
-                    return html + '</ul></div></div></div>';
-        }
-        // output imported object
-        function getMsgUl(dataArray,endString,panelMode){
-            var msg = "";
-            // if(dataArray.conference.setAcronym)msg += dataArray.conference.setAcronym;
-            // else if(dataArray.conference.setSummary)msg += dataArray.conference.setSummary;
-            msg += "<ul"+(panelMode?' class="list-group" ':'')+">"; 
-            for (var i in dataArray) 
-                if(dataArray[i] && dataArray[i].length >0)
-                    msg +="<li"+(panelMode?' class="list-group-item" ':'')+">"+dataArray[i].length +" "+i+" "+endString+" !</li>"
-
-            return msg + "</ul>";
-        }
-
-        function extractDatas(mapping,op){
-            if(!op)op={}; 
-
-              Importer().run( xmlMapper["data"],mapping,op,function(data,importedLog,notImportedLog){
-                    Pager.changePage('#page-result');
-                    xmlMapper.setSerialisedDatas(data);
-                    xmlMapper.setImportedLog(importedLog);
-                    xmlMapper.setNotImportedLog(notImportedLog);
-
-                    $("#result-extract").html(getHtmlResultDiv(data,importedLog,notImportedLog,"extracted"));
-                    bootstrapAlert("success",getMsgUl(xmlMapper.getSerialisedDatas(),"extracted"),"conference parsed : "); 
-                },function(msg)
-                { 
-                    bootstrapAlert("warning", msg || "there was an error during extraction of datas","Error :"); 
-                    // console.log(Mapper["data"],mapping)
-                }
-            ); 
-              
-            // run( Mapper["data"],mapping,op,function(data,importedLog,notImportedLog){
-            //         Pager.changePage('#page-result');
-            //         Mapper.setSerialisedDatas(data);
-            //         Mapper.setImportedLog(importedLog);
-            //         Mapper.setNotImportedLog(notImportedLog);
-
-            //         $("#result-extract").html(getHtmlResultDiv(data,importedLog,notImportedLog,"extracted"));
-            //         bootstrapAlert("success",getMsgUl(Mapper.getSerialisedDatas(),"extracted"),"conference parsed : "); 
-            //     },function(msg)
-            //     { 
-            //         bootstrapAlert("warning", msg || "there was an error during extraction of datas","Error :"); 
-            //         // console.log(Mapper["data"],mapping)
-            //     }
-            // ); 
-        }
 
 
-        function handleKnownMappingFormat(e){
+        function handleDragover(e) {
                 e.stopPropagation();
                 e.preventDefault(); 
- 
-                var mapping = xmlMapper.getKnownMapping($("#known-mapping-format").val()); 
-                xmlMapper.read("#datafile-form");
-                $("#back-to-mapping").hide();
-                $(xmlMapper).on("fileRead",function(ev,data){
-                     extractDatas(mapping)
-                })
+                $("#drop").css("border-color","green")
+                           .find("> span").css({"color":"#444"});
+        }
+
+        function handleDragleave(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                $("#drop").css("border-color","#bbb")
+                           .find("> span").css({"color":"#bbb"});
         }
 
 
@@ -349,8 +273,6 @@
 
                 e.stopPropagation();
                 e.preventDefault();
-
-                console.log("drop");
               
                 Pager.changePage('#page-mapping-file');
                 var file = "";
@@ -358,31 +280,39 @@
                     file = e.dataTransfer.files[0];
                 }else{
                     file = this.files[0];
-                }
-                xmlMapper.initialize(file);
-                var worker = new Worker("{{ asset('bundles/fibeexternalization/js/importer/xlsxImport/xlsxWorker.js') }}");
-                xlsxMapper.initialize(worker, file);
+                } 
+                mapper.setFile(file);
                
         }
+        
 
-        function handleDragover(e) {
+        function handleKnownMappingFormat(e){
                 e.stopPropagation();
-                e.preventDefault();
-                e.dataTransfer.dropEffect = 'copy';
+                e.preventDefault(); 
+ 
+                $("#back-to-mapping").hide();
+                $(mapper).on("fileRead",function(ev,data){
+                    extractDatas();
+                })
+                mapper.setKnownMapping($("#known-mapping-format").val())
+                      .readFile();
+                      console.debug(mapper.getMapping())
         }
 
-        function handleBackToMapping(e){
+         function handleImport(e) {
                 e.stopPropagation();
                 e.preventDefault();
-                Pager.changePage('#page-new-mapping-file');
+                mapper.generateMappingFile(); 
+                extractDatas();  
+                $("#back-to-mapping").show();
         }
 
         function handleSendSerializedConf(e) {
                 e.stopPropagation();
                 e.preventDefault();
- 
-                    bootstrapAlert("info",' sending file...',"Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
-                    sendSerializedConf(xmlMapper.getSerialisedDatas()); 
+                Pager.changePage('#page-sending-file'); 
+                bootstrapAlert("info",' sending file...',"Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
+                sendSerializedConf(mapper["serialisedDatas"]); 
 
                 //send file
                 function sendSerializedConf(dataArray){
@@ -398,9 +328,9 @@
                             Pager.changePage('#page-end');  
                             
                             $("#result-import").html(
-                                getHtmlResultDiv(xmlMapper.getSerialisedDatas(),xmlMapper.getImportedLog(),xmlMapper.getNotImportedLog())
+                                getHtmlResultDiv(mapper["serialisedDatas"],mapper["importedLog"],mapper["notImportedLog"])
                             );
-                            bootstrapAlert("success",getMsgUl(xmlMapper.getSerialisedDatas(),"imported"),"Conference imported : "); 
+                            bootstrapAlert("success",getMsgUl(mapper["serialisedDatas"],"imported"),"Conference imported : "); 
                         },
                         error:function(a,b,c)
                         {
@@ -411,37 +341,123 @@
                         },
                     });
                 }
-        }
-
-
-         function handleImport(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                var mapping = mapper.generateMappingFile(); 
-                extractDatas(mapping);  
-                $("#back-to-mapping").show();
-        }
+        } 
 
         function handleNewMappingFile(e) {
 
                 e.stopPropagation();
                 e.preventDefault();
- 
+                
                 if($("#file-format").val() == "xml"){
-                    mapper = xmlMapper;
+                    mapper.setMapper(xmlMapper); 
                 }else{
-                    mapper = xlsxMapper;
+                    var worker = new Worker("{{ asset('bundles/fibeexternalization/js/importer/xlsxImport/xlsxWorker.js') }}");
+                    xlsxMapper.setWorker(worker);
+                    mapper.setMapper(xlsxMapper); 
                 }
 
                 Pager.changePage('#page-new-mapping-file');
-                mapper.read("#datafile-form");
                 $(mapper).on("fileRead",function(ev,data){
-                    this.map( data);
+                    this.map($("#datafile-form"));
                     Model.initialize(this);
-                })
-
-
+                });
+                mapper.readFile();
                 Model.modelToTab($("#model-form")) ;
+        }
+
+        function handleBackToMapping(e){
+                e.stopPropagation();
+                e.preventDefault();
+                Pager.changePage('#page-new-mapping-file');
+        }
+
+        function extractDatas(op){
+            if(!op)op={}; 
+
+                      console.debug(mapper.getMapping())
+            Importer().run( 
+                mapper.getData(),
+                mapper.getMapping(),
+                op,
+                function(data,importedLog,notImportedLog){
+                    Pager.changePage('#page-result');
+                    mapper["serialisedDatas"] = data;
+                    mapper["importedLog"]     = importedLog;
+                    mapper["notImportedLog"]  = notImportedLog; 
+
+                    $("#result-extract").html(getHtmlResultDiv(data,importedLog,notImportedLog,"extracted"));
+                    bootstrapAlert("success",getMsgUl(mapper["serialisedDatas"],"extracted"),"conference parsed : "); 
+                },function(msg)
+                { 
+                    bootstrapAlert("warning", msg || "there was an error during extraction of datas","Error :"); 
+                    // console.log(Mapper["data"],mapping)
+                }
+            );  
+        }
+
+
+
+        //output results of import
+        function getHtmlResultDiv(data,importedLog,notImportedLog,endMsg){
+            var html='<div class="row"><div class="col-md-12 col-lg-4"><div class="panel panel-primary">\
+                                                  <!-- Default panel contents -->\
+                                                  <div class="panel-heading">'+(data.conference.setSummary?data.conference.setSummary:'Found datas')+'</div>';
+
+                    html+= getMsgUl(mapper["serialisedDatas"],endMsg || "found",true);
+
+                    html+='</ul></div></div><div class="col-sm-6 col-lg-4"><div class="panel panel-info">\
+                                                  <!-- Default panel contents -->\
+                                                  <div class="panel-heading">Imported properties : </div>\
+                                                  <ul class="list-group">'; 
+                    for(var i in importedLog){
+                        html+= '<li class="list-group-item">'+importedLog[i]+"</li>";
+                    } 
+
+                    html+= '</ul></div></div><div class="col-sm-6 col-lg-4"><div class="panel panel-info">\
+                                                  <!-- Default panel contents -->\
+                                                  <div class="panel-heading">Not imported properties : </div>\
+                                                  <ul class="list-group">';
+                    for(var i in notImportedLog){
+                        html+= '<li class="list-group-item">'+notImportedLog[i]+"</li>";
+                    }
+
+                    return html + '</ul></div></div></div>';
+        }
+
+        //confirm with a bootstrap modal then call callback
+        function confirmEmpty(callback){
+            var confirmModal = $('#confirmModal');
+            confirmModal
+                .modal('show')
+                .one('shown.bs.modal', function() {
+                    $(this).find("input").first().focus();
+                })
+                .find("form")
+                    .one("submit",function(e){
+                        if(confirmModal.find("input") === "Empty !"){
+                            callback();
+                            confirmModal.modal('hide');
+                            return false;
+                        }
+                        else{
+                            bootstrapAlert("info",' Conference clear cancelled.');
+                            confirmModal.modal('hide');
+                            return false;
+                        }
+                    });
+        }
+
+        // output imported object
+        function getMsgUl(dataArray,endString,panelMode){
+            var msg = "";
+            // if(dataArray.conference.setAcronym)msg += dataArray.conference.setAcronym;
+            // else if(dataArray.conference.setSummary)msg += dataArray.conference.setSummary;
+            msg += "<ul"+(panelMode?' class="list-group" ':'')+">"; 
+            for (var i in dataArray) 
+                if(dataArray[i] && dataArray[i].length >0)
+                    msg +="<li"+(panelMode?' class="list-group-item" ':'')+">"+dataArray[i].length +" "+i+" "+endString+" !</li>"
+
+            return msg + "</ul>";
         }
 
 
