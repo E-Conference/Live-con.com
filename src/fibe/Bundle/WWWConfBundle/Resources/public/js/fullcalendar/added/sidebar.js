@@ -9,7 +9,7 @@ function Sidebar(readOnly){
  
         var eventHtml =  "<div class='external-event fc-event"+(readOnly?" fc-event-draggable":"")+" fc-event-sidebar'></div>";
         var $sidebarTmp = $(eventHtml);
- 
+        
         var readOnly = readOnly ;
         function populate(url){ 
         $.get(
@@ -81,10 +81,11 @@ function Sidebar(readOnly){
         } 
 
         function sidebarDraggable($event,event,prepend){
-          if(prepend===true)$event.prependTo($sidebar);
-          else $event.appendTo($sidebar);
+          var $sidebarScrollable = $sidebar.find(" .mCSB_container").length==1?$sidebar.find(".mCSB_container"):$sidebar; 
+          if(prepend===true)$event.prependTo($sidebarScrollable);
+          else $event.appendTo($sidebarScrollable);
 
-          $sidebarTmp.prependTo($sidebar); 
+          $sidebarTmp.prependTo($sidebarScrollable); 
 
           sidebarEventHtml($event,event);
 
