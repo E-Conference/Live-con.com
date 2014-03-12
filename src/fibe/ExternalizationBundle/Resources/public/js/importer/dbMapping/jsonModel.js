@@ -243,7 +243,6 @@ Model = {
 	        mainPanel.append(modelPanel);
         };
         
-        
  
 		$(".model-node").droppable({
 			accept: ".map-node" ,
@@ -259,8 +258,7 @@ Model = {
 			        }
 			        $(this).addClass("list-group-item-success") 
 			        var $this =$(this); 
-		        		setTimeout(function() {validateParentPanel($this);
-		        	},1);
+		        	validateParentPanel($this);
 			},
 			out: function( event, ui ) { 
 	        	$(this).removeClass("list-group-item-success")
@@ -268,29 +266,31 @@ Model = {
 		        	$(this).addClass("list-group-item-"+$(this).data("oldStyle")) ;
 		        }
 		        var $this =$(this); 
-	        		setTimeout(function() {validateParentPanel($this);
+	        	setTimeout(function() {
+	        		validateParentPanel($this);
 	        	},1); 
 			},
-			drop: function( event, ui ) {  
-		        // $(this).removeClass("list-group-item-success")
-		        mapper.dataLinks[$(this).data("model-path")] = {nodePath : ui.draggable.data("node-path")};
-		        $(this).attr("data-node-path", ui.draggable.data("node-path"));
+			drop: function( event, ui ) {   
+        		mapper.addDataLink($(this).data("model-path"),ui.draggable.data("node-path")); 
 
-		        var indicator = $("<a href='#' style='float:right' class='btn-danger btn'><i class='fa fa-trash-o'></i>"+ui.draggable.data("node-path")+"</a>");
+		        var indicator = $("<a href='#' style='float:right' class='btn-danger btn btn-xs'><i class='fa fa-trash-o'></i> "+ui.draggable.data("node-path")+"</a>");
 		        indicator.click({target : $(this)}, function(ev){
-		        	mapper.dataLinks[$(this).data("model-path")] = null;
-		        	target.attr("data-node-path", "");
-		        	target.removeClass("list-group-item-success");
+		        	mapper.removeDataLink[$(this).data("model-path")];
+		        	var parent = $(this).parent().removeClass("list-group-item-success"); 
+		        	if(parent.data("required"))parent.addClass("list-group-item-danger")
+	        		validateParentPanel(parent);
+		        	$(this).remove();
+		        	return false;
 		        })
-		        $(this).append(indicator);
-		        console.log(Model.mapper.dataLinks);  
+		        $(this).find("> .btn").remove();
+		        $(this).append(indicator); 
 			}
 		});
 
 		function validateParentPanel($div){
 
 		        var panelDiv = $div.parent().parent(); 
-		        if($div.siblings(".list-group-item-danger").length==0){
+		        if($div.siblings(".list-group-item-danger").length==0 && !$div.hasClass("list-group-item-danger")){
 		        	panelDiv.addClass("panel-success")
 		        	panelDiv.removeClass("panel-danger")
 		        }else{
