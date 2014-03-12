@@ -40,19 +40,19 @@ function Importer() {
 
     function run(file,mapping,op,callback,fallback){ 
         
-        var mappingConfig = mapping; 
-        this.setMappingConfig(mappingConfig)
         if(!file)
         {
             if(fallback!=undefined)fallback("Error with the file."); 
             return;
-        } 
-        if(!mappingConfig)
+        }
+        if(!mapping)
         {
             if(fallback!=undefined)fallback("Error with the mapping config."); 
             return;
         }  
-        console.log("mapping with : ",mapping)
+        var mappingConfig = mapping; 
+        this.setMappingConfig(mappingConfig)
+        console.log("mapping with : ",mappingConfig)
 
 
         var confName ;
@@ -230,7 +230,7 @@ function Importer() {
         for (var i in dataArray){
             if(empty == true && dataArray[i] && dataArray[i].length>0)empty = false;
         }
-        if(empty == true){
+        if(empty == true && !dataArray['conference']['setSummary']){
             if(fallback!=undefined)fallback("nothing found... please check your file !"); 
             return;
         }

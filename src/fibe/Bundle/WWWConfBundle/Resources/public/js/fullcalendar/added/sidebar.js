@@ -38,7 +38,7 @@ function Sidebar(readOnly){
             // if(!isInstant(instant_events[i])) continue;
             var $event = $(eventHtml);
             var event = new CalEvent(instant_events[i]); 
-            $event = sidebarDraggable($event,event); 
+            $event = sidebarDraggable($event,event);
             Events[event.id]['elem'] = $event;
           } 
  
