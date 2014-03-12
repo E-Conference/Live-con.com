@@ -22,10 +22,12 @@ function Importer() {
     this.run = run;
 
     this.doFormat = doFormat;
+    this.getNodeName = getNodeName;
     this.getArrayId = getArrayId;
 
 
-    var notImportedLog,
+    var self = this,
+        notImportedLog,
         importedLog,
         objectMap,
         objectsIndexes,
@@ -303,7 +305,7 @@ function Importer() {
                      
                  //post processing
                 if(mapping.postProcess){
-                    if(mapping.postProcess(node,rtnArray) === true){
+                    if(mapping.postProcess(node,rtnArray,self.getNodeName(node)) === true){
                         //if it was the main conf event
                         //register in the objectmap index
                         conference = rtnArray;
@@ -473,6 +475,157 @@ function Importer() {
         return {start:start.format(),end:end.format()}
     } 
 
+    function getMappingPath(mapping){
+        var rtn = [];
+        for(var i in mapping.format){
+            rtn.push(mapping.format[i].arg[0]) ;
+        }
+        return rtn.join("/");
+    }
+
+
+    /**
+     *  Public function Importer().doFormat 
+     *     used to parse a node according to a format object 
+     * @param  {Object} node    the thing to parse
+     * @param  {Object} format  format instruction object (see ocs_config / rdf_config for examples )
+     * @param  {Boolean} log    verbose mode
+     * @return {Object|String}  the extracted node | nodeset | value
+     */
+    function doFormat(node,format,log){
+        var rtn = node;
+        if(isFunction(format)){
+           return format(rtn); 
+        } 
+        for (var i in format){ 
+            var currentFormat = format[i];
+            rtn = utils[this.mappingConfig.util][currentFormat.fn](rtn,currentFormat.arg,log)  
+        }
+        return rtn; 
+    }
+    function getNodeName(node){ 
+       return utils[this.mappingConfig.util].getNodeName(node);
+    }
+
+    //data manipulation functions used by doFormat
+    var utils = {
+        xlsUtil : {},
+        xmlUtil : { 
+            //*internal* : do not use this function in any format or config file
+            getNodeName : function(node){
+                var nodeName =  Importer().doFormat(node,Importer().mappingConfig.getNodeName.format);
+                // console.warn("undefined nodename for",node)
+                return (nodeName ? nodeName.toLowerCase() : undefined);
+            },
+            /*********************  node manipulation : return a string *******************/
+            text : function(node){
+                return $(node).text();
+            },
+            localName : function(node){
+                return node.localName;
+            },
+            //get a rdf nodeName
+            rdfNodeName : function(node,arg){
+                var node = $(node)[0];
+                if(!node.localName)return;//comment
+                var uri=[];
+                var rtn;
+
+                //first, look for  <rdf:type> child(ren)
+                $(node).children().each(function(){ 
+                    if(this.localName.indexOf("rdf:type")!== -1 ){ 
+                        if($(this).attr('rdf:resource').indexOf("#")!== -1 ){ 
+                            uri.push($(this).attr('rdf:resource').split('#')[1]); 
+                        }
+                        else{
+                            var nodeName = $(this).attr('rdf:resource').split('/'); 
+                            uri.push(nodeName[nodeName.length-1]);  
+                        }
+                    } 
+                });  
+                for(var i in uri){
+                    var lc = uri[i].toLowerCase();
+                    if(lc.indexOf('keynotetalk')>-1){
+                        rtn = 'KeynoteEvent'; 
+                    }
+                }
+                var lc = node.localName.toLowerCase();
+                if(lc.indexOf('keynotetalk')>-1){
+                    rtn = 'KeynoteEvent'; 
+                }
+                else if(uri.length==1)
+                {
+                    rtn = uri[0];
+                }
+                else if(uri.length==0) //rdf
+                { 
+                    rtn = node.localName;
+                } 
+                return rtn;
+            },
+            // get a specific attr for the given node
+            //arg[0] must contain the wanted attr
+            attr : function(node,arg){
+                return $(node).attr(arg[0]);
+            },
+
+            /********************* nodeSet && node manipulation : return jquery Node or NodeSet *******************/
+            
+            // get a specific node in a nodeSet
+            //arg[0] must contain the wanted nodeName
+            node : function(nodes,arg){
+                var rtnNode;
+                var seekedNodeName = arg[0].toLowerCase();
+                $(nodes).each(function(){ 
+                    var nodeName = self.getNodeName(this);  
+                    if(nodeName && nodeName.toLowerCase() === seekedNodeName){
+                        rtnNode = $(this);
+                    }
+                })
+                return rtnNode;
+            }, 
+            // get specific children in a nodeSet ( case sensitive )
+            //arg[0] string : must contain the wanted children nodeName 
+            //arg[1] bool   : option to match with substring containment
+            children : function(node,arg){
+                var rtnNodeSet= [];
+                var seekedChildNodeName = arg[0].toLowerCase();
+                var matchTest = arg[1] === true ? function(a,b){return a.indexOf(b) > -1} 
+                                                : function(a,b){ return a === b};
+                $.each(node,function(){
+                    $(this).children().each(function(){
+                        var childNodeName = self.getNodeName(this); 
+                        if(childNodeName && matchTest(childNodeName,seekedChildNodeName)){ 
+                            rtnNodeSet.push($(this));
+                        } 
+                    })
+                })
+                return $(rtnNodeSet);
+            },
+            // get the first specific child in a nodeSet ( case insensitive )
+            //arg[0] must contain the wanted child nodeName 
+            child : function(node,arg){
+                // return $(node).children(childNodeName);
+                var rtnNode;
+                var seekedChildNodeName = arg[0].toLowerCase();
+                $(node).children().each(function(){
+                    if(rtnNode)return;
+                    var childNodeName = self.getNodeName(this);
+                    if(childNodeName && childNodeName === seekedChildNodeName){
+                        rtnNode = $(this);
+                    }
+                })
+                return rtnNode;
+            },
+        }
+    }
+
+    function isFunction(functionToCheck) {
+        var getType = {};
+        return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+    }
+
+
     function str_format(string){
         // return string ;
         // return $('<div/>').text(string).html();
@@ -500,152 +653,5 @@ function Importer() {
         for (key in obj)if (obj.hasOwnProperty(key)) size++;
         return size;
     };
-
-
-    /**
-     *  Public function Importer().doFormat 
-     *     used to parse a node according to a format object 
-     * @param  {Object} node    the thing to parse
-     * @param  {Object} format  format instruction object (see ocs_config / rdf_config for examples )
-     * @param  {Boolean} log    verbose mode
-     * @return {Object|String}  the extracted value
-     */
-    function doFormat(node,format,log){
-        var rtn = node;
-        if(isFunction(format)){
-           return format(rtn); 
-        } 
-        for (var i in format){ 
-            var currentFormat = format[i];
-            rtn = utils[mappingConfig.util][currentFormat.fn](rtn,currentFormat.arg,log)  
-        }
-        return rtn;
-
-
-        //data manipulation
-        utils = {
-            xlsUtil : {},
-            xmlUtil : { 
-                //*internal* : do not use this function in any format or config file
-                getNodeName : function(node){
-                    var nodeName =  Importer().doFormat(node,Importer().mappingConfig.getNodeName.format);
-                    // console.warn("undefined nodename for",node)
-                    return (nodeName ? nodeName.toLowerCase() : undefined);
-                },
-                /*********************  node manipulation : return a string *******************/
-                text : function(node){
-                    return $(node).text();
-                },
-                localName : function(node){
-                    return node.localName;
-                },
-                //get a rdf nodeName
-                rdfNodeName : function(node,arg){
-                    var node = $(node)[0];
-                    if(!node.localName)return;//comment
-                    var uri=[];
-                    var rtn;
-
-                    //first, look for  <rdf:type> child(ren)
-                    $(node).children().each(function(){ 
-                        if(this.localName.indexOf("rdf:type")!== -1 ){ 
-                            if($(this).attr('rdf:resource').indexOf("#")!== -1 ){ 
-                                uri.push($(this).attr('rdf:resource').split('#')[1]); 
-                            }
-                            else{
-                                var nodeName = $(this).attr('rdf:resource').split('/'); 
-                                uri.push(nodeName[nodeName.length-1]);  
-                            }
-                        } 
-                    });  
-                    for(var i in uri){
-                        var lc = uri[i].toLowerCase();
-                        if(lc.indexOf('keynotetalk')>-1){
-                            rtn = 'KeynoteEvent'; 
-                        }
-                    }
-                    var lc = node.localName.toLowerCase();
-                    if(lc.indexOf('keynotetalk')>-1){
-                        rtn = 'KeynoteEvent'; 
-                    }
-                    else if(uri.length==1)
-                    {
-                        rtn = uri[0];
-                    }
-                    else if(uri.length==0) //rdf
-                    { 
-                        rtn = node.localName;
-                    } 
-                    return rtn;
-                },
-                // get a specific attr for the given node
-                //arg[0] must contain the wanted attr
-                attr : function(node,arg){
-                    return $(node).attr(arg[0]);
-                },
-
-                /********************* nodeSet && node manipulation : return jquery Node or NodeSet *******************/
-                
-                // get a specific node in a nodeSet
-                //arg[0] must contain the wanted nodeName
-                node : function(nodes,arg){
-                    var rtnNode;
-                    var seekedNodeName = arg[0].toLowerCase();
-                    $(nodes).each(function(){ 
-                        var nodeName = Importer().util.getNodeName(this);  
-                        if(nodeName && nodeName.toLowerCase() === seekedNodeName){
-                            rtnNode = $(this);
-                        }
-                    })
-                    return rtnNode;
-                }, 
-                // get specific children in a nodeSet ( case sensitive )
-                //arg[0] string : must contain the wanted children nodeName 
-                //arg[1] bool   : option to match with substring containment
-                children : function(node,arg){
-                    var rtnNodeSet= [];
-                    var seekedChildNodeName = arg[0].toLowerCase();
-                    var matchTest = arg[1] === true ? function(a,b){return a.indexOf(b) > -1} 
-                                                    : function(a,b){ return a === b};
-                    $.each(node,function(){
-                        $(this).children().each(function(){
-                            var childNodeName = Importer().util.getNodeName(this); 
-                            if(childNodeName && matchTest(childNodeName,seekedChildNodeName)){ 
-                                rtnNodeSet.push($(this));
-                            } 
-                        })
-                    })
-                    return $(rtnNodeSet);
-                },
-                // get the first specific child in a nodeSet ( case insensitive )
-                //arg[0] must contain the wanted child nodeName 
-                child : function(node,arg){
-                    // return $(node).children(childNodeName);
-                    var rtnNode;
-                    var seekedChildNodeName = arg[0].toLowerCase();
-                    $(node).children().each(function(){
-                        if(rtnNode)return;
-                        var childNodeName = Importer().util.getNodeName(this);
-                        if(childNodeName && childNodeName === seekedChildNodeName){
-                            rtnNode = $(this);
-                        }
-                    })
-                    return rtnNode;
-                },
-            }
-        }
-    }
-    function getMappingPath(mapping){
-        var rtn = [];
-        for(var i in mapping.format){
-            rtn.push(mapping.format[i].arg[0]) ;
-        }
-        return rtn.join("/");
-    }
-
-    function isFunction(functionToCheck) {
-        var getType = {};
-        return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
-    }
 };//Importer Singleton 
 
