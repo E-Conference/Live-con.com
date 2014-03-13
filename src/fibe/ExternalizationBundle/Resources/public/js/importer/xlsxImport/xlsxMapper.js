@@ -19,25 +19,6 @@ xlsxMapper = {
 
 	readFile : function(file,reader){  
         reader.readAsArrayBuffer(file);
-	},
- 
-    defaultMapping : {
-        util : "xlsUtil",
-        getNodeKey : {
-            format : [{
-                fn : "attr",
-                arg : ["rdf:about"],
-            }] 
-        }, 
-        getNodeName : {
-            format : [{
-                fn : "rdfNodeName", 
-            }] 
-        },  
-    },
-
-    map : function(data,nodePath,$el,nodeCallBack,entryCallBack){
- 
 
         if(typeof Worker !== 'undefined') {
   
@@ -62,28 +43,48 @@ xlsxMapper = {
                         break; 
                     default:
                         data = to_csv(wb);
+
+                $(xlsxMapper).trigger("fileRead",[data]); 
             }
-            //TODO : add root node like a noob as a collection to permit getting 
-            //       the nodePtyPath value like /name/text ( in mapper.generateMappingFile())
-            mapper.checkIfMappingCollection(nodePath,[""]);
-            $el = nodeCallBack(nodePath,$el,tab,{panelClass:"panel-success",margin:true,collapsible:true,collapsed:false});
-            
-            //Viewing all lines in the json return file  
-            for(var i = 0; i < data.Sheet1.length; i++){
-                var currentLine = data.Sheet1[i];
-                //Viewing all property of a line
+	},
+ 
+    defaultMapping : {
+        util : "xlsUtil",
+        getNodeKey : {
+            format : [{
+                fn : "attr",
+                arg : ["rdf:about"],
+            }] 
+        }, 
+        getNodeName : {
+            format : [{
+                fn : "rdfNodeName", 
+            }] 
+        },  
+    },
 
-                for(var tab in currentLine){
+    map : function(data,nodePath,$el,nodeCallBack,entryCallBack){
 
-                    if(tab != "__rowNum__"){ 
-                        var childNodePath = nodePath+ "/"+tab; 
-                        var $panel = nodeCallBack(childNodePath,$el,tab,{panelClass:"panel-success",margin:true,collapsible:true,collapsed:false});
-                        entryCallBack(childNodePath,$panel,currentLine[tab]);
-                    }
+        //TODO : add root node like a noob as a collection to permit getting 
+        //       the nodePtyPath value like /name/text ( in mapper.generateMappingFile())
+        mapper.checkIfMappingCollection(nodePath,[""]);
+        $el = nodeCallBack(nodePath,$el,tab,{panelClass:"panel-success",margin:true,collapsible:true,collapsed:false});
+        
+        //Viewing all lines in the json return file  
+        for(var i = 0; i < data.Sheet1.length; i++){
+            var currentLine = data.Sheet1[i];
+            //Viewing all property of a line
+
+            for(var tab in currentLine){
+
+                if(tab != "__rowNum__"){ 
+                    var childNodePath = nodePath+ "/"+tab; 
+                    var $panel = nodeCallBack(childNodePath,$el,tab,{panelClass:"panel-success",margin:true,collapsible:true,collapsed:false});
+                    entryCallBack(childNodePath,$panel,currentLine[tab]);
                 }
             }
-            $(xlsxMapper).trigger("mapEnd");  
         }
+        $(xlsxMapper).trigger("mapEnd");   
     }, 
 
     // generateNode : function(nodeId){
@@ -130,4 +131,30 @@ xlsxMapper = {
             });
             return result.join("\n");
     },  
+
+    utils : {
+        // get specific children in a nodeSet ( case sensitive )
+        //arg[0] string : contains the seeked children nodeName. if undefined returns all
+        //arg[1] bool   : option to match with substring containment
+        children : function(node,arg){
+            if(!arg)return node;
+            var rtnNodeSet= [],
+                seekAllChar = '*',
+                seekedChildNodeName = arg[0]
+                                        ? arg[0].toLowerCase()
+                                        : seekAllChar,
+                matchTest =  arg[1] === true
+                                ? function(a,b){return a.indexOf(b) > -1}
+                                : function(a,b){ return a === b};
+            $.each(node,function(){
+                $(this).children().each(function(){
+                    var childNodeName = xlsxMapper.getNodeName(this); 
+                    if(childNodeName && matchTest(childNodeName,seekedChildNodeName)){ 
+                        rtnNodeSet.push($(this));
+                    } 
+                })
+            })
+            return $(rtnNodeSet);
+        },
+    },
 }

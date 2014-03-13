@@ -373,11 +373,11 @@
 
         function extractDatas(op){
             if(!op)op={}; 
-
-                      console.debug(mapper.getMapping())
+ 
+            Importer().setUtils(mapper.getUtils()); 
+            Importer().setMappingConfig(mapper.getMapping()); 
             Importer().run( 
-                mapper.getData(),
-                mapper.getMapping(),
+                mapper.getData(), 
                 op,
                 function(data,importedLog,notImportedLog){
                     Pager.changePage('#page-result');

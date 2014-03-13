@@ -14,11 +14,12 @@ function Importer() {
  
 
 
-    this.util = {}; 
+    
     this.mappingConfig = {};
     this.objects = objects = {};
 
     this.setMappingConfig = setMappingConfig;
+    this.setUtils = setUtils;
     this.run = run;
 
     this.doFormat = doFormat;
@@ -27,31 +28,40 @@ function Importer() {
 
 
     var self = this,
+        utils,      //data manipulation functions used by doFormat
         notImportedLog,
         importedLog,
         objectMap,
         objectsIndexes,
         fkMap,
         fkMapIndexes,
-        defaultDate = 'now';
+        defaultDate = 'now',
+        utils       = {};
+    
 
     function setMappingConfig(mappingConfig){
         this.mappingConfig = mappingConfig; 
     }
+    function setUtils(u){
+        utils = u; 
+    }
+    function getUtils(){
+        return utils; 
+    }
 
-    function run(file,mapping,op,callback,fallback){ 
+    function run(file,op,callback,fallback){ 
         
         if(!file)
         {
             if(fallback!=undefined)fallback("Error with the file."); 
             return;
         }
-        if(!mapping)
+        var mappingConfig = self.mappingConfig; 
+        if(!mappingConfig)
         {
             if(fallback!=undefined)fallback("Error with the mapping config."); 
             return;
-        }  
-        var mappingConfig = mapping; 
+        }   
         this.setMappingConfig(mappingConfig)
         console.log("mapping with : ",mappingConfig)
 
@@ -100,8 +110,8 @@ function Importer() {
             if(fallback)fallback("Wrong root node"); 
             return;
         }
-        console.log("rootNode contains "+rootNode.children().length+" children",rootNode)
-        if(rootNode.children().length ==0){
+        console.log("rootNode contains "+getChildren(rootNode).length+" children",rootNode)
+        if(getChildren(rootNode).length ==0){
             if(fallback)fallback("Empty root node"); 
             return;
         }
@@ -110,18 +120,17 @@ function Importer() {
         //////////////////////////////////////////////////////////////////////////
         ////////////////////  pre process the root node  /////////////////////////
         //////////////////////////////////////////////////////////////////////////  
+        
         if(mappingConfig.parseConference){
-
             for ( var i in mappingConfig.parseConference){
                 var confInfoMapping = mappingConfig.parseConference[i];
                 var node = rootNode;
-                if(confInfoMapping.format){ 
-                    node = Importer().doFormat(node,confInfoMapping.format);  
+                if(confInfoMapping.format){
+                    node = Importer().doFormat(node,confInfoMapping.format);
                 }
                 objects.conference[i] = node;
             }
-        } 
-
+        }
 
         //////////////////////////////////////////////////////////////////////////
         ///////////////////////////  items Processing  ///////////////////////////
@@ -213,15 +222,17 @@ function Importer() {
         {
             delete objects.locations[i]["uri"];
         }
-        var dataArray={}; 
-        dataArray['conference']=objects.conference;  
-        dataArray['persons']=objects.persons;   
-        dataArray['events']=objects.events; 
-        dataArray['proceedings']=objects.proceedings; 
-        dataArray['organizations']=objects.organizations; 
-        dataArray['topics']=objects.topics;   
-        dataArray['locations']=objects.locations;  
-        dataArray['categories']=objects.categories;
+
+        var dataArray={
+            conference   : objects.conference,
+            persons      : objects.persons,
+            events       : objects.events,
+            proceedings  : objects.proceedings,
+            organizations: objects.organizations,
+            topics       : objects.topics,
+            locations    : objects.locations,
+            categories   : objects.categories,
+        }; 
 
         console.log('---------finished---------' );
         console.log(dataArray);
@@ -281,23 +292,23 @@ function Importer() {
                 var key = Importer().doFormat(node,mappingConfig.getNodeKey.format);     
 
                 $(node).children().each(function(){ 
-                    if(mapping.label[this.localName]!== undefined){
+                    if(mapping.label[self.getNodeName(this)]!== undefined){
                         
-                        if(mapping.label[this.localName].setter){
-                            var nodeName = this.localName;
+                        if(mapping.label[self.getNodeName(this)].setter){
+                            var nodeName = self.getNodeName(this);
 
                             //unwrapped if needed 
                             //TODO remove this option and use format instead
-                            if(mapping.label[this.localName].wrapped === true){
+                            if(mapping.label[self.getNodeName(this)].wrapped === true){
                                 $(this).children().each(function(){ 
                                     set(mapping,nodeName,this); 
                                 });
                             }else{
-                                set(mapping,nodeName,this); 
+                                set(mapping,nodeName,this);
                             }
                         }
                     }else{ 
-                        var mappingLake = getMappingPath(mapping)+" : "+this.localName; 
+                        var mappingLake = getMappingPath(mapping)+" : "+self.getNodeName(this); 
                         if($.inArray(mappingLake, notImportedLog) === -1)
                             notImportedLog.push(mappingLake); 
                     }
@@ -444,11 +455,11 @@ function Importer() {
         valueFormatted=str_format(value);
         for (var i=0;i<array.length;i++){ 
             if(array[i][field]==value || array[i][field]==valueFormatted){
-                return i; 
+                return i;
             }
         }
         return -1;
-    } 
+    }
 
 
     /**
@@ -473,7 +484,8 @@ function Importer() {
         }
         if(start.isSame(moment('5010-10-20')) || end.isSame(moment('1900-10-20')) )return undefined;
         return {start:start.format(),end:end.format()}
-    } 
+    }
+
 
     function getMappingPath(mapping){
         var rtn = [];
@@ -497,128 +509,21 @@ function Importer() {
         if(isFunction(format)){
            return format(rtn); 
         } 
-        for (var i in format){ 
+        for (var i in format){
             var currentFormat = format[i];
-            rtn = utils[this.mappingConfig.util][currentFormat.fn](rtn,currentFormat.arg,log)  
+            rtn = utils[currentFormat.fn](rtn,currentFormat.arg,log)
         }
-        return rtn; 
-    }
-    function getNodeName(node){ 
-       return utils[this.mappingConfig.util].getNodeName(node);
+        return rtn;
+    } 
+    function getChildren(node){
+       // return utils.getNodeName(node);
+       return doFormat(node,[{fn:"children"}]);
     }
 
-    //data manipulation functions used by doFormat
-    var utils = {
-        xlsUtil : {},
-        xmlUtil : { 
-            //*internal* : do not use this function in any format or config file
-            getNodeName : function(node){
-                var nodeName =  Importer().doFormat(node,Importer().mappingConfig.getNodeName.format);
-                // console.warn("undefined nodename for",node)
-                return (nodeName ? nodeName.toLowerCase() : undefined);
-            },
-            /*********************  node manipulation : return a string *******************/
-            text : function(node){
-                return $(node).text();
-            },
-            localName : function(node){
-                return node.localName;
-            },
-            //get a rdf nodeName
-            rdfNodeName : function(node,arg){
-                var node = $(node)[0];
-                if(!node.localName)return;//comment
-                var uri=[];
-                var rtn;
+    function getNodeName(node){
+        return mapper.getNodeName(node)
+    };
 
-                //first, look for  <rdf:type> child(ren)
-                $(node).children().each(function(){ 
-                    if(this.localName.indexOf("rdf:type")!== -1 ){ 
-                        if($(this).attr('rdf:resource').indexOf("#")!== -1 ){ 
-                            uri.push($(this).attr('rdf:resource').split('#')[1]); 
-                        }
-                        else{
-                            var nodeName = $(this).attr('rdf:resource').split('/'); 
-                            uri.push(nodeName[nodeName.length-1]);  
-                        }
-                    } 
-                });  
-                for(var i in uri){
-                    var lc = uri[i].toLowerCase();
-                    if(lc.indexOf('keynotetalk')>-1){
-                        rtn = 'KeynoteEvent'; 
-                    }
-                }
-                var lc = node.localName.toLowerCase();
-                if(lc.indexOf('keynotetalk')>-1){
-                    rtn = 'KeynoteEvent'; 
-                }
-                else if(uri.length==1)
-                {
-                    rtn = uri[0];
-                }
-                else if(uri.length==0) //rdf
-                { 
-                    rtn = node.localName;
-                } 
-                return rtn;
-            },
-            // get a specific attr for the given node
-            //arg[0] must contain the wanted attr
-            attr : function(node,arg){
-                return $(node).attr(arg[0]);
-            },
-
-            /********************* nodeSet && node manipulation : return jquery Node or NodeSet *******************/
-            
-            // get a specific node in a nodeSet
-            //arg[0] must contain the wanted nodeName
-            node : function(nodes,arg){
-                var rtnNode;
-                var seekedNodeName = arg[0].toLowerCase();
-                $(nodes).each(function(){ 
-                    var nodeName = self.getNodeName(this);  
-                    if(nodeName && nodeName.toLowerCase() === seekedNodeName){
-                        rtnNode = $(this);
-                    }
-                })
-                return rtnNode;
-            }, 
-            // get specific children in a nodeSet ( case sensitive )
-            //arg[0] string : must contain the wanted children nodeName 
-            //arg[1] bool   : option to match with substring containment
-            children : function(node,arg){
-                var rtnNodeSet= [];
-                var seekedChildNodeName = arg[0].toLowerCase();
-                var matchTest = arg[1] === true ? function(a,b){return a.indexOf(b) > -1} 
-                                                : function(a,b){ return a === b};
-                $.each(node,function(){
-                    $(this).children().each(function(){
-                        var childNodeName = self.getNodeName(this); 
-                        if(childNodeName && matchTest(childNodeName,seekedChildNodeName)){ 
-                            rtnNodeSet.push($(this));
-                        } 
-                    })
-                })
-                return $(rtnNodeSet);
-            },
-            // get the first specific child in a nodeSet ( case insensitive )
-            //arg[0] must contain the wanted child nodeName 
-            child : function(node,arg){
-                // return $(node).children(childNodeName);
-                var rtnNode;
-                var seekedChildNodeName = arg[0].toLowerCase();
-                $(node).children().each(function(){
-                    if(rtnNode)return;
-                    var childNodeName = self.getNodeName(this);
-                    if(childNodeName && childNodeName === seekedChildNodeName){
-                        rtnNode = $(this);
-                    }
-                })
-                return rtnNode;
-            },
-        }
-    }
 
     function isFunction(functionToCheck) {
         var getType = {};

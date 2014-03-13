@@ -26,6 +26,10 @@ var Mapper = function(){
      
         reader.onload = function(e) {
             data = e.target.result;
+        
+            $(mapper).on("fileRead",function(ev,data){
+                extractDatas();
+            })
             $(self).trigger("fileRead",[data]);
         }
         mapper.readFile(file,reader);
@@ -33,6 +37,11 @@ var Mapper = function(){
     }
     this.generateMappingFile = function(){
         mapping = generateMappingFile();
+    }
+
+
+    this.getUtils = function(){
+        return mapper.utils; 
     }
 
     this.map = function($ctn){
@@ -103,6 +112,10 @@ var Mapper = function(){
     this.setMapper = function(m){
         mapper = m;
     }
+    this.getNodeName = function(node){
+        return mapper.getNodeName(node)
+    };
+
     this.setKnownMapping = function(formatName){  
         if(!knownFormatConfig[formatName])return console.warn("unknown formatName : "+formatName); 
         mapping = knownFormatConfig[formatName].mapping;
