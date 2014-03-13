@@ -76,48 +76,48 @@ class fillDatabaseUpCommand extends ContainerAwareCommand
         $em->persist($roleType);
 
         //Social Service 
-        $socialService = new SocialService(); 
-        $socialService->setName("Facebook");
-        $em->persist($socialService);
+        // $socialService = new SocialService(); 
+        // $socialService->setName("Facebook");
+        // $em->persist($socialService);
 
-        $socialService = new SocialService(); 
-        $socialService->setName("Twitter");
-        $em->persist($socialService);
+        // $socialService = new SocialService(); 
+        // $socialService->setName("Twitter");
+        // $em->persist($socialService);
 
-        $socialService = new SocialService(); 
-        $socialService->setName("LinkedIn");
-        $em->persist($socialService);
+        // $socialService = new SocialService(); 
+        // $socialService->setName("LinkedIn");
+        // $em->persist($socialService);
 
-        //Equipments
-        $equipment = new Equipment(); 
-        $equipment->setLabel("Computer")
-                  ->setIcon("laptop");
-        $em->persist($equipment);
+        // //Equipments
+        // $equipment = new Equipment(); 
+        // $equipment->setLabel("Computer")
+        //           ->setIcon("laptop");
+        // $em->persist($equipment);
 
-        $equipment = new Equipment(); 
-        $equipment->setLabel("Speaker")
-                  ->setIcon("volume-up");
-        $em->persist($equipment);
+        // $equipment = new Equipment(); 
+        // $equipment->setLabel("Speaker")
+        //           ->setIcon("volume-up");
+        // $em->persist($equipment);
 
-        $equipment = new Equipment(); 
-        $equipment->setLabel("Wifi")
-                  ->setIcon("rss");
-        $em->persist($equipment);
+        // $equipment = new Equipment(); 
+        // $equipment->setLabel("Wifi")
+        //           ->setIcon("rss");
+        // $em->persist($equipment);
 
-        $equipment = new Equipment(); 
-        $equipment->setLabel("Screen")
-                  ->setIcon("film");
-        $em->persist($equipment);
+        // $equipment = new Equipment(); 
+        // $equipment->setLabel("Screen")
+        //           ->setIcon("film");
+        // $em->persist($equipment);
 
-        $equipment = new Equipment(); 
-        $equipment->setLabel("OHP")
-                  ->setIcon("video-camera");
-        $em->persist($equipment);
+        // $equipment = new Equipment(); 
+        // $equipment->setLabel("OHP")
+        //           ->setIcon("video-camera");
+        // $em->persist($equipment);
 
-        $equipment = new Equipment(); 
-        $equipment->setLabel("Microphone")
-                  ->setIcon("microphone");
-        $em->persist($equipment);
+        // $equipment = new Equipment(); 
+        // $equipment->setLabel("Microphone")
+        //           ->setIcon("microphone");
+        // $em->persist($equipment);
 
         //Topic 
        /* $topic = new Topic(); 
@@ -162,92 +162,92 @@ class fillDatabaseUpCommand extends ContainerAwareCommand
         //               ->setParent($OrganisedEvent);
         // $em->persist($AcademicEvent);
         // non academic
-        $SocialEvent = new Category(); 
-        $SocialEvent->setName("SocialEvent");
-         $SocialEvent->setLabel("Social event")
-                     ->setColor("#B186D7")
-                    // ->setParent($NonAcademicEvent)
-                    ;
-        $em->persist($SocialEvent);
+        // $SocialEvent = new Category(); 
+        // $SocialEvent->setName("SocialEvent");
+        //  $SocialEvent->setLabel("Social event")
+        //              ->setColor("#B186D7")
+        //             // ->setParent($NonAcademicEvent)
+        //             ;
+        // $em->persist($SocialEvent);
          
-        $MealEvent = new Category(); 
-        $MealEvent->setName("MealEvent");
-        $MealEvent->setLabel("Meal Event")
-                  ->setColor("#00a2e0")
-                  // ->setParent($NonAcademicEvent)
-                  ;
-        $em->persist($MealEvent);
+        // $MealEvent = new Category(); 
+        // $MealEvent->setName("MealEvent");
+        // $MealEvent->setLabel("Meal Event")
+        //           ->setColor("#00a2e0")
+        //           // ->setParent($NonAcademicEvent)
+        //           ;
+        // $em->persist($MealEvent);
         
-        $BreakEvent = new Category(); 
-        $BreakEvent->setName("BreakEvent");
-        $BreakEvent->setLabel("Break event")
-                  ->setColor("#00a2e0")
-                  // ->setParent($NonAcademicEvent)
-                  ;
-        $em->persist($BreakEvent); 
+        // $BreakEvent = new Category(); 
+        // $BreakEvent->setName("BreakEvent");
+        // $BreakEvent->setLabel("Break event")
+        //           ->setColor("#00a2e0")
+        //           // ->setParent($NonAcademicEvent)
+        //           ;
+        // $em->persist($BreakEvent); 
 
-        // academic
+        // // academic
 
-        $KeynoteEvent = new Category();
-        $KeynoteEvent->setName("KeynoteEvent");
-        $KeynoteEvent->setLabel("Keynote event")
-                 ->setColor("#afcbe0")
+        // $KeynoteEvent = new Category();
+        // $KeynoteEvent->setName("KeynoteEvent");
+        // $KeynoteEvent->setLabel("Keynote event")
+        //          ->setColor("#afcbe0")
+        //           // ->setParent($AcademicEvent)
+        //           ;
+        // $em->persist($KeynoteEvent);
+
+        // $TrackEvent = new Category();
+        // $TrackEvent->setName("TrackEvent");
+        // $TrackEvent->setLabel("Track event")
+        //           ->setColor("#afcbe0")
+        //           // ->setParent($AcademicEvent)
+        //           ;
+        // $em->persist($TrackEvent);
+
+        // $PanelEvent = new Category(); 
+        // $PanelEvent->setName("PanelEvent");
+        // $PanelEvent->setLabel("Panel event")
+        //           ->setColor("#e7431e")
+        //           // ->setParent($AcademicEvent)
+        //           ;
+        // $em->persist($PanelEvent);
+
+        // $ConferenceEvent = new Category(); 
+        // $ConferenceEvent->setName("ConferenceEvent");
+        // $ConferenceEvent->setLabel("Conference event")
+        //           ->setColor("#b0ca0f")
+        //           // ->setParent($AcademicEvent)
+        //           ;
+        // $em->persist($ConferenceEvent);
+
+        // $WorkshopEvent = new Category(); 
+        // $WorkshopEvent->setName("WorkshopEvent");
+        //  $WorkshopEvent->setLabel("Workshop event")
+        //           ->setColor("#EBD94E")
+        //           // ->setParent($AcademicEvent)
+        //           ;
+        // $em->persist($WorkshopEvent);
+
+        // $SessionEvent = new Category(); 
+        // $SessionEvent->setName("SessionEvent");
+        //  $SessionEvent->setLabel("Session event")
+        //           ->setColor("#8F00FF")
+        //           // ->setParent($AcademicEvent)
+        //           ;
+        // $em->persist($SessionEvent);
+
+        // $TalkEvent = new Category(); 
+        // $TalkEvent->setName("TalkEvent");
+        // $TalkEvent->setLabel("Talk event")
+        //           ->setColor("#FF5A45")
                   // ->setParent($AcademicEvent)
                   ;
-        $em->persist($KeynoteEvent);
-
-        $TrackEvent = new Category();
-        $TrackEvent->setName("TrackEvent");
-        $TrackEvent->setLabel("Track event")
-                  ->setColor("#afcbe0")
-                  // ->setParent($AcademicEvent)
-                  ;
-        $em->persist($TrackEvent);
-
-        $PanelEvent = new Category(); 
-        $PanelEvent->setName("PanelEvent");
-        $PanelEvent->setLabel("Panel event")
-                  ->setColor("#e7431e")
-                  // ->setParent($AcademicEvent)
-                  ;
-        $em->persist($PanelEvent);
-
-        $ConferenceEvent = new Category(); 
-        $ConferenceEvent->setName("ConferenceEvent");
-        $ConferenceEvent->setLabel("Conference event")
-                  ->setColor("#b0ca0f")
-                  // ->setParent($AcademicEvent)
-                  ;
-        $em->persist($ConferenceEvent);
-
-        $WorkshopEvent = new Category(); 
-        $WorkshopEvent->setName("WorkshopEvent");
-         $WorkshopEvent->setLabel("Workshop event")
-                  ->setColor("#EBD94E")
-                  // ->setParent($AcademicEvent)
-                  ;
-        $em->persist($WorkshopEvent);
-
-        $SessionEvent = new Category(); 
-        $SessionEvent->setName("SessionEvent");
-         $SessionEvent->setLabel("Session event")
-                  ->setColor("#8F00FF")
-                  // ->setParent($AcademicEvent)
-                  ;
-        $em->persist($SessionEvent);
-
-        $TalkEvent = new Category(); 
-        $TalkEvent->setName("TalkEvent");
-        $TalkEvent->setLabel("Talk event")
-                  ->setColor("#FF5A45")
-                  // ->setParent($AcademicEvent)
-                  ;
-        $em->persist($TalkEvent);
-        $em->flush();
+        // $em->persist($TalkEvent);
+        // $em->flush();
 
         $output->writeln("common rows inserted successfully");
 
-        for ( $counter = 0; $counter <= 100; $counter += 1) {
+        for ( $counter = 0; $counter <= 70; $counter += 1) {
 
              $output->writeln("conference ".$counter."started");
             //Create the default conference
@@ -287,7 +287,7 @@ class fillDatabaseUpCommand extends ContainerAwareCommand
            
             $em->persist($defaultAppConfig);
 
-            $categorie = $em->getRepository('IDCISimpleScheduleBundle:Category')->findOneByName("ConferenceEvent");
+          
             
            //Main conf event  
             $mainConfEvent = new ConfEvent();
@@ -296,8 +296,9 @@ class fillDatabaseUpCommand extends ContainerAwareCommand
             $mainConfEvent->setStartAt( new \DateTime('now'));
             $end = new \DateTime('now');
             $mainConfEvent->setEndAt( $end->add(new \DateInterval('P2D')));
-            $mainConfEvent->addCategorie($categorie);
             $mainConfEvent->setConference($conference);
+            $mainConfEvent->setComment("Livecon Conference ".$counter." comment");
+            $mainConfEvent->setUrl("http://liveconconference".$counter);
             $em->persist($mainConfEvent);
 
 
@@ -329,15 +330,15 @@ class fillDatabaseUpCommand extends ContainerAwareCommand
 
 
             $em->persist($conference); 
-            $em->flush();
+   
 
             //Create slug after persist => visibleon endpoint
             $conference->slugify();
             $em->persist($conference); 
-            $em->flush();
 
 
-            for ( $counterLoc = 0; $counterLoc <= 10; $counterLoc += 1) {
+
+            for ( $counterLoc = 0; $counterLoc <= 50; $counterLoc += 1) {
 
               $location = new Location();
               $location->setName("location".$counterLoc);
@@ -345,11 +346,13 @@ class fillDatabaseUpCommand extends ContainerAwareCommand
             }
              $em->flush();
 
-            for ( $counterEnt = 0; $counterEnt <= 300; $counterEnt += 1) {
+            for ( $counterEnt = 0; $counterEnt <= 3000; $counterEnt += 1) {
                 $person  = new Person();
                 $person->setConference($conference);
+                $person->setFamilyName("person".$counterEnt);
+                $person->setFirstName("person".$counterEnt);
                 $person->setName("person".$counterEnt);
-                $person->setDescription("person h blahblah blahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahbla".$counterEnt);
+                $person->setDescription("person ".$counterEnt." description descriptiondescription description description description description description description description description description description ");
                 $person->setImg("http://png-4.findicons.com/files/icons/61/dragon_soft/128/user.png");
                 $person->setEmail("email@lol.fr");
                 $person->setPage("mypersonnalpage.com");
@@ -371,21 +374,20 @@ class fillDatabaseUpCommand extends ContainerAwareCommand
                 $paper->setConference($conference);
                 $paper->setTitle("paper".$counterEnt);
                 $paper->setUrl("paper url".$counterEnt);
-                $paper->setAbstract("paper blah blahblah blahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblah");
+                $paper->setAbstract("paper".$counterEnt."abstact abstact abstact abstact abstact abstact abstact abstact abstact abstact abstact abstact abstact abstact abstact abstact abstact ");
                 $paper->addTopic($topic);
                 $paper->addAuthor($person);
 
                 $event  = new ConfEvent();
                 $event->setConference($conference);
-                $event->addCategorie($SessionEvent);
                 $event->setStartAt(new \DateTime('now'));
                 $end = new \DateTime('now');
                 $event->setEndAt( $end->add(new \DateInterval('P2D')));
-                $event->setSummary("event lah blahblah blahblahblahblahblahblahblahblahblahblahblah".$counterEnt);
+                $event->setSummary("event ".$counterEnt);
                 $event->setAttach("event attach".$counterEnt);
-                $event->setDescription("event blah blahblah blahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblah");
+                $event->setDescription("event ".$counterEnt." description : description description description description description description description description description description description description ");
                 $event->addPaper($paper);
-               
+                $event->setLocation($location);
 
                 $role  = new Role();
                 $role->setConference($conference);
@@ -400,11 +402,8 @@ class fillDatabaseUpCommand extends ContainerAwareCommand
                 $em->persist($role);
                 $em->persist($event);
                 $em->persist($person);
-
-
+            
             }
-
-        
         }
          $TalkEvent = new Category(); 
 
