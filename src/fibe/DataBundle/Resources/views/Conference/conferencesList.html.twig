@@ -10,7 +10,7 @@
                          <h4> {{conference.getConfName()}}</h4>
                   </div>
                   <div class="panel-body">
-                           <img src="{{ asset('uploads/')}}{{conference.logoPath}}" style="height:80px;width:auto;display: block;max-width: 100%;" class="img-rounded show_dataconf" data-url="{{ path('mobileAppPublic_index', {slug: conference.slug} ) }}"/>                         
+                          <img src="{{ asset('uploads/')}}{{conference.logoPath}}" style="height:80px;width:auto;display: block;max-width: 100%;" class="img-rounded show_dataconf" data-url="{{path('mobileAppPublic_sparql_index', { 'slug': conference.slug })}}"/>                         
                   </div>
                 </div>
             </div>

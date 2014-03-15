@@ -217,8 +217,8 @@ define([],function() {
 			'event' : {
 				'startAt' : 'Débute à',
 				'startAtLe' : 'Débute le',
-				'endAt' : 'Fini à',
-				'endAtLe' : 'Fini le',
+				'endAt' : 'Finit à',
+				'endAtLe' : 'Finit le',
 				'subEvent' : 'Sous évènements',
 				'duration' : 'Durée',
 				'location' : 'Salle',

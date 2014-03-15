@@ -316,7 +316,7 @@ var rdfConfig = {
                     },    
                 } 
             },
-            postProcess : function(node,event){
+            postProcess : function(node,event,nodeName){
 
                 // EVENT CAT 
                 var catName
@@ -326,10 +326,10 @@ var rdfConfig = {
                 tmp = node[0].nodeName.split("swc:").join("").split("&swc;").join("").split("event:").join("");
                 if(testCatName(tmp))catName = tmp;
 
-                tmp = utils[rdfConfig.util].getNodeName(node); 
+                tmp = nodeName; 
                 if(testCatName(tmp))catName = tmp;
 
-                tmp = utils[rdfConfig.util].getNodeName(node).split("&swc;").join("").split("swc:").join("").split("event:").join("");
+                tmp = nodeName.split("&swc;").join("").split("swc:").join("").split("event:").join("");
                 if(testCatName(tmp))catName = tmp; 
      
                 if(catName){

@@ -57,7 +57,7 @@ class MobileAppPublicController extends Controller
             throw new NotFoundHttpException();
         }
         $mobile_app_config = $conference->getAppConfig();
-        $baseUri ="http://data.live-con.com/resource/conference/".$conference->getId()."/".$conference->getSlug();
+        $baseUri = "http://data.live-con.com/resource/conference/".$conference->getId()."/".$conference->getSlug();
         $apiUri = "http://data.live-con.com/sparql";
         $apiType = "sparql";
         return array(
