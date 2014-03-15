@@ -1,0 +1,536 @@
+
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY dcterms "http://purl.org/dc/terms/" >
+    <!ENTITY foaf "http://xmlns.com/foaf/0.1/" >
+    <!ENTITY dbpedia "http://dbpedia.org/property/" >
+    <!ENTITY bibo "http://purl.org/ontology/bibo/" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY dc "http://purl.org/dc/elements/1.1/" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY swrc "http://swrc.ontoware.org/ontology#" >
+    <!ENTITY vcard "http://www.w3.org/2001/vcard-rdf/3.0#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY ical "http://www.w3.org/2002/12/cal/icaltzd#" >
+    <!ENTITY geo "http://www.w3.org/2003/01/geo/wgs84_pos#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY swc "http://data.semanticweb.org/ns/swc/ontology#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.w3.org/2002/07/owl#"
+     xml:base="http://www.w3.org/2002/07/owl"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+     xmlns:foaf="http://xmlns.com/foaf/0.1/"
+     xmlns:vcard="http://www.w3.org/2001/vcard-rdf/3.0#"
+     xmlns:dcterms="http://purl.org/dc/terms/"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:bibo="http://purl.org/ontology/bibo/"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:dbpedia="http://dbpedia.org/property/"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:swrc="http://swrc.ontoware.org/ontology#"
+     xmlns:ical="http://www.w3.org/2002/12/cal/icaltzd#"
+     xmlns:swc="http://data.semanticweb.org/ns/swc/ontology#">
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <AnnotationProperty rdf:about="&foaf;made"/>
+    <AnnotationProperty rdf:about="&swrc;abstract"/>
+    <AnnotationProperty rdf:about="&swc;hasLogo"/>
+    <AnnotationProperty rdf:about="&foaf;mbox_sha1sum"/>
+    <AnnotationProperty rdf:about="&foaf;homepage"/>
+    <AnnotationProperty rdf:about="&foaf;based_near"/>
+    <AnnotationProperty rdf:about="&swc;hasLocation"/>
+    <AnnotationProperty rdf:about="&foaf;firstName"/>
+    <AnnotationProperty rdf:about="&swc;isSuperEventOf"/>
+    <AnnotationProperty rdf:about="&swrc;month"/>
+    <AnnotationProperty rdf:about="&ical;dtstart"/>
+    <AnnotationProperty rdf:about="&swc;isSubEventOf"/>
+    <AnnotationProperty rdf:about="&swrc;affiliation"/>
+    <AnnotationProperty rdf:about="&swc;heldBy"/>
+    <AnnotationProperty rdf:about="&foaf;name"/>
+    <AnnotationProperty rdf:about="&ical;description"/>
+    <AnnotationProperty rdf:about="&bibo;authorList"/>
+    <AnnotationProperty rdf:about="&swc;relatedToEvent"/>
+    <AnnotationProperty rdf:about="&dc;creator"/>
+    <AnnotationProperty rdf:about="&ical;dtend"/>
+    <AnnotationProperty rdf:about="&foaf;maker"/>
+    <AnnotationProperty rdf:about="&swc;isRoleAt"/>
+    <AnnotationProperty rdf:about="&dc;subject"/>
+    <AnnotationProperty rdf:about="&swc;holdsRole"/>
+    <AnnotationProperty rdf:about="&swc;hasRelatedDocument"/>
+    <AnnotationProperty rdf:about="&foaf;member"/>
+    <AnnotationProperty rdf:about="&ical;summary"/>
+    <AnnotationProperty rdf:about="&swc;hasRole"/>
+    <AnnotationProperty rdf:about="&foaf;lastName"/>
+    <AnnotationProperty rdf:about="&swrc;year"/>
+    <AnnotationProperty rdf:about="&swc;hasAcronym"/>
+    <AnnotationProperty rdf:about="&swrc;series"/>
+    <AnnotationProperty rdf:about="&bibo;editorList"/>
+    <AnnotationProperty rdf:about="&swc;completeGraph"/>
+    <AnnotationProperty rdf:about="&swc;isPartOf"/>
+    <AnnotationProperty rdf:about="&swrc;booktitle"/>
+    <AnnotationProperty rdf:about="&swc;hasPart"/>
+    <AnnotationProperty rdf:about="&swrc;editor"/>
+    <AnnotationProperty rdf:about="&dc;title"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Datatypes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.w3.org/2001/XMLSchema#date -->
+
+    <rdfs:Datatype rdf:about="&xsd;date"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#hasRole -->
+
+    <ObjectProperty rdf:about="&swc;hasRole">
+        <inverseOf rdf:resource="&swc;isRoleAt"/>
+        <rdfs:subPropertyOf rdf:resource="&owl;topObjectProperty"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#heldBy -->
+
+    <ObjectProperty rdf:about="&swc;heldBy">
+        <inverseOf rdf:resource="&swc;holdsRole"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#holdsRole -->
+
+    <ObjectProperty rdf:about="&swc;holdsRole"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isRoleAt -->
+
+    <ObjectProperty rdf:about="&swc;isRoleAt"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isSubEventOf -->
+
+    <ObjectProperty rdf:about="&swc;isSubEventOf"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isSubPropertyOf -->
+
+    <ObjectProperty rdf:about="&swc;isSubPropertyOf"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isSuperEventOf -->
+
+    <ObjectProperty rdf:about="&swc;isSuperEventOf">
+        <inverseOf rdf:resource="&swc;isSubEventOf"/>
+        <rdfs:subPropertyOf rdf:resource="&owl;topObjectProperty"/>
+    </ObjectProperty>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#isSuperPropertyOf -->
+
+    <ObjectProperty rdf:about="&swc;isSuperPropertyOf">
+        <inverseOf rdf:resource="&swc;isSubPropertyOf"/>
+    </ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#AcademicEvent -->
+
+    <Class rdf:about="&swc;AcademicEvent"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#BreakEvent -->
+
+    <Class rdf:about="&swc;BreakEvent">
+        <rdfs:subClassOf rdf:resource="&swc;NonAcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#Chair -->
+
+    <Class rdf:about="&swc;Chair">
+        <rdfs:subClassOf rdf:resource="&swc;Role"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#ConferenceEvent -->
+
+    <Class rdf:about="&swc;ConferenceEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#KeynoteEvent -->
+
+    <Class rdf:about="&swc;KeynoteEvent">
+        <rdfs:subClassOf rdf:resource="&swc;TalkEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#NonAcademicEvent -->
+
+    <Class rdf:about="&swc;NonAcademicEvent"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#PanelEvent -->
+
+    <Class rdf:about="&swc;PanelEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#Poster -->
+
+    <Class rdf:about="&swc;Poster"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#Presenter -->
+
+    <Class rdf:about="&swc;Presenter">
+        <rdfs:subClassOf rdf:resource="&swc;Role"/>
+    </Class>
+
+
+     <!-- http://data.semanticweb.org/ns/swc/ontology#Delegate -->
+
+    <Class rdf:about="&swc;Delegate">
+        <rdfs:subClassOf rdf:resource="&swc;Role"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#ProgrammeCommitteeMember -->
+
+    <Class rdf:about="&swc;ProgrammeCommitteeMember">
+        <rdfs:subClassOf rdf:resource="&swc;Role"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#Role -->
+
+    <Class rdf:about="&swc;Role"/>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#SessionEvent -->
+
+    <Class rdf:about="&swc;SessionEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#SocialEvent -->
+
+    <Class rdf:about="&swc;SocialEvent">
+        <rdfs:subClassOf rdf:resource="&swc;NonAcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#TalkEvent -->
+
+    <Class rdf:about="&swc;TalkEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#TrackEvent -->
+
+    <Class rdf:about="&swc;TrackEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#TutorialEvent -->
+
+    <Class rdf:about="&swc;TutorialEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://data.semanticweb.org/ns/swc/ontology#WorkshopEvent -->
+
+    <Class rdf:about="&swc;WorkshopEvent">
+        <rdfs:subClassOf rdf:resource="&swc;AcademicEvent"/>
+    </Class>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#InProceedings -->
+
+    <Class rdf:about="&swrc;InProceedings"/>
+    
+
+
+    <!-- http://swrc.ontoware.org/ontology#Proceedings -->
+
+    <Class rdf:about="&swrc;Proceedings"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/Organization -->
+
+    <Class rdf:about="&foaf;Organization"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/Person -->
+
+    <Class rdf:about="&foaf;Person"/>
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+    <!-- http://data.semanticweb.org/conference/eswc/2013 -->
+
+    <NamedIndividual rdf:about="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}">
+        <rdf:type rdf:resource="&swc;ConferenceEvent"/>
+        <rdfs:label>{{ entity.getConfName() }}</rdfs:label>
+        <ical:dtstart rdf:datatype="&xsd;date">{{ entity.getMainConfEvent().getStartAt()| date('Y-m-d H:i')}}</ical:dtstart>
+        <ical:dtend rdf:datatype="&xsd;date">{{ entity.getMainConfEvent().getEndAt()| date('Y-m-d H:i')}}</ical:dtend>
+        <swc:hasAcronym>{{ entity.getMainConfEvent().getAcronym()}}</swc:hasAcronym>
+        <foaf:homepage rdf:resource="{{ entity.getMainConfEvent().getUrl() }}"/>
+        {% for role in entity.mainConfEvent.roles %}
+        <swc:hasRole rdf:resource="http://data.live-con.com/page/role/{{entity.mainConfEvent.id}}/{{role.type.name}}"/>
+        {% endfor %}
+        <swc:hasLogo rdf:resource="{{ entity.getLogoPath() }}"/>
+        <swc:hasLocation rdf:resource="http://data.live-con.com/page/location/{{entity.getMainConfEvent().getLocation().getId()}}/{{entity.getMainConfEvent().getLocation().getSlug()}}"/>
+        <swc:hasRelatedDocument rdf:resource="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}/proceedings"/>
+        {% for event in entity.getEvents() %}
+            {% if event.isMainConfEvent == false %}
+                 <swc:isSuperEventOf rdf:resource="http://data.live-con.com/page/event/{{ event.id }}/{{ event.slug }}"/>
+            {% endif %}
+        {% endfor %}
+    </NamedIndividual>
+
+ 
+
+    <NamedIndividual rdf:about="http://data.live-con.com/page/role/{{entity.mainConfEvent.id}}/Delegate">
+        <rdf:type rdf:resource="&swc;Delegate"/>
+        <rdfs:label>{{ entity.getConfName() }}  delegate</rdfs:label>
+        <swc:isRoleAt rdf:resource="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}"/>
+        {% for role in entity.mainConfEvent.getRoles() %}
+            {% if role.type =="Delegate" %}
+                <swc:heldBy rdf:resource="http://data.live-con.com/page/person/{{role.person.id}}/{{role.person.slug}}"/>
+            {% endif %}
+        {% endfor %}
+    </NamedIndividual>
+
+    <NamedIndividual rdf:about="http://data.live-con.com/page/role/{{entity.mainConfEvent.id}}/Chair">
+        <rdf:type rdf:resource="&swc;Chair"/>
+        <rdfs:label>{{ entity.getConfName() }}  chair</rdfs:label>
+        <swc:isRoleAt rdf:resource="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}"/>
+        {% for role in entity.mainConfEvent.getRoles() %}
+            {% if role.type =="Chair" %}
+                <swc:heldBy rdf:resource="http://data.live-con.com/page/person/{{role.person.id}}/{{role.person.slug}}"/>
+            {% endif %}
+        {% endfor %}
+    </NamedIndividual>
+
+    <NamedIndividual rdf:about="http://data.live-con.com/page/role/{{entity.mainConfEvent.id}}/Presenter">
+        <rdf:type rdf:resource="&swc;Presenter"/>
+        <rdfs:label>{{ entity.getConfName() }}  presenter</rdfs:label>
+        <swc:isRoleAt rdf:resource="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}"/>
+        {% for role in entity.mainConfEvent.getRoles() %}
+            {% if role.type =="Presenter" %}
+                <swc:heldBy rdf:resource="http://data.live-con.com/page/person/{{role.person.id}}/{{role.person.slug}}"/>
+            {% endif %}
+        {% endfor %}
+    </NamedIndividual>
+
+    <NamedIndividual rdf:about="http://data.live-con.com/page/role/{{entity.mainConfEvent.id}}/ProgrammeCommitteeMember"/>
+        <rdf:type rdf:resource="&swc;ProgrammeCommitteeMember"/>
+        <rdfs:label>{{ entity.getConfName() }} programme committee member</rdfs:label>
+        <swc:isRoleAt rdf:resource="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}"/>
+        {% for role in entity.mainConfEvent.getRoles() %}
+            {% if role.type =="ProgrammeCommitteeMember" %}
+                <swc:heldBy rdf:resource="http://data.live-con.com/page/person/{{role.person.id}}/{{role.person.slug}}"/>
+            {% endif %}
+        {% endfor %}
+    </NamedIndividual>
+
+
+
+    <!-- http://data.semanticweb.org/conference/eswc/2013/proceedings -->
+
+    <NamedIndividual rdf:about="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}/proceedings">
+        <rdf:type rdf:resource="&swrc;Proceedings"/>
+        <rdfs:label>Proceedings of {{ entity.getConfName() }}</rdfs:label>
+        <swrc:booktitle>Proceedings of {{ entity.getConfName() }}</swrc:booktitle>
+        <swc:relatedToEvent rdf:resource="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}"/>
+        {% for paper in entity.papers %}
+        <swc:hasPart rdf:resource="http://data.live-con.com/page/paper/{{ paper.id }}/{{ paper.slug }}"/>
+        {% endfor %}
+    </NamedIndividual>
+
+
+  {% for event in entity.events %}
+  
+     {% if event.isMainConfEvent == false %}
+        <NamedIndividual rdf:about="http://data.live-con.com/page/event/{{event.id}}/{{event.slug}}">
+         {% for category in event.categories %}
+            <rdf:type rdf:resource="&swc;{{category.name}}"/>
+         {% endfor %}
+            <rdfs:label>{{event.summary}}</rdfs:label>
+            <dc:title>{{event.summary}}</dc:title>
+            <ical:dtstart>{{entity.startAt | date('Y-m-d H:i')}}</ical:dtstart>
+            <ical:dtend>{{entity.endAt | date('Y-m-d H:i')}}</ical:dtend>
+            <ical:duration>{{entity.duration}}</ical:duration>
+            <ical:description>{{entity.description}}</ical:description>
+            <swrc:abstract>{{entity.description}}</swrc:abstract>
+            {% for paper in event.papers %}
+            <swc:hasRelatedDocument rdf:resource="http://data.live-con.com/page/paper/{{paper.id}}/{{paper.slug}}"/>
+            {% endfor %}
+            <swc:isSubEventOf rdf:resource="http://data.live-con.com/page/event/{{event.parent.id}}/{{event.parent.slug}}"/>
+            {% for role in event.roles %}
+            <swc:hasRole rdf:resource="http://data.live-con.com/page/role/{{role.event.id}}/{{role.person.id}}/{{role.type.name}}"/>
+            {% endfor %}
+            {% if entity.location %}
+            <swc:hasLocation rdf:resource="http://data.live-con.com/page/location/{{entity.location.id}}/{{entity.location.getSlug()}}"/>
+            {% endif %}
+            {% for topic in event.topics %}
+            <dc:subject>{{topic.name}}</dc:subject>
+            {% endfor %}
+        </NamedIndividual>
+      {% endif %}
+  {% endfor %}
+
+
+
+ {% for paper in entity.papers %}
+
+    <NamedIndividual rdf:about="http://data.live-con.com/page/paper/{{paper.id}}/{{paper.slug}}">
+        <rdf:type rdf:resource="&swrc;InProceedings"/>
+        <rdfs:label>{{paper.title}}</rdfs:label>
+        <swrc:date>{{entity.publishDate()}}</swrc:date>
+        {% for topic in paper.topics %}
+        <dc:subject>{{topic.name}}</dc:subject>
+        {% endfor %}
+        <swrc:abstract>{{paper.abstract}}</swrc:abstract>
+        <dc:title>{{paper.title}}</dc:title>
+        <swc:isPartOf rdf:resource="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}/proceedings"/>
+        {% for event in paper.events %}
+        <swc:relatedToEvent rdf:resource="http://data.live-con.com/page/event/{{event.getParent().getId()}}/{{event.getParent().getSlug()}}"/>
+        {% endfor %}
+        {% for author in paper.authors %}
+        <dc:creator rdf:resource="http://data.live-con.com/page/person/{{author.id}}/{{author.slug}}"/>
+        <foaf:maker rdf:resource="http://data.live-con.com/page/person/{{author.id}}/{{author.slug}}"/>
+        {% endfor %}
+    </NamedIndividual>
+ {% endfor %}
+
+
+{% for organization in entity.organizations %}
+ <!-- http://data.semanticweb.org/organization/bouvet-asa -->
+
+    <NamedIndividual rdf:about="http://data.live-con.com/page/organization/{{organization.id}}/{{organization.slug}}">
+        <rdf:type rdf:resource="&foaf;Organization"/>
+        <rdfs:label>{{organization.name}}</rdfs:label>
+        <foaf:name>{{organization.name}}</foaf:name>
+        {% for person  in entity.members %}
+        <foaf:member rdf:resource="http://data.live-con.com/page/person/{{person.id}}/{{person.slug}}"/>
+        {% endfor %}
+    </NamedIndividual>
+{% endfor %}
+
+
+{% for person in entity.persons %}
+<!-- http://data.semanticweb.org/person/andreas-harth -->
+
+    <NamedIndividual rdf:about="http://data.live-con.com/page/person/{{person.id}}/{{person.slug}}">
+        <rdf:type rdf:resource="&foaf;Person"/>
+        <rdfs:label>{{person.firstName }} {{person.familyName}}</rdfs:label>
+        <foaf:mbox_sha1sum>{{person.emailSha1}}</foaf:mbox_sha1sum>
+        <foaf:lastName>{{person.familyName}}</foaf:lastName>
+        <foaf:firstName>{{person.firstName}}</foaf:firstName>
+        <foaf:name>{{person.firstName }} {{ person.familyName}}</foaf:name>
+        {% for role in person.roles %}
+        <swc:holdsRole rdf:resource="http://data.semanticweb.org/conference/{{ entity.id }}/{{ entity.slug }}/{{role.type.label}}"/>
+        {% endfor %}
+        {% for paper in person.papers %}
+        <foaf:made rdf:resource="http://data.live-con.com/page/paper/{{paper.id}}/{{paper.slug}}"/>
+        {% endfor %}
+        {% for organization in person.organizations %}
+        <swrc:affiliation rdf:resource="http://data.live-con.com/page/organization/{{organization.id}}/{{organization.slug}}"/>
+        <foaf:based_near rdf:resource="http://dbpedia.org/resource/{{organization.country}}"/>
+        {% endfor %}
+    </NamedIndividual>
+{% endfor %}
+
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.3.1957) http://owlapi.sourceforge.net -->

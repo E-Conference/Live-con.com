@@ -1,0 +1,25 @@
+# services:
+#     event.listener:
+#         class: fibe\Bundle\WWWConfBundle\Listener\updateChildrenDate
+#         arguments: ["@session"]
+#         tags:
+#             - { name: doctrine.event_listener, event: prePersist }
+#             - { name: doctrine.event_listener, event: preUpdate }
+
+
+services:
+    emptyConf:
+        class:        "fibe\\Bundle\\WWWConfBundle\\Services\\EmptyConf"
+
+idci_exporter:
+    entities:
+        WwwConf:
+            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\WwwConf"
+            formats:
+                xml:
+                    transformer:
+                        service: "idci_exporter.transformer_twig"
+                        options:
+#                            template_path:
+                            template_name_format: "export.xml.twig"
+

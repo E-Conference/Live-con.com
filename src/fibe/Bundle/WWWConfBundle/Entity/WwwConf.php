@@ -511,6 +511,19 @@ class WwwConf
         return $this->events;
     }
 
+     /**
+     * Get sub-events
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSubEvents()
+    {
+        $sub_events[] = $this->events;
+        $sub_events->removeElement($this->mainConfEvent); 
+        return  $sub_events;
+    }
+
+
     public function uploadLogo()
     {
         // the file property can be empty if the field is not required

@@ -129,6 +129,7 @@
                           {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
                           <li class="externalization_import_index col-xs-2 col-sm-2 col-mg-3 col-lg-3"><a href="{{ path('externalization_import_index') }}" class='ellipsis'><i class="fa fa-exchange fa-1x"></i><span> Import </span></a></li>
                           {% endif %}
+                         
                            {% block menu_page%} 
                            {% endblock menu_page %}
                       

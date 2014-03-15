@@ -170,6 +170,7 @@ class Paper
      */
     public function getSlug()
     {
+        $this->slugify();
         return $this->slug;
     }
 

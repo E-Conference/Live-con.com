@@ -52,6 +52,11 @@
                    <i class="fa fa-exchange fa-3x"></i>  Import
                  </a>
               {% endif %}
+              {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
+                 <a href="{{ path('externalization_export_index') }}">
+                   <i class="fa fa-exchange fa-3x"></i>  Export
+                 </a>
+              {% endif %}
 
             </li>
           </ul>
