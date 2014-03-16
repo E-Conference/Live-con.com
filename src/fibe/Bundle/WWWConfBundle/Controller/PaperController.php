@@ -78,6 +78,7 @@ class PaperController extends Controller
             // bind values from the request
           
              $entities = $em->getRepository('fibeWWWConfBundle:Paper')->filtering($filters->getData(), $conf);
+             $nbResult = count($entities);
 
              //Pager
              $adapter = new ArrayAdapter($entities);
@@ -91,6 +92,7 @@ class PaperController extends Controller
 
              return $this->render('fibeWWWConfBundle:Paper:list.html.twig', array(
                  'pager'  => $pager,
+                 'nbResult' => $nbResult,
              ));
         }
 

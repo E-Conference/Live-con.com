@@ -129,7 +129,7 @@
                           <li class="externalization_import_index col-xs-2 col-sm-2 col-mg-2 col-lg-2"><a href="{{ path('externalization_import_index') }}" class='ellipsis'><i class="fa fa-exchange fa-1x"></i><span> Import </span></a></li>
                           {% endif %}
                             {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
-                          <li class="externalization_import_index col-xs-2 col-sm-2 col-mg-2 col-lg-2"><a href="{{ path('externalization_export_index') }}" class='ellipsis'><i class="fa fa-exchange fa-1x"></i><span> Export </span></a></li>
+                          <li class="externalization_export_index col-xs-2 col-sm-2 col-mg-2 col-lg-2"><a href="{{ path('externalization_export_index') }}" class='ellipsis'><i class="fa fa-download fa-1x"></i><span> Export </span></a></li>
                           {% endif %}
                            {% block menu_page%} 
                            {% endblock menu_page %}

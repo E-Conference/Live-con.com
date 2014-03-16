@@ -65,7 +65,7 @@
                                     </li>-->
                                     
                                     <li>
-                                       <a href="#" onclick="removeManager({{entity.id}});location.reload();"><i class=" icon-trash"></i> Remove user from the conference</a>
+                                       <a onclick="removeManager({{entity.id}});"><i class="fa fa-trash-o"></i>  Remove user from the conference</a>
                                     </li>
                                 </ul>
                                 {% endif %}
@@ -180,8 +180,24 @@
               type: "POST",
               url: "{{path('schedule_conference_remove_manager')}}",
               data: { 'id' : managerId },
+              success: function (response) { location.reload(); }
             });
+
       };
+
+      function filter(){
+        $datas = $("#filter_form").serialize();
+
+        //start send the post request
+         $.post("{{path('schedule_confevent_filter')}}",               
+                 $datas, 
+              function(response){
+                     $('#confevent_list').html(response);
+                     $("#resultsFound").show();
+                  
+              }, "html");    
+          return false;
+    };
       
 
        //Listen change authorization select

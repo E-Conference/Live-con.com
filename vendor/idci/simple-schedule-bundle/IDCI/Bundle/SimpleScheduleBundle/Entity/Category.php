@@ -101,7 +101,7 @@ class Category
             );
         }
 
-        return $this->getName();
+        return $this->getLabel();
     }
 
     /**
