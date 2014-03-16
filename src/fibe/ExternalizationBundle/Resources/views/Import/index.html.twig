@@ -435,7 +435,7 @@
                 })
                 .find("form")
                     .one("submit",function(e){
-                        if(confirmModal.find("input") === "Empty !"){
+                        if(confirmModal.find("input").val() === "Empty !"){
                             callback();
                             confirmModal.modal('hide');
                             return false;
