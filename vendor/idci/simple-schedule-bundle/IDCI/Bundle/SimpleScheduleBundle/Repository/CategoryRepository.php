@@ -145,6 +145,7 @@ class CategoryRepository extends EntityRepository
         return is_null($qb) ? $qb : $qb->getQuery();
     }
 
+
     /**
      * extract
      *

@@ -214,6 +214,7 @@ class ConfEvent extends Event
      */
     public function getSlug()
     {
+        $this->slugify();
         return $this->slug;
     }
 
