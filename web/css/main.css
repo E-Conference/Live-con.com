@@ -95,10 +95,10 @@ body{
 	color:#f2f2f2 !important ;
 }
 
-.dropdown-menu>li>a>i {
+#menu-navbar .dropdown-menu>li>a>i {
 	width: 45px; 
 }
-.dropdown-menu>li>a {
+#menu-navbar .dropdown-menu>li>a {
 	padding-left:10px;
 }
 

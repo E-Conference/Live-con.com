@@ -341,7 +341,6 @@ var rdfConfig = {
                         if(catName.toLowerCase() == "conferenceevent") {
                             isMainConfEvent = true;
                             console.debug("mainconference event is ",event)
-                            defaultDate = event['setStartAt'] || defaultDate;
                         }
                         Importer().objects.categories.push(category);
                         catId = Importer().objects.categories.length-1;

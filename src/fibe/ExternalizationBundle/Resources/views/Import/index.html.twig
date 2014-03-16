@@ -355,6 +355,7 @@
                     xlsxMapper.setWorker(worker);
                     mapper.setMapper(xlsxMapper); 
                 }
+                Importer().setUtils(mapper.getUtils()); 
 
                 Pager.changePage('#page-new-mapping-file');
                 $(mapper).on("fileRead",function(ev,data){
@@ -374,8 +375,8 @@
         function extractDatas(op){
             if(!op)op={}; 
  
-            Importer().setUtils(mapper.getUtils()); 
             Importer().setMappingConfig(mapper.getMapping()); 
+            Importer().setUtils(mapper.getUtils()); 
             Importer().run( 
                 mapper.getData(), 
                 op,

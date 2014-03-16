@@ -110,8 +110,9 @@ function Importer() {
             if(fallback)fallback("Wrong root node"); 
             return;
         }
-        console.log("rootNode contains "+getChildren(rootNode).length+" children",rootNode)
-        if(getChildren(rootNode).length ==0){
+        var nbRootChild = getNbRootChildren(rootNode);
+        console.log("rootNode contains "+nbRootChild+" children",rootNode)
+        if(nbRootChild ==0){
             if(fallback)fallback("Empty root node"); 
             return;
         }
@@ -146,8 +147,8 @@ function Importer() {
             }else{
                 // console.log("mapping a collection",collectionNode)
             }
-            collectionNode.each(function(index,node){ 
-                add(itemMapping.array,itemMapping,this);    
+            $.each(collectionNode,function(index){ 
+                add(itemMapping.array,itemMapping,this,index);    
             }); 
         } 
 
@@ -231,12 +232,12 @@ function Importer() {
             organizations: objects.organizations,
             topics       : objects.topics,
             locations    : objects.locations,
-            categories   : objects.categories,
+            categories   : objects.categories
         }; 
 
         console.log('---------finished---------' );
         console.log(dataArray);
-        console.log(objects.roles)
+        console.log(objects.roles);
 
         var empty = true;
         for (var i in dataArray){
@@ -269,11 +270,11 @@ function Importer() {
          * @param {dom elem} node       the xml dom element from the import file 
          * @param {object} arg          arg for override functions 
          */
-        function add(addArray,mapping,node){
+        function add(addArray,mapping,node,index){
 
             //to override this method, write an "override : function(){...}" in the mapping file of the function. 
             if(mapping.override!==undefined){
-                return mapping.override(node,addArray);
+                return mapping.override(node,addArray,index);
             }
             //unwrapped if needed (not used anymore)
             // if(mapping.format){ 
@@ -284,22 +285,22 @@ function Importer() {
             //         process(addArray,mapping,this);
             //     });
             // }else{
-                process(addArray,mapping,node); 
+                process(addArray,mapping,node,index); 
             // }
 
-            function process(addArray,mapping,node){
+            function process(addArray,mapping,node,index){
                 var rtnArray = {};  
                 var key = Importer().doFormat(node,mappingConfig.getNodeKey.format);     
-
-                $(node).children().each(function(){ 
-                    if(mapping.label[self.getNodeName(this)]!== undefined){
+                var children = getChildren(node);
+                $.each(children,function(index){ 
+                    if(mapping.label[self.getNodeName(this,index)]!== undefined){
                         
-                        if(mapping.label[self.getNodeName(this)].setter){
-                            var nodeName = self.getNodeName(this);
+                        if(mapping.label[self.getNodeName(this,index)].setter){
+                            var nodeName = self.getNodeName(this,index);
 
                             //unwrapped if needed 
                             //TODO remove this option and use format instead
-                            if(mapping.label[self.getNodeName(this)].wrapped === true){
+                            if(mapping.label[self.getNodeName(this,index)].wrapped === true){
                                 $(this).children().each(function(){ 
                                     set(mapping,nodeName,this); 
                                 });
@@ -308,7 +309,7 @@ function Importer() {
                             }
                         }
                     }else{ 
-                        var mappingLake = getMappingPath(mapping)+" : "+self.getNodeName(this); 
+                        var mappingLake = getMappingPath(mapping)+" : "+self.getNodeName(this,index); 
                         if($.inArray(mappingLake, notImportedLog) === -1)
                             notImportedLog.push(mappingLake); 
                     }
@@ -316,10 +317,11 @@ function Importer() {
                      
                  //post processing
                 if(mapping.postProcess){
-                    if(mapping.postProcess(node,rtnArray,self.getNodeName(node)) === true){
+                    if(mapping.postProcess(node,rtnArray,self.getNodeName(node,index)) === true){
                         //if it was the main conf event
                         //register in the objectmap index
                         conference = rtnArray;
+                        defaultDate = conference['setStartAt'] || defaultDate;
 
                         addObjectMap(key,rtnArray); 
                         objectsIndexes[key] = {array:"conference"};
@@ -515,13 +517,15 @@ function Importer() {
         }
         return rtn;
     } 
-    function getChildren(node){
-       // return utils.getNodeName(node);
+    function getNbRootChildren(node){  
+        return mapper.getNbRootChildren(node)
+    }
+    function getChildren(node){ 
        return doFormat(node,[{fn:"children"}]);
     }
 
-    function getNodeName(node){
-        return mapper.getNodeName(node)
+    function getNodeName(node,i){
+        return mapper.getNodeName(node,i)
     };
 
 

@@ -4,8 +4,10 @@ xmlMapper = {
  
 
     readFile : function(file,reader){   
+        reader.onload = function(e) { 
+            $(xmlMapper).trigger("fileRead",[e.target.result]);  
+        }
         reader.readAsText(file);
-        $(xmlMapper).trigger("fileRead",[data]); 
     },
 
     defaultMapping : {
@@ -59,11 +61,16 @@ xmlMapper = {
         }
 	},  
 
-    // *required by Importer internal* : do not use this function in any format or config file
+    // *required by Importer internal* 
     getNodeName : function(node){
                 var nodeName = Importer().doFormat(node,Importer().mappingConfig.getNodeName.format);
                 
                 return (nodeName ? nodeName.toLowerCase() : console.log("undefined nodename for",node));
+    },
+
+    // *required by Importer internal* 
+    getNbRootChildren : function(node){  
+                return $(node).children().length
     },
 
      //data manipulation functions used by Importer().doFormat
@@ -158,6 +165,9 @@ xmlMapper = {
                 })
             })
             return $(rtnNodeSet);
+        }, 
+        nbChildren : function(node){ 
+            return $(node).children().length;
         },
 
         /********************* nodeSet && node manipulation : return jquery Node *******************/
