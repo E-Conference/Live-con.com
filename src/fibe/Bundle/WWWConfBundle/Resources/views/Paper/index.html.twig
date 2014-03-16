@@ -33,6 +33,9 @@
 
 {% block javascripts_page %}
 <script type="text/javascript">
+    $(document).ready(function() {
+        $("#resultsFound").hide();
+   });
 
     function filter(){
         $datas = $("#filter_form").serialize();
@@ -42,6 +45,7 @@
                  $datas, 
               function(response){
                      $('#paper_list').html(response);
+                     $("#resultsFound").show();
                   
               }, "html");    
           return false;
