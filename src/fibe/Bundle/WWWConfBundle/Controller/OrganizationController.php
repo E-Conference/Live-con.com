@@ -82,6 +82,7 @@ class OrganizationController extends Controller
             // bind values from the request
           
              $entities = $em->getRepository('fibeWWWConfBundle:Organization')->filtering($filters->getData(), $conf);
+             $nbResult = count($entities);
 
              //Pager
              $adapter = new ArrayAdapter($entities);
@@ -95,6 +96,7 @@ class OrganizationController extends Controller
 
              return $this->render('fibeWWWConfBundle:Organization:list.html.twig', array(
                  'pager'  => $pager,
+                 'nbResult' => $nbResult,
              ));
         }
 

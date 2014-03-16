@@ -80,10 +80,11 @@ class ConfEventController extends Controller
         $filters =$this->createForm(new ConfEventFilterType($this->getUser()));
         $filters->bindRequest($this->get('request'));
 
-        if ($filters->isValid())  {
+        if ($filters->isValid()) {
             // bind values from the request
           
              $entities = $em->getRepository('fibeWWWConfBundle:ConfEvent')->filtering($filters->getData(), $conf);
+             $nbResult = count($entities);
 
              //Pager
              $adapter = new ArrayAdapter($entities);
@@ -97,6 +98,7 @@ class ConfEventController extends Controller
 
              return $this->render('fibeWWWConfBundle:ConfEvent:list.html.twig', array(
                  'pager'  => $pager,
+                 'nbResult' => $nbResult,
              ));
         }
 

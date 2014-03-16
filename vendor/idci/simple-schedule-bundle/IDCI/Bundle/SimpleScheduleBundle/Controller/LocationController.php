@@ -89,6 +89,7 @@ class LocationController extends Controller
             // bind values from the request
           
              $entities = $em->getRepository('IDCISimpleScheduleBundle:Location')->filtering($filters->getData(), $conf);
+             $nbResult = count($entities);
 
              //Pager
              $adapter = new ArrayAdapter($entities);
@@ -102,6 +103,7 @@ class LocationController extends Controller
 
              return $this->render('IDCISimpleScheduleBundle:Location:list.html.twig', array(
                  'pager'  => $pager,
+                 'nbResult' => $nbResult,
              ));
         }
 
