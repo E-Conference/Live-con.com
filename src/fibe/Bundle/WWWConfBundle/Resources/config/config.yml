@@ -14,6 +14,15 @@ services:
 idci_exporter:
     api_route: "/api/{entity_reference}.{_format}"
     entities:
+        WwwConf:
+            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\WwwConf"
+            formats:
+                xml:
+                    transformer:
+                        service: "idci_exporter.transformer_twig"
+                        options:
+#                            template_path:
+                            template_name_format: "export.xml.twig"
         schedule_event:
             class: "fibe\\Bundle\\WWWConfBundle\\Entity\\ConfEvent"
             formats:
@@ -24,15 +33,6 @@ idci_exporter:
 #                            template_path:
                             template_name_format: "export.json.twig"
 
-        schedule_topic:
-            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Topic"
-            formats:
-                jsonp:
-                    transformer:
-#                        service: "idci_exporter.transformer_twig"
-                        options:
-#                            template_path:
-                            template_name_format: "export.json.twig"
         schedule_role:
             class: "fibe\\Bundle\\WWWConfBundle\\Entity\\RoleType"
             formats:

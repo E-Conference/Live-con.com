@@ -1,0 +1,16 @@
+
+
+{% set enclosure = '"' %}
+{% set delimiter = ',' %}
+
+{% autoescape false %}
+{% spaceless %}
+
+{{ enclosure }}{{entity.getConfName()}}{{ enclosure }}{{ delimiter | raw }}
+{{ enclosure }}{{entity.getMainConfEvent().getAcronym()}}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{entity.getMainConfEvent().getStartAt()|date('Y-m-d H:i')}}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{entity.getMainConfEvent().getEndAt()|date('Y-m-d H:i')}}{{ enclosure }}{{ delimiter }}
+
+
+{% endspaceless %}
+{% endautoescape %}

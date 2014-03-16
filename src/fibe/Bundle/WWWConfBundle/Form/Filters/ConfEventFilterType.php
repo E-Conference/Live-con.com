@@ -5,6 +5,8 @@ namespace fibe\Bundle\WWWConfBundle\Form\Filters;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
+
 
 class ConfEventFilterType extends AbstractType
 {
@@ -33,7 +35,17 @@ class ConfEventFilterType extends AbstractType
                 'empty_data'  => null,
                 'required' => false,
                 'attr'  => array('placeholder'  => 'Location')
-            ))  
+            ))
+            ->add('category', 'entity', array(
+                'class' => 'IDCISimpleScheduleBundle:Category',
+                'label'   => 'Category',
+                'query_builder'=> function(EntityRepository $er) {
+                                return $er->extractQueryBuilder(array());
+                             },
+                'empty_data'  => null,
+                'required' => false,
+                'attr'  => array('placeholder'  => 'Category')
+            ))    
         ;
     }
 
