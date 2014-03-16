@@ -54,11 +54,11 @@
                             <td>{{ entity.acronym }}</td>
                         </tr>
                         <tr>
-                            <th>Startat</th>
+                            <th>Start At</th>
                             <td>{{ entity.startAt|date('Y-m-d H:i:s') }}</td>
                         </tr>
                         <tr>
-                            <th>Endat</th>
+                            <th>End At</th>
                             <td>{{ entity.endAt|date('Y-m-d H:i:s') }}</td>
                         </tr>
                          <tr>
@@ -83,11 +83,11 @@
                             <td>{{ entity.parent.summary }}</td>
                         </tr>
                          <tr>
-                            <th>Createdat</th>
+                            <th>Created At</th>
                             <td>{{ entity.createdAt|date('Y-m-d H:i:s') }}</td>
                         </tr>
                         <tr>
-                            <th>Lastmodifiedat</th>
+                            <th>Last Modified At</th>
                             <td>{{ entity.lastModifiedAt|date('Y-m-d H:i:s') }}</td>
                         </tr>
                        <!-- <tr>
@@ -124,7 +124,7 @@
                         </tr>
                         <tr>
                             <th>Duration</th>
-                            <td>{{ entity.duration }}</td>
+                            <td class="duration">{{ entity.duration }}</td>
                         </tr>
                         <tr>
                             <th>Istransparent</th>

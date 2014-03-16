@@ -1,13 +1,14 @@
 
+<div id="resultsFound"><h4>{{ nbResult }} results found</h4></div>
 <table class="table table-hover .table-responsive records_list">
     <thead>
         <tr>
             <th>Summary</th>
             <th>Categories</th>
             <th>Location</th>
-            <th>Startat</th>
+            <th>Start At</th>
             <th>Duration</th>
-            <th>Endat</th>
+            <th>End At</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -23,7 +24,7 @@
             </td>
             <td>{{ entity.location }}</td>
             <td>{% if entity.startAt %}{{ entity.startAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-            <td>{% if entity.duration %}{{ entity.duration }}{% endif %}</td>
+            <td class="duration">{% if entity.duration %}{{ entity.duration }}{% endif %}</td>
             <td>{% if entity.endAt %}{{ entity.endAt|date('Y-m-d H:i:s') }}{% endif %}</td>
           
             <td>
@@ -47,3 +48,5 @@
     {% endfor %}
     </tbody>
 </table>
+
+

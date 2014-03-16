@@ -247,9 +247,21 @@ class fillDatabaseUpCommand extends ContainerAwareCommand
 
         $output->writeln("common rows inserted successfully");
 
-        for ( $counter = 0; $counter <= 70; $counter += 1) {
+        for ( $counter = 0; $counter <= 50; $counter += 1) {
+            $container = $this->getContainer();
+            $container->set('doctrine.orm.default', null);
+            $container->set('doctrine.orm.entity_manager', null);
+            $container->set('doctrine.orm.default_entity_manager', null);
+            // get a fresh EM 
+            $this->createConf($counter,3000,$output,$roleType,$roleTypeChair,$roleTypePresenter);
+        }
 
-             $output->writeln("conference ".$counter."started");
+    }
+
+    function createConf($counter,$limit,$output,$roleType,$roleTypeChair,$roleTypePresenter){
+
+            $output->writeln("conference ".$counter." started");
+            $em = $this->getContainer()->get('doctrine')->getManager('default'); 
             //Create the default conference
             $conference = new WwwConf();
             $conference->setLogoPath("livecon.png"); 
@@ -338,7 +350,7 @@ class fillDatabaseUpCommand extends ContainerAwareCommand
 
 
 
-            for ( $counterLoc = 0; $counterLoc <= 50; $counterLoc += 1) {
+            for ( $counterLoc = 0; $counterLoc <= $limit/10; $counterLoc += 1) {
 
               $location = new Location();
               $location->setName("location".$counterLoc);
@@ -346,7 +358,7 @@ class fillDatabaseUpCommand extends ContainerAwareCommand
             }
              $em->flush();
 
-            for ( $counterEnt = 0; $counterEnt <= 3000; $counterEnt += 1) {
+            for ( $counterEnt = 0; $counterEnt <= $limit; $counterEnt += 1) {
                 $person  = new Person();
                 $person->setConference($conference);
                 $person->setFamilyName("person".$counterEnt);
@@ -396,6 +408,7 @@ class fillDatabaseUpCommand extends ContainerAwareCommand
                 $role->setType($roleTypePresenter);
 
 
+                $em->persist($roleTypePresenter);
                 $em->persist($organization);
                 $em->persist($paper);
                 $em->persist($topic);
@@ -404,11 +417,7 @@ class fillDatabaseUpCommand extends ContainerAwareCommand
                 $em->persist($person);
             
             }
-        }
-         $TalkEvent = new Category(); 
-
-
-
          $em->flush();
+         $em->close(); 
     }
 }

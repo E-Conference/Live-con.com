@@ -65,7 +65,7 @@
                                     </li>-->
                                     
                                     <li>
-                                       <a href="#" onclick="removeManager({{entity.id}});location.reload();"><i class=" icon-trash"></i> Remove user from the conference</a>
+                                       <a href="#" onclick="removeManager({{entity.id}});"><i class=" icon-trash"></i> Remove user from the conference</a>
                                     </li>
                                 </ul>
                                 {% endif %}
@@ -171,7 +171,6 @@
 
 {%  block javascripts_page %}
 
-    <script src="{{ asset('bundles/fibewwwconf/js/moment.min.js') }}" type="text/javascript" ></script>
     <script  type="text/javascript" >
 
 

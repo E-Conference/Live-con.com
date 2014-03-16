@@ -36,6 +36,14 @@ class ConfEventRepository extends EntityRepository
                 ->setParameter('loc', $params['location'])
             ;
         }
+        if(isset($params['category'])) {
+            $qb
+                ->leftJoin('confevent.categories', 'cat')
+                ->andWhere('cat.id = :cat_id')
+                ->setParameter('cat_id', $params['category'])
+            ;
+           
+        }
 
 
         $query = $qb->getQuery();

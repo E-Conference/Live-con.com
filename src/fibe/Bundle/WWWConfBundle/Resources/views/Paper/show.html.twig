@@ -65,8 +65,12 @@
                     <tr>
                         <th>Topics</th>
                         <td> 
-                             {% for topic in entity.topics %}
-                                <li>{{ topic.name }}</li>
+                            {% for topic in entity.topics %}
+                                 <li>
+                                   <a href="{{ path('schedule_topic_show', { 'id': topic.id }) }}">
+                                     {{ topic.name|e }}
+                                    </a>
+                                  </li>
                              {% endfor %}
                         </td>
                     </tr>

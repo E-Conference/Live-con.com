@@ -49,7 +49,12 @@
               {% endif %}
              {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
                  <a href="{{ path('externalization_import_index') }}">
-                   <i class="fa fa-exchange fa-3x"></i>  Import
+                   <i class="fa fa-cloud-upload fa-3x"></i>  Import
+                 </a>
+              {% endif %}
+              {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
+                 <a href="{{ path('externalization_export_index') }}">
+                   <i class="fa fa-download fa-3x"></i>  Export
                  </a>
               {% endif %}
 

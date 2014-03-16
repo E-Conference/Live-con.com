@@ -37,6 +37,9 @@
 {% endblock %}
 {% block javascripts_page %}
 <script type="text/javascript">
+    $(document).ready(function() {
+        $("#resultsFound").hide();
+   });
 
     function filter(){
         $datas = $("#filter_form").serialize();
@@ -46,6 +49,7 @@
                  $datas, 
               function(response){
                      $('#confevent_list').html(response);
+                     $("#resultsFound").show();
                   
               }, "html");    
           return false;

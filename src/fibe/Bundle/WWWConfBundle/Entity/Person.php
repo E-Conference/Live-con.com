@@ -192,6 +192,8 @@ class Person
         $this->setName($this->firstName." ".$this->familyName);
     }
 
+
+
      /**
      * Slugify
      * @ORM\PrePersist()
@@ -232,6 +234,7 @@ class Person
      */
     public function getSlug()
     {
+        $this->slugify();
         return $this->slug;
     }
 

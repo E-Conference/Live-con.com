@@ -83,6 +83,7 @@ class PersonController extends Controller
             // bind values from the request
           
              $entities = $em->getRepository('fibeWWWConfBundle:Person')->filtering($filters->getData(), $conf);
+             $nbResult = count($entities);
 
              //Pager
              $adapter = new ArrayAdapter($entities);
@@ -96,6 +97,7 @@ class PersonController extends Controller
 
              return $this->render('fibeWWWConfBundle:Person:list.html.twig', array(
                  'pager'  => $pager,
+                 'nbResult' => $nbResult,
              ));
         }
 

@@ -11,7 +11,8 @@ Model = {
 				required : {
 					"summary" : {
 						setter : "setSummary",
-				}},
+					}
+				},
 				optionnal : { 
 					"homepage" : {
 						setter : "setUrl",
@@ -25,9 +26,9 @@ Model = {
 					"organizer" : {
 						setter : "setOrganizer",
 					}, 
-					"contacts" : {
-						setter : "setContacts",
-					}, 
+					// "contacts" : {
+					// 	setter : "setContacts",
+					// }, 
 					"acronym" : {
 						setter : "setAcronym",
 					}, 
@@ -36,7 +37,8 @@ Model = {
 					},
 					"location" : {
 						setter : "setLocation",
-				}}
+					}
+				}
 			} 
 		}, 
 		"Event" : { 
@@ -62,9 +64,9 @@ Model = {
 					"organizer" : {
 						setter : "setOrganizer",
 					}, 
-					"contacts" : {
-						setter : "setContacts",
-					}, 
+					// "contacts" : {
+					// 	setter : "setContacts",
+					// }, 
 					"acronym" : {
 						setter : "setAcronym",
 					}, 
@@ -73,7 +75,8 @@ Model = {
 					},
 					"location" : {
 						setter : "setLocation",
-				}}
+					}
+				}
 			} 
 		}, 
 		"Person" : {
@@ -99,15 +102,16 @@ Model = {
 					"page" : {
 						setter : "setPage",
 					}, 
-					"organizations" : {
-						setter : "setOrganizations",
-					}, 
-					"accounts" : {
-						setter : "setAccounts",
-					}, 
-					"papers" : {
-						setter : "setPapers",
-				}}
+					// "organizations" : {
+					// 	setter : "setOrganizations",
+					// }, 
+					// "accounts" : {
+					// 	setter : "setAccounts",
+					// }, 
+					// "papers" : {
+					// 	setter : "setPapers",
+					// }
+				}
 			}
 		},
 
@@ -132,18 +136,19 @@ Model = {
 					"url" : {
 						setter : "setUrl",
 					}, 
-					"authors" : {
-						setter : "setAuthors",
-					}, 
-					"subjects" : {
-						setter : "setSubjects",
-					}, 
-					"topics" : {
-						setter : "setTopics",
-					}, 
-					"events" : {
-						setter : "setEvents",
-				}}
+					// "authors" : {
+					// 	setter : "setAuthors",
+					// }, 
+					// "subjects" : {
+					// 	setter : "setSubjects",
+					// }, 
+					// "topics" : {
+					// 	setter : "setTopics",
+					// }, 
+					// "events" : {
+					// 	setter : "setEvents",
+					// }
+				}
 			}
 		},
 
@@ -161,9 +166,9 @@ Model = {
 					"country" : {
 						setter : "setCountry",
 					}, 
-					"members" : {
-						setter : "setMembers",
-					}, 
+					// "members" : {
+					// 	setter : "setMembers",
+					// }, 
 				} 
 			}
 	  	},
