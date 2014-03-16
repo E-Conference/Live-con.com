@@ -9,7 +9,7 @@
   
 <!-- Conferences List -->
 <div id="background"></div>
-<div id="entete">
+<div id="entete" style="background:none;min-height:700px">
   <div class="container_12">
     <div class="grid_12" style="border: 2px solid black; border-top:0px">
       <div class="input-group">
@@ -23,7 +23,41 @@
         {% include "DataBundle:Conference:conferencesList.html.twig" %}
   </div>
 </div>
-
+  <div id="footer">
+      <div class="container_12">
+        <div class="grid_6">
+          <h3>Created by</h3>
+          <ul>
+            <li><p>Fiona LE PEUTREC<p></li>
+            <li><p>Florian BACLE</p></li>
+            <li><p>Benoît DURANT DE LA PASTELLIERE</p></li>
+          </ul>
+          <a href="http://thibaud-lentheric.com" title="Thibaud LENTHERIC Portfolio" target="_blank">
+          <h3 class="design">Design by</h3>
+            <p class="design">Thibaud LENTHERIC</p>
+          </a>
+        </div>
+        <div class="grid_2">
+          <a href="http://www.live-con.com/login" title="Back Office Access">
+            <img src="{{ asset('bundles/fibehomepage/img/picto/backoffice.png') }}" />
+            <h4>Back Office Access</h4>
+          </a>
+        </div>
+        <div class="grid_2">
+          <a href="https://github.com/E-Conference/" title="GitHub Project" target="_blank">
+            <img src="{{ asset('bundles/fibehomepage/img/picto/github.png') }}" />
+            <h4>GitHub Project</h4>
+          </a>
+        </div>
+        <div class="grid_2">
+          <a href="http://twitter.com/Livecon" title="Livecon on Twitter" target="_blank">
+            <img src="{{ asset('bundles/fibehomepage/img/picto/twitter.png') }}" />
+            <h4><span class="logoname"><b>Live</b>con</span> on Twitter</h4>
+          </a>
+        </div>
+        <div class="grid_6" id="version"><p>Live-con · v1.0 | licensed under</p></div>
+      </div>
+    </div>
 
 
 <!-- DataConf show Modal -->
