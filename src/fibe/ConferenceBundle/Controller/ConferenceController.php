@@ -311,7 +311,7 @@ class ConferenceController extends Controller
             );
         }
         
-         return $this->redirect($this->generateUrl('conference_team_list'));
+          return $this->redirect($this->generateUrl('conference_team_list'));
 
     }
 
