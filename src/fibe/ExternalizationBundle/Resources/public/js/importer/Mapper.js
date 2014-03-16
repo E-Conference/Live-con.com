@@ -14,7 +14,7 @@ var Mapper = function(){
  
     var knownFormatConfig = { 
         'swc': {mapping:rdfConfig,mapper:xmlMapper},
-        'ocs': {mapping:ocsConfig,mapper:xmlMapper},
+        'ocs': {mapping:ocsConfig,mapper:xmlMapper}
     }
 
 
@@ -24,15 +24,20 @@ var Mapper = function(){
     this.readFile = function(){ 
         var reader = new FileReader();
      
-        reader.onload = function(e) {
-            data = e.target.result;
+        $(mapper).on("fileRead",function(ev,d){
+            data = d;
             $(self).trigger("fileRead",[data]);
-        }
+        })
         mapper.readFile(file,reader);
  
     }
     this.generateMappingFile = function(){
         mapping = generateMappingFile();
+    }
+
+
+    this.getUtils = function(){
+        return mapper.utils; 
     }
 
     this.map = function($ctn){
@@ -51,16 +56,22 @@ var Mapper = function(){
         console.log("mapping : ",data); 
           
 
-        function nodeCallBack(nodePath,$el,nodeName,panelOp){
-            if(!self.isNodeKnown(nodePath)){  
+        function nodeCallBack(nodePath,$el,nodeName,panelOp,htmlOnly){
+            if(htmlOnly){
+                return doPanel();
+            }
+            if(!self.isNodeKnown(nodePath)){
+                return doPanel();
+            }
+            return $el
+
+            function doPanel(){ 
                 if(!panelOp)panelOp={panelClass:"panel-success",margin:true,collapsible:true,collapsed:true};
                 panelOp["node-path"] = nodePath;
                 var tempPanel = Pager.getPanelHtml(nodePath,panelOp);  
                 $el.append(tempPanel);
                 return tempPanel.find("> ul"); 
             }
-            return $el
-
 
                     // if(!mapper.isNodeKnown(childNodePath)){
                     //     childTags.push(getNodeName(child));
@@ -103,6 +114,13 @@ var Mapper = function(){
     this.setMapper = function(m){
         mapper = m;
     }
+    this.getNodeName = function(node,i){
+        return mapper.getNodeName(node,i)
+    };
+    this.getNbRootChildren = function(node){  
+        return mapper.getNbRootChildren(node)
+    } 
+
     this.setKnownMapping = function(formatName){  
         if(!knownFormatConfig[formatName])return console.warn("unknown formatName : "+formatName); 
         mapping = knownFormatConfig[formatName].mapping;
@@ -237,7 +255,7 @@ var Mapper = function(){
                 html : true,
                 placement : "right",
                 title : ' <b>'+nodePath+'</b>',
-                content : content,
+                content : content
             });
 
             //draggable
@@ -275,7 +293,6 @@ var Mapper = function(){
                 var modelSetter = Model.getSetter(modelName,$(this).data("model-path").split("/")[1])
                 
                 
-                //check if this is the conference mapping
                 if(modelName=="Conference"){
                     //the conference mapping has a different mapping object
                     var mappingObj = getOrCreateParseConference(modelName);
@@ -351,19 +368,19 @@ var Mapper = function(){
                     var label = splittedEntityMapping[i]
                     format.push({
                         fn : "children",
-                        arg : [label],
+                        arg : [label]
                     })
                 }else if(splittedEntityMapping[i].charAt(0) == "@"){
                     var label = splittedEntityMapping[i] 
                     format.push({
                         fn : "attr",
-                        arg : [label.substring(1)],
+                        arg : [label.substring(1)]
                     })
                 }else {
                     var label = splittedEntityMapping[i]
                     format.push({
                         fn : "child",
-                        arg : [label],
+                        arg : [label]
                     })
                 } 
             }
@@ -388,7 +405,7 @@ var Mapper = function(){
                     }else{
                         var parentPath = parent.data("node-path");
                         if(parentPath && knownCollection[parentPath])
-                            return nodePath;
+                            return parentPath;
                         $node = parent;
                         nodePath = parentPath || nodePath;
                     }

@@ -31,7 +31,7 @@ class Location
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=128,nullable=true)
+     * @ORM\Column(type="string", length=128)
      */
     protected $name;
 

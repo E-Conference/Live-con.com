@@ -355,6 +355,7 @@
                     xlsxMapper.setWorker(worker);
                     mapper.setMapper(xlsxMapper); 
                 }
+                Importer().setUtils(mapper.getUtils()); 
 
                 Pager.changePage('#page-new-mapping-file');
                 $(mapper).on("fileRead",function(ev,data){
@@ -373,11 +374,11 @@
 
         function extractDatas(op){
             if(!op)op={}; 
-
-                      console.debug(mapper.getMapping())
+ 
+            Importer().setMappingConfig(mapper.getMapping()); 
+            Importer().setUtils(mapper.getUtils()); 
             Importer().run( 
-                mapper.getData(),
-                mapper.getMapping(),
+                mapper.getData(), 
                 op,
                 function(data,importedLog,notImportedLog){
                     Pager.changePage('#page-result');
@@ -434,7 +435,7 @@
                 })
                 .find("form")
                     .one("submit",function(e){
-                        if(confirmModal.find("input") === "Empty !"){
+                        if(confirmModal.find("input").val() === "Empty !"){
                             callback();
                             confirmModal.modal('hide');
                             return false;
