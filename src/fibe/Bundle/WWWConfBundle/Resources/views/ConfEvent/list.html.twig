@@ -23,7 +23,7 @@
             </td>
             <td>{{ entity.location }}</td>
             <td>{% if entity.startAt %}{{ entity.startAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-            <td>{% if entity.duration %}{{ entity.duration }}{% endif %}</td>
+            <td class="duration">{% if entity.duration %}{{ entity.duration }}{% endif %}</td>
             <td>{% if entity.endAt %}{{ entity.endAt|date('Y-m-d H:i:s') }}{% endif %}</td>
           
             <td>
