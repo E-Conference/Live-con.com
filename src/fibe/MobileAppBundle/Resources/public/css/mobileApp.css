@@ -1,2 +1,14 @@
 
 
+#iframe-phone{
+	height: 800px;
+	background: url(../img/iphone.png) no-repeat;
+}
+
+#iframe-phone iframe {
+	position: absolute;
+	width: 315px;
+	height: 560px;
+	top: 118px;
+	left: 48px;
+}
