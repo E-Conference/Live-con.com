@@ -450,3 +450,13 @@ fieldset[disabled] .btn-livecon.active
 .btn-livecon .badge{
 	color:#428bca;
 	background-color:#2B5566}
+
+
+/*-------------------------------------------------------------------------------------
+--------------------------------------Global Ajax Spinner-----------------------------------------
+-------------------------------------------------------------------------------------*/
+body.wait *, body.wait
+{
+    /*cursor: url(../img/ajax-loader.gif), url(../img/ajax-loader.ani), auto; !important;*/
+    cursor: progress !important;
+}

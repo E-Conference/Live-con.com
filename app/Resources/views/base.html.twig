@@ -63,7 +63,19 @@
                     $(this).text(momentDur.humanize()); 
                 });
             });
-            </script>  
+            </script> 
+            <!-- Ajax Spinner -->
+            <script type="text/javascript">
+                $(document).ajaxStart(function ()
+                {
+                        $('body').addClass('wait');
+
+                    }).ajaxComplete(function () {
+
+                        $('body').removeClass('wait');
+
+                });
+            </script> 
          
         {% endblock%}
 

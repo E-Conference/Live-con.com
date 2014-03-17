@@ -41,12 +41,9 @@ class MobileAppThemeController extends Controller
         $mobile_app_form = $this->createForm(new MobileAppConfigType(), $mobile_app_config);
 
         $conference = $user->getCurrentConf();
-       // $conference_form = $this->createForm(new MobileAppWwwConfType($this->getUser()), $conference);
-         $conference_form = $this->createForm(new WwwConfType($this->getUser(), $conference->getMainConfEvent()), $conference); 
 
 		return $this->render('fibeMobileAppBundle:MobileAppTheme:index.html.twig', array(
             'mobile_app_form' => $mobile_app_form->createView(),
-            'conference_form' => $conference_form->createView(),
 		    'mobile_app_config' => $mobile_app_config,
             'conference' => $conference,
             'authorized' => $authorization->getFlagApp(),
@@ -87,40 +84,6 @@ class MobileAppThemeController extends Controller
         return $this->redirect($this->generateUrl('mobileAppTheme_index'));
     }
 
-
-    /**
-    * @Route("/{id}/update/conference",name="mobileAppTheme_update_conference")
-    * @Template()
-    */
-    public function updateConferenceAction(Request $request, $id)
-    {
-        
-         //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-        if(!$authorization->getFlagconfDatas()){
-            throw new AccessDeniedException('Action not authorized !');
-        } 
-
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('fibeWWWConfBundle:WwwConf')->find($id);
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find conference entity.');
-        }
- 
-         $editForm = $this->createForm(new WwwConfType($this->getUser(), $entity->getMainConfEvent()), $entity); 
-        //$editForm = $this->createForm(new MobileAppWwwConfType($this->getUser()), $entity);
-        $editForm->bind($request);
-
-        if ($editForm->isValid()) {
-            $em->persist($entity);
-            $entity->uploadLogo();
-            $em->flush();
-           // $this->clearCache();
-        }
-        return $this->redirect($this->generateUrl('mobileAppTheme_index'));
-    }
 
     public function clearCache(){
         $fileCache = $this->container->get('twig')->getCacheFilename('fibeMobileAppBundle:MobileAppPublic:index.html.twig');

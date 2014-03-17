@@ -25,46 +25,26 @@
             </div>
         </div>
         <div class="row page-content">
-            <div class="row">
-               <div class="row-fluid">
-                  <div class='col-lg-8'>
-                    <iframe style="height:500px;width:100%;" src="{{path('mobileAppPublic_sparql_index', { 'slug': conference.slug })}}"/></iframe>
+             <div class="row">
+       
+                  <div class='col-xs-12 col-sm-12 col-mg-6 col-lg-6' id="iframe-container">
+                    <div  id="iframe-phone">
+                          <iframe  width="315" height="560" src="{{path('mobileAppPublic_sparql_index', { 'slug': conference.slug })}}"/></iframe>
+                     </div>
+                   
                   </div>
-                   {% include "fibeMobileAppBundle:MobileAppTheme:edit.html.twig" %}
-                </div>
-               
-              
-            </div>
-
-              <form class="edit-app" action="{{ path('mobileAppTheme_update_conference', { 'id': conference.id })}}" method="post" {{ form_enctype(conference_form) }}>
-                <div class="row">
-                    <div class="col-lg-4">
-                          <h1> Conference settings</h1> 
-                          {{ form_row(conference_form.mainConfEvent.summary) }}
-                          {{ form_row(conference_form.mainConfEvent.acronym) }}
-                          {{ form_row(conference_form.mainConfEvent.url) }}
-                          {{ form_row(conference_form.logo) }}
-                          {{ form_errors(conference_form) }}
-                           <button type="submit" class="btn btn-success edit"><i class="fa fa-pencil-square-o"></i></button>
-                          <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(conference_form) }}</div> 
-                     </div>
-                    <div class="col-lg-4">
-                        <h1>Logo</h1>
-                        <div class='logo' style="width:300px; height: 100px">
-                          <div class="logo-choice"  style="width:300px; height: 100px">
-                              <img src="{{ asset('uploads/')}}{{conference.logoPath}}" style="width:auto; height: 100%">
-                          </div>
-                       </div>
-                     </div>
-                      <div class="col-lg-4 ">
-                        <h1>Color board</h1> 
-                        <div id="palette"> 
-                          <a href="#" id="generateTheme" class="edit btn btn-success"><i class="fa fa-magic"></i>Generate theme</a>
+                  <div class="col-xs-12 col-sm-12 col-mg-6 col-lg-6">
+                      <div class="well">
+                        <h4>Color board</h4> 
+                        <div id="palette" class="well"> 
+                         
                         </div>
+                         <a href="#" id="generateTheme" class="edit btn btn-success" style="width:100%"><i class="fa fa-magic"></i>  Generate theme</a>
                       </div>
-                  </div>  
-              </form>
-          
+                   {% include "fibeMobileAppBundle:MobileAppTheme:edit.html.twig" %}
+                   </div>
+      
+            </div>
         </div>
   {% endblock centerPanel %}
 {% block javascripts_page %}
@@ -77,7 +57,8 @@
 
   <script type="text/javascript">
   $( document ).ready(function() {
-    $("#generateTheme").click(function(){
+    $("#generateTheme").click(function(e){
+        e.preventDefault();
         generateTheme();
     })
   
@@ -157,16 +138,21 @@
     for(i=0; i<6; i++){
       tabRandomised.push(Math.floor((Math.random()*5)+1));
     }
-    $(".BGColorHeader").spectrum("set", palette[tabRandomised[0]]);
-    $(".TitleColorHeader").spectrum("set", palette["black"]);
-    $(".BGColorNavBar").spectrum("set", palette[tabRandomised[1]]);
-    $(".TitleColorNavBar").spectrum("set", palette["black"]);
-    $(".BGColorContent").spectrum("set", "#f3f6f6");
-    $(".TitleColorContent").spectrum("set", palette["black"]);
-    $(".BGColorButton").spectrum("set", palette[tabRandomised[4]]);
-    $(".TitleColorButton").spectrum("set", palette["black"]);
-    $(".BGColorFooter").spectrum("set", palette[tabRandomised[1]]);
-    $(".TitleColorFooter").spectrum("set", palette["black"]);
+
+    $(".edit-app-theme").hide("slow", function(){
+
+      $(".BGColorHeader").spectrum("set", palette[tabRandomised[0]]);
+      $(".TitleColorHeader").spectrum("set", palette["black"]);
+      $(".BGColorNavBar").spectrum("set", palette[tabRandomised[1]]);
+      $(".TitleColorNavBar").spectrum("set", palette["black"]);
+      $(".BGColorContent").spectrum("set", "#f3f6f6");
+      $(".TitleColorContent").spectrum("set", palette["black"]);
+      $(".BGColorButton").spectrum("set", palette[tabRandomised[4]]);
+      $(".TitleColorButton").spectrum("set", palette["black"]);
+      $(".BGColorFooter").spectrum("set", palette[tabRandomised[1]]);
+      $(".TitleColorFooter").spectrum("set", palette["black"]);
+      $(".edit-app-theme").show("slow");
+    }); 
   }
   </script>
 {% endblock%}
