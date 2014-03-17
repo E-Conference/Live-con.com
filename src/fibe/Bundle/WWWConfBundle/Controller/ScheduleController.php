@@ -124,8 +124,10 @@ class ScheduleController extends Controller
         
         $event->setConference($conf) ;
         //fix windows "double time specification" bug...
-        $event->setStartAt( new \DateTime(strstr($postData['start'], " (", true)));
-        $event->setEndAt( new \DateTime(strstr($postData['end'], " (", true) ) );
+        $start = $this->parseDate($postData['start']);
+        $end   = $this->parseDate($postData['end']);
+        $event->setStartAt($start);
+        $event->setEndAt($end);
         $event->setParent( ($postData['parent']['id']!= "" ? $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['parent']['id']) : $mainConfEvent) );
         $event->setSummary( $postData['title'] ); 
         $event->setIsAllDay($postData['allDay']=="true");
@@ -150,6 +152,15 @@ class ScheduleController extends Controller
         $response = new Response(json_encode($JSONArray));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
+    }
+
+    //fix windows "double time specification" bug...
+    function parseDate($dateStr){
+        return new \DateTime(
+            strlen(strstr($dateStr, '(')) <9 
+                ? $dateStr
+                : strstr($dateStr, " (", true)
+            );
     }
     
 
