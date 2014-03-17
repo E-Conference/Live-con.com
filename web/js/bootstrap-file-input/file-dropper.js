@@ -7,28 +7,28 @@ $(document).ready( function () {
         fileDropper(this)
     })
 });    
-function fileDropper(selectDataFile,dataFileChangeCallBck){
-    var $selectDataFile = $(selectDataFile);
-    if($selectDataFile.closest(".droppable-area").length>0){
-        var $fileAreaDiv = $selectDataFile.closest(".droppable-area");
+function fileDropper(input,dataFileChangeCallBck){
+    var $input = $(input);
+    if($input.closest(".droppable-area").length>0){
+        var $fileAreaDiv = $input.closest(".droppable-area");
         $fileAreaDiv.off('drop').on('drop',{$fileAreaDiv:$fileAreaDiv},handleDataFileChange);  
-        $selectDataFile.off('change').on('change', {$fileAreaDiv:$fileAreaDiv},handleDataFileChange);
+        $input.off('change').on('change', {$fileAreaDiv:$fileAreaDiv},handleDataFileChange);
         return;
     }else{}
     var $fileAreaDiv    = $("<div class='droppable-area'>");
-    $fileAreaDiv.insertBefore($selectDataFile)
+    $fileAreaDiv.insertBefore($input)
         .append('<span>Drag your file here <br/> or </span>')
-        .append($selectDataFile)
-        .append('<small class="filename"></small>');
+        .append($input)
+        .append('<small class="filename fa fa-file-o"> </small>');
      
     $fileAreaDiv.on('dragenter',{$fileAreaDiv:$fileAreaDiv},handleDragover); 
     $fileAreaDiv.on('dragover',{$fileAreaDiv:$fileAreaDiv},handleDragover); 
     $fileAreaDiv.on('dragleave',{$fileAreaDiv:$fileAreaDiv},handleDragleave);
     $fileAreaDiv.on('drop',{$fileAreaDiv:$fileAreaDiv},handleDataFileChange); 
 
-    $selectDataFile.on('change', {$fileAreaDiv:$fileAreaDiv},handleDataFileChange);
+    $input.on('change', {$fileAreaDiv:$fileAreaDiv},handleDataFileChange);
 
-    $selectDataFile.bootstrapFileInput(); 
+    $input.bootstrapFileInput(); 
     $fileAreaDiv.css({
         "border"    :"4px dashed #bbb",
         "padding"   :"15px 25px",
@@ -70,7 +70,7 @@ function fileDropper(selectDataFile,dataFileChangeCallBck){
             var file="",files; 
                 files = e.dataTransfer || e.originalEvent.dataTransfer || e.target;
             file = files.files[0];
-            e.data.$fileAreaDiv.find(".filename").text(file.name)
+            e.data.$fileAreaDiv.find(".filename").text(" : "+file.name)
             if(dataFileChangeCallBck)dataFileChangeCallBck(file); 
     }
 }
