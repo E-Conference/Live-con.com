@@ -457,5 +457,6 @@ fieldset[disabled] .btn-livecon.active
 -------------------------------------------------------------------------------------*/
 body.wait *, body.wait
 {
+    /*cursor: url(../img/ajax-loader.gif), url(../img/ajax-loader.ani), auto; !important;*/
     cursor: progress !important;
 }
