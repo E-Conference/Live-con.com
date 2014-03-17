@@ -43,12 +43,12 @@
                     <tr>
                         <td>
                             <div class="btn-group">
-                           
+                            {% if app.user.getCurrentConf().getConfManagers()|length > 1 %}
                                 <button class="btn dropdown-toggle" data-toggle="dropdown">
                                     <b>{{ entity.username }}</b>
                                     <span class="caret"></span>
                                 </button>
-                                 {% if app.user.getCurrentConf().getConfManagers()|length > 1 %}
+                                 
                                 <ul class="dropdown-menu">
                                    <!-- <li>
                                         <a href="{{ path('schedule_user_toggle_role', { 'id': entity.id }) }}"> 
@@ -68,8 +68,10 @@
                                        <a onclick="removeManager({{entity.id}});"><i class="fa fa-trash-o"></i>  Remove user from the conference</a>
                                     </li>
                                 </ul>
-                                {% endif %}
                             </div>
+                            {% else %}
+                               {{ entity.username }}
+                            {% endif %}
                            <!-- <form style="height:0px;" id="delete-form{{ loop.index0 }}" action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
                                 <input type="hidden" name="_method" value="DELETE" />
                                 {{ form_widget(delete_forms[loop.index0]) }}
