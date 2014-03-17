@@ -123,8 +123,9 @@ class ScheduleController extends Controller
         }
         
         $event->setConference($conf) ;
-        $event->setStartAt( new \DateTime($postData['start']));
-        $event->setEndAt( new \DateTime($postData['end'] ) );
+        //fix windows "double time specification" bug...
+        $event->setStartAt( new \DateTime(strstr($postData['start'], " (", true)));
+        $event->setEndAt( new \DateTime(strstr($postData['end'], " (", true) ) );
         $event->setParent( ($postData['parent']['id']!= "" ? $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['parent']['id']) : $mainConfEvent) );
         $event->setSummary( $postData['title'] ); 
         $event->setIsAllDay($postData['allDay']=="true");

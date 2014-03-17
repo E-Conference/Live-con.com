@@ -24,7 +24,7 @@ class PersonType extends AbstractType
             ->add('email','text', array('required' => false))
             ->add('age', 'text', array('required' => false))
             ->add('page', 'text', array('required' => false, 'label' => 'Homepage'))
-            ->add('img', 'text', array('required' => false, 'label' => 'Image'))
+            ->add('img', 'text', array('required' => false, 'label' => 'Image (external url)'))
             ->add('openId', 'text', array('required' => false))
             ->add('description', 'textarea', array('required' => false, 'label' => 'Description'))
             // ->add('nick', 'text', array('required' => false))

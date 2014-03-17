@@ -16,25 +16,25 @@ class ContactType extends AbstractType
     {
         $builder
             ->add('nom', 'text', array(
+                'label'=> 'Last Name',
                 'attr' => array(
-                    'label'=> 'First Name :',
-                    'placeholder' => 'What\'s your name?',
-                    'name' => 'nom',
-                    'class' => 'nom',
-                    'required' => true,
-                )
-            ))
-             ->add('prenom', 'text', array(
-                'label'=> 'Last Name :',
-                'attr' => array(
-                    'placeholder' => 'What\'s your last name?',
+                    'placeholder' => 'What\'s your first name?',
                     'name' => 'prenom',
                     'class' => 'prenom',
                     'required' => true,
                 )
             ))
+             ->add('prenom', 'text', array(
+                'label'=> 'First Name',
+                'attr' => array(
+                    'placeholder' => 'What\'s your last name?',
+                    'name' => 'nom',
+                    'class' => 'nom',
+                    'required' => true,
+                )
+            ))
             ->add('email', 'email', array(
-                'label'=> 'Email : ',
+                'label'=> 'Email',
                 'attr' => array(
                     'placeholder' => 'So we can get back to you.',
                     'name' => 'email',
@@ -43,7 +43,7 @@ class ContactType extends AbstractType
                 )
             ))
             ->add('confname', 'text', array(
-                'label'=> 'Conference name :',
+                'label'=> 'Conference name',
                 'attr' => array(
                     'placeholder' => 'conference name',
                     'name' => 'confname',
@@ -52,7 +52,7 @@ class ContactType extends AbstractType
                 )
             ))
             ->add('message', 'text', array(
-                'label'=> 'Message : ',
+                'label'=> 'Message',
                 'attr' => array(
                     'rows' => 8,
                     'placeholder' => 'Your message to us...',

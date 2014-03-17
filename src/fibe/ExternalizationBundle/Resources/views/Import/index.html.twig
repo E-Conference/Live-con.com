@@ -4,19 +4,6 @@
 {% block stylesheets_page %}
 
         <style>
-        #drop{
-                border:4px dashed #bbb;
-                -moz-border-radius:5px;
-                -webkit-border-radius:5px;
-                border-radius:5px;
-                padding:25px;
-                text-align:center;
-                font:20pt bold,"Vollkorn";
-                color:#bbb;
-        }
-        #drop > span{
-            display: block;
-        }
         .col-sm-12 > .panel {
             margin-top: 1.5em;
         }
@@ -62,7 +49,7 @@
         <div id="page-data-file" class="page">
              <form id="datasetFileForm"  class="input-append">
                 <label for="datasetFile"> 
-                    Available XML input format are : 
+                    Available input format are : 
                         <span class="badge badge-success" ><i class="fa fa-check" ></i>  XML</span>
                         <span class="badge badge-success"><i class="fa fa-check" ></i>  XLS</span>
                       
@@ -71,10 +58,7 @@
                 <div class="input-group">
     				   <span class="input-group-addon">File to import</span>
                         
-                        <div id="drop">
-                            <span>Drag your file here <br/> or </span>
-                            <input id="datasetFile" class="btn btn-primary " title="Search for a file to add" type="file"/>
-                        </div>
+                    <input id="datasetFile" class="btn btn-primary " title="Search for a file to add" type="file"/>
                 </div> 
             </form>  
             <h3 class="text-info">Action</h3> 
@@ -186,6 +170,7 @@
         <script src="{{ asset('bundles/fibeexternalization/js/importer/xmlImport/ocs_config.js') }}" type="text/javascript" ></script>
 
         <script src="{{ asset('js/bootstrap-file-input/bootstrap.file-input.js') }}"></script>  
+        <script src="{{ asset('js/bootstrap-file-input/file-dropper.js') }}"></script>  
 
         <script type="text/javascript" >
 
@@ -193,8 +178,7 @@
         $(document).ready(function(){
 
             /*********      handle change page workflow  **********/
-            Pager.initialize($("#page-data-file"));
-            var dropDataFile             = document.getElementById('drop');
+            Pager.initialize($("#page-data-file")); 
             var selectDataFile           = document.getElementById("datasetFile");  
             var formKnownMappingFormat   = document.getElementById("form-known-mapping-format");  
             var selectKnownMappingFormat = document.getElementById("known-mapping-format");  
@@ -203,15 +187,9 @@
             var newMappingFile           = document.getElementById('new-mapping'); 
             var backToMapping            = document.getElementById('back-to-mapping'); 
             var sendData                 = document.getElementById('send-data'); 
-            if(dropDataFile.addEventListener) {
-                dropDataFile.addEventListener('dragenter', handleDragover, false); 
-                dropDataFile.addEventListener('dragover', handleDragover, false); 
-                dropDataFile.addEventListener('dragleave', handleDragleave, false);
-                dropDataFile.addEventListener('drop', handleDataFileChange, false);
-            }
-            if(selectDataFile.addEventListener) {
-                selectDataFile.addEventListener('change', handleDataFileChange, false);
-            }
+            
+            fileDropper(datasetFile,handleDataFileChange);
+            
             if(newMappingFile.addEventListener) {
                 newMappingFile.addEventListener('click', handleNewMappingFile, false);
             }
@@ -230,11 +208,6 @@
             } 
 
 
-            // prevent misdrop
-            $(document).bind('drop dragover', function (e) {
-                e.preventDefault();
-            });  
-            $("#datasetFile").bootstrapFileInput();
 
 
             /*********       run the importer and send the serialized obj to php   **********/ 
@@ -257,32 +230,22 @@
         function handleDragover(e) {
                 e.stopPropagation();
                 e.preventDefault(); 
-                $("#drop").css("border-color","green")
+                $(".droppable-input").css("border-color","green")
                            .find("> span").css({"color":"#444"});
         }
 
         function handleDragleave(e) {
                 e.stopPropagation();
                 e.preventDefault();
-                $("#drop").css("border-color","#bbb")
+                $(".droppable-input").css("border-color","#bbb")
                            .find("> span").css({"color":"#bbb"});
         }
 
 
-         function handleDataFileChange(e) {
+         function handleDataFileChange(file) {
 
-                e.stopPropagation();
-                e.preventDefault();
-              
-                Pager.changePage('#page-mapping-file');
-                var file = "";
-                if(e.dataTransfer){
-                    file = e.dataTransfer.files[0];
-                }else{
-                    file = this.files[0];
-                } 
-                mapper.setFile(file);
-               
+            Pager.changePage('#page-mapping-file'); 
+            mapper.setFile(file); 
         }
         
 
