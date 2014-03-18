@@ -368,17 +368,18 @@
           if(res == currentRes)filterResourcesByIds(val); //ADDED FOR RESOURCES
       }).on("changed", function(ev,data,ids){
           bootstrapAlert("success",ids.length+" events have been well fetched" );
-          ids.push(mainConfEvent.id)
-
+          ids.push(mainConfEvent.id);
+          var calEvents = $calendar.fullCalendar('clientEvents');
           //hide filtered event 
-          for(var i in Events){
-            var e = Events[Events[i].id];
-            if($.inArray(i, ids) === -1 ){
+          for(var i in calEvents){
+            var e = Events[calEvents[i].id];
+            if($.inArray(e.id, ids) === -1 ){
               //hide
               e.hideElem();
             } else if( ($calendar.fullCalendar('getView').name != "resourceDay" || !e.hasChild()) && e.hide === true){
               //show back
               e.showElem();
+
             }
             // else{ 
             //   if(e.elem)e.elem.show() 

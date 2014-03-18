@@ -16,6 +16,7 @@ class ConfEventType extends EventType
 
     public function __construct($user,$entity)
     {
+        parent::__construct($user);
         $this->user   = $user;
         $this->entity = $entity;
     }
@@ -74,7 +75,7 @@ class ConfEventType extends EventType
                 ->add('acronym', 'text', array('required' => false,
                                             'label'     => 'Acronym',
                                             'attr'  => array('placeholder'   => 'Acronym')))
-                ->add('categories',null,array('required' => false)) 
+                ->add('categories',null,array('required' => false))
                  ;
 
         }

@@ -18,6 +18,14 @@ use IDCI\Bundle\SimpleScheduleBundle\Form\EventListener\RecurFieldSubscriber;
 
 abstract class CalendarEntityType extends AbstractType
 {
+
+    private $user;
+
+    public function __construct($user)
+    {
+        $this->user   = $user;
+    }
+
     abstract public function getEntityDiscr();
 
     public function buildForm(FormBuilderInterface $builder, array $options)
