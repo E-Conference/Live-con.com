@@ -16,7 +16,16 @@ use IDCI\Bundle\SimpleScheduleBundle\Entity\CalendarEntity;
 
 class EventType extends LocationAwareCalendarEntityType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+   
+    private $user;
+
+    public function __construct($user)
+    {
+        parent::__construct($user);
+        $this->user   = $user;
+    }
+
+   public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             
