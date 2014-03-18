@@ -32,6 +32,10 @@
              -moz-background-clip: padding;
                   background-clip: padding-box;
         }
+
+        #datafile-form .list-group-item{
+            cursor: move;
+        }
         </style>
     {% endblock %}
 {% block centerPanel %}
@@ -96,7 +100,7 @@
             <button id="new-mapping" class="btn btn-default "><i class="fa fa-plus"> </i>  New mapping file </button>
         </div>
 
-        <div id="page-new-mapping-file" data-progress="35" data-desc="Step 3 : Please proceed to the mapping"  class="page" style="display:none;">
+        <div id="page-new-mapping-file" data-progress="35" data-desc="Step 3 : Drag and drop your data and import them!"  class="page" style="display:none;">
             <div style="margin: 15px;"> 
                 <button id="submit-new-mapping" class="btn btn-success btn-lg"><i class="fa fa-play-circle"></i> Try your mapping </button>
             </div>
@@ -365,7 +369,7 @@
         function getHtmlResultDiv(data,importedLog,notImportedLog,endMsg){
             var html='<div class="row"><div class="col-md-12 col-lg-4"><div class="panel panel-primary">\
                                                   <!-- Default panel contents -->\
-                                                  <div class="panel-heading">'+(data.conference.setSummary?data.conference.setSummary:'Found datas')+'</div>';
+                                                  <div class="panel-heading">'+(mapper.fileName || 'Found datas')+'</div>';
 
                     html+= getMsgUl(mapper["serialisedDatas"],endMsg || "found",true);
 
