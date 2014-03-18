@@ -590,6 +590,27 @@ CalEvent.prototype.getNonAllDayBros = function (){
 };
 
 
+CalEvent.prototype.hideElem = function(){
+    if(!this.elem)return;
+    this.elem.stop( true, true )
+      .animate(
+          { opacity: 0, "margin-top": "-10px" },
+          {
+            duration:'slow',
+            queue   :false,
+            complete:function(){
+              $(this).hide()}
+          });
+    this["hide"] = true;
+};
+CalEvent.prototype.showElem = function(){
+  if(!this.elem)return;
+    this.elem.css("margin-top", "-10px");
+    this.elem.stop( true, true ).show().animate({ opacity: 1, "margin-top": "0px" },
+                                                     {duration:'slow',queue:false}); 
+    this["hide"] = false;
+};
+
 /**
  * construct popOverContent html
  * @return {html string} (to be appended to bootstrap popover )

@@ -18,7 +18,7 @@
             <td>{{ entity.summary }}</td>
             <td>
                 {% for category in entity.categories %}
-                <div style="background:{{ category.color }};float:left;margin-right:6px;" title="{{ category.name }}">{{ category.name }}</div>
+                <div style="background:{{ category.color }};float:left;margin-right:6px;" title="{{ category.label }}">{{ category.label }}</div>
                 <br>
                 {% endfor %}
             </td>

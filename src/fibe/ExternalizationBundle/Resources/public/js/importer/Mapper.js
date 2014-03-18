@@ -5,6 +5,7 @@ var Mapper = function(){
         mapping,
         data,
         file,
+        fileName,
         serialisedDatas,
         notImportedLog,
         importedLog,
@@ -17,8 +18,9 @@ var Mapper = function(){
         'ocs': {mapping:ocsConfig,mapper:xmlMapper}
     }
 
-
+    this.fileName;
     this.setFile = function(f){
+        this.fileName = f.name;
         file = f; 
     }
     this.readFile = function(){ 
@@ -33,12 +35,11 @@ var Mapper = function(){
     }
     this.generateMappingFile = function(){
         mapping = generateMappingFile();
-    }
-
+    } 
 
     this.getUtils = function(){
         return mapper.utils; 
-    }
+    } 
 
     this.map = function($ctn){
         mapper["mappingConfig"] = mapping = mapping || mapper.defaultMapping; 
@@ -49,16 +50,16 @@ var Mapper = function(){
         knownCollection = {}; 
 
         var basePath = "root";
-        var globalPanel = Pager.getPanelHtml("Found data",{panelClass:"panel-primary",margin:false,collapsible:false,collapsed:false})
+        var globalPanel = Pager.getPanelHtml("Data of "+this.fileName,{panelClass:"panel-primary",margin:false,collapsible:false,collapsed:false})
                                     .appendTo($ctn);
 
 
         console.log("mapping : ",data); 
           
 
-        function nodeCallBack(nodePath,$el,nodeName,panelOp,htmlOnly){
+        function nodeCallBack(nodePath,$el,basePath,panelOp,htmlOnly){
             if(htmlOnly){
-                return doPanel();
+                // return doPanel();
             }
             if(!self.isNodeKnown(nodePath)){
                 return doPanel();
@@ -226,14 +227,16 @@ var Mapper = function(){
         $('#datafile-form .panel').each(function(){
             var nodePath = $(this).data("node-path"); 
             if(knownCollection[nodePath]){
-                knownCollection[nodePath] = $(this);
+                knownCollection[nodePath] = $(this)
+                          .find("> .panel-heading > .panel-title")
+                             .prepend('<i title=" collection node of '+collectionNodeName+' " class="fa fa-bars"></i> ');;
                 var collectionNodeName = $(this).find("> .panel-heading").text();
                 // $(this).find("> .panel-heading").remove();
                 var childPanel = $(this).find("> .list-group > .panel-success ")
                 childPanel.data("collection",nodePath)
                           // .insertBefore($(this))
-                          .find("> .panel-heading > .panel-title")
-                             .prepend('<i title=" collection node of '+collectionNodeName+' " class="fa fa-bars"></i> ');
+                          // .find("> .panel-heading > .panel-title")
+                          //    .prepend('<i title=" collection node of '+collectionNodeName+' " class="fa fa-bars"></i> ');
                 // $(this).remove();
             }
         })
@@ -260,10 +263,10 @@ var Mapper = function(){
 
             //draggable
             $(this).draggable({
-                zIndex: 999,
+                zIndex: 999, 
                 revert: true,      // will cause the event to go back to its
                 revertDuration: 0,  //  original position after the drag
-                helper: 'clone'
+                // helper: 'clone'
             });
         })
     }
