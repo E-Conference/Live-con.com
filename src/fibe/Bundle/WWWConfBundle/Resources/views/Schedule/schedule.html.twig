@@ -373,11 +373,13 @@
           //hide filtered event
           var calendarEvents = $calendar.fullCalendar('clientEvents'); //loop only on calendar events 
           for(var i in calendarEvents){
-            if($.inArray(calendarEvents[i].id, ids) === -1 ){ 
+            if($.inArray(calendarEvents[i].id, ids) === -1 ){
+              //hide
               Events[calendarEvents[i].id].elem.stop( true, true ).animate({ opacity: 0, "margin-top": "-10px" },
                                                         {duration:'slow',queue:false,complete:function(){$(this).hide()}});
               Events[calendarEvents[i].id]["hide"] = true;
             }else if(Events[calendarEvents[i].id].hide === true){
+              
               Events[calendarEvents[i].id].elem.css("margin-top", "-10px");
               Events[calendarEvents[i].id].elem.stop( true, true ).show().animate({ opacity: 1, "margin-top": "0px" },
                                                                {duration:'slow',queue:false});
