@@ -10,7 +10,7 @@ use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
  
 /**
  * @ORM\Entity
- * @ORM\Table(name="authorization")
+ * @ORM\Table(name="authorizations")
  */
 class Authorization
 {
