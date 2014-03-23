@@ -32,8 +32,8 @@
                        <!-- <th>Team Manager</th> -->
                         <th>Mobil App Manager</th>
                         <th>Schedule Manager</th>
-                        <th>Team Manager</th>
                         <th>Datas Conference Manager</th>
+                        <th>Team Manager</th>
                         <th>Action<th>
                          
                     </tr>
@@ -121,14 +121,7 @@
                             {% else %}
                                       <i class="fa fa-ban"></i>
                             {% endif %}
-                         </td>
-                         <td>
-                            {% if  entity.getFlagByConferenceId(currentConf.id,'team') == 1 %}
-                                      <i class="fa fa-check"></i>
-                            {% else %}
-                                      <i class="fa fa-ban"></i>
-                            {% endif %}
-                         </td>    
+                         </td>   
                          <td>
                             {% if  entity.getFlagByConferenceId(currentConf.id,'datas') == 1 %}
                                       <i class="fa fa-check"></i>
@@ -136,6 +129,13 @@
                                       <i class="fa fa-ban"></i>
                             {% endif %}
                          </td>
+                          <td>
+                            {% if  entity.getFlagByConferenceId(currentConf.id,'team') == 1 %}
+                                      <i class="fa fa-check"></i>
+                            {% else %}
+                                      <i class="fa fa-ban"></i>
+                            {% endif %}
+                         </td> 
                          <td>
                               <a class="btn btn-large btn-warning edit" href="{{ path('schedule_authorization_edit', { 'id': entity.getAuthorizationByConference(app.user.getCurrentConf()).getId()}) }}"><i class="fa fa-pencil"></i></a>
                          </td>

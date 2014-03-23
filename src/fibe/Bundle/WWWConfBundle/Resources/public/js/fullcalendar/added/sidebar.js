@@ -89,7 +89,7 @@ function Sidebar(readOnly){
 
           sidebarEventHtml($event,event);
 
-          $event.data("id",event.id);
+          $event.attr("data-id",event.id);
           event['elem'] = $event;
           //set child drag     
           if (!readOnly){  

@@ -589,6 +589,30 @@ CalEvent.prototype.getNonAllDayBros = function (){
     return rtn; 
 };
 
+CalEvent.prototype.getElem = function(){
+    return this.elem || $('.fc-event-sidebar[data-id="'+this.id+'"]');
+};
+
+CalEvent.prototype.hideElem = function(){
+    if(!this.getElem())return;
+    this.getElem().stop( true, true )
+      .animate(
+          { opacity: 0, "margin-top": "-10px" },
+          {
+            duration:'slow',
+            queue   :false,
+            complete:function(){
+              $(this).hide()}
+          });
+    this["hide"] = true;
+};
+CalEvent.prototype.showElem = function(){
+  if(!this.getElem())return;
+    this.getElem().css("margin-top", "-10px");
+    this.getElem().stop( true, true ).show().animate({ opacity: 1, "margin-top": "0px" },
+                                                     {duration:'slow',queue:false}); 
+    this["hide"] = false;
+};
 
 /**
  * construct popOverContent html

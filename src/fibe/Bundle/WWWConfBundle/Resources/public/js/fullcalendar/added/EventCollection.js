@@ -486,8 +486,7 @@ var EventCollection = {
           console.debug(moment().diff(logtime)+" to stylizeBlocks"); 
           console.log( "######################################################"); 
         // },0);
-            
-      // hide events that aren't a leaf in the hierarchy in resource mode 
+             
       if($calendar.fullCalendar('getView').name == "resourceDay" && mainConfEvent.hasChild() ) 
         $(mainConfEvent.elem).hide();
     },

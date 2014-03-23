@@ -71,7 +71,7 @@
                 <div class="row">
                    <div class="col-lg-2"></div>
                    <div class="col-lg-8">
-                    <h1>Topics</h1><div id="loader_topics" style="visibility: hidden; display:inline;"><img src="{{ asset('img/ajax-loader.gif') }}"/></div>
+                    <h1>Topics</h1>
                      <a  class="btn btn-link btn-small help"  data-toggle="popover" title="Add topic to the event" data-content="For add a topic to the event, select it in the  select field.">
                            <i class="icon-question"></i>
                       </a>    
@@ -89,7 +89,7 @@
                 <div class="row">
                    <div class="col-lg-2"></div>
                    <div class="col-lg-8">
-                    <h1 style="display:inline;">Papers Relation</h1><div id="loader_papers" class="loaders" style="display:inline;" ><img src="{{ asset('img/ajax-loader.gif') }}"/></div>
+                    <h1 style="display:inline;">Papers Relation</h1>
                      <a  class="btn btn-link btn-small help" data-toggle="popover" title="Add paper to the event" data-content="For add a paper to the event, select it in the select field.">
                            <i class="icon-question"></i>
                         </a>
@@ -107,7 +107,7 @@
                 <div class="row">
                    <div class="col-lg-2"></div>
                    <div class="col-lg-8">
-                      <h1 style="display:inline;">Persons Relation</h1><div id="loader_persons" class="loaders" style="display:inline;"><img src="{{ asset('img/ajax-loader.gif') }}"/></div>
+                      <h1 style="display:inline;">Persons Relation</h1>
                       <a  class="btn btn-link btn-small help" data-toggle="popover" title="Add a person to the event" data-content='For add a person to the event, select it in the select field and the role of this person for the event. Then, click on "add person".'>
                            <i class="icon-question"></i>
                       </a>
@@ -115,9 +115,9 @@
                         {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
                     </div>
 
-                <form onsubmit="addPerson(this)" id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
-                     {{ form_widget(role_form) }}
+                <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
                      {{ form_errors(role_form) }}
+                     {{ form_widget(role_form) }}
                      </br>
                       <button id="role_form_submit"class="btn btn-info" type="submit" >
                         <i class="fa fa-plus"></i> add Person
@@ -142,13 +142,11 @@
    $("#form_papers").change(function(){
       //get the url for the form
       var id_paper= $(this).val();
-      $('#loader_papers').show();
       //start send the post request
        $.post('{{path("schedule_confevent_addPaper") }}',               
                 {id_entity : '{{entity.id}}', id_paper: id_paper}, 
             function(response){
                    $('#paper_related_list').html(response);
-                   $('#loader_papers').hide();
                 
             }, "html");    
        });
@@ -157,15 +155,27 @@
    $("#form_topics").change(function(){
       //get the url for the form
       var id_topic= $(this).val();
-      $('#loader_topics').show();
       //start send the post request
        $.post('{{path("schedule_confevent_addTopic") }}',               
                 {id_entity : '{{entity.id}}', id_topic: id_topic}, 
             function(response){
                    $('#topics_related_list').html(response);
-                   $('#loader_topics').hide();
             }, "html");    
        });
+
+   $("#role_form").submit(function(){
+        //get the url for the form
+        var id_person = $('#fibe_bundle_wwwconfbundle_roletype_person').val();
+        var id_type = $('#fibe_bundle_wwwconfbundle_roletype_type').val();
+        //start send the post request
+         $.post("{{path('schedule_confevent_addPerson')}}",               
+                 {id_person : id_person, id_type:id_type, id: "{{entity.id }}"} , 
+              function(response){
+                     $('#person_related_list').html(response);
+                  
+              }, "html");    
+          return false;
+         });
 
     
        
@@ -174,24 +184,7 @@
    
   
   });
-  function addPerson(form){
-      //get the url for the form
-      var id_person = $(form).find('#fibe_bundle_wwwconfbundle_roletype_person').val();
-      if(!mandatoryCheck(id_person))return false;
-      var id_type = $(form).find('#fibe_bundle_wwwconfbundle_roletype_type').val();
-      if(!mandatoryCheck(id_type))return false;
-      $('#loader_persons').show();
-      //start send the post request
-      $.post("{{path('schedule_confevent_addPerson')}}",               
-          {id_person : id_person, id_type:id_type, id: "{{entity.id }}"} , 
-          function(response){
-                 $('#person_related_list').html(response);
-                 $('#loader_persons').hide();
-          }, 
-          "html"
-      );    
-      return false;
-  };
+  
 </script>
 
 {% endblock javascripts_page %}
