@@ -10,8 +10,8 @@
     </button>
 
 
-      <button class="btn btn-default btn-lg dropdown-toggle btn-conf" type="button" data-toggle="dropdown">
-         {{ app.user.getCurrentConf().getConfName() }} 
+      <button class="btn btn-default btn-lg btn-conf" type="button">
+         <a href="{{ path('schedule_conference_edit') }}" >{{ app.user.getCurrentConf().getConfName() }} </a>
       </button>
 
       

@@ -74,6 +74,16 @@ body{
 	color: #19313b;
 }
 
+.btn-conf a{
+	text-decoration: none;
+	color: #19313b;
+}
+
+.btn-conf:focus{
+	text-decoration: none;
+	color: #19313b;
+}
+
 .navbar-inverse .navbar-nav>li>a{
 	color:#f2f2f2 !important ;
 }
