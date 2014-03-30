@@ -5,7 +5,7 @@
       var self = this;
       var endPointUrl = endPointUrl;
       var currentFilter= {};
-      this.getFilters = function(){ return currentFilter;};
+      this.getFilters = function(){ return currentFilter;}
 
       $('#filters').find("select").each(function(){
         $(this).select2("destroy").select2({

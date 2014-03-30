@@ -222,7 +222,7 @@
             $('.empty-conf').click(function(){
                 confirmEmpty(function(){
                     window.location = "{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}";
-                });
+                })
                 return false;
             }); 
  
@@ -260,7 +260,7 @@
                 $("#back-to-mapping").hide();
                 $(mapper).on("fileRead",function(ev,data){
                     extractDatas();
-                });
+                })
                 mapper.setKnownMapping($("#known-mapping-format").val())
                       .readFile();
                       console.debug(mapper.getMapping())
@@ -302,8 +302,8 @@
                         error:function(a,b,c)
                         {
                             bootstrapAlert("warning",'import failed because : '+c);
-                            console.log(a);
-                            console.log(b);
+                            console.log(a)
+                            console.log(b)
                             console.log(c) 
                         }
                     });
@@ -369,28 +369,28 @@
         function getHtmlResultDiv(data,importedLog,notImportedLog,endMsg){
             var html='<div class="row"><div class="col-md-12 col-lg-4"><div class="panel panel-primary">\
                                                   <!-- Default panel contents -->\
-                                                  <div class="panel-heading">'+(mapper.fileName || 'Found;; datas')+'<;/div>';
+                                                  <div class="panel-heading">'+(mapper.fileName || 'Found datas')+'</div>';
 
                     html+= getMsgUl(mapper["serialisedDatas"],endMsg || "found",true);
 
                     html+='</ul></div></div><div class="col-sm-6 col-lg-4"><div class="panel panel-info">\
                                                   <!-- Default panel contents -->\
-                                                  <div class="panel-heading">Imported; properties : </div>\
-                                                  <ul class="list-group">'; ;
+                                                  <div class="panel-heading">Imported properties : </div>\
+                                                  <ul class="list-group">'; 
                     for(var i in importedLog){
                         html+= '<li class="list-group-item">'+importedLog[i]+"</li>";
                     } 
 
                     html+= '</ul></div></div><div class="col-sm-6 col-lg-4"><div class="panel panel-info">\
                                                   <!-- Default panel contents -->\
-                                                  <div class="panel-heading">Not; imported; properties : </div>\
+                                                  <div class="panel-heading">Not imported properties : </div>\
                                                   <ul class="list-group">';
                     for(var i in notImportedLog){
                         html+= '<li class="list-group-item">'+notImportedLog[i]+"</li>";
                     }
 
                     return html + '</ul></div></div></div>';
-        };;;;;;;;;;;
+        }
 
         //confirm with a bootstrap modal then call callback
         function confirmEmpty(callback){
@@ -423,7 +423,7 @@
             msg += "<ul"+(panelMode?' class="list-group" ':'')+">"; 
             for (var i in dataArray) 
                 if(dataArray[i] && dataArray[i].length >0)
-                    msg +="<li"+(panelMode?' class="list-group-item" ':'')+">"+dataArray[i].length +" "+i+" "+endString+" !</li>";
+                    msg +="<li"+(panelMode?' class="list-group-item" ':'')+">"+dataArray[i].length +" "+i+" "+endString+" !</li>"
 
             return msg + "</ul>";
         }

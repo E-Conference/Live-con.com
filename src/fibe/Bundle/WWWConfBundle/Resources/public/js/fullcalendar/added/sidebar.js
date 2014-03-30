@@ -116,7 +116,7 @@ function Sidebar(readOnly){
                               } 
                             // },1);//event isn't yet updated   
                         } 
-                      });
+                      }) 
               // alert("update")
           } else{$event.css("cursor","default")}  
           // $(".scroller").mCustomScrollbar("update");

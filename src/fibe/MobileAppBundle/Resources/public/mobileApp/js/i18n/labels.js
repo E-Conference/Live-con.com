@@ -322,8 +322,8 @@ define([],function() {
 
 		}
 
-	};
+	}
 
 	return labels;
-});
+})
 

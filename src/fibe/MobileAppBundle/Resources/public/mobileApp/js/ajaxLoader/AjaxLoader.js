@@ -1,7 +1,7 @@
 /**   
 *	Copyright <c> Claude Bernard - University Lyon 1 -  2013
 * 	License : This file is part of the DataConf application, which is licensed under a Creative Commons Attribution-NonCommercial 3.0 Unported License. See details at : http://liris.cnrs.fr/lionel.medini/wiki/doku.php?id=dataconf&#licensing 
-*   Author: Lionel MEDINI(supervisor), Florian BACLE, Fiona LEPEUTREC, Benoï¿½t DURANT-DE-LA-PASTELLIERE, NGUYEN Hoang Duy Tan
+*   Author: Lionel MEDINI(supervisor), Florian BACLE, Fiona LEPEUTREC, Benoît DURANT-DE-LA-PASTELLIERE, NGUYEN Hoang Duy Tan
 *   Description: Object in charge of executing commands
 *   Version: 1.2
 *   Tags:  JSON, SPARQL, AJAX
@@ -59,6 +59,6 @@ define(['jquery','jqueryMobile'], function($, jqueryMobile){
 				}
 			},this);
 		}
-	};
+	}
 	return AjaxLoader;
 });

@@ -63,7 +63,7 @@ function SWDF(SWDFUrl){
 	            //si la publi a plusieurs auteurs, on concatène l'auteur
 	            returnArray[i-1]['value']+=",  "+$(this).find("binding[name='name'] :first-child").text(); 
 	        }else{
-	            returnArray[i]={ value: "", uri: ""  };
+	            returnArray[i]={ value: "", uri: ""  }
 	             $(this).find("binding").each(function(){
 	                if($(this).attr("name")=="uriPaper"){
 	                    returnArray[i]['uri']=$(this).find(":first-child").text();
@@ -87,7 +87,7 @@ function toArray2(){
         var returnArray= [ ];
         var i=0; 
 	   $(self.$XMLresult).find("sparql > results > result").each(function(){
-	            returnArray[i]={ value: "", uri: ""  };
+	            returnArray[i]={ value: "", uri: ""  }
 	             $(this).find("binding").each(function(){
 	                if($(this).attr("name")=="eventLabel"){
 	                    returnArray[i]['value']=$(this).find(":first-child").text();

@@ -10,8 +10,8 @@ var EventCollection = {
 
     isLoginPage : function (html){
       if(Object.prototype.toString.call(html) == '[object String]' && html.substring(0,9)=="<!DOCTYPE"){
-        alert("Session expired :(\n\n\t refresh the page to reconnect!");
-        bootstrapAlert("warning","you must reconnect to continue!");
+        alert("Session expired :(\n\n\t refresh the page to reconnect!")
+        bootstrapAlert("warning","you must reconnect to continue!")
           
         return true;
       }
@@ -21,7 +21,7 @@ var EventCollection = {
 
     refetchEvents : function(refetch,force){ 
         if(force!==true && refetch!==true && (EventCollection.forceMainConfRendering!==true && EventCollection.eventsToComputeBroCountRangeIndexes.length==0)){ 
-          console.log("not rendered");
+          console.log("not rendered")
           return; 
         }  
         EventCollection.forceMainConfRendering = false;
@@ -99,7 +99,7 @@ var EventCollection = {
 
                   //resource view : check if bros have the same resource 
                   if(curBroResId != (bro.resourceId || bro.resource.id)){
-                    console.debug("decrementing "+curBro.id+" and "+bro.id);
+                    console.debug("decrementing "+curBro.id+" and "+bro.id)
 
                     //decrements bro resCount and resRange
                     EventCollection.broCountRange[bro.id]["resCount"] = baseBroResCount;
@@ -183,7 +183,7 @@ var EventCollection = {
          mainConfEvent.start = moment(newStart, "YYYY-MM-DD HH:mmZ").format();
          mainConfEvent.end = moment(newEnd, "YYYY-MM-DD HH:mmZ").format(); 
 
-         bootstrapAlert("success","conference event "+mainConfEvent.title+" have been updated");
+         bootstrapAlert("success","conference event "+mainConfEvent.title+" have been updated") 
          mainConfEvent.renderForRefetch();  
          firstDay = moment(mainConfEvent.start);
          EventCollection.forceMainConfRendering = true;
@@ -213,7 +213,7 @@ var EventCollection = {
     },
 
     getEventByDiv : function(div){
-        var id = div.data("id");
+        var id = div.data("id")
         // console.log()
         return Events[id];
     },
@@ -239,7 +239,7 @@ var EventCollection = {
           var element = event.elem; 
           if(!element)  continue; //event is in another view
           $(element).each(function(i,element){
-            element = $(element);
+            element = $(element)
             //action on hovered by another dragged event  
             element.data("border-color",element.css("border-color"))
                    // .data("background-color",element.css("background-color"))
@@ -297,7 +297,7 @@ var EventCollection = {
                   out: function( ev, ui ) { 
                     if ( $(ui.draggable).hasClass("fc-event") ){
                         // $(this).animate({"background-color":$(this).data("background-color")},{queue:false});
-                        $(this).removeClass("drag-over-events");
+                        $(this).removeClass("drag-over-events")
                         var event = EventCollection.getEventByDiv($(this));
 
                         for(var i in dragOverEvents){
@@ -334,8 +334,8 @@ var EventCollection = {
                       if(event.isChild(draggedEvent)){ 
                         return;
                       }  
-                      console.log(event);
-                      console.log(draggedEvent);
+                      console.log(event)
+                      console.log(draggedEvent)
 
                       // if(event.isOutOf(draggedEvent))return;  
                       
@@ -346,7 +346,7 @@ var EventCollection = {
 
                         $modalSetParent.find('button.yes').off("click").click(function(){ 
                           //set event as parent of draggedEvent and children relation
-                          console.log(draggedEvent+" is now the child of "+event.id);
+                          console.log(draggedEvent+" is now the child of "+event.id)
                           
                           draggedEvent.computeCountRange({allBrosInDay:true});
                           draggedEvent.setParent(event);
@@ -381,7 +381,7 @@ var EventCollection = {
                   curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false});
                 }
             },function(){
-                $(this).animate({"border-color":$(this).data("border-color")},{queue:false});
+                $(this).animate({"border-color":$(this).data("border-color")},{queue:false})
                 var elemEvent = EventCollection.getEventByDiv($(this));
                 var childrenDiv = EventCollection.getChildren(elemEvent,{concat:true,onlyEvent:true});
                 for (var j in childrenDiv){
@@ -407,7 +407,7 @@ var EventCollection = {
           stopRender = false;  
           // console.log("fetched",calendar_events_indexes) 
           // console.log(calendar_events)
-          console.log("########fullcalendar rendering "+calendar_events.length+" events");
+          console.log("########fullcalendar rendering "+calendar_events.length+" events")
 
           logtime = moment();
           callback(calendar_events ); 
@@ -424,7 +424,7 @@ var EventCollection = {
           op.data['before']=moment(end).format();
           op.data['after']=moment(start).format();
         }
-          console.log("########fetching");
+          console.log("########fetching")
         
         $.get(
           op.getOrderedUrl,
@@ -433,7 +433,7 @@ var EventCollection = {
               // if(stopRender===true)return;
               if(EventCollection.isLoginPage(events))return;
               
-              console.log(events);
+              console.log(events) 
               if(events.length!=0)bootstrapAlert("success",events.length+" events have been well fetched" );
               else {bootstrapAlert("info","no event found");}
 
@@ -481,7 +481,7 @@ var EventCollection = {
         if(!mainConfEvent || stopRender)return;
 
         // setTimeout(function(){    
-          logtime = moment();
+          logtime = moment() 
           EventCollection.stylizeBlocks();
           console.debug(moment().diff(logtime)+" to stylizeBlocks"); 
           console.log( "######################################################"); 
@@ -495,12 +495,12 @@ var EventCollection = {
       event = Events[event.id];
       //if the event is longer than a day, multiple divs can represent one event
       if(event["elem"] && event["elem"].is(":visible"))
-        event["elem"].push(element);
+        event["elem"].push(element)
       else
         event["elem"] = element; 
 
       // add id in the dom 
-      $(element).data("id",event.id);
+      $(element).data("id",event.id)
 
       //add class to the mainConfEvent
       if(event.id == mainConfEvent.id)return $(element).addClass("main-conf-event");
@@ -511,7 +511,7 @@ var EventCollection = {
       
       //set z-index calculated in calculateWidth
       if(!event.allDay)
-        $(element).css("z-index",EventCollection.broCountRange[event.id].zindex);
+        $(element).css("z-index",EventCollection.broCountRange[event.id].zindex)
       
       // hide events that aren't a leaf in the hierarchy in resource mode 
       if($calendar.fullCalendar('getView').name == "resourceDay" && event.hasChild() ) 
@@ -539,27 +539,27 @@ var EventCollection = {
                     $modal.on('hidden.bs.modal', function () {
                       setTimeout(function(){EventCollection.resetEvents()},10); 
                     })
-                  };
+                  }
 
                   //refetch if changed
                   $modalBody.find("form").each(function(){
                     $(this).submit(function(){
                       rerender();
                     })
-                  });
+                  }) 
                   //refetch if changed
                   $modalBody.find("a").click(function(){
                       rerender();
-                  });
+                  }) 
                   // close and refetch event 
                   $modalBody.find("#eventForm").submit(function(){ 
                       $modal.modal("hide"); 
-                  });
+                  }) 
                   $modalBody.find("#delete-event-form").submit(function(){
                       calEvent.removeForRefetch(); 
                       $modal.modal("hide"); 
                   }) 
-              });
+              }) 
               $modal.modal("show");
           }
       }); 
@@ -595,7 +595,7 @@ var EventCollection = {
                     bootstrapAlert("success","event <b>"+tmp['title']+"</b> has been well added");
                     tmp.id =response.id;
                     var ev = new CalEvent(tmp);    
-                    ev.setParent(mainConfEvent);
+                    ev.setParent(mainConfEvent)  
                     ev.renderForRefetch(); 
                     ev.computeCountRange({allBrosInDay:true});  
                     if(response.mainConfEvent){
@@ -680,7 +680,7 @@ var EventCollection = {
     },
     eventDragStop : function( event, jsEvent, ui, view ) {  
       // var parent = EventCollection.find(event.parent.id,{noSidebar:true});  
-      var event = Events[event.id];
+      var event = Events[event.id]
       if(mainConfEvent.id==event.id && !event.allDay)return;
       var parent = EventCollection.find(event.parent.id,{noSidebar:true}); 
       var children = EventCollection.getChildren(event,{concat:true,onlyEvent:true}); 
@@ -741,5 +741,5 @@ var EventCollection = {
       EventCollection.refetchEvents(false,true); 
       event.persist(); 
     }
-};
+}
 

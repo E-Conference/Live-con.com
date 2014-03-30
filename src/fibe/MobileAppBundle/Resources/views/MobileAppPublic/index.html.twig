@@ -81,7 +81,7 @@
         }
 
         //Modules configuration
-        var modules = [];
+        var modules = []
         {% if paper_module == true %}
           modules.push("publications");
         {% endif %}
@@ -117,7 +117,7 @@
         
         //Language configuration
         moment.lang({{ mobile_app_config.lang |json_encode|raw }});
-        configuration.conference.lang =; {{ mobile_app_config.lang |json_encode|raw }} || 'EN';
+        configuration.conference.lang = {{ mobile_app_config.lang |json_encode|raw }} || 'EN';
 
 
 
@@ -191,7 +191,7 @@
         }
 
         #uselessNav{
-          width : 0;
+          width : 0px;
         }
 
         #header-title{
@@ -272,8 +272,8 @@
         } 
         #getConferenceSchedule p.ui-li-desc{
           font-size : 11pt !important;
-          margin-top : 0 !important;
-          margin-bottom : 0 !important;
+          margin-top : 0em!important;
+          margin-bottom : 0em!important;
         }
 
         #getConferenceSchedule H3.ui-li-heading{
@@ -281,8 +281,8 @@
           overflow : visible;
           text-overflow : visible;
           font-size : 11pt !important;
-          margin-top : 0 !important;
-          margin-bottom : 0 !important;
+          margin-top : 0em!important;
+          margin-bottom : 0em!important;
         }
 
 

@@ -93,4 +93,4 @@
     },
     optimizeCss: "standard",
     inlineText: true
-});
+})

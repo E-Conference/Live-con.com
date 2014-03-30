@@ -143,7 +143,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						JSONToken.uri = this.eventUri.value || null;
 						JSONToken.name = this.eventSummary.value || null;
 						JSONfile[i] = JSONToken;
-				});
+				})
 				
 				StorageManager.pushCommandToStorage(currentUri,"getAllEvents",JSONfile);
 				return JSONfile;
@@ -1050,7 +1050,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				var JSONfile = {};
 				$(dataXML).each(function(i){  
 					var JSONToken = {};
-					JSONToken.eventLabel =  this.name;
+					JSONToken.eventLabel =  this.name
 					for(var j=0;j<this.xproperties.length;j++){
 					  if(this.xproperties[j].xNamespace=='event_uri')JSONToken.eventUri =  this.xproperties[j].xValue;
 					}
@@ -1685,7 +1685,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						var currentDay,currentUl ;
 						$.each(parameters.JSONdata, function(i,location){  
 							var lasts  =  moment(location.event.eventStart).from(moment(location.event.eventEnd),true); 
-							var formatedStart = moment(location.event.eventStart).format('h:mm a');
+							var formatedStart = moment(location.event.eventStart).format('h:mm a') 
 							currentCollabsible = $('<div data-role="collapsible" data-theme="d" ><h2>'+location.location+'</h2></div>');
 							currentUl = $('<ul data-role="listview" data-inset="true" ></ul>');
 							content.append(currentCollabsible); 
@@ -1697,7 +1697,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							                <p>'+labels[parameters.conference.lang].event.startAt+' : <strong>'+formatedStart+'</p>\
 											<p>'+labels[parameters.conference.lang].event.last+' : <strong>'+lasts+'</strong></p>\
 							                </a></li>'); 
-					  	});
+					  	})
 
 					  	parameters.contentEl.append(content);
 					}

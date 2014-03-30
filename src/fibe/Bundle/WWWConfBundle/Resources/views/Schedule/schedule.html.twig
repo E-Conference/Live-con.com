@@ -268,7 +268,7 @@
         },category : {
           url : "{{ path('exporter_api', { 'entity_reference': 'schedule_category','_format': 'json' }) }}?conference_id={{currentConf.id}}",
           parse : function(e){
-            console.log(e);
+            console.log(e)
             if( e.categories && e.categories.length < 1) return "other" ; 
             for(var i in e.categories){
               var c = e.categories[i];
@@ -290,7 +290,7 @@
           url:resConfig[currentRes].url,
           data :  op.data, 
           success :  function(events) {
-            events.push(unknownRes);
+            events.push(unknownRes)
             allRes = events.slice(0);
             res = events;
             if(callback)callback(res); 
@@ -304,7 +304,7 @@
           if($.inArray(res[i].id, ids) !== -1 )
             filteredRes.push(res[i])
         }
-        filteredRes.push(unknownRes);
+        filteredRes.push(unknownRes)
         $calendar.fullCalendar('setResources',filteredRes);
       }
 
@@ -322,7 +322,7 @@
             .append(
               $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"> First day</button>')
                 .click(function(e){ 
-                  $calendar.fullCalendar( 'gotoDate', firstDay.year(), firstDay.month(), firstDay.date() );
+                  $calendar.fullCalendar( 'gotoDate', firstDay.year(), firstDay.month(), firstDay.date() ) 
                   EventCollection.refetchEvents();
                 })
             ).append(
@@ -349,7 +349,7 @@
       {% if authorized == 1 %} 
           //dropped from calendar to sidebar;
           $(sidebar).on("dropped",function(ev,calEvent){
-              console.log("dropped",calEvent);
+              console.log("dropped",calEvent)
               Events[calEvent.id].dropFromSidebar();  
           }).on("drag",function(ev,event){ 
               event.dragChildren();

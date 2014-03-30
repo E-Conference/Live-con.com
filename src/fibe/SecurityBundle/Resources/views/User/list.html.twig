@@ -47,7 +47,7 @@
 
                         </ul>
                     </div>
-                    <form style="height:0;" id="delete-form{{ loop.index0 }}" action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
+                    <form style="height:0px;" id="delete-form{{ loop.index0 }}" action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
                         <input type="hidden" name="_method" value="DELETE" />
                         {{ form_widget(delete_forms[loop.index0]) }}
                     </form>
@@ -77,7 +77,7 @@
                             </li>
                         </ul>
                     </div>
-                    <form style="height:0;" id="toggle-role-form{{ loop.index0 }}" action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
+                    <form style="height:0px;" id="toggle-role-form{{ loop.index0 }}" action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
                         <input type="hidden" name="_method" value="DELETE" />
                         {{ form_widget(delete_forms[loop.index0]) }}
                     </form>
