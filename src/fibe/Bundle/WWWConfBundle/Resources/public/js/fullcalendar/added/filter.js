@@ -13,8 +13,8 @@
                     formatSelectionCssClass : function(obj,ctn){ 
                       var elem = $(obj.element); 
                       obj.css = {"background":elem.data("color")};
-                    },
-                })
+                    }
+        })
                 .change(function(){  
 
                     $(this).each(function(){ 

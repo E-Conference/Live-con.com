@@ -114,10 +114,10 @@ define(['jquery', 'underscore', 'jStorage'], function($, _, jStorage){
 		},
 		getMode : function(){
 			return StorageManager.get("configurations").storage;
-		},
+		}
 
-		
-	};
+
+  };
 	return StorageManager;
 });
 

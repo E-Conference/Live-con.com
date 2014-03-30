@@ -27,19 +27,19 @@
         <ul class="dropdown-menu"> 
           <li> 
             <a style="padding-right:5px;" href="{{ path('fos_user_profile_edit') }}" title="Profile">
-              <span class="icon-user glyphicon-white "> Profile		
+              <span class="icon-user glyphicon-white "> Profile </span>
             </a>
           </li>
 
           {% if is_granted("ROLE_ADMIN") %} 
           <li>
             <a href="{{ path('schedule_user_list') }}" title="Manage manager">
-              <span class="icon-list glyphicon-white "> Manage user
+              <span class="icon-list glyphicon-white "> Manage user </span>
             </a>
           </li>
           <li>
               <a href="{{ path('fos_user_registration_register') }}" title="Add manager">
-                <span class="icon-plus glyphicon-white "> Add manager
+                <span class="icon-plus glyphicon-white "> Add manager </span>
               </a> 
           </li>
           {% endif %}  

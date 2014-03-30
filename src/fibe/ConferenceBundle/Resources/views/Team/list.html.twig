@@ -102,12 +102,10 @@
                                     </li>
                                 </ul>
                             </div>-->
-                            <form style="height:0px;" id="toggle-role-form{{ loop.index0 }}" action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
+                            <form style="height:0;" id="toggle-role-form{{ loop.index0 }}" action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
                                 <input type="hidden" name="_method" value="DELETE" />
                                 {{ form_widget(delete_forms[loop.index0]) }}
                             </form>
-                            
-                        </td> 
                          <td>
                             {% if  entity.getFlagByConferenceId(currentConf.id,'app') == 1 %}
                                       <i class="fa fa-check"></i>
@@ -153,14 +151,14 @@
             <a class="btn btn-info" id="addUserInConference" onclick="$('#addUserInConferenceForm').toggle('slow')">
                 <i class="icon-plus icon-white"></i> Add user in conference
             </a>
-            </br>
+            <br />
             <div id="addUserInConferenceForm">
               <div class="row-fluid">
                  <div class="col-lg-4 well">
                     <form action="{{ path('schedule_user_create_authorization') }}" method="post" {{ form_enctype(authorization_form) }}>
                             {{ form_widget(authorization_form) }}
                             {{ form_errors(authorization_form) }}
-                            </br>
+                            <br />
                         <button type="submit" class="btn btn-block btn-success">
                             <i class="fa fa-check"></i>
                         </button>

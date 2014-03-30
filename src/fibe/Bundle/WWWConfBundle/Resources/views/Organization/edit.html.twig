@@ -28,20 +28,22 @@
             </div>
       </div>
       <div class="row page-content">
-   
 
-        <form action="{{ path('schedule_organization_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
-            <input type="hidden" name="_method" value="PUT" />
-                <div class="row">
+        <form action="{{ path('schedule_organization_update', { 'id': entity.id }) }}"
+              method="post" {{ form_enctype(edit_form) }}>
+          <input type="hidden" name="_method" value="PUT"/>
 
-                   <div class="col-lg-12">
-                     {{ form_widget(edit_form) }}
-                     {{ form_errors(edit_form) }}
-                     </br>
-                      <button type="submit" class="btn btn-block btn-success">
-                                <i class="fa fa-check"></i>
-                      </button>
-                </div>
+          <div class="row">
+
+            <div class="col-lg-12">
+              {{ form_widget(edit_form) }}
+              {{ form_errors(edit_form) }}
+              <br/>
+              <button type="submit" class="btn btn-block btn-success">
+                <i class="fa fa-check"></i>
+              </button>
+            </div>
+          </div>
         </form>
       </div>
 {% endblock %}

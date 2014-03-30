@@ -23,13 +23,13 @@ var ocsConfig = {
     getNodeKey : {
         format : [{
             fn : "attr",
-            arg : ["id"],
+            arg : ["id"]
         }]
     },
 
     getNodeName : {
         format : [{
-            fn : "localName",
+            fn : "localName"
         }]
     }, 
 
@@ -39,35 +39,35 @@ var ocsConfig = {
         setSummary : {
             format : [{
                 fn : "child",
-                arg : ["name"],
+                arg : ["name"]
             },{
-                fn : "text",
+                fn : "text"
             }] 
         },
         setAcronym : {
             format : [{
                 fn : "child",
-                arg : ["acronym"],
+                arg : ["acronym"]
             },{
-                fn : "text",
+                fn : "text"
             }] 
         },
         setDescription : {
             format : [{
                 fn : "child",
-                arg : ["description"],
+                arg : ["description"]
             },{
-                fn : "text",
+                fn : "text"
             }] 
         },
         setUrl : {
             format : [{
                 fn : "child",
-                arg : ["homepage"],
+                arg : ["homepage"]
             },{
-                fn : "text",
+                fn : "text"
             }] 
-        },
+        }
     },
     
     //
@@ -76,18 +76,18 @@ var ocsConfig = {
             array   : "organizations", 
             format : [{
                 fn : "children",
-                arg : ["organizations"],
+                arg : ["organizations"]
             },{
                 fn : "children",
-                arg : ["organization"],
+                arg : ["organization"]
             }], 
             label   : {
                 'name' : {
-                    setter : 'setName',
+                    setter : 'setName'
                 },
                 'country' : {
-                    setter : 'setCountry',
-                },
+                    setter : 'setCountry'
+                }
             }
 
         },
@@ -96,14 +96,14 @@ var ocsConfig = {
             array   :"persons", 
             format : [{
                 fn : "children",
-                arg : ["persons"],
+                arg : ["persons"]
             },{
                 fn : "children",
-                arg : ["person"],
+                arg : ["person"]
             }], 
             label   : {
                 'firstname' : {
-                    setter : 'setFirstName',
+                    setter : 'setFirstName'
                 },
                 'lastname' : {
                     setter : 'setFamilyName'
@@ -116,28 +116,28 @@ var ocsConfig = {
                     setter : 'addOrganization',
                     fk : {
                         format : [{
-                            fn : "text",
+                            fn : "text"
                         }],
-                        array : "organizations",
-                    },  
-                },
+                        array : "organizations"
+                    }
+                }
             }
         },
         {
             array   :"proceedings", 
             format : [{
                 fn : "children",
-                arg : ["papers"],
+                arg : ["papers"]
             },{
                 fn : "children",
-                arg : ["paper"],
+                arg : ["paper"]
             }], 
             label   : {
                 'title' : {
-                    setter : 'setTitle',
+                    setter : 'setTitle'
                 },
                 'abstract': {
-                    setter : 'setAbstract',
+                    setter : 'setAbstract'
                 }, 
                 //topics entity are created directly here (or retrieved)
                 //then we register the correct index
@@ -153,11 +153,11 @@ var ocsConfig = {
                     //so we must retrieve an index with getArrayId instead of objectMap 
                     fk : {
                         format : [{
-                            fn : "text",
+                            fn : "text"
                         }],
                         array : "topics", 
-                        create : "setName",
-                    },   
+                        create : "setName"
+                    }
                 },
                 //authors are retrieved from their id in the objectMap .
                 'authors' : {
@@ -166,21 +166,21 @@ var ocsConfig = {
                     setter : 'addAuthor',
                     fk : {
                         format : [{
-                            fn : "text",
+                            fn : "text"
                         }],
-                        array : "persons",
-                    },
+                        array : "persons"
+                    }
                 }
-            },
+            }
         },
         {  
             array   : "events", 
             format : [{
                 fn : "children",
-                arg : ["sessions"],
+                arg : ["sessions"]
             },{
                 fn : "children",
-                arg : ["session"],
+                arg : ["session"]
             }], 
             label   : {
                 'name' : {
@@ -192,10 +192,10 @@ var ocsConfig = {
                     setter : 'addPaper',
                     fk : {
                         format : [{
-                            fn : "text",
+                            fn : "text"
                         }],
-                        array : "proceedings",
-                    },  
+                        array : "proceedings"
+                    }
                 },
                 'pc-chairs' : {
                     wrapped : true,
@@ -203,13 +203,13 @@ var ocsConfig = {
                     setter : 'addChair',
                     fk : {
                         format : [{
-                            fn : "text",
+                            fn : "text"
                         }],
-                        array : "persons",
-                    }, 
+                        array : "persons"
+                    }
                 }
-            },
-            // set all events to sessionEvent
+            }
+          // set all events to sessionEvent
             // postProcess : function(node,event){
             //     var catName = "SessionEvent";
             //     var catId = getArrayId("categories",'setName',catName);
@@ -223,10 +223,10 @@ var ocsConfig = {
             // },
         },
 
-    ],
-    
+    ]
 
-    
-    
+
+
+
 
 };
