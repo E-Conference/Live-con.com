@@ -24,7 +24,7 @@
 }
 
 #calendar-container {
-    padding: 0px;
+    padding: 0;
 }
 
 /** filters **/
@@ -36,7 +36,7 @@
 /****  sidebar *****/
 
 #sidebar-container {
-    padding: 0px;
+    padding: 0;
 }
 
 #sidebar {

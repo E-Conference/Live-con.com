@@ -4,6 +4,10 @@ namespace fibe\Bundle\WWWConfBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * Class ConfEventControllerTest
+ * @package fibe\Bundle\WWWConfBundle\Tests\Controller
+ */
 class ConfEventControllerTest extends WebTestCase
 {
     /*

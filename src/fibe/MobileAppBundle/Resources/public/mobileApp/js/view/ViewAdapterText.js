@@ -2,7 +2,7 @@
 /**   
 *	Copyright <c> Claude Bernard - University Lyon 1 -  2013
 * 	License : This file is part of the DataConf application, which is licensed under a Creative Commons Attribution-NonCommercial 3.0 Unported License. See details at : http://liris.cnrs.fr/lionel.medini/wiki/doku.php?id=dataconf&#licensing 
-*   Author: Lionel MEDINI(supervisor), Florian BACLE, Fiona LEPEUTREC, Benoît DURANT-DE-LA-PASTELLIERE, NGUYEN Hoang Duy Tan
+*   Author: Lionel MEDINI(supervisor), Florian BACLE, Fiona LEPEUTREC, Benoï¿½t DURANT-DE-LA-PASTELLIERE, NGUYEN Hoang Duy Tan
 *   Description: This file provide simple function to build jquery mobile element such as button or sorted list plus some graph first attempt
 *   Version: 0.8
 *   Tags:  Backbone Jquery-ui-mobile Adapter Linked-Data Graph html5 canvas
@@ -162,7 +162,7 @@ define(['jquery','twttr'], function($,Twttr){
 		// option { option.theme a|b|c , option.tiny : bool, option.align : right,option.prepend }
 		appendButton: function(el,href,label,option){
 			if(!href)return;
-			if(!option)var option={}
+			if(!option)var option={};
 			var newButton = 
 				$(  '<a href="'+href+'" class="button" data-role="button" ' +
 					(option.tiny  ? 'data-inline="true"'              : 'data-icon="arrow-r" data-iconpos="right"') +
@@ -205,7 +205,7 @@ define(['jquery','twttr'], function($,Twttr){
 			return timelineWidget;
 		}
 		
-	}
+	};
 	return ViewAdapterText;
 });
 

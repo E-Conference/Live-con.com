@@ -65,7 +65,7 @@ CalEvent.prototype.persist = function(add){ //persist at server side
       parent    : this['parent'],
       end       : this['end'],
       start     : this['start']
-    }
+    };
     if( this.resource){  
       toSend['currentRes'] = currentRes;
       toSend['resourceId'] = this.resource.id;
@@ -134,7 +134,7 @@ CalEvent.prototype.removeForRefetch = function(){
  */
 CalEvent.prototype.computeCountRange = function(opt){
     // console.log("#ComputeCountRange allBrosInDay "+this.id);
-    if(!opt)opt={}
+    if(!opt)opt={};
       var bros; 
     if(opt.allBrosInDay || this.allDay){
       bros = calendar_events;
@@ -164,7 +164,7 @@ CalEvent.prototype.computeCountRange = function(opt){
         }
       }
     } 
-    addEvent(this.id) 
+    addEvent(this.id);
     function addEvent(id){
 
       if($.inArray(id, EventCollection.eventsToComputeBroCountRangeIndexes) === -1 && !Events[id].allDay && !Events[id].isInstant()) { 
@@ -176,7 +176,7 @@ CalEvent.prototype.computeCountRange = function(opt){
         // console.debug("#ComputeCountRange didn't add event "+id);
       }
     }
-}
+};
 
 
 CalEvent.prototype.calculateWidth = function(seg, leftmost, availWidth, outerWidth, levelI, bottom, top, forward, dis,rtl){  
@@ -195,7 +195,7 @@ CalEvent.prototype.calculateWidth = function(seg, leftmost, availWidth, outerWid
         //go to the parent place
         var parentId = this.parent.id,
             count    = !isResView ? EventCollection.broCountRange[this.id].count : EventCollection.broCountRange[this.id].resCount,
-            range    = !isResView ? EventCollection.broCountRange[this.id].range : EventCollection.broCountRange[this.id].resRange
+            range    = !isResView ? EventCollection.broCountRange[this.id].range : EventCollection.broCountRange[this.id].resRange;
             shifted  = false; 
 
         while(!Events[parentId].allDay){ 
@@ -217,7 +217,7 @@ CalEvent.prototype.calculateWidth = function(seg, leftmost, availWidth, outerWid
             }
             // height -= (2*Hmargin);
 
-            zindex +=100
+            zindex +=100;
 
             parentId = Events[parentId].parent.id;
         }
@@ -261,7 +261,7 @@ CalEvent.prototype.dropFromSidebar = function(){
     sidebar.setSidebarEvent(this,true);
     EventCollection.refetchEvents(); 
     this.persist();
-}
+};
 
 /*--------------------------------------------------------------------------------------------------*/
 /*------------------------------------- hierarchy function -----------------------------------------*/
@@ -296,7 +296,7 @@ CalEvent.prototype.dragChildren = function(){
     $(this.elem).mouseup(function(){
       $(this).off("mousemove").off("mouseup")
     })
-}
+};
 
 /**
  * child date has changed, update parent's one to fit
@@ -334,7 +334,7 @@ CalEvent.prototype.updateParentDate = function(){
             oldStart = event['start'],
             oldEnd = event['end']
             ;
-          console.log(event.id+" is not inside of "+parent.id)
+          console.log(event.id+" is not inside of "+parent.id);
           // console.log("oldStart : "+oldStart)
           // console.log("oldEnd : "+oldEnd)
         //event start is before parent start
@@ -465,7 +465,7 @@ CalEvent.prototype.SetRecurDate = function(){
 
         child['end']  = moment(lastMoment).format();    
         // child.elem.remove();  
-        child.computeCountRange()
+        child.computeCountRange();
         child.renderForRefetch();
         child.persist();
       } 
@@ -549,7 +549,7 @@ CalEvent.prototype.getBrosId = function (){
         return []; 
     var id = this.id;
     // console.log("children of"+this.id,Events[this.parent.id].children)
-    return $(Events[this.parent.id].children).map(function(key,value){ if(value && value.id!=id){return value.id;}})
+    return $(Events[this.parent.id].children).map(function(key,value){ if(value && value.id!=id){return value.id;}});
 
     // return $(Events[this.parent.id].children).map(function(key,value){return value.id!=this.id?value.id:undefined;})
 };
@@ -627,7 +627,7 @@ CalEvent.prototype.getPopoverContent = function(){
         }
         categories += "</ul>";
     }
-    var topics = "no topics"
+    var topics = "no topics";
     if(this.topics && this.topics[0] && this.topics[0].name!==""){
         topics = "<ul>";
         for (var i=0;i<this.topics.length;i++){
@@ -635,7 +635,7 @@ CalEvent.prototype.getPopoverContent = function(){
         }
         topics += "</ul>";
     }
-    var roles = "no roles"
+    var roles = "no roles";
     if(this.roles && this.roles[0] && this.roles[0].id!==""){
         roles = "<ul>";
         for (var i=0;i<this.roles.length;i++){
@@ -688,7 +688,7 @@ CalEvent.prototype.fitToDay = function (oldStart,oldEnd){
     // this.end = moment(midnightLimit).subtract("s",1).format();
     this.start = moment(this.end).subtract(duration).format(); 
   }
-}
+};
 
 /**
  * whether the event is out of the given arg event

@@ -262,7 +262,7 @@
           .append(
             $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"> First day</button>')
               .click(function(e){ 
-                $calendar.fullCalendar( 'gotoDate', firstDay.year(), firstDay.month(), firstDay.date() ) 
+                $calendar.fullCalendar( 'gotoDate', firstDay.year(), firstDay.month(), firstDay.date() );
                 EventCollection.refetchEvents();
               })
           ).append(
@@ -282,7 +282,7 @@
       {% if authorized == 1 %} 
           //dropped from calendar to sidebar;
           $(sidebar).on("dropped",function(ev,calEvent){  
-              console.log("dropped",calEvent)
+              console.log("dropped",calEvent);
               Events[calEvent.id].dropFromSidebar();  
           }).on("drag",function(ev,event){ 
               event.dragChildren();
@@ -300,7 +300,7 @@
           bootstrapAlert("info","event request sent","","<i class='fa-2x fa fa-spinner fa-spin'></i>");
       }).on("changed", function(ev,ids){
           bootstrapAlert("success",ids.length+" events have been well fetched" );
-          ids.push(mainConfEvent.id)
+          ids.push(mainConfEvent.id);
           var calendarEvents = $calendar.fullCalendar('clientEvents'); //loop only on calendar events 
           for(var i in calendarEvents){
             if($.inArray(calendarEvents[i].id, ids) === -1 ){ 

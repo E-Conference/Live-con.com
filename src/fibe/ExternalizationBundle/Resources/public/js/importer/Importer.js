@@ -62,8 +62,8 @@ function Importer() {
             if(fallback!=undefined)fallback("Error with the mapping config."); 
             return;
         }   
-        this.setMappingConfig(mappingConfig)
-        console.log("mapping with : ",mappingConfig)
+        this.setMappingConfig(mappingConfig);
+        console.log("mapping with : ",mappingConfig);
 
 
         var confName ;
@@ -111,7 +111,7 @@ function Importer() {
             return;
         }
         var nbRootChild = getNbRootChildren(rootNode);
-        console.log("rootNode contains "+nbRootChild+" children",rootNode)
+        console.log("rootNode contains "+nbRootChild+" children",rootNode);
         if(nbRootChild ==0){
             if(fallback)fallback("Empty root node"); 
             return;
@@ -142,7 +142,7 @@ function Importer() {
             var itemMapping = mappingConfig.mappings[i];  
             var collectionNode = Importer().doFormat(rootNode,mappingConfig.mappings[i].format); 
             if(collectionNode.length == 0){
-                console.warn("couln't not have got nodes for the mapping",mappingConfig.mappings[i])
+                console.warn("couln't not have got nodes for the mapping",mappingConfig.mappings[i]);
                 console.warn("with rootNode : ",rootNode)
             }else{
                 // console.log("mapping a collection",collectionNode)
@@ -338,7 +338,7 @@ function Importer() {
                 } 
 
                 function set(mapping,nodeName,node){
-                    var mappingStr  = getMappingPath(mapping)+" : "+nodeName
+                    var mappingStr  = getMappingPath(mapping)+" : "+nodeName;
                     if($.inArray(mappingStr, importedLog) === -1)
                         importedLog.push(mappingStr);  
                     var val = node.textContent;

@@ -115,17 +115,17 @@ a .swtich{
 
 
 .ui-btn-text{
-	padding-top : 0em!important;
-	padding-bottom : 0em!important;
+	padding-top : 0 !important;
+	padding-bottom : 0 !important;
 }
 
 .ui-li{
-	padding-top : 0em!important;
-	padding-bottom : 0em!important;
+	padding-top : 0 !important;
+	padding-bottom : 0 !important;
 
 }
 .ui-listview-filter{
-	margin-top: 0px;
+	margin-top: 0;
 
 }
 
@@ -153,8 +153,8 @@ a .swtich{
 } 
 #getConferenceSchedule p.ui-li-desc{
 	font-size : 11pt !important;
-	margin-top : 0em!important;
-	margin-bottom : 0em!important;
+	margin-top : 0 !important;
+	margin-bottom : 0 !important;
 }
 
 #getConferenceSchedule H3.ui-li-heading{
@@ -162,8 +162,8 @@ a .swtich{
 	overflow : visible;
 	text-overflow : visible;
 	font-size : 11pt !important;
-	margin-top : 0em!important;
-	margin-bottom : 0em!important;
+	margin-top : 0 !important;
+	margin-bottom : 0 !important;
 }
 
 

@@ -140,8 +140,8 @@ outline: none;
 	background: #f2f2f2;
 	width: 100%;
 	height: 70px;
-	left: 0px;
-	top: 0px;
+	left: 0;
+	top: 0;
 	padding-top: 10px;
 	border-bottom: 1px solid #19313b;
 	z-index: 100;
@@ -421,14 +421,14 @@ outline: none;
 
 #overview05{
 	position: absolute;
-	top: 0px;
-	left: 0px;
+	top: 0;
+	left: 0;
 }
 
 #overview06{
 	position: absolute;
 	top: 270px;
-	left: 0px;
+	left: 0;
 }
 
 
@@ -457,14 +457,14 @@ outline: none;
 
 #overview05{
 	position: absolute;
-	top: 0px;
-	left: 0px;
+	top: 0;
+	left: 0;
 }
 
 #overview06{
 	position: absolute;
 	top: 270px;
-	left: 0px;
+	left: 0;
 }
 
 
@@ -533,7 +533,7 @@ outline: none;
 	}
 
 	#getstarted p{
-		padding: 0px 40px;
+		padding: 0 40px;
 		margin-top: 15px;
 	}
 
@@ -600,7 +600,7 @@ outline: none;
 		color: #19313b;
 		border: 1px solid #cccccc;
 		border-radius: 3px;
-		padding: 0px 10px;
+		padding: 0 10px;
 		margin-bottom: 17px;
 	}
 
@@ -612,7 +612,7 @@ outline: none;
 		width: 460px;
 		height: 130px;
 		line-height: 20px;
-		margin-bottom: 0px;
+		margin-bottom: 0;
 	}
 
 	#contact input#submitButton{
@@ -723,8 +723,8 @@ outline: none;
 	background-size: cover;
 	width: 100%;
 	height: 100%;
-	top: 0px;
-	left: 0px;
+	top: 0;
+	left: 0;
 }
 
 #login_page #login{
@@ -736,7 +736,7 @@ outline: none;
 	margin-left: -160px;
 	top: 50%;
 	margin-top: -225px;
-	padding: 0px 20px;
+	padding: 0 20px;
 	font-family: Helvetica, Arial sans-serif;
 	font-size: 17px;
 	line-height: 30px;
@@ -770,7 +770,7 @@ outline: none;
 		color: #19313b;
 		border: 1px solid #cccccc;
 		border-radius: 3px;
-		padding: 0px 10px;
+		padding: 0 10px;
 		margin-bottom: 17px;
 	}
 
@@ -809,7 +809,7 @@ outline: none;
 	left: 50%;
 	margin-left: -160px;
 	top: 50px;
-	padding: 0px 20px;
+	padding: 0 20px;
 	font-family: Helvetica, Arial sans-serif;
 	font-size: 17px;
 	line-height: 30px;
@@ -832,7 +832,7 @@ outline: none;
 		color: #19313b;
 		border: 1px solid #cccccc;
 		border-radius: 3px;
-		padding: 0px 10px;
+		padding: 0 10px;
 		margin-bottom: 17px;
 	}
 
@@ -867,19 +867,21 @@ outline: none;
 --------------------------------------Datas Bundle Conferences-------------------------
 -------------------------------------------------------------------------------------*/
 .panel-livecon{
-	border-color:#19313b
-	}
+	border-color:#19313b;
+}
 
 .panel-livecon>.panel-heading{
 	color:#fff;
 	background-color:#19313b;
-	border-color:#19313b
-	}
+	border-color:#19313b;
+}
 
 .panel-livecon>.panel-heading+.panel-collapse 
-.panel-body{border-top-color:#19313b}
+.panel-body{border-top-color:#19313b;
+}
 .panel-livecon>.panel-footer+.panel-collapse 
-.panel-body{border-bottom-color:#19313b}
+.panel-body{border-bottom-color:#19313b;
+}
 
 	
 

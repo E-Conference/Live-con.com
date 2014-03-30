@@ -466,4 +466,4 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
       }
 		};
 		return AppConfig;
-})
+});

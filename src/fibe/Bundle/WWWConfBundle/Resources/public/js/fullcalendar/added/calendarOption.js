@@ -24,7 +24,7 @@ var calendarOption =  function(){
                           $modal.off('hidden.bs.modal').on('hidden.bs.modal', function () {
                             $calendar.fullCalendar( 'refetchEvents' ) 
                           })
-                        }) 
+                        });
                         // $modal.on('hidden.bs.modal', function () {
                         //   // rerender if changed
 
@@ -134,4 +134,4 @@ var calendarOption =  function(){
 
         }
     };
-}
+};

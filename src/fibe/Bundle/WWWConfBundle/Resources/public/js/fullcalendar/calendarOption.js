@@ -142,4 +142,4 @@ var calendarOption =  function(){
         selectHelper: true,
         droppable: true // this allows things to be dropped onto the calendar !!!
     };
-}
+};

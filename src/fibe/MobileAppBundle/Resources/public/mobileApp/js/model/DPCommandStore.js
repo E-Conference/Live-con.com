@@ -139,12 +139,10 @@
 										case "foaf_phone" : parameters.contentEl.append('<h2>Phone number</h2>'+resourcesList[resource]); break;
 										case "foaf_interest" : parameters.contentEl.append('<h2>Interest</h2>'+resourcesList[resource]); break;
 										case "foaf_knows" : parameters.contentEl.append('<h2>Knows</h2>'+resourcesList[resource]); break;
-										case "foaf_interest" : parameters.contentEl.append('<h2>Interest</h2>'+resourcesList[resource]); break;
 
 										case "foaf_thumbnail" : parameters.contentEl.append('<h2>Thumbnail</h2>'+resourcesList[resource]); break;
 										case "foaf_topic_interest" : parameters.contentEl.append('<h2>Interested in</h2>'+resourcesList[resource]); break;
 										case "foaf_workInfoHomepage" : parameters.contentEl.append('<h2>Work homepage</h2>'+resourcesList[resource]); break;
-										case "foaf_topic_interest" : parameters.contentEl.append('<h2>Interested in</h2>'+resourcesList[resource]); break;
 										case "foaf_PersonalProfileDocument" : parameters.contentEl.append('<h2>Personal profile document</h2>'+resourcesList[resource]); break;
 										default : "";
 
