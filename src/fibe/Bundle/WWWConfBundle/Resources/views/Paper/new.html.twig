@@ -20,21 +20,21 @@
                  </a>
             </div>
       </div>
-      <div class="row page-content">
+  <div class="row page-content">
 
-
-        <form action="{{ path('schedule_paper_create') }}" method="post" {{ form_enctype(form) }}>
-          <div class="row">
-               <div class="col-lg-12">
-                 {{ form_widget(form) }}
-                 {{ form_errors(form) }}
-                 </br>
-           <button type="submit" class="btn btn-block btn-success">
-                            <i class="fa fa-check"></i>
-                  </button>
-            </div>
-        </form>
+    <form action="{{ path('schedule_paper_create') }}" method="post" {{ form_enctype(form) }}>
+      <div class="row">
+        <div class="col-lg-12">
+          {{ form_widget(form) }}
+          {{ form_errors(form) }}
+          <br/>
+          <button type="submit" class="btn btn-block btn-success">
+            <i class="fa fa-check"></i>
+          </button>
+        </div>
       </div>
+    </form>
+  </div>
 
 {% endblock %}
  

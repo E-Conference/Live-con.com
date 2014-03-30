@@ -1,154 +1,164 @@
-    .event-popover ul,ul.event-popover {
-        margin-left: -1.5em;
-    }
-    .drag-over-events{
-        outline : 3px dashed green;
-    }    
-    .external-event {
-        min-width : 230px;
-        border-bottom-width: 1px;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px; 
-        border-top-width: 1px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-    }
-    #calendar {
-        margin-top : 15px;
-        margin : 0;
-        padding: 1em;
-        float  : left;
-    }
+.event-popover ul, ul.event-popover {
+    margin-left: -1.5em;
+}
 
-     #calendar-container{
-         padding:0px;
-    }
+.drag-over-events {
+    outline: 3px dashed green;
+}
 
-    /** filters **/
-    #filters  {
-        background-color :#f2f2f2;
-        padding: 20px;
-    }
+.external-event {
+    min-width: 230px;
+    border-bottom-width: 1px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-top-width: 1px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
 
-    /****  sidebar *****/
+#calendar {
+    margin-top: 15px;
+    margin: 0;
+    padding: 1em;
+    float: left;
+}
 
-    #sidebar-container{
-        padding:0px;
-    }
+#calendar-container {
+    padding: 0px;
+}
 
-    #sidebar {
-        padding   : 1em 0.5em;
-        padding   : 0 10px;
-        z-index   : 1;
-        float     : right;
-    }
-        
-    .bordered{
-        background: #f2f2f2;
-        width     : 100%;
-        border    : solid 2px #19313b;
-    }
+/** filters **/
+#filters {
+    background-color: #f2f2f2;
+    padding: 20px;
+}
 
-    #sidebar h4 {
-        font-size  : 16px;
-        margin-top : 0;
-        padding-top: 1em;
-    }
-        
-    #sidebar .history{
-        text-align: center;
-    }
-        
-    #sidebar p {
-        margin   : 1.5em 0;
-        font-size: 11px;
-        color    : #666;
-    }
-        
-    #sidebar p input {
-        margin        : 0;
-        vertical-align: middle;
-    } 
-        
-    .fc-event-sidebar {
-        min-height: 2em;
-    } 
+/****  sidebar *****/
 
-    #external-events{
-        border        : 1px solid #ccc;
-        padding       : 1em 0.5em;
-        margin        : 0;
-        margin-bottom : 1em;
-        position      : relative; 
-        z-index       : 2; 
-        max-height    : 600px ;
-        min-height        : 600px ; 
-        /*overflow-y    :    auto;*/
-        height        : 100%;  /*sidebar h4 height*/
-        min-height    : 15em;
+#sidebar-container {
+    padding: 0px;
+}
 
-    }
-        
-    .external-event { /* try to mimick the look of a real event */
-        margin-bottom: 1em;
-        border        : 1px solid rgb(58, 135, 173); 
-        padding      : 2px 4px;
-        background   : #3a87ad;
-        color        : #fff;
-        font-size    : .85em;
-        cursor       : pointer;
-    }
+#sidebar {
+    padding: 1em 0.5em;
+    padding: 0 10px;
+    z-index: 1;
+    float: right;
+}
 
+.bordered {
+    background: #f2f2f2;
+    width: 100%;
+    border: solid 2px #19313b;
+}
 
+#sidebar h4 {
+    font-size: 16px;
+    margin-top: 0;
+    padding-top: 1em;
+}
 
-    /****  modal *****/
+#sidebar .history {
+    text-align: center;
+}
 
-    #modal .modal-dialog { 
-        width: 90%; 
-    }  
-    #modal-set-parent .modal-body { 
-      /*text-align: center; */
-    }
-    #calendar table { table-layout: fixed; }
+#sidebar p {
+    margin: 1.5em 0;
+    font-size: 11px;
+    color: #666;
+}
 
-    .event-name { 
-      text-align: center;
-      margin:2em;
-      font-weight: bolder; 
-    }
-    .fc-event{
-      font-size: 1em; 
-      transform: translateZ(0);
-      transform: translate3d(0,0,0);
-      perspective: 1000; backface-visibility: hidden;
-    }
-    .fc-event-id {
-      display: none;
-    }
-    .fc-view { /* prevents dragging outside of widget */
-        overflow: visible;
-    }
+#sidebar p input {
+    margin: 0;
+    vertical-align: middle;
+}
 
-    /*** popover ***/
-    .popover{
-      z-index: 2000;
-      width: 276px;
-    }
+.fc-event-sidebar {
+    min-height: 2em;
+}
 
+#external-events {
+    border: 1px solid #ccc;
+    padding: 1em 0.5em;
+    margin: 0;
+    margin-bottom: 1em;
+    position: relative;
+    z-index: 2;
+    max-height: 600px;
+    min-height: 600px;
+    /*overflow-y    :    auto;*/
+    height: 100%; /*sidebar h4 height*/
+    min-height: 15em;
+
+}
+
+.external-event {
+    /* try to mimick the look of a real event */
+    margin-bottom: 1em;
+    border: 1px solid rgb(58, 135, 173);
+    padding: 2px 4px;
+    background: #3a87ad;
+    color: #fff;
+    font-size: .85em;
+    cursor: pointer;
+}
+
+/****  modal *****/
+
+#modal .modal-dialog {
+    width: 90%;
+}
+
+#modal-set-parent .modal-body {
+    /*text-align: center; */
+}
+
+#calendar table {
+    table-layout: fixed;
+}
+
+.event-name {
+    text-align: center;
+    margin: 2em;
+    font-weight: bolder;
+}
+
+.fc-event {
+    font-size: 1em;
+    transform: translateZ(0);
+    transform: translate3d(0, 0, 0);
+    perspective: 1000;
+    backface-visibility: hidden;
+}
+
+.fc-event-id {
+    display: none;
+}
+
+.fc-view {
+    /* prevents dragging outside of widget */
+    overflow: visible;
+}
+
+/*** popover ***/
+.popover {
+    z-index: 2000;
+    width: 276px;
+}
+
+.popover .description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 8em;
+    list-style-type: disc;
+}
+
+/* 5 line displayed about event's description*/
+@media (-webkit-min-device-pixel-ratio: 0) {
     .popover .description {
-      overflow: hidden;
-      text-overflow: ellipsis; 
-      max-height: 8em;
-      list-style-type: disc;
-    } 
-
-    /* 5 line displayed about event's description*/
-    @media (-webkit-min-device-pixel-ratio: 0) {
-        .popover .description {
-            display: -webkit-box;
-            -webkit-line-clamp: 5; /* number of lines to show */
-            -webkit-box-orient: vertical;
-        }
+        display: -webkit-box;
+        -webkit-line-clamp: 5; /* number of lines to show */
+        -webkit-box-orient: vertical;
     }
 }
 

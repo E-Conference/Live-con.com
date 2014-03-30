@@ -16,9 +16,9 @@ define([],function() {
 				'publishDate' : 'Published date',
 				'url' : 'Url',
 				'topics' : 'Topics',
-				'publishBy' : 'Published by',
-				
-			},
+				'publishBy' : 'Published by'
+
+      },
 			'otherPublication' : {
 				'year' : 'Year',
 				'authors' : 'Authors',
@@ -114,9 +114,9 @@ define([],function() {
 				'searchByTopic' :'by topic',
 				'searchByPerson' :'by person',
 				'searchByLocation' :'by location',
-				'searchByCategory' :'by category',
-				
-			},
+				'searchByCategory' :'by category'
+
+      },
 
 			'settingsPanel' : {
 				'storage' : 'Storage',
@@ -177,8 +177,8 @@ define([],function() {
 				'publishDate' : 'Date de publication',
 				'url' : 'Url',
 				'topics' : 'Themes',
-				'publishBy' : 'Publié par',	
-			},
+				'publishBy' : 'Publié par'
+      },
 			'otherPublication' : {
 				'year' : 'Année',
 				'authors' : 'Auteurs',
@@ -272,9 +272,9 @@ define([],function() {
 				'searchByTopic' :'par theme',
 				'searchByPerson' :'par participant',
 				'searchByLocation' :'par salle',
-				'searchByCategory' :'par catégorie',
-			
-			},
+				'searchByCategory' :'par catégorie'
+
+      },
 
 			'settingsPanel' : {
 				'storage' : 'Storage',

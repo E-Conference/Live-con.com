@@ -140,6 +140,6 @@ var calendarOption =  function(){
         date: firstDay.date(),
         selectable: true, 
         selectHelper: true,
-        droppable: true, // this allows things to be dropped onto the calendar !!!
+        droppable: true // this allows things to be dropped onto the calendar !!!
     };
 }

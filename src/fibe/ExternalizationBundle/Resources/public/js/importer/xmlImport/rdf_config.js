@@ -11,12 +11,12 @@ var rdfConfig = {
     getNodeKey : {
         format : [{
             fn : "attr",
-            arg : ["rdf:about"],
+            arg : ["rdf:about"]
         }] 
     }, 
     getNodeName : {
         format : [{
-            fn : "rdfNodeName", 
+            fn : "rdfNodeName"
         }] 
     },  
     mappings : [
@@ -24,22 +24,22 @@ var rdfConfig = {
             array   : "locations",  
             format : [{
                 fn : "children",
-                arg : ["meetingroomplace",true],
+                arg : ["meetingroomplace",true]
             }], 
             label : {
                 'rdfs:label' : {
                     setter : 'setName'
                 }, 
                 'rdfs:comment' : {
-                    setter : 'setDescription',
-                },
-            },
+                    setter : 'setDescription'
+                }
+            }
         },
         {
             array   : "organizations",  
             format : [{
                 fn : "children",
-                arg : ["organization",true],
+                arg : ["organization",true]
             }], 
             label : {
                 'rdfs:label' : {
@@ -47,14 +47,14 @@ var rdfConfig = {
                 },
                 'foaf:name' : {
                     setter : 'setName'
-                }, 
+                }
             }
         },
         {
             array   : "persons", 
             format : [{
                 fn : "children",
-                arg : ["person",true],
+                arg : ["person",true]
             }],  
             label : {
 
@@ -73,7 +73,7 @@ var rdfConfig = {
                     }
                 },
                 'foaf:firstName' : {
-                    setter : 'setFirstName',
+                    setter : 'setFirstName'
                 },
                 'foaf:lastName' : {
                     setter : 'setFamilyName'
@@ -100,42 +100,42 @@ var rdfConfig = {
                     fk : {
                         format : [{
                             fn : "attr",
-                            arg : ["rdf:resource"],
+                            arg : ["rdf:resource"]
                         }],
-                        array : "organizations",
-                    },  
-                },
+                        array : "organizations"
+                    }
+                }
             }
         },
         {
             array   : "proceedings",  
             format : [{
                 fn : "children",
-                arg : ["inproceedings",true],
+                arg : ["inproceedings",true]
             }],  
 
             label : {
                 'dc:title' : {
-                    setter : 'setTitle',
+                    setter : 'setTitle'
                 },
                 'rdfs:label' : {
-                    setter : 'setTitle',
+                    setter : 'setTitle'
                 },
                 'swrc:abstract': {
-                    setter : 'setAbstract',
+                    setter : 'setAbstract'
                 },
                 'dc:subject' : {
                     multiple : true,
                     setter : 'addTopic', 
                     fk : {
                         format : [{
-                            fn : "text",
+                            fn : "text"
                         }],
                         array : "topics",
                         //pointed entity isn't a concrete node in this format and thus, don't contains any index 
                         //so we must retrieve an index with Importer().getArrayId instead of objectMap 
-                        create : "setName",
-                    },    
+                        create : "setName"
+                    }
                 },
                 'swrc:listkeyword' : {
                     multiple : true,
@@ -146,13 +146,13 @@ var rdfConfig = {
                     setter : 'addTopic',
                     fk : {
                         format : [{
-                            fn : "text",
+                            fn : "text"
                         }],
                         array : "topics",
                         //pointed entity isn't a concrete node in this format and thus, don't contains any index 
                         //so we must retrieve an index with Importer().getArrayId instead of objectMap 
-                        create : "setName",
-                    },    
+                        create : "setName"
+                    }
                 },
                 //authors are retrieved from their id in the objectMap .
                 'dc:creator' : {
@@ -161,10 +161,10 @@ var rdfConfig = {
                     fk : {
                         format : [{
                             fn : "attr",
-                            arg : ["rdf:resource"],
+                            arg : ["rdf:resource"]
                         }],
-                        array : "persons",
-                    }, 
+                        array : "persons"
+                    }
                 },
                 'foaf:maker' : {
                     multiple : true,
@@ -172,18 +172,18 @@ var rdfConfig = {
                     fk : {
                         format : [{
                             fn : "attr",
-                            arg : ["rdf:resource"],
+                            arg : ["rdf:resource"]
                         }],
-                        array : "persons",
-                    }, 
-                },
-            },
+                        array : "persons"
+                    }
+                }
+            }
         },
         {
             array   : "events",  
             format : [{
                 fn : "children",
-                arg : ["event",true],
+                arg : ["event",true]
             }],  
             label : {
                 'rdfs:label' : {
@@ -198,8 +198,8 @@ var rdfConfig = {
                     setter : 'setLogoPath',
                     format : [{
                         fn : "attr",
-                        arg : ["rdf:resource"],
-                    }], 
+                        arg : ["rdf:resource"]
+                    }]
                 },
                 'dce:description' : {
                     setter : 'setDescription'
@@ -252,11 +252,11 @@ var rdfConfig = {
                     setter : 'addTopic',
                     fk : {
                         format : [{
-                            fn : "text",
+                            fn : "text"
                         }],
                         array : "topics", 
-                        create : "setName",
-                    },    
+                        create : "setName"
+                    }
                 },
                 'swc:hasLocation' : {
                     setter : 'setLocation',
@@ -296,14 +296,14 @@ var rdfConfig = {
                             locationName = locationName[locationName.length -1 ];
                         }
                         return Importer().getArrayId("locations",'setName',locationName) ;
-                    },
+                    }
                 },
                 'foaf:homepage' : {
                     setter : 'setUrl',
                     format : [{
                         fn : "attr",
-                        arg : ["rdf:resource"],
-                    }],  
+                        arg : ["rdf:resource"]
+                    }]
                 },
                 "swc:issubeventof" : {
                     setter : 'setParent',
@@ -312,8 +312,8 @@ var rdfConfig = {
                             fn : "attr",
                             arg : ["rdf:resource"]
                         }],
-                        array : "events",
-                    },    
+                        array : "events"
+                    }
                 } 
             },
             postProcess : function(node,event,nodeName){
@@ -366,7 +366,7 @@ var rdfConfig = {
 
                     return (cn.indexOf("event") !== -1 && cn !== "event")
                 }
-            }, 
+            }
         },
         
         //TODO DO NOT PERMIT OVERRIDING
@@ -377,7 +377,7 @@ var rdfConfig = {
             array   : "roles",  
             format : [{
                 fn : "children",
-                arg : ["presenter",true],
+                arg : ["presenter",true]
             }],  
             override : function(node){
 
@@ -404,7 +404,7 @@ var rdfConfig = {
             array   : "roles",  
             format : [{
                 fn : "children",
-                arg : ["chair",true],
+                arg : ["chair",true]
             }],  
             override : function(node){
 
@@ -427,6 +427,6 @@ var rdfConfig = {
                 }
             }
         }, 
-    ],      
+    ]
 }
  

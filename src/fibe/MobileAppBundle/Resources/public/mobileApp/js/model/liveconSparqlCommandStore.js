@@ -52,8 +52,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#topic/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["uri"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["uri"])}
+                           },
 													 "name",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "event : "+str["name"];}});
@@ -102,8 +102,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 	
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#schedule/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])}
+                           },
 													 "name",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "event : "+str["name"];}});
@@ -157,8 +157,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#event/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["uri"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["uri"])}
+                           },
 													 "name",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "event : "+str["name"];}});
@@ -207,8 +207,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 							ViewAdapterText.appendListImage(parameters.JSONdata,
 													 {baseHref:'#person/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["uri"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["uri"])}
+                           },
 													 "name",
 													 "image",
 													 parameters.contentEl,
@@ -264,8 +264,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 
 							ViewAdapterText.appendListImage(parameters.JSONdata,
 													 {baseHref:'#person/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["uri"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["uri"])}
+                           },
 													 "name",
 													 "image",
 													 parameters.contentEl,
@@ -314,8 +314,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 	
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#publication/',
-													  hrefCllbck:function(str){return Encoder.encode(str["title"])+"/"+Encoder.encode(str["uri"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["title"])+"/"+Encoder.encode(str["uri"])}
+                           },
 													 "title",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "paper : "+str["uri"];}});
@@ -365,8 +365,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 							ViewAdapterText.appendListImage(parameters.JSONdata,
 													 {baseHref:'#organization/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["uri"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["uri"])}
+                           },
 													 "name",
 													 "image",
 													 parameters.contentEl,
@@ -413,8 +413,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#person-by-role/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+'/'+Encoder.encode(str["uri"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+'/'+Encoder.encode(str["uri"])}
+                           },
 													 "name",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "Role : "+str["name"];}});
@@ -807,8 +807,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						
 							ViewAdapterText.appendListImage(parameters.JSONdata,
 													 {baseHref:'#person/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["uri"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["uri"])}
+                           },
 													 "name",
 													 "image",
 													 parameters.contentEl,
@@ -860,8 +860,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							parameters.contentEl.append('<h2>'+parameters.conference.acronym +' publications</h2>'); 
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#publication/',
-													  hrefCllbck:function(str){return Encoder.encode(str["title"])+'/'+Encoder.encode(str["id"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["title"])+'/'+Encoder.encode(str["id"])}
+                           },
 													 "title",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "publication : "+str["id"];}});
@@ -1071,8 +1071,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							parameters.contentEl.append('<h2>'+parameters.name+'</h2>'); 
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#event/',
-													  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])}
+                           },
 													 "eventLabel",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "Track : "+str["eventLabel"];}});

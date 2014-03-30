@@ -12,8 +12,8 @@ require.config({
             deps: [
                 'jquery',
                 'jqueryMobile.config'
-            ],
-        },
+            ]
+    },
         'jqueryMobile.config': {
         	deps: [
                 'jquery'
@@ -33,8 +33,8 @@ require.config({
 				'arbor-graphics'
 			],
 			exports: 'arbor'
-		},
-	},
+		}
+  },
     paths: {
         // the left side is the module ID,
         // the right side is the path to

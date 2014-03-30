@@ -47,8 +47,8 @@ function SWDF(SWDFUrl){
 		                success : function(xml){ 
 				                  self.$XMLresult=xml;
 				                  self.parseMtd();
-	                      }, 
-		            }); 
+	                      }
+                  });
 	              }
 		    }); 
               

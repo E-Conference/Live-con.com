@@ -175,5 +175,5 @@ xlsxMapper = {
                     }
             });
             return result.join("\n");
-    },  
+    }
 }

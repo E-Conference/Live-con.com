@@ -39,7 +39,7 @@
                                 <i class="fa fa-check"></i> 
                             </button> 
 
-                        <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">{{ form_rest(form) }}</div>  
+                        <div style="visibility:hidden;display:none;height:0;" id="hiddenInputs">{{ form_rest(form) }}</div>
                     </form>  
             </div><!-- #conference-edit -->    
         </div>
@@ -155,7 +155,8 @@
                     //activate  map
                     map.on('click', function(e){
                        if(marker)map.removeLayer(marker);
-                       console.log(e.latlng)
+//                      @TODO : TO REMOVE
+                       console.log(e.latlng);
                        marker = new L.marker(e.latlng).addTo(map); 
                        //UPDATE FIELDS
                        $('#fibe_bundle_wwwconfbundle_wwwconftype_mainConfEvent_location_latitude').val(e.latlng.lat);
@@ -202,11 +203,12 @@
                     error:function(a,b,c)
                     {
                         bootstrapAlert("warning",'import failed because : '+c);
-                        console.log(a)
-                        console.log(b)
-                        console.log(c)
+//                      @TODO : TO REMOVE
+                        console.log(a);
+                        console.log(b) ;
+                        console.log(c) ;
                         $(confOwlUriInput).parent().addClass('has-warning');  
-                    },
+                    }
                 });
             }
          }); 
@@ -221,7 +223,7 @@
             msg += "<ul>"; 
             for (var i in dataArray) 
                 if(dataArray[i] && dataArray[i].length >0)
-                    msg +="<li>"+dataArray[i].length +" "+i+" "+endString+" !</li>"
+                    msg +="<li>"+dataArray[i].length +" "+i+" "+endString+" !</li>";
 
             return msg + "</ul>";
         }
