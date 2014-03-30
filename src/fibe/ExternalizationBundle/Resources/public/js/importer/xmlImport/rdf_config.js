@@ -340,7 +340,7 @@ var rdfConfig = {
                         // console.log(catName);
                         if(catName.toLowerCase() == "conferenceevent") {
                             isMainConfEvent = true;
-                            console.debug("mainconference event is ",event)
+                            console.log("mainconference event is ",event)
                         }
                         Importer().objects.categories.push(category);
                         catId = Importer().objects.categories.length-1;

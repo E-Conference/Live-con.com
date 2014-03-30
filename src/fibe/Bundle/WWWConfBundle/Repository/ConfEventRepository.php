@@ -22,6 +22,16 @@ class ConfEventRepository extends EntityRepository
           ->where('confevent.conference = :conference_id')
           ->setParameter('conference_id', $currentConf->getId());
 
+        if(isset($params['only_instant'])) {
+            $qb
+                ->andWhere('cer.is_instant = 1')
+            ;
+        }else{
+            $qb
+                ->andWhere('cer.is_instant = 0')
+            ;
+        }
+
        if(isset($params['summary'])) {
            $qb
                 ->andWhere('confevent.id = :summary')
@@ -158,11 +168,11 @@ class ConfEventRepository extends EntityRepository
 
         if(isset($params['only_instant'])) {
             $qb
-                ->andWhere('cev.isInstant = 1')
+                ->andWhere('cev.isInstant = true')
             ;
         }else{
             $qb
-                ->andWhere('cev.isInstant = 0')
+                ->andWhere('cev.isInstant = false')
             ;
         }
 
