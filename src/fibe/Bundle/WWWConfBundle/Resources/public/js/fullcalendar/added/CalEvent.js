@@ -477,10 +477,10 @@ CalEvent.prototype.setParent = function (parent){
 
     this.deleteParent();
     //check if this is going to do a loop in the tree
-    if(this.isChild(parent)){
-      bootstrapAlert("warning","cannot set this <b>"+this.title+"</b> as child of <b>"+parent.title+"</b> because this is going to do a loop in the event tree","Circular reference : ");
-      return;
-    }
+    // if(this.isChild(parent)){
+    //   bootstrapAlert("warning","cannot set this <b>"+this.title+"</b> as child of <b>"+parent.title+"</b> because this is going to do a loop in the event tree","Circular reference : ");
+    //   return;
+    // }
     //affect parent to child
     this.parent = { "id": parent.id};
     //add child to parent
@@ -494,13 +494,14 @@ CalEvent.prototype.setParent = function (parent){
 CalEvent.prototype.deleteParent = function (){   
     if(!this)return;
         
-    parent = Events[this.parent.id];
+    var parent = Events[this.parent.id];
     if(!parent)return;
     this.parent.id = "";
     this.parent.title = "";
     this.parent.name = "";
     for( var i in parent.children){
       if(parent.children[i].id === this.id && this.id !== ""){ 
+        parent.children[i] = null;
         delete parent.children[i];
 
         return;
