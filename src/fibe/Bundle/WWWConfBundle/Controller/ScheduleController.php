@@ -87,7 +87,6 @@ class ScheduleController extends Controller
         $mainConfEvent = $conf->getMainConfEvent();
         
 
-        $event;
         if( $methodParam=="add"){
              $event= new Event();  
         }else if( $methodParam=="update")

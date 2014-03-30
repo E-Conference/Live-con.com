@@ -348,7 +348,7 @@ class fillDatabaseUpCommand extends ContainerAwareCommand
             $conference->slugify();
             $em->persist($conference); 
 
-
+            $location = null;
 
             for ( $counterLoc = 0; $counterLoc <= $limit/10; $counterLoc += 1) {
 
