@@ -64,7 +64,7 @@ CalEvent.prototype.persist = function(add){ //persist at server side
       title     : this['title'],
       parent    : this['parent'],
       end       : this['end'],
-      start     : this['start'],
+      start     : this['start']
     }
     if( this.resource){  
       toSend['currentRes'] = currentRes;

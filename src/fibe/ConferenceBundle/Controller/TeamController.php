@@ -148,13 +148,14 @@ class TeamController extends Controller
         return $this->redirect($this->generateUrl('conference_team_list'));
     }
 
-    /**
-     * Creates a form to delete a User entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return Symfony\Component\Form\Form The form
-     */
+  /**
+   * Creates a form to delete a User entity by id.
+   *
+   * @param mixed $id The entity id
+   *
+   * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+   * @return Symfony\Component\Form\Form The form
+   */
     private function createDeleteForm($id)
     {
         if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') )

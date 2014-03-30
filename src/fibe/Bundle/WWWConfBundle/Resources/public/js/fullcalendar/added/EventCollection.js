@@ -94,7 +94,7 @@ var EventCollection = {
                     count   :baseCount+1,
                     range   :EventCollection.broCountRange[curBro.id]["range"]+1, 
                     resCount:baseResCount+1,
-                    resRange:EventCollection.broCountRange[curBro.id]["resRange"]+1, 
+                    resRange:EventCollection.broCountRange[curBro.id]["resRange"]+1
                   };
 
                   //resource view : check if bros have the same resource 
@@ -264,7 +264,7 @@ var EventCollection = {
                     return "bottom";
                   },
                   title : ' <b><span class="muted">#'+event.id+'</span> '+event.title+'</b>',
-                  content : event.getPopoverContent(),
+                  content : event.getPopoverContent()
               });
 
               if (authorized) {

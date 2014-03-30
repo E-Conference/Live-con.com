@@ -15,14 +15,14 @@ xmlMapper = {
         getNodeKey : {
             format : [{
                 fn : "attr",
-                arg : ["rdf:about"],
+                arg : ["rdf:about"]
             }]
         },
         getNodeName : {
             format : [{
-                fn : "rdfNodeName", 
+                fn : "rdfNodeName"
             }] 
-        },
+        }
     },
 	map : function(data,nodePath,$el,nodeCallBack,entryCallBack){
         var $data = $(data);
@@ -186,7 +186,7 @@ xmlMapper = {
                 }
             })
             return rtnNode;
-        },
+        }
     }
 
 }
