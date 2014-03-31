@@ -51,8 +51,8 @@ xlsxMapper = {
 
         // add root node like as a collection to permit getting 
         //  the nodePtyPath value ( like /name/text ) in mapper.generateMappingFile() 
-        mapper.checkIfMappingCollection(nodePath,[""]);
-        $el = nodeCallBack(nodePath,$el,tab,{panelClass:"panel-success",margin:true,collapsible:true,collapsed:false});
+        // mapper.checkIfMappingCollection(nodePath,[""]);
+        $el = nodeCallBack(nodePath,$el,{panelClass:"panel-success",margin:true,collapsible:true,collapsed:false});
         
         //Viewing all lines in the json return file  
         for(var i = 0; i < data.length; i++){
@@ -63,8 +63,8 @@ xlsxMapper = {
 
                 if(tab != "__rowNum__"){ 
                     var childNodePath = nodePath+ "/"+tab; 
-                    var $panel = nodeCallBack(childNodePath,$el,tab,{panelClass:"panel-success",margin:true,collapsible:true,collapsed:false},true);
-                    entryCallBack(childNodePath,$panel,currentLine[tab]);
+                    var $panel = nodeCallBack(childNodePath,$el,{panelClass:"panel-success",margin:true,collapsible:true,collapsed:false},true);
+                    entryCallBack(childNodePath+"/text",$panel,currentLine[tab]);
                 }
             }
         }

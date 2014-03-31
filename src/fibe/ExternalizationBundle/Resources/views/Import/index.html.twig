@@ -258,7 +258,7 @@
                 e.preventDefault(); 
  
                 $("#back-to-mapping").hide();
-                $(mapper).on("fileRead",function(ev,data){
+                $(mapper).one("fileRead",function(ev,data){
                     extractDatas();
                 })
                 mapper.setKnownMapping($("#known-mapping-format").val())
@@ -295,7 +295,7 @@
                             Pager.changePage('#page-end');  
                             
                             $("#result-import").html(
-                                getHtmlResultDiv(mapper["serialisedDatas"],mapper["importedLog"],mapper["notImportedLog"])
+                                getHtmlResultDiv(mapper["serialisedDatas"],mapper["importedLog"],mapper["notImportedLog"],"sent")
                             );
                             bootstrapAlert("success",getMsgUl(mapper["serialisedDatas"],"imported"),"Conference imported : "); 
                         },
@@ -369,7 +369,9 @@
         function getHtmlResultDiv(data,importedLog,notImportedLog,endMsg){
             var html='<div class="row"><div class="col-md-12 col-lg-4"><div class="panel panel-primary">\
                                                   <!-- Default panel contents -->\
-                                                  <div class="panel-heading">'+(mapper.fileName || 'Found datas')+'</div>';
+                                                  <div class="panel-heading">'+
+                                                  (mapper["serialisedDatas"].conference.setSummary || mapper["serialisedDatas"].conference.setAcronym || mapper.fileName )
+                                                  +'</div>';
 
                     html+= getMsgUl(mapper["serialisedDatas"],endMsg || "found",true);
 
@@ -418,8 +420,6 @@
         // output imported object
         function getMsgUl(dataArray,endString,panelMode){
             var msg = "";
-            // if(dataArray.conference.setAcronym)msg += dataArray.conference.setAcronym;
-            // else if(dataArray.conference.setSummary)msg += dataArray.conference.setSummary;
             msg += "<ul"+(panelMode?' class="list-group" ':'')+">"; 
             for (var i in dataArray) 
                 if(dataArray[i] && dataArray[i].length >0)

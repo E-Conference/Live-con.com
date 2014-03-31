@@ -40,8 +40,8 @@ xmlMapper = {
 
                 $node.children().each(function(index,child){ 
                     var childNodeName = xmlMapper.getNodeName(child);
-                    var childNodePath = nodePath+ "/"+childNodeName; 
-                    var panelTmp = nodeCallBack(childNodePath,$el,childNodeName);
+                    var childNodePath = nodePath + "/" + childNodeName; 
+                    var panelTmp = nodeCallBack(childNodePath,$el);
                     if(panelTmp != $el){
                         childrenNodePath.push(childNodePath);
                         generateHtml($(child),childNodePath,panelTmp);
@@ -52,10 +52,16 @@ xmlMapper = {
                     generateHtml($(child),childNodePath,$el);
 
                 });
-                mapper.checkIfMappingCollection(nodePath,childrenNodePath);
+                // mapper.checkIfMappingCollection(nodePath,childrenNodePath);
             }else{
-                if($node.text() && $node.text() != "")
-                    entryCallBack(nodePath,$el,$node.text()); 
+                $node.each(function() {
+                  $.each(this.attributes, function(i, attrib){
+                    entryCallBack(nodePath+"/@"+attrib.name,$el,attrib.value);
+                  });
+                });
+                if($node.text && $.trim($node.text()))
+                    entryCallBack(nodePath+"/text",$el,$.trim($node.text()));
+
             }
  
         }
