@@ -17,7 +17,7 @@
 			</div>
 		</div>
 
-		<div id='navBarStyle' > 
+		<div id='navBarStyle' >
 		<h4>NavBar</h4>
 			<div style="min-height:30px">
 				{{ form_label(mobile_app_form.BGColorNavBar) }}
@@ -59,7 +59,7 @@
 			</div>
 			<div  style="min-height:30px">
 				{{ form_label(mobile_app_form.TitleColorButton) }}
-			
+
 				<div style="float:right; ">
 					{{ form_widget(mobile_app_form.TitleColorButton) }}
 				</div>
@@ -82,9 +82,9 @@
 			</div>
 		</div>
 		<button type="submit" class="btn btn-success edit-app" style="width:100%"><i class="fa fa-pencil-square-o"></i></button>
-		
-		
-		<div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
+
+
+		<div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">
                 {{ form_rest(mobile_app_form)}}
             </div>
 	</form>
