@@ -30,7 +30,9 @@
  *
  * @author Tobias Schultze <http://tobion.de>
  */
-class Requirement
+
+  /** @noinspection PhpUndefinedClassInspection */
+  class Requirement
 {
     private $fulfilled;
     private $testMessage;
@@ -112,7 +114,9 @@ class Requirement
  *
  * @author Tobias Schultze <http://tobion.de>
  */
-class PhpIniRequirement extends Requirement
+
+  /** @noinspection PhpUndefinedClassInspection */
+  class PhpIniRequirement extends Requirement
 {
     /**
      * Constructor that initializes the requirement.
@@ -166,7 +170,11 @@ class PhpIniRequirement extends Requirement
  *
  * @author Tobias Schultze <http://tobion.de>
  */
-class RequirementCollection implements IteratorAggregate
+
+  /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
+
+  /** @noinspection PhpUndefinedClassInspection */
+  class RequirementCollection implements IteratorAggregate
 {
     private $requirements = array();
 
@@ -374,7 +382,11 @@ class RequirementCollection implements IteratorAggregate
  * @author Tobias Schultze <http://tobion.de>
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class SymfonyRequirements extends RequirementCollection
+
+  /** @noinspection PhpMultipleClassesDeclarationsInOneFile */
+
+  /** @noinspection PhpUndefinedClassInspection */
+  class SymfonyRequirements extends RequirementCollection
 {
     const REQUIRED_PHP_VERSION = '5.3.3';
 
@@ -601,7 +613,8 @@ class SymfonyRequirements extends RequirementCollection
         );
 
         if (class_exists('Collator')) {
-            $this->addRecommendation(
+          /** @noinspection PhpUndefinedClassInspection */
+          $this->addRecommendation(
                 null !== new Collator('fr_FR'),
                 'intl extension should be correctly configured',
                 'The intl extension does not behave properly. This problem is typical on PHP 5.3.X x64 WIN builds.'

@@ -2,6 +2,7 @@
 
 namespace fibe\SecurityBundle\Controller;
 
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -9,7 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use fibe\SecurityBundle\Entity\User;
 use fibe\SecurityBundle\Entity\Authorization;
-use fibe\SecurityBundle\Form\UserType;
+use fibe\SecurityBundle\Form\UserAuthorizationType;
 use fibe\SecurityBundle\Form\AuthorizationType;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -156,7 +157,7 @@ class UserController extends Controller
      *
      * @param mixed $id The entity id
      *
-     * @return Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm($id)
     {

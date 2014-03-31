@@ -13,8 +13,7 @@ use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
 use fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig;
 use fibe\Bundle\WWWConfBundle\Form\WwwConfType;
 use fibe\Bundle\WWWConfBundle\Form\ModuleType;
-use fibe\Bundle\WWWConfBundle\Form\WwwConfEventDefaultType;
-use fibe\Bundle\WWWConfBundle\Form\WwwConfDefaultType;
+use fibe\Bundle\WWWConfBundle\Form\WwwConfEventType;
 
 use fibe\SecurityBundle\Entity\Authorization;
 
@@ -26,9 +25,8 @@ use IDCI\Bundle\SimpleScheduleBundle\Entity\Location;
 use fibe\Bundle\WWWConfBundle\Entity\Module;
 
 
-
-
-use Symfony\Component\Security\Core\Exception\AccessDeniedException; 
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Link controller.

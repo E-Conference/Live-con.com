@@ -23,6 +23,7 @@ use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;
 
 
 use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 
 /**

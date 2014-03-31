@@ -80,7 +80,7 @@ class PaperRepository extends EntityRepository
     /**
      * getOrderedQueryBuilder
      *
-     * @return QueryBuilder 
+     * @return Object QueryBuilder
      */
     public function getOrderedQueryBuilder()
     {
@@ -93,7 +93,7 @@ class PaperRepository extends EntityRepository
     /**
      * getOrderedQuery
      *
-     * @return Query
+     * @return Object Query
      */
     public function getOrderedQuery()
     {
@@ -105,7 +105,7 @@ class PaperRepository extends EntityRepository
     /**
      * getOrdered
      *
-     * @return DoctrineCollection
+     * @return Object DoctrineCollection
      */
     public function getOrdered()
     {
@@ -118,7 +118,7 @@ class PaperRepository extends EntityRepository
      * extractQueryBuilder
      *
      * @param array $params
-     * @return QueryBuilder
+     * @return Object QueryBuilder
      */
     public function extractQueryBuilder($params)
     {
@@ -174,7 +174,7 @@ class PaperRepository extends EntityRepository
      * extractQuery
      *
      * @param array $params
-     * @return Query
+     * @return Object Query
      */
     public function extractQuery($params)
     {
@@ -187,7 +187,7 @@ class PaperRepository extends EntityRepository
      * extract
      *
      * @param array $params
-     * @return DoctrineCollection
+     * @return Object DoctrineCollection
      */
     public function extract($params)
     {

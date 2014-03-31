@@ -13,7 +13,7 @@ use IDCI\Bundle\SimpleScheduleBundle\Entity\Location;
 use fibe\Bundle\WWWConfBundle\Entity\Role;
 
 use IDCI\Bundle\SimpleScheduleBundle\Form\EventType;
-use IDCI\Bundle\SimpleScheduleBundle\Form\RecurChoiceType;
+use IDCI\Bundle\SimpleScheduleBundle\Form\RecurType;
 use fibe\Bundle\WWWConfBundle\Form\RoleType;
 use fibe\Bundle\WWWConfBundle\Form\ConfEventType;
 
@@ -22,6 +22,7 @@ use fibe\Bundle\WWWConfBundle\Form\XPropertyType;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 
 /**

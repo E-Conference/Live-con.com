@@ -3,6 +3,7 @@
 namespace fibe\Bundle\WWWConfBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use IDCI\Bundle\SimpleScheduleBundle\Entity\Category;
 
 /**
  * ConfEventRepository
@@ -65,8 +66,8 @@ class ConfEventRepository extends EntityRepository
      /**
      * getRelatedAvailableCalendarEntitiesQueryBuilder
      *
-     * @param $entity CalendarEntity
-     * @return QueryBuilder
+     * @param $entity Object CalendarEntity
+     * @return Object QueryBuilder
      */
     public function getRelatedAvailableCalendarEntitiesQueryBuilder($entity = null)
     {
@@ -93,8 +94,8 @@ class ConfEventRepository extends EntityRepository
     /**
      * getRelatedAvailableCalendarEntitiesQuery
      *
-     * @param $entity CalendarEntity
-     * @return Query
+     * @param $entity Object CalendarEntity
+     * @return Object Query
      */
     public function getRelatedAvailableCalendarEntitiesQuery($entity = null)
     {
@@ -106,8 +107,8 @@ class ConfEventRepository extends EntityRepository
     /**
      * getRelatedAvailableCalendarEntities
      *
-     * @param $entity CalendarEntity
-     * @return DoctrineCollection
+     * @param $entity Object CalendarEntity
+     * @return Object DoctrineCollection
      */
     public function getRelatedAvailableCalendarEntities($entity = null)
     {
@@ -119,7 +120,7 @@ class ConfEventRepository extends EntityRepository
     /**
      * getAllOrderByStartAtQueryBuilder
      *
-     * @return QueryBuilder
+     * @return Object QueryBuilder
      */
     public function getAllOrderByStartAtQueryBuilder()
     {
@@ -135,7 +136,7 @@ class ConfEventRepository extends EntityRepository
     /**
      * getAllOrderByStartAtQuery
      *
-     * @return Query
+     * @return Object Query
      */
     public function getAllOrderByStartAtQuery()
     {
@@ -147,7 +148,7 @@ class ConfEventRepository extends EntityRepository
     /**
      * getAllOrderByStartAt
      *
-     * @return DoctrineCollection
+     * @return Object DoctrineCollection
      */
     public function getAllOrderByStartAt()
     {
@@ -160,7 +161,7 @@ class ConfEventRepository extends EntityRepository
      * extractQueryBuilder
      *
      * @param array $params
-     * @return QueryBuilder
+     * @return Object QueryBuilder
      */
     public function extractQueryBuilder($params)
     {
@@ -411,7 +412,7 @@ class ConfEventRepository extends EntityRepository
      * extractQuery
      *
      * @param array $params
-     * @return Query
+     * @return Object Query
      */
     public function extractQuery($params)
     {
@@ -424,7 +425,7 @@ class ConfEventRepository extends EntityRepository
      * extract
      *
      * @param array $params
-     * @return DoctrineCollection
+     * @return Object DoctrineCollection
      */
     public function extract($params)
     {

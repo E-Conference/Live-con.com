@@ -14,7 +14,8 @@ if (!in_array(@$_SERVER['REMOTE_ADDR'], array(
 
 require_once dirname(__FILE__).'/../app/SymfonyRequirements.php';
 
-$symfonyRequirements = new SymfonyRequirements();
+  /** @noinspection PhpUndefinedClassInspection */
+  $symfonyRequirements = new SymfonyRequirements();
 
 $majorProblems = $symfonyRequirements->getFailedRequirements();
 $minorProblems = $symfonyRequirements->getFailedRecommendations();

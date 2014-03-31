@@ -3,6 +3,7 @@
 namespace fibe\Bundle\WWWConfBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -11,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 use fibe\Bundle\WWWConfBundle\Entity\Equipment;
 use fibe\Bundle\WWWConfBundle\Form\EquipmentType;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * Equipment controller.
@@ -241,7 +243,7 @@ class EquipmentController extends Controller
      *
      * @param mixed $id The entity id
      *
-     * @return Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm($id)
     {

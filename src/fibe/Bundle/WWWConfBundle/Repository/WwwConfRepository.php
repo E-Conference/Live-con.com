@@ -16,7 +16,7 @@ class WwwConfRepository extends EntityRepository
     /**
      * getOrderedQueryBuilder
      *
-     * @return QueryBuilder
+     * @return Object QueryBuilder
      */
     public function getOrderedQueryBuilder()
     {
@@ -29,7 +29,7 @@ class WwwConfRepository extends EntityRepository
     /**
      * getOrderedQuery
      *
-     * @return Query
+     * @return Object Query
      */
     public function getOrderedQuery()
     {
@@ -41,7 +41,7 @@ class WwwConfRepository extends EntityRepository
     /**
      * getOrdered
      *
-     * @return DoctrineCollection
+     * @return Object DoctrineCollection
      */
     public function getOrdered()
     {

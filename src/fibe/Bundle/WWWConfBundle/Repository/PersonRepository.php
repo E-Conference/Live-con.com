@@ -85,7 +85,7 @@ class PersonRepository extends EntityRepository
     /**
      * getOrderedQueryBuilder
      *
-     * @return QueryBuilder
+     * @return Object QueryBuilder
      */
     public function getOrderedQueryBuilder()
     {
@@ -98,7 +98,7 @@ class PersonRepository extends EntityRepository
     /**
      * getOrderedQuery
      *
-     * @return Query
+     * @return Object Query
      */
     public function getOrderedQuery()
     {
@@ -110,7 +110,7 @@ class PersonRepository extends EntityRepository
     /**
      * getOrdered
      *
-     * @return DoctrineCollection
+     * @return Object DoctrineCollection
      */
     public function getOrdered()
     {
@@ -123,7 +123,7 @@ class PersonRepository extends EntityRepository
      * extractQueryBuilder
      *
      * @param array $params
-     * @return QueryBuilder
+     * @return Object QueryBuilder
      */
     public function extractQueryBuilder($params)
     {
@@ -199,7 +199,7 @@ class PersonRepository extends EntityRepository
      * extractQuery
      *
      * @param array $params
-     * @return Query
+     * @return Object Query
      */
     public function extractQuery($params)
     {
@@ -212,7 +212,7 @@ class PersonRepository extends EntityRepository
      * extract
      *
      * @param array $params
-     * @return DoctrineCollection
+     * @return Object DoctrineCollection
      */
     public function extract($params)
     {

@@ -153,7 +153,7 @@ class Role
      /**
      * Set conference
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\WwConf $conf
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conf
      * @return Role
      */
     public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conf)

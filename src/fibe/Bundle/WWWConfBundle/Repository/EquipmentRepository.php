@@ -23,7 +23,7 @@ class EquipmentRepository extends EntityRepository
     /**
      * getOrderedQueryBuilder
      *
-     * @return QueryBuilder
+     * @return Object QueryBuilder
      */
     public function getOrderedQueryBuilder()
     {
@@ -59,7 +59,7 @@ class EquipmentRepository extends EntityRepository
     /**
      * getOrderedQuery
      *
-     * @return Query
+     * @return Object Query
      */
     public function getOrderedQuery()
     {
@@ -71,7 +71,7 @@ class EquipmentRepository extends EntityRepository
     /**
      * getOrdered
      *
-     * @return DoctrineCollection
+     * @return Object DoctrineCollection
      */
     public function getOrdered()
     {
@@ -84,7 +84,7 @@ class EquipmentRepository extends EntityRepository
      * extractQueryBuilder
      *
      * @param array $params
-     * @return QueryBuilder
+     * @return Object QueryBuilder
      */
     public function extractQueryBuilder($params)
     {
@@ -110,7 +110,7 @@ class EquipmentRepository extends EntityRepository
      * extractQuery
      *
      * @param array $params
-     * @return Query
+     * @return Object Query
      */
     public function extractQuery($params)
     {
@@ -123,7 +123,7 @@ class EquipmentRepository extends EntityRepository
      * extract
      *
      * @param array $params
-     * @return DoctrineCollection
+     * @return Object DoctrineCollection
      */
     public function extract($params)
     {
