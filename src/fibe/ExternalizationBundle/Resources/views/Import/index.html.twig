@@ -258,7 +258,7 @@
                 e.preventDefault(); 
  
                 $("#back-to-mapping").hide();
-                $(mapper).one("fileRead",function(ev,data){
+                $(mapper).on("fileRead",function(ev,data){
                     extractDatas();
                 })
                 mapper.setKnownMapping($("#known-mapping-format").val())
@@ -297,7 +297,7 @@
                             $("#result-import").html(
                                 getHtmlResultDiv(mapper["serialisedDatas"],mapper["importedLog"],mapper["notImportedLog"],"sent")
                             );
-                            bootstrapAlert("success",getMsgUl(mapper["serialisedDatas"],"imported"),"Conference imported : "); 
+                            bootstrapAlert("success",getMsgUl(mapper["serialisedDatas"],"imported"),"Conference imported : "+mapper.getConfName()); 
                         },
                         error:function(a,b,c)
                         {
@@ -354,7 +354,7 @@
                     mapper["notImportedLog"]  = notImportedLog; 
 
                     $("#result-extract").html(getHtmlResultDiv(data,importedLog,notImportedLog,"extracted"));
-                    bootstrapAlert("success",getMsgUl(mapper["serialisedDatas"],"extracted"),"conference parsed : "); 
+                    bootstrapAlert("success",getMsgUl(mapper["serialisedDatas"],"extracted"),"conference parsed : "+mapper.getConfName()); 
                 },function(msg)
                 { 
                     bootstrapAlert("warning", msg || "there was an error during extraction of datas","Error :"); 
@@ -370,7 +370,7 @@
             var html='<div class="row"><div class="col-md-12 col-lg-4"><div class="panel panel-primary">\
                                                   <!-- Default panel contents -->\
                                                   <div class="panel-heading">'+
-                                                  (mapper["serialisedDatas"].conference.setSummary || mapper["serialisedDatas"].conference.setAcronym || mapper.fileName )
+                                                  mapper.getConfName()
                                                   +'</div>';
 
                     html+= getMsgUl(mapper["serialisedDatas"],endMsg || "found",true);

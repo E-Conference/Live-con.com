@@ -42,7 +42,7 @@ var Mapper = function(){
     } 
 
     this.map = function($ctn){
-        mapper["mappingConfig"] = mapping = mapping || mapper.defaultMapping; 
+        mapping = mapping || $.extend({},mapper.defaultMapping) ; 
         Importer().setMappingConfig(mapping);
 
         dataLinks       = {},
@@ -112,6 +112,9 @@ var Mapper = function(){
     }
     this.getData = function(){
         return data;
+    }
+    this.getConfName = function(){
+        return self["serialisedDatas"].conference.setSummary || self["serialisedDatas"].conference.setAcronym || self.fileName ;
     }
 
     this.isNodeKnown = function(nodePath,sample){
@@ -249,7 +252,8 @@ var Mapper = function(){
     //loop over the model panels  to build a mapping file
     function generateMappingFile(){
         console.log("############### generateMappingFile starts")
-        
+        mapping =  $.extend({},mapper.defaultMapping);
+        Importer().setMappingConfig(mapping); 
         //loop only on validated mapping
         $("#model-form .panel-success").each(function(iPanel,panel){
             var modelName = $(panel).data("model-path");
@@ -394,9 +398,9 @@ var Mapper = function(){
 
         function isSameFormat(f1,f2){
             for(var i in f1){
-                if(f1[i].nodeUtils != f2[i].nodeUtils)return false;
+                if(!f2[i] || f1[i].nodeUtils != f2[i].nodeUtils)return false;
                 for (var j in f1[i].arg){
-                    if(f1[i].arg[j] != f2[i].arg[j])return false;
+                    if(!f2[i].arg[j] || f1[i].arg[j] != f2[i].arg[j])return false;
                 }
             }
             return true;
