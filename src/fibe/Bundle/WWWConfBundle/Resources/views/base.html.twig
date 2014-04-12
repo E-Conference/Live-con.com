@@ -7,150 +7,171 @@
 
      
 {% block stylesheets %}
-    {{ parent() }}
-    {% block stylesheets_page %}
-    {% endblock %}
+  {{ parent() }}
+  {% block stylesheets_page %}
+  {% endblock %}
 {% endblock %}
       
 {% block javascripts %}
-        {{ parent() }}
+  {{ parent() }}
 
-        <script type="text/javascript">
-         $(document).ready(function() {
-               
-                $(".{{currentPath}}").addClass("active");
+  <script type="text/javascript">
+    $(document).ready(function ()
+    {
 
-                $('label[class="required"]').append("<i style='color:#C00000  '>*</i>");
+      $(".{{currentPath}}").addClass("active");
 
-                deployed = false;
-                $("#sideBarBtn").click(function(){
-                    deployResultBox();
-                }); 
-                $("select").select2({
-                   placeholder: " ",
-                   allowClear: true
-                }); 
-                //  $('.datetimepicker')
-                // .wrap('<div class="input-group">') 
-                // .after('<span class="input-group-addon"><span class="icon-calendar"></span></span>')
-                // .datetimepicker({
-                //     format: 'dd/mm/yyyy hh:ii',
-                //     autoclose: true,
-                // });
+      $('label[class="required"]').append("<i style='color:#C00000  '>*</i>");
 
-            });
-            function deployResultBox(){
-                    if(!deployed){
-                        $('#sidebar').animate({left:'0px'});
-                        deployed = true;
-                    }else{
-                        $('#sidebar').animate({left:'-180px'});
-                        deployed = false;
-                    }
-            }
-        </script> 
+      deployed = false;
+      $("#sideBarBtn").click(function ()
+      {
+        deployResultBox();
+      });
+      $("select").select2({
+        placeholder: " ",
+        allowClear: true
+      });
+      //  $('.datetimepicker')
+      // .wrap('<div class="input-group">')
+      // .after('<span class="input-group-addon"><span class="icon-calendar"></span></span>')
+      // .datetimepicker({
+      //     format: 'dd/mm/yyyy hh:ii',
+      //     autoclose: true,
+      // });
 
-    
-
-        {% for flashMessage in app.session.flashbag.get('info') %}
-            <script type="text/javascript" >
-                bootstrapAlert("info","{{ flashMessage }}","Info : ",'<i class="icon-info"></i> ');
-            </script> 
-        {% endfor %}
-
-        {% for flashMessage in app.session.flashbag.get('success') %} 
-            <script type="text/javascript" >
-            bootstrapAlert("success","{{ flashMessage }}","Success : ",'<i class="icon-ok-sign"></i> '); 
-            </script>  
-        {% endfor %}
-
-        {% for flashMessage in app.session.flashbag.get('error') %}
-            <script type="text/javascript" >
-            bootstrapAlert("warning","{{ flashMessage }}","Error : ",'<i class="icon-meh"></i> '); 
-            </script> 
-        {% endfor %}
-
-        <!-- Authorization -->
-        {% if authorized == 0 %}
-            <script type="text/javascript" >
-             $(document).ready(function(){
-                 $(".edit").hide();
-                 $(".create").hide();
-                 $(".delete").hide();
-                 $(".edit-event").hide();
-                 $(".create-event").hide();
-                 $(".delete-event").hide(); 
-             });
-            </script> 
-        {% endif %}
-
-        <!-- Hide module not used in the conference -->
-         {% if app.user.getCurrentConf().getModule().getPaperModule() == 0 %}
-            <script type="text/javascript" >
-             $(document).ready(function(){
-                 $(".module_paper").hide();
-             });
-            </script> 
-        {% endif %}
-
-        {%  block javascripts_page %}
-        {% endblock%}
-{% endblock%}
-
-{% block body %} 
-    {{ parent() }}
-    {% block navBar %} 
-        {% include "::mainNavBar.html.twig" %}
-    {% endblock navBar%}
+    });
+    function deployResultBox()
+    {
+      if (!deployed)
+      {
+        $('#sidebar').animate({left: '0px'});
+        deployed = true;
+      } else
+      {
+        $('#sidebar').animate({left: '-180px'});
+        deployed = false;
+      }
+    }
+  </script>
 
 
-    {% if app.user.getCurrentConf() %} 
-      {% block menuNavBar %} 
-          {% include "::menuNavBar.html.twig" %}
-      {% endblock menuNavBar%}
-    {% endif %}
 
-    {% block content %} 
+  {% for flashMessage in app.session.flashbag.get('info') %}
+    <script type="text/javascript">
+      bootstrapAlert("info", "{{ flashMessage }}", "Info : ", '<i class="icon-info"></i> ');
+    </script>
+  {% endfor %}
+
+  {% for flashMessage in app.session.flashbag.get('success') %}
+    <script type="text/javascript">
+      bootstrapAlert("success", "{{ flashMessage }}", "Success : ", '<i class="icon-ok-sign"></i> ');
+    </script>
+  {% endfor %}
+
+  {% for flashMessage in app.session.flashbag.get('error') %}
+    <script type="text/javascript">
+      bootstrapAlert("warning", "{{ flashMessage }}", "Error : ", '<i class="icon-meh"></i> ');
+    </script>
+  {% endfor %}
+
+  <!-- Authorization -->
+  {% if authorized == 0 %}
+    <script type="text/javascript">
+      $(document).ready(function ()
+      {
+        $(".edit").hide();
+        $(".create").hide();
+        $(".delete").hide();
+        $(".edit-event").hide();
+        $(".create-event").hide();
+        $(".delete-event").hide();
+      });
+    </script>
+  {% endif %}
+
+  <!-- Hide module not used in the conference -->
+  {% if app.user.getCurrentConf().getModule().getPaperModule() == 0 %}
+    <script type="text/javascript">
+      $(document).ready(function ()
+      {
+        $(".module_paper").hide();
+      });
+    </script>
+  {% endif %}
+
+  {% block javascripts_page %}
+  {% endblock %}
+{% endblock %}
+
+{% block body %}
+  {{ parent() }}
+  {% block navBar %}
+    {% include "::mainNavBar.html.twig" %}
+  {% endblock navBar %}
+
+
+  {% if app.user.getCurrentConf() %}
+    {% block menuNavBar %}
+      {% include "::menuNavBar.html.twig" %}
+    {% endblock menuNavBar %}
+  {% endif %}
+
+  {% block content %}
     <div class="content">
 
-        <div class="row">
-            <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div> 
+      <div class="row">
+        <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div>
 
-            <div class="col-xs-10 col-sm-10  col-md-10 col-lg-10 ">
-                 <div class="row ">
-                   <ul class="nav breadcrum nav-tabs">
+        <div class="col-xs-10 col-sm-10  col-md-10 col-lg-10 ">
+          <div class="row ">
+            <ul class="nav breadcrum nav-tabs">
 
-                          <li class="schedule_event schedule_event_new schedule_event_edit schedule_event_show schedule_confevent_show schedule_confevent schedule_confevent_new schedule_confevent_edit col-xs-1 col-sm-1  col-mg-1 col-lg-1"><a href="{{ path('schedule_confevent') }}" class='ellipsis'> <i class="fa fa-calendar-o fa-1x"></i> <span> Events </span> </a>  </li>
-                          <li class="schedule_person_index schedule_person_edit schedule_person_new schedule_person_show  col-xs-1 col-sm-1  col-mg-1 col-lg-1"><a href="{{ path('schedule_person_index') }}" class='ellipsis'> <i  class="fa fa-user fa-1x"></i> <span> Persons </span> </a></li>
-           
-                           {% if app.user.getCurrentConf().getModule().getPaperModule()== true %}
-                            <li class="schedule_paper schedule_paper_edit schedule_paper_new schedule_paper_show  col-xs-1 col-sm-1  col-mg-1 col-lg-2"><a href="{{ path('schedule_paper') }}" class='ellipsis'><i class="fa fa-book fa-1x"></i> <span> Publications  </span></a></li>
-                          {% endif %}
+              <li class="schedule_event schedule_event_new schedule_event_edit schedule_event_show schedule_confevent_show schedule_confevent schedule_confevent_new schedule_confevent_edit col-xs-1 col-sm-1  col-mg-1 col-lg-1">
+                <a href="{{ path('schedule_confevent') }}" class='ellipsis'> <i class="fa fa-calendar-o fa-1x"></i>
+                  <span> Events </span> </a></li>
+              <li class="schedule_person_index schedule_person_edit schedule_person_new schedule_person_show  col-xs-1 col-sm-1  col-mg-1 col-lg-1">
+                <a href="{{ path('schedule_person_index') }}" class='ellipsis'> <i class="fa fa-user fa-1x"></i>
+                  <span> Persons </span> </a></li>
 
-                          {% if app.user.getCurrentConf().getModule().getOrganizationModule()== true %}
-                          <li class="schedule_organization_index  schedule_organization_new schedule_organization_edit schedule_organization_show col-xs-1 col-sm-1  ccol-mg-2 col-lg-2"><a href="{{ path('schedule_organization_index') }}" class='ellipsis'><i class="fa fa-users fa-1x"></i><span> Organizations</span>  </a></li>
-                          {% endif %}
-                         
-                           <li class="schedule_location schedule_location_edit schedule_location_new schedule_location_show  col-xs-1 col-sm-1  col-mg-1 col-lg-1" ><a href="{{ path('schedule_location') }}" class='ellipsis'>  <i class="fa fa-map-marker fa-1x"></i><span>  Locations</span></a></li>
-                          <li class="schedule_category schedule_category_new schedule_category_edit schedule_category_show  col-xs-1 col-sm-1  col-mg-1 col-lg-2"><a href="{{ path('schedule_category') }}" class='ellipsis'><i class="fa fa-sort-amount-asc fa-1x"></i> <span> Categories</span> </a></li>
-                          <li class="schedule_topic schedule_topic_new  schedule_topic_edit schedule_topic_show  col-xs-1 col-sm-1  col-mg-1 col-lg-1"><a href="{{ path('schedule_topic') }}" class='ellipsis'> <i class="fa fa-crosshairs fa-1x"></i> <span>  Topics</span></a></li>
-                           {% block menu_page%} 
-                           {% endblock menu_page %}
-        
-                    </ul>
+              {% if app.user.getCurrentConf().getModule().getPaperModule()== true %}
+                <li class="schedule_paper schedule_paper_edit schedule_paper_new schedule_paper_show  col-xs-1 col-sm-1  col-mg-1 col-lg-2">
+                  <a href="{{ path('schedule_paper') }}" class='ellipsis'><i class="fa fa-book fa-1x"></i>
+                    <span> Publications  </span></a></li>
+              {% endif %}
 
-                 </div>
-                 <div class="row center">
-                {% block centerPanel %} 
-                {% endblock centerPanel %}
-                </div>
-            </div>
-           <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div>
+              {% if app.user.getCurrentConf().getModule().getOrganizationModule()== true %}
+                <li class="schedule_organization_index  schedule_organization_new schedule_organization_edit schedule_organization_show col-xs-1 col-sm-1  ccol-mg-2 col-lg-2">
+                  <a href="{{ path('schedule_organization_index') }}" class='ellipsis'><i class="fa fa-users fa-1x"></i><span> Organizations</span>
+                  </a></li>
+              {% endif %}
+
+              <li class="schedule_location schedule_location_edit schedule_location_new schedule_location_show  col-xs-1 col-sm-1  col-mg-1 col-lg-1">
+                <a href="{{ path('schedule_location') }}" class='ellipsis'> <i
+                      class="fa fa-map-marker fa-1x"></i><span>  Locations</span></a></li>
+              <li class="schedule_category schedule_category_new schedule_category_edit schedule_category_show  col-xs-1 col-sm-1  col-mg-1 col-lg-2">
+                <a href="{{ path('schedule_category') }}" class='ellipsis'><i class="fa fa-sort-amount-asc fa-1x"></i>
+                  <span> Categories</span> </a></li>
+              <li class="schedule_topic schedule_topic_new  schedule_topic_edit schedule_topic_show  col-xs-1 col-sm-1  col-mg-1 col-lg-1">
+                <a href="{{ path('schedule_topic') }}" class='ellipsis'> <i class="fa fa-crosshairs fa-1x"></i>
+                  <span>  Topics</span></a></li>
+              {% block menu_page %}
+              {% endblock menu_page %}
+
+            </ul>
+
+          </div>
+          <div class="row center">
+            {% block centerPanel %}
+            {% endblock centerPanel %}
+          </div>
         </div>
+        <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div>
+      </div>
 
     </div>
-    {% endblock content%}
-{% endblock body%}
+  {% endblock content %}
+{% endblock body %}
 
 
  
