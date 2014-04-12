@@ -1,26 +1,24 @@
 <?php
 
-namespace fibe\Bundle\WWWConfBundle\Entity;
+  namespace fibe\Bundle\WWWConfBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+  use Doctrine\ORM\Mapping as ORM;
+  use Symfony\Component\Validator\Constraints as Assert;
 
 
+  /**
+   * This entity define a mapping file
+   *
+   *
+   * @ORM\Table(name="mappingFile")
+   * @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\MappingFileRepository")
+   * @ORM\HasLifecycleCallbacks
+   *
+   */
+  class MappingFile
+  {
 
-/**
- * This entity define a mapping file 
- *
- *
- *  @ORM\Table(name="mappingFile")
- *  @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\MappingFileRepository")
- *  @ORM\HasLifecycleCallbacks
- *
- */
-
-class MappingFile
-{
-
-     /**
+    /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -43,7 +41,7 @@ class MappingFile
      */
     private $type;
 
-     
+
     /**
      *  Conference associated to this mappingFile
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="mappingFiles", cascade={"persist"})
@@ -53,85 +51,85 @@ class MappingFile
     protected $conference;
 
 
-  
-  
-
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
-        return $this->id;
+      return $this->id;
     }
 
     /**
      * Set mapping
      *
-     * @param string  $mapping
+     * @param string $mapping
+     *
      * @return MappingFile
      */
     public function setMapping($mapping)
     {
-        $this->mapping = $mapping;
-    
-        return $this;
+      $this->mapping = $mapping;
+
+      return $this;
     }
 
     /**
      * Get mapping
      *
-     * @return string  
+     * @return string
      */
     public function getMapping()
     {
-        return $this->mapping;
+      return $this->mapping;
     }
 
     /**
      * Set type
      *
      * @param string $type
+     *
      * @return MappingFile
      */
     public function setType($type)
     {
-        $this->type = $type;
-    
-        return $this;
+      $this->type = $type;
+
+      return $this;
     }
 
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
-        return $this->type;
+      return $this->type;
     }
 
     /**
      * Set conference
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
+     *
      * @return MappingFile
      */
     public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference = null)
     {
-        $this->conference = $conference;
-    
-        return $this;
+      $this->conference = $conference;
+
+      return $this;
     }
 
     /**
      * Get conference
      *
-     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
+     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf
      */
     public function getConference()
     {
-        return $this->conference;
+      return $this->conference;
     }
-}
+  }

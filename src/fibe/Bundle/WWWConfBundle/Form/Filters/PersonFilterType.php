@@ -6,17 +6,29 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+/**
+ * Class PersonFilterType
+ * @package fibe\Bundle\WWWConfBundle\Form\Filters
+ */
 class PersonFilterType extends AbstractType
 {
 
     private $user;
 
-    public function __construct($user)
+  /**
+   * Constructor
+   *
+   * @param $user
+   */
+  public function __construct($user)
     {
         $this->user = $user;
     }
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
+  /**
+   * {@inheritdoc}
+   */
+  public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('id', 'entity', array(
@@ -61,7 +73,10 @@ class PersonFilterType extends AbstractType
     }
 
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+  /**
+   * {@inheritdoc}
+   */
+  public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
          $resolver->setDefaults(array(
             'csrf_protection'   => false,
@@ -69,7 +84,12 @@ class PersonFilterType extends AbstractType
         ));
     }
 
-    public function getName()
+  /**
+   * Returns the name of this type.
+   *
+   * @return string The name of this type
+   */
+  public function getName()
     {
         return 'fibe_bundle_wwwconfbundle_personfiltertype';
     }

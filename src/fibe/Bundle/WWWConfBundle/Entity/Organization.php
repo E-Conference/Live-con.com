@@ -1,23 +1,23 @@
 <?php
 
-namespace fibe\Bundle\WWWConfBundle\Entity;
+  namespace fibe\Bundle\WWWConfBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+  use Doctrine\ORM\Mapping as ORM;
+  use Symfony\Component\Validator\Constraints as Assert;
 
-use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
-/**
- * This entity define a role for a person in an event
- *
- *
- *  @ORM\Table(name="organization")
- *  @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\OrganizationRepository")
- *  @ORM\HasLifecycleCallbacks
- *
- */
+  use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
 
-class Organization
-{
+  /**
+   * This entity define a role for a person in an event
+   *
+   *
+   * @ORM\Table(name="organization")
+   * @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\OrganizationRepository")
+   * @ORM\HasLifecycleCallbacks
+   *
+   */
+  class Organization
+  {
 
     /**
      * @ORM\Id
@@ -25,7 +25,7 @@ class Organization
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * name
      *
@@ -34,7 +34,7 @@ class Organization
      */
     protected $name;
 
-     /**
+    /**
      * page
      *
      *
@@ -42,7 +42,7 @@ class Organization
      */
     protected $page;
 
-     /**
+    /**
      * country
      *
      *
@@ -50,7 +50,7 @@ class Organization
      */
     protected $country;
 
-     /**
+    /**
      * @ORM\ManyToMany(targetEntity="Person",  mappedBy="organizations", cascade={"persist","merge","remove"})
      */
     protected $members;
@@ -63,7 +63,7 @@ class Organization
      */
     protected $conference;
 
-	
+
     /**
      * @ORM\Column(type="string", length=256, nullable=true)
      */
@@ -74,12 +74,13 @@ class Organization
      */
     public function __construct()
     {
-        $this->members = new \Doctrine\Common\Collections\ArrayCollection();
+      $this->members = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
-    public function __toString(){
-        return $this->name;
+    public function __toString()
+    {
+      return $this->name;
     }
 
     /**
@@ -88,7 +89,7 @@ class Organization
      */
     public function slugify()
     {
-        $this->setSlug(StringTools::slugify($this->getId().$this->getName()));
+      $this->setSlug(StringTools::slugify($this->getId() . $this->getName()));
     }
 
     /**
@@ -99,124 +100,128 @@ class Organization
      */
     public function onUpdate()
     {
-        $this->slugify();
+      $this->slugify();
     }
 
-     /**
+    /**
      * Set slug
      *
      * @param string $slug
+     *
      * @return ConfEvent
      */
     public function setSlug($slug)
     {
-        $this->slug = $slug;
-    
-        return $this;
+      $this->slug = $slug;
+
+      return $this;
     }
 
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {
-        $this->slugify();
-        return $this->slug;
+      $this->slugify();
+      return $this->slug;
     }
 
-   
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
-        return $this->id;
+      return $this->id;
     }
 
     /**
      * Set name
      *
      * @param string $name
+     *
      * @return Organization
      */
     public function setName($name)
     {
-        $this->name = $name;
-    
-        return $this;
+      $this->name = $name;
+
+      return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
-        return $this->name;
+      return $this->name;
     }
 
     /**
      * Set page
      *
      * @param string $page
+     *
      * @return Organization
      */
     public function setPage($page)
     {
-        $this->page = $page;
-    
-        return $this;
+      $this->page = $page;
+
+      return $this;
     }
 
     /**
      * Get page
      *
-     * @return string 
+     * @return string
      */
     public function getPage()
     {
-        return $this->page;
+      return $this->page;
     }
 
     /**
      * Set country
      *
      * @param string $country
+     *
      * @return Organization
      */
     public function setCountry($country)
     {
-        $this->country = $country;
-    
-        return $this;
+      $this->country = $country;
+
+      return $this;
     }
 
     /**
      * Get country
      *
-     * @return string 
+     * @return string
      */
     public function getCountry()
     {
-        return $this->country;
+      return $this->country;
     }
 
     /**
      * Add members
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\Person $members
+     *
      * @return Organization
      */
     public function addMember(\fibe\Bundle\WWWConfBundle\Entity\Person $members)
     {
-        $this->members[] = $members;
-        return $this;
+      $this->members[] = $members;
+      return $this;
     }
 
     /**
@@ -226,40 +231,41 @@ class Organization
      */
     public function removeMember(\fibe\Bundle\WWWConfBundle\Entity\Person $members)
     {
-        $this->members->removeElement($members);
+      $this->members->removeElement($members);
     }
 
 
     /**
      * Get members
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getMembers()
     {
-        return $this->members;
+      return $this->members;
     }
 
     /**
      * Set conference
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
+     *
      * @return Organization
      */
     public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference = null)
     {
-        $this->conference = $conference;
-    
-        return $this;
+      $this->conference = $conference;
+
+      return $this;
     }
 
     /**
      * Get conference
      *
-     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
+     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf
      */
     public function getConference()
     {
-        return $this->conference;
+      return $this->conference;
     }
-}
+  }

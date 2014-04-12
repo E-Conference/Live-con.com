@@ -1,55 +1,72 @@
 <?php
 
-namespace fibe\Bundle\WWWConfBundle\Services;
-use IDCI\Bundle\SimpleScheduleBundle\Entity\Location;
+  namespace fibe\Bundle\WWWConfBundle\Services;
 
-use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event; 
+  use IDCI\Bundle\SimpleScheduleBundle\Entity\Location;
 
-class EmptyConf {
+  use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event;
 
-    public function emptyConf($conference,$em)
+  /**
+   * Class EmptyConf
+   * @package fibe\Bundle\WWWConfBundle\Services
+   */
+  class EmptyConf
+  {
+
+    /**
+     * @TODO comment
+     *
+     * @param $conference
+     * @param $em
+     */
+    public function emptyConf($conference, $em)
     {
 
-      
 
       //  topics
       $topics = $conference->getTopics();
-      foreach ($topics as $topic) {
+      foreach ($topics as $topic)
+      {
         $conference->removeTopic($topic);
         $em->remove($topic);
       }
 
       //  organizations
       $organizations = $conference->getOrganizations();
-      foreach ($organizations as $organization) {
+      foreach ($organizations as $organization)
+      {
         $conference->removeOrganization($organization);
         $em->remove($organization);
       }
 
       //  topics
       $topics = $conference->getTopics();
-      foreach ($topics as $topic) {
+      foreach ($topics as $topic)
+      {
         $conference->removetopic($topic);
         $em->remove($topic);
       }
 
       //  papers
       $papers = $conference->getPapers();
-      foreach ($papers as $paper) {
+      foreach ($papers as $paper)
+      {
         $conference->removePaper($paper);
         $em->remove($paper);
       }
 
       //  locations
       $locations = $conference->getLocations();
-      foreach ($locations as $location) {
+      foreach ($locations as $location)
+      {
         $conference->removeLocation($location);
         $em->remove($location);
       }
 
       //  persons
       $persons = $conference->getPersons();
-      foreach ($persons as $person) {
+      foreach ($persons as $person)
+      {
         $conference->removePerson($person);
         $em->remove($person);
       }
@@ -58,10 +75,10 @@ class EmptyConf {
 
       $newMainConfEvent = new Event();
       $newMainConfEvent->setIsMainConfEvent(true);
-      $newMainConfEvent->setSummary("Livecon Conference"); 
-      $newMainConfEvent->setStartAt( new \DateTime('now'));
+      $newMainConfEvent->setSummary("Livecon Conference");
+      $newMainConfEvent->setStartAt(new \DateTime('now'));
       $end = new \DateTime('now');
-      $newMainConfEvent->setEndAt( $end->add(new \DateInterval('P2D'))); 
+      $newMainConfEvent->setEndAt($end->add(new \DateInterval('P2D')));
       $newMainConfEvent->addCategorie($em->getRepository('IDCISimpleScheduleBundle:Category')->findOneByName("ConferenceEvent"));
       $newMainConfEvent->setConference($conference);
       $conference->setMainConfEvent($newMainConfEvent);
@@ -72,15 +89,16 @@ class EmptyConf {
       $newMainConfEvent->setLocation($mainConfEventLocation);
       $mainConfEventLocation->setConference($conference);
       $em->persist($mainConfEventLocation);
-      
-      $em->persist($newMainConfEvent); 
+
+      $em->persist($newMainConfEvent);
       $em->remove($mainConfEvent);
- 
+
       $em->persist($conference);
 
-       //  events
+      //  events
       $events = $conference->getEvents();
-      foreach ($events as $event) {
+      foreach ($events as $event)
+      {
         $conference->removeEvent($event);
         $em->remove($event);
       }
@@ -89,78 +107,93 @@ class EmptyConf {
       $em->flush();
     }
 
-    public function prepareDeleteConf($conference,$em)
+    /**
+     * @TODO comment
+     *
+     * @param $conference
+     * @param $em
+     */
+    public function prepareDeleteConf($conference, $em)
     {
 
       //  topics
       $topics = $conference->getTopics();
-      foreach ($topics as $topic) {
+      foreach ($topics as $topic)
+      {
         $conference->removeTopic($topic);
         $em->remove($topic);
       }
 
       //  organizations
       $organizations = $conference->getOrganizations();
-      foreach ($organizations as $organization) {
+      foreach ($organizations as $organization)
+      {
         $conference->removeOrganization($organization);
         $em->remove($organization);
       }
 
       //  topics
       $topics = $conference->getTopics();
-      foreach ($topics as $topic) {
+      foreach ($topics as $topic)
+      {
         $conference->removetopic($topic);
         $em->remove($topic);
       }
 
       //  papers
       $papers = $conference->getPapers();
-      foreach ($papers as $paper) {
+      foreach ($papers as $paper)
+      {
         $conference->removePaper($paper);
         $em->remove($paper);
       }
 
       //  locations
       $locations = $conference->getLocations();
-      foreach ($locations as $location) {
+      foreach ($locations as $location)
+      {
         $conference->removeLocation($location);
         $em->remove($location);
       }
 
       //  events
       $events = $conference->getEvents();
-      foreach ($events as $event) {
+      foreach ($events as $event)
+      {
         $conference->removeEvent($event);
         $em->remove($event);
       }
 
       //  persons
       $persons = $conference->getPersons();
-      foreach ($persons as $person) {
+      foreach ($persons as $person)
+      {
         $conference->removePerson($person);
         $em->remove($person);
       }
 
       //authorizations
       $authorizations = $conference->getAuthorizations();
-      foreach ($authorizations as $authorization) {
-          $conference->removeAuthorization($authorization);
-          $em->remove($authorization);
+      foreach ($authorizations as $authorization)
+      {
+        $conference->removeAuthorization($authorization);
+        $em->remove($authorization);
       }
 
-       //Remove link between manager and conference
+      //Remove link between manager and conference
       $managers = $conference->getConfManagers();
-      foreach ($managers as $manager) {
-          $conference->removeConfManager($manager);
+      foreach ($managers as $manager)
+      {
+        $conference->removeConfManager($manager);
       }
 
       //main conf event t
       $mainConfEvent = $conference->getMainConfEvent();
       $conference->setMainConfEvent(null);
-      $em->remove( $mainConfEvent);
+      $em->remove($mainConfEvent);
 
       $em->persist($conference);
       $em->flush();
-  }
+    }
 
-}
+  }

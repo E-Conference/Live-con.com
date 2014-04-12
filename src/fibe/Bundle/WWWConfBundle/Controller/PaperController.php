@@ -1,31 +1,31 @@
 <?php
 
-namespace fibe\Bundle\WWWConfBundle\Controller;
+  namespace fibe\Bundle\WWWConfBundle\Controller;
 
-use Symfony\Component\Form\Form;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+  use Symfony\Component\Form\Form;
+  use Symfony\Component\HttpFoundation\Request;
+  use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
-use fibe\Bundle\WWWConfBundle\Entity\Paper;
-use fibe\Bundle\WWWConfBundle\Form\PaperType;
-use fibe\Bundle\WWWConfBundle\Form\Filters\PaperFilterType;
+  use fibe\Bundle\WWWConfBundle\Entity\Paper;
+  use fibe\Bundle\WWWConfBundle\Form\PaperType;
+  use fibe\Bundle\WWWConfBundle\Form\Filters\PaperFilterType;
 
-use Pagerfanta\Adapter\ArrayAdapter;
-use Pagerfanta\Pagerfanta;
-use Pagerfanta\Exception\NotValidCurrentPageException;
+  use Pagerfanta\Adapter\ArrayAdapter;
+  use Pagerfanta\Pagerfanta;
+  use Pagerfanta\Exception\NotValidCurrentPageException;
 
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+  use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+  use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-/**
- * Paper controller.
- * @Route("/paper")
- */
-class PaperController extends Controller
-{
+  /**
+   * Paper controller.
+   * @Route("/paper")
+   */
+  class PaperController extends Controller
+  {
     /**
      * Lists all Paper entities.
      * @Route("/", name="schedule_paper")
@@ -33,32 +33,35 @@ class PaperController extends Controller
      */
     public function indexAction(Request $request)
     {
-        
-          //Authorization Verification conference datas manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $em = $this->getDoctrine()->getManager();
+      //Authorization Verification conference datas manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $conf = $this->getUser()->getCurrentConf();
-        $entities = $conf->getPapers()->toArray();
+      $em = $this->getDoctrine()->getManager();
 
-        $adapter = new ArrayAdapter($entities);
-        $pager = new PagerFanta($adapter);
-        $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
+      $conf = $this->getUser()->getCurrentConf();
+      $entities = $conf->getPapers()->toArray();
 
-        try {
-            $pager->setCurrentPage($request->query->get('page', 1));
-        } catch (NotValidCurrentPageException $e) {
-            throw new NotFoundHttpException();
-        }
+      $adapter = new ArrayAdapter($entities);
+      $pager = new PagerFanta($adapter);
+      $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
 
-        $filters =$this->createForm(new PaperFilterType($this->getUser()));
-        return array(
-            'pager' => $pager,
-            'authorized' => $authorization->getFlagconfDatas(),
-            'filters_form' => $filters->createView(),
-        );
+      try
+      {
+        $pager->setCurrentPage($request->query->get('page', 1));
+      }
+      catch (NotValidCurrentPageException $e)
+      {
+        throw new NotFoundHttpException();
+      }
+
+      $filters = $this->createForm(new PaperFilterType($this->getUser()));
+      return array(
+        'pager'        => $pager,
+        'authorized'   => $authorization->getFlagconfDatas(),
+        'filters_form' => $filters->createView(),
+      );
     }
 
 
@@ -69,34 +72,38 @@ class PaperController extends Controller
     public function filterAction(Request $request)
     {
 
-        $em = $this->getDoctrine()->getManager();
+      $em = $this->getDoctrine()->getManager();
 
-        $conf = $this->getUser()->getCurrentConf();
-        //Filters
-        $filters =$this->createForm(new PaperFilterType($this->getUser()));
-        $filters->bindRequest($this->get('request'));
+      $conf = $this->getUser()->getCurrentConf();
+      //Filters
+      $filters = $this->createForm(new PaperFilterType($this->getUser()));
+      $filters->bindRequest($this->get('request'));
 
-        if ($filters->isValid())  {
-            // bind values from the request
-          
-             $entities = $em->getRepository('fibeWWWConfBundle:Paper')->filtering($filters->getData(), $conf);
-             $nbResult = count($entities);
+      if ($filters->isValid())
+      {
+        // bind values from the request
 
-             //Pager
-             $adapter = new ArrayAdapter($entities);
-             $pager = new PagerFanta($adapter);
-             $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
-             try {
-               $pager->setCurrentPage($request->query->get('page', 1));
-             } catch (NotValidCurrentPageException $e) {
-                throw new NotFoundHttpException();
-             }
+        $entities = $em->getRepository('fibeWWWConfBundle:Paper')->filtering($filters->getData(), $conf);
+        $nbResult = count($entities);
 
-             return $this->render('fibeWWWConfBundle:Paper:list.html.twig', array(
-                 'pager'  => $pager,
-                 'nbResult' => $nbResult,
-             ));
+        //Pager
+        $adapter = new ArrayAdapter($entities);
+        $pager = new PagerFanta($adapter);
+        $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
+        try
+        {
+          $pager->setCurrentPage($request->query->get('page', 1));
         }
+        catch (NotValidCurrentPageException $e)
+        {
+          throw new NotFoundHttpException();
+        }
+
+        return $this->render('fibeWWWConfBundle:Paper:list.html.twig', array(
+          'pager'    => $pager,
+          'nbResult' => $nbResult,
+        ));
+      }
 
     }
 
@@ -107,33 +114,35 @@ class PaperController extends Controller
      */
     public function createAction(Request $request)
     {
-        
-        //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-         if(!$authorization->getFlagconfDatas()){
-            throw new AccessDeniedException('Action not authorized !');
-          }
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $entity  = new Paper();
-        $form = $this->createForm(new PaperType($this->getUser()), $entity);
-        $form->bind($request);
+      if (!$authorization->getFlagconfDatas())
+      {
+        throw new AccessDeniedException('Action not authorized !');
+      }
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity->setConference($this->getUser()->getCurrentConf());
-            $em->persist($entity);
-            $em->flush();
+      $entity = new Paper();
+      $form = $this->createForm(new PaperType($this->getUser()), $entity);
+      $form->bind($request);
 
-            return $this->redirect($this->generateUrl('schedule_paper'));
-        }
+      if ($form->isValid())
+      {
+        $em = $this->getDoctrine()->getManager();
+        $entity->setConference($this->getUser()->getCurrentConf());
+        $em->persist($entity);
+        $em->flush();
 
-        return $this->render('fibeWWWConfBundle:Paper:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-            'authorized' => $authorization->getFlagconfDatas(),
-        ));
+        return $this->redirect($this->generateUrl('schedule_paper'));
+      }
+
+      return $this->render('fibeWWWConfBundle:Paper:new.html.twig', array(
+        'entity'     => $entity,
+        'form'       => $form->createView(),
+        'authorized' => $authorization->getFlagconfDatas(),
+      ));
     }
 
     /**
@@ -144,22 +153,23 @@ class PaperController extends Controller
      */
     public function newAction()
     {
-         //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-         if(!$authorization->getFlagconfDatas()){
-            throw new AccessDeniedException('Action not authorized !');
-          }
+      if (!$authorization->getFlagconfDatas())
+      {
+        throw new AccessDeniedException('Action not authorized !');
+      }
 
-        $entity = new Paper();
-        $form   = $this->createForm(new PaperType($this->getUser()), $entity);
+      $entity = new Paper();
+      $form = $this->createForm(new PaperType($this->getUser()), $entity);
 
-        return $this->render('fibeWWWConfBundle:Paper:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-            'authorized' => $authorization->getFlagconfDatas(),
-        ));
+      return $this->render('fibeWWWConfBundle:Paper:new.html.twig', array(
+        'entity'     => $entity,
+        'form'       => $form->createView(),
+        'authorized' => $authorization->getFlagconfDatas(),
+      ));
     }
 
     /**
@@ -169,26 +179,27 @@ class PaperController extends Controller
      */
     public function showAction($id)
     {
-        //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $em = $this->getDoctrine()->getManager();
+      $em = $this->getDoctrine()->getManager();
 
-       
-        //The object have to belongs to the current conf
-        $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Paper entity.');
-        }
 
-        $deleteForm = $this->createDeleteForm($id);
+      //The object have to belongs to the current conf
+      $currentConf = $this->getUser()->getCurrentConf();
+      $entity = $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+      if (!$entity)
+      {
+        throw $this->createNotFoundException('Unable to find Paper entity.');
+      }
 
-        return $this->render('fibeWWWConfBundle:Paper:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
-            'authorized' => $authorization->getFlagconfDatas(),        ));
+      $deleteForm = $this->createDeleteForm($id);
+
+      return $this->render('fibeWWWConfBundle:Paper:show.html.twig', array(
+        'entity'      => $entity,
+        'delete_form' => $deleteForm->createView(),
+        'authorized'  => $authorization->getFlagconfDatas(),));
     }
 
     /**
@@ -198,33 +209,35 @@ class PaperController extends Controller
      */
     public function editAction($id)
     {
-        
-           //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-         if(!$authorization->getFlagconfDatas()){
-            throw new AccessDeniedException('Action not authorized !');
-          }
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $em = $this->getDoctrine()->getManager();
+      if (!$authorization->getFlagconfDatas())
+      {
+        throw new AccessDeniedException('Action not authorized !');
+      }
 
-         //The object have to belongs to the current conf
-        $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Paper entity.');
-        }
+      $em = $this->getDoctrine()->getManager();
 
-        $editForm = $this->createForm(new PaperType($this->getUser()), $entity);
-        $deleteForm = $this->createDeleteForm($id);
+      //The object have to belongs to the current conf
+      $currentConf = $this->getUser()->getCurrentConf();
+      $entity = $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+      if (!$entity)
+      {
+        throw $this->createNotFoundException('Unable to find Paper entity.');
+      }
 
-        return $this->render('fibeWWWConfBundle:Paper:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-            'authorized' => $authorization->getFlagconfDatas(),
-        ));
+      $editForm = $this->createForm(new PaperType($this->getUser()), $entity);
+      $deleteForm = $this->createDeleteForm($id);
+
+      return $this->render('fibeWWWConfBundle:Paper:edit.html.twig', array(
+        'entity'      => $entity,
+        'edit_form'   => $editForm->createView(),
+        'delete_form' => $deleteForm->createView(),
+        'authorized'  => $authorization->getFlagconfDatas(),
+      ));
     }
 
     /**
@@ -233,41 +246,44 @@ class PaperController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-       
-           //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-         if(!$authorization->getFlagconfDatas()){
-            throw new AccessDeniedException('Action not authorized !');
-          }
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $em = $this->getDoctrine()->getManager();
+      if (!$authorization->getFlagconfDatas())
+      {
+        throw new AccessDeniedException('Action not authorized !');
+      }
 
-         //The object have to belongs to the current conf
-        $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Paper entity.');
-        }
+      $em = $this->getDoctrine()->getManager();
 
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new PaperType($this->getUser()), $entity);
-        $editForm->bind($request);
+      //The object have to belongs to the current conf
+      $currentConf = $this->getUser()->getCurrentConf();
+      $entity = $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+      if (!$entity)
+      {
+        throw $this->createNotFoundException('Unable to find Paper entity.');
+      }
 
-        if ($editForm->isValid()) {
-            $em->persist($entity);
-            $em->flush();
+      $deleteForm = $this->createDeleteForm($id);
+      $editForm = $this->createForm(new PaperType($this->getUser()), $entity);
+      $editForm->bind($request);
 
-            return $this->redirect($this->generateUrl('schedule_paper'));
-        }
+      if ($editForm->isValid())
+      {
+        $em->persist($entity);
+        $em->flush();
 
-        return $this->render('fibeWWWConfBundle:Paper:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-            'authorized' => $authorization->getFlagconfDatas(),
-        ));
+        return $this->redirect($this->generateUrl('schedule_paper'));
+      }
+
+      return $this->render('fibeWWWConfBundle:Paper:edit.html.twig', array(
+        'entity'      => $entity,
+        'edit_form'   => $editForm->createView(),
+        'delete_form' => $deleteForm->createView(),
+        'authorized'  => $authorization->getFlagconfDatas(),
+      ));
     }
 
     /**
@@ -277,32 +293,35 @@ class PaperController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
-        
-           //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-         if(!$authorization->getFlagconfDatas()){
-            throw new AccessDeniedException('Action not authorized !');
-          }
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $form = $this->createDeleteForm($id);
-        $form->bind($request);
+      if (!$authorization->getFlagconfDatas())
+      {
+        throw new AccessDeniedException('Action not authorized !');
+      }
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-             //The object have to belongs to the current conf
-            $currentConf=$this->getUser()->getCurrentConf();
-            $entity =  $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Paper entity.');
-            }
+      $form = $this->createDeleteForm($id);
+      $form->bind($request);
 
-            $em->remove($entity);
-            $em->flush();
+      if ($form->isValid())
+      {
+        $em = $this->getDoctrine()->getManager();
+        //The object have to belongs to the current conf
+        $currentConf = $this->getUser()->getCurrentConf();
+        $entity = $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+        if (!$entity)
+        {
+          throw $this->createNotFoundException('Unable to find Paper entity.');
         }
 
-        return $this->redirect($this->generateUrl('schedule_paper'));
+        $em->remove($entity);
+        $em->flush();
+      }
+
+      return $this->redirect($this->generateUrl('schedule_paper'));
     }
 
     /**
@@ -314,9 +333,8 @@ class PaperController extends Controller
      */
     private function createDeleteForm($id)
     {
-        return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
-        ;
+      return $this->createFormBuilder(array('id' => $id))
+        ->add('id', 'hidden')
+        ->getForm();
     }
-}
+  }

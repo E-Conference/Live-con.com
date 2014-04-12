@@ -1,28 +1,27 @@
 <?php
 
-namespace fibe\Bundle\WWWConfBundle\Entity;
+  namespace fibe\Bundle\WWWConfBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+  use Doctrine\ORM\Mapping as ORM;
+  use Symfony\Component\Validator\Constraints as Assert;
 
-use fibe\Bundle\WWWConfBundle\Entity\wwwConf;
-use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
-use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
+  use fibe\Bundle\WWWConfBundle\Entity\wwwConf;
+  use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
+  use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
 
-/**
- * This entity define a paper of a conference
- *
- *
- *  @ORM\Table(name="paper")
- *  @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\PaperRepository")
- *  @ORM\HasLifecycleCallbacks
- *
- */
+  /**
+   * This entity define a paper of a conference
+   *
+   *
+   * @ORM\Table(name="paper")
+   * @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\PaperRepository")
+   * @ORM\HasLifecycleCallbacks
+   *
+   */
+  class Paper
+  {
 
-class Paper
-{
-
-     /**
+    /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -53,10 +52,10 @@ class Paper
      */
     private $url;
 
-     /**
+    /**
      * authors
-     * Persons related to an event 
-     *   
+     * Persons related to an event
+     *
      * @ORM\ManyToMany(targetEntity="Person", inversedBy="papers", cascade={"persist", "merge"})
      * @ORM\JoinTable(
      *     joinColumns={@ORM\JoinColumn(name="paper_id", referencedColumnName="id", onDelete="Cascade")},
@@ -64,7 +63,7 @@ class Paper
      */
     protected $authors;
 
-   
+
     /**
      * publisher
      *
@@ -83,7 +82,7 @@ class Paper
 
 
     /**
-     * topic(topics) 
+     * topic(topics)
      *
      * @ORM\ManyToMany(targetEntity="Topic", inversedBy="papers", cascade={"persist"})
      * @ORM\JoinTable(name="paper_topic",
@@ -91,9 +90,9 @@ class Paper
      *     inverseJoinColumns={@ORM\JoinColumn(name="topic_id", referencedColumnName="id", onDelete="Cascade")})
      */
     protected $topics;
-    
 
-     /**
+
+    /**
      * confEvents
      * Events related to an paper
      *
@@ -101,7 +100,7 @@ class Paper
      */
     protected $events;
 
-   
+
     /**
      *  Conference associated to this paper
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="papers", cascade={"persist"})
@@ -110,33 +109,34 @@ class Paper
      */
     protected $conference;
 
-     /**
+    /**
      * @ORM\Column(type="string", length=256, nullable=true)
      */
     protected $slug;
 
-  
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->authors = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->topic = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->events = new \Doctrine\Common\Collections\ArrayCollection();
+      $this->authors = new \Doctrine\Common\Collections\ArrayCollection();
+      $this->topic = new \Doctrine\Common\Collections\ArrayCollection();
+      $this->events = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-     public function __toString(){
-        return $this->title;
+    public function __toString()
+    {
+      return $this->title;
     }
 
-     /**
+    /**
      * Slugify
      * @ORM\PrePersist()
      */
     public function slugify()
     {
-        $this->setSlug(StringTools::slugify($this->getId().$this->getTitle()));
+      $this->setSlug(StringTools::slugify($this->getId() . $this->getTitle()));
     }
 
     /**
@@ -147,172 +147,177 @@ class Paper
      */
     public function onUpdate()
     {
-        $this->slugify();
+      $this->slugify();
     }
 
-     /**
+    /**
      * Set slug
      *
      * @param string $slug
+     *
      * @return ConfEvent
      */
     public function setSlug($slug)
     {
-        $this->slug = $slug;
-    
-        return $this;
+      $this->slug = $slug;
+
+      return $this;
     }
 
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {
-        $this->slugify();
-        return $this->slug;
+      $this->slugify();
+      return $this->slug;
     }
 
-
-   
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
-        return $this->id;
+      return $this->id;
     }
 
     /**
      * Set title
      *
      * @param string $title
+     *
      * @return Paper
      */
     public function setTitle($title)
     {
-        $this->title = $title;
-    
-        return $this;
+      $this->title = $title;
+
+      return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
-        return $this->title;
+      return $this->title;
     }
 
     /**
      * Set abstract
      *
      * @param string $abstract
+     *
      * @return Paper
      */
     public function setAbstract($abstract)
     {
-        $this->abstract = $abstract;
-    
-        return $this;
+      $this->abstract = $abstract;
+
+      return $this;
     }
 
     /**
      * Get abstract
      *
-     * @return string 
+     * @return string
      */
     public function getAbstract()
     {
-        return $this->abstract;
+      return $this->abstract;
     }
 
     /**
      * Set url
      *
      * @param string $url
+     *
      * @return Paper
      */
     public function setUrl($url)
     {
-        $this->url = $url;
-    
-        return $this;
+      $this->url = $url;
+
+      return $this;
     }
 
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
-        return $this->url;
+      return $this->url;
     }
 
     /**
      * Set publisher
      *
      * @param string $publisher
+     *
      * @return Paper
      */
     public function setPublisher($publisher)
     {
-        $this->publisher = $publisher;
-    
-        return $this;
+      $this->publisher = $publisher;
+
+      return $this;
     }
 
     /**
      * Get publisher
      *
-     * @return string 
+     * @return string
      */
     public function getPublisher()
     {
-        return $this->publisher;
+      return $this->publisher;
     }
 
     /**
      * Set publishDate
      *
      * @param string $publishDate
+     *
      * @return Paper
      */
     public function setPublishDate($publishDate)
     {
-        $this->publishDate = $publishDate;
-    
-        return $this;
+      $this->publishDate = $publishDate;
+
+      return $this;
     }
 
     /**
      * Get publishDate
      *
-     * @return string 
+     * @return string
      */
     public function getPublishDate()
     {
-        return $this->publishDate;
+      return $this->publishDate;
     }
 
     /**
      * Add authors
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\Person $authors
+     *
      * @return Paper
      */
     public function addAuthor(\fibe\Bundle\WWWConfBundle\Entity\Person $authors)
     {
-        $this->authors[] = $authors;
-    
-        return $this;
+      $this->authors[] = $authors;
+
+      return $this;
     }
 
     /**
@@ -322,30 +327,31 @@ class Paper
      */
     public function removeAuthor(\fibe\Bundle\WWWConfBundle\Entity\Person $authors)
     {
-        $this->authors->removeElement($authors);
+      $this->authors->removeElement($authors);
     }
 
     /**
      * Get authors
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getAuthors()
     {
-        return $this->authors;
+      return $this->authors;
     }
 
     /**
      * Add topics
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\Topic $topics
+     *
      * @return Paper
      */
     public function addTopic(\fibe\Bundle\WWWConfBundle\Entity\Topic $topics)
     {
-        $this->topics[] = $topics;
-    
-        return $this;
+      $this->topics[] = $topics;
+
+      return $this;
     }
 
     /**
@@ -355,30 +361,31 @@ class Paper
      */
     public function removeTopic(\fibe\Bundle\WWWConfBundle\Entity\Topic $topics)
     {
-        $this->topics->removeElement($topics);
+      $this->topics->removeElement($topics);
     }
 
     /**
      * Get topics
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTopics()
     {
-        return $this->topics;
+      return $this->topics;
     }
 
     /**
      * Add events
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events
+     *
      * @return Paper
      */
     public function addEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events)
     {
-        $this->events[] = $events;
-    
-        return $this;
+      $this->events[] = $events;
+
+      return $this;
     }
 
     /**
@@ -388,39 +395,40 @@ class Paper
      */
     public function removeEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events)
     {
-        $this->events->removeElement($events);
+      $this->events->removeElement($events);
     }
 
     /**
      * Get events
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getEvents()
     {
-        return $this->events;
+      return $this->events;
     }
 
     /**
      * Set conference
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
+     *
      * @return Paper
      */
     public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference = null)
     {
-        $this->conference = $conference;
-    
-        return $this;
+      $this->conference = $conference;
+
+      return $this;
     }
 
     /**
      * Get conference
      *
-     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
+     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf
      */
     public function getConference()
     {
-        return $this->conference;
+      return $this->conference;
     }
-}
+  }

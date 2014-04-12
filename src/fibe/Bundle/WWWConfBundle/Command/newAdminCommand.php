@@ -8,6 +8,12 @@
   use Symfony\Component\Console\Input\InputOption;
   use Symfony\Component\Console\Output\OutputInterface;
 
+  /**
+   * Command who create a new admin in database
+   *
+   * Class newAdminCommand
+   * @package fibe\Bundle\WWWConfBundle\Command
+   */
   class newAdminCommand extends ContainerAwareCommand
   {
     /**
@@ -134,6 +140,8 @@ EOT
     }
 
     /**
+     * @TODO comment
+     *
      * @see Command
      */
     protected function interact(InputInterface $input, OutputInterface $output)
