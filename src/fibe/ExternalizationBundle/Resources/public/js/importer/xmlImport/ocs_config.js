@@ -81,14 +81,16 @@ var ocsConfig = {
                 fn : "children",
                 arg : ["organization"]
             }], 
-            label   : {
-                'name' : {
+            label : [
+                {
+                    nodeName : 'name',
                     setter : 'setName'
                 },
-                'country' : {
+                {
+                    nodeName : 'country',
                     setter : 'setCountry'
                 }
-            }
+            ]
 
         },
         {
@@ -101,17 +103,21 @@ var ocsConfig = {
                 fn : "children",
                 arg : ["person"]
             }], 
-            label   : {
-                'firstname' : {
+            label : [
+                {
+                    nodeName : 'firstname',
                     setter : 'setFirstName'
                 },
-                'lastname' : {
+                {
+                    nodeName : 'lastname',
                     setter : 'setFamilyName'
                 },
-                'email' : {
+                {
+                    nodeName : 'email',
                     setter : 'setEmail'
                 },
-                'organization-id' : {
+                {
+                    nodeName : 'organization-id',
                     multiple : true,
                     setter : 'addOrganization',
                     fk : {
@@ -121,7 +127,7 @@ var ocsConfig = {
                         array : "organizations"
                     }
                 }
-            }
+            ]
         },
         {
             array   :"proceedings", 
@@ -132,16 +138,19 @@ var ocsConfig = {
                 fn : "children",
                 arg : ["paper"]
             }], 
-            label   : {
-                'title' : {
+            label : [
+                {
+                    nodeName : 'title',
                     setter : 'setTitle'
                 },
-                'abstract': {
+                {
+                    nodeName : 'abstract',
                     setter : 'setAbstract'
                 }, 
                 //topics entity are created directly here (or retrieved)
                 //then we register the correct index
-                'keywords' : {
+                {
+                    nodeName : 'keywords',
                     wrapped : true,
                     multiple : true, 
                     //TODO add splitter format
@@ -160,7 +169,8 @@ var ocsConfig = {
                     }
                 },
                 //authors are retrieved from their id in the objectMap .
-                'authors' : {
+                {
+                    nodeName : 'authors',
                     wrapped : true,
                     multiple : true,
                     setter : 'addAuthor',
@@ -171,7 +181,7 @@ var ocsConfig = {
                         array : "persons"
                     }
                 }
-            }
+            ]
         },
         {  
             array   : "events", 
@@ -182,11 +192,13 @@ var ocsConfig = {
                 fn : "children",
                 arg : ["session"]
             }], 
-            label   : {
-                'name' : {
+            label : [
+                {
+                    nodeName : 'name',
                     setter : 'setSummary'
                 },
-                'papers' : {
+                {
+                    nodeName : 'papers',
                     wrapped : true,
                     multiple : true,
                     setter : 'addPaper',
@@ -197,7 +209,8 @@ var ocsConfig = {
                         array : "proceedings"
                     }
                 },
-                'pc-chairs' : {
+                {
+                    nodeName : 'pc-chairs',
                     wrapped : true,
                     multiple : true,
                     setter : 'addChair',
@@ -208,7 +221,7 @@ var ocsConfig = {
                         array : "persons"
                     }
                 }
-            }
+            ]
           // set all events to sessionEvent
             // postProcess : function(node,event){
             //     var catName = "SessionEvent";

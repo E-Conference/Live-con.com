@@ -24,43 +24,40 @@ xmlMapper = {
             }] 
         }
     },
-	map : function(data,nodePath,$el,nodeCallBack,entryCallBack){
+	map : function(data,nodePath,nodeCallBack,entryCallBack){
         var $data = $(data);
         console.log("mapping : ",$data); 
            
-        generateHtml($data,nodePath,$el); 
+        findNode($data,nodePath); 
         
         $(xmlMapper).trigger("mapEnd"); 
 
-        function generateHtml($node,nodePath,$el){
+        function findNode($node,nodePath){
   
 
-            if($node.children().length > 1){
+            if($node.children().length > 0){
                 var childrenNodePath = [];
 
                 $node.children().each(function(index,child){ 
                     var childNodeName = xmlMapper.getNodeName(child);
-                    var childNodePath = nodePath + "/" + childNodeName; 
-                    var panelTmp = nodeCallBack(childNodePath,$el);
-                    if(panelTmp != $el){
+                    var childNodePath = nodePath + mapper.nodePath.separator + childNodeName; 
+                    var panelTmp = nodeCallBack(childNodePath);
+                    //check if not already mapped
+                    // if(panelTmp){
                         childrenNodePath.push(childNodePath);
-                        generateHtml($(child),childNodePath,panelTmp);
-                    } else{
-                        //already mapped
-                        // mapper.addMappingCollection(nodePath); 
-                    } 
-                    generateHtml($(child),childNodePath,$el);
+                    //     findNode($(child),childNodePath,panelTmp);
+                    // }
+
+                    findNode($(child),childNodePath);
 
                 });
                 // mapper.checkIfMappingCollection(nodePath,childrenNodePath);
-            }else{
-                $node.each(function() {
-                  $.each(this.attributes, function(i, attrib){
-                    entryCallBack(nodePath+"/@"+attrib.name,$el,attrib.value);
-                  });
-                });
-                if($node.text && $.trim($node.text()))
-                    entryCallBack(nodePath+"/text",$el,$.trim($node.text()));
+            }else{ 
+                $.each($node[0].attributes, function(i, attrib){
+                    entryCallBack(nodePath+mapper.nodePath.separator+mapper.nodePath.attr+attrib.name,attrib.value);
+                }); 
+                if($node.text && $.trim($node.text())!="")
+                    entryCallBack(nodePath+mapper.nodePath.separator+mapper.nodePath.text,$.trim($node.text()));
 
             }
  
@@ -71,7 +68,9 @@ xmlMapper = {
     getNodeName : function(node){
                 var nodeName = Importer().doFormat(node,Importer().mappingConfig.getNodeName.format);
                 
-                return (nodeName ? nodeName.toLowerCase() : console.log("undefined nodename for",node));
+                return (nodeName 
+                            ? nodeName.toLowerCase() 
+                            : console.log("undefined nodename for",node));
     },
 
     // *required by Importer internal* 
@@ -130,7 +129,7 @@ xmlMapper = {
         // get a specific attr for the given node
         //arg[0] must contain the wanted attr
         attr : function(node,arg){
-            return $(node).attr(arg[0]);
+            return $(node).attr(arg[0]) || $(node).attr(arg[0]);
         },
 
         /********************* nodeSet && node manipulation : return jquery Node or NodeSet *******************/
@@ -170,6 +169,7 @@ xmlMapper = {
                     } 
                 })
             })
+            if(rtnNodeSet.length==1)return $(rtnNodeSet[0])
             return $(rtnNodeSet);
         }, 
         nbChildren : function(node){ 

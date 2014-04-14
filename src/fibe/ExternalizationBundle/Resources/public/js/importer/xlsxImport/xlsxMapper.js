@@ -27,7 +27,7 @@ xlsxMapper = {
                         default:
                             data = to_csv(wb); 
                 }
-                $(xlsxMapper).trigger("fileRead",[data.Sheet1 || data]); 
+                $(xlsxMapper).trigger("fileRead",[data ]); 
             } 
         }
         reader.readAsArrayBuffer(file);
@@ -47,24 +47,24 @@ xlsxMapper = {
         }
     },
 
-    map : function(data,nodePath,$el,nodeCallBack,entryCallBack){
-
-        // add root node like as a collection to permit getting 
-        //  the nodePtyPath value ( like /name/text ) in mapper.generateMappingFile() 
-        // mapper.checkIfMappingCollection(nodePath,[""]);
-        $el = nodeCallBack(nodePath,$el,{panelClass:"panel-success",margin:true,collapsible:true,collapsed:false});
+    map : function(data,basePath,nodeCallBack,entryCallBack){ 
         
-        //Viewing all lines in the json return file  
-        for(var i = 0; i < data.length; i++){
-            var currentLine = data[i];
-            //Viewing all property of a line
+        
+        for(var sheetName in data){
+            var sheet = data[sheetName];
+            var nodePath = basePath+mapper.nodePath.separator+sheetName;
+            nodeCallBack(nodePath,{panelClass:"panel-success",margin:true,collapsible:true,collapsed:false});
+            
+            for(var i = 0; i < sheet.length; i++){
+                var currentLine = sheet[i];
 
-            for(var tab in currentLine){
+                for(var tab in currentLine){
 
-                if(tab != "__rowNum__"){ 
-                    var childNodePath = nodePath+ "/"+tab; 
-                    var $panel = nodeCallBack(childNodePath,$el,{panelClass:"panel-success",margin:true,collapsible:true,collapsed:false},true);
-                    entryCallBack(childNodePath+"/text",$panel,currentLine[tab]);
+                    if(tab != "__rowNum__"){ 
+                        var childNodePath = nodePath+mapper.nodePath.separator +tab; 
+                         nodeCallBack(childNodePath,{panelClass:"panel-success",margin:true,collapsible:true,collapsed:false},true);
+                        entryCallBack(childNodePath+mapper.nodePath.separator+mapper.nodePath.text, currentLine[tab]);
+                    }
                 }
             }
         }
@@ -88,34 +88,57 @@ xlsxMapper = {
         //arg[1] bool   : option to match with substring containment
         //arg[2] bool   : is root node
         children : function(node,arg){
-            var rtnNodeSet= [],
+            var rtnNodeSet1= [],
+                rtnNodeSet2= {},
                 seekAllChar = '*',
-                seekedChildNodeName =   arg && arg[0] ? arg[0] : seekAllChar 
-            if(seekedChildNodeName==seekAllChar)return node;
-            var matchTest =  arg && arg[1] === true
-                            ? function(a,b){ return a.indexOf(b) > -1}
-                            : function(a,b){ return a === b}; 
+                seekedChildNodeName =   arg && arg[0] ? arg[0] : seekAllChar  
+            var matchTest = seekedChildNodeName==seekAllChar
+                            ? function(){ return true} 
+                            : arg && arg[1] === true
+                                ? function(a,b){ return a.indexOf(b) > -1}
+                                : function(a,b){ return a === b};
+
             for (var i in node){
-                for (var j in node[i]){
-                    if(j!="__rowNum__" &&  matchTest(j,seekedChildNodeName) ){ 
-                        rtnNodeSet.push(node[i][j]);
+                if( matchTest(i,seekedChildNodeName)){
+                    if(typeof node[i] == 'string' || node[i] instanceof String )
+                        rtnNodeSet2[i] = node[i];
+                    else{
+                        for (var j in node[i]){
+                            if(j!="__rowNum__"){ 
+                                rtnNodeSet1.push(node[i][j]);
+                            }
+                        }   
                     }
-                }   
+                }
+                // else{
+                //     if(i!="__rowNum__" &&  matchTest(i,seekedChildNodeName) ){ 
+                //         rtnNodeSet2[i] = node[i];
+                //     }
+
+                //     // for (var j in node[i]){
+                //     //     if(j!="__rowNum__" &&  matchTest(j,seekedChildNodeName) ){ 
+                //     //         rtnNodeSet2.push(node[i][j]);
+                //     //     }
+                //     // }   
+                // }
                 // if(node && (seekedChildNodeName==seekAllChar || matchTest(node,seekedChildNodeName))){ 
                 //     rtnNodeSet.push(node[i]);
                 // }
             }   
-            return rtnNodeSet;
+            return rtnNodeSet1.length > 0 ? rtnNodeSet1 : rtnNodeSet2;
         },
         index : function(node){
             return node["nodeName"];
         },
         text : function(node){  
-            return node;
+                if(typeof node == 'string' || node instanceof String )
+                     return node
+                else 
+                    for (var i in node)return node[i];
         },
-        //get a random key because we don't care
+        //get a random key because we don't care about fk
         generate : function(node){
-            return Math.floor((Math.random()*9999999999999999));
+            return Math.floor((Math.random()*1024*1024*1024*1024));
         }
     },
 
