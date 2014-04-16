@@ -86,16 +86,18 @@ var Mapper = function(){
             
             // var collectionNodePath =  cutLastSlash(cutLastSlash(nodePath,true),true);
             if(knownNodes[nodePath]){
-                var collectionNodePath = cutLastSlash(cutLastSlash(nodePath,true),true);
-                if(isAttr(nodePath) && (!knownCollection[collectionNodePath] || collectionNodePath==basePath))
-                    collectionNodePath = cutLastSlash(nodePath,true);
+                var collectionNodePath = cutLastSlash(nodePath,true); 
+                if(knownNodes[cutLastSlash(collectionNodePath,true)].size < knownNodes[collectionNodePath].size ){
+                        collectionNodePath = cutLastSlash(nodePath,true);
+                }else {
+                    collectionNodePath = cutLastSlash(collectionNodePath,true); 
+                }
                 if(!knownCollection[collectionNodePath])
                     addCollection(collectionNodePath)
 
                 function addCollection(nodePath){
                     console.log("new Collection of "+ nodePath);
-                    knownCollection[nodePath] = {};
-
+                    knownCollection[nodePath] = {}; 
                 }
             } 
 
@@ -160,8 +162,8 @@ var Mapper = function(){
         return true; 
         function addSample(nodePath,sample){
             sample=$.trim(sample);
+            knownNodes[nodePath].size += 1;
             if(sample && sample!=""  ){
-                knownNodes[nodePath].size += 1;
                 knownNodes[nodePath].samples.push(sample);  
             }  
         }
