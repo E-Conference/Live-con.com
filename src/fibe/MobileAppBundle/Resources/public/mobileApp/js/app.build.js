@@ -25,8 +25,8 @@
             deps: [
                 'jquery',
                 'jqueryMobile.config'
-            ],
-        },
+            ]
+    },
         'jqueryMobile.config': {
         	deps: [
                 'jquery'
@@ -46,8 +46,8 @@
 				'arbor-graphics'
 			],
 			exports: 'arbor'
-		},
-	},
+		}
+    },
     paths: {
         // the left side is the module ID,
         // the right side is the path to
@@ -92,5 +92,5 @@
         no_mangle: true
     },
     optimizeCss: "standard",
-    inlineText: true,
+    inlineText: true
 })

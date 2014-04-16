@@ -35,6 +35,7 @@ class EquipmentRepository extends EntityRepository
 
     public function getEquipmentForLocationSelect($location=null)
     {
+        $ids = null;
         if($location){
 
             $equipments = $location->getEquipments();

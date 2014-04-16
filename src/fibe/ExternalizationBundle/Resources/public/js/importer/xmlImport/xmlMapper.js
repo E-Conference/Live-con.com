@@ -14,48 +14,51 @@ xmlMapper = {
         util : "xmlUtil",
         getNodeKey : {
             format : [{
-                fn : "attr",
-                arg : ["rdf:about"],
+                //don't care about foreign keys
+                fn : "generate", 
             }]
         },
         getNodeName : {
             format : [{
-                fn : "rdfNodeName", 
+                fn : "rdfNodeName"
             }] 
-        },
+        }
     },
-	map : function(data,nodePath,$el,nodeCallBack,entryCallBack){
+	map : function(data,nodePath,nodeCallBack,entryCallBack){
         var $data = $(data);
         console.log("mapping : ",$data); 
            
-        generateHtml($data,nodePath,$el); 
+        findNode($data,nodePath); 
         
         $(xmlMapper).trigger("mapEnd"); 
 
-        function generateHtml($node,nodePath,$el){
+        function findNode($node,nodePath){
   
 
-            if($node.children().length > 1){
+            if($node.children().length > 0){
                 var childrenNodePath = [];
 
                 $node.children().each(function(index,child){ 
                     var childNodeName = xmlMapper.getNodeName(child);
-                    var childNodePath = nodePath+ "/"+childNodeName; 
-                    var panelTmp = nodeCallBack(childNodePath,$el,childNodeName);
-                    if(panelTmp != $el){
+                    var childNodePath = nodePath + mapper.nodePath.separator + childNodeName; 
+                    var panelTmp = nodeCallBack(childNodePath);
+                    //check if not already mapped
+                    // if(panelTmp){
                         childrenNodePath.push(childNodePath);
-                        generateHtml($(child),childNodePath,panelTmp);
-                    } else{
-                        //already mapped
-                        // mapper.addMappingCollection(nodePath); 
-                    } 
-                    generateHtml($(child),childNodePath,$el);
+                    //     findNode($(child),childNodePath,panelTmp);
+                    // }
+
+                    findNode($(child),childNodePath);
 
                 });
-                mapper.checkIfMappingCollection(nodePath,childrenNodePath);
-            }else{
-                if($node.text() && $node.text() != "")
-                    entryCallBack(nodePath,$el,$node.text()); 
+                // mapper.checkIfMappingCollection(nodePath,childrenNodePath);
+            }else{ 
+                $.each($node[0].attributes, function(i, attrib){
+                    entryCallBack(nodePath+mapper.nodePath.separator+mapper.nodePath.attr+attrib.name,attrib.value);
+                }); 
+                if($node.text && $.trim($node.text())!="")
+                    entryCallBack(nodePath+mapper.nodePath.separator+mapper.nodePath.text,$.trim($node.text()));
+
             }
  
         }
@@ -65,7 +68,9 @@ xmlMapper = {
     getNodeName : function(node){
                 var nodeName = Importer().doFormat(node,Importer().mappingConfig.getNodeName.format);
                 
-                return (nodeName ? nodeName.toLowerCase() : console.log("undefined nodename for",node));
+                return (nodeName 
+                            ? nodeName.toLowerCase() 
+                            : console.log("undefined nodename for",node));
     },
 
     // *required by Importer internal* 
@@ -119,12 +124,12 @@ xmlMapper = {
             return $(node).text();
         },
         localName : function(node){
-            return node.localName;
+            return $(node)[0].localName;
         },
         // get a specific attr for the given node
         //arg[0] must contain the wanted attr
         attr : function(node,arg){
-            return $(node).attr(arg[0]);
+            return $(node).attr(arg[0]) || $(node).attr(arg[0]);
         },
 
         /********************* nodeSet && node manipulation : return jquery Node or NodeSet *******************/
@@ -146,6 +151,7 @@ xmlMapper = {
         //arg[0] string : contains the seeked children nodeName. if undefined returns all
         //arg[1] bool   : option to match with substring containment
         children : function(node,arg){
+            var node = $(node)
             if(!arg)return $(node).children();
             var rtnNodeSet= [],
                 seekAllChar = '*',
@@ -164,6 +170,7 @@ xmlMapper = {
                     } 
                 })
             })
+            if(rtnNodeSet.length==1)return $(rtnNodeSet[0])
             return $(rtnNodeSet);
         }, 
         nbChildren : function(node){ 
@@ -174,19 +181,23 @@ xmlMapper = {
         
         // get the first specific child in a nodeSet ( case insensitive )
         //arg[0] must contain the wanted child nodeName 
-        child : function(node,arg){
-            // return $(node).children(childNodeName);
-            var rtnNode;
-            var seekedChildNodeName = arg[0].toLowerCase();
-            $(node).children().each(function(){
-                if(rtnNode)return;
-                var childNodeName = xmlMapper.getNodeName(this);
-                if(childNodeName && childNodeName === seekedChildNodeName){
-                    rtnNode = $(this);
-                }
-            })
-            return rtnNode;
-        },
+        // child : function(node,arg){
+        //     // return $(node).children(childNodeName);
+        //     var rtnNode;
+        //     var seekedChildNodeName = arg[0].toLowerCase();
+        //     $(node).children().each(function(){
+        //         if(rtnNode)return;
+        //         var childNodeName = xmlMapper.getNodeName(this);
+        //         if(childNodeName && childNodeName === seekedChildNodeName){
+        //             rtnNode = $(this);
+        //         }
+        //     })
+        //     return rtnNode;
+        // },
+        //get a random key because we don't care about fk
+        generate : function(node){
+            return Math.floor((Math.random()*1024*1024*1024*1024));
+        }
     }
 
 }

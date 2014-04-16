@@ -35,9 +35,9 @@ var Pager = {
                   (op.collapsible===true?
                         (op.collapsed===true?'data-collapsed="true"':'data-collapsed="false"')
                         +'style="cursor: pointer;" onclick="(!$(this).data(\'collapsed\') ? $(this).find(\'> .panel-title i\').removeClass(\'fa-chevron-down\').addClass(\'fa-chevron-up\').parent().parent().siblings(\'ul\').hide(\'slow\')\
-                                                                  : $(this).find(\'> .panel-title i\').removeClass(\'fa-chevron-up\').addClass(\'fa-chevron-down\').parent().parent().siblings(\'ul\').show(\'slow\'));$(this).data(\'collapsed\',!$(this).data(\'collapsed\'));"> ':'')+
+                                                                  : $(this).find(\'> .panel-title i\').removeClass(\'fa-chevron-up\').addClass(\'fa-chevron-down\').parent().parent().siblings(\'ul\').show(\'slow\'));$(this).data(\'collapsed\',!$(this).data(\'collapsed\'));"':'')+
                   
-                  '<h3 class="panel-title">'+
+                  '> <h3 class="panel-title">'+
                         content+
                         (op.collapsible===true?' <i class="fa '+(op.collapsed===true?'fa-chevron-up':'fa-chevron-down')+'"/> ':'')+
                     '</h3></div>'+

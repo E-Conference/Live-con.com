@@ -32,6 +32,10 @@
              -moz-background-clip: padding;
                   background-clip: padding-box;
         }
+        .popover-content {
+            
+          max-height: 600px;  
+        }
 
         #datafile-form .list-group-item{
             cursor: move;
@@ -263,7 +267,7 @@
                 })
                 mapper.setKnownMapping($("#known-mapping-format").val())
                       .readFile();
-                      console.debug(mapper.getMapping())
+                      console.log(mapper.getMapping())
         }
 
          function handleImport(e) {
@@ -295,9 +299,9 @@
                             Pager.changePage('#page-end');  
                             
                             $("#result-import").html(
-                                getHtmlResultDiv(mapper["serialisedDatas"],mapper["importedLog"],mapper["notImportedLog"])
+                                getHtmlResultDiv(mapper["serialisedDatas"],mapper["importedLog"],mapper["notImportedLog"],"sent")
                             );
-                            bootstrapAlert("success",getMsgUl(mapper["serialisedDatas"],"imported"),"Conference imported : "); 
+                            bootstrapAlert("success",getMsgUl(mapper["serialisedDatas"],"imported"),"Conference imported : "+mapper.getConfName()); 
                         },
                         error:function(a,b,c)
                         {
@@ -305,7 +309,7 @@
                             console.log(a)
                             console.log(b)
                             console.log(c) 
-                        },
+                        }
                     });
                 }
         } 
@@ -354,7 +358,7 @@
                     mapper["notImportedLog"]  = notImportedLog; 
 
                     $("#result-extract").html(getHtmlResultDiv(data,importedLog,notImportedLog,"extracted"));
-                    bootstrapAlert("success",getMsgUl(mapper["serialisedDatas"],"extracted"),"conference parsed : "); 
+                    bootstrapAlert("success",getMsgUl(mapper["serialisedDatas"],"extracted"),"conference parsed : "+mapper.getConfName()); 
                 },function(msg)
                 { 
                     bootstrapAlert("warning", msg || "there was an error during extraction of datas","Error :"); 
@@ -369,7 +373,9 @@
         function getHtmlResultDiv(data,importedLog,notImportedLog,endMsg){
             var html='<div class="row"><div class="col-md-12 col-lg-4"><div class="panel panel-primary">\
                                                   <!-- Default panel contents -->\
-                                                  <div class="panel-heading">'+(mapper.fileName || 'Found datas')+'</div>';
+                                                  <div class="panel-heading">'+
+                                                  mapper.getConfName()
+                                                  +'</div>';
 
                     html+= getMsgUl(mapper["serialisedDatas"],endMsg || "found",true);
 
@@ -418,8 +424,6 @@
         // output imported object
         function getMsgUl(dataArray,endString,panelMode){
             var msg = "";
-            // if(dataArray.conference.setAcronym)msg += dataArray.conference.setAcronym;
-            // else if(dataArray.conference.setSummary)msg += dataArray.conference.setSummary;
             msg += "<ul"+(panelMode?' class="list-group" ':'')+">"; 
             for (var i in dataArray) 
                 if(dataArray[i] && dataArray[i].length >0)

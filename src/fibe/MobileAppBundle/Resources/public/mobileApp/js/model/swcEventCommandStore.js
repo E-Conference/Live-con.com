@@ -41,8 +41,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#topic/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])}
+                           },
 													 "name",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "event : "+str["name"];}});
@@ -80,8 +80,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#event/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])}
+                           },
 													 "name",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "event : "+str["name"];}});
@@ -124,8 +124,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 							ViewAdapterText.appendListImage(parameters.JSONdata,
 													 {baseHref:'#person/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])}
+                           },
 													 "name",
 													 "image",
 													 parameters.contentEl,
@@ -164,8 +164,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#publication/',
-													  hrefCllbck:function(str){return Encoder.encode(str["title"])+"/"+Encoder.encode(str["id"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["title"])+"/"+Encoder.encode(str["id"])}
+                           },
 													 "title",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "paper : "+str["id"];}});
@@ -205,8 +205,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 							ViewAdapterText.appendListImage(parameters.JSONdata,
 													 {baseHref:'#organization/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])}
+                           },
 													 "name",
 													 "image",
 													 parameters.contentEl,
@@ -247,8 +247,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#person-by-role/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+'/'+Encoder.encode(str["id"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+'/'+Encoder.encode(str["id"])}
+                           },
 													 "name",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "Role : "+str["name"];}});
@@ -287,8 +287,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#event-by-category/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+'/'+Encoder.encode(str["id"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+'/'+Encoder.encode(str["id"])}
+                           },
 													 "name",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "Categories : "+str["name"];}});
@@ -424,8 +424,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 									parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].role[roleName]+' at </h2>'));
 									ViewAdapterText.appendList(parameters.JSONdata.roles[roleType],
 													 {baseHref:'#event/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])}
+                           },
 													 "name",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "person : "+str["id"];}});
@@ -543,8 +543,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							$("[data-role = page]").find("#header-title").html(labels[parameters.conference.lang].role[parameters.uri]);
 							ViewAdapterText.appendListImage(parameters.JSONdata,
 													 {baseHref:'#person/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])}
+                           },
 													 "name",
 													 "image",
 													 parameters.contentEl,
@@ -596,8 +596,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							parameters.contentEl.append('<h2>'+labels[parameters.conference.lang].person.publications+'</h2>'); 
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#publication/',
-													  hrefCllbck:function(str){return Encoder.encode(str["title"])+'/'+Encoder.encode(str["id"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["title"])+'/'+Encoder.encode(str["id"])}
+                           },
 													 "title",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "publication : "+str["id"];}});
@@ -715,8 +715,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#theme/',
-													  hrefCllbck:function(str){return Encoder.encode(str["themename"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["themename"])}
+                           },
 													 "themename",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "Track : "+str["themename"];}});
@@ -762,8 +762,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							parameters.contentEl.append('<h2>'+parameters.name+'</h2>'); 
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#event/',
-													  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])}
+                           },
 													 "eventLabel",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "Track : "+str["eventLabel"];}});
@@ -806,8 +806,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							$("[data-role = page]").find("#header-title").html(labels[parameters.conference.lang].category[parameters.name]);
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#event/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])},
-													  },
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])}
+                           },
 													 "name",
 													 parameters.contentEl,
 													 {type:"Node",labelCllbck:function(str){return "event : "+str["name"];}});

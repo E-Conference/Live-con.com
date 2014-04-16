@@ -39,7 +39,7 @@ class DBImportController extends Controller
   
       
     public function importAction(Request $request)
-    {      
+    {
         //Authorization Verification conference sched manager
         $user=$this->getUser();
         $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
@@ -203,7 +203,10 @@ class DBImportController extends Controller
                         switch ($setter) {
                             case 'addOrganization':
                                 $entityArray = $organizationEntities;
-                            break;  
+                            break;
+                            default:
+                                $entityArray = null;
+                            break;
                         } 
                         $this->doArray($entityArray,$entity, $setter,$value);
                     }else{
@@ -240,7 +243,10 @@ class DBImportController extends Controller
                             break; 
                             case 'addAuthor':
                                 $entityArray = $personEntities;
-                            break; 
+                            break;
+                            default:
+                                $entityArray = null;
+                            break;
                         } 
                         $this->doArray($entityArray,$entity, $setter,$value);
                     }else{
@@ -366,7 +372,10 @@ class DBImportController extends Controller
                             break; 
                             case 'addPaper':
                                 $entityArray = $proceedingEntities;
-                            break;  
+                            break;
+                            default:
+                                $entityArray = null;
+                            break;
                         } 
                         if($setter=="addChair"){
 

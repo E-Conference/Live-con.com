@@ -410,7 +410,7 @@
         {% endfor %}
     </NamedIndividual>
 
-    <NamedIndividual rdf:about="http://data.live-con.com/page/role/{{entity.mainConfEvent.id}}/ProgrammeCommitteeMember"/>
+    <NamedIndividual rdf:about="http://data.live-con.com/page/role/{{entity.mainConfEvent.id}}/ProgrammeCommitteeMember">
         <rdf:type rdf:resource="&swc;ProgrammeCommitteeMember"/>
         <rdfs:label>{{ entity.getConfName() }} programme committee member</rdfs:label>
         <swc:isRoleAt rdf:resource="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}"/>

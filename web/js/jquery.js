@@ -7081,8 +7081,10 @@ jQuery.extend({
 // NOTE: we've included the "window" in window.getComputedStyle
 // because jsdom on node.js will break without it.
 if ( window.getComputedStyle ) {
-	getStyles = function( elem ) {
-		return window.getComputedStyle( elem, null );
+	getStyles = function( elem ) { 
+        if ( elem && elem.nodeType ) {
+            return window.getComputedStyle (elem, null);
+        } 
 	};
 
 	curCSS = function( elem, name, _computed ) {

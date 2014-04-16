@@ -247,7 +247,7 @@ class fillDatabaseUpCommand extends ContainerAwareCommand
 
         $output->writeln("common rows inserted successfully");
 
-        for ( $counter = 0; $counter <= 50; $counter += 1) {
+        for ( $counter = 0; $counter <= 1; $counter += 1) {
             $container = $this->getContainer();
             $container->set('doctrine.orm.default', null);
             $container->set('doctrine.orm.entity_manager', null);
@@ -303,7 +303,7 @@ class fillDatabaseUpCommand extends ContainerAwareCommand
             
            //Main conf event  
             $mainConfEvent = new ConfEvent();
-            $mainConfEvent->setSummary("Livecon Conference".$counter);
+            $mainConfEvent->setSummary("Big Livecon Conference".$counter);
             $mainConfEvent->setIsMainConfEvent(true);
             $mainConfEvent->setStartAt( new \DateTime('now'));
             $end = new \DateTime('now');
@@ -348,7 +348,7 @@ class fillDatabaseUpCommand extends ContainerAwareCommand
             $conference->slugify();
             $em->persist($conference); 
 
-
+            $location = null;
 
             for ( $counterLoc = 0; $counterLoc <= $limit/10; $counterLoc += 1) {
 

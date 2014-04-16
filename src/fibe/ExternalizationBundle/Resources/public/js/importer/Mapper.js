@@ -1,5 +1,14 @@
 
 var Mapper = function(){
+
+    this["nodePath"] = {
+        root : "root",
+        separator : "/",
+        attr : "@",
+        text : "text",
+    } 
+
+
     var self = this,
         mapper,
         mapping,
@@ -42,84 +51,76 @@ var Mapper = function(){
     } 
 
     this.map = function($ctn){
-        mapper["mappingConfig"] = mapping = mapping || mapper.defaultMapping; 
+        mapping = mapping || $.extend({},mapper.defaultMapping) ; 
         Importer().setMappingConfig(mapping);
 
         dataLinks       = {},
         knownNodes      = {},
         knownCollection = {}; 
 
-        var basePath = "root";
-        var globalPanel = Pager.getPanelHtml("Data of "+this.fileName,{panelClass:"panel-primary",margin:false,collapsible:false,collapsed:false})
-                                    .appendTo($ctn);
+        var basePath = self.nodePath.root; 
 
+        nodeCallBack(basePath,{panelClass:"panel-success",margin:true}); 
 
-        console.log("mapping : ",data); 
+        // console.log("mapping : ",data); 
           
 
-        function nodeCallBack(nodePath,$el,basePath,panelOp,htmlOnly){
-            if(htmlOnly){
-                // return doPanel();
-            }
+        function nodeCallBack(nodePath,panelOp){
+
             if(!self.isNodeKnown(nodePath)){
-                return doPanel();
+                doPanel();
+                return true;
             }
-            return $el
+            return false;
 
             function doPanel(){ 
-                if(!panelOp)panelOp={panelClass:"panel-success",margin:true,collapsible:true,collapsed:true};
-                panelOp["node-path"] = nodePath;
-                var tempPanel = Pager.getPanelHtml(nodePath,panelOp);  
-                $el.append(tempPanel);
-                return tempPanel.find("> ul"); 
-            }
-
-                    // if(!mapper.isNodeKnown(childNodePath)){
-                    //     childTags.push(getNodeName(child));
-                    //     tempPanel = Pager.getPanelHtml(getNodeName(child),{panelClass:"panel-success",margin:true,"node-path":childNodePath,collapsible:true,collapsed:true});
-                    //     $el.append(tempPanel);
-                    //     generateHtml($(child),childNodePath,tempPanel);
-                    // } else{
-                    //     //already mapped
-                    //     // mapper.addMappingCollection(nodePath); 
-                    // } 
-
-
+                knownNodes[nodePath]["panelOp"] = panelOp || {panelClass:"panel-success",margin:true,collapsible:true,collapsed:true}; 
+                knownNodes[nodePath]["panelOp"]["node-path"] = knownNodes[nodePath]["node-path"] = nodePath;  
+                knownNodes[nodePath]["type"] = "node"; 
+                // var tempPanel = Pager.getPanelHtml(nodePath,panelOp);  
+                // $el.append(tempPanel);
+                // return tempPanel.find("> ul"); 
+            } 
         };
-        function entryCallBack(nodePath,$el,value){   
-                $el.append(self.generateNode(nodePath,value)); 
-        };
-        // $(mapper).off("entry").on("entry",function(ev,nodePath,value){ 
-        //     if(!self.isNodeKnown(nodePath,value,callback)){ 
-        //         var panel = Pager.getPanelHtml(nodePath,{panelClass:"panel-success",margin:true,collapsible:false,collapsed:false});
-        //         var node = $(xlsxMapper.generateNode(nodePath));
-        //         panel.append(node);
-        //         globalPanel.append(panel);
-        //         if(callback)callback();
+        function entryCallBack(nodePath,value){ 
+            
+            // var collectionNodePath =  cutLastSlash(cutLastSlash(nodePath,true),true);
+            if(knownNodes[nodePath]){
+                var collectionNodePath = cutLastSlash(nodePath,true); 
+                if(knownNodes[cutLastSlash(collectionNodePath,true)].size < knownNodes[collectionNodePath].size ){
+                        collectionNodePath = cutLastSlash(nodePath,true);
+                }else {
+                    collectionNodePath = cutLastSlash(collectionNodePath,true); 
+                }
+                if(!knownCollection[collectionNodePath])
+                    addCollection(collectionNodePath)
 
+                function addCollection(nodePath){
+                    console.log("new Collection of "+ nodePath);
+                    knownCollection[nodePath] = {}; 
+                }
+            } 
 
+            if(!$.trim(value)=="")
+                self.generateNode(nodePath,value); 
+        }; 
 
-        //         tempPanel = Pager.getPanelHtml(getNodeName(child),{panelClass:"panel-success",margin:true,"node-path":nodePath+ "/"+getNodeName(child),collapsible:true,collapsed:true});
-        //         $el.append(tempPanel);
-        //         childTags.push(getNodeName(child));
-        //         generateHtml($(child),nodePath+ "/"+getNodeName(child),tempPanel);
-        //     }
-        // });
-        $(mapper).off("mapEnd").on("mapEnd",function(ev,$html){ 
-            // $html.appendTo($el); 
-            initUi();
+        $(mapper).off("mapEnd").on("mapEnd",function(ev,$html){
+            initUi(
+                Pager.getPanelHtml("Data of "+self.getConfName(),{panelClass:"panel-primary",margin:false,collapsible:false,collapsed:false})
+                        .appendTo($ctn)
+            );
         });
-        mapper.map(data,basePath,globalPanel.find("> ul"),nodeCallBack,entryCallBack);
-
+        mapper.map(data,basePath,nodeCallBack,entryCallBack); 
     }
     this.setMapper = function(m){
         mapper = m;
     }
     this.getNodeName = function(node,i){
-        return mapper.getNodeName(node,i)
+        return mapper.getNodeName(node,i);
     };
     this.getNbRootChildren = function(node){  
-        return mapper.getNbRootChildren(node)
+        return mapper.getNbRootChildren(node);
     } 
 
     this.setKnownMapping = function(formatName){  
@@ -134,35 +135,49 @@ var Mapper = function(){
     this.getData = function(){
         return data;
     }
+    this.getConfName = function(){
+        var confName = self["serialisedDatas"] && self["serialisedDatas"].conference 
+                            ? self["serialisedDatas"].conference.setSummary || self["serialisedDatas"].conference.setAcronym 
+                            : undefined;
+        return  confName || self.fileName || "file" ;
+    }
+
+    this.generateNode = function(nodePath,value){
+        // var rtn = ""; 
+        if(!self.isNodeKnown(nodePath,value)){ 
+            knownNodes[nodePath]["node-path"] = nodePath;
+            // rtn += '<li data-node-path="'+nodePath+'" class="map-node list-group-item list-group-item-warning">'+nodeName+'</li>';
+        } 
+        // return rtn;
+    }
 
     this.isNodeKnown = function(nodePath,sample){
         if(!knownNodes[nodePath]){
             console.log("adding "+nodePath);
-            knownNodes[nodePath] = {samples:[]};
+            knownNodes[nodePath] = {samples:[],size:0};
             addSample(nodePath,sample);
             return false;
         } 
-
         addSample(nodePath,sample);
-        
-        return true;
-
+        return true; 
         function addSample(nodePath,sample){
-            if(sample && $.inArray(sample, knownNodes[nodePath].samples) === -1){
+            sample=$.trim(sample);
+            knownNodes[nodePath].size += 1;
+            if(sample && sample!=""  ){
                 knownNodes[nodePath].samples.push(sample);  
-            } 
+            }  
+        }
+    }
 
-        }
-    }
-    this.checkIfMappingCollection = function(nodePath,childrenNodePath){
-        //TODO review how to get collection
-        //TODO review how to get collection
-        //TODO review how to get collection 
-        if(childrenNodePath.length==1){
-            console.log("new Collection of "+ nodePath);
-            knownCollection[nodePath] = {};
-        }
-    }
+    // this.checkIfMappingCollection = function(nodePath,childrenNodePath){
+    //     //TODO review how to get collection
+    //     //TODO review how to get collection
+    //     //TODO review how to get collection 
+    //     if(childrenNodePath.length==1){
+    //         console.log("new Collection of "+ nodePath);
+    //         knownCollection[nodePath] = {};
+    //     }
+    // }
 
     this.getDataLinks = function(){ 
         return dataLinks;
@@ -188,48 +203,42 @@ var Mapper = function(){
         return rtn;
     }
  
-
-    this.generateNode = function(nodePath,value,label){
-        var rtn = ""; 
-        if(!self.isNodeKnown(nodePath + "/text",value)){ 
-            rtn += '<li data-node-path="'+nodePath+'/text" class="map-node list-group-item list-group-item-warning">'+(label || 'text')+'</li>';
-        } 
-        return rtn;
+    function isAttr(nodePath){
+        return nodePath.substring(nodePath.lastIndexOf(self.nodePath.separator)+1,nodePath.length).charAt(0) == self.nodePath.attr;
     }
  
-
-    // this.generateNode = function(node,nodePath){
-    //     if(!node.text() || node.text() == "")return"";
-    //     var rtn = "";
-
-    //     if(!self.isNodeKnown(nodePath + "/text",node.text())){ 
-    //         rtn += '<li data-node-path="'+nodePath+'/text" class="map-node list-group-item list-group-item-warning">text</li>';
-    //     } 
-    //     return rtn;
-    // }
-
-
-    this.getAttributesHtml = function(node,nodePath){
-        var rtn = "";  
-        if(!node[0].attributes || node[0].attributes.length==0)return rtn;
-        $.each(node[0].attributes, function() { 
-
-            if(!self.isNodeKnown(nodePath + "/@" + this.name.toLowerCase(),this.value)){ 
-                rtn += '<li data-node-path="'+nodePath+ "/@" + this.name+'" class="map-node list-group-item list-group-item-warning">@'+this.name+"</li>";
-            }
-        }); 
-        return rtn;
+    function cutLastSlash(str,left){
+        return left ===true ? str.substring(0,str.lastIndexOf(self.nodePath.separator))
+                            : str.substring(str.lastIndexOf(self.nodePath.separator)+1,str.length);
     }
+  
+    var initUi = function ($el){
+        //construct html
+        var htmlUl={};
+        for(var i in knownNodes){
+            var node=knownNodes[i];
+            var nodePath=node["node-path"];
+            var isCollection=knownCollection[nodePath]!==undefined;
+            var appendTo = nodePath == "root" ? $el : htmlUl[cutLastSlash(nodePath,true)];
+            if(node["type"]=="node"){ 
+                var panel = Pager.getPanelHtml(nodePath,node["panelOp"] )
+                htmlUl[nodePath] = panel.find("> ul"); 
+                appendTo.append(panel);
+            }else{
+                var nodeName = cutLastSlash(nodePath);
+                appendTo.append('<li data-node-path="'+nodePath+'" class="map-node list-group-item list-group-item-warning">'+nodeName+'</li>')
+            }
+        }
 
-
-    var initUi = function (){
         //collection
         $('#datafile-form .panel').each(function(){
+            // if($(this).find(".map-node").length == 0){return $(this).remove();}
             var nodePath = $(this).data("node-path"); 
             if(knownCollection[nodePath]){
                 knownCollection[nodePath] = $(this)
                           .find("> .panel-heading > .panel-title")
-                             .prepend('<i title=" collection node of '+collectionNodeName+' " class="fa fa-bars"></i> ');;
+                             .prepend('<i title=" collection node of '+collectionNodeName+' " class="fa fa-bars"></i> ')
+                             // .find(".fa-chevron-down").before('<span class="badge badge-success">'+knownNodes[nodePath].size+' </span> ');  
                 var collectionNodeName = $(this).find("> .panel-heading").text();
                 // $(this).find("> .panel-heading").remove();
                 var childPanel = $(this).find("> .list-group > .panel-success ")
@@ -240,7 +249,7 @@ var Mapper = function(){
                 // $(this).remove();
             }
         })
-
+        //map node
         $('.map-node').each(function(){
             var nodePath = $(this).data("node-path");
 
@@ -257,15 +266,15 @@ var Mapper = function(){
                 trigger : 'hover',
                 html : true,
                 placement : "right",
-                title : ' <b>'+nodePath+'</b>',
+                title : ' <b>'+nodePath+' </b> <span class="badge">'+knownNodes[nodePath].size+' </span> ',
                 content : content
             });
 
             //draggable
             $(this).draggable({
                 zIndex: 999, 
-                revert: true,      // will cause the event to go back to its
-                revertDuration: 0,  //  original position after the drag
+                revert: true,
+                revertDuration: 0  
                 // helper: 'clone'
             });
         })
@@ -276,7 +285,8 @@ var Mapper = function(){
     //loop over the model panels  to build a mapping file
     function generateMappingFile(){
         console.log("############### generateMappingFile starts")
-        
+        mapping =  $.extend({},mapper.defaultMapping);
+        Importer().setMappingConfig(mapping);
         //loop only on validated mapping
         $("#model-form .panel-success").each(function(iPanel,panel){
             var modelName = $(panel).data("model-path");
@@ -291,9 +301,9 @@ var Mapper = function(){
                 console.log("leftEntityMapping:",leftEntityMapping)
 
                 var leftCollectionPath = getClosestCollectionPath(leftEntityMapping.nodePath);
+                if(!leftCollectionPath)return console.warn("leftCollectionPath not found for "+leftEntityMapping.nodePath)
 
-
-                var modelSetter = Model.getSetter(modelName,$(this).data("model-path").split("/")[1])
+                var modelSetter = Model.getSetter(modelName,$(this).data("model-path").split(self.nodePath.separator)[1])
                 
                 
                 if(modelName=="Conference"){
@@ -304,12 +314,14 @@ var Mapper = function(){
                     
                 }else{ 
                     var nodePtyPath = leftEntityMapping.nodePath.split(leftCollectionPath).join(""); 
-                    var nodeName = nodePtyPath.split("/")[0] != "" ?nodePtyPath.split("/")[0] : nodePtyPath.split("/")[1];
+                    var nodeName = nodePtyPath.split(self.nodePath.separator)[0] != "" ?nodePtyPath.split(self.nodePath.separator)[0] : nodePtyPath.split(self.nodePath.separator)[1];
 
                     var mappingObj = getOrCreateMappingObjFromFormat(extractMappingFormat(leftCollectionPath,true),modelName); 
-
-                    mappingObj.label[nodeName]={setter:modelSetter};
-                    mappingObj.label[nodeName]["format"] = extractMappingFormat(nodePtyPath.split(nodeName).join(""));
+                    var mappingPty = {
+                        setter  :modelSetter, 
+                        format  :extractMappingFormat(nodePtyPath)
+                    };
+                    mappingObj.label.push(mappingPty);
 
                 } 
             }) 
@@ -340,13 +352,13 @@ var Mapper = function(){
                  //look if its already registered
                     console.log("getOrCreateMappingObjFromFormat ",format)
                 for(var i in mapping['mappings']){ 
-                    if(isSameFormat(mapping['mappings'][i].format,format)){ 
+                    if(mapping['mappings'][i].array == array && isSameFormat(mapping['mappings'][i].format,format)){ 
                         return mapping['mappings'][i];
                     }
                 }
 
                 //add if not found
-                var newMapping = {array: array,label:{},format:format};
+                var newMapping = {array: array,label:[],format:format};
                 mapping['mappings'].push(newMapping);
                 return newMapping;
         }
@@ -360,29 +372,26 @@ var Mapper = function(){
          */
         function extractMappingFormat(mapping,collectionMapping){
             var format = [];
-            var splittedEntityMapping = mapping.split("/"); 
-            for(var i in splittedEntityMapping){
-                if(splittedEntityMapping[i]=="root" || splittedEntityMapping[i]=="")continue;//don't add rootNode
-                if(splittedEntityMapping[i]=="text"){
+            var splittedEntityMapping = mapping.split(self.nodePath.separator);
+            if(mapping.charAt(0)=="/")splittedEntityMapping.splice(0,1);
+            for(var i in splittedEntityMapping)
+            {
+                var curEntMapping = splittedEntityMapping[i];
+                if(curEntMapping=="root" || curEntMapping=="")continue;//don't add rootNode
+                if(curEntMapping=="text"){
                     format.push({
                         fn : "text"
                     })
-                }else if(collectionMapping){
-                    var label = splittedEntityMapping[i]
-                    format.push({
-                        fn : "children",
-                        arg : [label]
-                    })
-                }else if(splittedEntityMapping[i].charAt(0) == "@"){
-                    var label = splittedEntityMapping[i] 
+                }else if(curEntMapping.charAt(0) == "@"){
+                    var label = curEntMapping 
                     format.push({
                         fn : "attr",
                         arg : [label.substring(1)]
                     })
                 }else {
-                    var label = splittedEntityMapping[i]
+                    var label = curEntMapping
                     format.push({
-                        fn : "child",
+                        fn : "children",
                         arg : [label]
                     })
                 } 
@@ -404,7 +413,7 @@ var Mapper = function(){
                 while(true){
                     var parent = $node.parent();
                     if(parent.length==0){
-                        return false; //stop loop if no more parent
+                        return self.nodePath.root; //stop loop if no more parent
                     }else{
                         var parentPath = parent.data("node-path");
                         if(parentPath && knownCollection[parentPath])
@@ -414,15 +423,14 @@ var Mapper = function(){
                     }
 
                 }
-            }
-
+            } 
         }
 
         function isSameFormat(f1,f2){
             for(var i in f1){
-                if(f1[i].nodeUtils != f2[i].nodeUtils)return false;
+                if(!f2[i] || f1[i].nodeUtils != f2[i].nodeUtils)return false;
                 for (var j in f1[i].arg){
-                    if(f1[i].arg[j] != f2[i].arg[j])return false;
+                    if(!f2[i].arg[j] || f1[i].arg[j] != f2[i].arg[j])return false;
                 }
             }
             return true;
