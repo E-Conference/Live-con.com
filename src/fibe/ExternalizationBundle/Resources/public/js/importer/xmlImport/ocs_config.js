@@ -38,7 +38,7 @@ var ocsConfig = {
         //conference mapping
         setSummary : {
             format : [{
-                fn : "child",
+                fn : "children",
                 arg : ["name"]
             },{
                 fn : "text"
@@ -46,7 +46,7 @@ var ocsConfig = {
         },
         setAcronym : {
             format : [{
-                fn : "child",
+                fn : "children",
                 arg : ["acronym"]
             },{
                 fn : "text"
@@ -54,7 +54,7 @@ var ocsConfig = {
         },
         setDescription : {
             format : [{
-                fn : "child",
+                fn : "children",
                 arg : ["description"]
             },{
                 fn : "text"
@@ -62,7 +62,7 @@ var ocsConfig = {
         },
         setUrl : {
             format : [{
-                fn : "child",
+                fn : "children",
                 arg : ["homepage"]
             },{
                 fn : "text"
@@ -83,11 +83,17 @@ var ocsConfig = {
             }], 
             label : [
                 {
-                    nodeName : 'name',
+                    format : [{
+                        fn : "children",
+                        arg : ["name"]
+                    }],
                     setter : 'setName'
                 },
                 {
-                    nodeName : 'country',
+                    format : [{
+                        fn : "children",
+                        arg : ["country"]
+                    }],
                     setter : 'setCountry'
                 }
             ]
@@ -105,19 +111,31 @@ var ocsConfig = {
             }], 
             label : [
                 {
-                    nodeName : 'firstname',
+                    format : [{
+                        fn : "children",
+                        arg : ["firstname"]
+                    }],
                     setter : 'setFirstName'
                 },
                 {
-                    nodeName : 'lastname',
+                    format : [{
+                        fn : "children",
+                        arg : ["lastname"]
+                    }],
                     setter : 'setFamilyName'
                 },
                 {
-                    nodeName : 'email',
+                    format : [{
+                        fn : "children",
+                        arg : ["email"]
+                    }],
                     setter : 'setEmail'
                 },
                 {
-                    nodeName : 'organization-id',
+                    format : [{
+                        fn : "children",
+                        arg : ["organization-id"]
+                    }],
                     multiple : true,
                     setter : 'addOrganization',
                     fk : {
@@ -140,23 +158,31 @@ var ocsConfig = {
             }], 
             label : [
                 {
-                    nodeName : 'title',
+                    format : [{
+                        fn : "children",
+                        arg : ["title"]
+                    }],
                     setter : 'setTitle'
                 },
                 {
-                    nodeName : 'abstract',
+                    format : [{
+                        fn : "children",
+                        arg : ["abstract"]
+                    }],
                     setter : 'setAbstract'
                 }, 
                 //topics entity are created directly here (or retrieved)
                 //then we register the correct index
                 {
-                    nodeName : 'keywords',
+                    format : [{
+                        fn : "children",
+                        arg : ["keywords"]
+                    }],
                     wrapped : true,
                     multiple : true, 
                     //TODO add splitter format
                     //TODO add splitter format
                     //TODO add splitter format
-                    list : {delimiter:";"},
                     setter : 'addTopic',
                     //pointed entity isn't a concrete node in this format and thus, don't contains any index 
                     //so we must retrieve an index with getArrayId instead of objectMap 
@@ -170,7 +196,10 @@ var ocsConfig = {
                 },
                 //authors are retrieved from their id in the objectMap .
                 {
-                    nodeName : 'authors',
+                    format : [{
+                        fn : "children",
+                        arg : ["authors"]
+                    }],
                     wrapped : true,
                     multiple : true,
                     setter : 'addAuthor',
@@ -194,11 +223,17 @@ var ocsConfig = {
             }], 
             label : [
                 {
-                    nodeName : 'name',
+                    format : [{
+                        fn : "children",
+                        arg : ["name"]
+                    }],
                     setter : 'setSummary'
                 },
                 {
-                    nodeName : 'papers',
+                    format : [{
+                        fn : "children",
+                        arg : ["papers"]
+                    }],
                     wrapped : true,
                     multiple : true,
                     setter : 'addPaper',
@@ -210,7 +245,10 @@ var ocsConfig = {
                     }
                 },
                 {
-                    nodeName : 'pc-chairs',
+                    format : [{
+                        fn : "children",
+                        arg : ["pc-chairs"]
+                    }],
                     wrapped : true,
                     multiple : true,
                     setter : 'addChair',

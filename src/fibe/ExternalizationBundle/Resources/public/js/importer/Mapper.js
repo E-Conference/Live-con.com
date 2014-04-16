@@ -350,7 +350,7 @@ var Mapper = function(){
                  //look if its already registered
                     console.log("getOrCreateMappingObjFromFormat ",format)
                 for(var i in mapping['mappings']){ 
-                    if(isSameFormat(mapping['mappings'][i].format,format)){ 
+                    if(mapping['mappings'][i].array == array && isSameFormat(mapping['mappings'][i].format,format)){ 
                         return mapping['mappings'][i];
                     }
                 }

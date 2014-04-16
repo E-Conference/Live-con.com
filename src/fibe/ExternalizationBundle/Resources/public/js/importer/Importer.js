@@ -296,7 +296,7 @@ function Importer() {
                 for(var i in mapping.label){
                     var curMapping = mapping.label[i];
                     var val = Importer().doFormat(node,curMapping.format); 
-                    if(curMapping.setter&& val){
+                    if(curMapping.setter && val && val[0]){
 
                         //unwrapped if needed 
                         //TODO remove this option and use format instead
@@ -344,7 +344,7 @@ function Importer() {
                     var mappingStr  = getMappingPath(mapping)+" : "+nodeName
                     if($.inArray(mappingStr, importedLog) === -1)
                         importedLog.push(mappingStr);  
-                    var val = (typeof node == 'string' || node instanceof String ) ? node : node.textContent;
+                    var val = (typeof node == 'string' || node instanceof String ) ? node : $(node)[0].textContent;
 
                     if(curMapping.list){
                         var vals = val.split(curMapping.list.delimiter); 
@@ -391,6 +391,7 @@ function Importer() {
                         //     val = Importer().doFormat(node,curMapping.format) 
                         // }
                         val = curMapping.setter === false ? val : typeof val === 'string' ? str_format(val) : val ;
+                        val = val.trim();
                         if(curMapping.multiple === true){
                             //create the object if not found
                             if(!rtnArray[curMapping.setter])
@@ -442,11 +443,11 @@ function Importer() {
                     } 
                 } 
                 function deleteKey(){
-                    if(index){
-                        delete fks[index];
-                    }else{
+                    // if(index!==undefined){
+                    //     delete fkKey;
+                    // }else{
                         delete objectMap[fk.entity][fk.setter]; 
-                    } 
+                    // } 
                 }
         }
 
@@ -508,6 +509,7 @@ function Importer() {
      * @return {Object|String}  the extracted node | nodeset | value
      */
     function doFormat(node,format,log){
+        if(!format)throw " format missing for node";
         var rtn = node;
         if(isFunction(format)){
            return format(rtn); 
@@ -515,6 +517,7 @@ function Importer() {
         for (var i in format){
             var currentFormat = format[i];
             rtn = utils[currentFormat.fn](rtn,currentFormat.arg,log)
+            if(!rtn)throw "couldn't have proceed "+currentFormat.fn;
         }
         return rtn;
     } 

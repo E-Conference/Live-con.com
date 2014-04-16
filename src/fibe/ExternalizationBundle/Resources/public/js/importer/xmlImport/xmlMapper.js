@@ -14,8 +14,8 @@ xmlMapper = {
         util : "xmlUtil",
         getNodeKey : {
             format : [{
-                fn : "attr",
-                arg : ["rdf:about"]
+                //don't care about foreign keys
+                fn : "generate", 
             }]
         },
         getNodeName : {
@@ -124,7 +124,7 @@ xmlMapper = {
             return $(node).text();
         },
         localName : function(node){
-            return node.localName;
+            return $(node)[0].localName;
         },
         // get a specific attr for the given node
         //arg[0] must contain the wanted attr
@@ -151,6 +151,7 @@ xmlMapper = {
         //arg[0] string : contains the seeked children nodeName. if undefined returns all
         //arg[1] bool   : option to match with substring containment
         children : function(node,arg){
+            var node = $(node)
             if(!arg)return $(node).children();
             var rtnNodeSet= [],
                 seekAllChar = '*',
@@ -180,18 +181,22 @@ xmlMapper = {
         
         // get the first specific child in a nodeSet ( case insensitive )
         //arg[0] must contain the wanted child nodeName 
-        child : function(node,arg){
-            // return $(node).children(childNodeName);
-            var rtnNode;
-            var seekedChildNodeName = arg[0].toLowerCase();
-            $(node).children().each(function(){
-                if(rtnNode)return;
-                var childNodeName = xmlMapper.getNodeName(this);
-                if(childNodeName && childNodeName === seekedChildNodeName){
-                    rtnNode = $(this);
-                }
-            })
-            return rtnNode;
+        // child : function(node,arg){
+        //     // return $(node).children(childNodeName);
+        //     var rtnNode;
+        //     var seekedChildNodeName = arg[0].toLowerCase();
+        //     $(node).children().each(function(){
+        //         if(rtnNode)return;
+        //         var childNodeName = xmlMapper.getNodeName(this);
+        //         if(childNodeName && childNodeName === seekedChildNodeName){
+        //             rtnNode = $(this);
+        //         }
+        //     })
+        //     return rtnNode;
+        // },
+        //get a random key because we don't care about fk
+        generate : function(node){
+            return Math.floor((Math.random()*1024*1024*1024*1024));
         }
     }
 
