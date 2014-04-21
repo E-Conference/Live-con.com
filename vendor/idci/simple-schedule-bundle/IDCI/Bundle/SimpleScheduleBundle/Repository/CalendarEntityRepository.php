@@ -126,11 +126,11 @@ class CalendarEntityRepository extends EntityRepository
 
         if(isset($params['only_instant'])) {
             $qb
-                ->andWhere('cer.isInstant = 1')
+                ->andWhere('cer.is_instant = 1')
             ;
         }else{
             $qb
-                ->andWhere('cer.isInstant = 0')
+                ->andWhere('cer.is_instant = 0')
             ;
         }
 

@@ -81,7 +81,7 @@ var EventCollection = {
 
                   bro = Events[ remainingIds[j] ];  
                   
-                  if(curBro.id===bro.id || bro.allDay )continue;   //ensure the bro is not itself or an all day event
+                  if(curBro.id===bro.id || bro.allDay )continue;   //ensure the bro is not itself or an all day event 
                   
                   if(curBro.isOutOf(bro,true) || ($.inArray(bro.id, brosIdsofcurBro) === -1))continue;    //ensure the bro is a real bro  
                   EventCollection.broCountRange[curBro.id]["count"]++;  //increments self count  

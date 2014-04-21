@@ -38,7 +38,7 @@ var ocsConfig = {
         //conference mapping
         setSummary : {
             format : [{
-                fn : "child",
+                fn : "children",
                 arg : ["name"]
             },{
                 fn : "text"
@@ -46,7 +46,7 @@ var ocsConfig = {
         },
         setAcronym : {
             format : [{
-                fn : "child",
+                fn : "children",
                 arg : ["acronym"]
             },{
                 fn : "text"
@@ -54,7 +54,7 @@ var ocsConfig = {
         },
         setDescription : {
             format : [{
-                fn : "child",
+                fn : "children",
                 arg : ["description"]
             },{
                 fn : "text"
@@ -62,7 +62,7 @@ var ocsConfig = {
         },
         setUrl : {
             format : [{
-                fn : "child",
+                fn : "children",
                 arg : ["homepage"]
             },{
                 fn : "text"
@@ -81,14 +81,22 @@ var ocsConfig = {
                 fn : "children",
                 arg : ["organization"]
             }], 
-            label   : {
-                'name' : {
+            label : [
+                {
+                    format : [{
+                        fn : "children",
+                        arg : ["name"]
+                    }],
                     setter : 'setName'
                 },
-                'country' : {
+                {
+                    format : [{
+                        fn : "children",
+                        arg : ["country"]
+                    }],
                     setter : 'setCountry'
                 }
-            }
+            ]
 
         },
         {
@@ -101,17 +109,33 @@ var ocsConfig = {
                 fn : "children",
                 arg : ["person"]
             }], 
-            label   : {
-                'firstname' : {
+            label : [
+                {
+                    format : [{
+                        fn : "children",
+                        arg : ["firstname"]
+                    }],
                     setter : 'setFirstName'
                 },
-                'lastname' : {
+                {
+                    format : [{
+                        fn : "children",
+                        arg : ["lastname"]
+                    }],
                     setter : 'setFamilyName'
                 },
-                'email' : {
+                {
+                    format : [{
+                        fn : "children",
+                        arg : ["email"]
+                    }],
                     setter : 'setEmail'
                 },
-                'organization-id' : {
+                {
+                    format : [{
+                        fn : "children",
+                        arg : ["organization-id"]
+                    }],
                     multiple : true,
                     setter : 'addOrganization',
                     fk : {
@@ -121,7 +145,7 @@ var ocsConfig = {
                         array : "organizations"
                     }
                 }
-            }
+            ]
         },
         {
             array   :"proceedings", 
@@ -132,22 +156,33 @@ var ocsConfig = {
                 fn : "children",
                 arg : ["paper"]
             }], 
-            label   : {
-                'title' : {
+            label : [
+                {
+                    format : [{
+                        fn : "children",
+                        arg : ["title"]
+                    }],
                     setter : 'setTitle'
                 },
-                'abstract': {
+                {
+                    format : [{
+                        fn : "children",
+                        arg : ["abstract"]
+                    }],
                     setter : 'setAbstract'
                 }, 
                 //topics entity are created directly here (or retrieved)
                 //then we register the correct index
-                'keywords' : {
+                {
+                    format : [{
+                        fn : "children",
+                        arg : ["keywords"]
+                    }],
                     wrapped : true,
                     multiple : true, 
                     //TODO add splitter format
                     //TODO add splitter format
                     //TODO add splitter format
-                    list : {delimiter:";"},
                     setter : 'addTopic',
                     //pointed entity isn't a concrete node in this format and thus, don't contains any index 
                     //so we must retrieve an index with getArrayId instead of objectMap 
@@ -160,7 +195,11 @@ var ocsConfig = {
                     }
                 },
                 //authors are retrieved from their id in the objectMap .
-                'authors' : {
+                {
+                    format : [{
+                        fn : "children",
+                        arg : ["authors"]
+                    }],
                     wrapped : true,
                     multiple : true,
                     setter : 'addAuthor',
@@ -171,7 +210,7 @@ var ocsConfig = {
                         array : "persons"
                     }
                 }
-            }
+            ]
         },
         {  
             array   : "events", 
@@ -182,11 +221,19 @@ var ocsConfig = {
                 fn : "children",
                 arg : ["session"]
             }], 
-            label   : {
-                'name' : {
+            label : [
+                {
+                    format : [{
+                        fn : "children",
+                        arg : ["name"]
+                    }],
                     setter : 'setSummary'
                 },
-                'papers' : {
+                {
+                    format : [{
+                        fn : "children",
+                        arg : ["papers"]
+                    }],
                     wrapped : true,
                     multiple : true,
                     setter : 'addPaper',
@@ -197,7 +244,11 @@ var ocsConfig = {
                         array : "proceedings"
                     }
                 },
-                'pc-chairs' : {
+                {
+                    format : [{
+                        fn : "children",
+                        arg : ["pc-chairs"]
+                    }],
                     wrapped : true,
                     multiple : true,
                     setter : 'addChair',
@@ -208,7 +259,7 @@ var ocsConfig = {
                         array : "persons"
                     }
                 }
-            }
+            ]
           // set all events to sessionEvent
             // postProcess : function(node,event){
             //     var catName = "SessionEvent";
@@ -221,7 +272,7 @@ var ocsConfig = {
             //     }
             //     event['addCategorie']=catId; 
             // },
-        },
+        }
 
     ]
 

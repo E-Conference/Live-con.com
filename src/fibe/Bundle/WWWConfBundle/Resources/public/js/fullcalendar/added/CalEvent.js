@@ -196,7 +196,7 @@ CalEvent.prototype.calculateWidth = function(seg, leftmost, availWidth, outerWid
         var parentId = this.parent.id,
             count    = !isResView ? EventCollection.broCountRange[this.id].count : EventCollection.broCountRange[this.id].resCount,
             range    = !isResView ? EventCollection.broCountRange[this.id].range : EventCollection.broCountRange[this.id].resRange
-            shifted  = false; 
+            ; 
 
         while(!Events[parentId].allDay){ 
             var parentCount   = !isResView ? EventCollection.broCountRange[parentId].count : EventCollection.broCountRange[parentId].resCount,

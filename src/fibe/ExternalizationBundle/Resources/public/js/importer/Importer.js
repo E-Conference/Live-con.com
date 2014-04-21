@@ -236,8 +236,7 @@ function Importer() {
         }; 
 
         console.log('---------finished---------' );
-        console.log(dataArray);
-        console.log(objects.roles);
+        console.log(dataArray); 
 
         var empty = true;
         for (var i in dataArray){
@@ -255,7 +254,7 @@ function Importer() {
         console.log("Imported properties : ");
         console.log(importedLog);
 
-        console.log("not imported properties : ");
+        console.log("Not imported properties : ");
         console.log(notImportedLog);
    
         // workflow run end
@@ -290,30 +289,34 @@ function Importer() {
 
             function process(addArray,mapping,node,index){
                 var rtnArray = {};  
-                var key = Importer().doFormat(node,mappingConfig.getNodeKey.format);     
-                var children = getChildren(node);
-                $.each(children,function(index){ 
-                    if(mapping.label[self.getNodeName(this,index)]!== undefined){
-                        
-                        if(mapping.label[self.getNodeName(this,index)].setter){
-                            var nodeName = self.getNodeName(this,index);
+                var key = Importer().doFormat(node,mappingConfig.getNodeKey.format);
+                // var children = getChildren(node);
+                // $.each(children,function(index){ 
+                var nodeName = self.getNodeName(node,index); 
+                for(var i in mapping.label){
+                    var curMapping = mapping.label[i];
+                    var val = Importer().doFormat(node,curMapping.format); 
+                    if(curMapping.setter && val && val[0]){
 
-                            //unwrapped if needed 
-                            //TODO remove this option and use format instead
-                            if(mapping.label[self.getNodeName(this,index)].wrapped === true){
-                                $(this).children().each(function(){ 
-                                    set(mapping,nodeName,this); 
-                                });
-                            }else{
-                                set(mapping,nodeName,this);
-                            }
-                        }
-                    }else{ 
-                        var mappingLake = getMappingPath(mapping)+" : "+self.getNodeName(this,index); 
-                        if($.inArray(mappingLake, notImportedLog) === -1)
-                            notImportedLog.push(mappingLake); 
+                        //unwrapped if needed 
+                        //TODO remove this option and use format instead
+                        // if(curMapping.wrapped === true){
+                        //     $(this).children().each(function(){ 
+                        //         set(curMapping,nodeName,this); 
+                        //     });
+                        // }else{
+                            set(curMapping,nodeName,val);
+                        // } 
                     }
-                });
+                        // });
+                    // TODO check mapping lake
+                    // }else{ 
+                    //     var mappingLake = getMappingPath(mapping)+" : "+nodeName; 
+                    //     if($.inArray(mappingLake, notImportedLog) === -1)
+                    //         notImportedLog.push(mappingLake); 
+                    // } 
+                }
+                // });
                      
                  //post processing
                 if(mapping.postProcess){
@@ -337,32 +340,32 @@ function Importer() {
                     addObject(addArray,rtnArray,key); 
                 } 
 
-                function set(mapping,nodeName,node){
+                function set(curMapping,nodeName,node){
                     var mappingStr  = getMappingPath(mapping)+" : "+nodeName
                     if($.inArray(mappingStr, importedLog) === -1)
                         importedLog.push(mappingStr);  
-                    var val = node.textContent;
+                    var val = (typeof node == 'string' || node instanceof String ) ? node : $(node)[0].textContent;
 
-                    if(mapping.label[nodeName].list){
-                        var vals = val.split(mapping.label[nodeName].list.delimiter); 
+                    if(curMapping.list){
+                        var vals = val.split(curMapping.list.delimiter); 
                         for(var i=0;i<vals.length;i++){  
-                            setWithValue(mapping,nodeName,node,vals[i],true);
+                            setWithValue(curMapping,nodeName,node,vals[i],true);
                         }
                     }else{
-                        setWithValue(mapping,nodeName,node,val);    
+                        setWithValue(curMapping,nodeName,node,val);
                     }
 
 
-                    function setWithValue(mapping,nodeName,node,val,splitter){
+                    function setWithValue(curMapping,nodeName,node,val,splitter){
 
                         // pre processing
-                        if(mapping.label[nodeName].preProcess){
-                            mapping.label[nodeName].preProcess(node,rtnArray,val); 
+                        if(curMapping.preProcess){
+                            curMapping.preProcess(node,rtnArray,val); 
                         }
 
-                        if(mapping.label[nodeName].fk){   
+                        if(curMapping.fk){   
 
-                            var fk = mapping.label[nodeName].fk;
+                            var fk = curMapping.fk;
                             var fkKey = !splitter ? Importer().doFormat(node,fk.format) : val; 
                             
                             var pointedEntity;
@@ -378,32 +381,33 @@ function Importer() {
                                 }
                             } 
                             val = fkKey; 
-                            if(!fkMapIndexes[key+"-"+mapping.label[nodeName].setter]){
-                                fkMapIndexes[key+"-"+mapping.label[nodeName].setter] = "lol";
-                                fkMap.push({entity:key,setter:mapping.label[nodeName].setter,fkArray:fk.array});
+                            if(!fkMapIndexes[key+"-"+curMapping.setter]){
+                                fkMapIndexes[key+"-"+curMapping.setter] = "lol";
+                                fkMap.push({entity:key,setter:curMapping.setter,fkArray:fk.array});
                             } 
                         }
 
-                        if(mapping.label[nodeName].format){   
-                            val = Importer().doFormat(node,mapping.label[nodeName].format) 
-                        }
-                        val = mapping.label[nodeName].setter === false ? val : typeof val === 'string' ? str_format(val) : val ;
-                        if(mapping.label[nodeName].multiple === true){
+                        // if(curMapping.format){   
+                        //     val = Importer().doFormat(node,curMapping.format) 
+                        // }
+                        val = curMapping.setter === false ? val : typeof val === 'string' ? str_format(val) : val ;
+                        val = val.trim();
+                        if(curMapping.multiple === true){
                             //create the object if not found
-                            if(!rtnArray[mapping.label[nodeName].setter])
-                                rtnArray[mapping.label[nodeName].setter]={};
+                            if(!rtnArray[curMapping.setter])
+                                rtnArray[curMapping.setter]={};
                             
                             //get object length
-                            var index = Object.size(rtnArray[mapping.label[nodeName].setter]);
+                            var index = Object.size(rtnArray[curMapping.setter]);
 
                             //check if there's no duplicated link
                             var found = false;
-                            for ( var j in rtnArray[mapping.label[nodeName].setter]){
-                                if(rtnArray[mapping.label[nodeName].setter][j] == val){found = true;}
+                            for ( var j in rtnArray[curMapping.setter]){
+                                if(rtnArray[curMapping.setter][j] == val){found = true;}
                             }
-                            if(!found)rtnArray[mapping.label[nodeName].setter][index] = val;
+                            if(!found)rtnArray[curMapping.setter][index] = val;
                         }else{
-                            rtnArray[mapping.label[nodeName].setter]= val;
+                            rtnArray[curMapping.setter]= val;
                         }
 
                     }
@@ -417,8 +421,6 @@ function Importer() {
                 } 
             }
         }
-
-         
     } // this.run end
 
      function computeFk(fkKey, fk, index){
@@ -441,11 +443,11 @@ function Importer() {
                     } 
                 } 
                 function deleteKey(){
-                    if(index){
-                        delete fks[index];
-                    }else{
+                    // if(index!==undefined){
+                    //     delete fkKey;
+                    // }else{
                         delete objectMap[fk.entity][fk.setter]; 
-                    } 
+                    // } 
                 }
         }
 
@@ -507,6 +509,7 @@ function Importer() {
      * @return {Object|String}  the extracted node | nodeset | value
      */
     function doFormat(node,format,log){
+        if(!format)throw " format missing for node";
         var rtn = node;
         if(isFunction(format)){
            return format(rtn); 
@@ -514,6 +517,7 @@ function Importer() {
         for (var i in format){
             var currentFormat = format[i];
             rtn = utils[currentFormat.fn](rtn,currentFormat.arg,log)
+            if(!rtn)throw "couldn't have proceed "+currentFormat.fn;
         }
         return rtn;
     } 
