@@ -330,7 +330,10 @@
 
                 Pager.changePage('#page-new-mapping-file');
                 $(mapper).on("fileRead",function(ev,data){
-                    this.map($("#datafile-form"));
+                    $(this).off("mapEnd").on("mapEnd",function(ev,knownNodes,knownCollection){
+                        this.initUi($("#datafile-form"));
+                    }); 
+                    this.map();
                     Model.initialize(this);
                 });
                 mapper.readFile();
@@ -351,12 +354,11 @@
             Importer().run( 
                 mapper.getData(), 
                 op,
-                function(data,importedLog,notImportedLog){
+                function(data,importedLog){
                     Pager.changePage('#page-result');
                     mapper["serialisedDatas"] = data;
-                    mapper["importedLog"]     = importedLog;
-                    mapper["notImportedLog"]  = notImportedLog; 
-
+                    mapper.setImportedLog(importedLog); 
+                    var notImportedLog = mapper.getNotImportedLog();
                     $("#result-extract").html(getHtmlResultDiv(data,importedLog,notImportedLog,"extracted"));
                     bootstrapAlert("success",getMsgUl(mapper["serialisedDatas"],"extracted"),"conference parsed : "+mapper.getConfName()); 
                 },function(msg)

@@ -84,7 +84,7 @@ function Importer() {
 
         notImportedLog = [],
         importedLog    = [],
-        objectMap      = {}, 
+        objectMap      = {},
         objectsIndexes = {}, 
         fkMap          = [], 
         fkMapIndexes   = []; 
@@ -341,7 +341,7 @@ function Importer() {
                 } 
 
                 function set(curMapping,nodeName,node){
-                    var mappingStr  = getMappingPath(mapping)+" : "+nodeName
+                    var mappingStr  = "root"+getMappingPath(itemMapping)+"/"+getMappingPath(curMapping);
                     if($.inArray(mappingStr, importedLog) === -1)
                         importedLog.push(mappingStr);  
                     var val = (typeof node == 'string' || node instanceof String ) ? node : $(node)[0].textContent;
@@ -494,7 +494,8 @@ function Importer() {
     function getMappingPath(mapping){
         var rtn = [];
         for(var i in mapping.format){
-            rtn.push(mapping.format[i].arg[0]) ;
+            var str = mapping.format[i].arg ? mapping.format[i].arg[0] : mapping.format[i].fn;
+            rtn.push(str) ;
         }
         return rtn.join("/");
     }
@@ -517,7 +518,7 @@ function Importer() {
         for (var i in format){
             var currentFormat = format[i];
             rtn = utils[currentFormat.fn](rtn,currentFormat.arg,log)
-            if(!rtn)throw "couldn't have proceed "+currentFormat.fn;
+            if(rtn===undefined)consol.war( "couldn't have proceed "+currentFormat.fn);
         }
         return rtn;
     } 
