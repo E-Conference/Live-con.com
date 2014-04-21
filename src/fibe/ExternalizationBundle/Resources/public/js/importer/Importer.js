@@ -518,7 +518,7 @@ function Importer() {
         for (var i in format){
             var currentFormat = format[i];
             rtn = utils[currentFormat.fn](rtn,currentFormat.arg,log)
-            if(rtn===undefined)consol.war( "couldn't have proceed "+currentFormat.fn);
+            if(rtn===undefined)console.warn( "couldn't have proceed "+currentFormat.fn);
         }
         return rtn;
     } 
