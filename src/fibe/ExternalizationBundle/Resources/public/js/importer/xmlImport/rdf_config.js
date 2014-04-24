@@ -82,11 +82,8 @@ var rdfConfig = {
             }],  
             label : [
 
-                //some dataset use rdfs:label instead of foaf ontology
-                // TODO ADD SPLITER NODEUTIL
-                // TODO ADD SPLITER NODEUTIL
-                // TODO ADD SPLITER NODEUTIL
-                // TODO ADD SPLITER NODEUTIL
+                //some dataset use rdfs:label instead of foaf ontology i.e. dh2012.rdf
+                // TODO ADD SPLITER NODEUTIL 
                 {
                     format : [{
                         fn : "children",
@@ -171,15 +168,12 @@ var rdfConfig = {
                         fn : "children",
                         arg : ["swrc:affiliation"]
                     },{
-                        fn : "text"
+                        fn : "attr",
+                        arg : ["rdf:resource"]
                     }],
                     multiple : true,
                     setter : 'addOrganization',
                     fk : {
-                        format : [{
-                            fn : "attr",
-                            arg : ["rdf:resource"]
-                        }],
                         array : "organizations"
                     }
                 }
@@ -230,9 +224,6 @@ var rdfConfig = {
                     multiple : true,
                     setter : 'addTopic', 
                     fk : {
-                        format : [{
-                            fn : "text"
-                        }],
                         array : "topics",
                         //pointed entity isn't a concrete node in this format and thus, don't contains any index 
                         //so we must retrieve an index with Importer().getArrayId instead of objectMap 
@@ -243,22 +234,12 @@ var rdfConfig = {
                     format : [{
                         fn : "children",
                         arg : ["swrc:listkeyword"]
-                    },{
-                        fn : "text"
                     }],
-                    multiple : true,
-                    //TODO add splitter format
-                    //TODO add splitter format
-                    //TODO add splitter format
+                    multiple : true, 
                     list : {delimiter:", "},
                     setter : 'addTopic',
                     fk : {
-                        format : [{
-                            fn : "text"
-                        }],
-                        array : "topics",
-                        //pointed entity isn't a concrete node in this format and thus, don't contains any index 
-                        //so we must retrieve an index with Importer().getArrayId instead of objectMap 
+                        array : "topics", 
                         create : "setName"
                     }
                 },
@@ -268,15 +249,12 @@ var rdfConfig = {
                         fn : "children",
                         arg : ["dc:creator"]
                     },{
-                        fn : "text"
+                        fn : "attr",
+                        arg : ["rdf:resource"]
                     }],
                     multiple : true,
                     setter : 'addAuthor',
                     fk : {
-                        format : [{
-                            fn : "attr",
-                            arg : ["rdf:resource"]
-                        }],
                         array : "persons"
                     }
                 },
@@ -285,15 +263,12 @@ var rdfConfig = {
                         fn : "children",
                         arg : ["foaf:maker"]
                     },{
-                        fn : "text"
+                        fn : "attr",
+                        arg : ["rdf:resource"]
                     }],
                     multiple : true,
                     setter : 'addAuthor',
                     fk : {
-                        format : [{
-                            fn : "attr",
-                            arg : ["rdf:resource"]
-                        }],
                         array : "persons"
                     }
                 }
@@ -315,7 +290,6 @@ var rdfConfig = {
                     }],
                     setter : 'setSummary'
                 },
-                //only for conference event
                 {
                     format : [{
                         fn : "children",
@@ -325,7 +299,6 @@ var rdfConfig = {
                     }],
                     setter : 'setAcronym'
                 },
-                //only for conference event
                 {
                     format : [{
                         fn : "children",
@@ -375,52 +348,28 @@ var rdfConfig = {
                     }],
                     setter : 'setEndAt'
                 },
-                //TODO ADD TIME PARSER
-                //TODO ADD TIME PARSER
-                //TODO ADD TIME PARSER
                 {
                     format : [{
                         fn : "children",
                         arg : ["ical:dtstart"]
                     },{
-                        fn : "text"
+                        fn : "text",
+                    },{
+                        fn : "parseTime"
                     }],
-                    setter : 'setStartAt',
-                    // format : function(node){ 
-                    //     var rtn;
-                    //     $(node).children().each(function(){
-                    //         if(this.nodeName !=="ical:date") return;
-                    //         rtn = $(this).text();  
-                    //     });
-                    //     return moment(rtn || $(node).text()).format();
-                    // }
+                    setter : 'setStartAt', 
                 },
                 {
                     format : [{
                         fn : "children",
                         arg : ["ical:dtend"]
                     },{
-                        fn : "text"
+                        fn : "text",
+                    },{
+                        fn : "parseTime"
                     }],
-                    setter : 'setEndAt',
-                    // format : function(node){ 
-                    //     var rtn;
-                    //     $(node).children().each(function(){
-                    //         if(this.nodeName !=="ical:date") return;
-                    //         rtn = $(this).text();  
-                    //     });
-                    //     return moment(rtn || $(node).text()).format();
-                    // }
-                },
-                // 'swc:hasRelatedDocument' : { 
-                //     preProcess : function(node){
-                //         // var xproperty= {}; 
-                //         // xproperty['setCalendarEntity']=events.length;
-                //         // xproperty['setXNamespace']="publication_uri";
-                //         // xproperty['setXValue']=$(node).text() || $(node).attr('rdf:resource');
-                //         // xproperties.push(xproperty);
-                //     }
-                // },
+                    setter : 'setEndAt', 
+                }, 
                 {
                     format : [{
                         fn : "children",
@@ -431,9 +380,6 @@ var rdfConfig = {
                     multiple: true,
                     setter : 'addTopic',
                     fk : {
-                        format : [{
-                            fn : "text"
-                        }],
                         array : "topics", 
                         create : "setName"
                     }
@@ -446,54 +392,61 @@ var rdfConfig = {
                         fn : "text"
                     }],
                     setter : 'setLocation',
-                    // TODO add spliter nodeutil 
-                    // TODO add spliter nodeutil 
-                    // TODO add spliter nodeutil 
-                    // format : function(node){
-                    //     var key = $(node).text() || $(node).attr('rdf:resource');
-                    //     if(objectMap[key])
-                    //         locationName = objectMap[key]['setName'];
-                    //     else {
-                    //         locationName = key.split("/");
-                    //         locationName = locationName[locationName.length -1 ];
-                    //     }
-                    //     return Importer().getArrayId("locations",'setName',locationName)  
-                    //     // return getLocationIdFromName(locationName);
-                    // },
-                    // preProcess : function(node){
-                    //     var key = $(node).text() || $(node).attr('rdf:resource');
-                    //     if(objectMap[key])
-                    //         locationName = objectMap[key]['setName'];
-                    //     else {
-                    //         locationName = key.split("/");
-                    //         locationName = locationName[locationName.length -1 ];
-                    //     }  
-                    //     if(Importer().getArrayId("locations",'setName',locationName) === -1 ){
-                    //         locations.push({setDescription:"",setName:str_format(locationName)});  
-                    //     }
-                    // }
+                    fk : {
+                        array : "locations", 
+                        create : "setName"
+                    }
+                },
+                {
+                    format : [{
+                        fn : "children",
+                        arg : ["swc:hasLocation"]
+                    },{
+                        fn : "attr",
+                        arg : ["rdf:resource"]
+                    },{
+                        fn : "split",
+                        arg : ["/","last"]
+                    }],
+                    setter : 'setLocation',
+                    fk : {
+                        array : "locations", 
+                        create : "setName"
+                    }
                 },
                 {
                     format : [{
                         fn : "children",
                         arg : ["icaltzd:location"]
                     },{
-                        fn : "text"
+                        fn : "attr",
+                        arg : ["rdf:resource"]
+                    },{
+                        fn : "split",
+                        arg : ["/","last"]
                     }],
                     setter : 'setLocation',
-                    // TODO add spliter nodeutil 
-                    // TODO add spliter nodeutil 
-                    // TODO add spliter nodeutil 
-                    // format : function(node){ 
-                    //     var key = $(node).text() || $(node).attr('rdf:resource');
-                    //     if(objectMap[key])
-                    //         locationName = objectMap[key]['setName'];
-                    //     else {
-                    //         locationName = key.split("/");
-                    //         locationName = locationName[locationName.length -1 ];
-                    //     }
-                    //     return Importer().getArrayId("locations",'setName',locationName) ;
-                    // }
+                    fk : {
+                        array : "locations", 
+                        create : "setName"
+                    }
+                },
+                {
+                    format : [{
+                        fn : "children",
+                        arg : ["icaltzd:location"]
+                    },{
+                        fn : "attr",
+                        arg : ["text"]
+                    },{
+                        fn : "split",
+                        arg : ["/","last"]
+                    }],
+                    setter : 'setLocation',
+                    fk : {
+                        array : "locations", 
+                        create : "setName"
+                    }
                 },
                 {
                     format : [{
@@ -513,21 +466,18 @@ var rdfConfig = {
                         fn : "children",
                         arg : ["swc:issubeventof"]
                     },{
-                        fn : "text"
+                        fn : "attr",
+                        arg : ["rdf:resource"]
                     }],
                     setter : 'setParent',
-                    fk : {
-                        format : [{
-                            fn : "attr",
-                            arg : ["rdf:resource"]
-                        }],
+                    fk : { 
                         array : "events"
                     }
                 } 
             ],
+            //TODO find a better way to get the category 
             postProcess : function(node,event,nodeName){
 
-                // EVENT CAT 
                 var catName
                     ,tmp
                     ,isMainConfEvent = false;
@@ -556,17 +506,6 @@ var rdfConfig = {
                     }
                     if(!isMainConfEvent)event['addCategorie']=catId;
                 }
-                
-                
-                // store uri via xproperty array to get the event back in the relation loop
-                // if(!isMainConfEvent){
-                //     var xproperty= {}; 
-                //     xproperty['setCalendarEntity']=Importer().objects.events.length;
-                //     xproperty['setXNamespace']="event_uri";
-                //     xproperty['setXValue']=$(node).attr('rdf:about');
-                //     Importer().objects.xproperties.push(xproperty);
-                // }
-                //don't store the original event
                 return isMainConfEvent;
 
                 function testCatName(catName){
@@ -578,10 +517,7 @@ var rdfConfig = {
             }
         },
         
-        //TODO DO NOT PERMIT OVERRIDING
-        //TODO DO NOT PERMIT OVERRIDING
-        //TODO DO NOT PERMIT OVERRIDING
-        //TODO DO NOT PERMIT OVERRIDING
+        //TODO DO NOT PERMIT OVERRIDING 
         {
             array   : "roles",  
             format : [{
