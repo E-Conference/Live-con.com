@@ -315,7 +315,7 @@ function Importer()
                             var pointedEntity;
  
                             val = fk.array+"-"+val;
-                            if(!objectMap[val])
+                            if(!objectMap[val] && fk.create)
                             {
                                 var entry = {};
                                 entry[fk.create] = val;
@@ -327,7 +327,7 @@ function Importer()
                             if(!fkMapIndexes[key+"-"+curMapping.setter])
                             {
                                 fkMapIndexes[key+"-"+curMapping.setter] = "lol";
-                                fkMap.push({entity:key,setter:curMapping.setter,fkArray:fk.array,fkSetter:curMapping.fk.create});
+                                fkMap.push({entity:key,setter:curMapping.setter,fkArray:fk.array,fkSetter:fk.create});
                             } 
                         }
  
@@ -401,21 +401,25 @@ function Importer()
         function computeFk(fkKey, fk, index)
         {
             // console.log("computeFk : "+fk,addArray);
-            var objInd = objectsIndexes[fkKey];
+            var objInd = objectsIndexes[fkKey] || objectsIndexes[fkKey.replace(fk.fkArray+"-","")];
             if(!objInd )
             {
                 console.warn("error while retreiving fk ok "+fk.entity+" to "+fk.setter+". Cannot find "+fkKey);
-                deleteKey(); 
+                // deleteKey(); 
                 return; 
             }
             if(objInd.array == "conference")
             {
-                deleteKey(); 
+                // deleteKey(); 
                 // console.log("parent is mainConfEvent",objectMap[fk.entity][fk.setter]);
                 return;
             }
-            var val; 
-            objectMap[fkKey][fk.fkSetter] = objectMap[fkKey][fk.fkSetter].split(fk.fkArray+"-").join("");
+            if(fk.fkSetter){
+                objectMap[fkKey][fk.fkSetter] = objectMap[fkKey][fk.fkSetter].replace(fk.fkArray+"-","");
+            }else{
+                // console.log("lol")
+                // objects[objInd.array].splice(objInd.index,1);
+            }
             if(index)
             {
                 objectMap[fk.entity][fk.setter][index] = objInd.index;
@@ -424,10 +428,10 @@ function Importer()
             {
                 objectMap[fk.entity][fk.setter] = objInd.index;
             }  
-            function deleteKey()
-            {
-                    delete objectMap[fk.entity][fk.setter];  
-            }
+            // function deleteKey()
+            // {
+            //         delete objectMap[fk.entity][fk.setter];  
+            // }
         }
 
         //compute at the same time the mainConfEvent date

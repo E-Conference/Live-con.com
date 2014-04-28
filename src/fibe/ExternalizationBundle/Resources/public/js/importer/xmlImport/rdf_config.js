@@ -477,7 +477,7 @@ var rdfConfig = {
             ],
             //TODO find a better way to get the category 
             postProcess : function(node,event,nodeName){
-
+                node = $(node);
                 var catName
                     ,tmp
                     ,isMainConfEvent = false;

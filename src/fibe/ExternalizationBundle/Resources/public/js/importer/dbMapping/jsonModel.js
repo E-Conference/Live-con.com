@@ -35,9 +35,9 @@ Model = {
 					"logo" : {
 						setter : "setLogo"
           },
-					"location" : {
-						setter : "setLocation"
-          }
+					// "location" : {
+					// 	setter : "setLocation"
+     //      }
 				}
 			} 
 		}, 
@@ -46,36 +46,33 @@ Model = {
 			attributes : {
 				required : {
 					"summary" : {
-						setter : "setSummary"
-          }},
-				optionnal : {  
-					"description" : {
-						setter : "setStartAt"
-          },
-					"description" : {
-						setter : "setEndAt"
-          },
-					"description" : {
-						setter : "setDescription"
-          },
-					"comment" : {
-						setter : "setComment"
-          },
-					"organizer" : {
-						setter : "setOrganizer"
-          },
-					// "contacts" : {
-					// 	setter : "setContacts",
-					// }, 
-					"acronym" : {
-						setter : "setAcronym"
-          },
-					"logo" : {
-						setter : "setLogo"
-          },
-					"location" : {
-						setter : "setLocation"
-          }
+    						setter : "setSummary"
+              }},
+    				optionnal : {  
+    					"description" : {
+    						setter : "setStartAt"
+              },
+    					"description" : {
+    						setter : "setEndAt"
+              },
+    					"description" : {
+    						setter : "setDescription"
+              },
+    					"comment" : {
+    						setter : "setComment"
+              },
+                        "acronym" : {
+                            setter : "setAcronym"
+              },
+                        "logo" : {
+                            setter : "setLogo"
+              },
+    					// "organizer" : {
+    					// 	setter : "setOrganizer"
+         //      }, 
+    					// "location" : {
+    					// 	setter : "setLocation"
+         //      }
 				}
 			} 
 		}, 

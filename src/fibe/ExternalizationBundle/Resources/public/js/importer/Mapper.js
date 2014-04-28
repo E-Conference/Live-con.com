@@ -265,7 +265,7 @@ var Mapper = function(){
             if(knownCollection[nodePath]){
                 knownCollection[nodePath] = $(this)
                           .find("> .panel-heading > .panel-title")
-                             .prepend('<i title=" collection node of '+collectionNodeName+' " class="fa fa-bars"></i> ')  
+                             .prepend('<i title=" collection node of '+nodePath+' " class="fa fa-bars"></i> ')  
                 var collectionNodeName = $(this).find("> .panel-heading").text();
                 var childPanel = $(this).find("> .list-group > .panel-success ")
                 childPanel.data("collection",nodePath) 
