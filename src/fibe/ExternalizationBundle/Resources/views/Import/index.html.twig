@@ -40,6 +40,9 @@
         #datafile-form .list-group-item{
             cursor: move;
         }
+        .panel-heading, .panel>.list-group .list-group-item { 
+            padding: 0.5em;
+        }
         </style>
     {% endblock %}
 {% block centerPanel %}
@@ -262,7 +265,7 @@
                 e.preventDefault(); 
  
                 $("#back-to-mapping").hide();
-                $(mapper).on("fileRead",function(ev,data){
+                $(mapper).off("fileRead").on("fileRead",function(ev,data){
                     extractDatas();
                 })
                 mapper.setKnownMapping($("#known-mapping-format").val())
@@ -330,7 +333,10 @@
 
                 Pager.changePage('#page-new-mapping-file');
                 $(mapper).on("fileRead",function(ev,data){
-                    this.map($("#datafile-form"));
+                    $(this).off("mapEnd").on("mapEnd",function(ev,knownNodes,knownCollection){
+                        this.initUi($("#datafile-form"));
+                    }); 
+                    this.map();
                     Model.initialize(this);
                 });
                 mapper.readFile();
@@ -351,12 +357,11 @@
             Importer().run( 
                 mapper.getData(), 
                 op,
-                function(data,importedLog,notImportedLog){
+                function(data,importedLog){
                     Pager.changePage('#page-result');
                     mapper["serialisedDatas"] = data;
-                    mapper["importedLog"]     = importedLog;
-                    mapper["notImportedLog"]  = notImportedLog; 
-
+                    mapper.setImportedLog(importedLog); 
+                    var notImportedLog = mapper.getNotImportedLog();
                     $("#result-extract").html(getHtmlResultDiv(data,importedLog,notImportedLog,"extracted"));
                     bootstrapAlert("success",getMsgUl(mapper["serialisedDatas"],"extracted"),"conference parsed : "+mapper.getConfName()); 
                 },function(msg)
@@ -371,31 +376,31 @@
 
         //output results of import
         function getHtmlResultDiv(data,importedLog,notImportedLog,endMsg){
-            var html='<div class="row"><div class="col-md-12 col-lg-4"><div class="panel panel-primary">\
+            var html=$('<div class="row"><div class="col-md-12 col-lg-4"><div class="panel panel-primary">\
                                                   <!-- Default panel contents -->\
                                                   <div class="panel-heading">'+
                                                   mapper.getConfName()
-                                                  +'</div>';
+                                                  +'</div>');
 
-                    html+= getMsgUl(mapper["serialisedDatas"],endMsg || "found",true);
-
-                    html+='</ul></div></div><div class="col-sm-6 col-lg-4"><div class="panel panel-info">\
+                    html.find(".panel").append(getMsgPanel(mapper["serialisedDatas"],endMsg || "found"));
+ 
+                    var importedNotImportedPanels = '<div class="col-sm-6 col-lg-4"><div class="panel panel-info">\
                                                   <!-- Default panel contents -->\
                                                   <div class="panel-heading">Imported properties : </div>\
                                                   <ul class="list-group">'; 
                     for(var i in importedLog){
-                        html+= '<li class="list-group-item">'+importedLog[i]+"</li>";
+                        importedNotImportedPanels+= '<li class="list-group-item">'+importedLog[i]+"</li>";
                     } 
 
-                    html+= '</ul></div></div><div class="col-sm-6 col-lg-4"><div class="panel panel-info">\
+                    importedNotImportedPanels+= '</ul></div></div><div class="col-sm-6 col-lg-4"><div class="panel panel-info">\
                                                   <!-- Default panel contents -->\
                                                   <div class="panel-heading">Not imported properties : </div>\
                                                   <ul class="list-group">';
                     for(var i in notImportedLog){
-                        html+= '<li class="list-group-item">'+notImportedLog[i]+"</li>";
+                        importedNotImportedPanels+= '<li class="list-group-item">'+notImportedLog[i]+"</li>";
                     }
 
-                    return html + '</ul></div></div></div>';
+                    return html.append(importedNotImportedPanels);
         }
 
         //confirm with a bootstrap modal then call callback
@@ -430,6 +435,38 @@
                     msg +="<li"+(panelMode?' class="list-group-item" ':'')+">"+dataArray[i].length +" "+i+" "+endString+" !</li>"
 
             return msg + "</ul>";
+        }
+
+        // output imported object
+        function getMsgPanel(dataArray,endString){
+            var $html = "";
+            $html = $('<ul class="list-group" >'); 
+            for (var entityLabel in dataArray) {
+                if(dataArray[entityLabel] && dataArray[entityLabel].length >0){
+                    var fields = {};
+                    for(var i in dataArray[entityLabel]){
+                        var entityData = dataArray[entityLabel][i];
+                        for(var setter in entityData)
+                        {
+                            if(!fields[setter])fields[setter] = {samples:[]}
+                            fields[setter].samples.push(entityData[setter])
+                        }
+                    }
+                    var $li = $('<li class="list-group-item" ><div class="panel panel-primary"><div class="panel-heading">'+dataArray[entityLabel].length +" "+entityLabel+" "+endString+" !"+'</div><ul class="list-group"></ul></div></li>').appendTo($html);
+                    for(var setter in fields){
+                        var $setter = $('<li class="list-group-item">'+fields[setter].samples.length+' '+setter.replace("add", "").replace("set", "")+'</li>').appendTo($li.find('ul'));
+                        $setter.popover({
+                            trigger : 'hover',
+                            html : true,
+                            placement : "right",
+                            title : ' <b>'+entityLabel+'/'+setter+' </b>',
+                            content :  '<ul>'+ fields[setter].samples.map(function(sample,i){ return i<20?"<li>"+sample+"</li>":""; }).join("")+'</ul>'
+                        });
+                    }
+
+                }
+            }
+            return $html;
         }
 
 

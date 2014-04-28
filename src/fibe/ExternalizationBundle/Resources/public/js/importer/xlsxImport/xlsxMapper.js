@@ -57,6 +57,7 @@ xlsxMapper = {
             
             for(var i = 0; i < sheet.length; i++){
                 var currentLine = sheet[i];
+                nodeCallBack(nodePath,{panelClass:"panel-success",margin:true,collapsible:true,collapsed:false},true);
 
                 for(var tab in currentLine){
 
