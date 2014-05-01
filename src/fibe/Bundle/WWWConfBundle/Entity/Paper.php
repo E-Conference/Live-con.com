@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use fibe\Bundle\WWWConfBundle\Entity\wwwConf;
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
-use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
+use fibe\Bundle\WWWConfBundle\Util\StringTools;
 
 /**
  * This entity define a paper of a conference

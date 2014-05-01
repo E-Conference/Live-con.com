@@ -22,7 +22,7 @@ class LocationLatLngType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'IDCI\Bundle\SimpleScheduleBundle\Entity\Location',
+            'data_class' => 'fibe\Bundle\WWWConfBundle\Entity\Location',
             'cascade_validation' => true,
         ));
     }

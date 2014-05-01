@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use fibe\SecurityBundle\Entity\User;
 use fibe\SecurityBundle\Entity\Authorization;
 use fibe\Bundle\WWWConfBundle\Entity\MappingFile;
-use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
+use fibe\Bundle\WWWConfBundle\Util\StringTools;
 
 /**
  * WwwConf
@@ -40,7 +40,7 @@ class WwwConf
     /**
     * locations
     *
-    * @ORM\OneToMany(targetEntity="IDCI\Bundle\SimpleScheduleBundle\Entity\Location", mappedBy="conference",cascade={"persist", "remove"})
+    * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Location", mappedBy="conference",cascade={"persist", "remove"})
     */
     private $locations; 
 
@@ -273,10 +273,10 @@ class WwwConf
     /**
      * Add locations
      *
-     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\Location $locations
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Location $locations
      * @return WwwConf
      */
-    public function addLocation(\IDCI\Bundle\SimpleScheduleBundle\Entity\Location $locations)
+    public function addLocation(\fibe\Bundle\WWWConfBundle\Entity\Location $locations)
     {
         $this->locations[] = $locations;
     
@@ -286,9 +286,9 @@ class WwwConf
     /**
      * Remove locations
      *
-     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\Location $locations
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Location $locations
      */
-    public function removeLocation(\IDCI\Bundle\SimpleScheduleBundle\Entity\Location $locations)
+    public function removeLocation(\fibe\Bundle\WWWConfBundle\Entity\Location $locations)
     {
         $this->locations->removeElement($locations);
     }

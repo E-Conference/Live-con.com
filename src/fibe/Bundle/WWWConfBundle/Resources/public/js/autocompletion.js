@@ -7,7 +7,7 @@ function autoComplete(targetDiv,sourceArray) {
         source: sourceArray, 
         minLength: 1, 
         select: function (event, ui) { 
-            $("#idci_bundle_simpleschedulebundle_xpropertytype_xvalue").val(ui.item.uri).addClass("inputSuccess");
+            $("#fibe_bundle_wwwconfbundle__xpropertytype_xvalue").val(ui.item.uri).addClass("inputSuccess");
             $('#form_xvalue').val(ui.item.uri);
             $("#uriLink div").removeClass("warning").addClass("success");
             $("#submitLinkButton").removeAttr("disabled").removeClass("disabled") ;

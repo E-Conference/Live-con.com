@@ -5,11 +5,11 @@ namespace fibe\Bundle\WWWConfBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert; 
 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\Event; 
+use fibe\Bundle\WWWConfBundle\Entity\Event; 
 use fibe\Bundle\WWWConfBundle\Entity\Person;
 use fibe\Bundle\WWWConfBundle\Entity\Paper;
 
-use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
+use fibe\Bundle\WWWConfBundle\Util\StringTools;
 
 
 /**
@@ -22,6 +22,20 @@ use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
  */
 class ConfEvent extends Event
 {
+
+
+    /**
+     * status
+     *
+     * @ORM\ManyToOne(targetEntity="ConfEvent", inversedBy="children", cascade={"persist","detach"})
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+     */
+    protected $parent; 
+
+    /**
+     * @ORM\OneToMany(targetEntity="ConfEvent", mappedBy="parent", cascade={"persist"})
+     */
+    protected $children;
     
     /**
      * slidePresentation
@@ -110,6 +124,7 @@ class ConfEvent extends Event
      */
     public function __construct()
     {
+        parent::__construct(); 
         $this->papers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->topics = new \Doctrine\Common\Collections\ArrayCollection();
         $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
@@ -516,5 +531,73 @@ class ConfEvent extends Event
         return $this->acronym;
     }
 
+
+    
+
+    /**
+     * Set parent
+     *
+     * @param ConfEvent $parent
+     * @return ConfEvent
+     */
+    public function setParent(ConfEvent $parent = null)
+    {
+        $this->parent = $parent;
+    
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return ConfEvent 
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Add children
+     *
+     * @param ConfEvent $children
+     * @return ConfEvent
+     */
+    public function addChildren(ConfEvent $children)
+    {
+        $this->children[] = $children;
+    
+        return $this;
+    }
+
+    /**
+     * Remove children
+     *
+     * @param ConfEvent $children
+     */
+    public function removeChildren(ConfEvent $children)
+    {
+        $this->children->removeElement($children);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * Has children
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function hasChildren()
+    {
+        return count($this->children) != 0;
+    }
     
 }

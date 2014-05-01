@@ -5,7 +5,7 @@ namespace fibe\Bundle\WWWConfBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
+use fibe\Bundle\WWWConfBundle\Util\StringTools;
 /**
  * This entity define a role for a person in an event
  *

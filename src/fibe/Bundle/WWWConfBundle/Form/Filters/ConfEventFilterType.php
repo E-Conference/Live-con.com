@@ -29,7 +29,7 @@ class ConfEventFilterType extends AbstractType
                 'attr'  => array('placeholder'  => 'Summary')
             ))
             ->add('location', 'entity', array(
-                'class' => 'IDCISimpleScheduleBundle:Location',
+                'class' => 'fibeWWWConfBundle:Location',
                 'label'   => 'Location',
                 'choices'=> $this->user->getCurrentConf()->getLocations()->toArray(),
                 'empty_data'  => null,
@@ -37,7 +37,7 @@ class ConfEventFilterType extends AbstractType
                 'attr'  => array('placeholder'  => 'Location')
             ))
             ->add('category', 'entity', array(
-                'class' => 'IDCISimpleScheduleBundle:Category',
+                'class' => 'fibeWWWConfBundle:Category',
                 'label'   => 'Category',
                 'query_builder'=> function(EntityRepository $er) {
                                 return $er->extractQueryBuilder(array());

@@ -21,7 +21,6 @@ class AppKernel extends Kernel
             new JMS\SecurityExtraBundle\JMSSecurityExtraBundle(),
             new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
             new IDCI\Bundle\ExporterBundle\IDCIExporterBundle(),
-            new IDCI\Bundle\SimpleScheduleBundle\IDCISimpleScheduleBundle(),
             new fibe\Bundle\WWWConfBundle\fibeWWWConfBundle(),
             new fibe\SecurityBundle\fibeSecurityBundle(),
             new FOS\UserBundle\FOSUserBundle(),

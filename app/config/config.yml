@@ -1,8 +1,8 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
-#    - { resource: @IDCISimpleScheduleBundle/Resources/config/config.yml}
     - { resource: @fibeWWWConfBundle/Resources/config/config.yml}
+    - { resource: @fibeWWWConfBundle/Resources/config/services.yml}
 framework:
     #esi:             ~
     translator:      { fallback: %locale% }
@@ -75,7 +75,7 @@ swiftmailer:
 twig:
     form:
         resources:
-            - 'IDCISimpleScheduleBundle:Form:duration_widget.html.twig'
+            - 'fibeWWWConfBundle:Form:duration_widget.html.twig'
             - 'fibeWWWConfBundle:Form:my_form_div.html.twig'
 
 
@@ -99,7 +99,7 @@ fos_user:
          address:      noreply@live-con.com
          # Nom de l'expediteur
          sender_name:  Admin Livecon Manager
-       
+
 
 gregwar_captcha: ~
 

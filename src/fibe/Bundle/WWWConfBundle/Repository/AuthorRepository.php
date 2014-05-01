@@ -28,7 +28,7 @@ class AuthorRepository extends EntityRepository
         //Get the paper associate to this relation
         if($type == "paper") {
             $qb ->select('p')
-                ->from('IDCISimpleScheduleBundle:CalendarEntityRelation','r')
+                ->from('fibeWWWConfBundle:CalendarEntityRelation','r')
                 ->where('r.id = :entity_id')
                 ->setParameter('entity_id',$entity)
             ;

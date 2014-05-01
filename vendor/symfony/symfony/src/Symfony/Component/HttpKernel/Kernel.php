@@ -59,14 +59,13 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     protected $booted;
     protected $name;
     protected $startTime;
-    protected $classes;
     protected $errorReportingLevel;
 
-    const VERSION         = '2.2.1';
-    const VERSION_ID      = '20101';
+    const VERSION         = '2.2.11';
+    const VERSION_ID      = '20211';
     const MAJOR_VERSION   = '2';
     const MINOR_VERSION   = '2';
-    const RELEASE_VERSION = '1';
+    const RELEASE_VERSION = '11';
     const EXTRA_VERSION   = '';
 
     /**
@@ -84,7 +83,6 @@ abstract class Kernel implements KernelInterface, TerminableInterface
         $this->booted = false;
         $this->rootDir = $this->getRootDir();
         $this->name = $this->getName();
-        $this->classes = array();
         $this->bundles = array();
 
         if ($this->debug) {
@@ -101,7 +99,9 @@ abstract class Kernel implements KernelInterface, TerminableInterface
         if ($this->debug) {
             error_reporting(-1);
 
-            DebugClassLoader::enable();
+            if (class_exists('Symfony\Component\ClassLoader\DebugClassLoader')) {
+                DebugClassLoader::enable();
+            }
             ErrorHandler::register($this->errorReportingLevel);
             if ('cli' !== php_sapi_name()) {
                 ExceptionHandler::register();
@@ -495,7 +495,9 @@ abstract class Kernel implements KernelInterface, TerminableInterface
         }
 
         // look for orphans
-        if (count($diff = array_values(array_diff(array_keys($directChildren), array_keys($this->bundles))))) {
+        if (!empty($directChildren) && count($diff = array_diff_key($directChildren, $this->bundles))) {
+            $diff = array_keys($diff);
+
             throw new \LogicException(sprintf('Bundle "%s" extends bundle "%s", which is not registered.', $directChildren[$diff[0]], $diff[0]));
         }
 

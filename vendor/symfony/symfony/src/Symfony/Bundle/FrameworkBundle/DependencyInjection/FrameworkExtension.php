@@ -67,6 +67,7 @@ class FrameworkExtension extends Extension
         }
 
         $container->setParameter('kernel.trusted_proxies', $config['trusted_proxies']);
+        $container->setParameter('kernel.trusted_hosts', $config['trusted_hosts']);
 
         // @deprecated, to be removed in 2.3
         $container->setParameter('kernel.trust_proxy_headers', $config['trust_proxy_headers']);
@@ -320,7 +321,7 @@ class FrameworkExtension extends Extension
         $container->setParameter('session.storage.options', $options);
 
         // session handler (the internal callback registered with PHP session management)
-        if (null == $config['handler_id']) {
+        if (null === $config['handler_id']) {
             // Set the handler class to be null
             $container->getDefinition('session.storage.native')->replaceArgument(1, null);
         } else {
@@ -623,9 +624,13 @@ class FrameworkExtension extends Extension
 
     private function getValidatorXmlMappingFiles(ContainerBuilder $container)
     {
-        $reflClass = new \ReflectionClass('Symfony\Component\Form\FormInterface');
-        $files = array(dirname($reflClass->getFileName()).'/Resources/config/validation.xml');
-        $container->addResource(new FileResource($files[0]));
+        $files = array();
+
+        if (interface_exists('Symfony\Component\Form\FormInterface')) {
+            $reflClass = new \ReflectionClass('Symfony\Component\Form\FormInterface');
+            $files[] = dirname($reflClass->getFileName()).'/Resources/config/validation.xml';
+            $container->addResource(new FileResource($files[0]));
+        }
 
         foreach ($container->getParameter('kernel.bundles') as $bundle) {
             $reflection = new \ReflectionClass($bundle);

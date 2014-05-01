@@ -1,7 +1,7 @@
 <?php
 
 namespace fibe\Bundle\WWWConfBundle\Services;
-use IDCI\Bundle\SimpleScheduleBundle\Entity\Location;
+use fibe\Bundle\WWWConfBundle\Entity\Location;
 
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event; 
 
@@ -62,7 +62,7 @@ class EmptyConf {
       $newMainConfEvent->setStartAt( new \DateTime('now'));
       $end = new \DateTime('now');
       $newMainConfEvent->setEndAt( $end->add(new \DateInterval('P2D'))); 
-      $newMainConfEvent->addCategorie($em->getRepository('IDCISimpleScheduleBundle:Category')->findOneByName("ConferenceEvent"));
+      $newMainConfEvent->addCategorie($em->getRepository('fibeWWWConfBundle:Category')->findOneByName("ConferenceEvent"));
       $newMainConfEvent->setConference($conference);
       $conference->setMainConfEvent($newMainConfEvent);
 

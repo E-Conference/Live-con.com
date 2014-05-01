@@ -78,10 +78,12 @@ class Crawler extends \SplObjectStorage
     /**
      * Adds HTML/XML content.
      *
+     * If the charset is not set via the content type, it is assumed
+     * to be ISO-8859-1, which is the default charset defined by the
+     * HTTP 1.1 specification.
+     *
      * @param string      $content A string to parse as HTML/XML
      * @param null|string $type    The content type of the string
-     *
-     * @return null|void
      */
     public function addContent($content, $type = null)
     {
@@ -90,19 +92,28 @@ class Crawler extends \SplObjectStorage
         }
 
         // DOM only for HTML/XML content
-        if (!preg_match('/(x|ht)ml/i', $type, $matches)) {
+        if (!preg_match('/(x|ht)ml/i', $type, $xmlMatches)) {
             return null;
         }
 
-        $charset = 'ISO-8859-1';
-        if (false !== $pos = strpos($type, 'charset=')) {
+        $charset = null;
+        if (false !== $pos = stripos($type, 'charset=')) {
             $charset = substr($type, $pos + 8);
             if (false !== $pos = strpos($charset, ';')) {
                 $charset = substr($charset, 0, $pos);
             }
         }
 
-        if ('x' === $matches[1]) {
+        if (null === $charset &&
+            preg_match('/\<meta[^\>]+charset *= *["\']?([a-zA-Z\-0-9]+)/i', $content, $matches)) {
+            $charset = $matches[1];
+        }
+
+        if (null === $charset) {
+            $charset = 'ISO-8859-1';
+        }
+
+        if ('x' === $xmlMatches[1]) {
             $this->addXmlContent($content, $charset);
         } else {
             $this->addHtmlContent($content, $charset);
@@ -432,7 +443,9 @@ class Crawler extends \SplObjectStorage
             throw new \InvalidArgumentException('The current node list is empty.');
         }
 
-        return new static($this->sibling($this->getNode(0)->firstChild), $this->uri);
+        $node = $this->getNode(0)->firstChild;
+
+        return new static($node ? $this->sibling($node) : array(), $this->uri);
     }
 
     /**
@@ -491,6 +504,7 @@ class Crawler extends \SplObjectStorage
     public function extract($attributes)
     {
         $attributes = (array) $attributes;
+        $count = count($attributes);
 
         $data = array();
         foreach ($this as $node) {
@@ -503,7 +517,7 @@ class Crawler extends \SplObjectStorage
                 }
             }
 
-            $data[] = count($attributes) > 1 ? $elements : $elements[0];
+            $data[] = $count > 1 ? $elements : $elements[0];
         }
 
         return $data;
@@ -704,6 +718,11 @@ class Crawler extends \SplObjectStorage
         return sprintf("concat(%s)", implode($parts, ', '));
     }
 
+    /**
+     * @param integer $position
+     *
+     * @return \DOMElement|null
+     */
     private function getNode($position)
     {
         foreach ($this as $i => $node) {
@@ -717,6 +736,12 @@ class Crawler extends \SplObjectStorage
         // @codeCoverageIgnoreEnd
     }
 
+    /**
+     * @param \DOMElement $node
+     * @param string      $siblingDir
+     *
+     * @return array
+     */
     private function sibling($node, $siblingDir = 'nextSibling')
     {
         $nodes = array();

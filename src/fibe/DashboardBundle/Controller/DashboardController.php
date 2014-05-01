@@ -24,11 +24,7 @@ class DashboardController extends Controller
    */
     public function indexAction()
     {
-      $currentUser = $this->getUser();
-
-      return array(
-        'entity' => $currentUser,
-        );
+      return array();
     }
 
     

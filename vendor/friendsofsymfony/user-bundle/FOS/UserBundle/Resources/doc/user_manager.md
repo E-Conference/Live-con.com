@@ -50,7 +50,7 @@ The user manager has a few methods to find users based on the unique fields
 users.
 
 - findUserByUsername($username)
-- findUserByEmail($username)
+- findUserByEmail($email)
 - findUserByUsernameOrEmail($value)  (check if the value looks like an email to choose)
 - findUserByConfirmationToken($token)
 - findUsers()
@@ -128,7 +128,7 @@ public function MainController extends Controller
 
         // make more modifications to the database
 
-        $this->getDoctrine()->getEntityManager()->flush();
+        $this->getDoctrine()->getManager()->flush();
     }
 }
 ```
@@ -154,5 +154,5 @@ to reuse the common logic.
 
 ## SecurityBundle integration
 
-The built-in user managers also implement `Symfony\Component\Security\Core\User\UserProviderInterface`
-so they can be used as provider for the Security component.
+Although the built-in user managers also implement `Symfony\Component\Security\Core\User\UserProviderInterface`
+using the UserManager as user provider is deprecated and will trigger an error. Use 'FOS\UserBundle\Security\UserProvider' instead.

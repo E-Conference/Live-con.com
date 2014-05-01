@@ -26,7 +26,7 @@ class DataController extends Controller
         $repo = $em->getRepository('fibeWWWConfBundle:'.$object);
 
         if(!$repo){
-            $repo = $em->getRepository('IDCISimpleScheduleBundle:'.$object);
+            $repo = $em->getRepository('fibeWWWConfBundle:'.$object);
         }
         
         $entities = $repo->findAll();
@@ -49,7 +49,7 @@ class DataController extends Controller
         $repo = $em->getRepository('fibeWWWConfBundle:'.$object);
 
          if(!$repo){
-            $repo = $em->getRepository('IDCISimpleScheduleBundle:'.$object);
+            $repo = $em->getRepository('fibeWWWConfBundle:'.$object);
         }
 
          $entity = $repo->findOneBySlug($slug);

@@ -56,13 +56,15 @@ idci_exporter:
 
 By default, the export use twig engine to create exported files. We will see later
 that you can create your own transformer. For the moment create a directory
-in `YourBundle/Resources/exporter/EntityName`. Then create needed templates which convert
+in `YourBundle/Resources/exporter/EntityName`. Then create the needed templates which convert
 your entity into a specific format (csv, ics, json, xml for the moment) like this
 
   * export.csv.twig
   * export.ics.twig
   * export.json.twig
   * export.xml.twig
+
+Within your template you should usually use the twig variable `entity` such as `{{ entity.id }}`.
 
 Finaly simply use the service as follow to export your entities into the given format:
 
@@ -144,7 +146,7 @@ idci_exporter:
 Use the API
 ===========
 
-This bundle help you to get your entities in a given format throw a HTTP request.
+This bundle help you to get your entities in a given format via HTTP requests.
 To do that, add its controller in the `app/config/routing.yml` like this:
 
 ```yml
@@ -169,7 +171,7 @@ idci_exporter:
 ```
 
 If you get a `UndefinedExportableEntityException` this mean that you don't have
-well defined the export config for your Entity.
+well defined the export config for your Entity (The url might not match the entity_reference parameter for example).
 
 Then you have to create an `extract` function in your EntityRepository which return
 a `DoctrineCollection`. This function get `$params` variable as arguments which
@@ -242,16 +244,8 @@ public function extract($params)
 
 Now you can query your entities like this:
 
-    http://mydomaine/api/query?entity_reference=my_entity_reference&format=xml
+    http://mydomaine/api/query?entityReference=my_entity_reference&format=xml
 
 or
 
     http://mydomaine/api/my_entity_reference.xml
-
-
-
-Todo
-====
-
- * Create a commande line to export entity in bash.
- 

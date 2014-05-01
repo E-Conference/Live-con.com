@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraint;
  * Default implementation of the ConstraintValidatorFactoryInterface.
  *
  * This enforces the convention that the validatedBy() method on any
- * Constrain will return the class name of the ConstraintValidator that
+ * Constraint will return the class name of the ConstraintValidator that
  * should validate the Constraint.
  */
 class ConstraintValidatorFactory implements ConstraintValidatorFactoryInterface
@@ -32,7 +32,7 @@ class ConstraintValidatorFactory implements ConstraintValidatorFactoryInterface
     {
         $className = $constraint->validatedBy();
 
-        if (!isset($this->validators[$className])) {
+        if (!isset($this->validators[$className]) || $className === 'Symfony\Component\Validator\Constraints\CollectionValidator') {
             $this->validators[$className] = new $className();
         }
 

@@ -17,6 +17,7 @@ use Symfony\Component\Yaml\Parser;
 
 class FOSUserExtensionTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var ContainerBuilder */
     protected $configuration;
 
     /**
@@ -293,6 +294,20 @@ class FOSUserExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertAlias('acme_my.username_canonicalizer', 'fos_user.util.username_canonicalizer');
     }
 
+    public function testUserLoadFlashesByDefault()
+    {
+        $this->createEmptyConfiguration();
+
+        $this->assertHasDefinition('fos_user.listener.flash');
+    }
+
+    public function testUserLoadFlashesCanBeDisabled()
+    {
+        $this->createFullConfiguration();
+
+        $this->assertNotHasDefinition('fos_user.listener.flash');
+    }
+
     protected function createEmptyConfiguration()
     {
         $this->configuration = new ContainerBuilder();
@@ -334,6 +349,7 @@ EOF;
 db_driver: orm
 firewall_name: fos_user
 use_listener: true
+use_flash_notifications: false
 user_class: Acme\MyBundle\Entity\User
 model_manager_name: custom
 from_email:
@@ -387,7 +403,7 @@ group:
 EOF;
         $parser = new Parser();
 
-        return  $parser->parse($yaml);
+        return $parser->parse($yaml);
     }
 
     /**

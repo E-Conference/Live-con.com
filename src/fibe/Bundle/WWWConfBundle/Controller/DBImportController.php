@@ -17,12 +17,12 @@ use fibe\Bundle\WWWConfBundle\Entity\RoleType;
 use fibe\Bundle\WWWConfBundle\Entity\SocialService;
 use fibe\Bundle\WWWConfBundle\Entity\SocialServiceAccount;
 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\Category;
-use IDCI\Bundle\SimpleScheduleBundle\Entity\Location; 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;  
+use fibe\Bundle\WWWConfBundle\Entity\Category;
+use fibe\Bundle\WWWConfBundle\Entity\Location; 
+use fibe\Bundle\WWWConfBundle\Entity\XProperty;  
 
 
-use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
+use fibe\Bundle\WWWConfBundle\Util\StringTools;
 
 
 /**

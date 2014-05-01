@@ -21,7 +21,6 @@
         "pagerfanta/pagerfanta": "dev-master",
         "white-october/pagerfanta-bundle": "dev-master",
         "idci/exporter-bundle": "dev-master",
-        "idci/simple-schedule-bundle": "dev-master",
         "friendsofsymfony/user-bundle": "dev-master",
         "gregwar/captcha-bundle": "dev-master"
     },

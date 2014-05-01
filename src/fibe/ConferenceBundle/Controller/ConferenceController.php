@@ -18,11 +18,11 @@ use fibe\Bundle\WWWConfBundle\Form\WwwConfDefaultType;
 
 use fibe\SecurityBundle\Entity\Authorization;
 
-use IDCI\Bundle\SimpleScheduleBundle\Form\XPropertyType; 
-use IDCI\Bundle\SimpleScheduleBundle\Form\EventType;
-use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty; 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\Event; 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\Location; 
+use fibe\Bundle\WWWConfBundle\Form\XPropertyType; 
+use fibe\Bundle\WWWConfBundle\Form\EventType;
+use fibe\Bundle\WWWConfBundle\Entity\XProperty; 
+use fibe\Bundle\WWWConfBundle\Entity\Event; 
+use fibe\Bundle\WWWConfBundle\Entity\Location; 
 use fibe\Bundle\WWWConfBundle\Entity\Module;
 
 
@@ -212,7 +212,7 @@ class ConferenceController extends Controller
            
             $em->persist($defaultAppConfig);
 
-            $categorie = $em->getRepository('IDCISimpleScheduleBundle:Category')->findOneByName("ConferenceEvent");
+            $categorie = $em->getRepository('fibeWWWConfBundle:Category')->findOneByName("ConferenceEvent");
             
            //Main conf event  
             $mainConfEvent = new ConfEvent();

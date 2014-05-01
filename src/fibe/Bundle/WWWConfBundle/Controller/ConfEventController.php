@@ -17,7 +17,7 @@ use fibe\Bundle\WWWConfBundle\Form\TopicType as TopicType;
 //Filter type form
 use fibe\Bundle\WWWConfBundle\Form\Filters\ConfEventFilterType;
 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;  
+use fibe\Bundle\WWWConfBundle\Entity\XProperty;  
 
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;

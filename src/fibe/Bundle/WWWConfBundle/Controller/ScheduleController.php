@@ -8,12 +8,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 //On insere l'entity Event  de simple schedule
 
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event; 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty;
-use IDCI\Bundle\SimpleScheduleBundle\Entity\Location;
+use fibe\Bundle\WWWConfBundle\Entity\XProperty;
+use fibe\Bundle\WWWConfBundle\Entity\Location;
 use fibe\Bundle\WWWConfBundle\Entity\Role;
 
-use IDCI\Bundle\SimpleScheduleBundle\Form\EventType;
-use IDCI\Bundle\SimpleScheduleBundle\Form\RecurChoiceType;
+use fibe\Bundle\WWWConfBundle\Form\EventType;
+use fibe\Bundle\WWWConfBundle\Form\RecurChoiceType;
 use fibe\Bundle\WWWConfBundle\Form\RoleType;
 use fibe\Bundle\WWWConfBundle\Form\ConfEventType;
 

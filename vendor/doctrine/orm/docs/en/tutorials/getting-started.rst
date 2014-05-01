@@ -25,7 +25,7 @@ The code of this tutorial is `available on Github <https://github.com/doctrine/d
 
 .. note::
 
-    This tutorial assumes you work with Doctrine 2.3 and above.
+    This tutorial assumes you work with Doctrine 2.4 and above.
     Some of the code will not work with lower versions.
 
 What is Doctrine?
@@ -187,9 +187,7 @@ doctrine command. Its a fairly simple file:
     // cli-config.php
     require_once "bootstrap.php";
 
-    $helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
-        'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($entityManager)
-    ));
+    return \Doctrine\ORM\Tools\Console\ConsoleRunner::createHelperSet($entityManager);
 
 You can then change into your project directory and call the
 Doctrine command-line tool:
@@ -1110,10 +1108,10 @@ the first read-only use-case:
 
     foreach($bugs AS $bug) {
         echo $bug->getDescription()." - ".$bug->getCreated()->format('d.m.Y')."\n";
-        echo "    Reported by: ".$bug->getReporter()->name."\n";
-        echo "    Assigned to: ".$bug->getEngineer()->name."\n";
+        echo "    Reported by: ".$bug->getReporter()->getName()."\n";
+        echo "    Assigned to: ".$bug->getEngineer()->getName()."\n";
         foreach($bug->getProducts() AS $product) {
-            echo "    Platform: ".$product->name."\n";
+            echo "    Platform: ".$product->getName()."\n";
         }
         echo "\n";
     }

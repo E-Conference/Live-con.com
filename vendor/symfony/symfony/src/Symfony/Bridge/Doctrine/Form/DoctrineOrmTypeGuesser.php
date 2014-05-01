@@ -19,6 +19,7 @@ use Symfony\Component\Form\FormTypeGuesserInterface;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
 use Symfony\Component\Form\Guess\ValueGuess;
+use Doctrine\Common\Util\ClassUtils;
 
 class DoctrineOrmTypeGuesser implements FormTypeGuesserInterface
 {
@@ -153,8 +154,6 @@ class DoctrineOrmTypeGuesser implements FormTypeGuesserInterface
     {
         $ret = $this->getMetadata($class);
         if ($ret && $ret[0]->hasField($property) && !$ret[0]->hasAssociation($property)) {
-            $mapping = $ret[0]->getFieldMapping($property);
-
             if (in_array($ret[0]->getTypeOfField($property), array('decimal', 'float'))) {
                 return new ValueGuess(null, Guess::MEDIUM_CONFIDENCE);
             }
@@ -163,6 +162,9 @@ class DoctrineOrmTypeGuesser implements FormTypeGuesserInterface
 
     protected function getMetadata($class)
     {
+        // normalize class name
+        $class = ClassUtils::getRealClass(ltrim($class, '\\'));
+
         if (array_key_exists($class, $this->cache)) {
             return $this->cache[$class];
         }

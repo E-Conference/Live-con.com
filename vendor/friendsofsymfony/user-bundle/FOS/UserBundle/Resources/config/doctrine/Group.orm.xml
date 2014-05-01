@@ -4,12 +4,6 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                   http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <mapped-superclass name="FOS\UserBundle\Entity\Group">
-
-        <field name="name" column="name" type="string" length="255" unique="true" />
-
-        <field name="roles" column="roles" type="array" />
-
-    </mapped-superclass>
+    <mapped-superclass name="FOS\UserBundle\Entity\Group"/>
 
 </doctrine-mapping>

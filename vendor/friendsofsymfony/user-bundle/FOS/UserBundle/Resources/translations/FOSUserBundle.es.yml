@@ -13,6 +13,7 @@ group:
 
 # Security
 "Bad credentials": Nombre de usuario o Contraseña inválido
+"User account is disabled.": Cuenta de usuario desactivada
 
 security:
     login:
@@ -68,7 +69,7 @@ resetting:
     flash:
         success: La contraseña se ha cambiado con éxito
     email:
-        subject: Bienvenido %username%!
+        subject: Restablecer Contraseña
         message : |
             Hola %username%!
 

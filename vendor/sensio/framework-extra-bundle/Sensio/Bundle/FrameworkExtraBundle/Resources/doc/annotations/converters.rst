@@ -115,7 +115,9 @@ This also allows you to have multiple converters in one action::
 In the example above, the post parameter is handled automatically, but the comment is 
 configured with the annotation since they can not both follow the default convention.
 
-If you want to match an entity using multiple fields use ``mapping``::
+If you want to match an entity using multiple fields use the ``mapping`` hash
+option: the key is route placeholder name and the value is the Doctrine
+field name::
 
     /**
      * @Route("/blog/{date}/{slug}/comments/{comment_slug}")
@@ -131,7 +133,7 @@ route parameter from being part of the criteria::
 
     /**
      * @Route("/blog/{date}/{slug}")
-     * @ParamConverter("post", options={"exclude": ["date"]})
+     * @ParamConverter("post", options={"exclude": {"date"}})
      */
     public function showAction(Post $post, \DateTime $date)
     {

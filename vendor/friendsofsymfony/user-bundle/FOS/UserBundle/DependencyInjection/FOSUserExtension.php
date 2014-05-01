@@ -30,10 +30,15 @@ class FOSUserExtension extends Extension
 
         if ('custom' !== $config['db_driver']) {
             $loader->load(sprintf('%s.xml', $config['db_driver']));
+            $container->setParameter($this->getAlias() . '.backend_type_' . $config['db_driver'], true);
         }
 
         foreach (array('validator', 'security', 'util', 'mailer', 'listeners') as $basename) {
             $loader->load(sprintf('%s.xml', $basename));
+        }
+
+        if ($config['use_flash_notifications']) {
+            $loader->load('flash_notifications.xml');
         }
 
         $container->setAlias('fos_user.mailer', $config['service']['mailer']);

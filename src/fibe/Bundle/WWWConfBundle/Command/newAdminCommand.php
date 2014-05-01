@@ -12,7 +12,7 @@ use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
 use fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig;
 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\Location;
+use fibe\Bundle\WWWConfBundle\Entity\Location;
 
 use FOS\UserBundle\Model\User;
 
@@ -106,7 +106,7 @@ EOT
 
         $em->persist($defaultAppConfig);
 
-        $categorie = $em->getRepository('IDCISimpleScheduleBundle:Category')->findOneByName("ConferenceEvent");
+        $categorie = $em->getRepository('fibeWWWConfBundle:Category')->findOneByName("ConferenceEvent");
         
         //Main conf event  
         $mainConfEvent = new ConfEvent();

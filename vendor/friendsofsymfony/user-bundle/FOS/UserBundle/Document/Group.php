@@ -13,6 +13,14 @@ namespace FOS\UserBundle\Document;
 
 use FOS\UserBundle\Model\Group as BaseGroup;
 
+/**
+ * @deprecated directly extend the classes in the Model namespace
+ */
 abstract class Group extends BaseGroup
 {
+    public function __construct($name, $roles = array())
+    {
+        trigger_error(sprintf('%s is deprecated. Extend FOS\UserBundle\Model\Group directly.', __CLASS__), E_USER_DEPRECATED);
+        parent::__construct($name, $roles);
+    }
 }

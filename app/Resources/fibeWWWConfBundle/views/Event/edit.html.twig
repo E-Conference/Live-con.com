@@ -10,11 +10,11 @@
         </div>
 
         <form action="{{ path('schedule_event_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(form) }}>
-            {% include "IDCISimpleScheduleBundle:Event:form.html.twig" %}
+            {% include "fibeWWWConfBundle:Event:form.html.twig" %}
             <button type="submit" class="btn btn-primary">{% trans %}Edit{% endtrans %}</button>
         </form>
 
-        {% include "IDCISimpleScheduleBundle:Event:xproperties.html.twig" with {"with_form": true} %}
+        {% include "fibeWWWConfBundle:Event:xproperties.html.twig" with {"with_form": true} %}
 
 
         <ul class="record_actions">
@@ -86,17 +86,17 @@ function autoCompletePublication(){
     var swdf=new SWDF("{{ SparqlUrl }}");
     swdf.buildQry();
       
-	swdf.callback= function(arrayResult){autoComplete($('#idci_bundle_simpleschedulebundle_xpropertytype_xkey'),arrayResult)};
+	swdf.callback= function(arrayResult){autoComplete($('#fibe_bundle_wwwconfbundle__xpropertytype_xkey'),arrayResult)};
 	/*swdf.callback= function(arrayResult){
 	    var tmpArr = [];
 	    $.each(arrayResult,function(){
 	       tmpArr.push(this.value); 
 	    });
-	    $('#idci_bundle_simpleschedulebundle_xpropertytype_xkey').typeahead(
+	    $('#fibe_bundle_wwwconfbundle__xpropertytype_xkey').typeahead(
         {
             source:  tmpArr,
             updater : function(item){
-                $("#idci_bundle_simpleschedulebundle_xpropertytype_xvalue").val(item.uri).addClass("inputSuccess");
+                $("#fibe_bundle_wwwconfbundle__xpropertytype_xvalue").val(item.uri).addClass("inputSuccess");
                 $('#form_xvalue').val(item.uri);
                 $('#form_xkey').val(item.uri);
                 $("#uriLink div").removeClass("warning").addClass("success");
@@ -133,7 +133,7 @@ function autoCompleteEvent(){
                          '{?uriEvent rdf:type swc:PanelEvent.}';
     swdf.buildQry();
 	swdf.parseMtd=swdf.toArray2;
-	swdf.callback= function(arrayResult){autoComplete($('#idci_bundle_simpleschedulebundle_xpropertytype_xkey'),arrayResult)};
+	swdf.callback= function(arrayResult){autoComplete($('#fibe_bundle_wwwconfbundle__xpropertytype_xkey'),arrayResult)};
     swdf.doQry();
 	console.log(swdf.arrayResult); 
 }
@@ -141,7 +141,7 @@ function autoCompleteEvent(){
 $(document).ready(function(){ 
     
     //autocomplete  {{ SparqlUrl }}
-    $('#idci_bundle_simpleschedulebundle_xpropertytype_xnamespace').change(function(){
+    $('#fibe_bundle_wwwconfbundle__xpropertytype_xnamespace').change(function(){
         var xNamespace = $(this).val();
         if( xNamespace == "publication_uri") autoCompletePublication();
         else if( xNamespace == "event_uri") autoCompleteEvent();

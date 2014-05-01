@@ -268,7 +268,30 @@ class DateTypeTest extends LocalizedTestCase
     }
 
     /**
-     * This test is to check that the strings '0', '1', '2', '3' are no accepted
+     * @dataProvider provideDateFormats
+     */
+    public function testDatePatternWithFormatOption($format, $pattern)
+    {
+        $form = $this->factory->create('date', null, array(
+            'format' => $format,
+        ));
+
+        $view = $form->createView();
+
+        $this->assertEquals($pattern, $view->vars['date_pattern']);
+    }
+
+    public function provideDateFormats()
+    {
+        return array(
+            array('dMy', '{{ day }}{{ month }}{{ year }}'),
+            array('d-M-yyyy', '{{ day }}-{{ month }}-{{ year }}'),
+            array('M d y', '{{ month }} {{ day }} {{ year }}'),
+        );
+    }
+
+    /**
+     * This test is to check that the strings '0', '1', '2', '3' are not accepted
      * as valid IntlDateFormatter constants for FULL, LONG, MEDIUM or SHORT respectively.
      *
      * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
@@ -750,5 +773,26 @@ class DateTypeTest extends LocalizedTestCase
 
         $this->assertSame(array(), $form['day']->getErrors());
         $this->assertSame(array($error), $form->getErrors());
+    }
+    
+    public function testYearsFor32BitsMachines()
+    {
+        if (4 !== PHP_INT_SIZE) {
+            $this->markTestSkipped(
+                'PHP must be compiled in 32 bit mode to run this test');
+        }
+        
+        $form = $this->factory->create('date', null, array(
+            'years' => range(1900, 2040),
+        ));
+
+        $view = $form->createView();
+
+        $listChoices = array();
+        foreach(range(1902, 2037) as $y) {
+            $listChoices[] = new ChoiceView($y, $y, $y);
+        }
+        
+        $this->assertEquals($listChoices, $view['year']->vars['choices']);
     }
 }

@@ -49,7 +49,11 @@ class FormTypeCsrfExtension extends AbstractTypeExtension
 
         $builder
             ->setAttribute('csrf_factory', $builder->getFormFactory())
-            ->addEventSubscriber(new CsrfValidationListener($options['csrf_field_name'], $options['csrf_provider'], $options['intention']))
+            ->addEventSubscriber(new CsrfValidationListener(
+                $options['csrf_field_name'],
+                $options['csrf_provider'],
+                $options['intention'] ?: ($builder->getName() ?: get_class($builder->getType()->getInnerType()))
+            ))
         ;
     }
 
@@ -64,7 +68,8 @@ class FormTypeCsrfExtension extends AbstractTypeExtension
     {
         if ($options['csrf_protection'] && !$view->parent && $options['compound']) {
             $factory = $form->getConfig()->getAttribute('csrf_factory');
-            $data = $options['csrf_provider']->generateCsrfToken($options['intention']);
+            $intention = $options['intention'] ?: ($form->getName() ?: get_class($form->getConfig()->getType()->getInnerType()));
+            $data = $options['csrf_provider']->generateCsrfToken($intention);
 
             $csrfForm = $factory->createNamed($options['csrf_field_name'], 'hidden', $data, array(
                 'mapped' => false,
@@ -83,7 +88,7 @@ class FormTypeCsrfExtension extends AbstractTypeExtension
             'csrf_protection'   => $this->defaultEnabled,
             'csrf_field_name'   => $this->defaultFieldName,
             'csrf_provider'     => $this->defaultCsrfProvider,
-            'intention'         => 'unknown',
+            'intention'         => null,
         ));
     }
 

@@ -7,8 +7,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\Status;
-use IDCI\Bundle\SimpleScheduleBundle\Entity\Category;
+use fibe\Bundle\WWWConfBundle\Entity\Status;
+use fibe\Bundle\WWWConfBundle\Entity\Category;
 use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 use fibe\Bundle\WWWConfBundle\Entity\RoleType;
 use fibe\Bundle\WWWConfBundle\Entity\Equipment;

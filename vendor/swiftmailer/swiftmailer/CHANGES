@@ -1,5 +1,28 @@
-Changelog since Version 4.x.x
-=============================
+Changelog
+=========
+
+5.0.3 (2013-12-03)
+------------------
+
+ * fixed double-dot bug
+ * fixed DKIM signer
+
+5.0.2 (2013-08-30)
+------------------
+
+ * handled correct exception type while reading IoBuffer output
+
+5.0.1 (2013-06-17)
+------------------
+
+ * changed the spool to only start the transport when a mail has to be sent
+ * fixed compatibility with PHP 5.2
+ * fixed LICENSE file
+
+5.0.0 (2013-04-30)
+------------------
+
+ * changed the license from LGPL to MIT
 
 4.3.1 (2013-04-11)
 ------------------

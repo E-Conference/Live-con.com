@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use FOS\UserBundle\Model\UserInterface; 
+use FOS\UserBundle\Model\UserInterface;
 
 /**
  * Controller managing the registration
@@ -31,15 +31,28 @@ use FOS\UserBundle\Model\UserInterface;
  */
 class RegistrationController extends ContainerAware
 {
-    /** 
-    */
     public function registerAction(Request $request)
     {
-        if( ! $this->get('security.context')->isGranted('ROLE_ADMIN') )
-        {
-            // Sinon on déclenche une exception "Accès Interdit"
-            throw new AccessDeniedHttpException('Access denied');
-        } 
+        /** @var $formFactory \FOS\UserBundle\Form\Factory\FactoryInterface */
+        $formFactory = $this->container->get('fos_user.registration.form.factory');
+        /** @var $userManager \FOS\UserBundle\Model\UserManagerInterface */
+        $userManager = $this->container->get('fos_user.user_manager');
+        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
+        $dispatcher = $this->container->get('event_dispatcher');
+
+        $user = $userManager->createUser();
+        $user->setEnabled(true);
+
+        $event = new GetResponseUserEvent($user, $request);
+        $dispatcher->dispatch(FOSUserEvents::REGISTRATION_INITIALIZE, $event);
+
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
+        }
+
+        $form = $formFactory->createForm();
+        $form->setData($user);
+
         if ('POST' === $request->getMethod()) {
             $form->bind($request);
 
@@ -128,7 +141,7 @@ class RegistrationController extends ContainerAware
             throw new AccessDeniedException('This user does not have access to this section.');
         }
 
-        return $this->container->get('templating')->renderResponse('fibeSecurityBundle:Registration:confirmed.html.twig'.$this->getEngine(), array(
+        return $this->container->get('templating')->renderResponse('FOSUserBundle:Registration:confirmed.html.'.$this->getEngine(), array(
             'user' => $user,
         ));
     }

@@ -1,6 +1,6 @@
   $(document).ready(function() {
 //Hidden input StartAt of Event Form replace by datetimepicker
-$('#idci_simpleschedule_event_type_startAt').hide();
+$('#fibe_bundle_wwwconfbundle_confeventtype_startAt').hide();
 $(".alert ").hide();
 
 //initialise le datepicker
@@ -30,11 +30,11 @@ $(".form_datetime")
 				
 				console.log(year + month +day +hour+minute);
 				//Fill startAt fields
-				$('#idci_simpleschedule_event_type_startAt_date_month').val(month);
-				$('#idci_simpleschedule_event_type_startAt_date_day').val(day);
-				$('#idci_simpleschedule_event_type_startAt_date_year').val(year); 
-				$('#idci_simpleschedule_event_type_startAt_time_hour').val(hour);
-				$('#idci_simpleschedule_event_type_startAt_time_minute').val(minute); 
+				$('#fibe_bundle_wwwconfbundle_confeventtype_startAt_date_month').val(month);
+				$('#fibe_bundle_wwwconfbundle_confeventtype_startAt_date_day').val(day);
+				$('#fibe_bundle_wwwconfbundle_confeventtype_startAt_date_year').val(year); 
+				$('#fibe_bundle_wwwconfbundle_confeventtype_startAt_time_hour').val(hour);
+				$('#fibe_bundle_wwwconfbundle_confeventtype_startAt_time_minute').val(minute); 
 			} 
 		}); 
 });

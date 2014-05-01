@@ -7,14 +7,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\Status;
-use IDCI\Bundle\SimpleScheduleBundle\Entity\Category;
+use fibe\Bundle\WWWConfBundle\Entity\Status;
+use fibe\Bundle\WWWConfBundle\Entity\Category;
 use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 use fibe\Bundle\WWWConfBundle\Entity\RoleType;
 use fibe\Bundle\WWWConfBundle\Entity\SocialService;
 use fibe\Bundle\WWWConfBundle\Entity\Equipment;
 use fibe\Bundle\WWWConfBundle\Entity\SocialServiceAccount;
-
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
 use fibe\Bundle\WWWConfBundle\Entity\Person;
 use fibe\Bundle\WWWConfBundle\Entity\Paper;
@@ -22,19 +21,12 @@ use fibe\Bundle\WWWConfBundle\Entity\Role;
 use fibe\Bundle\WWWConfBundle\Entity\Topic;
 use fibe\Bundle\WWWConfBundle\Entity\Organization;
 use fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig;
-use fibe\Bundle\WWWConfBundle\Form\WwwConfType;
-use fibe\Bundle\WWWConfBundle\Form\ModuleType;
-use fibe\Bundle\WWWConfBundle\Form\WwwConfEventDefaultType;
-use fibe\Bundle\WWWConfBundle\Form\WwwConfDefaultType;
+use fibe\Bundle\WWWConfBundle\Entity\XProperty;
+use fibe\Bundle\WWWConfBundle\Entity\Location; 
+use fibe\Bundle\WWWConfBundle\Entity\Module;
 
 use fibe\SecurityBundle\Entity\Authorization;
-
-use IDCI\Bundle\SimpleScheduleBundle\Form\XPropertyType; 
-use IDCI\Bundle\SimpleScheduleBundle\Form\EventType;
-use IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty; 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\Event; 
-use IDCI\Bundle\SimpleScheduleBundle\Entity\Location; 
-use fibe\Bundle\WWWConfBundle\Entity\Module;
+ 
 
 
 class fillDatabaseUpCommand extends ContainerAwareCommand

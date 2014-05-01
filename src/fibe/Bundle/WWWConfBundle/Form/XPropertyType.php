@@ -18,12 +18,9 @@ class XPropertyType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('xnamespace', 'choice', array(
-                      'label'   =>'Link type',
-                      'choices' => array('publication_uri' => 'publication', 
-                                           'event_uri'       => 'event')))
-            ->add('xkey', null, array('label' =>'Name'))
-            ->add('xvalue', null, array('label' =>'Uri'))
+            ->add('xnamespace')
+            ->add('xkey')
+            ->add('xvalue')
             ->add('calendarEntity', null, array(
                 'label' => ' ',
                 'attr'=> array('style'=>'display:none')
@@ -34,7 +31,7 @@ class XPropertyType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'IDCI\Bundle\SimpleScheduleBundle\Entity\XProperty'
+            'data_class' => 'fibe\Bundle\WWWConfBundle\Entity\XProperty'
         ));
     }
 

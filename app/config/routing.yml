@@ -45,11 +45,6 @@ fibe_security_www_conf:
     resource: "@fibeSecurityBundle/Controller/"
     type:     annotation 
 
-idci_simple_schedule:
-    resource: "../../vendor/idci/simple-schedule-bundle/IDCI/Bundle/SimpleScheduleBundle/Controller"
-    type:     annotation
-    prefix:   /schedule
-
 idci_exporter:
     resource: "../../vendor/idci/exporter-bundle/IDCI/Bundle/ExporterBundle/Controller"
     type:     annotation

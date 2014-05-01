@@ -34,7 +34,7 @@ class BinaryFileResponse extends Response
     /**
      * Constructor.
      *
-     * @param SplFileInfo|string $file               The file to stream
+     * @param \SplFileInfo|string $file               The file to stream
      * @param integer            $status             The response status code
      * @param array              $headers            An array of response headers
      * @param boolean            $public             Files are public by default
@@ -64,7 +64,7 @@ class BinaryFileResponse extends Response
     /**
      * Sets the file to stream.
      *
-     * @param SplFileInfo|string $file The file to stream
+     * @param \SplFileInfo|string $file The file to stream
      * @param string             $contentDisposition
      * @param Boolean            $autoEtag
      * @param Boolean            $autoLastModified
@@ -166,6 +166,8 @@ class BinaryFileResponse extends Response
             $this->setProtocolVersion('1.1');
         }
 
+        $this->ensureIEOverSSLCompatibility($request);
+
         $this->offset = 0;
         $this->maxlen = -1;
 
@@ -216,6 +218,7 @@ class BinaryFileResponse extends Response
 
                 $this->setStatusCode(206);
                 $this->headers->set('Content-Range', sprintf('bytes %s-%s/%s', $start, $end, $fileSize));
+                $this->headers->set('Content-Length', $end - $start + 1);
             }
         }
 

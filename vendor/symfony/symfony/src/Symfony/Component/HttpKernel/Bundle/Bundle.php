@@ -160,7 +160,7 @@ abstract class Bundle extends ContainerAware implements BundleInterface
         $name = get_class($this);
         $pos = strrpos($name, '\\');
 
-        return $this->name = false === $pos ? $name :  substr($name, $pos + 1);
+        return $this->name = false === $pos ? $name : substr($name, $pos + 1);
     }
 
     /**
@@ -189,7 +189,7 @@ abstract class Bundle extends ContainerAware implements BundleInterface
                 $ns .= '\\'.strtr($relativePath, '/', '\\');
             }
             $r = new \ReflectionClass($ns.'\\'.$file->getBasename('.php'));
-            if ($r->isSubclassOf('Symfony\\Component\\Console\\Command\\Command') && !$r->isAbstract()) {
+            if ($r->isSubclassOf('Symfony\\Component\\Console\\Command\\Command') && !$r->isAbstract() && !$r->getConstructor()->getNumberOfRequiredParameters()) {
                 $application->add($r->newInstance());
             }
         }

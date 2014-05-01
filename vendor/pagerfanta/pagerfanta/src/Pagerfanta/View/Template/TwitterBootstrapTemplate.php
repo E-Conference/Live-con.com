@@ -17,9 +17,9 @@ namespace Pagerfanta\View\Template;
 class TwitterBootstrapTemplate extends Template
 {
     static protected $defaultOptions = array(
-        'prev_message'        => '&larr;',
+        'prev_message'        => '&larr; Previous',
         'prev_disabled_href'  => '#',
-        'next_message'        => '&rarr;',
+        'next_message'        => 'Next &rarr;',
         'next_disabled_href'  => '#',
         'dots_message'        => '&hellip;',
         'dots_href'           => '#',
@@ -33,8 +33,8 @@ class TwitterBootstrapTemplate extends Template
 
     public function container()
     {
-        return sprintf('<div class="%s"><ul class="%s">%%pages%%</ul></div>',
-            $this->option('css_container_class'), $this->option('css_container_class')
+        return sprintf('<div class="%s"><ul>%%pages%%</ul></div>',
+            $this->option('css_container_class')
         );
     }
 

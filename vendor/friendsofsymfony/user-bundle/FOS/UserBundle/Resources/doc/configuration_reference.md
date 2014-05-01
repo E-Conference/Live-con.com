@@ -14,7 +14,7 @@ fos_user:
     model_manager_name:     null  # change it to the name of your entity/document manager if you don't want to use the default one.
     from_email:
         address:        webmaster@example.com
-        sender_name:    Admin
+        sender_name:    webmaster
     profile:
         form:
             type:               fos_user_profile
@@ -45,7 +45,6 @@ fos_user:
             template:   FOSUserBundle:Resetting:email.txt.twig
         form:
             type:               fos_user_resetting
-            handler:            fos_user.resetting.form.handler.default
             name:               fos_user_resetting_form
             validation_groups:  [ResetPassword, Default]
     service:
