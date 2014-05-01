@@ -42,7 +42,7 @@ class ApiController extends Controller
 	        $query->add(array( "xproperty_value" => $uriParam));
 	        $query->remove("uri");
 	    }
-        $entities = $em->getRepository('IDCISimpleScheduleBundle:CalendarEntity')->extract($query->all()); 
+        $entities = $em->getRepository('fibeWWWConfBundle:CalendarEntity')->extract($query->all()); 
         $result = $this->get('idci_exporter.manager')->export($entities,"jsonp"); 
         $response = new Response();
         $response->setContent($result->getContent());

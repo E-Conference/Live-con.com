@@ -39,7 +39,7 @@ class CategoryController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('IDCISimpleScheduleBundle:Category')->getOrdered();
+        $entities = $em->getRepository('fibeWWWConfBundle:Category')->getOrdered();
 
         $adapter = new ArrayAdapter($entities);
         $pager = new PagerFanta($adapter);
@@ -65,7 +65,7 @@ class CategoryController extends Controller
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Category')->find($id);
+        $entity = $em->getRepository('fibeWWWConfBundle:Category')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Category entity.');
@@ -102,7 +102,7 @@ class CategoryController extends Controller
      *
      * @Route("/create", name="schedule_category_create")
      * @Method("POST")
-     * @Template("IDCISimpleScheduleBundle:Category:new.html.twig")
+     * @Template("fibeWWWConfBundle:Category:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -143,7 +143,7 @@ class CategoryController extends Controller
     { 
         throw new ServiceUnavailableHttpException('Not available yet.');
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Category')->find($id);
+        $entity = $em->getRepository('fibeWWWConfBundle:Category')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Category entity.');
@@ -163,13 +163,13 @@ class CategoryController extends Controller
      *
      * @Route("/{id}/update", name="schedule_category_update")
      * @Method("POST")
-     * @Template("IDCISimpleScheduleBundle:Category:edit.html.twig")
+     * @Template("fibeWWWConfBundle:Category:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
         throw new ServiceUnavailableHttpException('Not available yet.');
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Category')->find($id);
+        $entity = $em->getRepository('fibeWWWConfBundle:Category')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Category entity.');
@@ -215,7 +215,7 @@ class CategoryController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('IDCISimpleScheduleBundle:Category')->find($id);
+            $entity = $em->getRepository('fibeWWWConfBundle:Category')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Category entity.');
@@ -245,7 +245,7 @@ class CategoryController extends Controller
     {
         throw new ServiceUnavailableHttpException('Not available yet.');
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Category')->find($id);
+        $entity = $em->getRepository('fibeWWWConfBundle:Category')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Category entity.');

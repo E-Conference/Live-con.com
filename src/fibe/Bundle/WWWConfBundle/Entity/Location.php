@@ -49,15 +49,24 @@ class Location
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=6, nullable=true)
-     * @Assert\Max(limit = 90, message = "You must be between -90 and 90.")
-     * @Assert\Min(limit = "-90", message = "You must be between -90 and 90.")
+     * 
+     * @Assert\Length(
+     *      min = "-90",
+     *      max = "90",
+     *      minMessage = "You must be between -90 and 90.",
+     *      maxMessage = "YYou must be between -90 and 90."
+     * )
      */
     protected $latitude;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=6, nullable=true)
-     * @Assert\Max(limit = 180, message = "You must be between -180 and 180.")
-     * @Assert\Min(limit = "-180", message = "You must be between -180 and 180.")
+     * @Assert\Length(
+     *      min = "-180",
+     *      max = "180",
+     *      minMessage = "You must be between -180 and 180.",
+     *      maxMessage = "YYou must be between -180 and 180."
+     * )
      */
     protected $longitude;
 

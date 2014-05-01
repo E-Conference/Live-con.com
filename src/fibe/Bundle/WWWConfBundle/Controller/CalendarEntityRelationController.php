@@ -34,7 +34,7 @@ class CalendarEntityRelationController extends Controller
     public function addCalendarEntityRelationAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $calendarEntity = $em->getRepository('IDCISimpleScheduleBundle:CalendarEntity')->find($id);
+        $calendarEntity = $em->getRepository('fibeWWWConfBundle:CalendarEntity')->find($id);
 
         if (!$calendarEntity) {
             throw $this->createNotFoundException('Unable to find Calendar entity.');

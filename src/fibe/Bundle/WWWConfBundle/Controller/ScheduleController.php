@@ -48,7 +48,7 @@ class ScheduleController extends Controller
         $conf =$this->getUser()->getCurrentConf();
 
         //filters
-        $categories = $em->getRepository('IDCISimpleScheduleBundle:Category')->getOrdered();
+        $categories = $em->getRepository('fibeWWWConfBundle:Category')->getOrdered();
         $locations = $this->getUser()->getCurrentConf()->getLocations();
         $topics = $this->getUser()->getCurrentConf()->getTopics();
 
@@ -105,7 +105,7 @@ class ScheduleController extends Controller
             $resource =  $postData['resourceId'];
             $currentRes = $resConfig[$postData['currentRes']]; 
 
-            $repo = $em->getRepository('IDCISimpleScheduleBundle:'.$currentRes["name"]);
+            $repo = $em->getRepository('fibeWWWConfBundle:'.$currentRes["name"]);
             if(!$repo) $repo = $em->getRepository('fibeWWWConfBundle:'.$currentRes["name"]); 
 
             if($repo){
@@ -297,7 +297,7 @@ class ScheduleController extends Controller
     
 
         $em = $this->getDoctrine()->getManager();
-        $calendarEntity = $em->getRepository('IDCISimpleScheduleBundle:CalendarEntity')->find($id);
+        $calendarEntity = $em->getRepository('fibeWWWConfBundle:CalendarEntity')->find($id);
 
         if (!$calendarEntity) {
             throw $this->createNotFoundException('Unable to find Calendar entity.');

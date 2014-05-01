@@ -74,7 +74,7 @@ class DBImportController extends Controller
 
 
         $defaultCategory =    $this->getDoctrine()
-                                   ->getRepository('IDCISimpleScheduleBundle:Category')
+                                   ->getRepository('fibeWWWConfBundle:Category')
                                    ->findOneBy(array('name' => 'TalkEvent'));
 
         //categories color.
@@ -135,7 +135,7 @@ class DBImportController extends Controller
             for($i=0;$i<count($locations);$i++){
                 $current = $locations[$i];  
                 $existsTest = $this->getDoctrine()
-                                   ->getRepository('IDCISimpleScheduleBundle:Location')
+                                   ->getRepository('fibeWWWConfBundle:Location')
                                    ->findOneBy(array('name' => $current['setName'], 'conference' => $conference->getId()));
                 if($existsTest!=null){
                   array_push($locationEntities,$existsTest); 
@@ -271,7 +271,7 @@ class DBImportController extends Controller
                 $catSlug = StringTools::slugify($current['setName']); 
 
                 $existsTest = $this->getDoctrine()
-                                   ->getRepository('IDCISimpleScheduleBundle:Category')
+                                   ->getRepository('fibeWWWConfBundle:Category')
                                    ->findOneBy(array('slug' => $catSlug));
                 if($existsTest!=null){
                     array_push($categoryEntities,$existsTest); 

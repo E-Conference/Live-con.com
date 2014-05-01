@@ -30,7 +30,7 @@
       <div class="row page-content">
                 
           <div class="row-fluid">
-          {% for conference  in entity.getConferences()  %}
+          {% for conference  in app.user.getConferences()  %}
           
           <div class="col-lg-5">
             <div class="panel panel-livecon-dashboard">
@@ -44,7 +44,7 @@
                           <ul class="nav nav-pills nav-stacked">
                             <li>
                               <h5>App Manager
-                                  {% if conference.getFlagAppByManagerId(entity.id)==1 %}
+                                  {% if conference.getFlagAppByManagerId(app.user.id)==1 %}
                                         <i class="fa fa-check"></i>
                                    {% else %}
                                         <span class="glyphicon glyphicon-ban-circle"></span> 
@@ -53,7 +53,7 @@
                             </li>
                              <li>
                               <h5>Schedule Manager
-                                  {% if conference.getFlagSchedByManagerId(entity.id)==1 %}
+                                  {% if conference.getFlagSchedByManagerId(app.user.id)==1 %}
                                         <i class="fa fa-check"></i>
                                    {% else %}
                                           <span class="glyphicon glyphicon-ban-circle"></span> 
@@ -62,7 +62,7 @@
                              </li>
                              <li>
                               <h5>Datas Manager
-                                  {% if conference.getFlagDatasByManagerId(entity.id)==1 %}
+                                  {% if conference.getFlagDatasByManagerId(app.user.id)==1 %}
                                         <i class="fa fa-check"></i>
                                    {% else %}
                                         <span class="glyphicon glyphicon-ban-circle"></span> 
@@ -71,7 +71,7 @@
                             </li>
                             <li>
                               <h5>Team Manager
-                                  {% if conference.getFlagByManagerId(entity.id,'team')==1 %}
+                                  {% if conference.getFlagByManagerId(app.user.id,'team')==1 %}
                                         <i class="fa fa-check"></i>
                                    {% else %}
                                         <span class="glyphicon glyphicon-ban-circle"></span> 

@@ -73,7 +73,7 @@ class EventController extends Controller
     {
     
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id); 
+        $entity = $em->getRepository('fibeWWWConfBundle:Event')->find($id); 
         
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Event entity.');
@@ -109,7 +109,7 @@ class EventController extends Controller
      *
      * @Route("/create", name="schedule_event_create")
      * @Method("POST")
-     * @Template("IDCISimpleScheduleBundle:Event:new.html.twig")
+     * @Template("fibeWWWConfBundle:Event:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -150,7 +150,7 @@ class EventController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id);
+        $entity = $em->getRepository('fibeWWWConfBundle:Event')->find($id);
  
 
 
@@ -190,13 +190,13 @@ class EventController extends Controller
      *
      * @Route("/{id}/update", name="schedule_event_update")
      * @Method("POST")
-     * @Template("IDCISimpleScheduleBundle:Event:edit.html.twig")
+     * @Template("fibeWWWConfBundle:Event:edit.html.twig")
      * @Method({"PUT","POST"})
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id); 
+        $entity = $em->getRepository('fibeWWWConfBundle:Event')->find($id); 
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Event entity.');
@@ -240,7 +240,7 @@ class EventController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id);
+            $entity = $em->getRepository('fibeWWWConfBundle:Event')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Event entity.');
@@ -269,7 +269,7 @@ class EventController extends Controller
     public function deleteFormAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Event')->find($id);
+        $entity = $em->getRepository('fibeWWWConfBundle:Event')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Event entity.');

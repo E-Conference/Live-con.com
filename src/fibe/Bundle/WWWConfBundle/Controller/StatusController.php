@@ -40,7 +40,7 @@ class StatusController extends Controller
     {
         throw new ServiceUnavailableHttpException('Not available yet.');
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('IDCISimpleScheduleBundle:Status')->findAll();
+        $entities = $em->getRepository('fibeWWWConfBundle:Status')->findAll();
 
         $adapter = new ArrayAdapter($entities);
         $pager = new PagerFanta($adapter);
@@ -66,7 +66,7 @@ class StatusController extends Controller
     {
         throw new ServiceUnavailableHttpException('Not available yet.');
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Status')->find($id);
+        $entity = $em->getRepository('fibeWWWConfBundle:Status')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Status entity.');
@@ -101,7 +101,7 @@ class StatusController extends Controller
      *
      * @Route("/create", name="schedule_status_create")
      * @Method("POST")
-     * @Template("IDCISimpleScheduleBundle:Status:new.html.twig")
+     * @Template("fibeWWWConfBundle:Status:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -142,7 +142,7 @@ class StatusController extends Controller
     {
         throw new ServiceUnavailableHttpException('Not available yet.');
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Status')->find($id);
+        $entity = $em->getRepository('fibeWWWConfBundle:Status')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Status entity.');
@@ -163,13 +163,13 @@ class StatusController extends Controller
      *
      * @Route("/{id}/update", name="schedule_status_update")
      * @Method("POST")
-     * @Template("IDCISimpleScheduleBundle:Status:edit.html.twig")
+     * @Template("fibeWWWConfBundle:Status:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
         throw new ServiceUnavailableHttpException('Not available yet.');
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Status')->find($id);
+        $entity = $em->getRepository('fibeWWWConfBundle:Status')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Status entity.');
@@ -214,7 +214,7 @@ class StatusController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('IDCISimpleScheduleBundle:Status')->find($id);
+            $entity = $em->getRepository('fibeWWWConfBundle:Status')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Status entity.');
@@ -244,7 +244,7 @@ class StatusController extends Controller
     {
         throw new ServiceUnavailableHttpException('Not available yet.');
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IDCISimpleScheduleBundle:Status')->find($id);
+        $entity = $em->getRepository('fibeWWWConfBundle:Status')->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Status entity.');

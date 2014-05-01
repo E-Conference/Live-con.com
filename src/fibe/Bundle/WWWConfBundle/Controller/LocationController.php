@@ -49,7 +49,7 @@ class LocationController extends Controller
         $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
 
         $em = $this->getDoctrine()->getManager();
-        //$entities = $em->getRepository('IDCISimpleScheduleBundle:Location')->findAll();
+        //$entities = $em->getRepository('fibeWWWConfBundle:Location')->findAll();
         $currentConf = $this->getUser()->getCurrentConf();
         $entities = $currentConf->getLocations()->toArray();
      
@@ -88,7 +88,7 @@ class LocationController extends Controller
         if ($filters->isValid())  {
             // bind values from the request
           
-             $entities = $em->getRepository('IDCISimpleScheduleBundle:Location')->filtering($filters->getData(), $conf);
+             $entities = $em->getRepository('fibeWWWConfBundle:Location')->filtering($filters->getData(), $conf);
              $nbResult = count($entities);
 
              //Pager
@@ -101,7 +101,7 @@ class LocationController extends Controller
                 throw new NotFoundHttpException();
              }
 
-             return $this->render('IDCISimpleScheduleBundle:Location:list.html.twig', array(
+             return $this->render('fibeWWWConfBundle:Location:list.html.twig', array(
                  'pager'  => $pager,
                  'nbResult' => $nbResult,
              ));
@@ -127,7 +127,7 @@ class LocationController extends Controller
 
         //The object have to belongs to the current conf
         $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('IDCISimpleScheduleBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+        $entity =  $em->getRepository('fibeWWWConfBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Location entity.');
         }
@@ -175,7 +175,7 @@ class LocationController extends Controller
      *
      * @Route("/create", name="schedule_location_create")
      * @Method("POST")
-     * @Template("IDCISimpleScheduleBundle:Location:new.html.twig")
+     * @Template("fibeWWWConfBundle:Location:new.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -237,7 +237,7 @@ class LocationController extends Controller
         $em = $this->getDoctrine()->getManager();
          //The object have to belongs to the current conf
         $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('IDCISimpleScheduleBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+        $entity =  $em->getRepository('fibeWWWConfBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Location entity.');
         }
@@ -261,7 +261,7 @@ class LocationController extends Controller
      *
      * @Route("/{id}/update", name="schedule_location_update")
      * @Method("POST")
-     * @Template("IDCISimpleScheduleBundle:Location:edit.html.twig")
+     * @Template("fibeWWWConfBundle:Location:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
@@ -278,7 +278,7 @@ class LocationController extends Controller
         $em = $this->getDoctrine()->getManager();
          //The object have to belongs to the current conf
         $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('IDCISimpleScheduleBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+        $entity =  $em->getRepository('fibeWWWConfBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Location entity.');
         }
@@ -336,7 +336,7 @@ class LocationController extends Controller
             $em = $this->getDoctrine()->getManager();
              //The object have to belongs to the current conf
             $currentConf=$this->getUser()->getCurrentConf();
-            $entity =  $em->getRepository('IDCISimpleScheduleBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+            $entity =  $em->getRepository('fibeWWWConfBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Location entity.');
             }
@@ -376,7 +376,7 @@ class LocationController extends Controller
         $em = $this->getDoctrine()->getManager();
         //The object have to belongs to the current conf
         $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('IDCISimpleScheduleBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+        $entity =  $em->getRepository('fibeWWWConfBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Location entity.');
         }
