@@ -1,50 +1,54 @@
+<form class="edit-app" action="{{ path('mobileAppTheme_update_settings',  { 'id': mobile_app_config.id }) }}"
+      method="post" {{ form_enctype(mobile_app_form) }}>
+  <input type="hidden" name="_method" value="PUT"/>
 
-	<form class="edit-app" action="{{ path('mobileAppTheme_update_settings',  { 'id': mobile_app_config.id }) }}" method="post" {{ form_enctype(mobile_app_form) }}>
-		<input type="hidden" name="_method" value="PUT" />
+  <div class='row'>
+    <div class="well col-xs-12 col-sm-12 col-md-3 col-lg-3">
+      <img src="https://cdn1.iconfinder.com/data/icons/yooicons_set01_socialbookmarks/512/social_google_box.png"
+           style="height:100px; width:auto;"/>
 
-		<div class='row'>
-		<div class="well col-xs-12 col-sm-12 col-md-3 col-lg-3">
-			<img src="https://cdn1.iconfinder.com/data/icons/yooicons_set01_socialbookmarks/512/social_google_box.png" style="height:100px; width:auto;"/>
-			
-			<p>As you may be short on the informations you have concerning your presenters, the application is looking on the google search engine for you in order to catch their website and other data that may be missing. Please note that it's based on a "most probable" politic which mean that you may have wrong results.</p>
-			{{ form_row(mobile_app_form.googleDatasource) }}
-		</div>
+      <p>As you may be short on the informations you have concerning your presenters, the application is looking on the google search engine for you in order to catch their website and other data that may be missing. Please note that it's based on a "most probable" politic which mean that you may have wrong results.</p>
+      {{ form_row(mobile_app_form.googleDatasource) }}
+    </div>
 
-		<div class="well col-xs-12  col-sm-12 col-md-3 col-lg-3">
-			<img src="http://www.informatik.uni-trier.de/~ley/img/logo.png" style="height:100px; width:auto;"/>
-			<p>As your attendees have a probable scientific background in computer science, we use dblp sparql endpoint in order to grab all the publications previously written by each one of them. This way, everyone can view not only what people are presenting at your conference, but also what they may have written before.</p>
-			{{ form_row(mobile_app_form.dblpDatasource) }}
-		</div>
+    <div class="well col-xs-12  col-sm-12 col-md-3 col-lg-3">
+      <img src="http://www.informatik.uni-trier.de/~ley/img/logo.png" style="height:100px; width:auto;"/>
 
+      <p>As your attendees have a probable scientific background in computer science, we use dblp sparql endpoint in order to grab all the publications previously written by each one of them. This way, everyone can view not only what people are presenting at your conference, but also what they may have written before.</p>
+      {{ form_row(mobile_app_form.dblpDatasource) }}
+    </div>
 
-		<div class="well col-xs-12  col-sm-12 col-md-3 col-lg-3">
+    <div class="well col-xs-12  col-sm-12 col-md-3 col-lg-3">
 
-			<img src="https://scottlinux.com/wp-content/uploads/2012/04/duck-duck-go.png" style="height:100px; width:auto;"/>
+      <img src="https://scottlinux.com/wp-content/uploads/2012/04/duck-duck-go.png" style="height:100px; width:auto;"/>
 
-			<p>In order to improve your attendees experience on your app we dig informations on duckduckgo search engine concerning your organizations (website, description, country). Note that the results are based on a "most probable" politic which mean that you may have wrong results.</p>
-			{{ form_row(mobile_app_form.duckduckgoDatasource) }}
-		</div>
+      <p>In order to improve your attendees experience on your app we dig informations on duckduckgo search engine concerning your organizations (website, description, country). Note that the results are based on a "most probable" politic which mean that you may have wrong results.</p>
+      {{ form_row(mobile_app_form.duckduckgoDatasource) }}
+    </div>
 
-		<div class="well col-xs-12  col-sm-12 col-md-3 col-lg-3">
+    <div class="well col-xs-12  col-sm-12 col-md-3 col-lg-3">
 
-			<img src="http://whstherebellion.com/wp-content/uploads/2012/03/supporting-foreign-language-instruction-at-home.jpg" style="height:100px; width:auto;"/>
+      <img
+          src="http://whstherebellion.com/wp-content/uploads/2012/03/supporting-foreign-language-instruction-at-home.jpg"
+          style="height:100px; width:auto;"/>
 
-			<p>Your application can use different language, the default is EN but we encourage you to choose the language according to your content.</p>
-			{{ form_row(mobile_app_form.lang) }}
-		</div>
+      <p>Your application can use different language, the default is EN but we encourage you to choose the language according to your content.</p>
+      {{ form_row(mobile_app_form.lang) }}
+    </div>
 
-		</div>
+  </div>
 
-		<div class='row'>
+  <div class='row'>
 
-				<button type="submit" class="btn btn-success col-xs-12 col-sm-12 col-md-12 col-lg-12"><i class="fa fa-check"></i></button>
-		
-		</div>
-		
-		<div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
-                {{ form_rest(mobile_app_form)}}
-            </div>
-	</form>
+    <button type="submit" class="btn btn-success col-xs-12 col-sm-12 col-md-12 col-lg-12"><i class="fa fa-check"></i>
+    </button>
+
+  </div>
+
+  <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">
+    {{ form_rest(mobile_app_form) }}
+  </div>
+</form>
 
 
 

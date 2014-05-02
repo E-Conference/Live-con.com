@@ -7,137 +7,147 @@
 
      
 {% block stylesheets %}
-    {{ parent() }}
-    {% block stylesheets_page %}
-    {% endblock %}
-     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibemobileapp/css/mobileApp.css')}}"/>
+  {{ parent() }}
+  {% block stylesheets_page %}
+  {% endblock %}
+  <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibemobileapp/css/mobileApp.css') }}"/>
 {% endblock %}
       
 {% block javascripts %}
-        {{ parent() }}
+  {{ parent() }}
 
-        <script type="text/javascript">
-         $(document).ready(function() {
-               
-                $(".{{currentPath}}").addClass("active");
+  <script type="text/javascript">
+    $(document).ready(function ()
+    {
 
-                $('label[class="required"]').append("<i style='color:#C00000  '>*</i>");
+      $(".{{currentPath}}").addClass("active");
 
-                deployed = false;
-                $("#sideBarBtn").click(function(){
-                    deployResultBox();
-                }); 
-                $("select").select2(); 
-                //  $('.datetimepicker')
-                // .wrap('<div class="input-group">') 
-                // .after('<span class="input-group-addon"><span class="icon-calendar"></span></span>')
-                // .datetimepicker({
-                //     format: 'dd/mm/yyyy hh:ii',
-                //     autoclose: true,
-                // });
+      $('label[class="required"]').append("<i style='color:#C00000  '>*</i>");
 
+      deployed = false;
+      $("#sideBarBtn").click(function ()
+      {
+        deployResultBox();
+      });
+      $("select").select2();
+      //  $('.datetimepicker')
+      // .wrap('<div class="input-group">')
+      // .after('<span class="input-group-addon"><span class="icon-calendar"></span></span>')
+      // .datetimepicker({
+      //     format: 'dd/mm/yyyy hh:ii',
+      //     autoclose: true,
+      // });
 
-            });
-            function deployResultBox(){
-                    if(!deployed){
-                        $('#sideBar').animate({left:'0px'});
-                        deployed = true;
-                    }else{
-                        $('#sideBar').animate({left:'-180px'});
-                        deployed = false;
-                    }
-            }
-        </script> 
-
-    
-
-        {% for flashMessage in app.session.flashbag.get('info') %}
-            <script type="text/javascript" >
-                bootstrapAlert("info","{{ flashMessage }}","Info : ",'<i class="icon-info"></i> ');
-            </script> 
-        {% endfor %}
-
-        {% for flashMessage in app.session.flashbag.get('success') %} 
-            <script type="text/javascript" >
-            bootstrapAlert("success","{{ flashMessage }}","Success : ",'<i class="icon-ok-sign"></i> '); 
-            </script>  
-        {% endfor %}
-
-        {% for flashMessage in app.session.flashbag.get('error') %}
-            <script type="text/javascript" >
-            bootstrapAlert("warning","{{ flashMessage }}","Error : ",'<i class="icon-meh"></i> '); 
-            </script> 
-        {% endfor %}
-
-        <!-- Authorization -->
-        {% if authorized == 0 %}
-            <script type="text/javascript" >
-             $(document).ready(function(){
-                 $(".edit").hide();
-                 $(".edit-app").hide();
-                 $(".create").hide();
-                 $(".delete").hide();
-                 $(".edit-event").hide();
-                 $(".create-event").hide();
-                 $(".delete-event").hide(); 
-             });
-            </script> 
-        {% endif %}
-
-        <!-- Hide module not used in the conference -->
-         {% if app.user.getCurrentConf().getModule().getPaperModule() == 0 %}
-            <script type="text/javascript" >
-             $(document).ready(function(){
-                 $(".module_paper").hide();
-             });
-            </script> 
-        {% endif %}
-
-        {%  block javascripts_page %}
-        {% endblock%}
-{% endblock%}
-
-{% block body %} 
-    {{ parent() }}
-    {% block navBar %} 
-        {% include "::mainNavBar.html.twig" %}
-    {% endblock navBar%}
+    });
+    function deployResultBox()
+    {
+      if (!deployed)
+      {
+        $('#sideBar').animate({left: '0px'});
+        deployed = true;
+      } else
+      {
+        $('#sideBar').animate({left: '-180px'});
+        deployed = false;
+      }
+    }
+  </script>
 
 
-    {% if app.user.getCurrentConf() %} 
-      {% block menuNavBar %} 
-          {% include "::menuNavBar.html.twig" %}
-      {% endblock menuNavBar%}
-    {% endif %}
 
-    {% block content %} 
+  {% for flashMessage in app.session.flashbag.get('info') %}
+    <script type="text/javascript">
+      bootstrapAlert("info", "{{ flashMessage }}", "Info : ", '<i class="icon-info"></i> ');
+    </script>
+  {% endfor %}
+
+  {% for flashMessage in app.session.flashbag.get('success') %}
+    <script type="text/javascript">
+      bootstrapAlert("success", "{{ flashMessage }}", "Success : ", '<i class="icon-ok-sign"></i> ');
+    </script>
+  {% endfor %}
+
+  {% for flashMessage in app.session.flashbag.get('error') %}
+    <script type="text/javascript">
+      bootstrapAlert("warning", "{{ flashMessage }}", "Error : ", '<i class="icon-meh"></i> ');
+    </script>
+  {% endfor %}
+
+  <!-- Authorization -->
+  {% if authorized == 0 %}
+    <script type="text/javascript">
+      $(document).ready(function ()
+      {
+        $(".edit").hide();
+        $(".edit-app").hide();
+        $(".create").hide();
+        $(".delete").hide();
+        $(".edit-event").hide();
+        $(".create-event").hide();
+        $(".delete-event").hide();
+      });
+    </script>
+  {% endif %}
+
+  <!-- Hide module not used in the conference -->
+  {% if app.user.getCurrentConf().getModule().getPaperModule() == 0 %}
+    <script type="text/javascript">
+      $(document).ready(function ()
+      {
+        $(".module_paper").hide();
+      });
+    </script>
+  {% endif %}
+
+  {% block javascripts_page %}
+  {% endblock %}
+{% endblock %}
+
+{% block body %}
+  {{ parent() }}
+  {% block navBar %}
+    {% include "::mainNavBar.html.twig" %}
+  {% endblock navBar %}
+
+
+  {% if app.user.getCurrentConf() %}
+    {% block menuNavBar %}
+      {% include "::menuNavBar.html.twig" %}
+    {% endblock menuNavBar %}
+  {% endif %}
+
+  {% block content %}
     <div class="content">
-        <div class="row">
-            <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div> 
+      <div class="row">
+        <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div>
 
-            <div class="col-xs-10 col-sm-10  col-md-10 col-lg-10 ">
-                 <div class="row ">
-                   <ul class="nav breadcrum nav-tabs">
-                          
-                        <li class="mobileAppTheme_index  col-xs-3 col-sm-3 col-mg-3 col-lg-3"><a href="{{ path('mobileAppTheme_index') }}" class='ellipsis'><i class="fa fa-pencil  fa-1x"></i><span> Theme builder </span> </a></li>
-                        <li class="mobileAppSettings_index   col-xs-3 col-sm-3 col-mg-3 col-lg-3"><a href="{{ path('mobileAppSettings_index') }}" class='ellipsis'> <i class="fa fa-wrench fa-1x"></i><span> Settings </span></a></li>
-                        
-                           {% block menu_page%} 
-                           {% endblock menu_page %}
-                      
-                    </ul>
-                 </div>
-                 <div class="row center">
-                {% block centerPanel %} 
-                {% endblock centerPanel %}
-                </div>
-            </div>
-           <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div>
+        <div class="col-xs-10 col-sm-10  col-md-10 col-lg-10 ">
+          <div class="row ">
+            <ul class="nav breadcrum nav-tabs">
+
+              <li class="mobileAppTheme_index  col-xs-3 col-sm-3 col-mg-3 col-lg-3"><a
+                    href="{{ path('mobileAppTheme_index') }}" class='ellipsis'><i
+                      class="fa fa-pencil  fa-1x"></i><span> Theme builder </span> </a></li>
+              <li class="mobileAppSettings_index   col-xs-3 col-sm-3 col-mg-3 col-lg-3"><a
+                    href="{{ path('mobileAppSettings_index') }}" class='ellipsis'> <i
+                      class="fa fa-wrench fa-1x"></i><span> Settings </span></a></li>
+
+              {% block menu_page %}
+              {% endblock menu_page %}
+
+            </ul>
+          </div>
+          <div class="row center">
+            {% block centerPanel %}
+            {% endblock centerPanel %}
+          </div>
         </div>
+        <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div>
+      </div>
 
     </div>
-    {% endblock content%}
-{% endblock body%}
+  {% endblock content %}
+{% endblock body %}
 
 
  

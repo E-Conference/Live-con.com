@@ -3,38 +3,38 @@
 
 {% block centerPanel %}
   {{ parent() }}
-    <h1>Module</h1>
+  <h1>Module</h1>
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Papermodule</th>
-                <td>{{ entity.paperModule }}</td>
-            </tr>
-        </tbody>
-    </table>
+  <table class="record_properties">
+    <tbody>
+      <tr>
+        <th>Id</th>
+        <td>{{ entity.id }}</td>
+      </tr>
+      <tr>
+        <th>Papermodule</th>
+        <td>{{ entity.paperModule }}</td>
+      </tr>
+    </tbody>
+  </table>
 
-        <ul class="record_actions">
+  <ul class="record_actions">
     <li>
-        <a href="{{ path('conference_module_index') }}">
-            Back to the list
-        </a>
+      <a href="{{ path('conference_module_index') }}">
+        Back to the list
+      </a>
     </li>
     <li>
-        <a href="{{ path('conference_module_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
+      <a href="{{ path('conference_module_edit', { 'id': entity.id }) }}">
+        Edit
+      </a>
     </li>
     <li>
-        <form action="{{ path('conference_module_delete', { 'id': entity.id }) }}" method="post">
-            <input type="hidden" name="_method" value="DELETE" />
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
+      <form action="{{ path('conference_module_delete', { 'id': entity.id }) }}" method="post">
+        <input type="hidden" name="_method" value="DELETE"/>
+        {{ form_widget(delete_form) }}
+        <button type="submit">Delete</button>
+      </form>
     </li>
-</ul>
+  </ul>
 {% endblock %}

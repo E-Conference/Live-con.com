@@ -5,174 +5,169 @@
 
 {% block body %}
 
-{% include "fibeHomePageBundle::topBar.html.twig" %}
-  
-<!-- Conferences List -->
-<div id="background"></div>
-<div id="entete" style="background:none;min-height:700px">
-  <div class="container_12">
-    <div class="grid_12" style="border: 2px solid black; border-top:0px">
-      <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-search"></i></span>
-        <input type="text" class="form-control" placeholder="Find a conference" id="conference_filter_name"/>
+  {% include "fibeHomePageBundle::topBar.html.twig" %}
+
+  <!-- Conferences List -->
+  <div id="background"></div>
+  <div id="entete" style="background:none;min-height:700px">
+    <div class="container_12">
+      <div class="grid_12" style="border: 2px solid black; border-top:0px">
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-search"></i></span>
+          <input type="text" class="form-control" placeholder="Find a conference" id="conference_filter_name"/>
+        </div>
       </div>
     </div>
-  </div> 
 
-  <div id="conferences_list">
-        {% include "DataBundle:Conference:conferencesList.html.twig" %}
+    <div id="conferences_list">
+      {% include "DataBundle:Conference:conferencesList.html.twig" %}
+    </div>
   </div>
-</div>
   <div id="footer">
-      <div class="container_12">
-        <div class="grid_6">
-          <h3>Created by</h3>
-          <ul>
-            <li><p>Fiona LE PEUTREC<p></li>
-            <li><p>Florian BACLE</p></li>
-            <li><p>Benoît DURANT DE LA PASTELLIERE</p></li>
-          </ul>
-          <a href="http://thibaud-lentheric.com" title="Thibaud LENTHERIC Portfolio" target="_blank">
+    <div class="container_12">
+      <div class="grid_6">
+        <h3>Created by</h3>
+        <ul>
+          <li><p>Fiona LE PEUTREC
+
+            <p></li>
+          <li><p>Florian BACLE</p></li>
+          <li><p>Benoît DURANT DE LA PASTELLIERE</p></li>
+        </ul>
+        <a href="http://thibaud-lentheric.com" title="Thibaud LENTHERIC Portfolio" target="_blank">
           <h3 class="design">Design by</h3>
-            <p class="design">Thibaud LENTHERIC</p>
-          </a>
-        </div>
-        <div class="grid_2">
-          <a href="http://www.live-con.com/login" title="Back Office Access">
-            <img src="{{ asset('bundles/fibehomepage/img/picto/backoffice.png') }}" />
-            <h4>Back Office Access</h4>
-          </a>
-        </div>
-        <div class="grid_2">
-          <a href="https://github.com/E-Conference/" title="GitHub Project" target="_blank">
-            <img src="{{ asset('bundles/fibehomepage/img/picto/github.png') }}" />
-            <h4>GitHub Project</h4>
-          </a>
-        </div>
-        <div class="grid_2">
-          <a href="http://twitter.com/Livecon" title="Livecon on Twitter" target="_blank">
-            <img src="{{ asset('bundles/fibehomepage/img/picto/twitter.png') }}" />
-            <h4><span class="logoname"><b>Live</b>con</span> on Twitter</h4>
-          </a>
-        </div>
-        <div class="grid_6" id="version"><p>Live-con · v1.0 | licensed under</p></div>
+
+          <p class="design">Thibaud LENTHERIC</p>
+        </a>
+      </div>
+      <div class="grid_2">
+        <a href="http://www.live-con.com/login" title="Back Office Access">
+          <img src="{{ asset('bundles/fibehomepage/img/picto/backoffice.png') }}"/>
+          <h4>Back Office Access</h4>
+        </a>
+      </div>
+      <div class="grid_2">
+        <a href="https://github.com/E-Conference/" title="GitHub Project" target="_blank">
+          <img src="{{ asset('bundles/fibehomepage/img/picto/github.png') }}"/>
+          <h4>GitHub Project</h4>
+        </a>
+      </div>
+      <div class="grid_2">
+        <a href="http://twitter.com/Livecon" title="Livecon on Twitter" target="_blank">
+          <img src="{{ asset('bundles/fibehomepage/img/picto/twitter.png') }}"/>
+          <h4><span class="logoname"><b>Live</b>con</span> on Twitter</h4>
+        </a>
+      </div>
+      <div class="grid_6" id="version"><p>Live-con · v1.0 | licensed under</p></div>
+    </div>
+  </div>
+
+
+  <!-- DataConf show Modal -->
+
+  <div id="dataconf_iframe" class="modal fade" tabindex="-1" aria-hidden="true" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <iframe src="" width="1000px" height="600px"></iframe>
       </div>
     </div>
-
-
-<!-- DataConf show Modal -->
-
-<div id="dataconf_iframe" class="modal fade" tabindex="-1" aria-hidden="true" role="dialog" >
-  <div class="modal-dialog">
-      <div class="modal-content">
-              <iframe src="" width="1000px" height="600px" ></iframe>
-      </div>
   </div>
-</div>
 
 {% endblock body %}
 
 
 {% block javascripts_page %}
-   {{parent()}}
-   <script type="text/javascript" src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script> 
-    <script  type="text/javascript">
-         $(document).ready(function() {
+  {{ parent() }}
+  <script type="text/javascript" src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
+  <script type="text/javascript">
+    $(document).ready(function ()
+    {
 
-            $("#conference_filter_name").keypress(function(){
-                  var nameConf = $("#conference_filter_name").val();
-               $.post("{{path('datas_conferences_filter')}}",               
-                       {name : nameConf } , 
-                    function(response){
-                           $('#conferences_list').html(response);
-                    }, "html"); 
-             });
-
-
-            $('#dataconf_iframe').modal('hide');
-
-            $('.show_dataconf').click(function() {
-                    var dataconfUrl = $(this).attr('data-url');
-
-                    $('#dataconf_iframe').find("iframe").attr('src',dataconfUrl);
-                    $('#dataconf_iframe').modal('show');
-
-           })
-
-
-          });
-
-    </script>
-    <script type="text/javascript">
-      $(function() {
-
-          // Scroll to
-          $('body').plusAnchor({
-                easing: 'easeInOutExpo',
-                speed:  1000,
-                offsetTop: -70
-            });
-
-           
-           
-        var controller = $.superscrollorama();
-        
-        controller.addTween('#t_before .elements', 
-          TweenMax.from($('#t_before h2'), .3, {css:{paddingRight:200,opacity:0},ease:Cubic.easeoUt}),0,-75);
-        controller.addTween('#t_before .elements', 
-          TweenMax.from($('#t_before .element01'), .3, {css:{left:200,opacity:0},ease:Cubic.easeoUt}),0,-75); 
-        controller.addTween('#t_before .elements', 
-          TweenMax.from($('#t_before .element02'), .45, {css:{left:200,opacity:0},ease:Cubic.easeoUt}),0,-75);    
-
-        
-        controller.addTween('#t_during .elements', 
-          TweenMax.from($('#t_during h2'), .3, {css:{paddingRight:200,opacity:0},ease:Cubic.easeoUt}),0,-75);
-        controller.addTween('#t_during .elements', 
-          TweenMax.from($('#t_during .element01'), .3, {css:{left:200,opacity:0},ease:Cubic.easeoUt}),0,-75); 
-        controller.addTween('#t_during .elements', 
-          TweenMax.from($('#t_during .element02'), .45, {css:{left:200,opacity:0},ease:Cubic.easeoUt}),0,-75);    
-
-        
-        controller.addTween('#t_after .elements', 
-          TweenMax.from($('#t_after h2'), .3, {css:{paddingRight:200,opacity:0},ease:Cubic.easeoUt}),0,-75);
-        controller.addTween('#t_after .elements', 
-          TweenMax.from($('#t_after .element01'), .3, {css:{left:200,opacity:0},ease:Cubic.easeoUt}),0,-75);  
-        controller.addTween('#t_after .elements', 
-          TweenMax.from($('#t_after .element02'), .45, {css:{left:200,opacity:0},ease:Cubic.easeoUt}),0,-75);
-
-
-
-
-        controller.addTween('#overview01', 
-          TweenMax.from($('#overview01'), .45, {css:{marginLeft:520,opacity:0},ease:Cubic.easeoUt}),0,-100);    
-
-        controller.addTween('#overview02', 
-          TweenMax.from($('#overview02'), .45, {css:{marginLeft:420,top:580,opacity:0},ease:Cubic.easeoUt}),0,-250);    
-
-
-        controller.addTween('#overview03', 
-          TweenMax.from($('#overview03'), .45, {css:{marginLeft:-200,opacity:0},ease:Cubic.easeoUt}),0,-100);   
-
-        controller.addTween('#overview04', 
-          TweenMax.from($('#overview04'), .45, {css:{marginLeft:200,opacity:0},ease:Cubic.easeoUt}),0,-100);    
-
-
-        controller.addTween('#after', 
-          TweenMax.from($('#overview05'), .45, {css:{left:-200,top:100,opacity:0},ease:Cubic.easeoUt}),0,100);    
-
-        controller.addTween('#overview05', 
-          TweenMax.from($('#overview06'), .45, {css:{left:-200,top:100,opacity:0},ease:Cubic.easeoUt}),0,-75);    
-
-
-        controller.addTween('#app', 
-          TweenMax.from($('#app01'), .45, {css:{left:-200,opacity:0},ease:Cubic.easeoUt}),0,150);   
-
-        controller.addTween('#app', 
-          TweenMax.from($('#app02'), .45, {css:{right:-200,opacity:0},ease:Cubic.easeoUt}),0,150);    
-
-
+      $("#conference_filter_name").keypress(function ()
+      {
+        var nameConf = $("#conference_filter_name").val();
+        $.post("{{path('datas_conferences_filter')}}",
+            {name: nameConf },
+            function (response)
+            {
+              $('#conferences_list').html(response);
+            }, "html");
       });
-    </script>
 
-{% endblock javascripts_page  %}
+      $('#dataconf_iframe').modal('hide');
+
+      $('.show_dataconf').click(function ()
+      {
+        var dataconfUrl = $(this).attr('data-url');
+
+        $('#dataconf_iframe').find("iframe").attr('src', dataconfUrl);
+        $('#dataconf_iframe').modal('show');
+
+      })
+
+    });
+
+  </script>
+  <script type="text/javascript">
+    $(function ()
+    {
+
+      // Scroll to
+      $('body').plusAnchor({
+        easing: 'easeInOutExpo',
+        speed: 1000,
+        offsetTop: -70
+      });
+
+      var controller = $.superscrollorama();
+
+      controller.addTween('#t_before .elements',
+          TweenMax.from($('#t_before h2'), .3, {css: {paddingRight: 200, opacity: 0}, ease: Cubic.easeoUt}), 0, -75);
+      controller.addTween('#t_before .elements',
+          TweenMax.from($('#t_before .element01'), .3, {css: {left: 200, opacity: 0}, ease: Cubic.easeoUt}), 0, -75);
+      controller.addTween('#t_before .elements',
+          TweenMax.from($('#t_before .element02'), .45, {css: {left: 200, opacity: 0}, ease: Cubic.easeoUt}), 0, -75);
+
+      controller.addTween('#t_during .elements',
+          TweenMax.from($('#t_during h2'), .3, {css: {paddingRight: 200, opacity: 0}, ease: Cubic.easeoUt}), 0, -75);
+      controller.addTween('#t_during .elements',
+          TweenMax.from($('#t_during .element01'), .3, {css: {left: 200, opacity: 0}, ease: Cubic.easeoUt}), 0, -75);
+      controller.addTween('#t_during .elements',
+          TweenMax.from($('#t_during .element02'), .45, {css: {left: 200, opacity: 0}, ease: Cubic.easeoUt}), 0, -75);
+
+      controller.addTween('#t_after .elements',
+          TweenMax.from($('#t_after h2'), .3, {css: {paddingRight: 200, opacity: 0}, ease: Cubic.easeoUt}), 0, -75);
+      controller.addTween('#t_after .elements',
+          TweenMax.from($('#t_after .element01'), .3, {css: {left: 200, opacity: 0}, ease: Cubic.easeoUt}), 0, -75);
+      controller.addTween('#t_after .elements',
+          TweenMax.from($('#t_after .element02'), .45, {css: {left: 200, opacity: 0}, ease: Cubic.easeoUt}), 0, -75);
+
+      controller.addTween('#overview01',
+          TweenMax.from($('#overview01'), .45, {css: {marginLeft: 520, opacity: 0}, ease: Cubic.easeoUt}), 0, -100);
+
+      controller.addTween('#overview02',
+          TweenMax.from($('#overview02'), .45, {css: {marginLeft: 420, top: 580, opacity: 0}, ease: Cubic.easeoUt}), 0, -250);
+
+      controller.addTween('#overview03',
+          TweenMax.from($('#overview03'), .45, {css: {marginLeft: -200, opacity: 0}, ease: Cubic.easeoUt}), 0, -100);
+
+      controller.addTween('#overview04',
+          TweenMax.from($('#overview04'), .45, {css: {marginLeft: 200, opacity: 0}, ease: Cubic.easeoUt}), 0, -100);
+
+      controller.addTween('#after',
+          TweenMax.from($('#overview05'), .45, {css: {left: -200, top: 100, opacity: 0}, ease: Cubic.easeoUt}), 0, 100);
+
+      controller.addTween('#overview05',
+          TweenMax.from($('#overview06'), .45, {css: {left: -200, top: 100, opacity: 0}, ease: Cubic.easeoUt}), 0, -75);
+
+      controller.addTween('#app',
+          TweenMax.from($('#app01'), .45, {css: {left: -200, opacity: 0}, ease: Cubic.easeoUt}), 0, 150);
+
+      controller.addTween('#app',
+          TweenMax.from($('#app02'), .45, {css: {right: -200, opacity: 0}, ease: Cubic.easeoUt}), 0, 150);
+
+    });
+  </script>
+
+{% endblock javascripts_page %}
 

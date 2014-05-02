@@ -1,19 +1,19 @@
-
 {% extends 'fibeHomePageBundle::base.html.twig' %}
 
 {% block head %}
 
-    {% block title %}Livecon upgrade your conference{% endblock %}
+  {% block title %}Livecon upgrade your conference{% endblock %}
 
 
   {% block stylesheets_page %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibehomepage/css/homepage.css') }}" /> 
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibehomepage/css/homepage.css') }}"/>
     <!-- reset -->
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/reset.css') }}" />
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/reset.css') }}"/>
     <!-- grid system 16 -->
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/960_12_col.css') }}" />
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="{{ asset('bundles/fibehomepage/css/960_12_col.css') }}"/>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/style.css') }}" />
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/style.css') }}"/>
   {% endblock %}
 {% endblock %}
 
@@ -21,88 +21,96 @@
 {% block body %}
 {% include "fibeHomePageBundle::topBar.html.twig" %}
 <div id="login_page">
-  
+
   {% if error %}
     <div class="alert alert-error">{{ error.message }}</div>
   {% endif %}
 
-<div id="background"></div>
-    <div class="container_12">
-      <div id="signin" class="grid_4">
-        <a href="http://live-con.com/" title="Livecon UPGRATE YOUR CONFERENCE"><img src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon" id="logo" /></a>
-       <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="form-horizontal" > 
+  <div id="background"></div>
+  <div class="container_12">
+    <div id="signin" class="grid_4">
+      <a href="http://live-con.com/" title="Livecon UPGRATE YOUR CONFERENCE"><img
+            src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon" id="logo"/></a>
 
-            <div class="control-group">
-                <label class="control-label stage" >
-                    {{ form_label(form.username) }}
-                </label> 
-                <div class="controls">
-                <div style="color:#811B06">
-                      {{ form_errors(form.username) }}
-                   </div>
-                    {{ form_widget(form.username) }}
-                    
-                </div>
+      <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST"
+            class="form-horizontal">
+
+        <div class="control-group">
+          <label class="control-label stage">
+            {{ form_label(form.username) }}
+          </label>
+
+          <div class="controls">
+            <div style="color:#811B06">
+              {{ form_errors(form.username) }}
             </div>
-            <div class="control-group">
-                <label class="control-label" >
-                    {{ form_label(form.email) }}
-                </label> 
-                <div class="controls">
-                   <div style="color:#811B06">
-                        <strong>{{ form_errors(form.email) }}</strong>
-                   </div>
-                    {{ form_widget(form.email) }}
-                </div>
+            {{ form_widget(form.username) }}
+
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">
+            {{ form_label(form.email) }}
+          </label>
+
+          <div class="controls">
+            <div style="color:#811B06">
+              <strong>{{ form_errors(form.email) }}</strong>
             </div>
-            <div class="control-group">
-                <label class="control-label" >
-                    {{ form_label(form.plainPassword.first) }}
-                </label> 
-                <div class="controls stage">
-                   <div style="color:#811B06">
-                        <strong>{{ form_errors(form.plainPassword.first) }}</strong>
-                   </div>
-                    {{ form_widget(form.plainPassword.first) }}
-                </div>
+            {{ form_widget(form.email) }}
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">
+            {{ form_label(form.plainPassword.first) }}
+          </label>
+
+          <div class="controls stage">
+            <div style="color:#811B06">
+              <strong>{{ form_errors(form.plainPassword.first) }}</strong>
             </div>
-            <div class="control-group">
-                <label class="control-label" >
-                    {{ form_label(form.plainPassword.second) }}
-                </label> 
-                <div class="controls stage">
-                     <div style="color:#811B06">
-                        <strong>{{ form_errors(form.plainPassword.second) }}</strong>
-                     </div>
-                    {{ form_widget(form.plainPassword.second) }}
-                </div>
+            {{ form_widget(form.plainPassword.first) }}
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">
+            {{ form_label(form.plainPassword.second) }}
+          </label>
+
+          <div class="controls stage">
+            <div style="color:#811B06">
+              <strong>{{ form_errors(form.plainPassword.second) }}</strong>
             </div>
-            <div class="control-group">
-                <label class="control-label" >
-                    {{ form_label(form.captcha) }}
-                    <a onclick="location.reload()" ><i class="fa fa-refresh"></i></a>
-                </label> 
-                <div class="controls stage">
-                     <div style="color:#811B06">
-                        <strong>{{ form_errors(form.captcha) }}</strong>
-                     </div>
-                    {{ form_widget(form.captcha) }}
-                </div>
-            </div> 
-          
-            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
-                {{ form_rest(form  )}}
+            {{ form_widget(form.plainPassword.second) }}
+          </div>
+        </div>
+        <div class="control-group">
+          <label class="control-label">
+            {{ form_label(form.captcha) }}
+            <a onclick="location.reload()"><i class="fa fa-refresh"></i></a>
+          </label>
+
+          <div class="controls stage">
+            <div style="color:#811B06">
+              <strong>{{ form_errors(form.captcha) }}</strong>
             </div>
-            <div class="control-group">
-                    <div class="controls">
-                    <button type="submit" class="btn btn-success">
-                        <i class="icon-plus icon-white"></i> Register user
-                    </button>
-                </div>
-             </div>
-    </form>
+            {{ form_widget(form.captcha) }}
+          </div>
+        </div>
+
+        <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">
+          {{ form_rest(form  ) }}
+        </div>
+        <div class="control-group">
+          <div class="controls">
+            <button type="submit" class="btn btn-success">
+              <i class="icon-plus icon-white"></i> Register user
+            </button>
+          </div>
+        </div>
+      </form>
     </div>
-</div> 
- 
-{% endblock %} 
+  </div>
+
+  {% endblock %}
  

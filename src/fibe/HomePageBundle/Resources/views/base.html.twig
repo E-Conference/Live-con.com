@@ -1,29 +1,29 @@
 {% extends '::base.html.twig' %}
 
 {% block meta %}
-	{% block meta_page %}
-	{% endblock meta_page %}
+  {% block meta_page %}
+  {% endblock meta_page %}
 {% endblock meta %}
 
 {% block title %}{% endblock title %}
 
 {% block stylesheets %}
- {{parent()}}
- 	{% block stylesheets_page %}
- 	
-	{% endblock%}
-{% endblock%}
+  {{ parent() }}
+  {% block stylesheets_page %}
+
+  {% endblock %}
+{% endblock %}
 
 {% block javascripts %}
-{{parent()}}
-	<script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
-	{% block javascripts_page %}
-	{% endblock%}
-{% endblock%}
+  {{ parent() }}
+  <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
+  {% block javascripts_page %}
+  {% endblock %}
+{% endblock %}
 
 
 {% block body %}
-	{% block footer %}
-	{% endblock %}
+  {% block footer %}
+  {% endblock %}
 {% endblock body %}
 

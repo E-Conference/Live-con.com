@@ -1,60 +1,61 @@
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
 {% block body %}
-{{ parent() }}
-<div class="container">
+  {{ parent() }}
+  <div class="container">
     <div class="row center">
       <h1>Paper</h1>
+
       <div class="row">
-          <div class="col-lg-1"></div>
-          <div class="col-lg-6">
-              <h2> {{ entity.title }}</h2>
-              <table class="table table-hover">
-                  <tbody>
-                      <tr>
-                          <th>Id</th>
-                          <td>{{ entity.id }}</td>
-                      </tr>
-                      <tr>
-                          <th>Title</th>
-                          <td>{{ entity.title }}</td>
-                      </tr>
-                      <tr>
-                          <th>Abstract</th>
-                          <td>{{ entity.abstract }}</td>
-                      </tr>
-                      <tr>
-                          <th>Publish Date</th>
-                          <td>{{ entity.publishDate }}</td>
-                      </tr>
-                      <tr>
-                          <th>Publisher</th>
-                          <td>{{ entity.publisher }}</td>
-                      </tr>
-                      <tr>
-                          <th>Url</th>
-                          <td>{{ entity.url}}</td>
-                      </tr>
-                      <tr>
-                          <th>Subjects</th>
-                          <td> 
-                               {% for topic in entity.topics %}
-                                  <li>{{ topic.name }}</li>
-                               {% endfor %}
-                          </td>
-                      </tr>
-                      <tr>
-                          <th>Authors</th>
-                          <td>
-                               {% for author in entity.authors %}
-                                  <li>{{ author.name|e }}</li>
-                               {% endfor %}
-                          </td>
-                      </tr>
-                  </tbody>
-              </table>
-            </div>
+        <div class="col-lg-1"></div>
+        <div class="col-lg-6">
+          <h2> {{ entity.title }}</h2>
+          <table class="table table-hover">
+            <tbody>
+              <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+              </tr>
+              <tr>
+                <th>Title</th>
+                <td>{{ entity.title }}</td>
+              </tr>
+              <tr>
+                <th>Abstract</th>
+                <td>{{ entity.abstract }}</td>
+              </tr>
+              <tr>
+                <th>Publish Date</th>
+                <td>{{ entity.publishDate }}</td>
+              </tr>
+              <tr>
+                <th>Publisher</th>
+                <td>{{ entity.publisher }}</td>
+              </tr>
+              <tr>
+                <th>Url</th>
+                <td>{{ entity.url }}</td>
+              </tr>
+              <tr>
+                <th>Subjects</th>
+                <td>
+                  {% for topic in entity.topics %}
+                    <li>{{ topic.name }}</li>
+                  {% endfor %}
+                </td>
+              </tr>
+              <tr>
+                <th>Authors</th>
+                <td>
+                  {% for author in entity.authors %}
+                    <li>{{ author.name|e }}</li>
+                  {% endfor %}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
-</div> 
+  </div>
 {% endblock %}
