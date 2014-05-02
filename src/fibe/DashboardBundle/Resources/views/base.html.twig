@@ -3,91 +3,96 @@
     {% block meta %}{% endblock %}
     {% block title %}{% endblock %}
     {% block stylesheets %}
-    	{{parent()}}
-    	<link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibedashboard/css/dashboard.css') }}" /> 
-        {% block stylesheets_page %}
-        {% endblock %}
+      {{ parent() }}
+      <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibedashboard/css/dashboard.css') }}"/>
+      {% block stylesheets_page %}
+      {% endblock %}
     {% endblock %}
       
 
     {% block javascripts %}
-        {{ parent() }}
-        <script type="text/javascript" >
+      {{ parent() }}
+      <script type="text/javascript">
 
-            $(document).ready(function() {
-                deployed = false;
-                $("#sideBarBtn").click(function(){
-                    deployResultBox();
-                });
-            });
+        $(document).ready(function ()
+        {
+          deployed = false;
+          $("#sideBarBtn").click(function ()
+          {
+            deployResultBox();
+          });
+        });
 
-            function deployResultBox(){
-                    if(!deployed){
-                        $('#sideBar').animate({left:'0px'});
-                        deployed = true;
-                    }else{
-                        $('#sideBar').animate({left:'-180px'});
-                        deployed = false;
-                    }
-            }
+        function deployResultBox()
+        {
+          if (!deployed)
+          {
+            $('#sideBar').animate({left: '0px'});
+            deployed = true;
+          } else
+          {
+            $('#sideBar').animate({left: '-180px'});
+            deployed = false;
+          }
+        }
+      </script>
+
+      {% for flashMessage in app.session.flashbag.get('info') %}
+        <script type="text/javascript">
+          bootstrapAlert("info", "{{ flashMessage }}", "Info : ", '<i class="icon-info"></i> ');
         </script>
+      {% endfor %}
 
-        {% for flashMessage in app.session.flashbag.get('info') %}
-            <script type="text/javascript" >
-                bootstrapAlert("info","{{ flashMessage }}","Info : ",'<i class="icon-info"></i> ');
-            </script> 
-        {% endfor %}
+      {% for flashMessage in app.session.flashbag.get('success') %}
+        <script type="text/javascript">
+          bootstrapAlert("success", "{{ flashMessage }}", "Success : ", '<i class="icon-ok-sign"></i> ');
+        </script>
+      {% endfor %}
 
-        {% for flashMessage in app.session.flashbag.get('success') %} 
-            <script type="text/javascript" >
-            bootstrapAlert("success","{{ flashMessage }}","Success : ",'<i class="icon-ok-sign"></i> '); 
-            </script>  
-        {% endfor %}
+      {% for flashMessage in app.session.flashbag.get('error') %}
+        <script type="text/javascript">
+          bootstrapAlert("warning", "{{ flashMessage }}", "Error : ", '<i class="icon-meh"></i> ');
+        </script>
+      {% endfor %}
 
-        {% for flashMessage in app.session.flashbag.get('error') %}
-            <script type="text/javascript" >
-            bootstrapAlert("warning","{{ flashMessage }}","Error : ",'<i class="icon-meh"></i> '); 
-            </script> 
-        {% endfor %}
+      {% if authorized==0 %}
 
-        {% if authorized==0 %}
- 
-        {% endif %}
+      {% endif %}
 
-        {%  block javascripts_page %}
-         {% endblock%}
-    {% endblock%}
+      {% block javascripts_page %}
+      {% endblock %}
+    {% endblock %}
 
-{% block body %} 
-    {{ parent() }}
+{% block body %}
+  {{ parent() }}
 
-    {% block navBar %} 
-        {% include "::mainNavBar.html.twig" %}
-    {% endblock navBar%}
+  {% block navBar %}
+    {% include "::mainNavBar.html.twig" %}
+  {% endblock navBar %}
 
-    {% block content %} 
+  {% block content %}
     <div class="content">
-        <div class="row">
-            <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div> 
-            <div class="col-xs-10 col-sm-10  col-md-10 col-lg-10">
-                   <div class="row ">
-                   <ul class="nav breadcrum nav-tabs">
-                          <li class="active"><a href="#">My conferences</a></li>
-                        
-                           {% block menu_page%} 
-                           {% endblock menu_page %}
-                      
-                    </ul>
-                 </div>
-                 <div class="row center">
-                {% block centerPanel %} 
-                {% endblock centerPanel %}
-                </div>
-            </div>
-           <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div>
+      <div class="row">
+        <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div>
+        <div class="col-xs-10 col-sm-10  col-md-10 col-lg-10">
+          <div class="row ">
+            <ul class="nav breadcrum nav-tabs">
+              <li class="active"><a href="#">My conferences</a></li>
+
+              {% block menu_page %}
+              {% endblock menu_page %}
+
+            </ul>
+          </div>
+          <div class="row center">
+            {% block centerPanel %}
+            {% endblock centerPanel %}
+          </div>
         </div>
+        <div class="col-xs-1 col-sm-1  col-md-1 col-lg-1"></div>
+      </div>
 
     </div>
-    {% endblock content%}
+  {% endblock content %}
 
- {% endblock body%}
+{% endblock body %}

@@ -10,7 +10,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use fibe\SecurityBundle\Entity\User;
 use fibe\SecurityBundle\Entity\Authorization;
-use fibe\SecurityBundle\Form\UserType;
 use fibe\SecurityBundle\Form\AuthorizationType;
 use fibe\SecurityBundle\Form\UserAuthorizationType;
 

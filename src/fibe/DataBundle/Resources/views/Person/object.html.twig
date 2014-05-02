@@ -2,60 +2,60 @@
 
 <div class="container">
   <div class="row center">
-    <h1>Person</h1>
+  <h1>Person</h1>
 
-    <div class="row">
-      <div class="col-lg-1"></div>
-      <div class="col-lg-6">
-        <h2> {{ entity.name }}</h2>
-        <table class="table table-hover record_properties">
-          <tbody>
-            <tr>
-              <th>Id</th>
-              <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-              <th>Name</th>
-              <td>{{ entity.name }}</td>
-            </tr>
-            <tr>
-              <th>Family name</th>
-              <td>{{ entity.familyName }}</td>
-            </tr>
-            <tr>
-              <th>Age</th>
-              <td>{{ entity.age }}</td>
-            </tr>
-            <tr>
-              <th>Email</th>
-              <td>{{ entity.email }}</td>
-            </tr>
-            <tr>
-              <th>Organization</th>
-              <td> {% for organization in entity.organizations %}
-                  <a href="{{ path('object', { 'slug': organization.slug, 'object': 'Organization' }) }}">
-                    {{ organization.name|e }}</a>
-                {% endfor %}
-              </td>
-            </tr>
-            <tr>
-              <th>Social Accounts</th>
-              <td> {% for account in entity.accounts %}
-                  <li>{{ account.socialService.name|e }} : {{ account.accountName|e }} </li>
-                {% endfor %}
-              </td>
-            </tr>
-            <tr>
-              <th>Photo</th>
-              <td><img src="{{ entity.img }} " height="10%" width="20%"></td>
-            </tr>
-            <tr>
-              <th>Page</th>
-              <td>{{ entity.page }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  <div class="row">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-6">
+      <h2> {{ entity.name }}</h2>
+      <table class="table table-hover record_properties">
+        <tbody>
+          <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+          </tr>
+          <tr>
+            <th>Name</th>
+            <td>{{ entity.name }}</td>
+          </tr>
+          <tr>
+            <th>Family name</th>
+            <td>{{ entity.familyName }}</td>
+          </tr>
+          <tr>
+            <th>Age</th>
+            <td>{{ entity.age }}</td>
+          </tr>
+          <tr>
+            <th>Email</th>
+            <td>{{ entity.email }}</td>
+          </tr>
+          <tr>
+            <th>Organization</th>
+            <td> {% for organization in entity.organizations %}
+                <a href="{{ path('object', { 'slug': organization.slug, 'object': 'Organization' }) }}">
+                  {{ organization.name|e }}</a>
+              {% endfor %}
+            </td>
+          </tr>
+          <tr>
+            <th>Social Accounts</th>
+            <td> {% for account in entity.accounts %}
+                <li>{{ account.socialService.name|e }} : {{ account.accountName|e }} </li>
+              {% endfor %}
+            </td>
+          </tr>
+          <tr>
+            <th>Photo</th>
+            <td><img src="{{ entity.img }} " height="10%" width="20%"></td>
+          </tr>
+          <tr>
+            <th>Page</th>
+            <td>{{ entity.page }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
 
-    {% endblock body %}
+{% endblock body %}

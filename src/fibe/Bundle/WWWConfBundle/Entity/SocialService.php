@@ -1,26 +1,24 @@
 <?php
 
-namespace fibe\Bundle\WWWConfBundle\Entity;
+  namespace fibe\Bundle\WWWConfBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-
-
-use fibe\Bundle\WWWConfBundle\Entity\SocialServiceAccount;
+  use Doctrine\ORM\Mapping as ORM;
+  use Symfony\Component\Validator\Constraints as Assert;
 
 
+  use fibe\Bundle\WWWConfBundle\Entity\SocialServiceAccount;
 
-/**
- * Social Services available 
- *
- *
- *  @ORM\Table(name="socialService")
- *  @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\SocialServiceRepository")
- *
- */
 
-class SocialService
-{
+  /**
+   * Social Services available
+   *
+   *
+   * @ORM\Table(name="socialService")
+   * @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\SocialServiceRepository")
+   *
+   */
+  class SocialService
+  {
 
     /**
      * @ORM\Id
@@ -28,23 +26,23 @@ class SocialService
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
-   /**
-    *   Name
-    *   @ORM\Column(type="string", name="name")
-    */
+
+    /**
+     *   Name
+     * @ORM\Column(type="string", name="name")
+     */
     private $name;
 
-   /**
-    *   accountServiceHomepage
-    *   Url of the social Service
-    *   @ORM\Column(type="string", name="accountServiceHomepage",  nullable=true)
-    */
+    /**
+     *   accountServiceHomepage
+     *   Url of the social Service
+     * @ORM\Column(type="string", name="accountServiceHomepage",  nullable=true)
+     */
     private $accountServiceHomepage;
 
-   /**
+    /**
      * accounts
-     *  
+     *
      * @ORM\OneToMany(targetEntity="SocialServiceAccount", mappedBy="socialService")
      */
     private $accounts;
@@ -55,76 +53,79 @@ class SocialService
      */
     public function __construct()
     {
-        $this->accounts = new \Doctrine\Common\Collections\ArrayCollection();
+      $this->accounts = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
-        return $this->id;
+      return $this->id;
     }
 
     /**
      * Set name
      *
      * @param string $name
+     *
      * @return SocialService
      */
     public function setName($name)
     {
-        $this->name = $name;
-    
-        return $this;
+      $this->name = $name;
+
+      return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
-        return $this->name;
+      return $this->name;
     }
 
     /**
      * Set accountServiceHomepage
      *
      * @param string $accountServiceHomepage
+     *
      * @return SocialService
      */
     public function setAccountServiceHomepage($accountServiceHomepage)
     {
-        $this->accountServiceHomepage = $accountServiceHomepage;
-    
-        return $this;
+      $this->accountServiceHomepage = $accountServiceHomepage;
+
+      return $this;
     }
 
     /**
      * Get accountServiceHomepage
      *
-     * @return string 
+     * @return string
      */
     public function getAccountServiceHomepage()
     {
-        return $this->accountServiceHomepage;
+      return $this->accountServiceHomepage;
     }
 
     /**
      * Add accounts
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\SocialServiceAccount $accounts
+     *
      * @return SocialService
      */
     public function addAccount(\fibe\Bundle\WWWConfBundle\Entity\SocialServiceAccount $accounts)
     {
-        $this->accounts[] = $accounts;
-    
-        return $this;
+      $this->accounts[] = $accounts;
+
+      return $this;
     }
 
     /**
@@ -134,23 +135,23 @@ class SocialService
      */
     public function removeAccount(\fibe\Bundle\WWWConfBundle\Entity\SocialServiceAccount $accounts)
     {
-        $this->accounts->removeElement($accounts);
+      $this->accounts->removeElement($accounts);
     }
 
     /**
      * Get accounts
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getAccounts()
     {
-        return $this->accounts;
+      return $this->accounts;
     }
 
 
-     public function __toString() 
+    public function __toString()
     {
-        return $this->name;
+      return $this->name;
 
     }
-}
+  }

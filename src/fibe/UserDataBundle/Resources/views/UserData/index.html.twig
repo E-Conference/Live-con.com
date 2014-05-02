@@ -4,26 +4,27 @@
 {% block body %}
 
 
-{% include "fibeUserDataBundle::navbar.html.twig" %}
-<div class="container">
+  {% include "fibeUserDataBundle::navbar.html.twig" %}
+  <div class="container">
     <div class="row">
       <div class="jumbotron">
-            <h1>User data manager</h1>
-            <p>Manage user accounts</p>
-            <div class="row-fluid">
-                <div class="col-lg-4">
-                     <div class="btn-group"> 
-                        <a href="{{ path('schedule_index') }}" role="button" class="btn btn-success btn-large">
-                          <span class="icon-calendar"></span>See accounts
-                        </a>
-                    </div>
-                </div>
+        <h1>User data manager</h1>
+
+        <p>Manage user accounts</p>
+
+        <div class="row-fluid">
+          <div class="col-lg-4">
+            <div class="btn-group">
+              <a href="{{ path('schedule_index') }}" role="button" class="btn btn-success btn-large">
+                <span class="icon-calendar"></span>See accounts
+              </a>
             </div>
+          </div>
+        </div>
       </div>
 
-
     </div>
-</div>    
+  </div>
 
 {% endblock body %}
 

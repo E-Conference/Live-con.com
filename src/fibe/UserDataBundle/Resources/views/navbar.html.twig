@@ -8,15 +8,16 @@
       <span class="icon-bar"></span>
     </button>
     <a class="navbar-brand" href="{{ path('schedule_index') }}" title="Go back to Index">Seamposium</a>
-  </div> 
+  </div>
 
   <div class="navbar-collapse navbar-ex1-collapse">
 
-    <ul class="nav navbar-nav"> 
-        <li style="float:right"><a href ="{{ path('schedule_person_index') }}" title="Help">help</a></li>
-        <li style="float:right"><a href ="{{ path('schedule_person_index') }}" title="My Papers">My Papers</a></li>
-        <li style="float:right"><a href ="{{ path('schedule_person_index') }}" title="My Account">My Account</a></li>
-    </ul><!-- end class nav-->
+    <ul class="nav navbar-nav">
+      <li style="float:right"><a href="{{ path('schedule_person_index') }}" title="Help">help</a></li>
+      <li style="float:right"><a href="{{ path('schedule_person_index') }}" title="My Papers">My Papers</a></li>
+      <li style="float:right"><a href="{{ path('schedule_person_index') }}" title="My Account">My Account</a></li>
+    </ul>
+    <!-- end class nav-->
 
     <ul class="nav navbar-nav navbar-right">
       <li class="dropdown">
@@ -24,32 +25,32 @@
           <i class="icon-user "></i> {{ app.user.username }}
           <b class="caret"></b>
         </a>
-        <ul class="dropdown-menu"> 
-          <li> 
+        <ul class="dropdown-menu">
+          <li>
             <a style="padding-right:5px;" href="{{ path('fos_user_profile_edit') }}" title="Profile">
               <span class="icon-user glyphicon-white "> Profile </span>
             </a>
           </li>
 
-          {% if is_granted("ROLE_ADMIN") %} 
-          <li>
-            <a href="{{ path('schedule_user_list') }}" title="Manage manager">
-              <span class="icon-list glyphicon-white "> Manage user </span>
-            </a>
-          </li>
-          <li>
+          {% if is_granted("ROLE_ADMIN") %}
+            <li>
+              <a href="{{ path('schedule_user_list') }}" title="Manage manager">
+                <span class="icon-list glyphicon-white "> Manage user </span>
+              </a>
+            </li>
+            <li>
               <a href="{{ path('fos_user_registration_register') }}" title="Add manager">
                 <span class="icon-plus glyphicon-white "> Add manager </span>
-              </a> 
-          </li>
-          {% endif %}  
+              </a>
+            </li>
+          {% endif %}
 
           <li>
-              <a href="{{ path('logout') }}" title="logout">
-                  <i class="icon-off "></i> Logout</a>
+            <a href="{{ path('logout') }}" title="logout">
+              <i class="icon-off "></i> Logout</a>
           </li>
         </ul>
-      </li> 
-    </ul> 
+      </li>
+    </ul>
   </div>
 </div>

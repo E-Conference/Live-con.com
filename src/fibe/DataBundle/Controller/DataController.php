@@ -1,19 +1,20 @@
 <?php
 
-namespace fibe\DataBundle\Controller;
+  namespace fibe\DataBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+  use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Symfony\Component\HttpFoundation\Request;
-/**
-     * @Route("/")
-     * 
-     */
-class DataController extends Controller
-{
-   
+  use Symfony\Component\HttpFoundation\Request;
+
+  /**
+   * @Route("/")
+   *
+   */
+  class DataController extends Controller
+  {
+
 
     /*
       @Route("/{object}", name="list")
@@ -61,42 +62,44 @@ class DataController extends Controller
 
     /**
      * @Route("/conferences", name="datas_conferences_list")
-     * 
+     *
      */
     public function conferencesAction()
     {
-        $em = $this->getDoctrine()->getManager();
+      $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('fibeWWWConfBundle:WwwConf')->findAll();
+      $entities = $em->getRepository('fibeWWWConfBundle:WwwConf')->findAll();
 
 
-         return $this->render('DataBundle:Conference:conferences.html.twig', array(
-            'entities' => $entities,
-        ));
+      return $this->render('DataBundle:Conference:conferences.html.twig', array(
+        'entities' => $entities,
+      ));
     }
 
 
     /**
      * @Route("/filter", name="datas_conferences_filter")
-     * 
+     *
      */
     public function conferencesFilterAction(Request $request)
     {
-        $name = $request->request->get('name');
-        $em = $this->getDoctrine()->getManager();
+      $name = $request->request->get('name');
+      $em = $this->getDoctrine()->getManager();
 
-        if(!empty($name)){
-            $entities = $em->getRepository('fibeWWWConfBundle:WwwConf')->findByName($name);
-        }else{
-            $entities = $em->getRepository('fibeWWWConfBundle:WwwConf')->findAll();
-        }
+      if (!empty($name))
+      {
+        $entities = $em->getRepository('fibeWWWConfBundle:WwwConf')->findByName($name);
+      }
+      else
+      {
+        $entities = $em->getRepository('fibeWWWConfBundle:WwwConf')->findAll();
+      }
 
 
-         return $this->render('DataBundle:Conference:conferencesList.html.twig', array(
-             'entities' => $entities,
-        ));
+      return $this->render('DataBundle:Conference:conferencesList.html.twig', array(
+        'entities' => $entities,
+      ));
     }
 
-   
-    
-}
+
+  }

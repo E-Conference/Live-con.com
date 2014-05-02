@@ -1,28 +1,28 @@
-<?php 
- 
-namespace fibe\SecurityBundle\Entity;
- 
-use FOS\UserBundle\Entity\User as BaseUser;
-use Doctrine\ORM\Mapping as ORM;
+<?php
 
-use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
-use fibe\SecurityBundle\Entity\Authorization;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
- 
-/**
- * @ORM\Entity(repositoryClass="fibe\SecurityBundle\Repository\UserRepository")
- * @ORM\Table(name="manager")
-*
- */
-class User extends BaseUser
-{
+  namespace fibe\SecurityBundle\Entity;
+
+  use FOS\UserBundle\Entity\User as BaseUser;
+  use Doctrine\ORM\Mapping as ORM;
+
+  use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
+  use fibe\SecurityBundle\Entity\Authorization;
+  use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+  /**
+   * @ORM\Entity(repositoryClass="fibe\SecurityBundle\Repository\UserRepository")
+   * @ORM\Table(name="manager")
+   *
+   */
+  class User extends BaseUser
+  {
     /**
-    * @ORM\Id
-    * @ORM\Column(type="integer")
-    * @ORM\GeneratedValue(strategy="AUTO")
-    */
-    protected $id; 
-    
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
     /**
      * @ORM\ManyToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="confManagers", cascade={"persist"})
      * @ORM\JoinTable(name="manager_conference",
@@ -32,53 +32,54 @@ class User extends BaseUser
     protected $conferences;
 
     /**
-     *  
+     *
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf")
-     *  @ORM\JoinColumn(name="currentConf", referencedColumnName="id")
+     * @ORM\JoinColumn(name="currentConf", referencedColumnName="id")
      */
     protected $currentConf;
 
-     /**
-     *  
+    /**
+     *
      * @ORM\OneToMany(targetEntity="Authorization",  mappedBy="user",cascade={"persist"})
      * @ORM\JoinColumn(onDelete="CASCADE")
-     * 
+     *
      */
-     protected $authorizations;
+    protected $authorizations;
 
-     protected $captcha;
-    
-    
+    protected $captcha;
+
+
     /**
      * Constructor
      */
     public function __construct()
     {
-	    parent::__construct();
+      parent::__construct();
     }
-    
+
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
-        return $this->id;
+      return $this->id;
     }
 
     /**
      * Add conferences
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conferences
+     *
      * @return User
      */
     public function addConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conferences)
     {
-        $this->conferences[] = $conferences;
-    
-        return $this;
+      $this->conferences[] = $conferences;
+
+      return $this;
     }
 
     /**
@@ -88,55 +89,56 @@ class User extends BaseUser
      */
     public function removeConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conferences)
     {
-        $this->conferences->removeElement($conferences);
+      $this->conferences->removeElement($conferences);
     }
 
     /**
      * Get conferences
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getConferences()
     {
-        return $this->conferences;
+      return $this->conferences;
     }
 
     /**
      * Set currentConf
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $currentConf
+     *
      * @return User
      */
     public function setCurrentConf(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $currentConf = null)
     {
-        $this->currentConf = $currentConf;
-    
-        return $this;
+      $this->currentConf = $currentConf;
+
+      return $this;
     }
 
     /**
      * Get currentConf
      *
-     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
+     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf
      */
     public function getCurrentConf()
     {
-        return $this->currentConf;
+      return $this->currentConf;
     }
 
-  
 
     /**
      * Add authorizations
      *
      * @param \fibe\SecurityBundle\Entity\Authorization $authorizations
+     *
      * @return User
      */
     public function addAuthorization(\fibe\SecurityBundle\Entity\Authorization $authorizations)
     {
-        $this->authorizations[] = $authorizations;
-    
-        return $this;
+      $this->authorizations[] = $authorizations;
+
+      return $this;
     }
 
     /**
@@ -146,118 +148,135 @@ class User extends BaseUser
      */
     public function removeAuthorization(\fibe\SecurityBundle\Entity\Authorization $authorizations)
     {
-        $this->authorizations->removeElement($authorizations);
+      $this->authorizations->removeElement($authorizations);
     }
 
     /**
      * Get authorizations
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getAuthorizations()
     {
-        return $this->authorizations;
+      return $this->authorizations;
     }
 
     /**
-    *Get an authorization for a specific conference
-    *
-    */
+     *Get an authorization for a specific conference
+     *
+     */
     public function getAuthorizationByConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conf = null)
     {
-        if($conf == null){
-            throw new AccessDeniedException('you have to choose a conference !');
+      if ($conf == null)
+      {
+        throw new AccessDeniedException('you have to choose a conference !');
+      }
+      foreach ($this->authorizations as $authorization)
+      {
+        if ($authorization->getConference()->getId() == $conf->getId())
+        {
+          return $authorization;
         }
-        foreach ($this->authorizations as $authorization) {
-            if($authorization->getConference()->getId()==$conf->getId()){
-                return $authorization;
-            }
-        }
-        return null;
+      }
+      return null;
     }
 
     /**
-    *Get an authorization falg app for a specific conference
-    *
-    */
+     *Get an authorization falg app for a specific conference
+     *
+     */
     public function getFlagAppByConferenceId($confId)
     {
-        foreach ($this->authorizations as $authorization) {
-            if($authorization->getConference()->getId()==$confId){
-                return $authorization->getFlagApp();
-            }
+      foreach ($this->authorizations as $authorization)
+      {
+        if ($authorization->getConference()->getId() == $confId)
+        {
+          return $authorization->getFlagApp();
         }
-        return false;
+      }
+      return false;
     }
 
     /**
-    *Get an authorization falg app for a specific conference
-    *
-    */
+     *Get an authorization falg app for a specific conference
+     *
+     */
     public function getFlagSchedByConferenceId($confId)
     {
-        foreach ($this->authorizations as $authorization) {
-            if($authorization->getConference()->getId()==$confId){
-                return $authorization->getFlagSched();
-            }
+      foreach ($this->authorizations as $authorization)
+      {
+        if ($authorization->getConference()->getId() == $confId)
+        {
+          return $authorization->getFlagSched();
         }
-        return false;
+      }
+      return false;
     }
 
     /**
-    *Get an authorization flag app for a specific conference
-    *
-    */
+     *Get an authorization flag app for a specific conference
+     *
+     */
     public function getFlagDatasByConferenceId($confId)
     {
-        foreach ($this->authorizations as $authorization) {
-            if($authorization->getConference()->getId()==$confId){
-                return $authorization->getFlagconfDatas();
-            }
+      foreach ($this->authorizations as $authorization)
+      {
+        if ($authorization->getConference()->getId() == $confId)
+        {
+          return $authorization->getFlagconfDatas();
         }
-        return false;
+      }
+      return false;
     }
 
     /**
-    *Get an authorization flag app for a specific conference
-    *
-    */
-    public function getFlagByConferenceId($confId,$flagType)
+     *Get an authorization flag app for a specific conference
+     *
+     */
+    public function getFlagByConferenceId($confId, $flagType)
     {
-        foreach ($this->authorizations as $authorization) {
-            if($authorization->getConference()->getId()==$confId){
-                switch($flagType){
-                    case 'sched':
-                        return $authorization->getFlagSched();
-                        break;
-                    case 'app':
-                         return $authorization->getFlagApp();
-                         break;
-                    case 'datas':
-                         return $authorization->getFlagconfDatas();
-                         break;
-                    case 'team':
-                         return $authorization->getFlagTeam();
-                         break;
-                }
-            }
+      foreach ($this->authorizations as $authorization)
+      {
+        if ($authorization->getConference()->getId() == $confId)
+        {
+          switch ($flagType)
+          {
+            case 'sched':
+              return $authorization->getFlagSched();
+              break;
+            case 'app':
+              return $authorization->getFlagApp();
+              break;
+            case 'datas':
+              return $authorization->getFlagconfDatas();
+              break;
+            case 'team':
+              return $authorization->getFlagTeam();
+              break;
+          }
         }
-        return false;
+      }
+      return false;
     }
 
 
+    /**
+     * @TODO comment
+     *
+     * @param WwwConf $conf
+     *
+     * @return bool
+     */
     public function authorizedAccesToConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conf)
     {
-        $conferences = $this->conferences->toArray();
-        if (in_array($conf, $conferences)) {
-            return true;
-        }
+      $conferences = $this->conferences->toArray();
+      if (in_array($conf, $conferences))
+      {
+        return true;
+      }
 
-        return false;
+      return false;
     }
 
 
-
-
-
-}
+  }

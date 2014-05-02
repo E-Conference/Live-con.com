@@ -3,20 +3,20 @@
 
 {% block centerPanel %}
   {{ parent() }}
-    <h1>Module creation</h1>
+  <h1>Module creation</h1>
 
-    <form action="{{ path('conference_module_create') }}" method="post" {{ form_enctype(form) }}>
-        {{ form_widget(form) }}
-        <p>
-            <button type="submit">Create</button>
-        </p>
-    </form>
+  <form action="{{ path('conference_module_create') }}" method="post" {{ form_enctype(form) }}>
+    {{ form_widget(form) }}
+    <p>
+      <button type="submit">Create</button>
+    </p>
+  </form>
 
-        <ul class="record_actions">
+  <ul class="record_actions">
     <li>
-        <a href="{{ path('conference_module_index') }}">
-            Back to the list
-        </a>
+      <a href="{{ path('conference_module_index') }}">
+        Back to the list
+      </a>
     </li>
-</ul>
+  </ul>
 {% endblock %}

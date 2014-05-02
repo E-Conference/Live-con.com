@@ -1,54 +1,51 @@
-
-
 {% trans_default_domain 'FOSUserBundle' %}
 <div id="background"></div>
-    <div class="container_12">
+<div class="container_12">
 
-      <div id="login" class="grid_4">
-        <a href="http://live-con.com/" title="Livecon UPGRATE YOUR CONFERENCE"><img src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon" /></a>
+  <div id="login" class="grid_4">
+    <a href="http://live-con.com/" title="Livecon UPGRATE YOUR CONFERENCE"><img
+          src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon"/></a>
 
-				
-
-		</div>
-	</div>
-
-
+  </div>
+</div>
 
 {% block head %}
   {% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibehomepage/css/homepage.css') }}" /> 
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/fibehomepage/css/homepage.css') }}"/>
     <!-- reset -->
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/reset.css') }}" />
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/reset.css') }}"/>
     <!-- grid system 16 -->
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/960_12_col.css') }}" />
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="{{ asset('bundles/fibehomepage/css/960_12_col.css') }}"/>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/style.css') }}" />
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/fibehomepage/css/style.css') }}"/>
   {% endblock %}
 {% endblock %}
 
 
 {% block body %}
-  
+
 <div id="login_page">
-  
+
   {% if error %}
     <div class="alert alert-error">{{ error.message }}</div>
   {% endif %}
 
-<div id="background"></div>
-    <div class="container_12">
+  <div id="background"></div>
+  <div class="container_12">
 
-      <div id="login" class="grid_4">
-        <a href="http://live-con.com/" title="Livecon UPGRATE YOUR CONFERENCE"><img src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon" /></a>
+    <div id="login" class="grid_4">
+      <a href="http://live-con.com/" title="Livecon UPGRATE YOUR CONFERENCE"><img
+            src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon"/></a>
 
       <div class="row">
-                {% block fos_user_content %}
-				    <p>{{ 'registration.check_email'|trans({'%email%': user.email}) }}</p>
-				{% endblock fos_user_content %}
+        {% block fos_user_content %}
+          <p>{{ 'registration.check_email'|trans({'%email%': user.email}) }}</p>
+        {% endblock fos_user_content %}
       </div>
-        <br />
-       
+      <br/>
+
     </div>
- 
-{% endblock %} 
+
+    {% endblock %}
  

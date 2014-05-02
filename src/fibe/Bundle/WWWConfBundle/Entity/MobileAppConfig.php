@@ -1,18 +1,18 @@
 <?php
 
-namespace fibe\Bundle\WWWConfBundle\Entity;
+  namespace fibe\Bundle\WWWConfBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+  use Doctrine\ORM\Mapping as ORM;
 
-/**
- * This entity define a topic
- *
- *  @ORM\Table(name="mobileAppConfig")
- *  @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\MobileAppConfigRepository")
- *  @ORM\HasLifecycleCallbacks
- */
-class MobileAppConfig
-{
+  /**
+   * This entity define a topic
+   *
+   * @ORM\Table(name="mobileAppConfig")
+   * @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\MobileAppConfigRepository")
+   * @ORM\HasLifecycleCallbacks
+   */
+  class MobileAppConfig
+  {
     /**
      * @var integer
      *
@@ -22,7 +22,7 @@ class MobileAppConfig
      */
     private $id;
 
-   /**
+    /**
      * BGContent
      *
      *
@@ -30,7 +30,7 @@ class MobileAppConfig
      */
     protected $BGColorContent;
 
-     /**
+    /**
      * BGHeader
      *
      *
@@ -38,7 +38,7 @@ class MobileAppConfig
      */
     protected $BGColorHeader;
 
-     /**
+    /**
      * BGNavBar
      *
      *
@@ -47,7 +47,7 @@ class MobileAppConfig
     protected $BGColorNavBar;
 
 
-     /**
+    /**
      * BGfooter
      *
      *
@@ -56,7 +56,7 @@ class MobileAppConfig
     protected $BGColorfooter;
 
 
-     /**
+    /**
      * TitleColorContent
      *
      *
@@ -73,7 +73,7 @@ class MobileAppConfig
     protected $TitleColorHeader;
 
 
-      /**
+    /**
      * TitleColorNavBar
      *
      *
@@ -89,7 +89,6 @@ class MobileAppConfig
      * @ORM\Column(type="string", name="TitleColorFooter", nullable=true)
      */
     protected $TitleColorFooter;
-
 
 
     /**
@@ -108,7 +107,7 @@ class MobileAppConfig
      */
     protected $TitleColorButton;
 
-     /**
+    /**
      * IsPublished
      *
      *
@@ -117,30 +116,29 @@ class MobileAppConfig
     protected $IsPublished;
 
 
-
     /**
-     *  
+     *
      * @ORM\Column(type="boolean",nullable=false,options={"default" = true})
      *
      */
     private $dblpDatasource;
 
     /**
-     *  
+     *
      * @ORM\Column(type="boolean",nullable=false,options={"default" = true})
      *
      */
     private $googleDatasource;
 
-     /**
-     *  
+    /**
+     *
      * @ORM\Column(type="boolean",nullable=false, options={"default"= true})
      *
      */
     private $duckduckgoDatasource;
 
-        
-     /**
+
+    /**
      * Lang
      *
      * @ORM\Column(type="string", nullable=false, options={"default"= "EN"})
@@ -148,372 +146,382 @@ class MobileAppConfig
     protected $lang;
 
 
-  /**
+    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
-        return $this->id;
+      return $this->id;
     }
 
     /**
      * Set dblpDatasource
      *
      * @param boolean $dblpDatasource
+     *
      * @return MobileAppConfig
      */
     public function setDblpDatasource($dblpDatasource)
     {
-        $this->dblpDatasource = $dblpDatasource;
-    
-        return $this;
+      $this->dblpDatasource = $dblpDatasource;
+
+      return $this;
     }
 
     /**
      * Get dblpDatasource
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDblpDatasource()
     {
-        return $this->dblpDatasource;
+      return $this->dblpDatasource;
     }
 
 
-     /**
+    /**
      * Set googleDatasource
      *
      * @param boolean $googleDatasource
+     *
      * @return MobileAppConfig
      */
     public function setGoogleDatasource($googleDatasource)
     {
-        $this->googleDatasource = $googleDatasource;
-    
-        return $this;
+      $this->googleDatasource = $googleDatasource;
+
+      return $this;
     }
 
     /**
      * Get googleDatasource
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getGoogleDatasource()
     {
-        return $this->googleDatasource;
+      return $this->googleDatasource;
     }
 
 
-      /**
+    /**
      * Set duckduckgoDatasource
      *
      * @param boolean $duckduckgoDatasource
+     *
      * @return MobileAppConfig
      */
     public function setDuckduckgoDatasource($duckduckgoDatasource)
     {
-        $this->duckduckgoDatasource = $duckduckgoDatasource;
-    
-        return $this;
+      $this->duckduckgoDatasource = $duckduckgoDatasource;
+
+      return $this;
     }
 
     /**
      * Get duckduckgoDatasource
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDuckduckgoDatasource()
     {
-        return $this->duckduckgoDatasource;
+      return $this->duckduckgoDatasource;
     }
-
-
-
 
 
     /**
      * Set BGColorContent
      *
      * @param string $bGColorContent
+     *
      * @return MobileAppConfig
      */
     public function setBGColorContent($bGColorContent)
     {
-        $this->BGColorContent = $bGColorContent;
-    
-        return $this;
+      $this->BGColorContent = $bGColorContent;
+
+      return $this;
     }
 
     /**
      * Get BGColorContent
      *
-     * @return string 
+     * @return string
      */
     public function getBGColorContent()
     {
-        return $this->BGColorContent;
+      return $this->BGColorContent;
     }
 
     /**
      * Set BGColorHeader
      *
      * @param string $bGColorHeader
+     *
      * @return MobileAppConfig
      */
     public function setBGColorHeader($bGColorHeader)
     {
-        $this->BGColorHeader = $bGColorHeader;
-    
-        return $this;
+      $this->BGColorHeader = $bGColorHeader;
+
+      return $this;
     }
 
     /**
      * Get BGColorHeader
      *
-     * @return string 
+     * @return string
      */
     public function getBGColorHeader()
     {
-        return $this->BGColorHeader;
+      return $this->BGColorHeader;
     }
 
     /**
      * Set BGColorNavBar
      *
      * @param string $bGColorNavBar
+     *
      * @return MobileAppConfig
      */
     public function setBGColorNavBar($bGColorNavBar)
     {
-        $this->BGColorNavBar = $bGColorNavBar;
-    
-        return $this;
+      $this->BGColorNavBar = $bGColorNavBar;
+
+      return $this;
     }
 
     /**
      * Get BGColorNavBar
      *
-     * @return string 
+     * @return string
      */
     public function getBGColorNavBar()
     {
-        return $this->BGColorNavBar;
+      return $this->BGColorNavBar;
     }
 
     /**
      * Set BGColorfooter
      *
      * @param string $bGColorfooter
+     *
      * @return MobileAppConfig
      */
     public function setBGColorfooter($bGColorfooter)
     {
-        $this->BGColorfooter = $bGColorfooter;
-    
-        return $this;
+      $this->BGColorfooter = $bGColorfooter;
+
+      return $this;
     }
 
     /**
      * Get BGColorfooter
      *
-     * @return string 
+     * @return string
      */
     public function getBGColorfooter()
     {
-        return $this->BGColorfooter;
+      return $this->BGColorfooter;
     }
 
     /**
      * Set TitleColorContent
      *
      * @param string $TitleColorContent
+     *
      * @return MobileAppConfig
      */
     public function setTitleColorContent($TitleColorContent)
     {
-        $this->TitleColorContent = $TitleColorContent;
-    
-        return $this;
+      $this->TitleColorContent = $TitleColorContent;
+
+      return $this;
     }
 
     /**
      * Get TitleColorContent
      *
-     * @return string 
+     * @return string
      */
     public function getTitleColorContent()
     {
-        return $this->TitleColorContent;
+      return $this->TitleColorContent;
     }
 
     /**
      * Set TitleColorHeader
      *
      * @param string $TitleColorHeader
+     *
      * @return MobileAppConfig
      */
     public function setTitleColorHeader($TitleColorHeader)
     {
-        $this->TitleColorHeader = $TitleColorHeader;
-    
-        return $this;
+      $this->TitleColorHeader = $TitleColorHeader;
+
+      return $this;
     }
 
     /**
      * Get TitleColorHeader
      *
-     * @return string 
+     * @return string
      */
     public function getTitleColorHeader()
     {
-        return $this->TitleColorHeader;
+      return $this->TitleColorHeader;
     }
 
     /**
      * Set TitleColorNavBar
      *
      * @param string $TitleColorNavBar
+     *
      * @return MobileAppConfig
      */
     public function setTitleColorNavBar($TitleColorNavBar)
     {
-        $this->TitleColorNavBar = $TitleColorNavBar;
-    
-        return $this;
+      $this->TitleColorNavBar = $TitleColorNavBar;
+
+      return $this;
     }
 
     /**
      * Get TitleColorNavBar
      *
-     * @return string 
+     * @return string
      */
     public function getTitleColorNavBar()
     {
-        return $this->TitleColorNavBar;
+      return $this->TitleColorNavBar;
     }
 
 
-     /**
+    /**
      * Get TitleColorFooter
      *
-     * @return string 
+     * @return string
      */
     public function getTitleColorFooter()
     {
-        return $this->TitleColorFooter;
+      return $this->TitleColorFooter;
     }
 
 
-     /**
+    /**
      * Set TitleColorFooter
      *
      * @param string $titleColorFooter
+     *
      * @return MobileAppConfig
      */
     public function setTitleColorFooter($titleColorFooter)
     {
-        $this->TitleColorFooter = $titleColorFooter;
-    
-        return $this;
+      $this->TitleColorFooter = $titleColorFooter;
+
+      return $this;
     }
 
     /**
      * Set IsPublished
      *
      * @param boolean $isPublished
+     *
      * @return MobileAppConfig
      */
     public function setIsPublished($isPublished)
     {
-        $this->IsPublished = $isPublished;
-    
-        return $this;
+      $this->IsPublished = $isPublished;
+
+      return $this;
     }
 
     /**
      * Get IsPublished
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsPublished()
     {
-        return $this->IsPublished;
+      return $this->IsPublished;
     }
 
 
-     /**
+    /**
      * Set BGColorButton
      *
      * @param string $BGColorButton
+     *
      * @return MobileAppConfig
      */
     public function setBGColorButton($BGColorButton)
     {
-        $this->BGColorButton = $BGColorButton;
-    
-        return $this;
+      $this->BGColorButton = $BGColorButton;
+
+      return $this;
     }
 
-     /**
+    /**
      * Get BGColorButtond
      *
      * @return string
      */
     public function getBGColorButton()
     {
-        return $this->BGColorButton;
+      return $this->BGColorButton;
     }
 
-      /**
+    /**
      * Set BGColorButton
      *
      * @param string $TitleColorButton
+     *
      * @return MobileAppConfig
      */
     public function setTitleColorButton($TitleColorButton)
     {
-        $this->TitleColorButton = $TitleColorButton;
-    
-        return $this;
+      $this->TitleColorButton = $TitleColorButton;
+
+      return $this;
     }
 
-     /**
+    /**
      * Get TitleColorButton
      *
-     * @return string 
+     * @return string
      */
     public function getTitleColorButton()
     {
-        return $this->TitleColorButton;
+      return $this->TitleColorButton;
     }
 
     /**
      * Set lang
      *
      * @param string $lang
+     *
      * @return MobileAppConfig
      */
     public function setLang($lang)
     {
-        if($lang == "EN" || $lang == "FR")
+      if ($lang == "EN" || $lang == "FR")
         $this->lang = $lang;
-    
-        return $this;
+
+      return $this;
     }
 
-     /**
+    /**
      * Get lang
      *
-     * @return string 
+     * @return string
      */
     public function getLang()
     {
-        return $this->lang;
+      return $this->lang;
     }
 
-    
 
-
-}
+  }

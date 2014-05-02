@@ -1,22 +1,21 @@
-
-
 {% block title %}All Conferences{{ parent() }}{% endblock title %}
 {% block body %}
 
-<div class="container">
-    <div class="row center">         
-        <div class="row">
-            <div class="col-lg-4">
-                <ul>
-                  {% for entity in entities %}
-                    <li> <a href="{{ path('object', { 'slug': entity.slug, 'object': 'WwwConf' }) }}">{{ entity.slug }}</a></li>
-                  {% endfor %}
-                </ul> 
-            </div> 
-        </div>      
-    </div> 
-</div>
-  
+  <div class="container">
+    <div class="row center">
+      <div class="row">
+        <div class="col-lg-4">
+          <ul>
+            {% for entity in entities %}
+              <li><a href="{{ path('object', { 'slug': entity.slug, 'object': 'WwwConf' }) }}">{{ entity.slug }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
 {% endblock body %}
 
 
