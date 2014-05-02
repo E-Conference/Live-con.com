@@ -5,7 +5,7 @@ var Mapper = function(){
         root : "root",
         separator : "/",
         attr : "@",
-        text : "text"
+        text : "text",
     } 
 
 
@@ -48,9 +48,14 @@ var Mapper = function(){
 
     this.getUtils = function(){
         return mapper.utils; 
-    } 
+    }
 
-    this.map = function($ctn){
+/**
+ * read the file and discover knowNodes and knownCollection
+ * @trigger               mapEnd(event,knownNodes,knownCollection) 
+ *                            
+ */
+    this.map = function(){
         mapping = mapping || $.extend({},mapper.defaultMapping) ; 
         Importer().setMappingConfig(mapping);
 
@@ -106,15 +111,30 @@ var Mapper = function(){
         }; 
 
         $(mapper).off("mapEnd").on("mapEnd",function(ev,$html){
-            initUi(
-                Pager.getPanelHtml("Data of "+self.getConfName(),{panelClass:"panel-primary",margin:false,collapsible:false,collapsed:false})
-                        .appendTo($ctn)
-            );
+            $(self).trigger("mapEnd",[knownNodes,knownCollection]);
         });
         mapper.map(data,basePath,nodeCallBack,entryCallBack); 
     }
     this.setMapper = function(m){
         mapper = m;
+    }
+    this.getKnownNodes = function(){
+        return knownNodes;
+    };
+    this.setImportedLog = function(importedLog){
+        this["importedLog"] = importedLog
+    }
+    notImportedLog = {}
+    this.getNotImportedLog = function(){
+        if(!this["importedLog"] || this["importedLog"].length==0)
+            return console.warn("calling getNotImportedLog without importedLog")
+        notImportedLog = [];
+        for(var i in knownNodes){
+            if (knownNodes[i].type!=="node" && $.inArray(i, this["importedLog"]) === -1){
+                notImportedLog.push(i)
+            }
+        }
+        return notImportedLog;
     }
     this.getNodeName = function(node,i){
         return mapper.getNodeName(node,i);
@@ -212,48 +232,49 @@ var Mapper = function(){
                             : str.substring(str.lastIndexOf(self.nodePath.separator)+1,str.length);
     }
   
-    var initUi = function ($el){
+    //construct html
+    this.initUi = function ($ctn){
+
+        var $el = Pager.getPanelHtml("Data of "+self.getConfName(),{panelClass:"panel-primary",margin:false,collapsible:false,collapsed:false})
+                    .appendTo($ctn)
+
+        
         //construct html
         var htmlUl={};
         for(var i in knownNodes){
             var node=knownNodes[i];
             var nodePath=node["node-path"];
             var isCollection=knownCollection[nodePath]!==undefined;
-            var appendTo = nodePath == "root" ? $el : htmlUl[cutLastSlash(nodePath,true)];
-            if(node["type"]=="node"){ 
-                var panel = Pager.getPanelHtml(nodePath,node["panelOp"] )
-                htmlUl[nodePath] = panel.find("> ul"); 
-                appendTo.append(panel);
+            var ctn = nodePath == "root" ? $el : htmlUl[cutLastSlash(nodePath,true)];
+            var html;
+            if(node["type"]=="node"){
+                html = Pager.getPanelHtml(nodePath,node["panelOp"] )
+                htmlUl[nodePath] = html.find("> ul");
+
             }else{
                 var nodeName = cutLastSlash(nodePath);
-                appendTo.append('<li data-node-path="'+nodePath+'" class="map-node list-group-item list-group-item-warning">'+nodeName+'</li>')
+                html = $('<li data-node-path="'+nodePath+'" class="map-node list-group-item list-group-item-warning">'+nodeName+'</li>');
             }
+            ctn.append(html);
+            node["div"] = html;
         }
 
-        //collection
-        $('#datafile-form .panel').each(function(){
-            // if($(this).find(".map-node").length == 0){return $(this).remove();}
+        //put a different ui to collection
+        $('#datafile-form .panel').each(function(){ 
             var nodePath = $(this).data("node-path"); 
             if(knownCollection[nodePath]){
                 knownCollection[nodePath] = $(this)
                           .find("> .panel-heading > .panel-title")
-                             .prepend('<i title=" collection node of '+collectionNodeName+' " class="fa fa-bars"></i> ')
-                             // .find(".fa-chevron-down").before('<span class="badge badge-success">'+knownNodes[nodePath].size+' </span> ');  
+                             .prepend('<i title=" collection node of '+nodePath+' " class="fa fa-bars"></i> ')  
                 var collectionNodeName = $(this).find("> .panel-heading").text();
-                // $(this).find("> .panel-heading").remove();
                 var childPanel = $(this).find("> .list-group > .panel-success ")
-                childPanel.data("collection",nodePath)
-                          // .insertBefore($(this))
-                          // .find("> .panel-heading > .panel-title")
-                          //    .prepend('<i title=" collection node of '+collectionNodeName+' " class="fa fa-bars"></i> ');
-                // $(this).remove();
+                childPanel.data("collection",nodePath) 
             }
         })
-        //map node
+                
+        //leaf are draggable
         $('.map-node').each(function(){
             var nodePath = $(this).data("node-path");
-
-            knownNodes[nodePath]["div"] = $(this);
 
             //popover
             var samples = knownNodes[nodePath].samples;
@@ -302,6 +323,9 @@ var Mapper = function(){
 
                 var leftCollectionPath = getClosestCollectionPath(leftEntityMapping.nodePath);
                 if(!leftCollectionPath)return console.warn("leftCollectionPath not found for "+leftEntityMapping.nodePath)
+                //check if the collection is a sub collection
+                var parentCollectionCollectionPath = getClosestCollectionPath(leftCollectionPath,true);
+                if( parentCollectionCollectionPath != "root")leftCollectionPath = parentCollectionCollectionPath;
 
                 var modelSetter = Model.getSetter(modelName,$(this).data("model-path").split(self.nodePath.separator)[1])
                 
@@ -401,11 +425,12 @@ var Mapper = function(){
 
         /**
          * loop recursively over parents to find the closest collection node 
-         * @param  {String} nodePath                   node path
-         * @return {String} collectionNodePath         the closest parent collection node path
+         * @param  {String}  nodePath                   node path
+         * @param  {boolean} exlude                     exclude nodePath if it's a collectionNodePath
+         * @return {String}  collectionNodePath         the closest parent collection node path
          */
-        function getClosestCollectionPath(nodePath){
-            if(knownCollection[nodePath])
+        function getClosestCollectionPath(nodePath,exclude){
+            if(knownCollection[nodePath] && !exclude)
                 return nodePath;
             var $node = knownNodes[nodePath].div;
             if($node){

@@ -135,13 +135,12 @@ var ocsConfig = {
                     format : [{
                         fn : "children",
                         arg : ["organization-id"]
+                    },{
+                        fn : "text"
                     }],
                     multiple : true,
                     setter : 'addOrganization',
                     fk : {
-                        format : [{
-                            fn : "text"
-                        }],
                         array : "organizations"
                     }
                 }
@@ -177,19 +176,17 @@ var ocsConfig = {
                     format : [{
                         fn : "children",
                         arg : ["keywords"]
-                    }],
-                    wrapped : true,
+                    },{
+                        fn : "children",
+                        arg : ["keyword"]
+                    },{
+                        fn : "text"
+                    }], 
                     multiple : true, 
-                    //TODO add splitter format
-                    //TODO add splitter format
-                    //TODO add splitter format
                     setter : 'addTopic',
                     //pointed entity isn't a concrete node in this format and thus, don't contains any index 
                     //so we must retrieve an index with getArrayId instead of objectMap 
                     fk : {
-                        format : [{
-                            fn : "text"
-                        }],
                         array : "topics", 
                         create : "setName"
                     }
@@ -199,14 +196,15 @@ var ocsConfig = {
                     format : [{
                         fn : "children",
                         arg : ["authors"]
-                    }],
-                    wrapped : true,
+                    },{
+                        fn : "children",
+                        arg : ["author"]
+                    },{
+                        fn : "text"
+                    }], 
                     multiple : true,
                     setter : 'addAuthor',
                     fk : {
-                        format : [{
-                            fn : "text"
-                        }],
                         array : "persons"
                     }
                 }
@@ -233,14 +231,15 @@ var ocsConfig = {
                     format : [{
                         fn : "children",
                         arg : ["papers"]
-                    }],
-                    wrapped : true,
+                    },{
+                        fn : "children",
+                        arg : ["paper"]
+                    },{
+                        fn : "text"
+                    }], 
                     multiple : true,
                     setter : 'addPaper',
                     fk : {
-                        format : [{
-                            fn : "text"
-                        }],
                         array : "proceedings"
                     }
                 },
@@ -248,14 +247,15 @@ var ocsConfig = {
                     format : [{
                         fn : "children",
                         arg : ["pc-chairs"]
-                    }],
-                    wrapped : true,
+                    },{
+                        fn : "children",
+                        arg : ["pc-chair"]
+                    },{
+                            fn : "text"
+                        }], 
                     multiple : true,
                     setter : 'addChair',
                     fk : {
-                        format : [{
-                            fn : "text"
-                        }],
                         array : "persons"
                     }
                 }
@@ -272,7 +272,7 @@ var ocsConfig = {
             //     }
             //     event['addCategorie']=catId; 
             // },
-        }
+        },
 
     ]
 

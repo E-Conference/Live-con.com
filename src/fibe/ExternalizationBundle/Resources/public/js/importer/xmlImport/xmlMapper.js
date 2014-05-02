@@ -15,7 +15,7 @@ xmlMapper = {
         getNodeKey : {
             format : [{
                 //don't care about foreign keys
-                fn : "generate"
+                fn : "generate", 
             }]
         },
         getNodeName : {
@@ -123,6 +123,19 @@ xmlMapper = {
         text : function(node){
             return $(node).text();
         },
+        split : function(text,arg){
+            if(!text)return text;
+            var rtn = text.split(arg[0]);
+            switch(arg[1])
+            {
+            case "last":
+                rtn = rtn[rtn.length-1];
+            break;
+            default:
+                rtn = rtn[arg[1]];
+            }
+            return rtn;
+        },
         localName : function(node){
             return $(node)[0].localName;
         },
@@ -130,6 +143,15 @@ xmlMapper = {
         //arg[0] must contain the wanted attr
         attr : function(node,arg){
             return $(node).attr(arg[0]) || $(node).attr(arg[0]);
+        },
+        parseTime : function(node){ 
+            var rtn;
+            $(node).children().each(function(){
+                if(this.nodeName !=="ical:date") return;
+                rtn = $(this).text();  
+            });
+            rtn = rtn || $(node).text() || node;
+            return rtn ? moment(rtn ).format() : "";
         },
 
         /********************* nodeSet && node manipulation : return jquery Node or NodeSet *******************/
