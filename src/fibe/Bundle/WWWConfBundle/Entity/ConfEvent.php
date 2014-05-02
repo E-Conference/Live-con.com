@@ -1,29 +1,27 @@
 <?php
 
-namespace fibe\Bundle\WWWConfBundle\Entity;
+  namespace fibe\Bundle\WWWConfBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert; 
+  use Doctrine\ORM\Mapping as ORM;
+  use Symfony\Component\Validator\Constraints as Assert;
 
-use fibe\Bundle\WWWConfBundle\Entity\Event; 
-use fibe\Bundle\WWWConfBundle\Entity\Person;
-use fibe\Bundle\WWWConfBundle\Entity\Paper;
+  use fibe\Bundle\WWWConfBundle\Entity\Event;
+  use fibe\Bundle\WWWConfBundle\Entity\Person;
+  use fibe\Bundle\WWWConfBundle\Entity\Paper;
 
-use fibe\Bundle\WWWConfBundle\Util\StringTools;
-
-
-/**
- * ConfEvent
- *
- * @ORM\HasLifecycleCallbacks
- * @ORM\Entity
- * @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\ConfEventRepository")
- * @ORM\HasLifecycleCallbacks
- */
-class ConfEvent extends Event
-{
+  use fibe\Bundle\WWWConfBundle\Util\StringTools;
 
 
+  /**
+   * ConfEvent
+   *
+   * @ORM\HasLifecycleCallbacks
+   * @ORM\Entity
+   * @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\ConfEventRepository")
+   * @ORM\HasLifecycleCallbacks
+   */
+  class ConfEvent extends Event
+  {
     /**
      * status
      *
@@ -39,7 +37,7 @@ class ConfEvent extends Event
     
     /**
      * slidePresentation
-     * Url to slides presentation     
+     * Url to slides presentation
      *
      * @ORM\Column(type="string", nullable=true,  name="slidePresentation")
      */
@@ -69,68 +67,64 @@ class ConfEvent extends Event
      */
     private $topics;
 
-
     /**
      * roles
-     * Persons related to an event 
-     *  
+     * Persons related to an event
+     *
      * @ORM\OneToMany(targetEntity="Role", mappedBy="event",cascade={"persist","remove"})
      * @ORM\JoinColumn( onDelete="CASCADE")
      */
     private $roles;
 
-
     /**
-     *  
-     * Is an all day event 
+     *
+     * Is an all day event
      * Used for ui representation in the calendar view
-     *   
+     *
      * @ORM\Column(name="is_allday", type="boolean")
      */
-     private $isAllDay ;
+    private $isAllDay;
 
-     /**
+    /**
      * @ORM\Column(type="string", length=128, nullable=true)
      */
     protected $acronym;
 
-
-     /**
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $attach;
- 
 
     /**
-     *  
+     *
      * Is it a main conf event ?
-     *   
+     *
      * @ORM\Column(name="is_mainConfEvent", type="boolean")
      */
-     private $isMainConfEvent = false;
+    private $isMainConfEvent = false;
 
-     /**
+    /**
      * @ORM\Column(type="string", length=128, nullable=true)
      */
     protected $slug;
 
-     /**
+    /**
      * @ORM\Column(name="is_instant", type="boolean")
      */
     protected $isInstant;
-     
+
     /**
      * Constructor
      */
     public function __construct()
     {
-        parent::__construct(); 
-        $this->papers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->topics = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->xProperties = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+      parent::__construct(); 
+      $this->papers      = new \Doctrine\Common\Collections\ArrayCollection();
+      $this->topics      = new \Doctrine\Common\Collections\ArrayCollection();
+      $this->roles       = new \Doctrine\Common\Collections\ArrayCollection();
+      $this->children    = new \Doctrine\Common\Collections\ArrayCollection();
+      $this->xProperties = new \Doctrine\Common\Collections\ArrayCollection();
+      $this->categories  = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -139,7 +133,7 @@ class ConfEvent extends Event
      */
     public function slugify()
     {
-        $this->setSlug(StringTools::slugify($this->getId().$this->getSummary()));
+      $this->setSlug(StringTools::slugify($this->getId() . $this->getSummary()));
     }
 
     /**
@@ -150,204 +144,229 @@ class ConfEvent extends Event
      */
     public function onUpdate()
     {
-        $this->slugify();
-        $this->setIsInstant($this->getEndAt()->format('U') == $this->getStartAt()->format('U'));
- 
-        //events that aren't leaf in the hierarchy can't have a location
-        if($this->hasChildren() && $this->getLocation() != null){
-            $this->setLocation(null);
-        }
+      $this->slugify();
+      $this->setIsInstant($this->getEndAt()->format('U') == $this->getStartAt()->format('U'));
 
-        //ensure main conf has correct properties 
-        if($this->isMainConfEvent){
-            $this->fitChildrenDate(true);
-            if ($this->getEndAt()->getTimestamp() <=  $this->getStartAt()->getTimestamp()) {
-                $endAt = clone $this->getStartAt() ; 
-                $this->setEndAt($endAt->add(new \DateInterval('P1D')));
-            }
-            $this->setIsInstant(false);
+      //events that aren't leaf in the hierarchy can't have a location
+      if ($this->hasChildren() && $this->getLocation() != null)
+      {
+        $this->setLocation(null);
+      }
+
+      //ensure main conf has correct properties
+      if ($this->isMainConfEvent)
+      {
+        $this->fitChildrenDate(true);
+        if ($this->getEndAt()->getTimestamp() <= $this->getStartAt()->getTimestamp())
+        {
+          $endAt = clone $this->getStartAt();
+          $this->setEndAt($endAt->add(new \DateInterval('P1D')));
         }
+        $this->setIsInstant(false);
+      }
     }
 
-    //ensure main conf event fits its children dates 
-    public function fitChildrenDate($allDay = false){
-        $earliestStart= new \DateTime('6000-10-10'); 
-        $latestEnd = new \DateTime('1000-10-10');
-        foreach ($this->getChildren() as $child) {
-            if($child->getIsInstant())continue; 
-            if($child->getStartAt() < $earliestStart) $earliestStart = $child->getStartAt();
-            if($child->getEndAt() > $latestEnd) $latestEnd = $child->getEndAt();
-        } 
-        if($earliestStart == new \DateTime('6000-10-10') || $latestEnd == new \DateTime('1000-10-10'))return;
-        if($earliestStart == $latestEnd){ 
-            $latestEnd->add(new \DateInterval('P1D'));
-        }
-        // get startof and endof day
-        // if($allDay==true){
 
-        //     $sTS = $earliestStart->getTimestamp();
-        //     $eTS = $latestEnd->getTimestamp();
+    /**
+     * Ensure main conf event fits its children dates
+     *
+     * @param bool $allDay
+     *
+     * @return bool
+     */
+    public function fitChildrenDate($allDay = false)
+    {
+      $earliestStart = new \DateTime('6000-10-10');
+      $latestEnd = new \DateTime('1000-10-10');
+      foreach ($this->getChildren() as $child)
+      {
+        if ($child->getIsInstant())
+          continue;
+        if ($child->getStartAt() < $earliestStart)
+          $earliestStart = $child->getStartAt();
+        if ($child->getEndAt() > $latestEnd)
+          $latestEnd = $child->getEndAt();
+      }
+      if ($earliestStart == new \DateTime('6000-10-10') || $latestEnd == new \DateTime('1000-10-10'))
+        return;
+      if ($earliestStart == $latestEnd)
+      {
+        $latestEnd->add(new \DateInterval('P1D'));
+      }
+      // get startof and endof day
+      // if($allDay==true){
 
-        //     //adjust timezone to correctly calculate with floor()
-        //     $tzOffset = \DateTime::createFromFormat('U', $sTS); 
-        //     $tzOffset->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
+      //     $sTS = $earliestStart->getTimestamp();
+      //     $eTS = $latestEnd->getTimestamp();
 
-        //     $sTS = $sTS + $tzOffset->getOffset();
-        //     $sTS = (floor($sTS/86400))*86400;
+      //     //adjust timezone to correctly calculate with floor()
+      //     $tzOffset = \DateTime::createFromFormat('U', $sTS);
+      //     $tzOffset->setTimeZone(new \DateTimeZone(date_default_timezone_get()));
 
-        //     $eTS = $eTS - $tzOffset->getOffset();
-        //     $eTS = (floor(($eTS)/86400))*86400;
+      //     $sTS = $sTS + $tzOffset->getOffset();
+      //     $sTS = (floor($sTS/86400))*86400;
 
-        //     //adjust timezone back
-        //     $earliestStart = $earliestStart->setTimestamp($sTS - $tzOffset->getOffset()); 
-        //     $latestEnd = $latestEnd->setTimestamp($eTS + $tzOffset->getOffset()); 
-        // }
-        if($earliestStart->getTimestamp() != $this->getStartAt()->getTimestamp() || $latestEnd->getTimestamp() != $this->getEndAt()->getTimestamp()){
-            $this->setStartAt($earliestStart);
-            $this->setEndAt($latestEnd);
-            return true;
-        }
-    } 
+      //     $eTS = $eTS - $tzOffset->getOffset();
+      //     $eTS = (floor(($eTS)/86400))*86400;
 
-     /**
+      //     //adjust timezone back
+      //     $earliestStart = $earliestStart->setTimestamp($sTS - $tzOffset->getOffset());
+      //     $latestEnd = $latestEnd->setTimestamp($eTS + $tzOffset->getOffset());
+      // }
+      if ($earliestStart->getTimestamp() != $this->getStartAt()->getTimestamp() || $latestEnd->getTimestamp() != $this->getEndAt()->getTimestamp())
+      {
+        $this->setStartAt($earliestStart);
+        $this->setEndAt($latestEnd);
+        return true;
+      }
+    }
+
+    /**
      * Set slug
      *
      * @param string $slug
+     *
      * @return ConfEvent
      */
     public function setSlug($slug)
     {
-        $this->slug = $slug;
-    
-        return $this;
+      $this->slug = $slug;
+
+      return $this;
     }
 
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {
-        $this->slugify();
-        return $this->slug;
+      $this->slugify();
+      return $this->slug;
     }
 
 
     /** computeIsAllDay
      *
      * this is only computed on creation for the importer
-     *  @ORM\PrePersist() 
+     * @ORM\PrePersist()
      */
     public function computeIsAllDay()
-    {       
-        if($this->isMainConfEvent)$this->setIsAllDay(true);
+    {
+      if ($this->isMainConfEvent)
+        $this->setIsAllDay(true);
     }
-    
+
     /**
      * Set slidePresentation
      *
      * @param string $slidePresentation
+     *
      * @return ConfEvent
      */
     public function setSlidePresentation($slidePresentation)
     {
-        $this->slidePresentation = $slidePresentation;
-    
-        return $this;
+      $this->slidePresentation = $slidePresentation;
+
+      return $this;
     }
 
     /**
      * Get slidePresentation
      *
-     * @return string 
+     * @return string
      */
     public function getSlidePresentation()
     {
-        return $this->slidePresentation;
+      return $this->slidePresentation;
     }
 
-    
+
     /**
      * Set url
      *
      * @param string $url
+     *
      * @return ConfEvent
      */
     public function setUrl($url)
     {
-        $this->url = $url;
-    
-        return $this;
+      $this->url = $url;
+
+      return $this;
     }
 
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
-        return $this->url;
+      return $this->url;
     }
 
-      /**
+    /**
      * Set Attach
      *
      * @param string $attach
+     *
      * @return ConfEvent
      */
     public function setAttach($attach)
     {
-        $this->attach = $attach;
-    
-        return $this;
+      $this->attach = $attach;
+
+      return $this;
     }
 
     /**
      * Get Attach
      *
-     * @return string 
+     * @return string
      */
     public function getAttach()
     {
-        return $this->attach;
+      return $this->attach;
     }
-   
+
     /**
      * Set conference
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
+     *
      * @return ConfEvent
      */
     public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference)
     {
-        $this->conference = $conference;
-    
-        return $this;
+      $this->conference = $conference;
+
+      return $this;
     }
 
     /**
      * Get conference
      *
-     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
+     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf
      */
     public function getConference()
     {
-        return $this->conference;
+      return $this->conference;
     }
 
     /**
      * Add papers
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\Paper $papers
+     *
      * @return ConfEvent
      */
     public function addPaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $papers)
     {
-        $this->papers[] = $papers;
-    
-        return $this;
+      $this->papers[] = $papers;
+
+      return $this;
     }
 
     /**
@@ -357,30 +376,31 @@ class ConfEvent extends Event
      */
     public function removePaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $papers)
     {
-        $this->papers->removeElement($papers);
+      $this->papers->removeElement($papers);
     }
 
     /**
      * Get papers
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getPapers()
     {
-        return $this->papers;
+      return $this->papers;
     }
 
     /**
      * Add topics
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\Topic $topics
+     *
      * @return ConfEvent
      */
     public function addTopic(\fibe\Bundle\WWWConfBundle\Entity\Topic $topics)
     {
-        $this->topics[] = $topics;
-    
-        return $this;
+      $this->topics[] = $topics;
+
+      return $this;
     }
 
     /**
@@ -390,30 +410,31 @@ class ConfEvent extends Event
      */
     public function removeTopic(\fibe\Bundle\WWWConfBundle\Entity\Topic $topics)
     {
-        $this->topics->removeElement($topics);
+      $this->topics->removeElement($topics);
     }
 
     /**
      * Get topics
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTopics()
     {
-        return $this->topics;
+      return $this->topics;
     }
 
     /**
      * Add roles
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\Role $roles
+     *
      * @return ConfEvent
      */
     public function addRole(\fibe\Bundle\WWWConfBundle\Entity\Role $roles)
     {
-        $this->roles[] = $roles;
-    
-        return $this;
+      $this->roles[] = $roles;
+
+      return $this;
     }
 
     /**
@@ -423,115 +444,117 @@ class ConfEvent extends Event
      */
     public function removeRole(\fibe\Bundle\WWWConfBundle\Entity\Role $roles)
     {
-        $this->roles->removeElement($roles);
+      $this->roles->removeElement($roles);
     }
 
     /**
      * Get roles
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getRoles()
     {
-        return $this->roles;
+      return $this->roles;
     }
 
-    
+
     /**
      * Set isAllDay
      *
      * @param string $isAllDay
+     *
      * @return ConfEvent
      */
     public function setIsAllDay($isAllDay)
     {
-        $this->isAllDay = $isAllDay;
-    
-        return $this;
+      $this->isAllDay = $isAllDay;
+
+      return $this;
     }
 
     /**
      * Get isAllDay
      *
-     * @return string 
+     * @return string
      */
     public function getIsAllDay()
     {
-        return $this->isAllDay;
+      return $this->isAllDay;
     }
 
-    
+
     /**
      * Set isMainConfEvent
      *
      * @param string $isMainConfEvent
+     *
      * @return ConfEvent
      */
     public function setIsMainConfEvent($isMainConfEvent)
     {
-        $this->isMainConfEvent = $isMainConfEvent;
-    
-        return $this;
+      $this->isMainConfEvent = $isMainConfEvent;
+
+      return $this;
     }
 
     /**
      * Get isMainConfEvent
      *
-     * @return string 
+     * @return string
      */
     public function getIsMainConfEvent()
     {
-        return $this->isMainConfEvent;
+      return $this->isMainConfEvent;
     }
 
-    
+
     /**
      * Set isInstant
      *
      * @param string $isInstant
+     *
      * @return ConfEvent
      */
     public function setIsInstant($isInstant)
     {
-        $this->isInstant = $isInstant;
-    
-        return $this;
+      $this->isInstant = $isInstant;
+
+      return $this;
     }
 
     /**
      * Get isInstant
      *
-     * @return string 
+     * @return string
      */
     public function getIsInstant()
     {
-        return $this->isInstant;
+      return $this->isInstant;
     }
 
-     /**
+    /**
      * Set acronym
      *
      * @param string $acronym
+     *
      * @return ConfEvent
      */
     public function setAcronym($acronym)
     {
-        $this->acronym = $acronym;
-    
-        return $this;
+      $this->acronym = $acronym;
+
+      return $this;
     }
 
     /**
      * Get acronym
      *
-     * @return string 
+     * @return string
      */
     public function getAcronym()
     {
-        return $this->acronym;
+      return $this->acronym;
     }
-
-
     
 
     /**
@@ -600,4 +623,4 @@ class ConfEvent extends Event
         return count($this->children) != 0;
     }
     
-}
+  }

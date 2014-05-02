@@ -1,185 +1,196 @@
 <?php
 
-namespace fibe\Bundle\WWWConfBundle\Controller;
+  namespace fibe\Bundle\WWWConfBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+  use Symfony\Component\Form\Form;
+  use Symfony\Component\HttpFoundation\Request;
+  use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
-use fibe\Bundle\WWWConfBundle\Form\ConfEventType;
-use fibe\Bundle\WWWConfBundle\Entity\Role;
-use fibe\Bundle\WWWConfBundle\Entity\Topic;
-use fibe\Bundle\WWWConfBundle\Form\RoleType as RoleType;
-use fibe\Bundle\WWWConfBundle\Form\TopicType as TopicType;
-//Filter type form
-use fibe\Bundle\WWWConfBundle\Form\Filters\ConfEventFilterType;
+  use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
+  use fibe\Bundle\WWWConfBundle\Form\ConfEventType;
+  use fibe\Bundle\WWWConfBundle\Entity\Role;
+  use fibe\Bundle\WWWConfBundle\Entity\Topic;
+  use fibe\Bundle\WWWConfBundle\Form\RoleType as RoleType;
+  use fibe\Bundle\WWWConfBundle\Form\TopicType as TopicType;
+  //Filter type form
+  use fibe\Bundle\WWWConfBundle\Form\Filters\ConfEventFilterType;
 
-use fibe\Bundle\WWWConfBundle\Entity\XProperty;  
+  use fibe\Bundle\WWWConfBundle\Entity\XProperty;
 
-use Pagerfanta\Adapter\ArrayAdapter;
-use Pagerfanta\Pagerfanta;
-use Pagerfanta\Exception\NotValidCurrentPageException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+  use Pagerfanta\Adapter\ArrayAdapter;
+  use Pagerfanta\Pagerfanta;
+  use Pagerfanta\Exception\NotValidCurrentPageException;
+  use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+  use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-/**
- * ConfEvent controller.
- * @Route("/confevent")
- */
-class ConfEventController extends Controller
-{
+  /**
+   * ConfEvent controller.
+   * @Route("/confevent")
+   */
+  class ConfEventController extends Controller
+  {
     /**
      * Lists all ConfEvent entities.
      * @Route("/",name="schedule_confevent")
-     *@Template()
+     * @Template()
      */
     public function indexAction(Request $request)
     {
-        
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $em = $this->getDoctrine()->getManager();
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $entities = $this->getUser()->getCurrentConf()->getEvents()->toArray();
+      $em = $this->getDoctrine()->getManager();
 
-        $adapter = new ArrayAdapter($entities);
-        $pager = new PagerFanta($adapter);
-        $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
+      $entities = $this->getUser()->getCurrentConf()->getEvents()->toArray();
 
-        try {
-            $pager->setCurrentPage($request->query->get('page', 1));
-        } catch (NotValidCurrentPageException $e) {
-            throw new NotFoundHttpException();
-        }
+      $adapter = new ArrayAdapter($entities);
+      $pager = new PagerFanta($adapter);
+      $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
 
-        //Form Filter
-        $filters =$this->createForm(new ConfEventFilterType($this->getUser()));
-        
-        return array(
-            'pager' => $pager,
-            'authorized' => $authorization->getFlagSched(),
-            'filters_form' => $filters->createView()
-        );
+      try
+      {
+        $pager->setCurrentPage($request->query->get('page', 1));
+      }
+      catch (NotValidCurrentPageException $e)
+      {
+        throw new NotFoundHttpException();
+      }
+
+      //Form Filter
+      $filters = $this->createForm(new ConfEventFilterType($this->getUser()));
+
+      return array(
+        'pager'        => $pager,
+        'authorized'   => $authorization->getFlagSched(),
+        'filters_form' => $filters->createView()
+      );
     }
 
-     /**
+    /**
      * Filter confevent
      * @Route("/filter", name="schedule_confevent_filter")
      */
     public function filterAction(Request $request)
     {
 
-        $em = $this->getDoctrine()->getManager();
+      $em = $this->getDoctrine()->getManager();
 
-        $conf = $this->getUser()->getCurrentConf();
-        //Filters
-        $filters =$this->createForm(new ConfEventFilterType($this->getUser()));
-        $filters->bindRequest($this->get('request'));
+      $conf = $this->getUser()->getCurrentConf();
+      //Filters
+      $filters = $this->createForm(new ConfEventFilterType($this->getUser()));
+      $filters->bindRequest($this->get('request'));
 
-        if ($filters->isValid()) {
-            // bind values from the request
-          
-             $entities = $em->getRepository('fibeWWWConfBundle:ConfEvent')->filtering($filters->getData(), $conf);
-             $nbResult = count($entities);
+      if ($filters->isValid())
+      {
+        // bind values from the request
 
-             //Pager
-             $adapter = new ArrayAdapter($entities);
-             $pager = new PagerFanta($adapter);
-             $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
-             try {
-               $pager->setCurrentPage($request->query->get('page', 1));
-             } catch (NotValidCurrentPageException $e) {
-                throw new NotFoundHttpException();
-             }
+        $entities = $em->getRepository('fibeWWWConfBundle:ConfEvent')->filtering($filters->getData(), $conf);
+        $nbResult = count($entities);
 
-             return $this->render('fibeWWWConfBundle:ConfEvent:list.html.twig', array(
-                 'pager'  => $pager,
-                 'nbResult' => $nbResult,
-             ));
+        //Pager
+        $adapter = new ArrayAdapter($entities);
+        $pager = new PagerFanta($adapter);
+        $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
+        try
+        {
+          $pager->setCurrentPage($request->query->get('page', 1));
         }
+        catch (NotValidCurrentPageException $e)
+        {
+          throw new NotFoundHttpException();
+        }
+
+        return $this->render('fibeWWWConfBundle:ConfEvent:list.html.twig', array(
+          'pager'    => $pager,
+          'nbResult' => $nbResult,
+        ));
+      }
 
     }
 
     /**
      * Creates a new ConfEvent entity.
-     *  @Route("/create", name="schedule_confevent_create")
+     * @Route("/create", name="schedule_confevent_create")
      */
     public function createAction(Request $request)
     {
-        //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-         if(!$authorization->getFlagSched()){
-            throw new AccessDeniedException('Action not authorized !');
-          } 
+      if (!$authorization->getFlagSched())
+      {
+        throw new AccessDeniedException('Action not authorized !');
+      }
 
-        //events are created via the schedule view only
-        return $this->redirect($this->generateUrl('schedule_view'));
+      //events are created via the schedule view only
+      return $this->redirect($this->generateUrl('schedule_view'));
 
-        $entity  = new ConfEvent();
-        $form = $this->createForm(new ConfEventType($this->getUser(),$entity), $entity);
+      $entity = new ConfEvent();
+      $form = $this->createForm(new ConfEventType($this->getUser(), $entity), $entity);
 
-        $form->bind($request);
+      $form->bind($request);
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
+      if ($form->isValid())
+      {
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($entity);
 
-            //Link the new Event to the current Conf 
-            $entity->setConference($this->getUser()->getCurrentConf());
-            $em->persist($entity); 
-            $em->flush();
+        //Link the new Event to the current Conf
+        $entity->setConference($this->getUser()->getCurrentConf());
+        $em->persist($entity);
+        $em->flush();
 
-       /*   $xprop= new XProperty(); 
-            $xprop->setXNamespace("event_uri"); 
-            $xprop->setXKey(rand(0,999999));
-            $xprop->setXValue("http://dataconf-event/" . $entity->getId());  
-            $xprop->setCalendarEntity($entity); 
-            
-            $em->persist($xprop); 
+        /*   $xprop= new XProperty();
+             $xprop->setXNamespace("event_uri");
+             $xprop->setXKey(rand(0,999999));
+             $xprop->setXValue("http://dataconf-event/" . $entity->getId());
+             $xprop->setCalendarEntity($entity);
 
-            $em->flush(); */
+             $em->persist($xprop);
 
-            return $this->redirect($this->generateUrl('schedule_confevent_show', array('id' => $entity->getId())));
-        }
+             $em->flush(); */
 
-        return $this->render('fibeWWWConfBundle:ConfEvent:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-            'authorized' => $authorization->getFlagSched()
-        ));
+        return $this->redirect($this->generateUrl('schedule_confevent_show', array('id' => $entity->getId())));
+      }
+
+      return $this->render('fibeWWWConfBundle:ConfEvent:new.html.twig', array(
+        'entity'     => $entity,
+        'form'       => $form->createView(),
+        'authorized' => $authorization->getFlagSched()
+      ));
     }
 
     /**
      * Displays a form to create a new ConfEvent entity.
-     * @Route("/new",name="schedule_confevent_new") 
+     * @Route("/new",name="schedule_confevent_new")
      * @Template()
      */
     public function newAction()
-    { 
-        //events are created via the schedule view only
-        return $this->redirect($this->generateUrl('schedule_view'));
-        //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+    {
+      //events are created via the schedule view only
+      return $this->redirect($this->generateUrl('schedule_view'));
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-         if(!$authorization->getFlagSched()){
-            throw new AccessDeniedException('Action not authorized !');
-          } 
-        $entity = new ConfEvent();
-        $form   = $this->createForm(new ConfEventType($this->getUser(),$entity), $entity);
+      if (!$authorization->getFlagSched())
+      {
+        throw new AccessDeniedException('Action not authorized !');
+      }
+      $entity = new ConfEvent();
+      $form = $this->createForm(new ConfEventType($this->getUser(), $entity), $entity);
 
 
-        return $this->render('fibeWWWConfBundle:ConfEvent:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-            'authorized' => $authorization->getFlagSched()
-        ));
+      return $this->render('fibeWWWConfBundle:ConfEvent:new.html.twig', array(
+        'entity'     => $entity,
+        'form'       => $form->createView(),
+        'authorized' => $authorization->getFlagSched()
+      ));
     }
 
     /**
@@ -187,31 +198,32 @@ class ConfEventController extends Controller
      * @Route("/{id}/show", name="schedule_confevent_show")
      * @Template()
      */
-     
+
     public function showAction($id)
     {
-        
-        //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $em = $this->getDoctrine()->getManager();
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        //The object have to belongs to the current conf
-        $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ConfEvent entity.');
-        }
+      $em = $this->getDoctrine()->getManager();
 
-        $deleteForm = $this->createDeleteForm($id);
+      //The object have to belongs to the current conf
+      $currentConf = $this->getUser()->getCurrentConf();
+      $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+      if (!$entity)
+      {
+        throw $this->createNotFoundException('Unable to find ConfEvent entity.');
+      }
 
-        return $this->render('fibeWWWConfBundle:ConfEvent:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(), 
-            'authorized' => $authorization->getFlagSched()       
+      $deleteForm = $this->createDeleteForm($id);
 
-            ));
+      return $this->render('fibeWWWConfBundle:ConfEvent:show.html.twig', array(
+        'entity'      => $entity,
+        'delete_form' => $deleteForm->createView(),
+        'authorized'  => $authorization->getFlagSched()
+
+      ));
     }
 
     /**
@@ -221,109 +233,115 @@ class ConfEventController extends Controller
      */
     public function editAction($id)
     {
-        
-        //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        if(!$authorization->getFlagSched()){
-            throw new AccessDeniedException('Action not authorized !');
-        } 
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $em = $this->getDoctrine()->getManager();
+      if (!$authorization->getFlagSched())
+      {
+        throw new AccessDeniedException('Action not authorized !');
+      }
 
-        //The object have to belongs to the current conf
-        $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ConfEvent entity.');
-        }
+      $em = $this->getDoctrine()->getManager();
 
-        $role = new Role();
-        $roleForm = $this->createForm(new RoleType($this->getUser()), $role);
-        $editForm = $this->createForm(new ConfEventType($this->getUser(),$entity), $entity);
+      //The object have to belongs to the current conf
+      $currentConf = $this->getUser()->getCurrentConf();
+      $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+      if (!$entity)
+      {
+        throw $this->createNotFoundException('Unable to find ConfEvent entity.');
+      }
 
-        $papersForSelect = $this->getUser()->getCurrentConf()->getPapers()->toArray();
-        $form_paper = $this->createFormBuilder($entity)
-            ->add('papers', 'entity', array(
-                      'class'    => 'fibeWWWConfBundle:Paper',
-                      'property' => 'title',
-                      'required' => false,
-                      'multiple' => false,
-                      'choices'=> $papersForSelect,
-                      'label'    => "Select paper"))
-            ->getForm();
+      $role = new Role();
+      $roleForm = $this->createForm(new RoleType($this->getUser()), $role);
+      $editForm = $this->createForm(new ConfEventType($this->getUser(), $entity), $entity);
 
-         $topicsForSelect = $this->getUser()->getCurrentConf()->getTopics()->toArray();
-         $form_topic = $this->createFormBuilder($entity)
-            ->add('topics', 'entity', array(
-                  'class'    => 'fibeWWWConfBundle:Topic',
-                  'required' => false,
-                  'property' => 'name',
-                  'multiple' => false,
-                  'choices'=> $topicsForSelect,
-                  'label'    => "Select topic" ))
-            ->getForm();
+      $papersForSelect = $this->getUser()->getCurrentConf()->getPapers()->toArray();
+      $form_paper = $this->createFormBuilder($entity)
+        ->add('papers', 'entity', array(
+          'class'    => 'fibeWWWConfBundle:Paper',
+          'property' => 'title',
+          'required' => false,
+          'multiple' => false,
+          'choices'  => $papersForSelect,
+          'label'    => "Select paper"))
+        ->getForm();
 
-        $deleteForm = $this->createDeleteForm($id);
+      $topicsForSelect = $this->getUser()->getCurrentConf()->getTopics()->toArray();
+      $form_topic = $this->createFormBuilder($entity)
+        ->add('topics', 'entity', array(
+          'class'    => 'fibeWWWConfBundle:Topic',
+          'required' => false,
+          'property' => 'name',
+          'multiple' => false,
+          'choices'  => $topicsForSelect,
+          'label'    => "Select topic"))
+        ->getForm();
 
-        return $this->render('fibeWWWConfBundle:ConfEvent:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'role_form'    => $roleForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-            'paper_form' => $form_paper->createView(),
-            'topic_form' => $form_topic->createView(),
-            'authorized' => $authorization->getFlagSched(),
-        ));
+      $deleteForm = $this->createDeleteForm($id);
+
+      return $this->render('fibeWWWConfBundle:ConfEvent:edit.html.twig', array(
+        'entity'      => $entity,
+        'edit_form'   => $editForm->createView(),
+        'role_form'   => $roleForm->createView(),
+        'delete_form' => $deleteForm->createView(),
+        'paper_form'  => $form_paper->createView(),
+        'topic_form'  => $form_topic->createView(),
+        'authorized'  => $authorization->getFlagSched(),
+      ));
     }
 
     /**
      * Edits an existing ConfEvent entity.
-     *  @Route("/{id}/update", name="schedule_confevent_update")
-     *  @Template("fibeWWWConfBundle:ConfEvent:edit.html.twig")
+     * @Route("/{id}/update", name="schedule_confevent_update")
+     * @Template("fibeWWWConfBundle:ConfEvent:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
-        
-         //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        if(!$authorization->getFlagSched()){
-            throw new AccessDeniedException('Action not authorized !');
-        } 
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
+      if (!$authorization->getFlagSched())
+      {
+        throw new AccessDeniedException('Action not authorized !');
+      }
+
+      $em = $this->getDoctrine()->getManager();
+      //The object have to belongs to the current conf
+      $currentConf = $this->getUser()->getCurrentConf();
+      $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+
+      if (!$entity)
+      {
+        throw $this->createNotFoundException('Unable to find ConfEvent entity.');
+      }
+
+
+      $form = $this->createForm(new ConfEventType($this->getUser(), $entity), $entity);
+      $form->bind($request);
+
+      if ($form->isValid())
+      {
         $em = $this->getDoctrine()->getManager();
-         //The object have to belongs to the current conf
-        $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+        //If is a main confEvent => have to update the slug conference
+        if ($entity->getIsMainConfEvent())
+        {
 
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find ConfEvent entity.');
-        }
- 
-
-        $form = $this->createForm(new ConfEventType($this->getUser(),$entity), $entity);
-        $form->bind($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            //If is a main confEvent => have to update the slug conference
-            if($entity->getIsMainConfEvent()){
-
-                $conference = $entity->getConference();
-                $conference->slugify();
-                $em->persist($conference); 
-             }
-
-            $em->persist($entity);
-            $em->flush();
-
+          $conference = $entity->getConference();
+          $conference->slugify();
+          $em->persist($conference);
         }
 
-        return $this->redirect($this->generateUrl('schedule_confevent_show', array('id' => $id)));
-    
+        $em->persist($entity);
+        $em->flush();
+
+      }
+
+      return $this->redirect($this->generateUrl('schedule_confevent_show', array('id' => $id)));
+
     }
 
     /**
@@ -333,53 +351,57 @@ class ConfEventController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
-        
-          //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        if(!$authorization->getFlagSched()){
-            throw new AccessDeniedException('Action not authorized !');
-        } 
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $form = $this->createDeleteForm($id);
-        $form->bind($request);
+      if (!$authorization->getFlagSched())
+      {
+        throw new AccessDeniedException('Action not authorized !');
+      }
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+      $form = $this->createDeleteForm($id);
+      $form->bind($request);
 
-             //The object have to belongs to the current conf
-            $currentConf=$this->getUser()->getCurrentConf();
-            $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find ConfEvent entity.');
-            }
+      if ($form->isValid())
+      {
+        $em = $this->getDoctrine()->getManager();
 
-            $children = $entity->getChildren();
-            $mainConfEvent = $this->getUser()->getCurrentConf()->getMainConfEvent(); 
-
-            if($mainConfEvent->getId() ==  $entity->getId()){
-                $this->container->get('session')->getFlashBag()->add(
-                     'error',
-                     'Sorry, you cannot delete the Conference Event'
-                     );
-                return $this->redirect($this->generateUrl('schedule_event'));
-            }
-            foreach($children as $child)
-            {
-                $child->setParent($mainConfEvent);
-                $em->persist($child);
-            }
-            $this->container->get('session')->getFlashBag()->add(
-                     'success',
-                     'Event successfully deleted ! \n Its children have been set as children of the conference'
-                     );
-
-            $em->remove($entity);
-            $em->flush();
+        //The object have to belongs to the current conf
+        $currentConf = $this->getUser()->getCurrentConf();
+        $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id));
+        if (!$entity)
+        {
+          throw $this->createNotFoundException('Unable to find ConfEvent entity.');
         }
 
-        return $this->redirect($this->generateUrl('schedule_event'));
+        $children = $entity->getChildren();
+        $mainConfEvent = $this->getUser()->getCurrentConf()->getMainConfEvent();
+
+        if ($mainConfEvent->getId() == $entity->getId())
+        {
+          $this->container->get('session')->getFlashBag()->add(
+            'error',
+            'Sorry, you cannot delete the Conference Event'
+          );
+          return $this->redirect($this->generateUrl('schedule_event'));
+        }
+        foreach ($children as $child)
+        {
+          $child->setParent($mainConfEvent);
+          $em->persist($child);
+        }
+        $this->container->get('session')->getFlashBag()->add(
+          'success',
+          'Event successfully deleted ! \n Its children have been set as children of the conference'
+        );
+
+        $em->remove($entity);
+        $em->flush();
+      }
+
+      return $this->redirect($this->generateUrl('schedule_event'));
     }
 
     /**
@@ -387,281 +409,292 @@ class ConfEventController extends Controller
      *
      * @param mixed $id The entity id
      *
-     * @return Symfony\Component\Form\Form The form
+     * @return Form The form
      */
     private function createDeleteForm($id)
     {
-        return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
-        ;
+      return $this->createFormBuilder(array('id' => $id))
+        ->add('id', 'hidden')
+        ->getForm();
     }
 
     /*************************************** topics *****************************************************/
 
     /**
      * Add topic to a confEvent
-     *  @Route("/addTopic", name="schedule_confevent_addTopic")
-     *  @Method("POST")
-     *  
+     * @Route("/addTopic", name="schedule_confevent_addTopic")
+     * @Method("POST")
+     *
      */
     public function addTopicAction(Request $request)
     {
-        
-        //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        if(!$authorization->getFlagSched()){
-            throw new AccessDeniedException('Action not authorized !');
-        } 
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $id_topic = $request->request->get('id_topic');
-        $id_entity = $request->request->get('id_entity');
-           
-        $em = $this->getDoctrine()->getManager();
+      if (!$authorization->getFlagSched())
+      {
+        throw new AccessDeniedException('Action not authorized !');
+      }
 
-        $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
-        $topic =  $em->getRepository('fibeWWWConfBundle:Topic')->findOneBy(array('conference' => $currentConf, 'id' => $id_topic));
+      $id_topic = $request->request->get('id_topic');
+      $id_entity = $request->request->get('id_entity');
 
-         if (!$entity || !$topic) {
-            throw $this->createNotFoundException('Unable to find ConfEvent entity or topic.');
-        }
+      $em = $this->getDoctrine()->getManager();
 
-        //Add paper to the confEvent
-        $entity->addTopic($topic);
-        //Sauvegarde des données
-        $em->persist($entity);
-        $em->flush();
+      $currentConf = $this->getUser()->getCurrentConf();
+      $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
+      $topic = $em->getRepository('fibeWWWConfBundle:Topic')->findOneBy(array('conference' => $currentConf, 'id' => $id_topic));
 
-        return $this->render('fibeWWWConfBundle:ConfEvent:topicRelation.html.twig', array(
-            'entity'  => $entity,
-            'authorized' => $authorization->getFlagSched()
-        ));
+      if (!$entity || !$topic)
+      {
+        throw $this->createNotFoundException('Unable to find ConfEvent entity or topic.');
+      }
+
+      //Add paper to the confEvent
+      $entity->addTopic($topic);
+      //Sauvegarde des données
+      $em->persist($entity);
+      $em->flush();
+
+      return $this->render('fibeWWWConfBundle:ConfEvent:topicRelation.html.twig', array(
+        'entity'     => $entity,
+        'authorized' => $authorization->getFlagSched()
+      ));
     }
 
 
-     /**
+    /**
      * Delete topic of a confEvent
-     *  @Route("/deleteTopic", name="schedule_confevent_deleteTopic")
-     *  @Method("POST")
-     *  
+     * @Route("/deleteTopic", name="schedule_confevent_deleteTopic")
+     * @Method("POST")
+     *
      */
     public function deleteTopicAction(Request $request)
     {
-         //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        if(!$authorization->getFlagSched()){
-            throw new AccessDeniedException('Action not authorized !');
-        } 
+      if (!$authorization->getFlagSched())
+      {
+        throw new AccessDeniedException('Action not authorized !');
+      }
 
-        $id_topic = $request->request->get('id_topic');
-        $id_entity = $request->request->get('id_entity');
-           
-        $em = $this->getDoctrine()->getManager();
+      $id_topic = $request->request->get('id_topic');
+      $id_entity = $request->request->get('id_entity');
 
-        $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
-        $topic =  $em->getRepository('fibeWWWConfBundle:Topic')->findOneBy(array('conference' => $currentConf, 'id' => $id_topic));
+      $em = $this->getDoctrine()->getManager();
 
-         if (!$entity || !$topic) {
-            throw $this->createNotFoundException('Unable to find ConfEvent entity.');
-        }
-        //Delete topic to the confEvent
-        $entity->removeTopic($topic);
-        //Sauvegarde des données
-        $em->persist($entity);
-        $em->flush();
+      $currentConf = $this->getUser()->getCurrentConf();
+      $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
+      $topic = $em->getRepository('fibeWWWConfBundle:Topic')->findOneBy(array('conference' => $currentConf, 'id' => $id_topic));
 
-        return $this->render('fibeWWWConfBundle:ConfEvent:topicRelation.html.twig', array(
-            'entity'  => $entity,
-            'authorized' => $authorization->getFlagSched()
-        ));
+      if (!$entity || !$topic)
+      {
+        throw $this->createNotFoundException('Unable to find ConfEvent entity.');
+      }
+      //Delete topic to the confEvent
+      $entity->removeTopic($topic);
+      //Sauvegarde des données
+      $em->persist($entity);
+      $em->flush();
+
+      return $this->render('fibeWWWConfBundle:ConfEvent:topicRelation.html.twig', array(
+        'entity'     => $entity,
+        'authorized' => $authorization->getFlagSched()
+      ));
     }
 
 
     /*************************************** papers *****************************************************/
 
-     /**
+    /**
      * Add paper to the confEvent
-     *  @Route("/addPaper", name="schedule_confevent_addPaper")
-     *  @Method("POST")
-     *  
+     * @Route("/addPaper", name="schedule_confevent_addPaper")
+     * @Method("POST")
+     *
      */
     public function addPaperAction(Request $request)
     {
-        
-         //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        if(!$authorization->getFlagSched()){
-            throw new AccessDeniedException('Action not authorized !');
-        } 
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $id_paper = $request->request->get('id_paper');
-        $id_entity = $request->request->get('id_entity');
+      if (!$authorization->getFlagSched())
+      {
+        throw new AccessDeniedException('Action not authorized !');
+      }
 
-        $em = $this->getDoctrine()->getManager();
+      $id_paper = $request->request->get('id_paper');
+      $id_entity = $request->request->get('id_entity');
 
-        $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
-        $paper =  $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id_paper));
+      $em = $this->getDoctrine()->getManager();
 
-         if (!$entity || !$paper) {
-                throw $this->createNotFoundException('Unable to find ConfEvent entity or paper.');
-        }
+      $currentConf = $this->getUser()->getCurrentConf();
+      $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
+      $paper = $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id_paper));
 
-        //Add paper to the confEvent
-        $entity->addPaper($paper);
-        //Sauvegarde des données
-        $em->persist($entity);
-        $em->flush();
+      if (!$entity || !$paper)
+      {
+        throw $this->createNotFoundException('Unable to find ConfEvent entity or paper.');
+      }
 
-        return $this->render('fibeWWWConfBundle:ConfEvent:paperRelation.html.twig', array(
-            'entity'  => $entity,
-            'authorized' => $authorization->getFlagSched()
-        ));
+      //Add paper to the confEvent
+      $entity->addPaper($paper);
+      //Sauvegarde des données
+      $em->persist($entity);
+      $em->flush();
+
+      return $this->render('fibeWWWConfBundle:ConfEvent:paperRelation.html.twig', array(
+        'entity'     => $entity,
+        'authorized' => $authorization->getFlagSched()
+      ));
     }
 
-     /**
+    /**
      * Delete paper to a confEvent
-     *  @Route("/deletePaper", name="schedule_confevent_deletePaper")
-     *  @Method({"DELETE","POST"})
-     *  
+     * @Route("/deletePaper", name="schedule_confevent_deletePaper")
+     * @Method({"DELETE","POST"})
+     *
      */
     public function deletePaperAction(Request $request)
     {
-        
-         //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        if(!$authorization->getFlagSched()){
-            throw new AccessDeniedException('Action not authorized !');
-        } 
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $id_paper = $request->request->get('id_paper');
-        $id_entity = $request->request->get('id_entity');
-           
-        $em = $this->getDoctrine()->getManager();
+      if (!$authorization->getFlagSched())
+      {
+        throw new AccessDeniedException('Action not authorized !');
+      }
 
-        $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
-        $paper =  $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id_paper));
-         if (!$entity || !$paper) {
-            throw $this->createNotFoundException('Unable to find ConfEvent entity or paper.');
-        }
+      $id_paper = $request->request->get('id_paper');
+      $id_entity = $request->request->get('id_entity');
 
-        //Add paper to the confEvent
-        $entity->removePaper($paper);
-        //Sauvegarde des données
-        $em->persist($entity);
-        $em->flush();
+      $em = $this->getDoctrine()->getManager();
 
-        return $this->render('fibeWWWConfBundle:ConfEvent:paperRelation.html.twig', array(
-            'entity'  => $entity,
-            'authorized' => $authorization->getFlagSched()
-        ));
+      $currentConf = $this->getUser()->getCurrentConf();
+      $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
+      $paper = $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id_paper));
+      if (!$entity || !$paper)
+      {
+        throw $this->createNotFoundException('Unable to find ConfEvent entity or paper.');
+      }
+
+      //Add paper to the confEvent
+      $entity->removePaper($paper);
+      //Sauvegarde des données
+      $em->persist($entity);
+      $em->flush();
+
+      return $this->render('fibeWWWConfBundle:ConfEvent:paperRelation.html.twig', array(
+        'entity'     => $entity,
+        'authorized' => $authorization->getFlagSched()
+      ));
     }
 
     /*************************************** person *****************************************************/
 
-     /**
+    /**
      * Add person to the confEvent
-     * 
-     *  @Route( "/addPerson",name="schedule_confevent_addPerson")
-     *  @Method("POST")
-     *  
+     *
+     * @Route( "/addPerson",name="schedule_confevent_addPerson")
+     * @Method("POST")
+     *
      */
     public function addPersonAction(Request $request)
-    {      
-        
-         //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+    {
 
-        if(!$authorization->getFlagSched()){
-            throw new AccessDeniedException('Action not authorized !');
-        } 
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $id_person = $request->request->get('id_person');
-        $id_type = $request->request->get('id_type');
-        $id_entity = $request->request->get('id');
-     
-        $em = $this->getDoctrine()->getManager();
+      if (!$authorization->getFlagSched())
+      {
+        throw new AccessDeniedException('Action not authorized !');
+      }
 
-        $currentConf=$this->getUser()->getCurrentConf();
-        $type = $em->getRepository('fibeWWWConfBundle:RoleType')->find($id_type);
-        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
-        $person =  $em->getRepository('fibeWWWConfBundle:Person')->findOneBy(array('conference' => $currentConf, 'id' => $id_person));
+      $id_person = $request->request->get('id_person');
+      $id_type = $request->request->get('id_type');
+      $id_entity = $request->request->get('id');
 
-         if (!$entity || !$person || !$type) {
-                throw $this->createNotFoundException('Unable to find ConfEvent entity, person or type.');
-        }
+      $em = $this->getDoctrine()->getManager();
 
-        $role = new Role();
-        $role->setPerson($person);
-        $role->setType($type);
-        $role->setEvent($entity);
-        $role->setConference($this->getUser()->getCurrentConf());
-        $em->persist($role);
-        
-        //Add paper to the confEvent
-        $entity->addRole($role);
-        //Sauvegarde des données
-        $em->persist($entity);
-        $em->flush();
+      $currentConf = $this->getUser()->getCurrentConf();
+      $type = $em->getRepository('fibeWWWConfBundle:RoleType')->find($id_type);
+      $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
+      $person = $em->getRepository('fibeWWWConfBundle:Person')->findOneBy(array('conference' => $currentConf, 'id' => $id_person));
 
-        return $this->render('fibeWWWConfBundle:ConfEvent:personRelation.html.twig', array(
-            'entity'  => $entity,
-            'authorized' => $authorization->getFlagSched()
-        ));
+      if (!$entity || !$person || !$type)
+      {
+        throw $this->createNotFoundException('Unable to find ConfEvent entity, person or type.');
+      }
+
+      $role = new Role();
+      $role->setPerson($person);
+      $role->setType($type);
+      $role->setEvent($entity);
+      $role->setConference($this->getUser()->getCurrentConf());
+      $em->persist($role);
+
+      //Add paper to the confEvent
+      $entity->addRole($role);
+      //Sauvegarde des données
+      $em->persist($entity);
+      $em->flush();
+
+      return $this->render('fibeWWWConfBundle:ConfEvent:personRelation.html.twig', array(
+        'entity'     => $entity,
+        'authorized' => $authorization->getFlagSched()
+      ));
     }
 
     /**
      * Delete person  to a confEvent
-     *  @Route("/deletePerson", name="schedule_confevent_deletePerson")
-     *  @Method("POST")
-     *  
+     * @Route("/deletePerson", name="schedule_confevent_deletePerson")
+     * @Method("POST")
+     *
      */
     public function deletePersonAction(Request $request)
     {
-       
-          //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        if(!$authorization->getFlagSched()){
-            throw new AccessDeniedException('Action not authorized !');
-        } 
+      //Authorization Verification conference sched manager
+      $user = $this->getUser();
+      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $id_role = $request->request->get('id_role');
-        $id_entity = $request->request->get('id_entity');
-           
-        $em = $this->getDoctrine()->getManager();
+      if (!$authorization->getFlagSched())
+      {
+        throw new AccessDeniedException('Action not authorized !');
+      }
 
-        $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
-        $role =  $em->getRepository('fibeWWWConfBundle:Role')->findOneBy(array('conference' => $currentConf, 'id' => $id_role));
+      $id_role = $request->request->get('id_role');
+      $id_entity = $request->request->get('id_entity');
 
-         if (!$entity || !$role) {
-            throw $this->createNotFoundException('Unable to find ConfEvent entity or role.');
-        }
+      $em = $this->getDoctrine()->getManager();
 
-        //Add role to the confEvent
-        $entity->removeRole($role);
-        $em->remove($role);
-        //Sauvegarde des données
-        $em->persist($entity);
-        $em->flush();
+      $currentConf = $this->getUser()->getCurrentConf();
+      $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id_entity));
+      $role = $em->getRepository('fibeWWWConfBundle:Role')->findOneBy(array('conference' => $currentConf, 'id' => $id_role));
 
-        return $this->render('fibeWWWConfBundle:ConfEvent:personRelation.html.twig', array(
-            'entity'  => $entity,
-            'authorized' => $authorization->getFlagSched()
-        ));
+      if (!$entity || !$role)
+      {
+        throw $this->createNotFoundException('Unable to find ConfEvent entity or role.');
+      }
+
+      //Add role to the confEvent
+      $entity->removeRole($role);
+      $em->remove($role);
+      //Sauvegarde des données
+      $em->persist($entity);
+      $em->flush();
+
+      return $this->render('fibeWWWConfBundle:ConfEvent:personRelation.html.twig', array(
+        'entity'     => $entity,
+        'authorized' => $authorization->getFlagSched()
+      ));
     }
-}
+  }

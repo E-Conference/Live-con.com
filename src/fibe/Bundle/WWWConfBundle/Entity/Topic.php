@@ -1,24 +1,23 @@
 <?php
 
-namespace fibe\Bundle\WWWConfBundle\Entity;
+  namespace fibe\Bundle\WWWConfBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+  use Doctrine\ORM\Mapping as ORM;
+  use Symfony\Component\Validator\Constraints as Assert;
 
-use fibe\Bundle\WWWConfBundle\Util\StringTools;
+  use fibe\Bundle\WWWConfBundle\Util\StringTools;
 
 
-/**
- * This entity define a topic
- *
- *  @ORM\Table(name="topic")
- *  @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\TopicRepository")
- *  @ORM\HasLifecycleCallbacks
- *
- */
-
-class Topic
-{
+  /**
+   * This entity define a topic
+   *
+   * @ORM\Table(name="topic")
+   * @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\TopicRepository")
+   * @ORM\HasLifecycleCallbacks
+   *
+   */
+  class Topic
+  {
 
     /**
      * @ORM\Id
@@ -26,7 +25,7 @@ class Topic
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-	
+
     /**
      * name
      *
@@ -60,7 +59,6 @@ class Topic
      * @ORM\Column(type="string", length=128, nullable=true)
      */
     protected $slug;
-        
 
 
     /**
@@ -68,22 +66,22 @@ class Topic
      */
     public function __construct()
     {
-        $this->papers = new \Doctrine\Common\Collections\ArrayCollection();
+      $this->papers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-     public function __toString() 
+    public function __toString()
     {
-        return $this->name;
+      return $this->name;
 
     }
 
     /**
      * Slugify
-     * 
+     *
      */
     public function slugify()
     {
-        $this->setSlug(StringTools::slugify($this->getId().$this->getName()));
+      $this->setSlug(StringTools::slugify($this->getId() . $this->getName()));
     }
 
     /**
@@ -94,54 +92,56 @@ class Topic
      */
     public function onUpdate()
     {
-        $this->slugify();
+      $this->slugify();
     }
 
-     /**
+    /**
      * Set slug
      *
      * @param string $slug
+     *
      * @return ConfEvent
      */
     public function setSlug($slug)
     {
-        $this->slug = $slug;
-    
-        return $this;
+      $this->slug = $slug;
+
+      return $this;
     }
 
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {
-        return $this->slug;
+      return $this->slug;
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
-        return $this->id;
+      return $this->id;
     }
 
-    
+
     /**
      * Add papers
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\Paper $papers
+     *
      * @return Topic
      */
     public function addPaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $papers)
     {
-        $this->papers[] = $papers;
-    
-        return $this;
+      $this->papers[] = $papers;
+
+      return $this;
     }
 
     /**
@@ -151,31 +151,32 @@ class Topic
      */
     public function removePaper(\fibe\Bundle\WWWConfBundle\Entity\Paper $papers)
     {
-        $this->papers->removeElement($papers);
+      $this->papers->removeElement($papers);
     }
 
     /**
      * Get papers
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getPapers()
     {
-        return $this->papers;
+      return $this->papers;
     }
 
-    
+
     /**
      * Add events
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events
+     *
      * @return Topic
      */
     public function addEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events)
     {
-        $this->events[] = $events;
-    
-        return $this;
+      $this->events[] = $events;
+
+      return $this;
     }
 
     /**
@@ -185,62 +186,64 @@ class Topic
      */
     public function removeEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events)
     {
-        $this->events->removeElement($events);
+      $this->events->removeElement($events);
     }
 
     /**
      * Get events
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getEvents()
     {
-        return $this->events;
+      return $this->events;
     }
 
     /**
      * Set name
      *
      * @param string $name
+     *
      * @return Topic
      */
     public function setName($name)
     {
-        $this->name = $name;
-    
-        return $this;
+      $this->name = $name;
+
+      return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
-        return $this->name;
+      return $this->name;
     }
 
     /**
      * Set conference
      *
      * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
+     *
      * @return Topic
      */
     public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference = null)
     {
-        $this->conference = $conference;
-    
-        return $this;
+      $this->conference = $conference;
+
+      return $this;
     }
 
     /**
      * Get conference
      *
-     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
+     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf
      */
     public function getConference()
     {
-        return $this->conference;
+      return $this->conference;
     }
-}
+  }

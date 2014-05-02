@@ -3,7 +3,7 @@
   namespace fibe\Bundle\WWWConfBundle\Repository;
 
   use Doctrine\ORM\EntityRepository;
-  use IDCI\Bundle\SimpleScheduleBundle\Entity\Category;
+  use fibe\Bundle\WWWConfBundle\Entity\Category;
 
   /**
    * ConfEventRepository
