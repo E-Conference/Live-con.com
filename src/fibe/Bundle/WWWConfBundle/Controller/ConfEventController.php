@@ -255,9 +255,9 @@
 
       $role = new Role();
       $roleForm = $this->createForm(new RoleType($this->getUser()), $role);
-      $editForm = $this->createForm(new ConfEventType($this->getUser(), $entity), $entity);
+      $editForm = $this->createForm(new ConfEventType($this->getUser()), $entity);
 
-      $papersForSelect = $this->getUser()->getCurrentConf()->getPapers()->toArray();
+      $papersForSelect = $currentConf->getPapers()->toArray();
       $form_paper = $this->createFormBuilder($entity)
         ->add('papers', 'entity', array(
           'class'    => 'fibeWWWConfBundle:Paper',
@@ -268,7 +268,7 @@
           'label'    => "Select paper"))
         ->getForm();
 
-      $topicsForSelect = $this->getUser()->getCurrentConf()->getTopics()->toArray();
+      $topicsForSelect = $currentConf->getTopics()->toArray();
       $form_topic = $this->createFormBuilder($entity)
         ->add('topics', 'entity', array(
           'class'    => 'fibeWWWConfBundle:Topic',
@@ -280,7 +280,6 @@
         ->getForm();
 
       $deleteForm = $this->createDeleteForm($id);
-
       return $this->render('fibeWWWConfBundle:ConfEvent:edit.html.twig', array(
         'entity'      => $entity,
         'edit_form'   => $editForm->createView(),

@@ -16,7 +16,6 @@
   class ConfEventType extends EventType
   {
     private $user;
-    private $entity;
 
     /**
      * Constructor
@@ -24,11 +23,10 @@
      * @param $user
      * @param $entity
      */
-    public function __construct($user, $entity)
+    public function __construct($user)
     {
-      parent::__construct($user,$entity); 
+      parent::__construct($user); 
       $this->user = $user;
-      $this->entity = $entity;
     }
 
 
@@ -38,9 +36,6 @@
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-      if ($this->user->getCurrentConf())
-      {
-
         parent::buildForm($builder, $options);
         $builder
           ->add('attach', 'text', array('required' => false, 'label' => 'Twitter widget id'))
@@ -48,28 +43,6 @@
                                          'label'    => 'Acronym',
                                          'attr'     => array('placeholder' => 'Acronym')))
         ;
-
-        if ($this->entity->hasChildren())
-        {
-          $builder->remove('location');
-        }
-      }
-      else
-      {
-
-        parent::buildForm($builder, $options);
-        $builder
-          // ->add('conference', null, array(
-          //                         'required'  => true,
-          //                         'label'     => 'Belongs to conf'
-          // ))
-          ->add('summary', 'text', array('required' => true))
-          ->add('acronym', 'text', array('required' => false,
-                                         'label'    => 'Acronym',
-                                         'attr'     => array('placeholder' => 'Acronym')))
-          ->add('categories', null, array('required' => false));
-
-      }
     }
 
     /**

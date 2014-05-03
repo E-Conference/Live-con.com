@@ -11,6 +11,8 @@ namespace fibe\Bundle\WWWConfBundle\Form;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormEvent;
 
 abstract class LocationAwareCalendarEntityType extends CalendarEntityType
 {
@@ -19,7 +21,6 @@ abstract class LocationAwareCalendarEntityType extends CalendarEntityType
 
     public function __construct($user)
     {
-        parent::__construct($user);
         $this->user   = $user;
     }
 
@@ -27,19 +28,21 @@ abstract class LocationAwareCalendarEntityType extends CalendarEntityType
     {
         parent::buildForm($builder, $options);
 
-        $builder
-            ->add('location', 'entity', array(
-                'class' => 'fibeWWWConfBundle:Location',
-                'label'   => 'Location',
-                'choices'=> $this->user->getCurrentConf()->getLocations()->toArray(),
-                'multiple'  => false,
-                'required' => false
-            )) 
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event){ 
+            if ($event->getData()->hasChildren()) {
+                $event->getForm()->add('location', 'entity', array(
+                    'class'    => 'fibeWWWConfBundle:Location',
+                    'label'    => 'Location',
+                    'choices'  => $this->user->getCurrentConf()->getLocations()->toArray(),
+                    'multiple' => false,
+                    'required' => false
+                ));
+            }
+        });
             // ->add('priority', 'choice', array(
             //     'choices' => range(0, 9)
             // ))
             // ->add('resources')
-        ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

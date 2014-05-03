@@ -16,27 +16,17 @@ use fibe\Bundle\WWWConfBundle\Entity\CalendarEntity;
 use fibe\Bundle\WWWConfBundle\Repository\StatusRepository;
 use fibe\Bundle\WWWConfBundle\Form\EventListener\RecurFieldSubscriber;
 
-abstract class CalendarEntityType extends AbstractType
+class CalendarEntityType extends AbstractType
 {
-
-    private $user;
-
-    public function __construct($user)
-    {
-        $this->user   = $user;
-    }
-
-    abstract public function getEntityDiscr();
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $subscriber = new RecurFieldSubscriber($builder->getFormFactory());
         $builder->addEventSubscriber($subscriber);
 
-        $discr = $this->getEntityDiscr();
+        // $discr = $this->getEntityDiscr();
 
         $builder
-            ->add('summary', 'text', array('required' => true))
+            ->add('summary', 'text', array('required'  => true))
             ->add('categories', null, array('required' => false))
             ->add('url')
             ->add('description')

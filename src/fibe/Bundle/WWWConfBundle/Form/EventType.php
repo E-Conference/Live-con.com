@@ -16,14 +16,9 @@ use fibe\Bundle\WWWConfBundle\Entity\CalendarEntity;
 
 class EventType extends LocationAwareCalendarEntityType
 {
-   private $user;
-   private $entity;
-
-    public function __construct($user,$entity)
+    public function __construct($user)
     {
-        parent::__construct($user,$entity); 
-        $this->user   = $user;
-        $this->entity = $entity;
+        parent::__construct($user);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
