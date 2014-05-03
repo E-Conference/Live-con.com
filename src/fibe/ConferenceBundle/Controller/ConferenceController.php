@@ -10,7 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
-use fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig;
+use fibe\MobileAppBundle\Entity\MobileAppConfig;
 use fibe\Bundle\WWWConfBundle\Form\WwwConfType;
 use fibe\Bundle\WWWConfBundle\Form\ModuleType;
 use fibe\Bundle\WWWConfBundle\Form\WwwConfEventType;

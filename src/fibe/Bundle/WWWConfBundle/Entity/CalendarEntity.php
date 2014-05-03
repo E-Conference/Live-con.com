@@ -27,12 +27,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * })
  * @ORM\HasLifecycleCallbacks
  * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @ORM\DiscriminatorMap({
  *     "locationAwareCalendarEntities"="LocationAwareCalendarEntity",
  *     "event"="Event",
- *     "todo"="Todo",
- *     "journal"="Journal",
  *     "confEvent"="ConfEvent"
  * })
  */
@@ -41,7 +38,6 @@ class CalendarEntity
     //CalendarEntity.
     const EVENT   = "Event";
     const TODO    = "Todo";
-    const JOURNAL = "Journal";
 
     const CLASSIFICATION_PUBLIC        = "PUBLIC";
     const CLASSIFICATION_PRIVATE       = "PRIVATE";
@@ -344,19 +340,6 @@ class CalendarEntity
      * options
      */
     protected $options;
-
-    /**
-     * getDiscrs
-     */
-    public static function getDiscrs()
-    {
-        return array(
-            self::EVENT     => self::EVENT,
-            self::TODO      => self::TODO,
-            self::JOURNAL   => self::JOURNAL,
-            
-        );
-    }
 
     /**
      * getClassifications

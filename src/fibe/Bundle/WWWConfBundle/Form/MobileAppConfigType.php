@@ -109,7 +109,7 @@
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
       $resolver->setDefaults(array(
-        'data_class' => 'fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig'
+        'data_class' => 'fibe\MobileAppBundle\Entity\MobileAppConfig'
       ));
     }
 

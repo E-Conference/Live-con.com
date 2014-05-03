@@ -51,6 +51,6 @@ abstract class LocationAwareCalendarEntityType extends CalendarEntityType
 
     public function getName()
     {
-        return 'idci_simpleschedule_event_type';
+        return 'fibe_bundle_wwwconfbundle_event_type';
     }
 }

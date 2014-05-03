@@ -2,7 +2,7 @@
   namespace fibe\Bundle\WWWConfBundle\Command;
 
   use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
-  use fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig;
+  use fibe\MobileAppBundle\Entity\MobileAppConfig;
   use fibe\Bundle\WWWConfBundle\Entity\Module;
   use fibe\Bundle\WWWConfBundle\Entity\Organization;
   use fibe\Bundle\WWWConfBundle\Entity\Paper;

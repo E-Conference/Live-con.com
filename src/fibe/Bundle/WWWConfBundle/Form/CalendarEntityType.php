@@ -36,16 +36,19 @@ abstract class CalendarEntityType extends AbstractType
         $discr = $this->getEntityDiscr();
 
         $builder
-            ->add('summary')
-            ->add('parent', null, array('required' => false))
+            ->add('summary', 'text', array('required' => true))
             ->add('categories', null, array('required' => false))
-            ->add('location', null, array('required' => false))
+            ->add('url')
+            ->add('description')
+            ->add('comment')
+            ->add('organizer')
+            ->add('contacts')
+            /*
             ->add('startAt', 'datetime', array(  
                 'widget' =>'single_text',
                 'format' =>'dd/MM/yyyy HH:mm', 
-                'attr' => array('class' => 'datetimepicker')
             ))
-            /*
+            
             ->add('options', 'choice', array(
                 'choices' => array(
                     'all_day' => 'All the day',
@@ -56,10 +59,8 @@ abstract class CalendarEntityType extends AbstractType
             ))
             ->add('includedRule', new RecurType(), array(
                 'required' => false
-            ))*/
-            ->add('url')
-            // ->add('parent')
-            ->add('description')/*
+            ))
+            ->add('parent')
             ->add('status', 'entity', array(
                 'required'      => false,
                 'class'         => 'fibeWWWConfBundle:Status',
@@ -72,9 +73,6 @@ abstract class CalendarEntityType extends AbstractType
                 'multiple' => false,
                 'expanded' => true
             ))*/
-            ->add('comment')
-            ->add('organizer')
-            ->add('contacts')
             
         ;
     }
@@ -88,6 +86,6 @@ abstract class CalendarEntityType extends AbstractType
 
     public function getName()
     {
-        return 'idci_simpleschedule_calendarentity_type';
+        return 'fibe_bundle_wwwconfbundle_calendarentity_type';
     }
 }

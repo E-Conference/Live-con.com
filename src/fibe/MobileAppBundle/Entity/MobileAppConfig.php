@@ -1,6 +1,6 @@
 <?php
 
-  namespace fibe\Bundle\WWWConfBundle\Entity;
+  namespace fibe\MobileAppBundle\Entity;
 
   use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@
    * This entity define a topic
    *
    * @ORM\Table(name="mobileAppConfig")
-   * @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\MobileAppConfigRepository")
+   * @ORM\Entity
    * @ORM\HasLifecycleCallbacks
    */
   class MobileAppConfig

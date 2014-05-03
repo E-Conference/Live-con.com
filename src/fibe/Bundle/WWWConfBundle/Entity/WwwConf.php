@@ -98,7 +98,7 @@
     /**
      * Mobile app configurations
      *
-     * @ORM\OneToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig",cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="fibe\MobileAppBundle\Entity\MobileAppConfig",cascade={"persist"})
      * @ORM\JoinColumn(name="appConfig", referencedColumnName="id")
      */
     private $appConfig;
@@ -414,7 +414,7 @@
     /**
      * Add app config
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig $AppConfig
+     * @param \fibe\MobileAppBundle\Entity\MobileAppConfig $AppConfig
      *
      * @return WwwConf
      */

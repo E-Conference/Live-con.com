@@ -27,17 +27,6 @@ class Status
     const EVENT_CONFIRMED    = "CONFIRMED";      // Indicates event is definite.
     const EVENT_TENTATIVE    = "TENTATIVE";      // Indicates event is tentative.
 
-    // Status values for "TODO"
-    const TODO_CANCELLED     = "CANCELLED";      // Indicates to-do was cancelled.
-    const TODO_COMPLETED     = "COMPLETED";      // Indicates to-do completed.
-    const TODO_IN_PROCESS    = "IN-PROCESS";     // Indicates to-do in process of
-    const TODO_NEEDS_ACTION  = "NEEDS-ACTION";   // Indicates to-do needs action.
-
-    //Status values for "JOURNAL".
-    const JOURNAL_CANCELLED  = "CANCELLED";      // Indicates journal is removed.
-    const JOURNAL_DRAFT      = "DRAFT";          // Indicates journal is draft.
-    const JOURNAL_FINAL      = "FINAL";          // Indicates journal is final.
-
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -49,12 +38,6 @@ class Status
      * @ORM\Column(type="string", length=64, nullable=true)
      */
     protected $value;
-
-    /**
-     * @ORM\Column(type="string", length=64, nullable=true)
-     * @Assert\Choice(choices = {"Event","Todo","Journal"}, message = "Choose a valid CalendarEntity.")
-     */
-    protected $discr;
 
     /**
      * @ORM\OneToMany(targetEntity="CalendarEntity", mappedBy="status")

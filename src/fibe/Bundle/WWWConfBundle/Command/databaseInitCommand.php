@@ -1,4 +1,3 @@
-
 <?php
   namespace fibe\Bundle\WWWConfBundle\Command;
 

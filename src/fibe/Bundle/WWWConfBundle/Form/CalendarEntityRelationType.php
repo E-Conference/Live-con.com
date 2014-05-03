@@ -55,6 +55,6 @@ class CalendarEntityRelationType extends AbstractType
 
     public function getName()
     {
-        return 'idci_simpleschedule_calendarentityrelation_type';
+        return 'fibe_bundle_wwwconfbundle_calendarentityrelation_type';
     }
 }

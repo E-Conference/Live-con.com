@@ -10,7 +10,7 @@
   use Symfony\Component\HttpFoundation\Request;
   use Symfony\Component\HttpFoundation\Response;
 
-  use fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig;
+  use fibe\MobileAppBundle\Entity\MobileAppConfig;
   use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
   use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 

@@ -2,8 +2,7 @@
 
 require_once dirname(__FILE__).'/SymfonyRequirements.php';
 
-  /** @noinspection PhpUndefinedClassInspection */
-  $symfonyRequirements = new SymfonyRequirements();
+$symfonyRequirements = new SymfonyRequirements();
 
 $iniPath = $symfonyRequirements->getPhpIniConfigPath();
 
@@ -46,8 +45,7 @@ exit($checkPassed ? 0 : 1);
 /**
  * Prints a Requirement instance
  */
-function echo_requirement(/** @noinspection PhpUndefinedClassInspection */
-  Requirement $requirement)
+function echo_requirement(Requirement $requirement)
 {
     $result = $requirement->isFulfilled() ? 'OK' : ($requirement->isOptional() ? 'WARNING' : 'ERROR');
     echo ' ' . str_pad($result, 9);

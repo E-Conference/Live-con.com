@@ -43,39 +43,14 @@
 
         parent::buildForm($builder, $options);
         $builder
-          // ->add('conference', null, array(
-          //                         'required'  => true,
-          //                         'label'     => 'Belongs to conf'
-          // ))
-          ->add('summary', 'text', array('required' => true))
+          ->add('attach', 'text', array('required' => false, 'label' => 'Twitter widget id'))
           ->add('acronym', 'text', array('required' => false,
                                          'label'    => 'Acronym',
                                          'attr'     => array('placeholder' => 'Acronym')))
-          ->add('categories', null, array('required' => false))
-          ->add('attach', 'text', array('required' => false, 'label' => 'Twitter widget id'))
-          ->remove('startAt')
-          ->remove('endAt')
-          ->remove('parent')
-          //  ->add('parent', 'entity', array(
-          //     'class' => 'fibeWWWConfBundle:Event',
-          //     'label'   => 'Parent',
-          //     'choices'=> $this->user->getCurrentConf()->getEvents()->toArray(),
-          //     'empty_data'  => null,
-          //     'required' => false,
-          // ))
         ;
 
         if ($this->entity->hasChildren())
         {
-          // $builder->add('location', 'entity', array(
-          //     'class' => 'fibeWWWConfBundle:Location',
-          //     'label'   => 'Location',
-          //     'choices'=> $this->user->getCurrentConf()->getLocations()->toArray(),
-          //     'empty_data'  => null,
-          //     'required' => false,
-          //     // not working probably due to a twig behavior
-          //     // 'attr' => array('onload' => "$(this).parent().remove();")
-          // ));
           $builder->remove('location');
         }
       }

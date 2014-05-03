@@ -368,7 +368,7 @@
       {
         $em = $this->getDoctrine()->getManager();
 
-        //The object have to belongs to the current conf
+        //The object must belong to the current conf
         $currentConf = $this->getUser()->getCurrentConf();
         $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $currentConf, 'id' => $id));
         if (!$entity)
@@ -383,9 +383,10 @@
         {
           $this->container->get('session')->getFlashBag()->add(
             'error',
-            'Sorry, you cannot delete the Conference Event'
+            'You cannot delete the Conference Event'
           );
-          return $this->redirect($this->generateUrl('schedule_event'));
+
+          return $this->redirect($this->generateUrl('schedule_confevent_edit', array('id' => $entity->getId())));
         }
         foreach ($children as $child)
         {

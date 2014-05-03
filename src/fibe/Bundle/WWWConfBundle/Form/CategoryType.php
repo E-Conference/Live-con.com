@@ -33,6 +33,6 @@ class CategoryType extends AbstractType
 
     public function getName()
     {
-        return 'idci_simpleschedule_category_type'; 
+        return 'fibe_bundle_wwwconfbundle_category_type'; 
     }
 }
