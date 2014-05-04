@@ -2,7 +2,7 @@
    <div class="row page-top-header " style="margin-top:-1.5em;position: relative;"> 
  
             <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2" style="float: right;margin-right: -35px;">
-              <a type="button" target="_blank" href="{{ path('schedule_event_edit', { 'id': entity.id }) }}" class="btn btn-warning">
+              <a type="button" target="_blank" href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}" class="btn btn-warning">
                 <i class="fa fa-search"></i>
               </a>
               <form  id="delete-event-form" action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
@@ -153,7 +153,7 @@
         $('#loader_persons').show();
         //start send the post request
          $.post("{{path('schedule_confevent_addPerson')}}",               
-                 {id_person : id_person, id_type:id_type, id: "{{entity.id }}"} , 
+                 {id_person : id_person, id_type:id_type, id_entity: "{{entity.id }}"} , 
               function(response){
                      $('#person_related_list').html(response);
                      $('#loader_persons').show();

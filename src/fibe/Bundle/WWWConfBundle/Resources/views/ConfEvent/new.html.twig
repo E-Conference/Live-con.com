@@ -13,7 +13,7 @@
     <div class="row">
      <div class="col-lg-9"></div>
           <div class="col-lg-2 btn-group">
-              <a type="button" href="{{ path('schedule_event') }}" class="btn btn-warning">
+              <a type="button" href="{{ path('schedule_confevent') }}" class="btn btn-warning">
                     <i class="fa fa-list"></i>
               </a>
               
@@ -26,26 +26,23 @@
         <div class="col-lg-2"></div>
         <div class="col-lg-4">
                 {{ form_row(form.summary) }}
+                {{ form_row(form.acronym) }}
                 {{ form_row(form.categories) }}
-                {{ form_row(form.startAt) }}
-                {{ form_row(form.endAt) }}
+                {# {{ form_row(form.startAt) }}
+                {{ form_row(form.endAt) }} #}
                 {{ form_row(form.description) }} 
                 {{ form_row(form.url) }} 
         </div>
         <div class="col-lg-4">
                 {{ form_row(form.comment) }}
-                {{ form_row(form.organizer) }}
                 {{ form_row(form.contacts) }}
+                {{ form_row(form.organizer) }}
                 {{ form_row(form.location) }}
-                {{ form_row(form.parent) }} 
-                {# {{ form_row(form.parent) }} #}
-                {#<!-- {{ form_row(form.priority) }} -->              
-                  <!-- {{ form_row(form.resources) }} -->
-                  <!--  {{ form_row(form.isTransparent) }} -->
-                  <!-- {{ form_row(form.wwwConf) }} --> #}
+                {{ form_row(form.organizer) }}
+                {{ form_row(form.attach) }}
            <br />
         </div>
-        <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
+        <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">
                 {{ form_rest(form)}}
             </div>                       
         </div>

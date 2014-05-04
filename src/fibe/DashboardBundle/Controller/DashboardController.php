@@ -24,7 +24,8 @@ class DashboardController extends Controller
    */
     public function indexAction()
     {
-      return array();
+      $entities = $this->get('fibe_security.acl_helper')->getEntitiesACL('EDIT','WwwConf');
+      return array('conferences' => $entities);
     }
 
     
@@ -36,14 +37,10 @@ class DashboardController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $choosenConf = $em->getRepository('fibeWWWConfBundle:WwwConf')->find($id);
-        $user=$this->getUser();
-        if (!$user->authorizedAccesToConference($choosenConf)) {
-          throw new AccessDeniedException('Look at your conferences !!!');
-        } 
+        $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','WwwConf',$id);
         
         $user = $this->getUser();
-        $user->setCurrentConf($choosenConf);
+        $user->setCurrentConf($entity);
         $em->persist($user);
         $em->flush();
 

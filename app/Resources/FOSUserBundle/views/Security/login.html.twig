@@ -21,10 +21,7 @@
   {% include "fibeHomePageBundle::topBar.html.twig" %}
 
   <div id="login_page">
-
-    {% if error %}
-      <div class="alert alert-error">{{ error.message }}</div>
-    {% endif %}
+ 
 
     <div id="background"></div>
     <div class="container_12">
@@ -33,7 +30,7 @@
         <a href="http://live-con.com/" title="Livecon UPGRATE YOUR CONFERENCE"><img
               src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon"/></a>
 
-        <div style="color:#811B06"><strong>{{ error.message }}</strong></div>
+        <div style="color:#811B06"><strong>{{ error }}</strong></div>
         <form action="{{ path('login_check') }}" method="post">
           <label for="username"><p>Login :</p></label>
           <input type="text" id="username" name="_username" value="{{ last_username }}"/>
@@ -41,7 +38,7 @@
           <label for="password"><p>Password :</p></label>
           <input type="password" id="password" name="_password"/>
           <br/>
-          <input type="checkbox" id="remember_me" name="_remember_me" checked/>
+          <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
           <label for="remember_me">Remember me</label>
 
           <br/>

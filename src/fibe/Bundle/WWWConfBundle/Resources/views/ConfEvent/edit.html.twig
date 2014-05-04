@@ -166,7 +166,7 @@
         var id_type = $('#fibe_bundle_wwwconfbundle_roletype_type').val();
         //start send the post request
          $.post("{{path('schedule_confevent_addPerson')}}",               
-                 {id_person : id_person, id_type:id_type, id: "{{entity.id }}"} , 
+                 {id_person : id_person, id_type:id_type, id_entity: "{{entity.id }}"} , 
               function(response){
                      $('#person_related_list').html(response);
                   

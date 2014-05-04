@@ -20,6 +20,7 @@
 
   use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
   use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+  
 
   /**
    * Organization controller.
@@ -38,14 +39,8 @@
     public function indexAction(Request $request)
     {
 
-      //Authorization Verification conference datas manager
-      $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-      $em = $this->getDoctrine()->getManager();
-
-      $conf = $this->getUser()->getCurrentConf();
-      $entities = $conf->getOrganizations()->toArray();
+      $entities = $this->get('fibe_security.acl_helper')->getEntitiesACL('EDIT','Organization');
+      // $entities = $this->getUser()->getCurrentConf()->getOrganizations()->toArray();
 
       $adapter = new ArrayAdapter($entities);
       $pager = new PagerFanta($adapter);
@@ -62,6 +57,7 @@
 
       //Filters Form
       $filters = $this->createForm(new OrganizationFilterType($this->getUser()));
+      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return array(
         'pager'        => $pager,
         'authorized'   => $authorization->getFlagconfDatas(),
@@ -81,7 +77,7 @@
       $conf = $this->getUser()->getCurrentConf();
       //Filters
       $filters = $this->createForm(new OrganizationFilterType($this->getUser()));
-      $filters->bindRequest($this->get('request'));
+      $filters->bind($request);
 
       if ($filters->isValid())
       {
@@ -120,17 +116,7 @@
      */
     public function createAction(Request $request)
     {
-
-      //Authorization Verification conference sched manager
-      $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-      if (!$authorization->getFlagconfDatas())
-      {
-        throw new AccessDeniedException('Action not authorized !');
-      }
-
-      $entity = new Organization();
+      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('CREATE','Organization');
       $form = $this->createForm(new OrganizationType($this->getUser()), $entity);
       $form->bind($request);
 
@@ -148,10 +134,12 @@
 
         $em->persist($entity);
         $em->flush();
+       //$this->get('fibe_security.acl_helper')->createACL($entity,MaskBuilder::MASK_OWNER);
 
         return $this->redirect($this->generateUrl('schedule_organization_index'));
       }
 
+      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return array(
         'entity'     => $entity,
         'form'       => $form->createView(),
@@ -168,19 +156,10 @@
      */
     public function newAction()
     {
-
-      //Authorization Verification conference sched manager
-      $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-      if (!$authorization->getFlagconfDatas())
-      {
-        throw new AccessDeniedException('Action not authorized !');
-      }
-
-      $entity = new Organization();
+      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('CREATE','Organization');
       $form = $this->createForm(new OrganizationType($this->getUser()), $entity);
 
+      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return array(
         'entity'     => $entity,
         'form'       => $form->createView(),
@@ -197,23 +176,11 @@
      */
     public function showAction($id)
     {
-
-      //Authorization Verification conference sched manager
-      $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-      $em = $this->getDoctrine()->getManager();
-
-      //The object have to belongs to the current conf
-      $currentConf = $this->getUser()->getCurrentConf();
-      $entity = $em->getRepository('fibeWWWConfBundle:Organization')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-      if (!$entity)
-      {
-        throw $this->createNotFoundException('Unable to find Organization entity.');
-      }
+      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('VIEW','Organization',$id);
 
       $deleteForm = $this->createDeleteForm($id);
 
+      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return array(
         'entity'      => $entity,
         'delete_form' => $deleteForm->createView(),
@@ -230,29 +197,12 @@
      */
     public function editAction($id)
     {
-
-      //Authorization Verification conference sched manager
-      $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-      if (!$authorization->getFlagconfDatas())
-      {
-        throw new AccessDeniedException('Action not authorized !');
-      }
-
-      $em = $this->getDoctrine()->getManager();
-
-      //The object have to belongs to the current conf
-      $currentConf = $this->getUser()->getCurrentConf();
-      $entity = $em->getRepository('fibeWWWConfBundle:Organization')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-      if (!$entity)
-      {
-        throw $this->createNotFoundException('Unable to find Organization entity.');
-      }
+      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','Organization',$id);
 
       $editForm = $this->createForm(new OrganizationType($this->getUser()), $entity);
       $deleteForm = $this->createDeleteForm($id);
 
+      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return array(
         'entity'      => $entity,
         'edit_form'   => $editForm->createView(),
@@ -270,31 +220,14 @@
      */
     public function updateAction(Request $request, $id)
     {
-
-      //Authorization Verification conference sched manager
-      $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-      if (!$authorization->getFlagconfDatas())
-      {
-        throw new AccessDeniedException('Action not authorized !');
-      }
-
-      $em = $this->getDoctrine()->getManager();
-
-      //The object have to belongs to the current conf
-      $currentConf = $this->getUser()->getCurrentConf();
-      $entity = $em->getRepository('fibeWWWConfBundle:Organization')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-      if (!$entity)
-      {
-        throw $this->createNotFoundException('Unable to find Organization entity.');
-      }
+      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','Organization',$id);
 
       $deleteForm = $this->createDeleteForm($id);
       $editForm = $this->createForm(new OrganizationType($this->getUser()), $entity);
+
+      $em = $this->getDoctrine()->getManager();
+
       $personToRemove = $entity->getMembers();
-
-
       foreach ($personToRemove as $person)
       {
         $person->removeOrganization($entity);
@@ -337,31 +270,21 @@
     public function deleteAction(Request $request, $id)
     {
 
-      //Authorization Verification conference sched manager
-      $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-      if (!$authorization->getFlagconfDatas())
-      {
-        throw new AccessDeniedException('Action not authorized !');
-      }
-
       $form = $this->createDeleteForm($id);
       $form->bind($request);
 
       if ($form->isValid())
       {
+        $entity = $this->get('fibe_security.acl_helper')->getEntityACL('DELETE','Organization',$id);
         $em = $this->getDoctrine()->getManager();
         //The object have to belongs to the current conf
         $currentConf = $this->getUser()->getCurrentConf();
-        $entity = $em->getRepository('fibeWWWConfBundle:Organization')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-        if (!$entity)
-        {
-          throw $this->createNotFoundException('Unable to find Organization entity.');
-        }
-
         $em->remove($entity);
         $em->flush();
+        $this->container->get('session')->getFlashBag()->add(
+          'success',
+          'Organization successfully deleted !'
+        );
       }
 
       return $this->redirect($this->generateUrl('schedule_organization_index'));

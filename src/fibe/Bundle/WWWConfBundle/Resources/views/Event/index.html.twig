@@ -36,7 +36,7 @@
                 <tbody>
                 {% for entity in pager.currentPageResults %}
                     <tr>
-                        <td><a href="{{ path('schedule_event_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                        <td><a href="{{ path('schedule_confevent_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                         <td>
                             {% for category in entity.categories %}
                             <div style="width:28px;height:28px;border:1px solid #222;background:{{ category.color }};float:left;margin-right:6px;" title="{{ category.name }}"></div>

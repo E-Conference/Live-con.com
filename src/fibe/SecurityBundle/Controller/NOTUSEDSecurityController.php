@@ -11,7 +11,7 @@
    * Class SecurityController
    * @package fibe\SecurityBundle\Controller
    */
-  class SecurityController extends Controller
+  class NOTUSEDSecurityController extends Controller
   {
     /**
      * @return \Symfony\Component\HttpFoundation\Response

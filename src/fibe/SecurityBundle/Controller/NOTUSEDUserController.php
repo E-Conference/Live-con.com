@@ -19,7 +19,7 @@
    *
    * @Route("/user")
    */
-  class UserController extends Controller
+  class NOTUSEDUserController extends Controller
   {
     /**
      * Lists all User entities.

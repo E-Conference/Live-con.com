@@ -9,7 +9,10 @@ security:
 
     providers:
         main:
-            entity: { class: fibe\SecurityBundle\Entity\User, property: username } 
+            entity: { class: fibe\SecurityBundle\Entity\User, property: username }
+
+    acl:
+        connection: default
 
 #        in_memory:
 #            memory:

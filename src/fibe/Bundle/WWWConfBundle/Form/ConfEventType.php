@@ -15,7 +15,6 @@
    */
   class ConfEventType extends EventType
   {
-    private $user;
 
     /**
      * Constructor

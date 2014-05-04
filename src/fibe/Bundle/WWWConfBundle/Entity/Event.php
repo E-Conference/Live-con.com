@@ -64,9 +64,7 @@ class Event extends LocationAwareCalendarEntity
         
         if($this->getEndAt()) {
             $this->setDuration($this->getEndAt()->diff($this->getStartAt())->format('P%aDT%HH%IM%SS')); 
-        }else if($this->getDuration()) 
-        {
-        } else 
+        } else if($this->getStartAt()) 
         {
             $endAt = clone $this->getStartAt();
             $endAt->modify(sprintf(
@@ -74,6 +72,9 @@ class Event extends LocationAwareCalendarEntity
                 self::durationInTime($this->getDuration(), 'minute')
             ));
             $this->setEndAt($endAt);
+        } else {
+            $this->setEndAt(new \DateTime("now"));
+            $this->setStartAt(new \DateTime("now"));
         }
     }
 

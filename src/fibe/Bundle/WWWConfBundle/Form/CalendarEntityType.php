@@ -18,6 +18,10 @@ use fibe\Bundle\WWWConfBundle\Form\EventListener\RecurFieldSubscriber;
 
 class CalendarEntityType extends AbstractType
 {
+    public function __construct()
+    {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $subscriber = new RecurFieldSubscriber($builder->getFormFactory());
