@@ -157,7 +157,7 @@
             </a>
           </li>
 
-          {% if is_granted("ROLE_ADMIN") and app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')==1 %}
+          {%  app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')==1 %}
             <li>
               <a href="{{ path('schedule_user_list') }}" title="Manage manager">
                 <span class="icon-list glyphicon-white "> Manage user </span>

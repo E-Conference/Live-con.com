@@ -10,8 +10,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use fibe\SecurityBundle\Entity\User;
 use fibe\SecurityBundle\Entity\Authorization;
-use fibe\SecurityBundle\Form\AuthorizationType;
-use fibe\SecurityBundle\Form\UserAuthorizationType;
+use fibe\ConferenceBundle\Form\UserAuthorizationType;
+use fibe\ConferenceBundle\Form\AuthorizationType;
 
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -35,10 +35,10 @@ class AuthorizationController extends Controller
     {
         
         $currentConf = $this->getUser()->getCurrentConf();
-        if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') && $this->getUser()->getAuthorizationByConference($currentConf)->getFlagTeam()==1 )
+        if(!$this->getUser()->getAuthorizationByConference($currentConf)->getFlagTeam()==1 )
         {
             // Sinon on déclenche une exception "Accès Interdit"
-            throw new AccessDeniedHttpException('Access reserved to admin and team manager');
+            throw new AccessDeniedHttpException('Access reserved to team manager');
         }
         $entity  = new Authorization();
 
@@ -93,7 +93,7 @@ class AuthorizationController extends Controller
             throw $this->createNotFoundException('Unable to find authorization entity.');
         }
 
-        $editForm = $this->createForm(new UserAuthorizationType($this->getUser(),true), $entity);
+        $editForm = $this->createForm(new UserAuthorizationType($this->getUser()), $entity);
       
 
         return $this->render('fibeConferenceBundle:Authorization:edit.html.twig', array(

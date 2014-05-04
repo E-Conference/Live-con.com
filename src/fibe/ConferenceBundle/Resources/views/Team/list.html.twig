@@ -49,21 +49,7 @@
                                     <span class="caret"></span>
                                 </button>
                                  
-                                <ul class="dropdown-menu">
-                                   <!-- <li>
-                                        <a href="{{ path('schedule_user_toggle_role', { 'id': entity.id }) }}"> 
-                                                {% if  'ROLE_ADMIN' in entity.roles %}
-                                                      demote to manager 
-                                                {% else %}
-                                                     promote to admin 
-                                                {% endif %} 
-                                        </a>  
-                                    </li>
-                                    <li>
-                                        <a href="#" onclick="document.getElementById('delete-form{{ loop.index0 }}').submit()"><i class=" icon-trash"></i> delete user</a>
-                                        
-                                    </li>-->
-                                    
+                                <ul class="dropdown-menu"> 
                                     <li>
                                        <a onclick="removeManager({{entity.id}});"><i class="fa fa-trash-o"></i>  Remove user from the conference</a>
                                     </li>
@@ -72,40 +58,13 @@
                             {% else %}
                                {{ entity.username }}
                             {% endif %}
-                           <!-- <form style="height:0px;" id="delete-form{{ loop.index0 }}" action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
-                                <input type="hidden" name="_method" value="DELETE" />
-                                {{ form_widget(delete_forms[loop.index0]) }}
-                            </form>-->
-                        </td>
-                        <td><a href="mailto:{{ entity.email }}">{{ entity.email }}</a></td>
-                        <td class="moment">{% if entity.lastLogin %}{{ entity.lastLogin|date('Y-m-d H:i:s') }}{% endif %}</td> 
-                        <!--  <td>
-                            <div class="btn-group">
-                              <button class="btn dropdown-toggle" data-toggle="dropdown">
-                                    {% if  'ROLE_ADMIN' in entity.roles %}
-                                        True
-                                    {% else %}
-                                        False
-                                    {% endif %} 
-                                    <span class="caret"></span>
-                                 </button>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="{{ path('schedule_user_toggle_role', { 'id': entity.id }) }}"> 
-                                          {% if  'ROLE_ADMIN' in entity.roles %}
-                                               False
-                                          {% else %}
-                                               True
-                                          {% endif %} 
-                                        </a> 
-                                             
-                                    </li>
-                                </ul>
-                            </div>-->
-                            <form style="height:0;" id="toggle-role-form{{ loop.index0 }}" action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
+                           <form style="height:0px;" id="delete-form{{ loop.index0 }}" action="{{ path('conference_team_delete', { 'id': entity.id }) }}" method="post">
                                 <input type="hidden" name="_method" value="DELETE" />
                                 {{ form_widget(delete_forms[loop.index0]) }}
                             </form>
+                        </td>
+                        <td><a href="mailto:{{ entity.email }}">{{ entity.email }}</a></td>
+                        <td class="moment">{% if entity.lastLogin %}{{ entity.lastLogin|date('Y-m-d H:i:s') }}{% endif %}</td> 
                          <td>
                             {% if  entity.getFlagByConferenceId(currentConf.id,'app') == 1 %}
                                       <i class="fa fa-check"></i>

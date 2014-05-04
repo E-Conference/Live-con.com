@@ -281,7 +281,7 @@ class ConferenceController extends Controller
         }
 
         $currentConf = $this->getUser()->getCurrentConf();
-        if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') && !$this->getUser()->getAuthorizationByConference($currentConf)->getFlagTeam())
+        if(!$this->getUser()->getAuthorizationByConference($currentConf)->getFlagTeam())
         {
             // Sinon on déclenche une exception "Accès Interdit"
             throw new AccessDeniedHttpException('Access reserved to admin or team Manager');

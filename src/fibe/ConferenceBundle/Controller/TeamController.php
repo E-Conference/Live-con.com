@@ -11,7 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use fibe\SecurityBundle\Entity\User;
 use fibe\SecurityBundle\Entity\Authorization;
 use fibe\SecurityBundle\Form\UserAuthorizationType;
-use fibe\SecurityBundle\Form\AuthorizationType;
+use fibe\ConferenceBundle\Form\AuthorizationType;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
@@ -30,17 +30,17 @@ class TeamController extends Controller
      */
     public function listAction()
     {
-        if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') )
-        {
-            // Sinon on déclenche une exception "Accès Interdit"
-            throw new AccessDeniedHttpException('Access reserved to admin');
-        }
 
           //Authorization Verification conference sched manager
         $user=$this->getUser();
         $currentConf =$this->getUser()->getcurrentConf();
         $authorization = $user->getAuthorizationByConference($currentConf);
 
+        if(!$this->getUser()->getAuthorizationByConference($this->getUser()->getcurrentConf())->getFlagTeam()==1 )
+        {
+            // Sinon on déclenche une exception "Accès Interdit"
+            throw new AccessDeniedHttpException('Access reserved to admin');
+        }
         
        
         $em = $this->getDoctrine()->getManager();
@@ -73,43 +73,43 @@ class TeamController extends Controller
     }
 
     
-    /**
-     * switch between admin and user role
-     *
-     * @Route("/toggle/{id}", name="conference_team_toggle_role") 
-     * @Template()
-     */
-    public function updateAction(Request $request, $id)
-    {
-        if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') )
-        {
-            // Sinon on déclenche une exception "Accès Interdit"
-            throw new AccessDeniedHttpException('Access reserved to admin');
-        }
+    // /**
+    //  * switch between admin and user role
+    //  *
+    //  * @Route("/toggle/{id}", name="conference_team_toggle_role") 
+    //  * @Template()
+    //  */
+    // public function updateAction(Request $request, $id)
+    // {
+    //     if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') )
+    //     {
+    //         // Sinon on déclenche une exception "Accès Interdit"
+    //         throw new AccessDeniedHttpException('Access reserved to admin');
+    //     }
 
-        $em = $this->getDoctrine()->getManager();
-        $user = $em->getRepository('fibeSecurityBundle:User')->find($id);
-        if($user->hasRole('ROLE_ADMIN'))
-        {
-          $user->removeRole('ROLE_ADMIN');
-          $em->persist($user);
-          $em->flush();
-          $this->container->get('session')->getFlashBag()->add(
-              'success',
-              'The user has been successfully demoted to manager.'
-          );
-        } else
-        {
-          $user->addRole('ROLE_ADMIN');
-          $em->persist($user);
-          $em->flush();
-          $this->container->get('session')->getFlashBag()->add(
-              'success',
-              'The user has been successfully promoted to admin.'
-          );
-        }
-        return $this->redirect($this->generateUrl('conference_team_list')); 
-    }
+    //     $em = $this->getDoctrine()->getManager();
+    //     $user = $em->getRepository('fibeSecurityBundle:User')->find($id);
+    //     if($user->hasRole('ROLE_ADMIN'))
+    //     {
+    //       $user->removeRole('ROLE_ADMIN');
+    //       $em->persist($user);
+    //       $em->flush();
+    //       $this->container->get('session')->getFlashBag()->add(
+    //           'success',
+    //           'The user has been successfully demoted to manager.'
+    //       );
+    //     } else
+    //     {
+    //       $user->addRole('ROLE_ADMIN');
+    //       $em->persist($user);
+    //       $em->flush();
+    //       $this->container->get('session')->getFlashBag()->add(
+    //           'success',
+    //           'The user has been successfully promoted to admin.'
+    //       );
+    //     }
+    //     return $this->redirect($this->generateUrl('conference_team_list')); 
+    // }
 
 
 
@@ -158,12 +158,7 @@ class TeamController extends Controller
    * @return Form The form
    */
     private function createDeleteForm($id)
-    {
-        if( ! $this->container->get('security.context')->isGranted('ROLE_ADMIN') )
-        {
-            // Sinon on déclenche une exception "Accès Interdit"
-            throw new AccessDeniedHttpException('Access reserved to admin');
-        }
+    { 
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
             ->getForm()

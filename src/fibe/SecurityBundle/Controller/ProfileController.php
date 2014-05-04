@@ -15,9 +15,7 @@
 
   use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
   /**
-   * Controller managing the user profile
-   *
-   * @author Christophe Coevoet <stof@notk.org>
+   * Override edit and show action of FOS\UserBundle\Controller\ProfileController
    */
   class ProfileController extends BaseController
   {

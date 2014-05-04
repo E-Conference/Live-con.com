@@ -27,9 +27,9 @@
                                                 'allow_delete' => true));
     }
 
-    /**
+    *
      * {@inheritdoc}
-     */
+     
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
       $resolver->setDefaults(array(
