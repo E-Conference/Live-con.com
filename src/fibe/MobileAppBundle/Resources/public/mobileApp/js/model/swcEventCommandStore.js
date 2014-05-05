@@ -10,7 +10,92 @@
 *   Tags:  JSON, SPARQL, AJAX
 **/
 define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterText', 'localStorage/localStorageManager','moment', 'lib/FileSaver', 'labels'], function($, _, Encoder, ViewAdapter, ViewAdapterText, StorageManager, moment, FileSaver, labels){
-	var swcEventCommandStore = { 
+	var swcEventCommandStore = {
+
+
+    getAllSponsors: {
+      dataType: "JSONP",
+      method: "GET",
+      serviceUri: "schedule_sponsor.jsonp?",
+      getQuery: function (parameters)
+      {
+        var ajaxData = {conference_id: parameters.conference.id};
+        return ajaxData;
+      },
+
+      ModelCallBack: function (dataJSON, conferenceUri, datasourceUri, currentUri)
+      {
+        var JSONfile = {};
+        $.each(dataJSON, function (i)
+        {
+          var JSONToken = {};
+          JSONToken.id = this.id || null;
+          JSONToken.name = this.name || null;
+          JSONToken.description = this.description || null;
+          JSONToken.url = this.url || null;
+          JSONToken.logoPath = this.logoPath || null;
+          JSONfile[i] = JSONToken;
+        });
+        console.log(JSONfile);
+        StorageManager.pushCommandToStorage(currentUri, "getAllSponsors", JSONfile);
+        return JSONfile;
+      },
+
+      ViewCallBack: function (parameters)
+      {
+        var urlSponsor;
+        var endUrlSponsor;
+        var boolHasDescription;
+        var toAppend;
+        if (parameters.JSONdata != null && _.size(parameters.JSONdata) > 0 && parameters.mode == "text")
+        {
+          ViewAdapterText.appendButton(parameters.contentEl);
+          toAppend = '<table data-role="table" class="ui-responsive" >';
+          urlSponsor = '';
+          endUrlSponsor = '';
+          boolHasDescription = false;
+          $.each(parameters.JSONdata, function (i, sponsor)
+          {
+            toAppend += '<tr>';
+            if (!(sponsor.url === null))
+            {
+              urlSponsor = '<a href="' + sponsor.url + '">';
+              endUrlSponsor = '</a>';
+            }
+            else
+            {
+              urlSponsor = '';
+              endUrlSponsor = '';
+            }
+            if (sponsor.description === null)
+            {
+              boolHasDescription = false;
+              toAppend += '<td colspan="2">';
+            }
+            else
+            {
+              boolHasDescription = true;
+              toAppend += '<td>';
+            }
+
+            toAppend += urlSponsor;
+            if (sponsor.logoPath !== null)
+              toAppend += '<img src="' + parameters.conference.logoSponsorUri + sponsor.logoPath + '" height="auto" width ="200px" alt="' + sponsor.name + '"/>';
+            else
+              toAppend += '<h2>' + sponsor.name + '</h2>';
+
+            toAppend += endUrlSponsor + '</td>';
+            if(boolHasDescription)
+            {
+              toAppend += '<td><em>' + sponsor.description + '</em></td>';
+            }
+            toAppend += '</tr>';
+          });
+          toAppend += '</table>';
+          parameters.contentEl.append(toAppend);
+        }
+      }
+    },
 
 		getAllTopics : {
 		    dataType : "JSONP",

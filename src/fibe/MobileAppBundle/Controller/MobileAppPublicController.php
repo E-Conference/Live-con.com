@@ -34,15 +34,16 @@
       $apiUri = $this->get('router')->generate('idci_exporter_api_homeapi');
       $apiType = "rest";
       $baseUri = "http://data.live-con.com/resource/conference/" . $conference->getId() . "/" . $conference->getSlug();
-      return array(
+      return [
         'api_uri'             => $apiUri,
         'api_type'            => $apiType,
         'paper_module'        => $conference->getModule()->getPaperModule(),
         'organization_module' => $conference->getModule()->getOrganizationModule(),
+        'sponsor_module'      => $conference->getModule()->getSponsorModule(),
         'conference_baseUri'  => $baseUri,
         'mobile_app_config'   => $mobile_app_config,
         'conference'          => $conference,
-      );
+      ];
     }
 
     /**

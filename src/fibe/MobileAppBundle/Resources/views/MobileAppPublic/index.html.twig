@@ -92,6 +92,9 @@
       {% if organization_module == true %}
       modules.push("organizations");
       {% endif %}
+      {% if sponsor_module == true %}
+      modules.push("sponsors");
+      {% endif %}
 
       //Chosen datasource configuration
       {% if mobile_app_config.dblpDatasource == false %}
@@ -115,6 +118,7 @@
       configuration.conference.id = {{ conference.id |json_encode|raw }};
       configuration.conference.eventId = {{ conference.mainConfEvent.id |json_encode|raw }};
       configuration.conference.logoUri = "{{ asset('uploads/')}}{{conference.logoPath}}";
+      configuration.conference.logoSponsorUri = "{{ asset('uploads/sponsors/')}}";
       configuration.routes.Home.title = {{ conference.mainConfEvent.acronym |json_encode|raw }};
       tpl.uri = "{{ asset('bundles/fibemobileapp/mobileApp/templates/') }}";
 

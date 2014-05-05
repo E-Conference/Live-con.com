@@ -96,6 +96,11 @@
               <a style="padding-right:5px;" href="{{ path('schedule_topic') }}">
                 <i class="fa fa-crosshairs fa-3x"></i> Topics
               </a>
+              {% if app.user.getCurrentConf().getModule().getSponsorModule()== true %}
+                <a style="padding-right:5px;" href="{{ path('schedule_sponsor') }}">
+                  <i class="fa fa-dollar fa-3x"></i> Sponsors
+                </a>
+              {% endif %}
 
             </li>
           </ul>

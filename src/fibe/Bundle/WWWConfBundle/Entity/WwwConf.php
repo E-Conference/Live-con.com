@@ -80,6 +80,13 @@
     private $topics;
 
     /**
+     * Sponsors
+     *
+     * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Sponsor", mappedBy="conference",cascade={"persist", "remove"})
+     */
+    private $sponsors;
+
+    /**
      * confManager
      *
      * @ORM\ManyToMany(targetEntity="fibe\SecurityBundle\Entity\User", mappedBy="conferences",cascade={"persist"})
@@ -463,6 +470,40 @@
     public function getTopics()
     {
       return $this->topics;
+    }
+
+    /**
+     * Add sponsors
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Sponsor $sponsors
+     *
+     * @return WwwConf
+     */
+    public function addSponsor(\fibe\Bundle\WWWConfBundle\Entity\Topic $sponsors)
+    {
+      $this->sponsors[] = $sponsors;
+
+      return $this;
+    }
+
+    /**
+     * Remove sponsors
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\Sponsor $sponsors
+     */
+    public function removeSponsor(\fibe\Bundle\WWWConfBundle\Entity\Topic $sponsors)
+    {
+      $this->sponsors->removeElement($sponsors);
+    }
+
+    /**
+     * Get sponsors
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSponsors()
+    {
+      return $this->sponsors;
     }
 
     /**
