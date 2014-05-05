@@ -22,17 +22,7 @@
       parent::buildForm($builder, $options);
 
       // add your custom field
-      $builder
-        /*  ->add('roles', 'collection', array(
-                   'type' => 'choice',
-                   'options' => array(
-                        'choices'   => array(
-                            'ROLE_ADMIN'   => 'Admin',
-                            'ROLE_ADMIN_WWWCONF' => 'Admin WWWConf',
-                        )
-                   )
-              ))*/
-
+      $builder 
         ->add('captcha', 'captcha', array('required' => true));;
     }
 

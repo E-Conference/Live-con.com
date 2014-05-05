@@ -52,7 +52,7 @@
     </div>
   </div>
 
-  {% if is_granted("ROLE_ADMIN") and app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')==1 %}
+  {%  app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')==1 %}
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title">

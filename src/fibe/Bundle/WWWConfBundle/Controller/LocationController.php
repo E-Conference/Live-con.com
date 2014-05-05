@@ -27,6 +27,7 @@ use Pagerfanta\Exception\NotValidCurrentPageException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+
 /**
  * Location controller.
  *
@@ -64,6 +65,7 @@ class LocationController extends Controller
         }
 
         $filters =$this->createForm(new LocationFilterType($this->getUser()));
+        $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
         return array(
             'pager' => $pager,
             'authorized' => $authorized,
@@ -83,14 +85,14 @@ class LocationController extends Controller
         $conf = $this->getUser()->getCurrentConf();
         //Filters
         $filters =$this->createForm(new LocationFilterType($this->getUser()));
-        $filters->bindRequest($this->get('request'));
+        $filters->bind($request);
         
         if ($filters->isValid())  {
             // bind values from the request
           
              $entities = $em->getRepository('fibeWWWConfBundle:Location')->filtering($filters->getData(), $conf);
              $nbResult = count($entities);
-
+            
              //Pager
              $adapter = new ArrayAdapter($entities);
              $pager = new PagerFanta($adapter);
@@ -117,23 +119,12 @@ class LocationController extends Controller
      */
     public function showAction($id)
     {
-        
-        //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
-
-        $em = $this->getDoctrine()->getManager();
-
-        //The object have to belongs to the current conf
-        $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('fibeWWWConfBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Location entity.');
-        }
+        $entity = $this->get('fibe_security.acl_helper')->getEntityACL('VIEW','Location',$id);
  
         $deleteForm = $this->createDeleteForm($id);
 
+        $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
+        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
         return array(
             'entity'      => $entity, 
             'delete_form' => $deleteForm->createView(),
@@ -149,23 +140,14 @@ class LocationController extends Controller
      */
     public function newAction()
     {
-        
-       //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
-
-         if(!$authorized){
-            throw new AccessDeniedException('Action not authorized !');
-          }
-
-        $entity = new Location();
+        $entity = $this->get('fibe_security.acl_helper')->getEntityACL('CREATE','Location');
         $form   = $this->createForm(new LocationType(), $entity);
 
+        $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
+        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
-            'authorized' => $authorized,
             'authorized' => $authorized,
         );
     }
@@ -179,17 +161,7 @@ class LocationController extends Controller
      */
     public function createAction(Request $request)
     {
-        
-        //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
-
-         if(!$authorized){
-            throw new AccessDeniedException('Action not authorized !');
-          }
-
-        $entity  = new Location();
+        $entity = $this->get('fibe_security.acl_helper')->getEntityACL('CREATE','Location');
         $form = $this->createForm(new LocationType(), $entity);
         $form->bind($request);
 
@@ -198,6 +170,7 @@ class LocationController extends Controller
             $entity->setConference($this->getUser()->getCurrentConf());
             $em->persist($entity);
             $em->flush();
+           //$this->get('fibe_security.acl_helper')->createACL($entity,MaskBuilder::MASK_OWNER);
 
             $this->get('session')->getFlashBag()->add(
                 'info',
@@ -210,10 +183,11 @@ class LocationController extends Controller
             return $this->redirect($this->generateUrl('schedule_location'));
         }
 
+        $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
-            'authorized' => $authorized,
+            'authorized' => $authorization->getFlagconfDatas() || $authorization->getFlagSched(),
         );
     }
 
@@ -225,34 +199,20 @@ class LocationController extends Controller
      */
     public function editAction($id)
     { 
-        //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
-
-         if(!$authorized){
-            throw new AccessDeniedException('Action not authorized !');
-          }
-
-        $em = $this->getDoctrine()->getManager();
-         //The object have to belongs to the current conf
-        $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('fibeWWWConfBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Location entity.');
-        }
+        $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','Location',$id);
 
         $editForm = $this->createForm(new LocationType(), $entity); 
         $deleteForm = $this->createDeleteForm($id);
 
-        $equipments = $em->getRepository('fibeWWWConfBundle:Equipment')->getEquipmentForLocationSelect($entity);
+        $equipments = $this->getDoctrine()->getManager()->getRepository('fibeWWWConfBundle:Equipment')->getEquipmentForLocationSelect($entity);
     
+        $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf()); 
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(), 
             'delete_form' => $deleteForm->createView(),
             'equipments'  => $equipments,
-            'authorized'  => $authorized,
+            'authorized'  => $authorization->getFlagconfDatas() || $authorization->getFlagSched(),
         );
     }
 
@@ -265,47 +225,32 @@ class LocationController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        
-        //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
+        $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','Location',$id);
 
-         if(!$authorized){
-            throw new AccessDeniedException('Action not authorized !');
-          }
-
-        $em = $this->getDoctrine()->getManager();
-         //The object have to belongs to the current conf
-        $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('fibeWWWConfBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Location entity.');
-        }
  
         $editForm = $this->createForm(new LocationType(), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
+            $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
-        $this->get('session')->getFlashBag()->add(
-            'info',
-            $this->get('translator')->trans('%entity%[%id%] has been updated', array(
-                '%entity%' => 'Location',
-                '%id%'     => $entity->getId()
-            ))
-        );
-
-        return $this->redirect($this->generateUrl('schedule_location'));
-        
+            $this->get('session')->getFlashBag()->add(
+                'info',
+                $this->get('translator')->trans('%entity%[%id%] has been updated', array(
+                    '%entity%' => 'Location',
+                    '%id%'     => $entity->getId()
+                ))
+            );
+            return $this->redirect($this->generateUrl('schedule_location'));
         }
 
+        $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf()); 
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(), 
-            'authorized' => $authorized,
+            'authorized' => $authorization->getFlagconfDatas() || $authorization->getFlagSched(),
         );
     }
 
@@ -319,36 +264,22 @@ class LocationController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
-        
-        //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
+        $entity = $this->get('fibe_security.acl_helper')->getEntityACL('DELETE','Location',$id);
 
-         if(!$authorized){
-            throw new AccessDeniedException('Action not authorized !');
-          }
 
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-             //The object have to belongs to the current conf
-            $currentConf=$this->getUser()->getCurrentConf();
-            $entity =  $em->getRepository('fibeWWWConfBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Location entity.');
-            }
 
             $em->remove($entity);
             $em->flush();
             
             $this->get('session')->getFlashBag()->add(
                 'info',
-                $this->get('translator')->trans('%entity%[%id%] has been deleted', array(
-                    '%entity%' => 'Location',
-                    '%id%'     => $id
+                $this->get('translator')->trans('%entity% has been deleted', array(
+                    '%entity%' => 'Location'
                 ))
             );
         }
@@ -363,30 +294,15 @@ class LocationController extends Controller
      */
     public function deleteFormAction($id)
     {
-        
-        //Authorization Verification conference sched manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-        $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
-
-         if(!$authorized){
-            throw new AccessDeniedException('Action not authorized !');
-          }
-
-        $em = $this->getDoctrine()->getManager();
-        //The object have to belongs to the current conf
-        $currentConf=$this->getUser()->getCurrentConf();
-        $entity =  $em->getRepository('fibeWWWConfBundle:Location')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Location entity.');
-        }
+        $entity = $this->get('fibe_security.acl_helper')->getEntityACL('DELETE','Location',$id);
 
         $deleteForm = $this->createDeleteForm($id);
 
+        $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
         return array(
             'entity'      => $entity,
             'delete_form' => $deleteForm->createView(),
-            'authorized' => $authorized,
+            'authorized'  => $authorization->getFlagconfDatas() || $authorization->getFlagSched(),
         );
     }
 

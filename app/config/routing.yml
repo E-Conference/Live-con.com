@@ -51,7 +51,7 @@ idci_exporter:
 
 login:
     pattern:   /login
-    defaults:  { _controller: fibeSecurityBundle:Security:login }
+    defaults:  { _controller: FOSUserBundle:Security:login }
 
 login_check:
     pattern:   /login_check

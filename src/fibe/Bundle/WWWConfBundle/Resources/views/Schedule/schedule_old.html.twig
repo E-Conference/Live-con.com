@@ -194,8 +194,8 @@
         //url
         DATA_FEED_URL = "{{ path('schedule_view_event_get') }}",
         op = {  
-          getOrderedUrl     : "{{ path('exporter_api', { 'entity_reference': 'schedule_event','_format': 'json' }) }}?conference_id={{currentConf.id}}",
-          getDatalessUrl     : "{{ path('exporter_api', { 'entity_reference': 'schedule_event','_format': 'json' }) }}?only_instant=whatever&conference_id={{currentConf.id}}",
+          getOrderedUrl     : "{{ path('exporter_api', { 'entityReference': 'schedule_event','_format': 'json' }) }}?conference_id={{currentConf.id}}",
+          getDatalessUrl     : "{{ path('exporter_api', { 'entityReference': 'schedule_event','_format': 'json' }) }}?only_instant=whatever&conference_id={{currentConf.id}}",
           updateUrl     : "{{ path('schedule_view_event_edit') }}", //event modal form
           quickAddUrl   : DATA_FEED_URL + "?method=add", 
           quickUpdateUrl: DATA_FEED_URL + "?method=update",

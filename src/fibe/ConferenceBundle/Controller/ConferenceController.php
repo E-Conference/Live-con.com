@@ -290,12 +290,12 @@
         throw $this->createNotFoundException('Unable to find Manager.');
       }
 
-      $currentConf = $this->getUser()->getCurrentConf();
-      if (!$this->container->get('security.context')->isGranted('ROLE_ADMIN') && !$this->getUser()->getAuthorizationByConference($currentConf)->getFlagTeam())
-      {
-        // Sinon on déclenche une exception "Accès Interdit"
-        throw new AccessDeniedHttpException('Access reserved to admin or team Manager');
-      }
+        $currentConf = $this->getUser()->getCurrentConf();
+        if(!$this->getUser()->getAuthorizationByConference($currentConf)->getFlagTeam())
+        {
+            // Sinon on déclenche une exception "Accès Interdit"
+            throw new AccessDeniedHttpException('Access reserved to admin or team Manager');
+        }
 
       //It must stay one manager in a conference
       if (count($currentConf->getConfManagers()) > 1)

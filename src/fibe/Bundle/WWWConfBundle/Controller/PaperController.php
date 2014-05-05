@@ -19,6 +19,7 @@
 
   use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
   use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+  
 
   /**
    * Paper controller.
@@ -32,16 +33,9 @@
      * @Template()
      */
     public function indexAction(Request $request)
-    {
-
-      //Authorization Verification conference datas manager
-      $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-      $em = $this->getDoctrine()->getManager();
-
-      $conf = $this->getUser()->getCurrentConf();
-      $entities = $conf->getPapers()->toArray();
+    { 
+      $entities = $this->get('fibe_security.acl_helper')->getEntitiesACL('EDIT','Paper');
+      // $entities = $this->getUser()->getCurrentConf()->getPapers()->toArray();
 
       $adapter = new ArrayAdapter($entities);
       $pager = new PagerFanta($adapter);
@@ -57,6 +51,7 @@
       }
 
       $filters = $this->createForm(new PaperFilterType($this->getUser()));
+      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return array(
         'pager'        => $pager,
         'authorized'   => $authorization->getFlagconfDatas(),
@@ -77,7 +72,7 @@
       $conf = $this->getUser()->getCurrentConf();
       //Filters
       $filters = $this->createForm(new PaperFilterType($this->getUser()));
-      $filters->bindRequest($this->get('request'));
+      $filters->bind($request);
 
       if ($filters->isValid())
       {
@@ -114,17 +109,7 @@
      */
     public function createAction(Request $request)
     {
-
-      //Authorization Verification conference sched manager
-      $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-      if (!$authorization->getFlagconfDatas())
-      {
-        throw new AccessDeniedException('Action not authorized !');
-      }
-
-      $entity = new Paper();
+      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('CREATE','Paper');
       $form = $this->createForm(new PaperType($this->getUser()), $entity);
       $form->bind($request);
 
@@ -134,10 +119,12 @@
         $entity->setConference($this->getUser()->getCurrentConf());
         $em->persist($entity);
         $em->flush();
+       //$this->get('fibe_security.acl_helper')->createACL($entity,MaskBuilder::MASK_OWNER);
 
         return $this->redirect($this->generateUrl('schedule_paper'));
       }
 
+      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:Paper:new.html.twig', array(
         'entity'     => $entity,
         'form'       => $form->createView(),
@@ -153,18 +140,11 @@
      */
     public function newAction()
     {
+      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('CREATE','Paper');
       //Authorization Verification conference sched manager
-      $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-      if (!$authorization->getFlagconfDatas())
-      {
-        throw new AccessDeniedException('Action not authorized !');
-      }
-
-      $entity = new Paper();
       $form = $this->createForm(new PaperType($this->getUser()), $entity);
 
+      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:Paper:new.html.twig', array(
         'entity'     => $entity,
         'form'       => $form->createView(),
@@ -179,27 +159,15 @@
      */
     public function showAction($id)
     {
-      //Authorization Verification conference sched manager
-      $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-      $em = $this->getDoctrine()->getManager();
-
-
-      //The object have to belongs to the current conf
-      $currentConf = $this->getUser()->getCurrentConf();
-      $entity = $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-      if (!$entity)
-      {
-        throw $this->createNotFoundException('Unable to find Paper entity.');
-      }
-
+      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('VIEW','Paper',$id);
       $deleteForm = $this->createDeleteForm($id);
 
+      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:Paper:show.html.twig', array(
         'entity'      => $entity,
         'delete_form' => $deleteForm->createView(),
-        'authorized'  => $authorization->getFlagconfDatas(),));
+        'authorized'  => $authorization->getFlagconfDatas()
+      ));
     }
 
     /**
@@ -209,29 +177,12 @@
      */
     public function editAction($id)
     {
-
-      //Authorization Verification conference sched manager
-      $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-      if (!$authorization->getFlagconfDatas())
-      {
-        throw new AccessDeniedException('Action not authorized !');
-      }
-
-      $em = $this->getDoctrine()->getManager();
-
-      //The object have to belongs to the current conf
-      $currentConf = $this->getUser()->getCurrentConf();
-      $entity = $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-      if (!$entity)
-      {
-        throw $this->createNotFoundException('Unable to find Paper entity.');
-      }
+      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','Paper',$id);
 
       $editForm = $this->createForm(new PaperType($this->getUser()), $entity);
       $deleteForm = $this->createDeleteForm($id);
 
+      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:Paper:edit.html.twig', array(
         'entity'      => $entity,
         'edit_form'   => $editForm->createView(),
@@ -246,44 +197,18 @@
      */
     public function updateAction(Request $request, $id)
     {
+      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','Paper',$id);
 
-      //Authorization Verification conference sched manager
-      $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-      if (!$authorization->getFlagconfDatas())
-      {
-        throw new AccessDeniedException('Action not authorized !');
-      }
-
-      $em = $this->getDoctrine()->getManager();
-
-      //The object have to belongs to the current conf
-      $currentConf = $this->getUser()->getCurrentConf();
-      $entity = $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-      if (!$entity)
-      {
-        throw $this->createNotFoundException('Unable to find Paper entity.');
-      }
-
-      $deleteForm = $this->createDeleteForm($id);
       $editForm = $this->createForm(new PaperType($this->getUser()), $entity);
       $editForm->bind($request);
 
       if ($editForm->isValid())
       {
+        $em = $this->getDoctrine()->getManager();
         $em->persist($entity);
         $em->flush();
-
-        return $this->redirect($this->generateUrl('schedule_paper'));
       }
-
-      return $this->render('fibeWWWConfBundle:Paper:edit.html.twig', array(
-        'entity'      => $entity,
-        'edit_form'   => $editForm->createView(),
-        'delete_form' => $deleteForm->createView(),
-        'authorized'  => $authorization->getFlagconfDatas(),
-      ));
+      return $this->redirect($this->generateUrl('schedule_paper_show', array('id' => $id)));
     }
 
     /**
@@ -293,15 +218,7 @@
      */
     public function deleteAction(Request $request, $id)
     {
-
-      //Authorization Verification conference sched manager
-      $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-      if (!$authorization->getFlagconfDatas())
-      {
-        throw new AccessDeniedException('Action not authorized !');
-      }
+      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('DELETE','Paper',$id);
 
       $form = $this->createDeleteForm($id);
       $form->bind($request);
@@ -309,16 +226,12 @@
       if ($form->isValid())
       {
         $em = $this->getDoctrine()->getManager();
-        //The object have to belongs to the current conf
-        $currentConf = $this->getUser()->getCurrentConf();
-        $entity = $em->getRepository('fibeWWWConfBundle:Paper')->findOneBy(array('conference' => $currentConf, 'id' => $id));
-        if (!$entity)
-        {
-          throw $this->createNotFoundException('Unable to find Paper entity.');
-        }
-
         $em->remove($entity);
         $em->flush();
+        $this->container->get('session')->getFlashBag()->add(
+          'success',
+          'Paper successfully deleted !'
+        );
       }
 
       return $this->redirect($this->generateUrl('schedule_paper'));

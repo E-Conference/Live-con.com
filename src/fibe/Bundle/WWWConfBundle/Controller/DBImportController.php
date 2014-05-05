@@ -52,9 +52,6 @@
       $conference = $this->getUser()->getCurrentConf();
 
 
-      //empty conf
-      $emptyConf = $this->get('emptyConf');
-      $emptyConf->emptyConf($conference, $em);
 
       $eventEntities = array();
       $personEntities = array();

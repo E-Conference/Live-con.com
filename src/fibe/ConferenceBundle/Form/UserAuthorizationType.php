@@ -1,6 +1,6 @@
 <?php
 
-  namespace fibe\SecurityBundle\Form;
+  namespace fibe\ConferenceBundle\Form;
 
   use Symfony\Component\Form\AbstractType;
   use Symfony\Component\Form\FormBuilderInterface;
@@ -9,9 +9,7 @@
 
   /**
    * @TODO comment
-   *
-   * Class UserAuthorizationType
-   * @package fibe\SecurityBundle\Form
+   * 
    */
   class UserAuthorizationType extends AbstractType
   {
@@ -94,8 +92,7 @@
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
       $resolver->setDefaults(array(
-        'data_class'   => 'fibe\SecurityBundle\Entity\Authorization',
-        'inherit_data' => true
+        'data_class'   => 'fibe\SecurityBundle\Entity\Authorization'
       ));
     }
 

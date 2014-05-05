@@ -1,12 +1,19 @@
+
 parameters:
-#    fibe_security.example.class: fibe\SecurityBundle\Example
+    security.acl.dbal.provider.class: fibe\SecurityBundle\Services\AclProvider
+    fos_user.registration.confirmation.enabled: true
 
 services:
-#    fibe_security.example:
-#        class: %fibe_security.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
 
-services:
+    fibe_security.acl_helper:
+        class: fibe\SecurityBundle\Services\ACLHelper
+        arguments: ["@security.context","@doctrine.orm.entity_manager","@security.acl.provider"]
+
+    entityAddACL:
+        class: fibe\SecurityBundle\Listener\AddACL
+        arguments: ["@service_container"]
+        tags:
+            - { name: doctrine.event_listener, event: postPersist }
     fibe_user.registration.form.type:
         class: fibe\SecurityBundle\Form\RegistrationFormType
         arguments: [%fos_user.model.user.class%]

@@ -19,8 +19,8 @@
      */
     public function getOrderedQueryBuilder()
     {
-      $qb = $this->createQueryBuilder('loc');
-      $qb->orderBy('loc.name', 'ASC');
+      $qb = $this->createQueryBuilder('topic');
+      $qb->orderBy('topic.name', 'ASC');
 
       return $qb;
     }
@@ -63,14 +63,14 @@
       if (isset($params['id']))
       {
         $qb
-          ->andWhere('loc.id = :id')
+          ->andWhere('topic.id = :id')
           ->setParameter('id', $params['id']);
       }
 
       if (isset($params['ids']))
       {
         $qb
-          ->andWhere($qb->expr()->in('loc.id', $params['ids']));
+          ->andWhere($qb->expr()->in('topic.id', $params['ids']));
       }
 
       return $qb;

@@ -13,8 +13,6 @@
    */
   class WwwConfEventType extends ConfEventType
   {
-    private $user;
-    private $entity;
 
     /**
      * Constructor

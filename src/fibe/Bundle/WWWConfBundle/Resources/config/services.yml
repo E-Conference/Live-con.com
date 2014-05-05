@@ -1,4 +1,7 @@
 services:
+    emptyConf:
+        class: fibe\Bundle\WWWConfBundle\Services\EmptyConf
+
     idci_simpleschedule.type.year_day:
         class: fibe\Bundle\WWWConfBundle\Form\Type\YearDayType
         tags:
