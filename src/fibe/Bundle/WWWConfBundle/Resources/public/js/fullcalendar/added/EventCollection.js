@@ -55,7 +55,7 @@ var EventCollection = {
             
             var startScript = moment();
             computeCountRange(brothersIds,doChildren);
-            console.debug("BroCountRange : updated "+brothersIds.length+" events in "+moment().diff(startScript)+" ms",EventCollection.broCountRange);
+            console.log("BroCountRange : updated "+brothersIds.length+" events in "+moment().diff(startScript)+" ms",EventCollection.broCountRange);
 
             EventCollection.eventsToComputeBroCountRangeIndexes = []; 
             return EventCollection.eventsToComputeBroCountRangeIndexes;
@@ -75,13 +75,13 @@ var EventCollection = {
 
                 baseCount = EventCollection.broCountRange[curBro.id].count;
                 baseResCount = EventCollection.broCountRange[curBro.id].resCount;
-                // console.debug(curBro.id +" has "+brosIdsofcurBro.length+" non all day bros")
+                // console.log(curBro.id +" has "+brosIdsofcurBro.length+" non all day bros")
                 
                 for (var j in remainingIds){
 
                   bro = Events[ remainingIds[j] ];  
                   
-                  if(curBro.id===bro.id || bro.allDay )continue;   //ensure the bro is not itself or an all day event
+                  if(curBro.id===bro.id || bro.allDay )continue;   //ensure the bro is not itself or an all day event 
                   
                   if(curBro.isOutOf(bro,true) || ($.inArray(bro.id, brosIdsofcurBro) === -1))continue;    //ensure the bro is a real bro  
                   EventCollection.broCountRange[curBro.id]["count"]++;  //increments self count  
@@ -94,12 +94,12 @@ var EventCollection = {
                     count   :baseCount+1,
                     range   :EventCollection.broCountRange[curBro.id]["range"]+1, 
                     resCount:baseResCount+1,
-                    resRange:EventCollection.broCountRange[curBro.id]["resRange"]+1, 
+                    resRange:EventCollection.broCountRange[curBro.id]["resRange"]+1
                   };
 
                   //resource view : check if bros have the same resource 
                   if(curBroResId != (bro.resourceId || bro.resource.id)){
-                    console.debug("decrementing "+curBro.id+" and "+bro.id)
+                    // console.log("decrementing "+curBro.id+" and "+bro.id)
 
                     //decrements bro resCount and resRange
                     EventCollection.broCountRange[bro.id]["resCount"] = baseBroResCount;
@@ -178,7 +178,7 @@ var EventCollection = {
     updateMainConfEvent : function(newStart,newEnd){
     if(moment(mainConfEvent.start).dayOfYear() !== moment(newStart).dayOfYear() ||
        moment(mainConfEvent.end).dayOfYear() !== moment(newEnd).dayOfYear()){  
-         console.debug("mainConfEvent changed, rendering...");  
+         console.log("mainConfEvent changed, rendering...");  
          stopRender = true;
          mainConfEvent.start = moment(newStart, "YYYY-MM-DD HH:mmZ").format();
          mainConfEvent.end = moment(newEnd, "YYYY-MM-DD HH:mmZ").format(); 
@@ -264,7 +264,7 @@ var EventCollection = {
                     return "bottom";
                   },
                   title : ' <b><span class="muted">#'+event.id+'</span> '+event.title+'</b>',
-                  content : event.getPopoverContent(),
+                  content : event.getPopoverContent()
               });
 
               if (authorized) {
@@ -411,7 +411,7 @@ var EventCollection = {
 
           logtime = moment();
           callback(calendar_events ); 
-          console.debug(moment().diff(logtime)+" for fullcalendar to render"); 
+          console.log(moment().diff(logtime)+" for fullcalendar to render"); 
           logtime = moment();
           return;
         } 
@@ -461,7 +461,7 @@ var EventCollection = {
                 //last iteration  
                 if (!events[i]) { 
                   fetched = true;  
-                  console.debug(moment().diff(logtime)+" to init"); 
+                  console.log(moment().diff(logtime)+" to init"); 
                   EventCollection.refetchEvents(false,true);
                 }else if (stopRender!==true){ 
                   //the loop goes on
@@ -483,7 +483,7 @@ var EventCollection = {
         // setTimeout(function(){    
           logtime = moment() 
           EventCollection.stylizeBlocks();
-          console.debug(moment().diff(logtime)+" to stylizeBlocks"); 
+          console.log(moment().diff(logtime)+" to stylizeBlocks"); 
           console.log( "######################################################"); 
         // },0);
              

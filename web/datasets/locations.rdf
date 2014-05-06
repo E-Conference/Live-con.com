@@ -47,6 +47,10 @@
 
     
 
+    <!-- TEST -->
+    <AnnotationProperty>lol</AnnotationProperty>  
+    <AnnotationProperty>lol</AnnotationProperty>  
+
 
     <!-- http://data.semanticweb.org/ns/swc/ontology#completeGraph -->
 

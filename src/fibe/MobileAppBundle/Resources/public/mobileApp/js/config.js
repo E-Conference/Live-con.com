@@ -80,8 +80,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [ 
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getConferenceEvent",
-						},
+							"name" : "getConferenceEvent"
+            },
 						/*{
 							"datasource" : "eventDatasource",
 							"name" : "getConferenceTalk",
@@ -125,8 +125,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 						    "datasource" : "eventDatasource",
-						    "name" : "getWhatsNext",
-						},
+						    "name" : "getWhatsNext"
+            },
 					]
 				},  
 				"person-by-role" : { 
@@ -137,8 +137,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 					    {
 							"datasource" : "eventDatasource",
-							"name" : "getPersonByRole",
-						} 
+							"name" : "getPersonByRole"
+              }
 					]
 				},
 			    "Proceedings-search-by-theme" : { 
@@ -149,8 +149,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 					    {
 							"datasource" : "eventDatasource",
-							"name" : "getAllTheme",
-						} 
+							"name" : "getAllTheme"
+              }
 					]
 				},
 			    "Proceedings-search-by-category" : { 
@@ -161,8 +161,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 					    {
 							"datasource" : "eventDatasource",
-							"name" : "getAllCategories",
-						} 
+							"name" : "getAllCategories"
+              }
 					]
 				},
 				"Events" : {
@@ -173,8 +173,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getAllEvents",
-						} 
+							"name" : "getAllEvents"
+            }
 					]
 				},
 				"Event" : { 
@@ -201,8 +201,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 					    {
 							"datasource" : "eventDatasource",
-							"name" : "getEventByCategory",
-						} 
+							"name" : "getEventByCategory"
+              }
 					]
 				},
 				"Publication" : { 
@@ -213,8 +213,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getPublication",
-						}
+							"name" : "getPublication"
+            }
 						
 					]
 				},
@@ -251,8 +251,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getAllPublications",
-						}
+							"name" : "getAllPublications"
+            }
 					]
 				},
 
@@ -264,8 +264,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getAllLocations",
-						}
+							"name" : "getAllLocations"
+            }
 					]
 				},
 				
@@ -287,8 +287,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getAllPersons",
-						} 
+							"name" : "getAllPersons"
+            }
 					]
 				},
 				"Person" : {
@@ -300,20 +300,20 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 						
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getPerson",
-						},
+							"name" : "getPerson"
+            },
 						{
 							"datasource" : "GoogleDataSource",
-							"name" : "getAuthorPersonalPage",
-						},
+							"name" : "getAuthorPersonalPage"
+            },
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getPublicationsByAuthorId",
-						},
+							"name" : "getPublicationsByAuthorId"
+            },
 						{
 							"datasource" : "DblpDatasource",
-							"name" : "getAuthorPublications",
-						}
+							"name" : "getAuthorPublications"
+            }
 						
 
 					]
@@ -327,8 +327,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getAllOrganizations",
-						} 
+							"name" : "getAllOrganizations"
+            }
 					]
 				},
 				"Roles" : {
@@ -339,8 +339,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getAllRoles",
-						} 
+							"name" : "getAllRoles"
+            }
 					]
 				},
 
@@ -352,8 +352,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getAllCountries",
-						} 
+							"name" : "getAllCountries"
+            }
 					]
 				},
 				
@@ -365,8 +365,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getAllTopics",
-						},
+							"name" : "getAllTopics"
+            },
 					]
 				},
 				"Topic" : {
@@ -377,8 +377,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getTopic",
-						},
+							"name" : "getTopic"
+            },
 					]
 				},
 				"Categories" : {
@@ -389,8 +389,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getAllCategories",
-						} 
+							"name" : "getAllCategories"
+            }
 					]
 				},
 				"Category" : {
@@ -401,8 +401,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getEventbyCategory",
-						},
+							"name" : "getEventbyCategory"
+            },
 					]
 				},
 
@@ -414,8 +414,8 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getAllAuthors",
-						} 
+							"name" : "getAllAuthors"
+            }
 					]
 				},
 
@@ -427,12 +427,12 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 					    {
 							"datasource" : "DblpDatasource",
-							"name" : "getExternPublicationInfo",
-						},
+							"name" : "getExternPublicationInfo"
+              },
 						{
 							"datasource" : "DblpDatasource",
-							"name" : "getExternPublicationAuthors",
-						}
+							"name" : "getExternPublicationAuthors"
+            }
 					]
 				},
 				"Organization" : {
@@ -443,12 +443,12 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 							"datasource" : "DuckDuckGoDatasource",
-							"name" : "getResultOrganization",
-						},
+							"name" : "getResultOrganization"
+            },
 						{
 							"datasource" : "eventDatasource",
-							"name" : "getOrganization",
-						}
+							"name" : "getOrganization"
+            }
 					]
 				},
 				"Recommendation" : {
@@ -459,11 +459,11 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"commands" : [
 						{
 							"datasource" : "SemanticWebConferenceDatasource",
-							"name" : "getRecommendedPublications",
-						}
+							"name" : "getRecommendedPublications"
+            }
 					]
-				},
-			}
+				}
+      }
 		};
 		return AppConfig;
 })

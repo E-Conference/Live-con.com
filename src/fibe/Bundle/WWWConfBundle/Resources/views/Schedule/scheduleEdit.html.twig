@@ -32,7 +32,7 @@
                   {{ form_rest(edit_form)}}
               </div>                       
         </div> 
-        </br>
+        <br />
          <div class="row">  
             <div class="col-lg-12">  
                  <button type="submit" class="btn btn-block btn-success">
@@ -42,10 +42,9 @@
         </div>
     </form>
       
-        </br></br>
+        <br /><br />
 
-         
-            <div class="row">  
+        <div class="row">
                <h1>Topics</h1><div id="loader_topics" style="visibility: hidden; display:inline;"><img src="{{ asset('img/ajax-loader.gif') }}"/></div>
                 <div id="topics_related_list">
                   {% include "fibeWWWConfBundle:ConfEvent:topicRelation.html.twig" %}
@@ -53,9 +52,9 @@
                  {{ form_widget(topic_form) }}     
             </div> 
          
-        </br></br>
-          
-          {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
+        <br /><br />
+
+        {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
             <div class="row"> 
                 <h1>Papers Relation</h1><div id="loader_papers" style="visibility: hidden; display:inline;"><img src="{{ asset('img/ajax-loader.gif') }}"/></div>
                  <div id="paper_related_list">
@@ -65,9 +64,9 @@
             </div>
           {% endif %}
 
-        </br></br>
+        <br /><br />
 
-            <div class="row"> 
+        <div class="row">
                   <h1>Persons Relation</h1><div id="loader_persons" style="visibility: hidden; display:inline;"><img src="{{ asset('img/ajax-loader.gif') }}"/></div>
                 <div id="person_related_list"> 
                     {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
@@ -76,13 +75,13 @@
                 <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
                      {{ form_widget(role_form) }}
                      {{ form_errors(role_form) }}
-                      </br>
+                      <br />
                 <button id="role_form_submit"class="btn btn-info" type="submit">
                     <i class="fa fa-plus"></i> add Person
                 </button>
               </form> 
         </div>
-      </br>
+      <br />
 </div>
       <script type="text/javascript" >
         $(document).ready(function() { $("select").select2(); });
@@ -101,7 +100,7 @@
               route : "{{ path('schedule_confevent_delete', { 'id': entity.id }) }}",
               callback : function(response){
                 bootstrapAlert("success","Event deleted");
-              },
+              }
           },
       ];
 

@@ -64,7 +64,7 @@ CalEvent.prototype.persist = function(add){ //persist at server side
       title     : this['title'],
       parent    : this['parent'],
       end       : this['end'],
-      start     : this['start'],
+      start     : this['start']
     }
     if( this.resource){  
       toSend['currentRes'] = currentRes;
@@ -196,7 +196,7 @@ CalEvent.prototype.calculateWidth = function(seg, leftmost, availWidth, outerWid
         var parentId = this.parent.id,
             count    = !isResView ? EventCollection.broCountRange[this.id].count : EventCollection.broCountRange[this.id].resCount,
             range    = !isResView ? EventCollection.broCountRange[this.id].range : EventCollection.broCountRange[this.id].resRange
-            shifted  = false; 
+            ; 
 
         while(!Events[parentId].allDay){ 
             var parentCount   = !isResView ? EventCollection.broCountRange[parentId].count : EventCollection.broCountRange[parentId].resCount,
@@ -477,10 +477,10 @@ CalEvent.prototype.setParent = function (parent){
 
     this.deleteParent();
     //check if this is going to do a loop in the tree
-    if(this.isChild(parent)){
-      bootstrapAlert("warning","cannot set this <b>"+this.title+"</b> as child of <b>"+parent.title+"</b> because this is going to do a loop in the event tree","Circular reference : ");
-      return;
-    }
+    // if(this.isChild(parent)){
+    //   bootstrapAlert("warning","cannot set this <b>"+this.title+"</b> as child of <b>"+parent.title+"</b> because this is going to do a loop in the event tree","Circular reference : ");
+    //   return;
+    // }
     //affect parent to child
     this.parent = { "id": parent.id};
     //add child to parent
@@ -494,13 +494,14 @@ CalEvent.prototype.setParent = function (parent){
 CalEvent.prototype.deleteParent = function (){   
     if(!this)return;
         
-    parent = Events[this.parent.id];
+    var parent = Events[this.parent.id];
     if(!parent)return;
     this.parent.id = "";
     this.parent.title = "";
     this.parent.name = "";
     for( var i in parent.children){
       if(parent.children[i].id === this.id && this.id !== ""){ 
+        parent.children[i] = null;
         delete parent.children[i];
 
         return;
