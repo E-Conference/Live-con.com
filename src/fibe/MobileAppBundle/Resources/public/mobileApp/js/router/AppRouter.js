@@ -121,8 +121,8 @@ define(['backbone', 'jquery', 'config', 'encoder', 'localStorage/localStorageMan
 				});
 			});
 
-		},
+		}
 
-	});
+  });
  	return AppRouter;
 });

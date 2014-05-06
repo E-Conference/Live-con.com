@@ -102,10 +102,9 @@ a, span {
  .ui-btn-inner{
 	padding-top : .35em!important;
 	padding-bottom : .3em!important;
-	
 }
 
-//Special buttons
+/*Special buttons*/
 a .swtich{
 	background : #b0ca0f!important;
 }

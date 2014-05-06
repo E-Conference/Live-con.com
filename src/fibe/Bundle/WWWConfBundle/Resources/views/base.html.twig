@@ -28,7 +28,7 @@
                 }); 
                 $("select").select2({
                    placeholder: " ",
-                   allowClear: true,
+                   allowClear: true
                 }); 
                 //  $('.datetimepicker')
                 // .wrap('<div class="input-group">') 
@@ -41,10 +41,10 @@
             });
             function deployResultBox(){
                     if(!deployed){
-                        $('#sideBar').animate({left:'0px'});
+                        $('#sidebar').animate({left:'0px'});
                         deployed = true;
                     }else{
-                        $('#sideBar').animate({left:'-180px'});
+                        $('#sidebar').animate({left:'-180px'});
                         deployed = false;
                     }
             }
@@ -124,7 +124,7 @@
                           <li class="schedule_person_index schedule_person_edit schedule_person_new schedule_person_show  col-xs-1 col-sm-1  col-mg-1 col-lg-1"><a href="{{ path('schedule_person_index') }}" class='ellipsis'> <i  class="fa fa-user fa-1x"></i> <span> Persons </span> </a></li>
            
                            {% if app.user.getCurrentConf().getModule().getPaperModule()== true %}
-                            <li class="schedule_paper schedule_paper_edit schedule_paper_new schedule_paper_show  col-xs-1 col-sm-1  col-mg-1 col-lg-2"><a href="{{ path('schedule_paper') }}" class='ellipsis'><i class="fa fa-book fa-1x"></i> <span> Publications  </a></li>
+                            <li class="schedule_paper schedule_paper_edit schedule_paper_new schedule_paper_show  col-xs-1 col-sm-1  col-mg-1 col-lg-2"><a href="{{ path('schedule_paper') }}" class='ellipsis'><i class="fa fa-book fa-1x"></i> <span> Publications  </span></a></li>
                           {% endif %}
 
                           {% if app.user.getCurrentConf().getModule().getOrganizationModule()== true %}

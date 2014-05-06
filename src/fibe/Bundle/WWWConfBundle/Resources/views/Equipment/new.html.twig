@@ -5,24 +5,25 @@
 
 {% block centerPanel %}
     {{ parent() }}
-<div class="container">
+  <div class="container">
     <div class="row center">
-    <h1>Equipment creation</h1>
+      <h1>Equipment creation</h1>
 
-    <form action="{{ path('schedule_equipment_create') }}" method="post" {{ form_enctype(form) }}>
+      <form action="{{ path('schedule_equipment_create') }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
         <p>
-            <button type="submit" class="btn btn-default"><span class="fa fa-check"></span></button>
+          <button type="submit" class="btn btn-default"><span class="fa fa-check"></span></button>
         </p>
-    </form>
+      </form>
 
-        <ul class="record_actions">
-   
+      <ul class="record_actions">
+
         <a href="{{ path('equipment') }}">
-             <a  class="btn btn-warning" href="{{ path('schedule_equipment_new') }}">
-                 <span class="icon-list glyphicon-white"></span>
-            </a>
+          <a class="btn btn-warning" href="{{ path('schedule_equipment_new') }}">
+            <span class="icon-list glyphicon-white"></span>
+          </a>
         </a>
- </div>
-</div>
+      </ul>
+    </div>
+  </div>
 {% endblock %}

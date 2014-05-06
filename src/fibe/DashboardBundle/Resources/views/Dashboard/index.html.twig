@@ -24,7 +24,7 @@
             <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
                 <a class="btn btn-info btn-create create"  href="{{ path('schedule_conference_create') }}">
                     <i class="fa fa-plus"></i> New conference
-                </a></p>
+                </a>
             </div>
       </div>
       <div class="row page-content">
@@ -80,7 +80,6 @@
                             </li>
                           </ul>
                           </li>
-                        </li>
                         <li class="list-group-item"><h5>Events <span class="badge">{{ conference.events|length }}</span></h5></li>
                         {% if conference.getModule().getPaperModule() == 1 %}
                         <li class="list-group-item"><h5>Papers <span class="badge">{{ conference.papers|length }}</span></h5> </li>

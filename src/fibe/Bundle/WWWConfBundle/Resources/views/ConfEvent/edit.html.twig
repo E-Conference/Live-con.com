@@ -48,13 +48,13 @@
                 </div>
                 <div class="col-lg-4">
                       {{ form_rest(edit_form)}}
-                      </br>
+                      <br />
                   </div>
                   <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
                       {{ form_rest(edit_form)}}
                   </div>                       
             </div> 
-            </br>
+            <br />
              <div class="row"> 
                 <div class="col-lg-4"></div>
                 <div class="col-lg-4">  
@@ -65,7 +65,7 @@
             </div>
         </form>
           
-            </br></br>
+            <br /><br />
 
              
                 <div class="row">
@@ -81,9 +81,9 @@
                     </div>
                      {{ form_widget(topic_form) }}    
                   </div>  
-                </div> 
-             
-            </br></br>
+                </div>
+
+            <br /><br />
 
             {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
                 <div class="row">
@@ -102,7 +102,7 @@
                 </div>
               {% endif %}
 
-            </br></br>
+              <br /><br />
 
                 <div class="row">
                    <div class="col-lg-2"></div>
@@ -118,16 +118,16 @@
                 <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
                      {{ form_errors(role_form) }}
                      {{ form_widget(role_form) }}
-                     </br>
+                     <br />
                       <button id="role_form_submit"class="btn btn-info" type="submit" >
                         <i class="fa fa-plus"></i> add Person
                     </button>
                      </form>
-                     </br>
+                     <br />
                    
               </div>
             </div>
-          </br>
+          <br />
       </div>
 
 

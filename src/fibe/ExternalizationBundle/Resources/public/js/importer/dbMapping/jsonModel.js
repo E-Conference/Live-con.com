@@ -10,34 +10,34 @@ Model = {
 			attributes : {
 				required : {
 					"summary" : {
-						setter : "setSummary",
-					}
+						setter : "setSummary"
+          }
 				},
 				optionnal : { 
 					"homepage" : {
-						setter : "setUrl",
-					}, 
+						setter : "setUrl"
+          },
 					"description" : {
-						setter : "setDescription",
-					},
+						setter : "setDescription"
+          },
 					"comment" : {
-						setter : "setComment",
-					}, 
+						setter : "setComment"
+          },
 					"organizer" : {
-						setter : "setOrganizer",
-					}, 
+						setter : "setOrganizer"
+          },
 					// "contacts" : {
 					// 	setter : "setContacts",
 					// }, 
 					"acronym" : {
-						setter : "setAcronym",
-					}, 
+						setter : "setAcronym"
+          },
 					"logo" : {
-						setter : "setLogo",
-					},
-					"location" : {
-						setter : "setLocation",
-					}
+						setter : "setLogo"
+          },
+					// "location" : {
+					// 	setter : "setLocation"
+     //      }
 				}
 			} 
 		}, 
@@ -46,36 +46,33 @@ Model = {
 			attributes : {
 				required : {
 					"summary" : {
-						setter : "setSummary",
-				}},
-				optionnal : {  
-					"description" : {
-						setter : "setStartAt",
-					},
-					"description" : {
-						setter : "setEndAt",
-					},
-					"description" : {
-						setter : "setDescription",
-					},
-					"comment" : {
-						setter : "setComment",
-					}, 
-					"organizer" : {
-						setter : "setOrganizer",
-					}, 
-					// "contacts" : {
-					// 	setter : "setContacts",
-					// }, 
-					"acronym" : {
-						setter : "setAcronym",
-					}, 
-					"logo" : {
-						setter : "setLogo",
-					},
-					"location" : {
-						setter : "setLocation",
-					}
+    						setter : "setSummary"
+              }},
+    				optionnal : {  
+    					"description" : {
+    						setter : "setStartAt"
+              },
+    					"description" : {
+    						setter : "setEndAt"
+              },
+    					"description" : {
+    						setter : "setDescription"
+              },
+    					"comment" : {
+    						setter : "setComment"
+              },
+                        "acronym" : {
+                            setter : "setAcronym"
+              },
+                        "logo" : {
+                            setter : "setLogo"
+              },
+    					// "organizer" : {
+    					// 	setter : "setOrganizer"
+         //      }, 
+    					// "location" : {
+    					// 	setter : "setLocation"
+         //      }
 				}
 			} 
 		}, 
@@ -84,25 +81,25 @@ Model = {
 			attributes : {
 				required : {
 					"familyName" : {
-						setter : "setFamilyName",
-					}, 
+						setter : "setFamilyName"
+          },
 					"firstName" : {
-						setter : "setFirstName",
-				}},
+						setter : "setFirstName"
+          }},
 				optionnal : { 
 					"email" : {
-						setter : "setEmail",
-					}, 
+						setter : "setEmail"
+          },
 					"age" : {
-						setter : "setAge",
-					},
+						setter : "setAge"
+          },
 					"img" : {
-						setter : "setImg",
-					}, 
+						setter : "setImg"
+          },
 					"page" : {
-						setter : "setPage",
-					}, 
-					// "organizations" : {
+						setter : "setPage"
+          }
+          // "organizations" : {
 					// 	setter : "setOrganizations",
 					// }, 
 					// "accounts" : {
@@ -121,22 +118,22 @@ Model = {
 			attributes : {
 				required : {
 					"title" : {
-						setter : "setTitle",
-					}, 
+						setter : "setTitle"
+          },
 					"abstract" : {
-						setter : "setAbstract",
-				}},
+						setter : "setAbstract"
+          }},
 				optionnal : { 
 					"publishdate" : {
-						setter : "setPublishdate",
-					}, 
+						setter : "setPublishdate"
+          },
 					"publisher" : {
-						setter : "setPublisher",
-					},
+						setter : "setPublisher"
+          },
 					"url" : {
-						setter : "setUrl",
-					}, 
-					// "authors" : {
+						setter : "setUrl"
+          }
+          // "authors" : {
 					// 	setter : "setAuthors",
 					// }, 
 					// "subjects" : {
@@ -157,16 +154,16 @@ Model = {
 			attributes : {
 				required : {
 					"name" : {
-						setter : "setName",
-				}},
+						setter : "setName"
+          }},
 				optionnal : { 
 					"page" : {
-						setter : "setPage",
-					},
+						setter : "setPage"
+          },
 					"country" : {
-						setter : "setCountry",
-					}, 
-					// "members" : {
+						setter : "setCountry"
+          }
+          // "members" : {
 					// 	setter : "setMembers",
 					// }, 
 				} 
@@ -196,21 +193,21 @@ Model = {
 			attributes : {
 				required : {
 					"name" : {
-						setter : "setName",
-				}},
+						setter : "setName"
+          }},
 				optionnal : { 
 					"capacity" : {
-						setter : "setCapacity",
-					}, 
+						setter : "setCapacity"
+          },
 					"description" : {
-						setter : "setDescription",
-					}, 
+						setter : "setDescription"
+          },
 					"longitude" : {
-						setter : "setLongitude",
-					}, 
+						setter : "setLongitude"
+          },
 					"latitude" : {
-						setter : "setLatitude",
-				}}
+						setter : "setLatitude"
+          }}
 			}
 					 
 		}, 
@@ -219,8 +216,8 @@ Model = {
 			attributes : {
 				required : {
 					"name" : {
-						setter : "setName",
-				}},
+						setter : "setName"
+          }},
 				optionnal : {}
 		
 			}		
@@ -334,9 +331,9 @@ Model = {
 	            return Model.entities[i];
 	        }
 	    }
-    },
+    }
 
-	
+
 }
 
 

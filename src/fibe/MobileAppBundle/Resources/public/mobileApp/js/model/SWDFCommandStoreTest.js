@@ -1,7 +1,7 @@
 /**   
 *	Copyright <c> Claude Bernard - University Lyon 1 -  2013
 * 	License : This file is part of the DataConf application, which is licensed under a Creative Commons Attribution-NonCommercial 3.0 Unported License. See details at : http://liris.cnrs.fr/lionel.medini/wiki/doku.php?id=dataconf&#licensing 
-*   Author: Lionel MEDINI(supervisor), Florian BACLE, Fiona LEPEUTREC, Benoît DURANT-DE-LA-PASTELLIERE, NGUYEN Hoang Duy Tan
+*   Author: Lionel MEDINI(supervisor), Florian BACLE, Fiona LEPEUTREC, Benoï¿½t DURANT-DE-LA-PASTELLIERE, NGUYEN Hoang Duy Tan
 *   Description: This object contains a json definition of all the commands that will prepare all the queries we want to send on the SemanticWebDogFood sparql endpoint.
 *				 Each one of those commands declare the datatype, the method, the query string it is supposed to use on the endpoint and provide a model Callback to store results, a view CallBack to render data stored.		
 *				 To declare a request, each commands can use the parameters declared for the route they are called in (see Configuration.js). Those parameters can be a name, an uri or both and represents
@@ -19,7 +19,7 @@ var SWDFCommandStore = {
 		dataType : "XML",
 		//Declaration of the method to use when sending the query
 		method : "GET", 
-		//Declaring the function àthat will build the query using the parameters (the conference informations or a specific part of the url declared in configuration.js), encapsulate it in a JSON and returns it
+		//Declaring the function ï¿½that will build the query using the parameters (the conference informations or a specific part of the url declared in configuration.js), encapsulate it in a JSON and returns it
 		getQuery : function(parameters) { 
 			
 			//Building sparql query with prefix
@@ -252,8 +252,8 @@ var SWDFCommandStore = {
 					if(ViewAdapter.mode == "text"){
 						ViewAdapter.Text.appendList(parameters.JSONdata,
 									 {baseHref: '#publication/',
-									 hrefCllbck:function(str){return Encoder.encode(str["publiUri"])},
-									 },
+									 hrefCllbck:function(str){return Encoder.encode(str["publiUri"])}
+                   },
 									 "publiTitle",
 									 parameters.contentEl,
 									 {autodividers:"force",count :false}
@@ -262,8 +262,8 @@ var SWDFCommandStore = {
 					}else{
 						ViewAdapter.Graph.appendList(parameters.JSONdata,
 									 {baseHref: '#publication/',
-									 hrefCllbck:function(str){return Encoder.encode(str["publiTitle"])+'/'+Encoder.encode(str["publiUri"])},
-									 },
+									 hrefCllbck:function(str){return Encoder.encode(str["publiTitle"])+'/'+Encoder.encode(str["publiUri"])}
+                   },
 									 "publiTitle",
 									 parameters.contentEl,
 									 {type:"Node",labelCllbck:function(str){return "Publication : "+str["publiTitle"];}});
@@ -308,8 +308,8 @@ var SWDFCommandStore = {
 					if(ViewAdapter.mode == "text"){
 						ViewAdapter.Text.appendList(parameters.JSONdata,
 										 {baseHref:'#keyword/',
-										  hrefCllbck:function(str){return Encoder.encode(str["keyword"])},
-										  },
+										  hrefCllbck:function(str){return Encoder.encode(str["keyword"])}
+                     },
 										 "keyword",
 										 parameters.contentEl,
 										 {autodividers:"force",count :true}
@@ -318,8 +318,8 @@ var SWDFCommandStore = {
 					}else{
 						ViewAdapter.Graph.appendList(parameters.JSONdata,
 										 {baseHref:'#keyword/',
-										  hrefCllbck:function(str){return Encoder.encode(str["keyword"])},
-										  },
+										  hrefCllbck:function(str){return Encoder.encode(str["keyword"])}
+                     },
 										 "keyword",
 										 parameters.contentEl,
 										 {
@@ -369,8 +369,8 @@ var SWDFCommandStore = {
 					if(ViewAdapter.mode == "text"){
 						ViewAdapter.Text.appendList(parameters.JSONdata,
 										 {baseHref:'#keyword/',
-										  hrefCllbck:function(str){return Encoder.encode(str["keyword"])},
-										  },
+										  hrefCllbck:function(str){return Encoder.encode(str["keyword"])}
+                     },
 										 "keyword",
 										 parameters.contentEl,
 										 {autodividers:"force",count :true}
@@ -379,8 +379,8 @@ var SWDFCommandStore = {
 					}else{
 						ViewAdapter.Graph.appendList(parameters.JSONdata,
 										 {baseHref:'#keyword/',
-										  hrefCllbck:function(str){return Encoder.encode(str["keyword"])},
-										  },
+										  hrefCllbck:function(str){return Encoder.encode(str["keyword"])}
+                     },
 										 "keyword",
 										 parameters.contentEl,
 										 {
@@ -899,16 +899,16 @@ var SWDFCommandStore = {
 						parameters.contentEl.append($('<h2>Publications</h2>')); 
 						ViewAdapter.Text.appendList(parameters.JSONdata,
 											 {baseHref:'#publication/',
-											  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])},
-											  },
+											  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])}
+                       },
 											 "publiTitle",
 											 parameters.contentEl
 											 );
 					}else{
 						ViewAdapter.Graph.appendList(parameters.JSONdata,
 											 {baseHref:'#publication/',
-											  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])},
-											  },
+											  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])}
+                       },
 											 "publiTitle",
 											 parameters.contentEl,
 											 {type:"Node",labelCllbck:function(str){return "Publication : "+str["publiTitle"];}});
@@ -961,22 +961,22 @@ var SWDFCommandStore = {
 						parameters.contentEl.append('<h2>Browse conference tracks</h2>'); 
 						ViewAdapter.Text.appendList(parameters.JSONdata,
 												 {baseHref:'#event/',
-												  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
-												  },
+												  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])}
+                         },
 												 "eventLabel",
 												 parameters.contentEl,
 												 {type:"Node",labelCllbck:function(str){return "Track : "+str["eventLabel"];}});
 					}else{ 
 						ViewAdapter.Graph.appendList(parameters.JSONdata,
 												 {baseHref:'#event/',
-												  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
-												  },
+												  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])}
+                         },
 												 "eventLabel",
 												 parameters.contentEl,
 												 {type:"Node",
 												  labelCllbck:function(str){return "Track : "+str["eventLabel"];},
-												  option:{color:"#3366CC"},
-												 }); 
+												  option:{color:"#3366CC"}
+                         });
 					}
 				}
 			} 
@@ -1022,8 +1022,8 @@ var SWDFCommandStore = {
 						parameters.contentEl.append($('<h2>Sessions</h2>')); 
 						ViewAdapter.Text.appendList(parameters.JSONdata,
 											 {baseHref:'#event/',
-											  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
-											  },
+											  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])}
+                       },
 											 "eventLabel",
 											 parameters.contentEl,
 											 {type:"Node",labelCllbck:function(str){return "presentation : "+str["eventLabel"];}});
@@ -1031,8 +1031,8 @@ var SWDFCommandStore = {
 					}else{
 						ViewAdapter.Graph.appendList(parameters.JSONdata,
 											 {baseHref:'#event/',
-											  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
-											  },
+											  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])}
+                       },
 											 "eventLabel",
 											 parameters.contentEl,
 											 {type:"Node",labelCllbck:function(str){return "presentation : "+str["eventLabel"];}});
@@ -1079,8 +1079,8 @@ var SWDFCommandStore = {
 						parameters.contentEl.append($('<h2>Sub sessions</h2>')); 
 					  ViewAdapter.Text.appendList(parameters.JSONdata,
 											 {baseHref:'#event/',
-											  hrefCllbck:function(str){return Encoder.encode(str["sessionEvent"])},
-											  },
+											  hrefCllbck:function(str){return Encoder.encode(str["sessionEvent"])}
+                       },
 											 "sessionEventLabel",
 											 parameters.contentEl,
 											 {type:"Node",labelCllbck:function(str){return "Track : "+str["sessionEvent"];}});
@@ -1090,13 +1090,13 @@ var SWDFCommandStore = {
 					
 					  ViewAdapter.Graph.appendList(parameters.JSONdata,
 											 {baseHref:'#event/',
-											  hrefCllbck:function(str){return Encoder.encode(str["sessionEvent"])},
-											  },
+											  hrefCllbck:function(str){return Encoder.encode(str["sessionEvent"])}
+                       },
 											 "sessionEventLabel",
 											 parameters.contentEl,
 											 {type:"Node",labelCllbck:function(str){return "Track : "+str["sessionEvent"];},
-												  option:{color:"#3366CC"},
-											 });
+												  option:{color:"#3366CC"}
+                       });
 					}
 				}
 			} 
@@ -1141,8 +1141,8 @@ var SWDFCommandStore = {
 						parameters.contentEl.append($('<h2>Browse conference keynotes</h2>')); 
 						ViewAdapter.Text.appendList(parameters.JSONdata,
 										 {baseHref:'#event/',
-										  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
-										  },
+										  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])}
+                     },
 										 "eventLabel",
 										 parameters.contentEl,
 										 {type:"Node",labelCllbck:function(str){return "Keynote : "+str["eventLabel"];}});
@@ -1150,8 +1150,8 @@ var SWDFCommandStore = {
 					
 				    ViewAdapter.Graph.appendList(parameters.JSONdata,
 										 {baseHref:'#event/',
-										  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])},
-										  },
+										  hrefCllbck:function(str){return Encoder.encode(str["eventUri"])}
+                     },
 										 "eventLabel",
 										 parameters.contentEl,
 										 {type:"Node",labelCllbck:function(str){return "Keynote : "+str["eventLabel"];}});
@@ -1274,8 +1274,8 @@ var SWDFCommandStore = {
 						parameters.contentEl.append($('<h2>Publications</h2>')); 
 					  ViewAdapter.Text.appendList(parameters.JSONdata,
 											 {baseHref:'#publication/',
-											  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])},
-											  },
+											  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])}
+                       },
 											 "publiTitle",
 											 parameters.contentEl
 											);
@@ -1283,8 +1283,8 @@ var SWDFCommandStore = {
 					}else{
 						ViewAdapter.Graph.appendList(parameters.JSONdata,
 											 {baseHref:'#publication/',
-											  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])},
-											  },
+											  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])}
+                       },
 											 "publiTitle",
 											 parameters.contentEl,
 											 {type:"Node",labelCllbck:function(str){return "Publication : "+str["publiTitle"];}});
@@ -1530,8 +1530,8 @@ var SWDFCommandStore = {
 					}else{
 						ViewAdapter.Graph.appendList(parameters.JSONdata,
 											 {baseHref:'#publication/',
-											  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])},
-											  },
+											  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])}
+                       },
 											 "publiTitle",
 											 parameters.contentEl,
 											 {type:"Node",labelCllbck:function(str){return "Publication : "+str["publiTitle"];}});
@@ -1540,10 +1540,10 @@ var SWDFCommandStore = {
 				}
 			}
 		}
-	 },
+	 }
 
 
-   
+
 };
 
 function toTitleCase(str)

@@ -1,7 +1,7 @@
 /**   
 *	Copyright <c> Claude Bernard - University Lyon 1 -  2013
 * 	License : This file is part of the DataConf application, which is licensed under a Creative Commons Attribution-NonCommercial 3.0 Unported License. See details at : http://liris.cnrs.fr/lionel.medini/wiki/doku.php?id=dataconf&#licensing 
-*   Author: Lionel MEDINI(supervisor), Florian BACLE, Fiona LEPEUTREC, Benoît DURANT-DE-LA-PASTELLIERE, NGUYEN Hoang Duy Tan
+*   Author: Lionel MEDINI(supervisor), Florian BACLE, Fiona LEPEUTREC, Benoï¿½t DURANT-DE-LA-PASTELLIERE, NGUYEN Hoang Duy Tan
 *   Description: This object contains a json definition of all the commands that will prepare all the queries we want to send on the DBLP sparql endpoint.
 *				 Each one of those commands declare the datatype, the method, the query string it is supposed to use on the endpoint and provide the Callback function used to parse the results.		
 *				 To declare a request, each commands can use the parameters declared for the route they are called in (see Configuration.js). This parameter can be a name or an uri and represents
@@ -50,7 +50,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							parameters.contentEl.append('<h2>'+labels[parameters.conference.lang].person.otherPublications+'</h2>');
 							ViewAdapterText.appendList(parameters.JSONdata,
 														 {baseHref:'#externPublication/',
-														  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])},}, 
+														  hrefCllbck:function(str){return Encoder.encode(str["publiUri"])}},
 														 "publiTitle",
 														 parameters.contentEl,
 														 {type:"Node",labelCllbck:function(str){return "External paper : "+str["publiTitle"];}}
