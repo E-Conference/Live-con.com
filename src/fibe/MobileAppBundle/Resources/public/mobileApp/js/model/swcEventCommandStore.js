@@ -1196,7 +1196,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 			ViewCallBack : function(parameters){
 				if(parameters.JSONdata != null){
 					if(_.size(parameters.JSONdata) > 0 ){
-						$("[data-role = page]").find("#header-title").html(labels[parameters.conference.lang].schedule.whatsnext);
+						$("[data-role = page]").find("#header-title").html(labels[parameters.conference.lang].pageTitles.whatsnext);
 						var content=$("<div data-role='collapsible-set' data-inset='false'></div>");
 						var currentDay,currentUl ;
 						$.each(parameters.JSONdata, function(i,location){  
