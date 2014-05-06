@@ -353,8 +353,6 @@
 
     
 
-    <!-- http://data.semanticweb.org/conference/eswc/2013 -->
-
     <NamedIndividual rdf:about="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}">
         <rdf:type rdf:resource="&swc;ConferenceEvent"/>
         <rdfs:label>{{ entity.getConfName() }}</rdfs:label>
@@ -422,8 +420,6 @@
     </NamedIndividual>
 
 
-
-    <!-- http://data.semanticweb.org/conference/eswc/2013/proceedings -->
 
     <NamedIndividual rdf:about="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}/proceedings">
         <rdf:type rdf:resource="&swrc;Proceedings"/>
@@ -493,7 +489,6 @@
 
 
 {% for organization in entity.organizations %}
- <!-- http://data.semanticweb.org/organization/bouvet-asa -->
 
     <NamedIndividual rdf:about="http://data.live-con.com/page/organization/{{organization.id}}/{{organization.slug}}">
         <rdf:type rdf:resource="&foaf;Organization"/>
@@ -507,7 +502,6 @@
 
 
 {% for person in entity.persons %}
-<!-- http://data.semanticweb.org/person/andreas-harth -->
 
     <NamedIndividual rdf:about="http://data.live-con.com/page/person/{{person.id}}/{{person.slug}}">
         <rdf:type rdf:resource="&foaf;Person"/>

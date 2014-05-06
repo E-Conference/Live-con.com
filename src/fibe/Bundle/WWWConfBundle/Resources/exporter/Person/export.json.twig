@@ -1,18 +1,18 @@
 {
-    "id"          : "{% autoescape 'js' %}{{ entity.id }}{% endautoescape %}",
-    "email"       : "{% autoescape 'js' %}{{ entity.email }}{% endautoescape %}",
+    "id"          : "{{ entity.id }}",
+    "email"       : {% if entity.email != null %}{{entity.email|json_encode|raw()}}{% else %}""{% endif %},
     "created_at"  : "{{ entity.createdAt | date('Y-m-d H:i') }}",
-    "agent"       : "{% autoescape 'js' %}{{ entity.agent  }}{% endautoescape %}",
-    "title"       : "{% autoescape 'js' %}{{ entity.title  }}{% endautoescape %}",
-    "first_name"  : "{% autoescape 'js' %}{{ entity.firstName }}{% endautoescape %}",
-    "last_name"   : "{% autoescape 'js' %}{{ entity.lastName }}{% endautoescape %}",
-    "name"        : "{% autoescape 'js' %}{{ entity.name }}{% endautoescape %}",
-    "given_name"  : "{% autoescape 'js' %}{{ entity.givenName }}{% endautoescape %}",
-    "slug"        : "{% autoescape 'js' %}{{ entity.slug }}{% endautoescape %}",
-    "description" : "{% autoescape 'js' %}{{ entity.description }}{% endautoescape %}",
-    "homepage"    : "{% autoescape 'js' %}{{ entity.homepage }}{% endautoescape %}",
-    "based_near"  : "{% autoescape 'js' %}{{ entity.based_near }}{% endautoescape %}",
-    "image"       : "{% autoescape 'js' %}{{ entity.img }}{% endautoescape %}",
+    "agent"       : {% if entity.agent != null %}{{entity.agent|json_encode|raw()}}{% else %}""{% endif %},
+    "title"       : {% if entity.title != null %}{{entity.title|json_encode|raw()}}{% else %}""{% endif %},
+    "first_name"  : {% if entity.firstName != null %}{{entity.firstName|json_encode|raw()}}{% else %}""{% endif %},
+    "last_name"   : {% if entity.lastName != null %}{{entity.lastName|json_encode|raw()}}{% else %}""{% endif %},
+    "name"        : {% if entity.name != null %}{{entity.name|json_encode|raw()}}{% else %}""{% endif %},
+    "given_name"  : {% if entity.givenName != null %}{{entity.givenName|json_encode|raw()}}{% else %}""{% endif %},
+    "slug"        : {% if entity.slug != null %}{{entity.slug|json_encode|raw()}}{% else %}""{% endif %},
+    "description" : {% if entity.description != null %}{{entity.description|json_encode|raw()}}{% else %}""{% endif %},
+    "homepage"    : {% if entity.homepage != null %}{{entity.homepage|json_encode|raw()}}{% else %}""{% endif %},
+    "based_near"  : {% if entity.based_near != null %}{{entity.based_near|json_encode|raw()}}{% else %}""{% endif %},
+    "image"       : {% if entity.img != null %}{{entity.img|json_encode|raw()}}{% else %}""{% endif %},
     {% spaceless %}
     "roles":
     [
@@ -20,10 +20,10 @@
         {% if loop.first %}{% else %},{% endif %}
         { 
             "id": "{{ role.id }}", 
-            "type": "{% autoescape 'js' %}{{ role.type.name }}{% endautoescape %}", 
+            "type": {% if role.type != null %}{{role.type|json_encode|raw()}}{% else %}""{% endif %}, 
             "event": {
                 "id"  : "{{ role.event.id }}",
-                "name": "{% autoescape 'js' %}{{ role.event.summary }}{% endautoescape %}"
+                "name": {% if role.event != null %}{{role.event|json_encode|raw()}}{% else %}""{% endif %}
             }
         }
     {% endfor %}
@@ -34,9 +34,9 @@
             [
             {% for organization in entity.organizations %}
                 {% if loop.first %}
-                { "id": "{{ organization.id }}", "name": "{% autoescape 'js' %}{{ organization.name}}{% endautoescape %}"}
+                { "id": "{{ organization.id }}", "name": {% if organization.name != null %}{{organization.name|json_encode|raw()}}{% else %}""{% endif %}}
                 {% else %}
-                ,{ "id": "{{ organization.id }}", "name": "{% autoescape 'js' %}{{ organization.name}}{% endautoescape %}"}
+                ,{ "id": "{{ organization.id }}", "name": {% if organization.name != null %}{{organization.name|json_encode|raw()}}{% else %}""{% endif %}}
                 {% endif %}
             {% endfor %}
             ] 
