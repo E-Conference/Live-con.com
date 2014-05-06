@@ -7,7 +7,7 @@
             [
             {% for member in entity.members %}
                 {% if loop.first %} {% else %},{% endif %}
-                { "id": "{{ member.id }}", "name": {% if member.name != null %}{{member.name|json_encode|raw()}}{% else %}""{% endif %}}
+                { "id": "{{ member.id }}", "name": "{% if member.name != null %}{{member.name|json_encode|raw()}}{% else %}""{% endif %}"}
             {% endfor %}
             ] 
 

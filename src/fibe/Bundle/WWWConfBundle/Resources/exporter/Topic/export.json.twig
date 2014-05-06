@@ -15,9 +15,9 @@
 	[
 	{% for event in entity.events %}
 	    {% if loop.first %}
-	    { "id": "{{ event.id }}", "name": {% if event.summary != null %}{{event.summary|json_encode|raw()}}{% else %}""{% endif %}}
+	    { "id": "{{ event.id }}", "name": {% if event.name != null %}{{event.name|json_encode|raw()}}{% else %}""{% endif %}}
 	    {% else %}
-	    ,{ "id": "{{ event.id }}", "name": {% if event.summary != null %}{{event.summary|json_encode|raw()}}{% else %}""{% endif %}}
+	    ,{ "id": "{{ event.id }}", "name": {% if event.name != null %}{{event.name|json_encode|raw()}}{% else %}""{% endif %}}
 	    {% endif %}
 	{% endfor %}
 	]

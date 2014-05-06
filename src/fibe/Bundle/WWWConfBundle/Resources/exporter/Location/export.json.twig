@@ -1,7 +1,7 @@
 {
     "id": "{{ entity.id }}",
     "name": {% if entity.name != null %}{{entity.name|json_encode|raw()}}{% else %}""{% endif %},
-    "description": {% if entity.description != null %}{{entity.description|json_encode|raw()}}{% else %}""{% endif %},
+    "description": {% if entity.description != null %}{{entity.description|json_encode|raw()}},
     "latitude": "{{ entity.latitude }}",
     "longitude": "{{ entity.longitude }}"
 }
