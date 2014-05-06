@@ -14,15 +14,6 @@ services:
 idci_exporter:
     api_route: "/api/{entity_reference}.{_format}"
     entities:
-        WwwConf:
-            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\WwwConf"
-            formats:
-                xml:
-                    transformer:
-                        service: "idci_exporter.transformer_twig"
-                        options:
-#                            template_path:
-                            template_name_format: "export.xml.twig"
         schedule_event:
             class: "fibe\\Bundle\\WWWConfBundle\\Entity\\ConfEvent"
             formats:
@@ -33,8 +24,9 @@ idci_exporter:
 #                            template_path:
                             template_name_format: "export.json.twig"
 
-        schedule_role:
-            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\RoleType"
+
+        schedule_category:
+            class: "IDCI\\Bundle\\SimpleScheduleBundle\\Entity\\Category"
             formats:
                 jsonp:
                     transformer:
@@ -42,9 +34,8 @@ idci_exporter:
                         options:
 #                            template_path:
                             template_name_format: "export.json.twig"
-
-        schedule_person:
-            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Person"
+        schedule_location:
+            class: "IDCI\\Bundle\\SimpleScheduleBundle\\Entity\\Location"
             formats:
                 jsonp:
                     transformer:
@@ -63,15 +54,6 @@ idci_exporter:
 #                            template_path:
                             template_name_format: "export.json.twig"
 
-        schedule_category:
-            class: "IDCI\\Bundle\\SimpleScheduleBundle\\Entity\\Category"
-            formats:
-                jsonp:
-                    transformer:
-#                        service: "idci_exporter.transformer_twig"
-                        options:
-#                            template_path:
-                            template_name_format: "export.json.twig"
         schedule_paper:
             class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Paper"
             formats:
@@ -81,8 +63,9 @@ idci_exporter:
                         options:
 #                            template_path:
                             template_name_format: "export.json.twig"
-        schedule_location:
-            class: "IDCI\\Bundle\\SimpleScheduleBundle\\Entity\\Location"
+
+        schedule_person:
+            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Person"
             formats:
                 jsonp:
                     transformer:
@@ -90,3 +73,42 @@ idci_exporter:
                         options:
 #                            template_path:
                             template_name_format: "export.json.twig"
+
+        schedule_role:
+            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\RoleType"
+            formats:
+                jsonp:
+                    transformer:
+#                        service: "idci_exporter.transformer_twig"
+                        options:
+#                            template_path:
+                            template_name_format: "export.json.twig"
+
+        schedule_theme:
+            class: "IDCI\\Bundle\\SimpleScheduleBundle\\Entity\\Theme"
+            formats:
+                jsonp:
+                    transformer:
+#                        service: "idci_exporter.transformer_twig"
+                        options:
+#                            template_path:
+                            template_name_format: "export.json.twig"
+
+        schedule_topic:
+            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Topic"
+            formats:
+                jsonp:
+                    transformer:
+#                        service: "idci_exporter.transformer_twig"
+                        options:
+#                            template_path:
+                            template_name_format: "export.json.twig"
+        WwwConf:
+            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\WwwConf"
+            formats:
+                xml:
+                    transformer:
+                        service: "idci_exporter.transformer_twig"
+                        options:
+#                            template_path:
+                            template_name_format: "export.xml.twig"
