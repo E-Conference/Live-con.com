@@ -410,7 +410,7 @@ define(['model/SWDFCommandStore', 'model/DBLPCommandStore', 'model/DDGoCommandSt
 					"hash" : "authors",
 					"view" : "authors",
 					"graphView" : "no",
-					"title": "allAuthors",
+					"title": "allAuthor",
 					"commands" : [
 						{
 							"datasource" : "eventDatasource",
