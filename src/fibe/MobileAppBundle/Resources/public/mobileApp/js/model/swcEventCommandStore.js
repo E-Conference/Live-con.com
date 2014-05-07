@@ -52,6 +52,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 			}
 		},
 
+
 		getAllEvents : {
 		    dataType : "JSONP",
 		    method : "GET", 
@@ -91,6 +92,89 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 			}
 		},
 
+		getAllLocations : {
+		    dataType : "JSONP",
+		    method : "GET", 
+		    serviceUri : "schedule_location.jsonp?",
+		    getQuery : function(parameters){	
+		      var ajaxData = {conference_id : parameters.conference.id} ;
+		      return ajaxData;     
+		    },
+		    
+		    ModelCallBack : function(dataJSON,conferenceUri,datasourceUri, currentUri){
+				var JSONfile = {};
+				$.each(dataJSON,function(i){  
+					var JSONToken = {};
+					JSONToken.id = this.id || null;
+					JSONToken.name = this.name || null;
+					JSONfile[i] = JSONToken;
+				});
+				console.log(JSONfile);
+				StorageManager.pushCommandToStorage(currentUri,"getAllEvents",JSONfile);
+				return JSONfile;
+			},
+				
+			ViewCallBack : function(parameters){
+				if(parameters.JSONdata != null){
+					if(_.size(parameters.JSONdata) > 0 ){
+						if(parameters.mode == "text"){
+							ViewAdapterText.appendList(parameters.JSONdata,
+													 {baseHref:'#schedule/',
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])}
+                           },
+													 "name",
+													 parameters.contentEl,
+													 {type:"Node",labelCllbck:function(str){return "location : "+str["name"];}});
+						}
+					}
+				} 
+			}
+		},
+
+
+		getAllAuthors : {
+		    dataType : "JSONP",
+		    method : "GET", 
+		    serviceUri : "schedule_person.jsonp?",
+		    getQuery : function(parameters){	
+		      var ajaxData = {conference_id : parameters.conference.id, isAuthor:"true"} ;
+		      return ajaxData; 
+		    },
+		    
+		    ModelCallBack : function(dataXML,conferenceUri,datasourceUri, currentUri){
+				var JSONfile = {};
+				$.each(dataXML,function(i){  
+					var JSONToken = {};
+					JSONToken.name =  this.name || "";
+					JSONToken.description =  this.description || "";
+					JSONToken.homepage =  this.homepage || "";
+					JSONToken.image =  this.image || "";
+					JSONToken.twitter =  this.twitter || "";
+					JSONToken.id =  this.id || "";
+					JSONfile[i] = JSONToken;
+				});
+					console.log(JSONfile);
+				StorageManager.pushCommandToStorage(currentUri,"getAllPersons",JSONfile);
+				return JSONfile;
+			},
+				
+			ViewCallBack : function(parameters){
+				if(parameters.JSONdata != null){
+					if(_.size(parameters.JSONdata) > 0 ){
+						if(parameters.mode == "text"){
+							ViewAdapterText.appendListImage(parameters.JSONdata,
+													 {baseHref:'#person/',
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])}
+                           },
+													 "name",
+													 "image",
+													 parameters.contentEl,
+													 {type:"Node",labelCllbck:function(str){return "person : "+str["id"];}});
+						}
+					}
+				} 
+			}
+		},
 
 		getAllPersons : {
 		    dataType : "JSONP",
@@ -1048,7 +1132,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						  
 						//then push to the correct start/end slot 
 						if(event.xproperties[0])
-						  currentEvent.eventUri = event.xproperties[0].xValue; 
+						  currentEvent.eventUri = event.id; 
 						  currentEvent.eventLabel =  event.name;
 						  currentEvent.eventId =  event.id;
 						  currentEvent.eventDesc =  $(this).find("[name = eventDesc]").text();
@@ -1176,7 +1260,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								seenLocation.push(currentLocation);
 								JSONfile[i] = {};
 
-								currentEvent.eventUri = event.xproperties[0].xValue || "";
+								currentEvent.eventUri = event.id || "";
 								currentEvent.eventLabel =  event.name || "";
 								currentEvent.eventId =  event.id || "";
 								currentEvent.eventStart=  event.start_at || "";
@@ -1196,7 +1280,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 			ViewCallBack : function(parameters){
 				if(parameters.JSONdata != null){
 					if(_.size(parameters.JSONdata) > 0 ){
-						$("[data-role = page]").find("#header-title").html(labels[parameters.conference.lang].schedule.whatsnext);
+						$("[data-role = page]").find("#header-title").html(labels[parameters.conference.lang].pageTitles.whatsnext);
 						var content=$("<div data-role='collapsible-set' data-inset='false'></div>");
 						var currentDay,currentUl ;
 						$.each(parameters.JSONdata, function(i,location){  
