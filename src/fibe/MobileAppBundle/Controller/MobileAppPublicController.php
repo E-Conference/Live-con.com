@@ -32,7 +32,7 @@ class MobileAppPublicController extends Controller
     	$mobile_app_config = $conference->getAppConfig();
         $apiUri = $this->get('router')->generate('idci_exporter_api_homeapi');
         $apiType = "rest";
-        $baseUri = "http://data.live-con.com/resource/conference/" . $conference->getId() . "/" . $conference->getSlug();
+        $baseUri ="http://data.live-con.com/resource/conference/"+$conference->getId()+"/"+$conference->getSlug();
 		return array(
             'api_uri' => $apiUri,
             'api_type' => $apiType,
