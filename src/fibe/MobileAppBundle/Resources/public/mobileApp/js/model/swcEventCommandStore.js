@@ -1133,7 +1133,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						  
 						//then push to the correct start/end slot 
 						if(event.xproperties[0])
-						  currentEvent.eventUri = event.xproperties[0].xValue; 
+						  currentEvent.eventUri = event.id; 
 						  currentEvent.eventLabel =  event.name;
 						  currentEvent.eventId =  event.id;
 						  currentEvent.eventDesc =  $(this).find("[name = eventDesc]").text();
@@ -1261,7 +1261,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								seenLocation.push(currentLocation);
 								JSONfile[i] = {};
 
-								currentEvent.eventUri = event.xproperties[0].xValue || "";
+								currentEvent.eventUri = event.id || "";
 								currentEvent.eventLabel =  event.name || "";
 								currentEvent.eventId =  event.id || "";
 								currentEvent.eventStart=  event.start_at || "";
