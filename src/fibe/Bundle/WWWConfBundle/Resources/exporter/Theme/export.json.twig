@@ -1,4 +1,4 @@
 {
     "id": "{{ entity.id }}",
-    "libelle": "{{ entity.libelle }}"
+    "libelle": {% if entity.libelle != null %}{{entity.libelle|json_encode|raw()}}{% else %}""{% endif %}
 }

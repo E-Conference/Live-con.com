@@ -1,13 +1,13 @@
 {
     "id"          : "{{ entity.id }}",
-    "name"       : "{% autoescape 'js' %}{{ entity.name }}{% endautoescape %}",
+    "name"       : {% if entity.name != null %}{{entity.name|json_encode|raw()}}{% else %}""{% endif %},
 	"papers":
 	[
 	{% for paper in entity.papers %}
 	    {% if loop.first %}
-	    { "id": "{{ paper.id }}", "name": "{% autoescape 'js' %}{{ paper.title }}{% endautoescape %}"}
+	    { "id": "{{ paper.id }}", "name": {% if paper.title != null %}{{paper.title|json_encode|raw()}}{% else %}""{% endif %}}
 	    {% else %}
-	    ,{ "id": "{{ paper.id }}", "name": "{% autoescape 'js' %}{{ paper.title }}{% endautoescape %}"}
+	    ,{ "id": "{{ paper.id }}", "name": {% if paper.title != null %}{{paper.title|json_encode|raw()}}{% else %}""{% endif %}}
 	    {% endif %}
 	{% endfor %}
 	],
@@ -15,9 +15,9 @@
 	[
 	{% for event in entity.events %}
 	    {% if loop.first %}
-	    { "id": "{{ event.id }}", "name": "{% autoescape 'js' %}{{ event.name }}{% endautoescape %}"}
+	    { "id": "{{ event.id }}", "name": {% if event.name != null %}{{event.name|json_encode|raw()}}{% else %}""{% endif %}}
 	    {% else %}
-	    ,{ "id": "{{ event.id }}", "name": "{% autoescape 'js' %}{{ event.name }}{% endautoescape %}"}
+	    ,{ "id": "{{ event.id }}", "name": {% if event.name != null %}{{event.name|json_encode|raw()}}{% else %}""{% endif %}}
 	    {% endif %}
 	{% endfor %}
 	]

@@ -53,6 +53,23 @@ class MobileAppPublicController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $conference = $em->getRepository('fibeWWWConfBundle:WwwConf')->findOneBySlug($slug);
+        $mobile_app_config = $conference->getAppConfig();
+        $apiUri = $this->get('router')->generate('idci_exporter_api_homeapi');
+        $apiType = "rest";
+        $baseUri = "http://data.live-con.com/resource/conference/" . $conference->getId() . "/" . $conference->getSlug();
+        return array(
+            'api_uri' => $apiUri,
+            'api_type' => $apiType,
+            'paper_module' => $conference->getModule()->getPaperModule(),
+            'organization_module' => $conference->getModule()->getOrganizationModule(),
+            'conference_baseUri' => $baseUri,
+            'mobile_app_config' => $mobile_app_config,
+            'conference' => $conference,
+        );
+        /*
+        $em = $this->getDoctrine()->getManager();
+
+        $conference = $em->getRepository('fibeWWWConfBundle:WwwConf')->findOneBySlug($slug);
         if(!$conference){
             throw new NotFoundHttpException();
         }
@@ -68,6 +85,6 @@ class MobileAppPublicController extends Controller
             'conference_baseUri' => $baseUri,
             'mobile_app_config' => $mobile_app_config,
             'conference' => $conference,
-        );
+        );*/
     }
 }

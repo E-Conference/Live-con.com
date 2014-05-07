@@ -1,6 +1,7 @@
 {
     "id"               : "{{ entity.id }}",
-    "name"             : "{{ entity.summary }}",
+    "name"             : {% if entity.summary != null %}{{entity.summary|json_encode|raw()}}{% else %}""{% endif %},
+    "description"      : {% if entity.description != null %}{{entity.description|json_encode|raw()}}{% else %}""{% endif %},
     "created_at"       : "{{ entity.createdAt | date('Y-m-d H:i') }}",
     "end_at"           : "{{ entity.endAt | date('Y-m-d H:i') }}",
     "start_at"         : "{{ entity.startAt | date('Y-m-d H:i') }}",
@@ -10,7 +11,6 @@
     "resources"        : "{{ entity.resources }}",
     "duration"         : "{{ entity.duration }}",
     "last_modified_at" : "{{ entity.lastModifiedAt | date('Y-m-d H:i') }}",
-    "description"      : {{ entity.description|json_encode|raw()  }},
     "comment"          : "{{ entity.comment }}",
     "url"              : "{{ entity.url }}",
     "organizer"        : "{{ entity.organizer }}",
@@ -29,30 +29,33 @@
         "latitude": "{{ entity.location.latitude }}",
         "latitude": "{{ entity.location.longitude }}",
         {% endif %}
-        "description": "{{ entity.location.getDescription() }}"
+        "description": {% if entity.location.getDescription() != null %}{{entity.location.getDescription()|json_encode|raw()}}{% else %}""{% endif %}
     },
     "parent"           :
     {
         "id"           : "{{ entity.parent.id }}",
-        "name"         : "{{ entity.parent.summary }}"
+        "name"         : {% if entity.location.getDescription() != null %}{{entity.parent.summary|json_encode|raw()}}{% else %}""{% endif %}
     },
     {% spaceless %}
     "children":
     [
     {% for child in entity.children %}
-        {% if loop.first %} {% else %},{% endif %}{ "id": "{{ child.id }}", "name": "{{ child.getSummary() }}"}
+        {% if loop.first %} {% else %},{% endif %}
+        { "id": "{{ child.id }}", "name": {% if child.getSummary() != null %}{{child.getSummary()|json_encode|raw()}}{% else %}""{% endif %} }
     {% endfor %}
     ],
     "topics":
     [
     {% for topic in entity.topics %}
-        {% if loop.first %} {% else %},{% endif %}{ "id": "{{ topic.id }}", "name": "{{ topic.getname() }}"}
+        {% if loop.first %} {% else %},{% endif %}
+        { "id": "{{ topic.id }}", "name": {% if topic.getname() != null %}{{topic.getname()|json_encode|raw()}}{% else %}""{% endif %} }
     {% endfor %}
     ],
     "categories":
     [
     {% for category in entity.categories %}
-        {% if loop.first %} {% else %},{% endif %}{ "id": "{{ category.id }}", "name": "{{ category.name }}", "slug": "{{ category.slug }}", "color": "{{ category.color }}" }
+        {% if loop.first %} {% else %},{% endif %}
+        { "id": "{{ category.id }}", "name": {% if category.name != null %}{{category.name|json_encode|raw()}}{% else %}""{% endif %}, "slug": "{{ category.slug }}", "color": "{{ category.color }}" }
     {% endfor %}
     ],
     "roles":
@@ -80,9 +83,9 @@
     [
     {% for paper in entity.papers %}
         {% if loop.first %}
-        { "id": "{{ paper.id }}","title": "{{ paper.title }}"}
+        { "id": "{{ paper.id }}","title": {{ paper.title|json_encode|raw() }}}
         {% else %}
-        ,{ "id": "{{ paper.id }}","title": "{{ paper.title }}"}
+        ,{ "id": "{{ paper.id }}","title": {{ paper.title|json_encode|raw() }}}
         {% endif %}
     {% endfor %}
     ]

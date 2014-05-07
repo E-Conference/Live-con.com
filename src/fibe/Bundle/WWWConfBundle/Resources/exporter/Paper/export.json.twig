@@ -1,17 +1,17 @@
 {
      "id": "{{ entity.id }}",
-     "title": "{% autoescape 'js' %}{{ entity.title }}{% endautoescape %}",
-     "abstract": "{% autoescape 'js' %}{{ entity.abstract }}{% endautoescape %}",
+     "title": {% if entity.title != null %}{{entity.title|json_encode|raw()}}{% else %}""{% endif %},
+     "abstract": {% if entity.abstract != null %}{{entity.abstract|json_encode|raw()}}{% else %}""{% endif %},
      "publishDate": "{{ entity.publishDate }}" , 
-     "url": "{% autoescape 'js' %}{{ entity.url }}{% endautoescape %}" ,       
+     "url": {% if entity.url != null %}{{entity.url|json_encode|raw()}}{% else %}""{% endif %} ,       
      "publisher": "{{ entity.publisher }}" , 
      "topics":
             [
             {% for topic in entity.topics %}
                 {% if loop.first %}
-                { "id": "{{ topic.id }}", "name": "{% autoescape 'js' %}{{ topic.name }}{% endautoescape %}"}
+                { "id": "{{ topic.id }}", "name": {% if topic.name != null %}{{topic.name|json_encode|raw()}}{% else %}""{% endif %}}
                 {% else %}
-                ,{ "id": "{{ topic.id }}", "name": "{% autoescape 'js' %}{{ topic.name }}{% endautoescape %}"}
+                ,{ "id": "{{ topic.id }}", "name": {% if topic.name != null %}{{topic.name|json_encode|raw()}}{% else %}""{% endif %}}
                 {% endif %}
             {% endfor %}
             ],
@@ -19,9 +19,9 @@
             [
             {% for author in entity.authors %}
                 {% if loop.first %}
-                { "id": "{{ author.id }}", "name": "{% autoescape 'js' %}{{ author.name }}{% endautoescape %}"}
+                { "id": "{{ author.id }}", "name": {% if author.name != null %}{{author.name|json_encode|raw()}}{% else %}""{% endif %}}
                 {% else %}
-                ,{ "id": "{{ author.id }}", "name": "{% autoescape 'js' %}{{ author.name }}{% endautoescape %}"}
+                ,{ "id": "{{ author.id }}", "name": {% if author.name != null %}{{author.name|json_encode|raw()}}{% else %}""{% endif %}}
                 {% endif %}
             {% endfor %}
             ]
