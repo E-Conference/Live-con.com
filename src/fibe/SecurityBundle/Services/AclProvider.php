@@ -4,6 +4,7 @@
   use Symfony\Component\Security\Acl\Dbal\MutableAclProvider;
   use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
+  // filter-a-list-of-domain-objects-according-to-a-certain-use
   // http://stackoverflow.com/questions/6621220/how-do-one-use-acl-to-filter-a-list-of-domain-objects-according-to-a-certain-use
     
 
@@ -23,9 +24,8 @@
     public function getAllowedEntitiesIds($className,$mask, array $roles = array(), $asString = true)
     {
         if (!defined($mask = 'Symfony\Component\Security\Acl\Permission\MaskBuilder::MASK_'.$mask)) {
-            throw new \RuntimeException('There was no code defined for mask '.$maskConst.'!');
+            throw new \RuntimeException('There was no code defined for mask '.$mask.'!');
         }
-
         $mask =  constant($mask); 
 
         // Check for class-level global permission (its a very similar query to the one

@@ -35,12 +35,12 @@
       if (isset($params['only_instant']))
       {
         $qb
-          ->andWhere('cer.is_instant = 1');
+          ->andWhere('confevent.isInstant = 1');
       }
       else
       {
         $qb
-          ->andWhere('cer.is_instant = 0');
+          ->andWhere('confevent.isInstant = 0');
       }
 
       if (isset($params['summary']))

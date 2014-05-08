@@ -5,9 +5,13 @@ parameters:
 
 services:
 
-    fibe_security.acl_helper:
-        class: fibe\SecurityBundle\Services\ACLHelper
+    fibe_security.acl_entity_helper:
+        class: fibe\SecurityBundle\Services\ACLShareRight
         arguments: ["@security.context","@doctrine.orm.entity_manager","@security.acl.provider"]
+
+    fibe_security.acl_share_right_helper:
+        class: fibe\SecurityBundle\Services\ACLShareCurrentConfRight
+        arguments: ["@security.context","@doctrine.orm.entity_manager","@security.acl.provider","@fos_user.user_manager"]
 
     entityAddACL:
         class: fibe\SecurityBundle\Listener\AddACL

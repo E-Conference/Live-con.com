@@ -43,7 +43,7 @@
     public function indexAction(Request $request)
     {
 
-      $entities = $this->get('fibe_security.acl_helper')->getEntitiesACL('EDIT','ConfEvent');
+      $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('EDIT','ConfEvent');
 
       $adapter = new ArrayAdapter($entities);
       $pager = new PagerFanta($adapter);
@@ -117,7 +117,7 @@
      */
     public function createAction(Request $request)
     {
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('CREATE','ConfEvent');
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE','ConfEvent');
 
       $form = $this->createForm(new ConfEventType($this->getUser()), $entity);
       $form->bind($request);
@@ -137,7 +137,7 @@
 
         $em->flush();
 
-        //$this->get('fibe_security.acl_helper')->createACL($entity,MaskBuilder::MASK_OWNER);
+        //$this->get('fibe_security.acl_entity_helper')->createACL($entity,MaskBuilder::MASK_OWNER);
 
         return $this->redirect($this->generateUrl('schedule_confevent_show', array('id' => $entity->getId())));
       }
@@ -157,7 +157,7 @@
      */
     public function newAction()
     {
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('CREATE','ConfEvent');
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE','ConfEvent');
 
       $form = $this->createForm(new ConfEventType($this->getUser()), $entity);
 
@@ -177,7 +177,7 @@
 
     public function showAction($id)
     {
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('VIEW','ConfEvent',$id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW','ConfEvent',$id);
 
       $deleteForm = $this->createDeleteForm($id);
 
@@ -197,7 +197,7 @@
      */
     public function editAction($id)
     {
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','ConfEvent',$id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','ConfEvent',$id);
 
       $editForm = $this->createForm(new ConfEventType($this->getUser()), $entity);
       $deleteForm = $this->createDeleteForm($id);
@@ -245,7 +245,7 @@
      */
     public function updateAction(Request $request, $id)
     {
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','ConfEvent',$id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','ConfEvent',$id);
 
       $form = $this->createForm(new ConfEventType($this->getUser(), $entity), $entity);
       $form->bind($request);
@@ -275,7 +275,7 @@
      */
     public function deleteAction(Request $request, $id)
     {
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('DELETE','ConfEvent',$id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('DELETE','ConfEvent',$id);
 
       $form = $this->createDeleteForm($id);
       $form->bind($request);
@@ -346,10 +346,10 @@
     public function addTopicAction(Request $request)
     {
       $id = $request->request->get('id_entity');
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','ConfEvent',$id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','ConfEvent',$id);
 
       $id_topic = $request->request->get('id_topic');
-      $topic = $this->get('fibe_security.acl_helper')->getEntityACL('VIEW','Topic',$id_topic);
+      $topic = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW','Topic',$id_topic);
 
       $em = $this->getDoctrine()->getManager();
       //Add paper to the confEvent
@@ -375,10 +375,10 @@
     public function deleteTopicAction(Request $request)
     {
       $id = $request->request->get('id_entity');
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','ConfEvent',$id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','ConfEvent',$id);
 
       $id_topic = $request->request->get('id_topic');
-      $topic = $this->get('fibe_security.acl_helper')->getEntityACL('VIEW','Topic',$id_topic);
+      $topic = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW','Topic',$id_topic);
 
       //Delete topic to the confEvent
       $entity->removeTopic($topic);
@@ -406,10 +406,10 @@
     public function addPaperAction(Request $request)
     {
       $id = $request->request->get('id_entity');
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','ConfEvent',$id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','ConfEvent',$id);
 
       $id_paper = $request->request->get('id_paper');
-      $paper = $this->get('fibe_security.acl_helper')->getEntityACL('VIEW','Paper',$id_paper);
+      $paper = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW','Paper',$id_paper);
 
       //Add paper to the confEvent
       $entity->addPaper($paper);
@@ -434,10 +434,10 @@
     public function deletePaperAction(Request $request)
     {
       $id = $request->request->get('id_entity');
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','ConfEvent',$id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','ConfEvent',$id);
 
       $id_paper = $request->request->get('id_paper');
-      $paper = $this->get('fibe_security.acl_helper')->getEntityACL('VIEW','Paper',$id_paper);
+      $paper = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW','Paper',$id_paper);
 
       //Add paper to the confEvent
       $entity->removePaper($paper);
@@ -465,10 +465,10 @@
     public function addPersonAction(Request $request)
     {
       $id = $request->request->get('id_entity');
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','ConfEvent',$id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','ConfEvent',$id);
 
       $id_person = $request->request->get('id_person');
-      $person = $this->get('fibe_security.acl_helper')->getEntityACL('VIEW','Person',$id_person);
+      $person = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW','Person',$id_person);
 
       $id_type = $request->request->get('id_type');
 
@@ -509,7 +509,7 @@
     public function deletePersonAction(Request $request)
     {
       $id = $request->request->get('id_entity');
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','ConfEvent',$id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','ConfEvent',$id);
 
       $em = $this->getDoctrine()->getManager();
 

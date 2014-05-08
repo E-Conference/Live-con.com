@@ -15,40 +15,8 @@
    * to :
    *     http://calendar.labs.idci.fr/api/schedule_event.jsonp?xproperty_value=FOOBAR&PARAMS[]
    *
-   * @Route("/api/schedule")
+   * @Route("/api/")
    */
   class ApiController extends Controller
-  {
-    /**
-     * @Route("", name="schedule_api_event")
-     */
-    public function apiAction(Request $request)
-    {
-      /*
-              $response = $this->forward('AcmeHelloBundle:Hello:fancy', array(
-                  'xproperty_value'  => $request->request->get('uri', '')
-              ));
-
-          // ... further modify the response or return it directly
-
-          return $response;
-      */
-
-      $em = $this->getDoctrine()->getManager();
-      $query = $request->query;
-      $uriParam = $query->get('uri', '');
-      if ($uriParam != '')
-      {
-        $query->add(array("xproperty_value" => $uriParam));
-        $query->remove("uri");
-      }
-      $entities = $em->getRepository('fibeWWWConfBundle:CalendarEntity')->extract($query->all());
-      $result = $this->get('idci_exporter.manager')->export($entities, "jsonp");
-      $response = new Response();
-      $response->setContent($result->getContent());
-      $response->headers->set('Content-Type', $result->getContentType());
-      return $response;
-    }
-
-
+  { 
   }

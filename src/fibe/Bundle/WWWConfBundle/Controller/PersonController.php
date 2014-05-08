@@ -39,7 +39,7 @@
     public function indexAction(Request $request)
     {
 
-      $entities = $this->get('fibe_security.acl_helper')->getEntitiesACL('EDIT','Person');
+      $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('EDIT','Person');
       // $entities = $this->getUser()->getCurrentConf()->getPersons()->toArray();
 
       $adapter = new ArrayAdapter($entities);
@@ -115,7 +115,7 @@
      */
     public function createAction(Request $request)
     {
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('CREATE','Person');
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE','Person');
       $form = $this->createForm(new PersonType($this->getUser()), $entity);
       $form->bind($request);
 
@@ -133,7 +133,7 @@
 
         $em->persist($entity);
         $em->flush();
-       //$this->get('fibe_security.acl_helper')->createACL($entity,MaskBuilder::MASK_OWNER);
+       //$this->get('fibe_security.acl_entity_helper')->createACL($entity,MaskBuilder::MASK_OWNER);
 
         return $this->redirect($this->generateUrl('schedule_person_show', array('id' => $entity->getId())));
 
@@ -153,7 +153,7 @@
      */
     public function newAction()
     {
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('CREATE','Person');
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE','Person');
       $form = $this->createForm(new PersonType($this->getUser()), $entity);
 
       $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
@@ -171,7 +171,7 @@
      */
     public function showAction($id)
     {
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('VIEW','Person',$id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW','Person',$id);
 
       $deleteForm = $this->createDeleteForm($id);
 
@@ -190,7 +190,7 @@
      */
     public function editAction($id)
     {
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','Person',$id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','Person',$id);
 
       $editForm = $this->createForm(new PersonType($this->getUser()), $entity);
       $deleteForm = $this->createDeleteForm($id);
@@ -210,7 +210,7 @@
      */
     public function updateAction(Request $request, $id)
     {
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','Person',$id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','Person',$id);
 
       $deleteForm = $this->createDeleteForm($id);
       $editForm = $this->createForm(new PersonType($this->getUser()), $entity);
@@ -272,7 +272,7 @@
     public function deleteAction(Request $request, $id)
     {
 
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('DELETE','Person',$id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('DELETE','Person',$id);
 
       $form = $this->createDeleteForm($id);
       $form->bind($request);

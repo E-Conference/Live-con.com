@@ -1,16 +1,13 @@
 {
     "id"       : "{{ entity.id }}",
-    "name"     : "{% autoescape 'js' %}{{ entity.name }}{% endautoescape %}",
-    "page"     : "{% autoescape 'js' %}{{ entity.page }}{% endautoescape %}",
+    "name"     : {% if entity.name != null %}{{entity.name|json_encode|raw()}}{% else %}""{% endif %},
+    "page"     : {% if entity.page != null %}{{entity.page|json_encode|raw()}}{% else %}""{% endif %},
     "country"  :  "{{ entity.country }}",
     "members":
             [
             {% for member in entity.members %}
-                {% if loop.first %}
-                { "id": "{{ member.id }}", "name": "{{ member.name}}"}
-                {% else %}
-                ,{ "id": "{{ member.id }}", "name": "{{ member.name}}"}
-                {% endif %}
+                {% if loop.first %} {% else %},{% endif %}
+                { "id": "{{ member.id }}", "name": {% if member.name != null %}{{member.name|json_encode|raw()}}{% else %}""{% endif %}}
             {% endfor %}
             ] 
 

@@ -119,7 +119,7 @@ class LocationController extends Controller
      */
     public function showAction($id)
     {
-        $entity = $this->get('fibe_security.acl_helper')->getEntityACL('VIEW','Location',$id);
+        $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW','Location',$id);
  
         $deleteForm = $this->createDeleteForm($id);
 
@@ -140,7 +140,7 @@ class LocationController extends Controller
      */
     public function newAction()
     {
-        $entity = $this->get('fibe_security.acl_helper')->getEntityACL('CREATE','Location');
+        $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE','Location');
         $form   = $this->createForm(new LocationType(), $entity);
 
         $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
@@ -161,7 +161,7 @@ class LocationController extends Controller
      */
     public function createAction(Request $request)
     {
-        $entity = $this->get('fibe_security.acl_helper')->getEntityACL('CREATE','Location');
+        $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE','Location');
         $form = $this->createForm(new LocationType(), $entity);
         $form->bind($request);
 
@@ -170,7 +170,7 @@ class LocationController extends Controller
             $entity->setConference($this->getUser()->getCurrentConf());
             $em->persist($entity);
             $em->flush();
-           //$this->get('fibe_security.acl_helper')->createACL($entity,MaskBuilder::MASK_OWNER);
+           //$this->get('fibe_security.acl_entity_helper')->createACL($entity,MaskBuilder::MASK_OWNER);
 
             $this->get('session')->getFlashBag()->add(
                 'info',
@@ -199,7 +199,7 @@ class LocationController extends Controller
      */
     public function editAction($id)
     { 
-        $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','Location',$id);
+        $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','Location',$id);
 
         $editForm = $this->createForm(new LocationType(), $entity); 
         $deleteForm = $this->createDeleteForm($id);
@@ -225,7 +225,7 @@ class LocationController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','Location',$id);
+        $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','Location',$id);
 
  
         $editForm = $this->createForm(new LocationType(), $entity);
@@ -264,7 +264,7 @@ class LocationController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
-        $entity = $this->get('fibe_security.acl_helper')->getEntityACL('DELETE','Location',$id);
+        $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('DELETE','Location',$id);
 
 
         $form = $this->createDeleteForm($id);
@@ -294,7 +294,7 @@ class LocationController extends Controller
      */
     public function deleteFormAction($id)
     {
-        $entity = $this->get('fibe_security.acl_helper')->getEntityACL('DELETE','Location',$id);
+        $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('DELETE','Location',$id);
 
         $deleteForm = $this->createDeleteForm($id);
 

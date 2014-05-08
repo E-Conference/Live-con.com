@@ -284,7 +284,7 @@ class ConferenceController extends Controller
         if(!$this->getUser()->getAuthorizationByConference($currentConf)->getFlagTeam())
         {
             // Sinon on déclenche une exception "Accès Interdit"
-            throw new AccessDeniedHttpException('Access reserved to admin or team Manager');
+            throw new AccessDeniedHttpException('Access reserved to team Manager');
         }
 
         //It must stay one manager in a conference

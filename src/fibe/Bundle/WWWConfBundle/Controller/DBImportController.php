@@ -31,6 +31,15 @@
    */
   class DBImportController extends Controller
   {
+    private $eventEntities = array();
+    private $personEntities = array();
+    private $locationEntities = array();
+    private $categoryEntities = array();
+    private $topicEntities = array();
+    private $organizationEntities = array();
+    private $proceedingEntities = array();
+    private $conference;
+
     /**
      * @Route("/", name="schedule_admin_DBimport")
      */
@@ -49,22 +58,14 @@
 
       $em = $this->getDoctrine()->getManager();
 
-      $conference = $this->getUser()->getCurrentConf();
+      $this->conference = $this->getUser()->getCurrentConf();
 
 
 
-      $eventEntities = array();
-      $personEntities = array();
-      $locationEntities = array();
-      $categoryEntities = array();
-      $topicEntities = array();
-      $organizationEntities = array();
-      $topicEntities = array();
-      $proceedingEntities = array();
       $entity = null;
 
 
-      $mainConfEvent = $conference->getMainConfEvent();
+      $mainConfEvent = $this->conference->getMainConfEvent();
 
       $defaultCategory =    $this->getDoctrine()
                                  ->getRepository('fibeWWWConfBundle:Category')
@@ -77,35 +78,6 @@
       //categories color.
       $colorArray = array('lime', 'red', 'blue', 'orange', 'gold', 'coral', 'crimson', 'aquamarine', 'darkOrchid', 'forestGreen', 'peru', 'purple', 'seaGreen');
 
-      ////////////////////// conference //////////////////////
-      if (isset($JSONFile['conference']))
-      {
-
-        $conferenceData = $JSONFile['conference'];
-        foreach ($conferenceData as $setter => $value)
-        {
-
-          if ($setter == "setLogoPath")
-          {
-            //apply to the conference
-            $entity = $conference;
-          }
-          else
-          {
-            //apply to the mainconfevent
-            $entity = $mainConfEvent;
-            if ($setter == "setStartAt" || $setter == "setEndAt")
-            {
-              $date = explode(' ', $value);
-              $value = new \DateTime($date[0], new \DateTimeZone(date_default_timezone_get()));
-            }
-          }
-
-          call_user_func_array(array($entity, $setter), array($value));
-        }
-        $em->persist($mainConfEvent);
-        $conferenceData = null;
-      }
 
 
       //////////////////////  topics  //////////////////////
@@ -117,10 +89,10 @@
           $current = $topics[$i];
           $existsTest = $this->getDoctrine()
             ->getRepository('fibeWWWConfBundle:Topic')
-            ->findOneBy(array('name' => $current['setName'], 'conference' => $conference->getId()));
+            ->findOneBy(array('name' => $current['setName'], 'conference' => $this->conference->getId()));
           if ($existsTest != null)
           {
-            array_push($topicEntities, $existsTest);
+            array_push($this->topicEntities, $existsTest);
             continue; //skip existing topic
           }
           $entity = new Topic();
@@ -129,9 +101,9 @@
 
             call_user_func_array(array($entity, $setter), array($value));
           }
-          $entity->setConference($conference);
+          $entity->setConference($this->conference);
           $em->persist($entity);
-          array_push($topicEntities, $entity);
+          array_push($this->topicEntities, $entity);
         }
         $topics = null;
       }
@@ -145,10 +117,10 @@
           $current = $locations[$i];
           $existsTest = $this->getDoctrine()
             ->getRepository('fibeWWWConfBundle:Location')
-            ->findOneBy(array('name' => $current['setName'], 'conference' => $conference->getId()));
+            ->findOneBy(array('name' => $current['setName'], 'conference' => $this->conference->getId()));
           if ($existsTest != null)
           {
-            array_push($locationEntities, $existsTest);
+            array_push($this->locationEntities, $existsTest);
             continue; //skip existing location
           }
           $entity = new Location();
@@ -157,9 +129,9 @@
 
             call_user_func_array(array($entity, $setter), array($value));
           }
-          $entity->setConference($conference);
+          $entity->setConference($this->conference);
           $em->persist($entity);
-          array_push($locationEntities, $entity);
+          array_push($this->locationEntities, $entity);
         }
         $locations = null;
       }
@@ -173,10 +145,10 @@
           $current = $organizations[$i];
           $existsTest = $this->getDoctrine()
             ->getRepository('fibeWWWConfBundle:Organization')
-            ->findOneBy(array('name' => $current['setName'], 'conference' => $conference->getId()));
+            ->findOneBy(array('name' => $current['setName'], 'conference' => $this->conference->getId()));
           if ($existsTest != null)
           {
-            array_push($organizationEntities, $existsTest);
+            array_push($this->organizationEntities, $existsTest);
             continue; //skip existing organization
           }
 
@@ -186,9 +158,9 @@
 
             call_user_func_array(array($entity, $setter), array($value));
           }
-          $entity->setConference($conference);
+          $entity->setConference($this->conference);
           $em->persist($entity);
-          array_push($organizationEntities, $entity);
+          array_push($this->organizationEntities, $entity);
         }
         $organizations = null;
       }
@@ -223,7 +195,7 @@
               switch ($setter)
               {
                 case 'addOrganization':
-                  $entityArray = $organizationEntities;
+                  $entityArray = $this->organizationEntities;
                   break;
                 default:
                   $entityArray = null;
@@ -237,9 +209,9 @@
             }
           }
 
-          $entity->setConference($conference);
+          $entity->setConference($this->conference);
           $em->persist($entity);
-          array_push($personEntities, $entity);
+          array_push($this->personEntities, $entity);
         }
         $entities = null;
       }
@@ -254,10 +226,10 @@
           $current = $proceedings[$i];
           $existsTest = $this->getDoctrine()
             ->getRepository('fibeWWWConfBundle:Paper')
-            ->findOneBy(array('title' => $current['setTitle'], 'conference' => $conference->getId()));
+            ->findOneBy(array('title' => $current['setTitle'], 'conference' => $this->conference->getId()));
           if ($existsTest != null)
           {
-            array_push($proceedingEntities, $existsTest);
+            array_push($this->proceedingEntities, $existsTest);
             continue; //skip existing paper
           }
           $entity = new Paper();
@@ -268,10 +240,10 @@
               switch ($setter)
               {
                 case 'addTopic':
-                  $entityArray = $topicEntities;
+                  $entityArray = $this->topicEntities;
                   break;
                 case 'addAuthor':
-                  $entityArray = $personEntities;
+                  $entityArray = $this->personEntities;
                   break;
                 default:
                   $entityArray = null;
@@ -284,9 +256,9 @@
               call_user_func_array(array($entity, $setter), array($value));
             }
           }
-          $entity->setConference($conference);
+          $entity->setConference($this->conference);
           $em->persist($entity);
-          array_push($proceedingEntities, $entity);
+          array_push($this->proceedingEntities, $entity);
         }
         $proceedings = null;
       }
@@ -307,21 +279,31 @@
             ->findOneBy(array('slug' => $catSlug));
           if ($existsTest != null)
           {
-            array_push($categoryEntities, $existsTest);
+            array_push($this->categoryEntities, $existsTest);
             continue; //skip existing category
           }
           else
           {
-            array_push($categoryEntities, $defaultCategory);
+            array_push($this->categoryEntities, $defaultCategory);
           }
           // echo $current['setName']. " don't exists<br/>";
 
 
         }
-        // for ($i=0; $i < count($categoryEntities); $i++) {
-        //     echo $i. " " . $categoryEntities[$i]->getName()."<br/>";
+        // for ($i=0; $i < count($this->categoryEntities); $i++) {
+        //     echo $i. " " . $this->categoryEntities[$i]->getName()."<br/>";
         // }
         $entities = null;
+      }
+
+
+      ////////////////////// mainConfEvent //////////////////////
+      if (isset($JSONFile['conference']))
+      {
+
+        $this->conferenceData = $JSONFile['conference'];
+        $this->doEvent($mainConfEvent,$this->conferenceData,true); 
+        $em->persist($mainConfEvent);
       }
 
 
@@ -351,146 +333,27 @@
             // var_dump($current);
             // echo "\n";
             $entity = $mainConfEvent;
-            // $conference->setMainConfEvent($entity);
+            // $this->conference->setMainConfEvent($entity);
             // $entity->setIsMainConfEvent(true);
             // $em->remove($mainConfEvent);
             // $mainConfEvent = $entity;
           }
-          foreach ($current as $setter => $value)
-          {
-            if ($setter == "setStartAt" || $setter == "setEndAt")
-            {
-              $date = explode(' ', $value);
-              $value = new \DateTime($date[0], new \DateTimeZone(date_default_timezone_get()));
-            }
-
-            if ($setter == "setLocation")
-            {
-              $value = $locationEntities[$value];
-            }
-
-            if ($setter == "addCategorie")
-            {
-              if (count($categoryEntities) <= $value)
-              {
-                // echo count($categoryEntities)." ".$value." ".$entity->getSummary()."<br/>";
-                $value = $defaultCategory;
-              }
-              else
-              {
-                $value = $categoryEntities[$value];
-              }
-            }
-
-            if ($setter == "addPaper")
-            {
-              $j = 0;
-              foreach ($value as $paper)
-              {
-                if ($j != 0)
-                {
-                  $val = $proceedingEntities[$paper];
-
-                  call_user_func_array(array($entity, $setter), array($val));
-                }
-                $j++;
-              }
-              $value = $proceedingEntities[$value[0]];
-            }
-
-            if ($setter == "setParent")
-            {
-              continue;
-            }
-
-            // if($setter=="mainConferenceEvent"){
-
-            //     // echo "mainConfEvent replaced";
-            //     // $conference->setMainConfEvent($entity);
-            //     // $entity->setIsMainConfEvent(true);
-            //     // $conference->removeEvent($mainConfEvent);
-            //     // $em->remove($mainConfEvent);
-            //     // $mainConfEvent = $entity;
-            //     continue;
-            // }
-
-
-            if (is_array($value))
-            {
-              switch ($setter)
-              {
-                case 'addTopic':
-                  $entityArray = $topicEntities;
-                  break;
-                case 'addPaper':
-                  $entityArray = $proceedingEntities;
-                  break;
-                default:
-                  $entityArray = null;
-                  break;
-              }
-              if ($setter == "addChair")
-              {
-
-                $setter = "addRole";
-                foreach ($value as $chair)
-                {
-                  $val = new Role();
-                  $val->setType($chairRoleType);
-                  $val->setPerson($personEntities[$chair]);
-                  $val->setEvent($entity);
-                  $val->setConference($this->getUser()->getCurrentConf());
-                  $entity->addRole($val);
-
-                }
-              }
-              else if ($setter == "addPresenter")
-              {
-
-                $setter = "addRole";
-                foreach ($value as $presenter)
-                {
-                  $val = new Role();
-                  $val->setType($presenterRoleType);
-                  $val->setPerson($personEntities[$presenter]);
-                  $val->setEvent($entity);
-                  $val->setConference($this->getUser()->getCurrentConf());
-                  $entity->addRole($val);
-                }
-              }
-              else
-              {
-                $this->doArray($entityArray, $entity, $setter, $value);
-              }
-            }
-            else
-            {
-              call_user_func_array(array($entity, $setter), array($value));
-            }
-          }
-
-          // if($isMainConfEvent){
-          //      echo $entity->getSummary();
-          //      echo date_format($entity->getStartAt(), 'Y-m-d H:i:s');
-          // }
-
-          $entity->setConference($conference);
-          $em->persist($entity);
-          array_push($eventEntities, $entity);
+          $this->doEvent($entity,$current,$isMainConfEvent);
+          $em->persist($mainConfEvent);
         }
 
         //parent / child relationship
         for ($i = 0; $i < count($entities); $i++)
         {
-          $entity = $eventEntities[$i];
+          $entity = $this->eventEntities[$i];
           $current = $entities[$i];
           $hasParent = false;
           foreach ($current as $setter => $value)
           {
-            if ($setter == "setParent")
+            if ($setter == "setParent" && isset($this->eventEntities[$value]))
             {
               $hasParent = true;
-              $value = $eventEntities[$value];
+              $value = $this->eventEntities[$value];
               call_user_func_array(array($entity, $setter), array($value));
             }
           }
@@ -498,13 +361,13 @@
           {
             $entity->setParent($mainConfEvent);
           }
-          $entity->setConference($conference);
+          $entity->setConference($this->conference);
           $em->persist($entity);
         }
         $entities = null;
       }
 
-      //echo implode(",\t",$eventEntities)  ;
+      //echo implode(",\t",$this->eventEntities)  ;
       //////////////////////  x prop  //////////////////////
       //echo "xproperties->\n";
       // if(isset($JSONFile['xproperties'])){
@@ -515,8 +378,8 @@
       //         foreach ($current as $setter => $value) {
       //             if($setter=="setCalendarEntity"){
 
-      //                 //echo "XProperty->->".$eventEntities[strval($value)]."->".$value.");\n";
-      //                 $value=$eventEntities[$value];
+      //                 //echo "XProperty->->".$this->eventEntities[strval($value)]."->".$value.");\n";
+      //                 $value=$this->eventEntities[$value];
       //             }
       //             //echo "XProperty->".$setter."(".$value.");\n";
       //             call_user_func_array(array($entity, $setter), array($value));
@@ -528,11 +391,11 @@
 
       $mainConfEvent->setParent(null);
       $em->persist($mainConfEvent);
-      $em->persist($conference);
+      $em->persist($this->conference);
 
       //finally, make sure every events are at least child of the main conf event
 
-      $confEvents = $conference->getEvents();
+      $confEvents = $this->conference->getEvents();
       foreach ($confEvents as $event)
       {
         if (!$event->getParent())
@@ -547,6 +410,130 @@
       $em->flush();
 
       return new Response("ok");
+    }
+    
+    private function doEvent($entity,$data,$isMainConfEvent)
+    {
+
+      foreach ($data as $setter => $value)
+      {
+        if ($setter == "setStartAt" || $setter == "setEndAt")
+        {
+          $date = explode(' ', $value);
+          $value = new \DateTime($date[0], new \DateTimeZone(date_default_timezone_get()));
+        } 
+        if ($setter == "setLocation")
+        { 
+          $value = $this->locationEntities[$value];
+        }
+
+        if ($setter == "addCategorie")
+        {
+          if (count($this->categoryEntities) <= $value)
+          {
+            // echo count($this->categoryEntities)." ".$value." ".$entity->getSummary()."<br/>";
+            $value = $defaultCategory;
+          }
+          else
+          {
+            $value = $this->categoryEntities[$value];
+          }
+        }
+
+        if ($setter == "addPaper")
+        {
+          $j = 0;
+          foreach ($value as $paper)
+          {
+            if ($j != 0)
+            {
+              $val = $this->proceedingEntities[$paper];
+
+              call_user_func_array(array($entity, $setter), array($val));
+            }
+            $j++;
+          }
+          $value = $this->proceedingEntities[$value[0]];
+        }
+
+        if ($setter == "setParent")
+        {
+          continue;
+        }
+
+        // if($setter=="mainConferenceEvent"){
+
+        //     // echo "mainConfEvent replaced";
+        //     // $this->conference->setMainConfEvent($entity);
+        //     // $entity->setIsMainConfEvent(true);
+        //     // $this->conference->removeEvent($mainConfEvent);
+        //     // $em->remove($mainConfEvent);
+        //     // $mainConfEvent = $entity;
+        //     continue;
+        // }
+
+
+        if (is_array($value))
+        {
+          switch ($setter)
+          {
+            case 'addTopic':
+              $entityArray = $this->topicEntities;
+              break;
+            case 'addPaper':
+              $entityArray = $this->proceedingEntities;
+              break;
+            default:
+              $entityArray = null;
+              break;
+          }
+          if ($setter == "addChair")
+          {
+
+            $setter = "addRole";
+            foreach ($value as $chair)
+            {
+              $val = new Role();
+              $val->setType($chairRoleType);
+              $val->setPerson($this->personEntities[$chair]);
+              $val->setEvent($entity);
+              $val->setConference($this->getUser()->getCurrentConf());
+              $entity->addRole($val);
+
+            }
+          }
+          else if ($setter == "addPresenter")
+          {
+
+            $setter = "addRole";
+            foreach ($value as $presenter)
+            {
+              $val = new Role();
+              $val->setType($presenterRoleType);
+              $val->setPerson($this->personEntities[$presenter]);
+              $val->setEvent($entity);
+              $val->setConference($this->getUser()->getCurrentConf());
+              $entity->addRole($val);
+            }
+          }
+          else
+          {
+            $this->doArray($entityArray, $entity, $setter, $value);
+          }
+        }
+        else
+        {
+          call_user_func_array(array($entity, $setter), array($value));
+        }
+      }
+
+      // if($isMainConfEvent){
+      //      echo $entity->getSummary();
+      //      echo date_format($entity->getStartAt(), 'Y-m-d H:i:s');
+      // }
+
+      $entity->setConference($this->conference);
+      array_push($this->eventEntities, $entity);
     }
 
     private function doArray($entityArray, $entity, $setter, $valArray)

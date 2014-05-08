@@ -39,7 +39,7 @@
     public function indexAction(Request $request)
     {
 
-      $entities = $this->get('fibe_security.acl_helper')->getEntitiesACL('EDIT','Organization');
+      $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('EDIT','Organization');
       // $entities = $this->getUser()->getCurrentConf()->getOrganizations()->toArray();
 
       $adapter = new ArrayAdapter($entities);
@@ -116,7 +116,7 @@
      */
     public function createAction(Request $request)
     {
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('CREATE','Organization');
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE','Organization');
       $form = $this->createForm(new OrganizationType($this->getUser()), $entity);
       $form->bind($request);
 
@@ -134,7 +134,7 @@
 
         $em->persist($entity);
         $em->flush();
-       //$this->get('fibe_security.acl_helper')->createACL($entity,MaskBuilder::MASK_OWNER);
+       //$this->get('fibe_security.acl_entity_helper')->createACL($entity,MaskBuilder::MASK_OWNER);
 
         return $this->redirect($this->generateUrl('schedule_organization_index'));
       }
@@ -156,7 +156,7 @@
      */
     public function newAction()
     {
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('CREATE','Organization');
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE','Organization');
       $form = $this->createForm(new OrganizationType($this->getUser()), $entity);
 
       $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
@@ -176,7 +176,7 @@
      */
     public function showAction($id)
     {
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('VIEW','Organization',$id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW','Organization',$id);
 
       $deleteForm = $this->createDeleteForm($id);
 
@@ -197,7 +197,7 @@
      */
     public function editAction($id)
     {
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','Organization',$id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','Organization',$id);
 
       $editForm = $this->createForm(new OrganizationType($this->getUser()), $entity);
       $deleteForm = $this->createDeleteForm($id);
@@ -220,7 +220,7 @@
      */
     public function updateAction(Request $request, $id)
     {
-      $entity = $this->get('fibe_security.acl_helper')->getEntityACL('EDIT','Organization',$id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','Organization',$id);
 
       $deleteForm = $this->createDeleteForm($id);
       $editForm = $this->createForm(new OrganizationType($this->getUser()), $entity);
@@ -275,7 +275,7 @@
 
       if ($form->isValid())
       {
-        $entity = $this->get('fibe_security.acl_helper')->getEntityACL('DELETE','Organization',$id);
+        $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('DELETE','Organization',$id);
         $em = $this->getDoctrine()->getManager();
         //The object have to belongs to the current conf
         $currentConf = $this->getUser()->getCurrentConf();

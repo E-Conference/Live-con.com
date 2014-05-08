@@ -3,12 +3,14 @@
 
   use Doctrine\ORM\Event\LifecycleEventArgs; 
   use Symfony\Component\DependencyInjection\ContainerInterface;
-  use fibe\SecurityBundle\Services\ACLHelper;
+  use fibe\SecurityBundle\Services\ACLEntityHelper;
   use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
   use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
   use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity; 
   use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-
+  /**
+   * Doctrine listener post persist event filling ACL 
+   */
   class AddACL {
     protected $container;
 
@@ -25,7 +27,7 @@
       if (isset($token)) {
         $user = $token->getUser();
       }
-      $ACLEntityNameArray = ACLHelper::$ACLEntityNameArray; 
+      $ACLEntityNameArray = ACLEntityHelper::$ACLEntityNameArray; 
       if (in_array($this->get_real_class($entity), $ACLEntityNameArray)) {
         // creating the ACL
         $aclProvider = $this->container->get('security.acl.provider');

@@ -31,7 +31,13 @@
 
       $conference = $em->getRepository('fibeWWWConfBundle:WwwConf')->findOneBySlug($slug);
       $mobile_app_config = $conference->getAppConfig();
-      $apiUri = $this->get('router')->generate('idci_exporter_api_homeapi');
+
+      // $apiUri = $this->get('router')->generate('exporter_api');
+      // an entity reference is mandatory to generate the url
+      // so we need to cut the entityReference in order to get the generic exporter_api path
+      $apiUri = $this->generateUrl('exporter_api', array('entityReference' => 'null'));
+      $apiUri = substr($apiUri, 0, 1 + strrpos($apiUri, '/' ));
+      
       $apiType = "rest";
       $baseUri = "http://data.live-con.com/resource/conference/" . $conference->getId() . "/" . $conference->getSlug();
       return array(
