@@ -69,6 +69,15 @@ idci_exporter:
                         options:
 #                            template_path:
                             template_name_format: "export.json.twig"
+        schedule_sponsor:
+            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Sponsor"
+            formats:
+                jsonp:
+                    transformer:
+#                        service: "idci_exporter.transformer_twig"
+                        options:
+#                            template_path:
+                            template_name_format: "export.json.twig"
         schedule_location:
             class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Location"
             formats:

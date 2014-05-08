@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}IDCI SimpleSchedule Bundle{% endblock %}</title>
-        <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}" />
-    </head>
-    <body>
-        <div class="symfony-content">
-            {% block content %}
-            {% endblock %}
-        </div>
+  <head>
+    <meta charset="UTF-8"/>
+    <title>{% block title %}IDCI SimpleSchedule Bundle{% endblock %}</title>
+    <link rel="icon" sizes="16x16" href="{{ asset('favicon.ico') }}"/>
+  </head>
+  <body>
+    <div class="symfony-content">
+      {% block content %}
+      {% endblock %}
+    </div>
 
-        {% if code is defined %}
-            <h2>Code behind this page</h2>
-            <div class="symfony-content"><div class="jumbotron">{{ code|raw }}</div></div>
-        {% endif %}
-    </body>
+    {% if code is defined %}
+      <h2>Code behind this page</h2>
+      <div class="symfony-content">
+        <div class="jumbotron">{{ code|raw }}</div>
+      </div>
+    {% endif %}
+  </body>
 </html>

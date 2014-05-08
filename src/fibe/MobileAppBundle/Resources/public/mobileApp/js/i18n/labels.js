@@ -6,8 +6,8 @@ define([],function() {
 				'schedule' : 'Schedule',
 				'persons' : 'Persons',
 				'organizations' : 'Organizations',
-				'publications' : 'Publications'
-
+				'publications' : 'Publications',
+        'sponsors' : 'Sponsors'
 			},
 			'publication' : {
 				'allPublication' : 'Publications',
@@ -81,6 +81,10 @@ define([],function() {
 				'relatedEvents' : 'Related events'
 
 			},
+
+      'sponsor' : {
+        'labelSponsor' : 'Sponsors'
+      },
 
 			'role' : {
 				
@@ -168,8 +172,8 @@ define([],function() {
 				'schedule' : 'Planning',
 				'persons' : 'Participants',
 				'organizations' : 'Organisations',
-				'publications' : 'Publications'
-
+				'publications' : 'Publications',
+        'sponsors' : 'Sponsors'
 			},
 			'publication' : {
 				'abstract' : 'Résumé',
@@ -240,6 +244,10 @@ define([],function() {
 				'relatedEvents' : 'Evènements'
 
 			},
+
+      'sponsor' : {
+        'labelSponsor' : 'Sponsors'
+      },
 
 			'role' : {
 
@@ -315,11 +323,6 @@ define([],function() {
 			'specialButtons' : {
 				'addToCal' : 'Ajouter à mon calendrier'
 			}
-
-
-			
-
-
 		}
 
 	}

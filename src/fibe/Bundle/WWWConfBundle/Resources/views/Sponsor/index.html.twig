@@ -1,0 +1,57 @@
+{% extends 'fibeWWWConfBundle::base.html.twig' %}
+
+{% block title %}Sponsor edit{% endblock title %}
+
+{% block centerPanel %}
+  {{ parent() }}
+
+  <div class="row page-top-header ">
+    <div class="page-title  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+      <span>Sponsor list</span>
+      {#<a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Topic' }) }}" target="_blank" title="Help">#}
+      {#<i class="fa fa-question"></i> #}
+      {#</a>#}
+    </div>
+
+    <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+    </div>
+    <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+      <a class="btn btn-info btn-create create" href="{{ path('schedule_sponsor_new') }}" title="Add a sponsor">
+        <i class="fa fa-plus"></i> New sponsor
+      </a>
+    </div>
+  </div>
+  <div class="row page-content">
+    {% include "fibeWWWConfBundle:Filters:filters.html.twig" %}
+    <div id="sponsor_list" class="table-responsive">
+      {% include "fibeWWWConfBundle:Sponsor:list.html.twig" %}
+    </div>
+  </div>
+{% endblock %} 
+
+
+{% block javascripts_page %}
+  <script type="text/javascript">
+    $(document).ready(function ()
+    {
+      $("#resultsFound").hide();
+    });
+
+    function filter()
+    {
+      $datas = $("#filter_form").serialize();
+
+      //start send the post request
+      $.post("{{path('schedule_sponsor_filter')}}",
+          $datas,
+          function (response)
+          {
+            $('#sponsor_list').html(response);
+            $("#resultsFound").show();
+          }, "html");
+      return false;
+    }
+    ;
+  </script>
+
+{% endblock javascripts_page %}

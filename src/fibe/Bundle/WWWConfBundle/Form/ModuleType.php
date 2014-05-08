@@ -35,6 +35,15 @@
                               'data-off-label' => "<i class='fa fa-ban'>",
 
           ),
+        ))
+        ->add('sponsorModule', 'checkbox', array(
+          'label'    => 'Sponsors ',
+          'required' => false,
+          'attr'     => array('class'          => 'switch switch-small',
+                              'data-on-label'  => "<i class='fa fa-check fa-white'>",
+                              'data-off-label' => "<i class='fa fa-ban'>",
+
+          ),
         ));
     }
 

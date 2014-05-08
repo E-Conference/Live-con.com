@@ -41,6 +41,13 @@
      */
     private $organizationModule;
 
+    /**
+     * Module sponsors
+     *
+     * @ORM\Column(type="boolean",options={"default" = 1})
+     */
+    private $sponsorModule;
+
 
     /**
      * Get id
@@ -98,5 +105,25 @@
     public function getOrganizationModule()
     {
       return $this->organizationModule;
+    }
+
+    /**
+     * Get sponsor module
+     *
+     * @return mixed
+     */
+    public function getSponsorModule()
+    {
+      return $this->sponsorModule;
+    }
+
+    /**
+     * Set Sponsor module
+     *
+     * @param mixed $sponsorModule
+     */
+    public function setSponsorModule($sponsorModule)
+    {
+      $this->sponsorModule = $sponsorModule;
     }
   }

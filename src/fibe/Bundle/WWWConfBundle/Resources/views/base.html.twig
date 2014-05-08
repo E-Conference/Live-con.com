@@ -155,6 +155,11 @@
               <li class="schedule_topic schedule_topic_new  schedule_topic_edit schedule_topic_show  col-xs-1 col-sm-1  col-mg-1 col-lg-1">
                 <a href="{{ path('schedule_topic') }}" class='ellipsis'> <i class="fa fa-crosshairs fa-1x"></i>
                   <span>  Topics</span></a></li>
+              {% if app.user.getCurrentConf().getModule().getSponsorModule()== true %}
+                <li class="col-xs-1 col-sm-1  col-mg-1 col-lg-1">
+                  <a href="{{ path('schedule_sponsor') }}" class='ellipsis'> <i class="fa fa-dollar fa-1x"></i>
+                    <span>  Sponsors</span></a></li>
+              {% endif %}
               {% block menu_page %}
               {% endblock menu_page %}
 
