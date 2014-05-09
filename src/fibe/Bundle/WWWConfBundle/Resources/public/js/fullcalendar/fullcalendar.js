@@ -214,6 +214,14 @@ function Calendar(element, options, eventSources, resourceSources) {
 	
 	
 	// exports
+	//ADDED by benoitddlp
+	t.setOptions = function setOptions(new_options) {
+	    $.extend(options, new_options);
+	    var viewName=currentView.name;
+	    changeView(viewName,true);
+			debugger;
+	}
+	//ADDED by benoitddlp
 	t.options = options;
 	t.render = render;
 	t.destroy = destroy;
@@ -353,8 +361,10 @@ function Calendar(element, options, eventSources, resourceSources) {
 	
 	// TODO: improve view switching (still weird transition in IE, and FF has whiteout problem)
 	
-	function changeView(newViewName) {
-		if (!currentView || newViewName != currentView.name) {
+	function changeView(newViewName,force_reload) {
+		//MODIFIED BY BENOITDDLP
+		if (force_reload ||!currentView || newViewName != currentView.name) {
+		//MODIFIED BY BENOITDDLP
 			ignoreWindowResize++; // because setMinHeight might change the height before render (and subsequently setSize) is reached
 
 			unselect();
@@ -372,7 +382,12 @@ function Calendar(element, options, eventSources, resourceSources) {
 			content.css('overflow', 'hidden');
 			
 			currentView = viewInstances[newViewName];
-			if (currentView) {
+			//ADD BY BENOITDDLP
+			if (force_reload)
+			    currentView.element.remove();
+			debugger;
+			if (currentView && !force_reload) {
+			//if (currentView) { //COMMENTED BY BENOITDDLP
 				currentView.element.show();
 			}else{
 				currentView = viewInstances[newViewName] = new fcViews[newViewName](
