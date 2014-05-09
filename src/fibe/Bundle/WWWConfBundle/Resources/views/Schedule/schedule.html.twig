@@ -155,8 +155,7 @@
   <link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.print.css') }}" rel='stylesheet' media='print' /> 
   <link href="{{ asset('bundles/fibewwwconf/css/fullcalendarAddedUI.css') }}" rel='stylesheet'/>  
   <link href="{{ asset('bundles/fibewwwconf/css/jquery.mCustomScrollbar.css') }}" rel='stylesheet'/>  
-  <link href="{{ asset('bundles/fibewwwconf/css/jquery.mCustomScrollbar.css') }}" rel='stylesheet'/> 
-  <link href="{{ asset('css/slider.css') }}" rel='stylesheet'/>   
+  <link href="{{ asset('css/slider.css') }}" rel='stylesheet'/>  
 {% endblock stylesheets_page %}
 
 
@@ -293,6 +292,8 @@
               name: "Not defined",
               id  : "0"
             };
+
+        
       function fetchAllResources(callback){ 
         $.ajax({
           url:resConfig[currentRes].url,
@@ -347,7 +348,6 @@
       /*----------------------------------------------------------------------------------------*/
 
 
-
       /*-------------------------------------------------------------------------------------------------*/
       /*----------------------------------------- slider ------------------------------------------------*/
       /*-------------------------------------------------------------------------------------------------*/
@@ -357,7 +357,6 @@
      .on('slideStop', function(slideEvt) { 
         $('#calendar').fullCalendar('setOptions', {'slotMinutes':slideEvt.value});
       });
-     $('.slider').css("width","100%");
       //requires changes made by christian on https://code.google.com/p/fullcalendar/issues/detail?id=293&can=4
       
       /*
