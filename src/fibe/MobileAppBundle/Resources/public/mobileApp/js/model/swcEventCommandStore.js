@@ -1112,12 +1112,16 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							if(eventInfo.eventEnd && eventInfo.eventStart){
 								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.duration +' : <span class="inline">'+ moment(eventInfo.eventStart).from(moment(eventInfo.eventEnd),true)+'</span></h2>'));  
 							}
+
+							if(eventInfo.eventLocation.id){ 
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.location+' : <a href="#schedule/'+Encoder.encode(eventInfo.eventLocation.name)+'" data-role="button" data-icon="search" data-inline="true">'+eventInfo.eventLocation.name+'</a></h2>'));
+							}
 							if(eventInfo.eventDescription){ 
 								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.description+'</h2>')); 
 								parameters.contentEl.append($('<p>'+eventInfo.eventDescription+'</p>'));   
 							}
 							if(eventInfo.eventAbstract){ 
-								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.abstract+'</h2>')); 
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.comment+'</h2>')); 
 								parameters.contentEl.append($('<p>'+eventInfo.eventAbstract+'</p>'));   
 							}
 							if(eventInfo.eventHomepage){ 
@@ -1125,9 +1129,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								parameters.contentEl.append($('<a href="'+eventInfo.eventHomepage+'">'+eventInfo.eventHomepage+'</p>'));   
 							}
 						
-							if(eventInfo.eventLocation.id){ 
-								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.location+' : <a href="#schedule/'+Encoder.encode(eventInfo.eventLocation.name)+'" data-role="button" data-icon="search" data-inline="true">'+eventInfo.eventLocation.name+'</a></h2>'));
-							}
+							
 
 							if(eventInfo.eventLabel){ 
 								$("[data-role = page]").find("#header-title").html(eventInfo.eventLabel);
@@ -1167,7 +1169,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 									}
 								});
 								$.each(eventInfo.eventRoles, function(i,role){
-									ViewAdapterText.appendButton($('#'+role.type),'#person/'+Encoder.encode(role.person.name)+"/"+Encoder.encode(role.person.name.id),role.person.name,{tiny : 'true'});
+									ViewAdapterText.appendButton($('#'+role.type),'#person/'+Encoder.encode(role.person.name)+"/"+Encoder.encode(role.person.id),role.person.name,{tiny : 'true'});
 								});
 							}
 						}
