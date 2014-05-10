@@ -225,7 +225,7 @@ define([],function() {
 				'endAtLe' : 'Finit le',
 				'subEvent' : 'Sous évènements',
 				'duration' : 'Durée',
-				'location' : 'Salle',
+				'location' : 'Localisation',
 				'description' : 'Description',
 				'relatedDocument' : 'Documents liés',
 				'comment' : 'Commentaire',
