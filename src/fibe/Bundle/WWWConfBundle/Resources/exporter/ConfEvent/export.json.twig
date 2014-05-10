@@ -24,7 +24,7 @@
     "location":
     {
         "id": "{{ entity.location.id }}",
-        "name": "{{ entity.location.getName() }}",
+        "name": {% if entity.location.name != null %}{{entity.location.name|json_encode|raw()}}{% else %}""{% endif %},
         {% if entity.hasGeo() %}
         "latitude": "{{ entity.location.latitude }}",
         "latitude": "{{ entity.location.longitude }}",

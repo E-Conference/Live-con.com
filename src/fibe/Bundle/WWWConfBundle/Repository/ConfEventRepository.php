@@ -52,7 +52,6 @@ class ConfEventRepository extends EntityRepository
                 ->andWhere('cat.id = :cat_id')
                 ->setParameter('cat_id', $params['category'])
             ;
-           
         }
 
 

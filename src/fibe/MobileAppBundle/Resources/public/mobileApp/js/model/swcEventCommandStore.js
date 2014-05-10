@@ -110,7 +110,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					JSONfile[i] = JSONToken;
 				});
 				console.log(JSONfile);
-				StorageManager.pushCommandToStorage(currentUri,"getAllEvents",JSONfile);
+				StorageManager.pushCommandToStorage(currentUri,"getAllLocations",JSONfile);
 				return JSONfile;
 			},
 				
@@ -120,11 +120,11 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						if(parameters.mode == "text"){
 							ViewAdapterText.appendList(parameters.JSONdata,
 													 {baseHref:'#schedule/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])}
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])}
                            },
 													 "name",
 													 parameters.contentEl,
-													 {type:"Node",labelCllbck:function(str){return "location : "+str["name"];}});
+													 {type:"Node",labelCllbck:function(str){return "location : "+str["id"];}});
 						}
 					}
 				} 
@@ -776,7 +776,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    serviceUri : "schedule_topic.jsonp?",
 		    getQuery : function(parameters){	
 			  var conferenceUri = parameters.conferenceUri;
-		      var ajaxData = { } ;
+		      var ajaxData = { conference_id: parameters.conference.id } ;
 		      return ajaxData; 
 		    },
 		    
@@ -817,7 +817,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    serviceUri : "schedule_event.jsonp?",
 		    getQuery : function(parameters){	
 			  var conferenceUri = parameters.conferenceUri;
-		      var ajaxData = { theme_name : parameters.name } ;
+		      var ajaxData = { theme_name : parameters.name, conference_id: parameters.conference.id } ;
 		      return ajaxData; 
 		    },
 		    
@@ -865,7 +865,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    method : "GET", 
 		    serviceUri : "schedule_event.jsonp?",
 		    getQuery : function(parameters){	
-		      var ajaxData = { category_id : parameters.uri } ;
+		      var ajaxData = { category_id : parameters.uri, conference_id: parameters.conference.id };
 		      return ajaxData; 
 		    },
 		    
@@ -993,12 +993,12 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					JSONfile.eventHomepage =  dataXML.url|| null;
 					JSONfile.eventStart = (dataXML.start_at!= '1980-01-01 00:00'?dataXML.start_at:null);
 					JSONfile.eventEnd = (dataXML.end_at!= '1980-01-01 00:00'?dataXML.end_at:null);
-					JSONfile.eventLocationName =  dataXML.location.name  || null;
+					JSONfile.eventLocation =  dataXML.location  || null;
 					JSONfile.eventThemes =  dataXML.themes ||null;
 					JSONfile.eventChildren =  dataXML.children ||null;
 					JSONfile.eventPapers =  dataXML.papers || null;
+					JSONfile.eventRoles =  dataXML.roles || null;
 					JSONfile.eventTwitterWidgetToken =  dataXML.twitterWidgetToken || null;
-
 				}
 				StorageManager.pushCommandToStorage(currentUri,"getEvent",JSONfile);
 				return JSONfile;
@@ -1040,9 +1040,10 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								parameters.contentEl.append($('<a href="'+eventInfo.eventHomepage+'">'+eventInfo.eventHomepage+'</p>'));   
 							}
 						
-							if(eventInfo.locationName){ 
-								parameters.contentEl.append($('<h2>Location : <a href="#schedule/'+Encoder.encode(eventInfo.locationName)+'" data-role="button" data-icon="search" data-inline="true">'+locationName+'</a></h2>'));
+							if(eventInfo.eventLocation.id){ 
+								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].event.location+' : <a href="#schedule/'+Encoder.encode(eventInfo.eventLocation.name)+'" data-role="button" data-icon="search" data-inline="true">'+eventInfo.eventLocation.name+'</a></h2>'));
 							}
+
 							if(eventInfo.eventLabel){ 
 								$("[data-role = page]").find("#header-title").html(eventInfo.eventLabel);
 							}
@@ -1070,6 +1071,20 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							if(eventInfo.eventTwitterWidgetToken){ 
 								ViewAdapterText.appendTwitterTimeline(parameters.contentEl,eventInfo.eventTwitterWidgetToken, {});	   
 							}
+
+							if(eventInfo.eventRoles &&  eventInfo.eventRoles.length>0){
+								var roleType = [];
+								$.each(eventInfo.eventRoles, function(i,role){
+									if(roleType.indexOf(role.type) == -1){
+										parameters.contentEl.append('<h2>'+role.type+'</h2>'); 
+										parameters.contentEl.append('<div id='+role.type+'></div>'); 
+										roleType.push(role.type);
+									}
+								});
+								$.each(eventInfo.eventRoles, function(i,role){
+									ViewAdapterText.appendButton($('#'+role.type),'#person/'+Encoder.encode(role.person.name)+"/"+Encoder.encode(role.person.name.id),role.person.name,{tiny : 'true'});
+								});
+							}
 						}
 					}
 					
@@ -1093,7 +1108,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				var query = ""; 
 				//Encapsulating query in json object to return it
 				if(parameters.uri != "null"){
-					var  ajaxData = {"location_name" : parameters.uri};
+					var  ajaxData = {location_name: parameters.uri, conference_id : parameters.conference.id};
 				}else{
 					var  ajaxData = {conference_id : parameters.conference.id};
 				}
@@ -1232,7 +1247,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				var query = ""; 
 				//Encapsulating query in json object to return it
 				
-					var  ajaxData = {"after" : new Date()};
+					var  ajaxData = {conference_id : parameters.conference.id, "after" : new Date()};
 				
 				return ajaxData;
 			},
