@@ -2,6 +2,7 @@ define([],function() {
 		
 	var labels = {
 		'EN' : {
+      'noResults' : 'No results found',
 			'navBar' : {
 				'schedule' : 'Schedule',
 				'persons' : 'Persons',
@@ -34,7 +35,6 @@ define([],function() {
 				'organizations' : 'Organizations',
 				'publications' :'Conference publication(s)',
 				'otherPublications' :'Other publication(s)'
-
 			},
 
 			'organization' : {
@@ -168,6 +168,7 @@ define([],function() {
 
 		'FR' : {
 
+      'noResults' : 'Aucun résultat trouvé',
 			'navBar' : {
 				'schedule' : 'Planning',
 				'persons' : 'Participants',
@@ -198,7 +199,6 @@ define([],function() {
 				'organizations' : 'Organisations',
 				'publications' :'Publication(s) de la conférence',
 				'otherPublications' :'Autre publication(s)'
-
 			},
 
 			'organization' : {
