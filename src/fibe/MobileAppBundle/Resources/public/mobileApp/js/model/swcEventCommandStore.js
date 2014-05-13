@@ -10,7 +10,7 @@
 *   Tags:  JSON, SPARQL, AJAX
 **/
 define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterText', 'localStorage/localStorageManager','moment', 'lib/FileSaver', 'labels'], function($, _, Encoder, ViewAdapter, ViewAdapterText, StorageManager, moment, FileSaver, labels){
-	var swcEventCommandStore = {
+	var swcEventCommandStore = { 
 
 
     getAllSponsors: {
@@ -99,7 +99,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 
 		getAllTopics : {
 		    dataType : "JSONP",
-		    method : "GET", 
+		    method : "GET",
 		    serviceUri : "schedule_topic.jsonp?",
 		    getQuery : function(parameters){
 		      var ajaxData = {conference_id : parameters.conference.id} ;
@@ -586,31 +586,22 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].person.homepage+'</h2>'));
 								parameters.contentEl.append($('<a href='+parameters.JSONdata.homepage+'>'+parameters.JSONdata.homepage+'</a>'));
 							}
-
-							if (parameters.JSONdata.roles)
-              {
-                for (var roleType in parameters.JSONdata.roles)
-                {
-                  parameters.JSONdata.roles[roleType];
-                  parameters.contentEl.append($('<h2>' + labels[parameters.conference.lang].role[roleType] + ' at </h2>'));
-                  ViewAdapterText.appendList(parameters.JSONdata.roles[roleType],
-                      {baseHref: '#event/',
-                        hrefCllbck: function (str)
-                        {
-                          return Encoder.encode(str["name"]) + "/" + Encoder.encode(str["id"])
-                        }
-                      },
-                      "name",
-                      parameters.contentEl,
-                      {type: "Node", labelCllbck: function (str)
-                      {
-                        return "person : " + str["id"];
-                      }});
-                }
-                ;
-
-                parameters.contentEl.append($('<a href=' + parameters.JSONdata.twitter + '>' + parameters.JSONdata.twitter + '</a>'));
-              }
+							
+							if(parameters.JSONdata.roles) {
+								for(var roleType in parameters.JSONdata.roles){
+									parameters.JSONdata.roles[roleType];
+									parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].role[roleType]+' at </h2>'));
+									ViewAdapterText.appendList(parameters.JSONdata.roles[roleType],
+													 {baseHref:'#event/',
+													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])}
+                           },
+													 "name",
+													 parameters.contentEl,
+													 {type:"Node",labelCllbck:function(str){return "person : "+str["id"];}});
+								};
+							
+								parameters.contentEl.append($('<a href='+parameters.JSONdata.twitter+'>'+parameters.JSONdata.twitter+'</a>'));    
+							}
 
 							if(_.size(parameters.JSONdata.organizations) > 0 ){
 								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].person.organizations+'</h2>'));
@@ -747,7 +738,6 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		},
 
 
-	
 
 		getPublicationsByAuthorId : {
 		    dataType : "JSONP",
@@ -1108,8 +1098,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				}
 				StorageManager.pushCommandToStorage(currentUri,"getEvent",JSONfile);
 				return JSONfile;
-
-			},
+				
+			}, 
 
 			ViewCallBack : function(parameters){
 				var JSONdata = parameters.JSONdata;
@@ -1198,10 +1188,11 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 			}
 	    },
 
-		
-		
-		
-		
+
+
+
+
+
 	    /** Command used Schedule of the conf **/
 		getConferenceSchedule : {
 
@@ -1232,46 +1223,46 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 						//////////////////////////////
 					  	var currentEvent = {};
 						currentEvent.eventType = (event.categories[0]?event.categories[0].name:"");
-
-						if(currentEvent.eventType!="Event" && currentEvent.eventType!="ConferenceEvent"){
-
+						 
+						if(currentEvent.eventType!="Event" && currentEvent.eventType!="ConferenceEvent"){ 
+						   
 					    //retrieve current Start Slot
-						  var currentStartSlot =  event.start_at;
-						  if(!JSONfile[currentStartSlot]) JSONfile[currentStartSlot] = {};
+						  var currentStartSlot =  event.start_at; 	
+						  if(!JSONfile[currentStartSlot]) JSONfile[currentStartSlot] = {}; 
 						  currentStartSlot = JSONfile[currentStartSlot];
-
+						  
 					    //retrieve current End Slot
 						  var currentEndSlot =  event.end_at;
-						  if(!currentStartSlot[currentEndSlot]) currentStartSlot[currentEndSlot] = {bigEvents:{},events:[]};
+						  if(!currentStartSlot[currentEndSlot]) currentStartSlot[currentEndSlot] = {bigEvents:{},events:[]}; 
 						  currentEndSlot = currentStartSlot[currentEndSlot];
-
-
+						  
+						
 						  //retrieve current eventType slot
-						  if(!currentEndSlot.bigEvents[currentEvent.eventType]) currentEndSlot.bigEvents[currentEvent.eventType] = [];
-
-
-						//then push to the correct start/end slot
+						  if(!currentEndSlot.bigEvents[currentEvent.eventType]) currentEndSlot.bigEvents[currentEvent.eventType] = [];  
+						  
+						  
+						//then push to the correct start/end slot 
 						if(event.xproperties[0])
-						  currentEvent.eventUri = event.id;
+						  currentEvent.eventUri = event.id; 
 						  currentEvent.eventLabel =  event.name;
 						  currentEvent.eventId =  event.id;
 						  currentEvent.eventDesc =  $(this).find("[name = eventDesc]").text();
 						  currentEvent.locationLabel =  event.location.name;
 				          currentEndSlot.bigEvents[currentEvent.eventType].push(currentEvent);
-
-						}else {
-
+						  
+						}else { 
+						
 						  //currentEndSlot.events.push(currentEvent);
-
+						  
 						}
-
+						
 					});
 					StorageManager.pushCommandToStorage(currentUri,"getConferenceSchedule",JSONfile);
 					return JSONfile;
 				}
 				return null;
 			},
-
+			
 			ViewCallBack : function(parameters){
 				if(parameters.JSONdata != null){
 					if(_.size(parameters.JSONdata) > 0 ){
@@ -1279,33 +1270,33 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					  var content=$("<div data-role='collapsible-set' data-inset='false'></div>");
 					  var currentDay,currentUl ;
 					  for (var startAt in parameters.JSONdata) {
-
+					      
 					      //if the day has changed
 					      if(currentDay != moment(startAt).format('MMMM Do YYYY')){
 					          currentCollabsible = $('<div data-role="collapsible" data-theme="d" ><h2>'+moment(startAt).format('LL')+'</h2></div>');
 					          currentUl = $('<ul data-role="listview" data-inset="true" ></ul>');
 					          //content.append(currentUl);
-					          content.append(currentCollabsible);
+					          content.append(currentCollabsible); 
 					          currentCollabsible.append(currentUl);
 					      }
 					      currentDay = moment(startAt).format('MMMM Do YYYY');
-
+					      
 					      var startTime = moment(startAt).format('h:mm a');
-
+					      
 	             		 currentUl.append("<li data-role='list-divider' >"+labels[parameters.conference.lang].event.startAt +" "+startTime+"</li>");
-
+	                                
 				        for (var endAt in parameters.JSONdata[startAt]) {
-
-				            var lasts  =  moment(startAt).from(moment(endAt),true);
-
+				         
+				            var lasts  =  moment(startAt).from(moment(endAt),true); 
+				            
 				            var bigEvents = parameters.JSONdata[startAt][endAt].bigEvents;
 			              if(_.size(bigEvents)>0){
 			                for (var eventType in bigEvents) {
-
+			                    
 			                    for (var i=0 ;i<bigEvents[eventType].length;i++) {
-
-		                         	var LocationHtml= '';
-
+		            
+		                         	var LocationHtml= ''; 
+		                          
 		                          	if(parameters.name && parameters.name!="null" && parameters.name!=""){
 		                              	LocationHtml = '<p>'+parameters.name+'</p>';
 		                            }else{
@@ -1314,7 +1305,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 			                              LocationHtml += '<p><a href="#schedule/'+Encoder.encode(bigEvents[eventType][i].locationLabel)+'" data-role="button" data-icon="search" data-inline="true">'+bigEvents[eventType][i].locationLabel+'</a></p>';
 		                           		}
 		                            }
-
+		        
 		                            var labelCategory = labels[parameters.conference.lang].category[bigEvents[eventType][i].eventType] || "";
 		                            var newLi = $('<li data-inset="true" ></li>');
 		                            var newEventlink = $('<a href="#event/'+Encoder.encode(bigEvents[eventType][i].eventLabel)+'/'+Encoder.encode(bigEvents[eventType][i].eventId)+'">');
@@ -1332,9 +1323,9 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		                         }
 		                        }
 			              	}
-				        }
+				        } 
 					  }
-	  				  parameters.contentEl.append('<h2>'+labels[parameters.conference.lang].pageTitles.schedule+'</h2>');
+	  				  parameters.contentEl.append('<h2>'+labels[parameters.conference.lang].pageTitles.schedule+'</h2>'); 
 					  parameters.contentEl.append(content);
 					}
 				}
@@ -1343,21 +1334,19 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 
 	    	    /** Command used Schedule of the conf **/
 		getWhatsNext : {
-
-			dataType : "JSONP",
+	 
+			dataType : "JSONP", 
 			method : "GET",
-			serviceUri : "schedule_event.jsonp?",
-        getQuery: function (parameters)
-        {
-          //Building sparql query with prefix
-          var query = "";
-          //Encapsulating query in json object to return it
-          var date = moment();
-          date.lang('en');
-          var ajaxData = {conference_id: parameters.conference.id, "after": date.format('ddd MMMM D YYYY HH:mm:ss ZZ')};
-
-          return ajaxData;
-        },
+			serviceUri : "schedule_event.jsonp?",  
+			getQuery : function(parameters) {  
+				//Building sparql query with prefix
+				var query = ""; 
+				//Encapsulating query in json object to return it
+				var date = moment();
+				date.lang('en');
+				var ajaxData = {conference_id: parameters.conference.id, "after": date.format('ddd MMMM D YYYY HH:mm:ss ZZ')};
+				return ajaxData;
+			},
 			//Declaring the callback function to use when sending the command
 			ModelCallBack : function(dataXML,conferenceUri,datasourceUri, currentUri){
 				
