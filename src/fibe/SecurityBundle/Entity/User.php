@@ -32,6 +32,14 @@
     protected $conferences;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Team", inversedBy="confManagers", cascade={"persist"})
+     * @ORM\JoinTable(name="manager_team",
+     *     joinColumns={@ORM\JoinColumn(name="manager_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="team_id", referencedColumnName="id")})
+     */
+    protected $teams;
+
+    /**
      *
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf")
      * @ORM\JoinColumn(name="currentConf", referencedColumnName="id")
@@ -67,6 +75,41 @@
     {
       return $this->id;
     }
+
+    /**
+     * Add teams
+     *
+     * @param Team $teams
+     *
+     * @return User
+     */
+    public function addTeam(Team $teams)
+    {
+      $this->teams[] = $teams;
+
+      return $this;
+    }
+
+    /**
+     * Remove teams
+     *
+     * @param Team $teams
+     */
+    public function removeTeam(Team $teams)
+    {
+      $this->teams->removeElement($teams);
+    }
+
+    /**
+     * Get teams
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTeams()
+    {
+      return $this->teams;
+    } 
+    
 
     /**
      * Add conferences

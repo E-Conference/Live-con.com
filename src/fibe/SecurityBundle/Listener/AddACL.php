@@ -2,8 +2,7 @@
   namespace fibe\SecurityBundle\Listener;
 
   use Doctrine\ORM\Event\LifecycleEventArgs; 
-  use Symfony\Component\DependencyInjection\ContainerInterface;
-  use fibe\SecurityBundle\Services\ACLEntityHelper;
+  use Symfony\Component\DependencyInjection\ContainerInterface; 
   use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
   use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
   use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity; 
@@ -26,9 +25,10 @@
       $token = $this->container->get('security.context')->getToken();
       if (isset($token)) {
         $user = $token->getUser();
-      }
-      $ACLEntityNameArray = ACLEntityHelper::$ACLEntityNameArray; 
-      if (in_array($this->get_real_class($entity), $ACLEntityNameArray)) {
+      } 
+      try {
+        //check if the entity is managed with ACL 
+        $this->container->get('fibe_security.acl_entity_helper')->getClassNameByRepositoryName($this->get_real_class($entity));
         // creating the ACL
         $aclProvider = $this->container->get('security.acl.provider');
 
@@ -40,7 +40,9 @@
         // grant owner access
         $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
         $aclProvider->updateAcl($acl); 
-      } 
+      } catch(\RunTimeException $e){
+        // just don't add acl
+      }
     }
     /**
      * Obtains an object class name without namespaces

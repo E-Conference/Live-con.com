@@ -34,7 +34,7 @@
 
           {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')==1 %}
             <li>
-              <a href="{{ path('schedule_user_list') }}" title="Manage manager">
+              <a href="{{ path('conference_team_index') }}" title="Manage manager">
                 <span class="icon-list glyphicon-white "> Manage user </span>
               </a>
             </li>

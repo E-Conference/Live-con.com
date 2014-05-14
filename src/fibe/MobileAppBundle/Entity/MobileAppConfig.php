@@ -23,6 +23,14 @@
     private $id;
 
     /**
+     * Conference
+     *
+     * @ORM\OneToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf",cascade={"persist","remove"})
+     * @ORM\JoinColumn(name="conference", referencedColumnName="id",onDelete="CASCADE")
+     */
+    private $conference;
+    
+    /**
      * BGContent
      *
      *
@@ -154,6 +162,30 @@
     public function getId()
     {
       return $this->id;
+    }
+
+    /**
+     * Set conference
+     *
+     * @param boolean $conference
+     *
+     * @return MobileAppConfig
+     */
+    public function setConference($conference)
+    {
+      $this->conference = $conference;
+
+      return $this;
+    }
+
+    /**
+     * Get conference
+     *
+     * @return boolean
+     */
+    public function getConference()
+    {
+      return $this->conference;
     }
 
     /**

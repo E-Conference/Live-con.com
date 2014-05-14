@@ -64,11 +64,11 @@ security:
             form_login:
                 login_path: login
                 check_path: login_check
-                default_target_path: dashboard_index
+                success_handler: fibe_security.select_conference_success_handler
             logout:
                 path:   logout
                 target: /login
 
     access_control:
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
-        
+

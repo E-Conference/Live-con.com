@@ -220,3 +220,13 @@
         -webkit-box-orient: vertical;
     }
 }
+
+/*slider*/
+.slider.slider-horizontal .slider-selection {
+    background: rgb(221, 221, 221);
+}
+@media (max-width: 1200px) {
+    #sidebar-div{
+        padding: 0 1em 0 2em; 
+    }
+}

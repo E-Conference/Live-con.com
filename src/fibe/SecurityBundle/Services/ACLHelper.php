@@ -5,8 +5,10 @@
   use Doctrine\ORM\EntityManager;
   use Doctrine\ORM\QueryBuilder;
   use Symfony\Component\Security\Acl\Dbal\MutableAclProvider;
+  use Symfony\Component\Security\Acl\Permission\MaskBuilder;
   use Symfony\Component\Security\Core\Exception\AccessDeniedException;
   use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+  use Doctrine\ORM\EntityNotFoundException;
 
   class ACLHelper
   {
@@ -19,6 +21,30 @@
      * first %s is action, second is entityType and third is id
      */
     const NOT_AUTHORYZED_ENTITY_LABEL = 'You don\'t have the authorization to perform %s on %s %s';
+
+    /** @const */
+    public static $MASKS = array(
+            'V' => 'VIEW',
+            'E' => 'EDIT',
+            // 'C' => 'CREATE',
+            // 'D' => 'DELETE',
+            // 'U' => 'UNDELETE',
+            'O' => 'OPERATOR',
+            'M' => 'MASTER',
+            'N' => 'OWNER'
+      );
+    /** @const */
+    public static $MASK_LABELS = array(
+            'VIEW' => '[View]',
+            'EDIT' => '[Edit]',
+            // 'CREATE' => 'CREATE',
+            // 'DELETE' => 'DELETE',
+            // 'UNDELETE' => 'UNDELETE',
+            'OPERATOR' => '[OPERATOR] Edit/Create/Delete',
+            'MASTER' => '[MASTER] Master can give those permissions to others',
+            'OWNER' => '[OWNER] Owner can promote/demote the Master status'
+      );
+
 
     protected $securityContext;
     protected $entityManager;
@@ -34,18 +60,22 @@
     protected function getUser($id=null)
     {
       if($id){
-        return $teamate = $em->getRepository('fibeSecurityBundle:User')->find($id);
+        return $teamate = $this->entityManager->getRepository('fibeSecurityBundle:User')->find($id);
       } else
       {
         return $this->securityContext->getToken()->getUser();
       }
-      $this->throwNotFoundHttpException( $repositoryName, $id?'#'.$id:'');
+      $this->throwNotFoundHttpException( $repositoryName,$id );
     }
 
     protected function getCurrentConf()
     {
-      //TODO redirect to dashboard url with parameter if the conf doesn't exist
-      return $this->getUser()->getCurrentConf();
+      if(!$currentConf = $this->getUser()->getCurrentConf())
+      {
+        //TODO redirect to the dashboard with parameter if the conf doesn't exist
+        $this->throwNotFoundHttpException( "current conference");
+      }
+      return $currentConf;
     }
 
     protected function restrictQueryBuilderByConferenceId(QueryBuilder $queryBuilder)
@@ -67,12 +97,29 @@
       }
     }
 
-    protected function getClassNameByRepositoryName($repositoryName)
+    protected function getMask($action)
     {
-      return ACLEntityHelper::ACL_ENTITIES_CLASSPATH.'\\'.$repositoryName;
+      if(is_int($action))
+      {  
+        return static::$MASKS[MaskBuilder::getCode($action)];
+      }
+      else if (!defined($mask = 'Symfony\Component\Security\Acl\Permission\MaskBuilder::MASK_'.$action))
+      {
+          throw new \RuntimeException("[ACLHelper] Requested action $action is incorrect!");
+      }
+      return constant($mask);
     }
 
-    protected function throwNotFoundHttpException( $repositoryName, $id)
+    protected function getMaskCode($action)
+    {
+      if (!defined($mask = 'Symfony\Component\Security\Acl\Permission\MaskBuilder::CODE_'.$action))
+      {
+          throw new \RuntimeException("[ACLHelper] Requested action $action is incorrect!");
+      }
+      return constant($mask);
+    }
+
+    protected function throwNotFoundHttpException( $repositoryName, $id=null)
     {
        throw new NotFoundHttpException(sprintf(ACLHelper::CANNOT_FIND_ENTITY_LABEL, $repositoryName, $id?'#'.$id:''));
     }

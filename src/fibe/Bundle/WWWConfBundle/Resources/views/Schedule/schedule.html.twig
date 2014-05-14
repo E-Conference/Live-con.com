@@ -65,6 +65,12 @@
                 </optgroup>
             </select>
         </div> #}  
+        <h4>Time scale</h4>
+        <input type="text" class="slider" data-slider-id='sliderTimeScale' type="number" data-slider-min="5" data-slider-max="120" data-slider-step="5" data-slider-value="30"/>
+        <span id="sliderTimeScaleValLabel">
+          <span id="sliderTimeScaleVal">30</span>
+          mn
+        </span>
         <h4>Dateless Events</h4>
         <div id='external-events' class='scroller'>
         </div> 
@@ -149,6 +155,8 @@
   <link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.print.css') }}" rel='stylesheet' media='print' /> 
   <link href="{{ asset('bundles/fibewwwconf/css/fullcalendarAddedUI.css') }}" rel='stylesheet'/>  
   <link href="{{ asset('bundles/fibewwwconf/css/jquery.mCustomScrollbar.css') }}" rel='stylesheet'/>  
+  <link href="{{ asset('bundles/fibewwwconf/css/jquery.mCustomScrollbar.css') }}" rel='stylesheet'/> 
+  <link href="{{ asset('css/slider.css') }}" rel='stylesheet'/>   
 {% endblock stylesheets_page %}
 
 
@@ -165,6 +173,7 @@
   <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/added/EventCollection.js') }}"></script>
     
   <script src="{{ asset('bundles/fibewwwconf/js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+  <script src="{{ asset('js/bootstrap-slider.js') }}"></script>
 
   <script src ="{{ asset('js/loginModal.js') }}" type="text/javascript" ></script>  
   <script type="text/javascript">
@@ -338,6 +347,54 @@
       /*----------------------------------------------------------------------------------------*/
 
 
+
+      /*-------------------------------------------------------------------------------------------------*/
+      /*----------------------------------------- slider ------------------------------------------------*/
+      /*-------------------------------------------------------------------------------------------------*/
+      $('.slider').slider().on('slide', function(slideEvt) {
+        $("#"+$(this).data("sliderId")+"Val").text(slideEvt.value); 
+      })
+     .on('slideStop', function(slideEvt) { 
+        $('#calendar').fullCalendar('setOptions', {'slotMinutes':slideEvt.value});
+      });
+     $('.slider').css("width","100%");
+      //requires changes made by christian on https://code.google.com/p/fullcalendar/issues/detail?id=293&can=4
+      
+      /*
+      #19 cristian...@gmail.com
+      I made some changes on the plugin and now I can change minTime and maxTime dynamically. I think that it works for the other options too.
+
+      I simply changed the "changeView" function to support a "force_reload" parameter that, when set to true, recreates the current View with the existent options. Then, I made a function called setOptions that simply has this code:
+
+      function setOptions(new_options) {
+          $.extend(options, new_options);
+          var viewName=currentView.name;
+          changeView(viewName,true);
+      }
+
+      I hope this can help someone in need =)
+      Jan 25, 2012 #20 cristian...@gmail.com
+      I forgot to specify the changes made on "changeView"...
+      Here are the important lines:
+
+          function changeView(newViewName,force_reload) {
+              [+]if (force_reload || !currentView || newViewName != currentView.name) {
+              ....
+              content.css('overflow', 'hidden');
+          
+              currentView = viewInstances[newViewName];
+        [+]if (force_reload)
+            [+]currentView.element.remove();
+        [+]if (currentView && !force_reload) {
+            currentView.element.show();
+        }else{
+            currentView = viewInstances[newViewName] = new fcViews[newViewName](
+           ....
+
+      The "[+]" signals indicate changes or additions.
+
+      */ 
+                            
       /*-------------------------------------------------------------------------------------------------*/
       /*------------------------------------- initialize sidebar ----------------------------------------*/
       /*-------------------------------------------------------------------------------------------------*/

@@ -1,0 +1,162 @@
+{% extends 'fibeConferenceBundle::base.html.twig' %}
+
+{% block title %}Team{% endblock title %}
+
+{% block centerPanel %}
+
+ 
+
+{% trans_default_domain 'FOSUserBundle' %}
+     <div class="row page-top-header ">
+            <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-3">
+                <span>Team management</span>
+                <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Collaborative' }) }}" target="_blank" title="Help">
+                     <i class="fa fa-question"></i> 
+                </a>
+            </div> 
+            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-7">
+            </div>
+            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+                <a class="btn btn-info btn-create create" href="{{ path('schedule_confevent_new') }}" title="Add a manager">
+                  <i class="fa fa-plus"></i>  New manger
+                </a>
+            </div>
+      </div>
+      <div class="row page-content">
+
+             
+          <div id="team_list" class="table-responsive">
+            <table class="records_list table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Last login</th> 
+                        {% for confPermission in manager_conf_authorizations[0].confPermissions %}
+                          <th>{{ confPermission.entityLabel }} Permission</th>
+                        {% endfor %}
+                        <th>Action<th>
+                         
+                    </tr>
+                </thead>
+                <tbody>
+                {% for manager in team.confManagers %}
+                    <tr>
+                        <td> 
+                          <b>{{ manager.username }}</b> 
+                        </td>
+                        <td><a href="mailto:{{ manager.email }}">{{ manager.email }}</a></td>
+                        <td class="moment">{% if manager.lastLogin %}{{ manager.lastLogin|date('Y-m-d H:i:s') }}{% endif %}</td>
+ 
+                        {% for confPermission in manager_conf_authorizations[loop.index0].confPermissions %}
+                         <td>
+                            <span class="badge authorization-{{ confPermission.action }}">{{ confPermission.action }}</span> 
+                        </td>
+                        {% endfor %}
+                        {% if is_granted('DELETE', team) %}
+                        <td>
+                          <form id="delete-form{{ loop.index0 }}" action="{{ path('conference_team_delete', { 'id': manager.id }) }}" method="post">
+                            <button type="submit" class="btn btn-large btn-danger delete" onclick="removeManager({{manager.id}});"><i class="fa fa-trash-o"></i> </button>
+                              <input type="hidden" name="_method" value="DELETE" />
+                              {{ form_widget(delete_forms[loop.index0]) }}
+                          </form>
+                        </td>
+                        {% endif %}
+                        {% if is_granted('EDIT', team) %}
+                        <td>
+                          <a class="btn btn-large btn-warning edit" href="{{ path('conference_team_edit', { 'id': manager.id }) }}"><i class="fa fa-pencil"></i></a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+          </div>
+            <!--<a class="btn btn-info" href="{{ path('fos_user_registration_register') }}">
+                <i class="icon-plus icon-white"> </i> Add user in conference
+            </a>-->
+
+
+            <!--   Add user in conference  -->
+            <a class="btn btn-info" id="addUserInConference" onclick="$('#addUserInConferenceForm').toggle('slow')">
+                <i class="icon-plus icon-white"></i> Add user in conference
+            </a>
+            <br />
+            <div id="addUserInConferenceForm" style="display: none;">
+              <div class="row-fluid">
+                 <div class="well">
+                    <form action="{{ path('conference_team_add') }}" method="post" {{ form_enctype(add_teamate_form) }}>
+
+
+
+                            {# affiche l'unique champ de la tâche : description #}
+                            {{ form_row(add_teamate_form.user) }}
+
+                            <div class="form-horizontal">
+                              
+                                {{ form_label(add_teamate_form.confPermissions) }}
+                                {# itère sur chaque tag existant et affiche son unique champ : name #}
+                                {% for confPermission in add_teamate_form.confPermissions %}
+                                <div class="form-group">
+                                  <label class="col-sm-2 control-label">{{ confPermission.vars.value.entityLabel }}</label>
+                                  <div class="col-sm-10">
+                                    {{ form_widget(confPermission.action) }}
+                                  </div>
+                                </div> 
+                                    {{ form_rest(confPermission) }}
+                                {% endfor %}
+                            </div>
+
+                            {{ form_rest(add_teamate_form) }}
+                            {# ... #}
+
+
+
+
+                            {# {{ form_widget(authorization_form) }}
+                            {{ form_errors(authorization_form) }} #}
+                            <br />
+                        <button type="submit" class="btn btn-block btn-success">
+                            <i class="fa fa-check"></i>
+                        </button>
+                    </form> 
+                  </div>
+                </div>
+             </div>
+    </div>
+{% endblock  %}
+
+{%  block javascripts_page %}
+
+    <script  type="text/javascript" >
+ 
+
+      function filter(){
+        $datas = $("#filter_form").serialize();
+
+        //start send the post request
+         $.post("{{path('schedule_confevent_filter')}}",               
+                 $datas, 
+              function(response){
+                     $('#confevent_list').html(response);
+                     $("#resultsFound").show();
+                  
+              }, "html");    
+          return false;
+    };
+      
+
+    //    //Listen change authorization select
+    //     $(document).ready(function(){
+    //         //Hide add manager form
+    //         $("#addUserInConferenceForm").hide();
+    //         $('.moment').each(function(){
+    //             var momentString = moment($(this).html()); 
+    //             !momentString || $(this).html(momentString.format("dddd, MMMM Do YYYY, h:mm:ss a"));
+    //         })
+    //     });
+    </script>
+
+{% endblock %}
+
+ 

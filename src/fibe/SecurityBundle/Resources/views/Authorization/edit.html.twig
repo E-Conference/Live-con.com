@@ -22,7 +22,7 @@
 
     <h1>{{ entity.user.username }}</h1>
 
-    <form action="{{ path('schedule_authorization_update', { 'id': entity.id }) }}"
+    <form action="{{ path('conference_teamate_update', { 'id': entity.id }) }}"
           method="post" {{ form_enctype(edit_form) }}>
       <input type="hidden" name="_method" value="PUT"/>
 

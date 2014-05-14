@@ -277,7 +277,7 @@
       {
         $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('DELETE','Organization',$id);
         $em = $this->getDoctrine()->getManager();
-        //The object have to belongs to the current conf
+        //The object must belong to the current conf
         $currentConf = $this->getUser()->getCurrentConf();
         $em->remove($entity);
         $em->flush();

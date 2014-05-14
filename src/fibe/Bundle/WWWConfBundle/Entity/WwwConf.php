@@ -103,10 +103,17 @@
 
 
     /**
+     * Team
+     *
+     * @ORM\OneToOne(targetEntity="fibe\SecurityBundle\Entity\Team",cascade={"persist", "remove"})
+     */
+    private $team;
+
+
+    /**
      * Mobile app configurations
      *
-     * @ORM\OneToOne(targetEntity="fibe\MobileAppBundle\Entity\MobileAppConfig",cascade={"persist"})
-     * @ORM\JoinColumn(name="appConfig", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="fibe\MobileAppBundle\Entity\MobileAppConfig",cascade={"persist"}) 
      */
     private $appConfig;
 
@@ -419,6 +426,27 @@
       return $this->persons;
     }
 
+    /** 
+     *
+     * @param \fibe\SecurityBundle\Entity\Team $team
+     *
+     * @return WwwConf
+     */
+    public function setTeam($team)
+    {
+      $this->team = $team;
+
+      return $this;
+    }
+    /**  
+     *
+     * @return \fibe\SecurityBundle\Entity\Team
+     */
+    public function getTeam()
+    {
+      return $this->team;
+    }
+
     /**
      * Add app config
      *
@@ -429,6 +457,7 @@
     public function setAppConfig($AppConfig)
     {
       $this->appConfig = $AppConfig;
+      $this->appConfig->setConference($this);
 
       return $this;
     }

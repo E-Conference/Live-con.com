@@ -191,7 +191,7 @@
 
       $em = $this->getDoctrine()->getManager();
 
-      //The object have to belongs to the current conf
+      //The object must belong to the current conf
       $currentConf = $this->getUser()->getCurrentConf();
       $entity = $em->getRepository('fibeWWWConfBundle:Sponsor')->findOneBy(['conference' => $currentConf, 'id' => $id]);
       if (!$entity)
@@ -228,7 +228,7 @@
 
       $em = $this->getDoctrine()->getManager();
 
-      //The object have to belongs to the current conf
+      //The object must belong to the current conf
       $currentConf = $this->getUser()->getCurrentConf();
       $entity = $em->getRepository('fibeWWWConfBundle:Sponsor')->findOneBy(['conference' => $currentConf, 'id' => $id]);
       if (!$entity)
@@ -268,7 +268,7 @@
 
       $em = $this->getDoctrine()->getManager();
 
-      //The object have to belongs to the current conf
+      //The object must belong to the current conf
       $currentConf = $this->getUser()->getCurrentConf();
       /**
        * @var Sponsor
@@ -323,7 +323,7 @@
       if ($form->isValid())
       {
         $em = $this->getDoctrine()->getManager();
-        //The object have to belongs to the current conf
+        //The object must belong to the current conf
         $currentConf = $this->getUser()->getCurrentConf();
         $entity = $em->getRepository('fibeWWWConfBundle:Sponsor')->findOneBy(['conference' => $currentConf, 'id' => $id]);
         if (!$entity)

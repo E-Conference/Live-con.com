@@ -38,7 +38,7 @@
                 </a>
               {% endif %}
               {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')== 1 %}
-                <a style="padding-right:5px;" href="{{ path('conference_team_list') }}">
+                <a style="padding-right:5px;" href="{{ path('conference_team_index') }}">
                   <i class="fa fa-users fa-3x"></i> Team
                 </a>
               {% endif %}

@@ -202,7 +202,7 @@
       $id = $getData->get('id', '');
 
       $em = $this->getDoctrine()->getManager();
-      //The object have to belongs to the current conf
+      //The object must belong to the current conf
       $conf = $this->getUser()->getCurrentConf();
       $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $conf, 'id' => $id));
       if (!$entity)
@@ -270,7 +270,7 @@
 
       $JSONArray = array();
 
-      //The object have to belongs to the current conf
+      //The object must belong to the current conf
       $conf = $this->getUser()->getCurrentConf();
       $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(array('conference' => $conf, 'id' => $id)); //@TODO error
       if (!$entity)

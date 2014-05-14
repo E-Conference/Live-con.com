@@ -15,6 +15,7 @@
   use fibe\Bundle\WWWConfBundle\Form\ModuleType;
   use fibe\Bundle\WWWConfBundle\Form\WwwConfEventType;
 
+  use fibe\SecurityBundle\Entity\Team;
   use fibe\SecurityBundle\Entity\Authorization;
 
   use fibe\Bundle\WWWConfBundle\Form\XPropertyType;
@@ -186,6 +187,7 @@
       //Session user
       $user = $this->getUser();
 
+
       //Module
       $defaultModule = new Module();
       $defaultModule->setPaperModule(1);
@@ -241,6 +243,14 @@
       $em->persist($mainConfEventLocation);
       $mainConfEvent->setLocation($mainConfEventLocation);
       $em->persist($mainConfEvent);
+
+      //Team
+      $defaultTeam = new Team();
+      $defaultTeam->addConfManager($user);
+      $user->addTeam($defaultTeam);
+      $defaultTeam->setConference($entity);
+      $entity->setTeam($defaultTeam);
+      $em->persist($defaultTeam);
 
       //Create authorization
       $creatorAuthorization = new Authorization();
@@ -318,11 +328,11 @@
 
         $this->container->get('session')->getFlashBag()->add(
           'error',
-          'It must stay unless one manager by conference.'
+          'It must stay at least one manager by conference.'
         );
       }
 
-      return $this->redirect($this->generateUrl('conference_team_list'));
+      return $this->redirect($this->generateUrl('conference_team_index'));
 
     }
 
@@ -367,25 +377,7 @@
       $em = $this->getDoctrine()->getManager();
       $user = $this->getUser();
 
-
-      $conference = $em->getRepository('fibeWWWConfBundle:WwwConf')->find($id);
-
-      if (!$conference)
-      {
-        throw $this->createNotFoundException('Unable to find Conference.');
-      }
-
-      if (!$user->authorizedAccesToConference($conference))
-      {
-        throw new AccessDeniedException('Look at your conferences !!!');
-      }
-
-      //Authorization Verification conference datas manager
-      $authorization = $user->getAuthorizationByConference($conference);
-      if (!$authorization->getFlagconfDatas())
-      {
-        throw new AccessDeniedException('Action not authorized !');
-      }
+      $conference = $this->get('fibe_security.acl_entity_helper')->getEntityACL('DELETE','WwwConf',$id);
 
       //Change User current Conf
       $user->setCurrentConf(null);

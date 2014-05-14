@@ -180,6 +180,10 @@
         $em->remove($authorization);
       }
 
+      //team
+      $team = $conference->getTeam();
+      $conference->setTeam(null);
+
       //Remove link between manager and conference
       $managers = $conference->getConfManagers();
       foreach ($managers as $manager)
@@ -187,13 +191,18 @@
         $conference->removeConfManager($manager);
       }
 
-      //main conf event t
+      //main conf event
       $mainConfEvent = $conference->getMainConfEvent();
-      $conference->setMainConfEvent(null);
-      $em->remove($mainConfEvent);
-
-      $em->persist($conference);
+      if($mainConfEvent){
+        $conference->setMainConfEvent(null);
+        $em->flush();
+        $em->remove($mainConfEvent);
+      }
       $em->flush();
+      $em->remove($team);
+      $em->flush();
+
+      // $em->persist($conference);
     }
 
   }

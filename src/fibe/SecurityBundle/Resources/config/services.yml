@@ -1,16 +1,20 @@
 
+
 parameters:
     security.acl.dbal.provider.class: fibe\SecurityBundle\Services\AclProvider
     fos_user.registration.confirmation.enabled: true
 
 services:
+    fibe_security.select_conference_success_handler:
+        class: fibe\SecurityBundle\Services\ChooseConferenceSuccessHandler
+        arguments: ["@router"]
 
     fibe_security.acl_entity_helper:
-        class: fibe\SecurityBundle\Services\ACLShareRight
+        class: fibe\SecurityBundle\Services\ACLEntityHelper
         arguments: ["@security.context","@doctrine.orm.entity_manager","@security.acl.provider"]
 
-    fibe_security.acl_share_right_helper:
-        class: fibe\SecurityBundle\Services\ACLShareCurrentConfRight
+    fibe_security.acl_user_permission_helper:
+        class: fibe\SecurityBundle\Services\ACLUserPermissionHelper
         arguments: ["@security.context","@doctrine.orm.entity_manager","@security.acl.provider","@fos_user.user_manager"]
 
     entityAddACL:
