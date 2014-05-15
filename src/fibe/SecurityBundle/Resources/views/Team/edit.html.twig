@@ -26,15 +26,12 @@
             <span class="hidden">
               {{ form_row(edit_form.user, {'attr': {'type': 'hidden'}}) }}
             </span>
-            <div class="form-horizontal">
-              
-                {{ form_label(edit_form.confPermissions) }}
-                {# itère sur chaque tag existant et affiche son unique champ : name #}
+            <div class="form-horizontal"> 
                 {% for confPermission in edit_form.confPermissions %}
                 <div class="form-group">
                   <label class="col-sm-2 control-label">{{ confPermission.vars.value.entityLabel }}</label> 
-                  <div class="col-sm-10 choiceList" data-val="{{ confPermission.vars.value.action }}">
-                    {{ form_row(confPermission.action) }}
+                  <div class="col-sm-10 choiceList">
+                    {{ form_widget(confPermission.action) }}
                   </div>
                 </div> 
                     {{ form_rest(confPermission) }}
@@ -48,17 +45,4 @@
         </button>
     </form> 
   </div>
-
-{# ugly trick to set default value on this custom field choice type #}
-<script>
-  // $(function(){
-  //   $(".choiceList").each(function(){
-  //     var val = $(this).data("val");
-  //     $(this).find("select").select2("data",val);
-  //     $(this).find("select").select2("data",val);
-  //   });
-  // })
-</script>
-{# ugly trick to set default value on this custom field choice type #}
-
 {% endblock %}

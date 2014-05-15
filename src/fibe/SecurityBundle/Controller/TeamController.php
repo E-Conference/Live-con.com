@@ -49,7 +49,7 @@ class TeamController extends Controller
 
 
         $userConfPermission = $ACLService->getUserConfPermission();
-        $addTeamateForm = $this->createForm(new UserConfPermissionType(), $userConfPermission);
+        $addTeamateForm = $this->createForm(new UserConfPermissionType($this->getUser()), $userConfPermission);
         // $authorizationForm = $this->createPermissionForm();
 
         foreach($managers as $manager ){
@@ -88,7 +88,7 @@ class TeamController extends Controller
 
 
       $userConfPermission = new UserConfPermission();
-      $form = $this->createForm(new UserConfPermissionType(), $userConfPermission); 
+      $form = $this->createForm(new UserConfPermissionType($this->getUser()), $userConfPermission); 
       $form->bind($request);
 
       if ($form->isValid())
@@ -137,7 +137,7 @@ class TeamController extends Controller
       
       $userConfPermission = $ACLService->getUserConfPermission($entity);
 
-      $editForm = $this->createForm(new UserConfPermissionType(), $userConfPermission);
+      $editForm = $this->createForm(new UserConfPermissionType($this->getUser()), $userConfPermission);
     
       return array(
         'entity'      => $entity,
@@ -159,7 +159,7 @@ class TeamController extends Controller
       $entity = $em->getRepository('fibeSecurityBundle:User')->find($id);
       
       $userConfPermission = $ACLService->getUserConfPermission($entity);
-      $editForm = $this->createForm(new UserConfPermissionType(), $userConfPermission);
+      $editForm = $this->createForm(new UserConfPermissionType($this->getUser()), $userConfPermission);
       $editForm->bind($request);
 
       if ($editForm->isValid())

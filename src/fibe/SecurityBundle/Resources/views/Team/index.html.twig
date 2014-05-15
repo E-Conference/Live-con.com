@@ -86,18 +86,13 @@
               <div class="row-fluid">
                  <div class="well">
                     <form action="{{ path('conference_team_add') }}" method="post" {{ form_enctype(add_teamate_form) }}>
-
-
-
-                            {# affiche l'unique champ de la tâche : description #}
+ 
                             {{ form_row(add_teamate_form.user) }}
 
-                            <div class="form-horizontal">
-                              
-                                {{ form_label(add_teamate_form.confPermissions) }}
+                            <div style="padding-top: 1em;" class="form-horizontal"> 
                                 {# itère sur chaque tag existant et affiche son unique champ : name #}
                                 {% for confPermission in add_teamate_form.confPermissions %}
-                                <div class="form-group">
+                                <div  class="form-group">
                                   <label class="col-sm-2 control-label">{{ confPermission.vars.value.entityLabel }}</label>
                                   <div class="col-sm-10">
                                     {{ form_widget(confPermission.action) }}
@@ -107,14 +102,7 @@
                                 {% endfor %}
                             </div>
 
-                            {{ form_rest(add_teamate_form) }}
-                            {# ... #}
-
-
-
-
-                            {# {{ form_widget(authorization_form) }}
-                            {{ form_errors(authorization_form) }} #}
+                            {{ form_rest(add_teamate_form) }} 
                             <br />
                         <button type="submit" class="btn btn-block btn-success">
                             <i class="fa fa-check"></i>
@@ -143,18 +131,7 @@
                   
               }, "html");    
           return false;
-    };
-      
-
-    //    //Listen change authorization select
-    //     $(document).ready(function(){
-    //         //Hide add manager form
-    //         $("#addUserInConferenceForm").hide();
-    //         $('.moment').each(function(){
-    //             var momentString = moment($(this).html()); 
-    //             !momentString || $(this).html(momentString.format("dddd, MMMM Do YYYY, h:mm:ss a"));
-    //         })
-    //     });
+    }; 
     </script>
 
 {% endblock %}

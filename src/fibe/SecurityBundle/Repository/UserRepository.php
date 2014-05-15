@@ -22,14 +22,18 @@
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function ManagerForSelectTeamQuery($currentConf)
+    public function ManagerForSelectTeamQuery($teams)
     {
 
       //Init array with all id of managers actually in the team.
       $managers_ids = array();
-      foreach ($currentConf->getConfManagers() as $manager_id)
+      foreach ($teams as $team)
       {
-        $managers_ids[] = $manager_id;
+        foreach ($team->getConfManagers() as $manager_id)
+        {
+          
+          $managers_ids[] = $manager_id;
+        }
       }
 
       $qb = $this->createQueryBuilder('mng');

@@ -56,19 +56,19 @@
 
   {% for flashMessage in app.session.flashbag.get('info') %}
     <script type="text/javascript">
-      bootstrapAlert("info", "{{ flashMessage }}", "Info : ", '<i class="icon-info"></i> ');
+      bootstrapAlert("info", "{{ flashMessage }}", "Info : " );
     </script>
   {% endfor %}
 
   {% for flashMessage in app.session.flashbag.get('success') %}
     <script type="text/javascript">
-      bootstrapAlert("success", "{{ flashMessage }}", "Success : ", '<i class="icon-ok-sign"></i> ');
+      bootstrapAlert("success", "{{ flashMessage }}", "Success : " );
     </script>
   {% endfor %}
 
   {% for flashMessage in app.session.flashbag.get('error') %}
     <script type="text/javascript">
-      bootstrapAlert("warning", "{{ flashMessage }}", "Error : ", '<i class="icon-meh"></i> ');
+      bootstrapAlert("warning", "{{ flashMessage }}", "Error : ");
     </script>
   {% endfor %}
 
