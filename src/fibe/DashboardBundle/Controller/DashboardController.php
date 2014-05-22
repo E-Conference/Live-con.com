@@ -24,7 +24,7 @@ class DashboardController extends Controller
    */
     public function indexAction()
     {
-      $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('EDIT','WwwConf');
+      $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('VIEW','WwwConf');
       return array('conferences' => $entities);
     }
 
@@ -37,7 +37,7 @@ class DashboardController extends Controller
     {
 
         $em = $this->getDoctrine()->getManager();
-        $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','WwwConf',$id);
+        $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW','WwwConf',$id);
         
         $user = $this->getUser();
         $user->setCurrentConf($entity);

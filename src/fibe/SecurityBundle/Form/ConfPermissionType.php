@@ -25,6 +25,18 @@
         ;
     }
 
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+          'data_class' => 'fibe\SecurityBundle\Entity\ConfPermission',
+          'required'   => true,
+          'options'  => array(
+            'data_class' => 'fibe\SecurityBundle\Entity\ConfPermission',
+            'required'  => true,
+          )
+        ));
+    }
+
     /**
      * @return string
      */

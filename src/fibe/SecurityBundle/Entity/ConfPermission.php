@@ -21,6 +21,8 @@
 
     protected $entityLabel;
 
+    protected $restricted;
+
     public function setAction($action)
     {
       $this->action = $action;
@@ -70,6 +72,19 @@
     public function getEntityLabel()
     {
       return $this->entityLabel;
+    }
+
+
+    public function setRestricted($restricted)
+    {
+      $this->restricted = $restricted;
+
+      return $this;
+    }
+
+    public function getRestricted()
+    {
+      return $this->restricted;
     }
 
 

@@ -35,7 +35,6 @@ class TeamController extends Controller
     public function indexAction()
     {
 
-          //Authorization Verification conference sched manager 
         $currentConf =$this->getUser()->getcurrentConf(); 
 
         $ACLService = $this->get('fibe_security.acl_user_permission_helper');
@@ -47,29 +46,26 @@ class TeamController extends Controller
         $delete_forms= array();
         $managerConfAuthorizations= array();
 
+        foreach($managers as $manager){
+          if($manager->getId() != $this->getUser()->getId()){
 
-        $userConfPermission = $ACLService->getUserConfPermission();
-        $addTeamateForm = $this->createForm(new UserConfPermissionType($this->getUser()), $userConfPermission);
-        // $authorizationForm = $this->createPermissionForm();
-
-        foreach($managers as $manager ){
             $delete_forms[] = $this->createDeleteForm($manager->getId())->createView();
             
-            $managerConfAuthorizations[]  = $ACLService->getUserConfPermission($manager);
-            
-            // $user = new User();
-            // $update_forms[] = $this->createFormBuilder($user)
-            //                         ->add('roles')
-            //                         ->getForm();
-        }
+            $managerConfAuthorizations[]  = $ACLService->getUserConfPermission($manager,false);
+          }
+        } 
+
+        $userConfPermission = $ACLService->getUserConfPermission($this->getUser(),false);  
+        $addTeamateForm = $this->createForm(new UserConfPermissionType($this->getUser()), $ACLService->getUserConfPermission()); 
         return array(
-            'team'                        => $team,
-            'delete_forms'                => $delete_forms,
-            'manager_conf_authorizations' => $managerConfAuthorizations,
-            // 'update_forms'             => $update_forms,
-            'add_teamate_form'            => $addTeamateForm->createView(),
-            'currentConf'                 => $currentConf,
-            'authorized'                  => true
+            'team'                                => $team,
+            'delete_forms'                        => $delete_forms,
+            'manager_conf_authorizations'         => $managerConfAuthorizations,
+            'current_manager_conf_authorizations' => $userConfPermission,
+            // 'update_forms'                     => $update_forms,
+            'add_teamate_form'                    => $addTeamateForm->createView(),
+            'currentConf'                         => $currentConf,
+            'authorized'                          => true
         );
     }
 
@@ -87,7 +83,7 @@ class TeamController extends Controller
       $team = $ACLService->getEntityACL('CREATE','Team',$currentConf->getTeam()->getId());
 
 
-      $userConfPermission = new UserConfPermission();
+      $userConfPermission = $ACLService->getUserConfPermission(); 
       $form = $this->createForm(new UserConfPermissionType($this->getUser()), $userConfPermission); 
       $form->bind($request);
 
@@ -136,7 +132,6 @@ class TeamController extends Controller
       $entity = $em->getRepository('fibeSecurityBundle:User')->find($id);
       
       $userConfPermission = $ACLService->getUserConfPermission($entity);
-
       $editForm = $this->createForm(new UserConfPermissionType($this->getUser()), $userConfPermission);
     
       return array(

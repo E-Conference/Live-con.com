@@ -15,13 +15,20 @@ services:
 
     fibe_security.acl_user_permission_helper:
         class: fibe\SecurityBundle\Services\ACLUserPermissionHelper
-        arguments: ["@security.context","@doctrine.orm.entity_manager","@security.acl.provider","@fos_user.user_manager"]
+        arguments: ["@security.context","@doctrine.orm.entity_manager","@security.acl.provider","@fibe_user.user_conf_permissions.form.type"]
+
+    fibe_user.user_conf_permissions.form.type:
+        class: fibe\SecurityBundle\Form\UserConfPermissionType
+        arguments: ["@fibe_security.acl_entity_helper"]
+        tags: 
+            - { name: form.type, alias: user_conf_permissions }
 
     entityAddACL:
         class: fibe\SecurityBundle\Listener\AddACL
         arguments: ["@service_container"]
         tags:
             - { name: doctrine.event_listener, event: postPersist }
+
     fibe_user.registration.form.type:
         class: fibe\SecurityBundle\Form\RegistrationFormType
         arguments: [%fos_user.model.user.class%]

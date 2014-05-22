@@ -26,7 +26,7 @@
     {
 
       //Init array with all id of managers actually in the team.
-      $managers_ids = array();
+      $managers_ids = array(); 
       foreach ($teams as $team)
       {
         foreach ($team->getConfManagers() as $manager_id)
@@ -35,7 +35,6 @@
           $managers_ids[] = $manager_id;
         }
       }
-
       $qb = $this->createQueryBuilder('mng');
       $qb
         ->where($qb->expr()->notIn('mng.id', ':managers_ids'))

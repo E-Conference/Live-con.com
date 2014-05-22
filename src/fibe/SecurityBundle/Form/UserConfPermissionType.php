@@ -24,41 +24,65 @@
      * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-      $builder 
-        // ->add('user', 'entity', array(
-        //   'class' => 'fibeSecurityBundle:User',
-        //   'property' => 'username',
-        //   'required'  => true,
-        //   )) 
+    { 
+      $builder
         ->add('confPermissions',  'collection', array( 
           'type'   => new ConfPermissionType(), 
           'label'   => 'Permissions for the user : ', 
           'allow_add' => true,
-          'options'  => array(
-            'data_class' => 'fibe\SecurityBundle\Entity\ConfPermission',
-            'required'  => true,
-          ))
+          // 'options'  => array(
+          //   'data_class' => 'fibe\SecurityBundle\Entity\ConfPermission',
+          //   'required'  => true,
+          // )
+          )
         );
+        
+                  //if there's  a user set, ther's no need to use a custom qb
+        if($builder->getData()->getUser())
+        {
+          $builder->add('user', 'hidden', array(
+            // 'data_class' => 'fibe\SecurityBundle\Entity\User', 
+            'property_path' => 'user.username', 
+            // 'required'  => true
+            ));
+        } else
+        {
+          $builder->addEventListener(
+              FormEvents::PRE_SET_DATA,
+              function(FormEvent $event) use ($builder) 
+              { 
+                $event->getForm()->add('user', 'entity', array(
+                  'class' => 'fibeSecurityBundle:User',
+                  'property' => 'username',
+                  'required'  => true,
+                  'query_builder' => function(EntityRepository $er) {
+                    return $er->ManagerForSelectTeamQuery($this->user->getTeams()); 
+                  },
+                )); 
+                // seems to be bugged https://github.com/symfony/symfony/issues/7807
+                // $event->getForm()->add($builder->getFormFactory()->createNamed('confPermissions',  'collection',array(), array( 
+                //   'type'   => new ConfPermissionType(), 
+                //   'label'   => 'Permissions for the user : ', 
+                //   'allow_add' => true,
+                //   'auto_initialize' => false,
+                //   'data_class' => 'fibe\SecurityBundle\Entity\ConfPermission',
+                //   'options'  => array(
+                //     'data_class' => 'fibe\SecurityBundle\Entity\ConfPermission',
+                //     'required'  => true,
+                //   )
+                // ))); 
+                // 
+                // don't work neither
+                // foreach ($event->getData()->getConfPermissions() as $index => $confPermission)
+                // {
+                //     $event->getForm()->add('confPermissions', 'form', array(
+                //         'property_path' => 'confPermissions[' . $index . ']',
+                //     ));
+                // }
+              }
+          );
 
-        //supprime les membres de la team 
-        $user = $this->user;
-        $builder->addEventListener(
-            FormEvents::PRE_SET_DATA,
-            function(FormEvent $event) use ($user) {
-                $form = $event->getForm();
- 
-                $form->add('user', 'entity', array(
-                    'class' => 'fibeSecurityBundle:User',
-                    'property' => 'username',
-                    'required'  => true,
-                    'query_builder' => function(EntityRepository $er) use ($user) {
-                      return $er->ManagerForSelectTeamQuery($user->getTeams()); 
-                    },
-                ));
-            }
-        );
-        ;
+        };
     }
 
     /**

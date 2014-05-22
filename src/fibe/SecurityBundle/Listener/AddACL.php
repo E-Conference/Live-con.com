@@ -25,7 +25,7 @@
       $token = $this->container->get('security.context')->getToken();
       if (isset($token)) {
         $user = $token->getUser();
-      } 
+      }
       try {
         //check if the entity is managed with ACL 
         $this->container->get('fibe_security.acl_entity_helper')->getClassNameByRepositoryName($this->get_real_class($entity));
@@ -39,7 +39,15 @@
 
         // grant owner access
         $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-        $aclProvider->updateAcl($acl); 
+        $aclProvider->updateAcl($acl);
+        //TODO : SHARE WITH TEAMATES
+        //TODO : SHARE WITH TEAMATES
+        //TODO : SHARE WITH TEAMATES
+        //TODO : SHARE WITH TEAMATES
+        //TODO : SHARE WITH TEAMATES
+        //TODO : SHARE WITH TEAMATES
+        //TODO : SHARE WITH TEAMATES
+        //TODO : SHARE WITH TEAMATES
       } catch(\RunTimeException $e){
         // just don't add acl
       }

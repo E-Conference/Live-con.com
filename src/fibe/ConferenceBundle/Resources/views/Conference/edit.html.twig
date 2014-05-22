@@ -28,24 +28,27 @@
         </div>
       </div>
       <br/>
-      <a id="showConfForm" class="btn btn-warning">
-        <i class="fa fa-pencil-square-o"></i> Edit conference
-      </a>
 
-      <div id="conference-edit">
-        <h3 class="text-info">Conference info </h3>
+      {% if is_granted('EDIT', wwwConf.mainConfEvent) %}
+        <a id="showConfForm" class="btn btn-warning">
+          <i class="fa fa-pencil-square-o"></i> Edit conference
+        </a>
 
-        <form class="input-append" method="POST" action="" {{ form_enctype(form) }} >
-          {{ form_widget(form) }}
-          {{ form_errors(form) }}
-          <button type="submit" class="btn btn-block btn-success">
-            <i class="fa fa-check"></i>
-          </button>
+        <div id="conference-edit">
+          <h3 class="text-info">Conference info </h3>
 
-          <div style="visibility:hidden;display:none;height:0;" id="hiddenInputs">{{ form_rest(form) }}</div>
-        </form>
-      </div>
-      <!-- #conference-edit -->
+          <form class="input-append" method="POST" action="" {{ form_enctype(form) }} >
+            {{ form_widget(form) }}
+            {{ form_errors(form) }}
+            <button type="submit" class="btn btn-block btn-success">
+              <i class="fa fa-check"></i>
+            </button>
+
+            <div style="visibility:hidden;display:none;height:0;" id="hiddenInputs">{{ form_rest(form) }}</div>
+          </form>
+        </div>
+        <!-- #conference-edit -->
+      {% endif %}
     </div>
   </div>
 

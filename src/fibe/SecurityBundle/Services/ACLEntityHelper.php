@@ -36,6 +36,7 @@
       'Module'         => 'fibe\\Bundle\\WWWConfBundle\\Entity'
     ); 
 
+
     /**
      * Examples
      * $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE','Topic');
@@ -63,7 +64,7 @@
      * $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('EDIT','Topic');
      */
     public function getEntitiesACL($action,$repositoryName)
-    {
+    { 
       //TODO : fix this to don't waste time to loop over each entities
       $ids = $this->aclProvider->getAllowedEntitiesIds($this->getClassNameByRepositoryName($repositoryName), $action);
       $queryBuilder = $this->entityManager->getRepository('fibeWWWConfBundle:'.$repositoryName)->createQueryBuilder('entity');
@@ -87,23 +88,35 @@
       return $rtn;
     }
  
-    public function getACEByEntity($entity,$user=null)
+    public function getACEByEntity($entity,$user=null,$returnType="action",$acl=null)
     {
       $entitySecurityIdentity = ObjectIdentity::fromDomainObject($entity);
       $userSecurityIdentity = UserSecurityIdentity::fromAccount($user ? $user : $this->getUser()); 
-      $acl = $this->aclProvider->findAcl(
-        $entitySecurityIdentity,
-        array($userSecurityIdentity)
-      );
+      if(!$acl)
+      {
+        $acl = $this->aclProvider->findAcl(
+          $entitySecurityIdentity,
+          array($userSecurityIdentity)
+        );
+      }
+      //find the ace for the given user
       foreach($acl->getObjectAces() as $index => $ace)
       {
         $aceSecurityId = $ace->getSecurityIdentity();
         if($aceSecurityId ->equals($userSecurityIdentity))
         {
-          return $this->getMask($ace->getMask());
+          switch ($returnType) {
+            case 'mask':
+              return $ace->getMask();
+            case 'index':
+              return $index;
+            case 'action':
+            default:
+              return $this->getMask($ace->getMask());
+          } 
         }
       } 
-      throw new AceNotFoundException(sprintf('Cannot find ace %s %s with user %s', 
+      throw new AceNotFoundException(sprintf('Cannot find ACE %s %s with user %s', 
           get_class ($entity), 
           '#'.$entity->getId(),
           $user ? $user->getUsername():"[current user]"));

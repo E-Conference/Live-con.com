@@ -132,7 +132,7 @@
                       href="{{ path('schedule_conference_settings') }}" class='ellipsis'> <i
                         class="fa fa-inbox fa-1x"></i><span> Modules  </span></a></li>
               {% endif %}
-              {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')== 1 %}
+              {% if is_granted('VIEW', app.user.currentConf.team) %}
                 <li class="conference_team_index col-xs-2 col-sm-2  col-mg-2 col-lg-2"><a
                       href="{{ path('conference_team_index') }}" class='ellipsis'><i
                         class="fa fa-users fa-1x"></i><span> Team   </span></a></li>

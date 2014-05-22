@@ -13,14 +13,7 @@
                 <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Collaborative' }) }}" target="_blank" title="Help">
                      <i class="fa fa-question"></i> 
                 </a>
-            </div> 
-            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-7">
-            </div>
-            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                <a class="btn btn-info btn-create create" href="{{ path('schedule_confevent_new') }}" title="Add a manager">
-                  <i class="fa fa-plus"></i>  New manger
-                </a>
-            </div>
+            </div>  
       </div>
       <div class="row page-content">
 
@@ -32,31 +25,45 @@
                         <th>User</th>
                         <th>Email</th>
                         <th>Last login</th> 
-                        {% for confPermission in manager_conf_authorizations[0].confPermissions %}
+                        {% for confPermission in current_manager_conf_authorizations.confPermissions %}
                           <th>{{ confPermission.entityLabel }} Permission</th>
                         {% endfor %}
                         <th>Action<th>
                          
                     </tr>
                 </thead>
-                <tbody>
-                {% for manager in team.confManagers %}
+                <tbody> 
+                <tr>
+                    <td> 
+                      <b>{{ app.user.username }}</b> 
+                    </td>
+                    <td><a href="mailto:{{ app.user.email }}">{{ app.user.email }}</a></td> 
+                    <td class="moment">{% if app.user.lastLogin %}{{ app.user.lastLogin|date('Y-m-d H:i:s') }}{% endif %}</td>
+                    {% for confPermission in current_manager_conf_authorizations.confPermissions %}
+                     <td>
+                        <span class="badge authorization-{{ confPermission.action }}">{{ confPermission.action }}</span> 
+                    </td>
+                    {% endfor %}
+                    <td><button class="btn btn-large btn-danger" disabled="disabled"><i class="fa fa-trash-o"></i> </button></td>
+                    <td><button class="btn btn-large btn-warning" disabled="disabled"><i class="fa fa-pencil"></i> </button></td>
+                </tr> 
+                {% for manager_conf_authorization in manager_conf_authorizations %}
                     <tr>
                         <td> 
-                          <b>{{ manager.username }}</b> 
+                          <b>{{ manager_conf_authorization.user.username }}</b> 
                         </td>
-                        <td><a href="mailto:{{ manager.email }}">{{ manager.email }}</a></td>
-                        <td class="moment">{% if manager.lastLogin %}{{ manager.lastLogin|date('Y-m-d H:i:s') }}{% endif %}</td>
+                        <td><a href="mailto:{{ manager_conf_authorization.user.email }}">{{ manager_conf_authorization.user.email }}</a></td>
+                        <td class="moment">{% if manager_conf_authorization.user.lastLogin %}{{ manager_conf_authorization.user.lastLogin|date('Y-m-d H:i:s') }}{% endif %}</td>
  
-                        {% for confPermission in manager_conf_authorizations[loop.index0].confPermissions %}
+                        {% for confPermission in manager_conf_authorization.confPermissions %}
                          <td>
                             <span class="badge authorization-{{ confPermission.action }}">{{ confPermission.action }}</span> 
                         </td>
                         {% endfor %}
                         {% if is_granted('DELETE', team) %}
                         <td>
-                          <form id="delete-form{{ loop.index0 }}" action="{{ path('conference_team_delete', { 'id': manager.id }) }}" method="post">
-                            <button type="submit" class="btn btn-large btn-danger delete" onclick="removeManager({{manager.id}});"><i class="fa fa-trash-o"></i> </button>
+                          <form id="delete-form{{ loop.index0 }}" action="{{ path('conference_team_delete', { 'id': manager_conf_authorization.user.id }) }}" method="post">
+                            <button type="submit" class="btn btn-large btn-danger delete" onclick="removeManager({{manager_conf_authorization.user.id}});"><i class="fa fa-trash-o"></i> </button>
                               <input type="hidden" name="_method" value="DELETE" />
                               {{ form_widget(delete_forms[loop.index0]) }}
                           </form>
@@ -64,19 +71,17 @@
                         {% endif %}
                         {% if is_granted('EDIT', team) %}
                         <td>
-                          <a class="btn btn-large btn-warning edit" href="{{ path('conference_team_edit', { 'id': manager.id }) }}"><i class="fa fa-pencil"></i></a>
+                          <a class="btn btn-large btn-warning edit" href="{{ path('conference_team_edit', { 'id': manager_conf_authorization.user.id }) }}"><i class="fa fa-pencil"></i></a>
                         </td>
                         {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
-          </div>
-            <!--<a class="btn btn-info" href="{{ path('fos_user_registration_register') }}">
-                <i class="icon-plus icon-white"> </i> Add user in conference
-            </a>-->
+          </div> 
 
 
+          {% if is_granted('CREATE', team) %} 
             <!--   Add user in conference  -->
             <a class="btn btn-info" id="addUserInConference" onclick="$('#addUserInConferenceForm').toggle('slow')">
                 <i class="icon-plus icon-white"></i> Add user in conference
@@ -92,17 +97,23 @@
                             <div style="padding-top: 1em;" class="form-horizontal"> 
                                 {# itère sur chaque tag existant et affiche son unique champ : name #}
                                 {% for confPermission in add_teamate_form.confPermissions %}
-                                <div  class="form-group">
-                                  <label class="col-sm-2 control-label">{{ confPermission.vars.value.entityLabel }}</label>
-                                  <div class="col-sm-10">
-                                    {{ form_widget(confPermission.action) }}
-                                  </div>
-                                </div> 
+                                  {% if confPermission.vars.value.restricted %} 
+                                  <div  class="form-group">
+                                    <label class="col-sm-2 control-label">{{ confPermission.vars.value.entityLabel }}</label>
+                                    <div class="col-sm-10">
+                                      {{ form_widget(confPermission.action) }}
+                                    </div>
+                                  </div> 
+                                  <div  class="hide">
                                     {{ form_rest(confPermission) }}
+                                  </div> 
+                                  {% endif %}
                                 {% endfor %}
                             </div>
 
-                            {{ form_rest(add_teamate_form) }} 
+                            <div  class="hide"> 
+                              {{ form_rest(add_teamate_form) }} 
+                            </div> 
                             <br />
                         <button type="submit" class="btn btn-block btn-success">
                             <i class="fa fa-check"></i>
@@ -111,6 +122,7 @@
                   </div>
                 </div>
              </div>
+          {% endif %}
     </div>
 {% endblock  %}
 

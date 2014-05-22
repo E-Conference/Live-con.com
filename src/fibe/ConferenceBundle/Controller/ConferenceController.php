@@ -45,21 +45,10 @@
      */
     public function editAction(Request $request)
     {
-      $em = $this->getDoctrine()->getManager();
-      $wwwConf = $this->getUser()->getCurrentConf();
-      //main conf event MUST have a location
-      $mainConfEvent = $wwwConf->getMainConfEvent();
-      $form = $this->createForm(new WwwConfType($this->getUser(), $mainConfEvent), $wwwConf);
-
-      //Authorization Verification conference datas manager
-      $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-      if (!$authorization->getFlagconfDatas())
-      {
-        //throw new AccessDeniedException('Action not authorized !');
-        return $this->redirect($this->generateUrl('schedule_conference_show'));
-      }
+      $conference = $this->getUser()->getCurrentConf();
+      
+      $mainConfEvent = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW','ConfEvent',$conference->getMainConfEvent()->getId()); 
+      $form = $this->createForm(new WwwConfType($this->getUser(), $mainConfEvent), $conference);
 
       $request = $this->get('request');
       if ($request->getMethod() == 'POST')
@@ -69,9 +58,9 @@
         if ($form->isValid())
         {
           $em = $this->getDoctrine()->getManager();
-          $wwwConf->slugify();
-          $em->persist($wwwConf);
-          $wwwConf->uploadLogo();
+          $conference->slugify();
+          $em->persist($conference);
+          $conference->uploadLogo();
           $em->flush();
 
           $this->container->get('session')->getFlashBag()->add(
@@ -91,9 +80,9 @@
 
       return array(
         'location'   => $mainConfEvent->getLocation(),
-        'wwwConf'    => $wwwConf,
+        'wwwConf'    => $conference,
         'form'       => $form->createView(),
-        'authorized' => $authorization->getFlagconfDatas()
+        'authorized' => true
       );
 
     }
@@ -107,9 +96,9 @@
     public function showAction(Request $request)
     {
       $em = $this->getDoctrine()->getManager();
-      $wwwConf = $this->getUser()->getCurrentConf();
+      $conference = $this->getUser()->getCurrentConf();
       //main conf event MUST have a location
-      $mainConfEvent = $wwwConf->getMainConfEvent();
+      $mainConfEvent = $conference->getMainConfEvent();
 
       //Authorization Verification conference datas manager
       $user = $this->getUser();
@@ -117,7 +106,7 @@
 
       return array(
         'location'   => $mainConfEvent->getLocation(),
-        'wwwConf'    => $wwwConf,
+        'wwwConf'    => $conference,
         'authorized' => $authorization->getFlagconfDatas()
       );
 
@@ -344,15 +333,15 @@
     public function settingsAction(Request $request)
     {
       $em = $this->getDoctrine()->getManager();
-      $wwwConf = $this->getUser()->getCurrentConf();
-      $module = $wwwConf->getModule();
+      $conference = $this->getUser()->getCurrentConf();
+      $module = $conference->getModule();
 
 
       //Authorization Verification conference datas manager
       $user = $this->getUser();
       $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-      $ModuleForm = $this->createForm(new ModuleType(), $wwwConf->getModule());
+      $ModuleForm = $this->createForm(new ModuleType(), $conference->getModule());
 
 
       /*  if(!$authorization->getFlagconfDatas()){
@@ -360,7 +349,7 @@
         }  */
 
       return array(
-        'wwwConf'     => $wwwConf,
+        'wwwConf'     => $conference,
         'module'      => $module,
         'authorized'  => $authorization->getFlagconfDatas(),
         'module_form' => $ModuleForm->createView(),

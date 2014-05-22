@@ -5,8 +5,7 @@
   use Doctrine\ORM\EntityManager;
   use Doctrine\ORM\QueryBuilder;
   use Symfony\Component\Security\Acl\Dbal\MutableAclProvider;
-  use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-  use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+  use Symfony\Component\Security\Acl\Permission\MaskBuilder; 
   use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
   use Doctrine\ORM\EntityNotFoundException;
 

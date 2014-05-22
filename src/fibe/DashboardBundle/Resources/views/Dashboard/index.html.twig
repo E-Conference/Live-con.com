@@ -94,8 +94,8 @@
                       </ul>
                         <a href="{{ path('dashboard_enter_conference', {id: conference.id} ) }}" class="edit_conference btn btn-livecon btn-block">
                                   <i class="fa fa-sign-in"></i>
-                        </a>
-                      {% if conference.getFlagByManagerId(app.user.id, 'datas') == 1 %}
+                        </a> 
+                        {% if is_granted('OWNER', conference) %} 
                           <a data-url="{{ path('schedule_conference_delete', {id: conference.id}) }}" class="delete_conference btn btn-danger btn-block modal-toggle" data-message ="Are you sure you want to delete '{{ conference.getConfName() }}' conference ?" data-toggle="modal" data-target="#myModal">
                                   <i class="fa fa-trash-o"></i>
                           </a>

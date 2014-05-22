@@ -211,9 +211,20 @@ option
 }
 
 
-.badge-success{
-	/*background-color: #47a447;*/
-	background-color: #5cb85c;
+.badge-primary, .authorization-OWNER{ 
+    background-color: #428bca;
+}
+.badge-warning, .authorization-MASTER{ 
+    background-color: #f0ad4e;
+}
+.badge-success, .authorization-OPERATOR{ 
+    background-color: #5cb85c;
+}
+.badge-info, .authorization-EDIT{ 
+    background-color: #5bc0de;
+}
+.badge-danger{ 
+    background-color: #d9534f;
 }
 
 /*-------------------------------------------------------------------------------------
