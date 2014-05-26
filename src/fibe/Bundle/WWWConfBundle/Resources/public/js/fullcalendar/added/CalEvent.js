@@ -97,12 +97,12 @@ CalEvent.prototype.renderForRefetch = function(){
     // console.log("##renderForRefetch",this);
     if(this.isInstant())return;
     if(calendar_events_indexes[this.id]=== undefined){
-      // console.debug("#renderForRefetch rendering "+this.id);
+      console.debug("#renderForRefetch rendering "+this.id);
       calendar_events.push(this);
       calendar_events_indexes[this.id]=calendar_events.length-1; 
     }
     else{
-      // console.debug("#renderForRefetch updating "+this.id);
+      console.debug("#renderForRefetch updating "+this.id);
       calendar_events.splice(calendar_events_indexes[this.id],1,this); 
     } 
     // console.log("",calendar_events[calendar_events_indexes[this.id]]);
@@ -608,11 +608,11 @@ CalEvent.prototype.hideElem = function(){
     this["hide"] = true;
 };
 CalEvent.prototype.showElem = function(){
+  this["hide"] = false;
   if(!this.getElem())return;
     this.getElem().css("margin-top", "-10px");
     this.getElem().stop( true, true ).show().animate({ opacity: 1, "margin-top": "0px" },
                                                      {duration:'slow',queue:false}); 
-    this["hide"] = false;
 };
 
 /**
