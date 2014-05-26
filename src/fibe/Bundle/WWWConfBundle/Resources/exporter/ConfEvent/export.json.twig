@@ -21,6 +21,7 @@
     "included_dates"   : "{{ entity.includedDates }}",
     "classification"   : "{{ entity.classification }}",
     "r_rule"           : "{% autoescape false %}{{ entity.includedRule }}{% endautoescape %}",
+    "twitterWidgetToken" : {% if entity.attach != null %}{{entity.attach|json_encode|raw()}}{% else %}""{% endif %},
     "location":
     {
         "id": "{{ entity.location.id }}",
