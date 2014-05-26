@@ -404,7 +404,7 @@ function Importer()
             var objInd = objectsIndexes[fkKey] || objectsIndexes[fkKey.replace(fk.fkArray+"-","")];
             if(!objInd )
             {
-                console.warn("error while retreiving fk ok "+fk.entity+" to "+fk.setter+". Cannot find "+fkKey);
+                console.warn("error while retreiving fk of "+fk.entity+" to "+fk.setter+". Cannot find "+fkKey);
                 // deleteKey(); 
                 return; 
             }
