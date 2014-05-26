@@ -9,10 +9,10 @@
 
   use Symfony\Component\HttpFoundation\Request;
   use Symfony\Component\HttpFoundation\Response;
-
-  use fibe\MobileAppBundle\Entity\MobileAppConfig;
-  use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
   use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+  use fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig;
+  use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 
   /**
    * Mobile app controller.
@@ -54,6 +54,31 @@
         $em = $this->getDoctrine()->getManager();
 
         $conference = $em->getRepository('fibeWWWConfBundle:WwwConf')->findOneBySlug($slug);
+
+        if($conference == null) {
+            throw new NotFoundHttpException();
+        }
+
+        $mobile_app_config = $conference->getAppConfig();
+        $apiUri = $this->get('router')->generate('idci_exporter_api_homeapi');
+        $apiType = "rest";
+        $baseUri = "http://data.live-con.com/resource/conference/" . $conference->getId() . "/" . $conference->getSlug();
+
+       
+
+        return array(
+            'api_uri' => $apiUri,
+            'api_type' => $apiType,
+            'paper_module' => $conference->getModule()->getPaperModule(),
+            'organization_module' => $conference->getModule()->getOrganizationModule(),
+            'conference_baseUri' => $baseUri,
+            'mobile_app_config' => $mobile_app_config,
+            'conference' => $conference,
+        );
+        /*
+        $em = $this->getDoctrine()->getManager();
+
+        $conference = $em->getRepository('fibeWWWConfBundle:WwwConf')->findOneBySlug($slug);
         if(!$conference){
             throw new NotFoundHttpException();
         }
@@ -69,6 +94,6 @@
             'conference_baseUri' => $baseUri,
             'mobile_app_config' => $mobile_app_config,
             'conference' => $conference,
-        );
+        );*/
     }
   }
