@@ -16,19 +16,19 @@ class ConfEventRepository extends EntityRepository
 
      public function filtering($params, $currentConf){
     
-       $entities = array();
-       $qb = $this->createQueryBuilder('confevent');
-       $qb     
+        $entities = array();
+        $qb = $this->getAllOrderByStartAtQueryBuilder();
+        $qb     
           ->where('confevent.conference = :conference_id')
           ->setParameter('conference_id', $currentConf->getId());
 
         if(isset($params['only_instant'])) {
             $qb
-                ->andWhere('cer.is_instant = 1')
+                ->andWhere('confevent.isInstant = 1')
             ;
         }else{
             $qb
-                ->andWhere('cer.is_instant = 0')
+                ->andWhere('confevent.isInstant = 0')
             ;
         }
 
@@ -78,7 +78,7 @@ class ConfEventRepository extends EntityRepository
             }
 
             $qb
-                ->where('cev.id not in (:entities_id)')
+                ->where('confevent.id not in (:entities_id)')
                 ->setParameter('entities_id', array_merge(
                     array($entity->getId()),
                     $ids
@@ -122,10 +122,10 @@ class ConfEventRepository extends EntityRepository
      */
     public function getAllOrderByStartAtQueryBuilder()
     {
-        $qb = $this->createQueryBuilder('cev');
+        $qb = $this->createQueryBuilder('confevent');
         $qb
-            ->orderBy('cev.startAt', 'ASC')
-            ->addOrderBy('cev.location', 'ASC')
+            ->orderBy('confevent.startAt', 'ASC')
+            ->addOrderBy('confevent.location', 'ASC')
         ;
 
         return $qb;
@@ -167,51 +167,51 @@ class ConfEventRepository extends EntityRepository
 
         if(isset($params['only_instant'])) {
             $qb
-                ->andWhere('cev.isInstant = true')
+                ->andWhere('confevent.isInstant = true')
             ;
         }else{
             $qb
-                ->andWhere('cev.isInstant = false')
+                ->andWhere('confevent.isInstant = false')
             ;
         }
 
         if(isset($params['id'])) {
             $qb
-                ->andWhere('cev.id = :id')
+                ->andWhere('confevent.id = :id')
                 ->setParameter('id', $params['id'])
             ;
         }
 
         if(isset($params['ids'])) {
             $qb
-                ->andWhere($qb->expr()->in('cev.id', $params['ids']))
+                ->andWhere($qb->expr()->in('confevent.id', $params['ids']))
             ;
         } 
 
         if(isset($params['before'])) {
             $qb
-                ->andWhere('cev.startAt < :before')
+                ->andWhere('confevent.startAt < :before')
                 ->setParameter('before', new \DateTime($params['before']))
             ;
         }
 
         if(isset($params['after'])) {
             $qb
-                ->andWhere('cev.endAt > :after')
+                ->andWhere('confevent.endAt > :after')
                 ->setParameter('after', new \DateTime($params['after']))
             ;
         }
         
         if(isset($params['conference_id'])) {
             $qb
-                ->andWhere('cev.conference = :conference_id')
+                ->andWhere('confevent.conference = :conference_id')
                 ->setParameter('conference_id', $params['conference_id'])
             ;
         }
 
         if(isset($params['category_id'])) {
             $qb
-                ->leftJoin('cev.categories', 'c')
+                ->leftJoin('confevent.categories', 'c')
                 ->andWhere('c.id = :cat_id')
                 ->setParameter('cat_id', $params['category_id'])
             ;
@@ -219,14 +219,14 @@ class ConfEventRepository extends EntityRepository
 
         if(isset($params['category_ids'])) {
             $qb
-                ->leftJoin('cev.categories', 'cs')
+                ->leftJoin('confevent.categories', 'cs')
                 ->andWhere($qb->expr()->in('cs.id', $params['category_ids']))
             ;
         }
 
         if(isset($params['category_name'])) {
             $qb
-                ->leftJoin('cev.categories', 'c')
+                ->leftJoin('confevent.categories', 'c')
                 ->andWhere('c.name = :category_name')
                 ->setParameter('category_name', $params['category_name'])
             ;
@@ -234,7 +234,7 @@ class ConfEventRepository extends EntityRepository
 
         if(isset($params['parent_category_id'])) {
             $qb
-                ->leftJoin('cev.categories', 'pc')
+                ->leftJoin('confevent.categories', 'pc')
                 ->andWhere('pc.parent = :parent_id')
                 ->setParameter('parent_id', $params['parent_category_id'])
             ;
@@ -242,14 +242,14 @@ class ConfEventRepository extends EntityRepository
 
         if(isset($params['parent_category_ids'])) {
             $qb
-                ->leftJoin('cev.categories', 'pcs')
+                ->leftJoin('confevent.categories', 'pcs')
                 ->andWhere($qb->expr()->in('pcs.parent', $params['parent_category_ids']))
             ;
         }
 
         if(isset($params['ancestor_category_id'])) {
             $qb
-                ->leftJoin('cev.categories', 'pc')
+                ->leftJoin('confevent.categories', 'pc')
                 ->andWhere($qb->expr()->like('pc.tree', sprintf(
                     "'%%%d%s'",
                     $params['ancestor_category_id'],
@@ -259,7 +259,7 @@ class ConfEventRepository extends EntityRepository
         }
 
         if(isset($params['ancestor_category_ids'])) {
-            $qb->leftJoin('cev.categories', 'pcs');
+            $qb->leftJoin('confevent.categories', 'pcs');
             $temp = array();
             foreach($params['ancestor_category_ids'] as $id) {
                 $temp[] = $qb->expr()->like('pcs.tree', sprintf(
@@ -273,20 +273,20 @@ class ConfEventRepository extends EntityRepository
 
         if(isset($params['location_id'])) {
             $qb
-                ->andWhere('cev.location = :location_id')
+                ->andWhere('confevent.location = :location_id')
                 ->setParameter('location_id', $params['location_id'])
             ;
         }
 
         if(isset($params['location_ids'])) {
             $qb
-                ->andWhere($qb->expr()->in('cev.location', $params['location_ids']))
+                ->andWhere($qb->expr()->in('confevent.location', $params['location_ids']))
             ;
         }
 
         if(isset($params['xproperty_namespace'])) {
             $qb
-                ->leftJoin('cev.xProperties', 'xpn')
+                ->leftJoin('confevent.xProperties', 'xpn')
                 ->andWhere('xpn.xNamespace = :xproperty_namespace')
                 ->setParameter('xproperty_namespace', $params['xproperty_namespace'])
             ;
@@ -294,7 +294,7 @@ class ConfEventRepository extends EntityRepository
 
         if(isset($params['xproperty_key'])) {
             $qb
-                ->leftJoin('cev.xProperties', 'xpk')
+                ->leftJoin('confevent.xProperties', 'xpk')
                 ->andWhere('xpk.xKey = :xproperty_key')
                 ->setParameter('xproperty_key', $params['xproperty_key'])
             ;
@@ -302,7 +302,7 @@ class ConfEventRepository extends EntityRepository
 
         if(isset($params['xproperty_value'])) {
             $qb
-                ->leftJoin('cev.xProperties', 'xpv')
+                ->leftJoin('confevent.xProperties', 'xpv')
                 ->andWhere('xpv.xValue = :xproperty_value')
                 ->setParameter('xproperty_value', $params['xproperty_value'])
             ;
@@ -310,7 +310,7 @@ class ConfEventRepository extends EntityRepository
 
         if(isset($params['parent_xproperty_value'])) {
             $qb
-                ->leftJoin('cev.parent', 'parent')
+                ->leftJoin('confevent.parent', 'parent')
                 ->leftJoin('parent.xProperties','parentxp')
                 ->andWhere('parentxp.xValue = :parent_xproperty_value')
                 ->setParameter('parent_xproperty_value', $params['parent_xproperty_value'])
@@ -319,7 +319,7 @@ class ConfEventRepository extends EntityRepository
 
         if(isset($params['child_xproperty_value'])) {
             $qb
-                ->leftJoin('cev.children', 'child')
+                ->leftJoin('confevent.children', 'child')
                 ->leftJoin('child.xProperties','childxp')
                 ->andWhere('childxp.xValue = :child_xproperty_value')
                 ->setParameter('child_xproperty_value', $params['child_xproperty_value'])
@@ -329,7 +329,7 @@ class ConfEventRepository extends EntityRepository
 
         if(isset($params['location_name'])) {
             $qb
-                ->leftJoin('cev.location', 'lct')
+                ->leftJoin('confevent.location', 'lct')
                 ->andWhere('lct.name = :location_name')
                 ->setParameter('location_name', $params['location_name'])
             ;
@@ -338,14 +338,14 @@ class ConfEventRepository extends EntityRepository
 
         if(isset($params['parent_id'])) {
             $qb
-                ->andWhere('cev.parent = :parent_id')
+                ->andWhere('confevent.parent = :parent_id')
                 ->setParameter('parent_id', $params['parent_id'])
             ;
         }
 
         if(isset($params['child_id'])) {
             $qb
-                ->leftJoin('cev.children', 'child')
+                ->leftJoin('confevent.children', 'child')
                 ->andWhere('child.id = :child_id')
                 ->setParameter('child_id', $params['child_id'])
             ;
@@ -353,32 +353,32 @@ class ConfEventRepository extends EntityRepository
 
         if(isset($params['theme_id'])) {
             $qb
-                 ->leftJoin('cev.themes', 't')
+                 ->leftJoin('confevent.themes', 't')
                  ->andWhere('t.id = :theme_id')
                  ->setParameter('theme_id',$params['theme_id']);
 
             ;
         }
 
-        if(isset($params['theme_ids'])) {
+        if(isset($params['topic_ids'])) {
             $qb 
-                 ->leftJoin('cev.themes', 't')
-                 ->andWhere($qb->expr()->in('t.id', $params['theme_ids'])) 
+                 ->leftJoin('confevent.topics', 't')
+                 ->andWhere($qb->expr()->in('t.id', $params['topic_ids'])) 
             ;
         }
 
-        if(isset($params['theme_name'])) {
+        if(isset($params['topic_name'])) {
             $qb
-                 ->leftJoin('cev.themes', 't')
-                 ->andWhere('t.libelle = :theme_name')
-                 ->setParameter('theme_name',$params['theme_name']);
+                 ->leftJoin('confevent.topics', 't')
+                 ->andWhere('t.libelle = :topic_name')
+                 ->setParameter('topic_name',$params['topic_name']);
 
             ;
         }
 
         if(isset($params['person_id'])) {
             $qb
-                ->leftJoin('cev.roles', 'r')
+                ->leftJoin('confevent.roles', 'r')
                 ->leftJoin('r.person', 'p')
                 ->andWhere('p.id = :person_id')
                 ->setParameter('person_id',$params['person_id']);
@@ -387,7 +387,7 @@ class ConfEventRepository extends EntityRepository
 
         if(isset($params['person_slug'])) {
             $qb
-                ->leftJoin('cev.roles', 'r')
+                ->leftJoin('confevent.roles', 'r')
                 ->leftJoin('r.person', 'p')
                 ->andWhere('p.slug = :person_slug')
                 ->setParameter('person_slug',$params['person_slug']);
@@ -396,7 +396,7 @@ class ConfEventRepository extends EntityRepository
 
         if(isset($params['role_type'])) {
             $qb
-                ->leftJoin('cev.roles', 'ro')
+                ->leftJoin('confevent.roles', 'ro')
                 ->leftJoin('ro.type', 'rot')
                 ->andWhere('rot.name = :role_type')
                 ->setParameter('role_type',$params['role_type']);
