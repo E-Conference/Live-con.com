@@ -505,7 +505,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							if(parameters.JSONdata.roles) {
 								for(var roleType in parameters.JSONdata.roles){
 									parameters.JSONdata.roles[roleType];
-									parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].role[roleName]+' at </h2>'));
+									parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].role[roleType]+' at </h2>'));
 									ViewAdapterText.appendList(parameters.JSONdata.roles[roleType],
 													 {baseHref:'#event/',
 													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])}
@@ -620,22 +620,36 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				return JSONfile;
 			},
 				
-			ViewCallBack : function(parameters){
-				if(parameters.JSONdata != null){
-					if(_.size(parameters.JSONdata) > 0 ){
-						if(parameters.mode == "text"){
-							$("[data-role = page]").find("#header-title").html(labels[parameters.conference.lang].role[parameters.uri]);
-							ViewAdapterText.appendListImage(parameters.JSONdata,
-													 {baseHref:'#person/',
-													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])}
-                           },
-													 "name",
-													 "image",
-													 parameters.contentEl,
-													 {type:"Node",labelCllbck:function(str){return "person : "+str["id"];}});
-						}
+			ViewCallBack: function (parameters)
+			{
+				if (parameters.JSONdata != null)
+				{
+				  if (_.size(parameters.JSONdata) > 0)
+				  {
+					if (parameters.mode == "text")
+					{
+					  $("[data-role = page]").find("#header-title").html(labels[parameters.conference.lang].role[parameters.uri]);
+					  ViewAdapterText.appendListImage(parameters.JSONdata,
+						  {baseHref: '#person/',
+							hrefCllbck: function (str)
+							{
+							  return Encoder.encode(str["name"]) + "/" + Encoder.encode(str["id"])
+							}
+						  },
+						  "name",
+						  "image",
+						  parameters.contentEl,
+						  {type: "Node", labelCllbck: function (str)
+						  {
+							return "person : " + str["id"];
+						  }});
 					}
-				} 
+				  }
+				  else
+				  {
+					parameters.contentEl.append($('<h2>' + labels[parameters.conference.lang].noResults + '</h2>'));
+				  }
+				}
 			}
 		},
 
@@ -1248,9 +1262,9 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 				//Building sparql query with prefix
 				var query = ""; 
 				//Encapsulating query in json object to return it
-				
-					var  ajaxData = {conference_id : parameters.conference.id, "after" : new Date()};
-				
+				var date = moment();
+				date.lang('en');
+				var ajaxData = {conference_id: parameters.conference.id, "after": date.format('ddd MMMM D YYYY HH:mm:ss ZZ')};
 				return ajaxData;
 			},
 			//Declaring the callback function to use when sending the command

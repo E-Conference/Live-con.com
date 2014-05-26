@@ -19,12 +19,18 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 			getQuery : function(parameters){ 
 					
 				var prefix =  '  PREFIX akt:  <http://www.aktors.org/ontology/portal#>   ';  
-									
+				
+				var nameToUpper = '';
+				$.each(parameters.name.toLowerCase().split(' '), function(i,currentWord){
+					nameToUpper+= this.charAt(0).toUpperCase() + this.slice(1) + ' ';
+				})
+				var validName = nameToUpper.substring(0, nameToUpper.length-1) || null;
+
 				var query =   ' SELECT DISTINCT ?publiUri ?publiTitle WHERE { '+
 								'OPTIONAL{	?publiUri akt:has-author <'+parameters.uri+'>   '+
 								'	?publiUri  akt:has-title ?publiTitle. } '+
 								' {	?publiUri akt:has-author ?o       '+
-								'	?o akt:full-name "'+parameters.name+'". '+
+								'	?o akt:full-name "'+validName+'". '+
 								'	?publiUri  akt:has-title ?publiTitle.  }'+
 								'} ';
 				var  ajaxData = { query : prefix + query };
