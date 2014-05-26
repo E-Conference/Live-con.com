@@ -32,6 +32,7 @@ define([],function() {
 			'person' : {
 				'website' : 'Website',
 				'description' : 'Description',
+				'homepage' : 'Homepage',
 				'organizations' : 'Organizations',
 				'publications' :'Conference publication(s)',
 				'otherPublications' :'Other publication(s)'
@@ -192,6 +193,7 @@ define([],function() {
 			'person' : {
 				'website' : 'Site web',
 				'description' : 'Description',
+				'homepage' : 'Homepage',
 				'organizations' : 'Organisations',
 				'publications' :'Publication(s) de la conférence',
 				'otherPublications' :'Autre publication(s)'
