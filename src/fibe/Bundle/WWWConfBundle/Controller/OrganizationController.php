@@ -162,12 +162,9 @@ class OrganizationController extends Controller
     $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE', 'Organization');
     $form = $this->createForm(new OrganizationType($this->getUser()), $entity);
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return array(
       'entity' => $entity,
-      'form' => $form->createView(),
-      'authorized' => $authorization->getFlagconfDatas()
+      'form' => $form->createView()
     );
   }
 
@@ -184,12 +181,9 @@ class OrganizationController extends Controller
 
     $deleteForm = $this->createDeleteForm($id);
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return array(
       'entity' => $entity,
-      'delete_form' => $deleteForm->createView(),
-      'authorized' => $authorization->getFlagconfDatas()
+      'delete_form' => $deleteForm->createView()
     );
   }
 
@@ -207,13 +201,10 @@ class OrganizationController extends Controller
     $editForm = $this->createForm(new OrganizationType($this->getUser()), $entity);
     $deleteForm = $this->createDeleteForm($id);
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return array(
       'entity' => $entity,
       'edit_form' => $editForm->createView(),
-      'delete_form' => $deleteForm->createView(),
-      'authorized' => $authorization->getFlagconfDatas()
+      'delete_form' => $deleteForm->createView()
     );
   }
 
