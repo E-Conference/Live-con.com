@@ -25,7 +25,7 @@ framework:
 # Twig Configuration
 twig:
     debug:            %kernel.debug%
-    strict_variables: %kernel.debug%
+    # strict_variables: %kernel.debug%
     form:
         resources:
             - form_global_theme.html.twig
