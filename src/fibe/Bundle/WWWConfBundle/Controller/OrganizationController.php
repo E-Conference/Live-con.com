@@ -45,9 +45,11 @@ class OrganizationController extends Controller
     $pager = new PagerFanta($adapter);
     $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
 
-    try {
+    try
+    {
       $pager->setCurrentPage($request->query->get('page', 1));
-    } catch (NotValidCurrentPageException $e) {
+    } catch (NotValidCurrentPageException $e)
+    {
       throw new NotFoundHttpException();
     }
 
@@ -74,7 +76,8 @@ class OrganizationController extends Controller
     $filters = $this->createForm(new OrganizationFilterType($this->getUser()));
     $filters->submit($request);
 
-    if ($filters->isValid()) {
+    if ($filters->isValid())
+    {
       // bind values from the request
 
       $entities = $em->getRepository('fibeWWWConfBundle:Organization')->filtering($filters->getData(), $conf);
@@ -84,9 +87,11 @@ class OrganizationController extends Controller
       $adapter = new ArrayAdapter($entities);
       $pager = new PagerFanta($adapter);
       $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
-      try {
+      try
+      {
         $pager->setCurrentPage($request->query->get('page', 1));
-      } catch (NotValidCurrentPageException $e) {
+      } catch (NotValidCurrentPageException $e)
+      {
         throw new NotFoundHttpException();
       }
 
@@ -114,7 +119,8 @@ class OrganizationController extends Controller
     $form = $this->createForm(new OrganizationType($this->getUser()), $entity);
     $form->bind($request);
 
-    if ($form->isValid()) {
+    if ($form->isValid())
+    {
       $em = $this->getDoctrine()->getManager();
       $entity->setConference($this->getUser()->getCurrentConf());
 
@@ -239,7 +245,8 @@ class OrganizationController extends Controller
 
     $editForm->bind($request);
     $personToAdd = $entity->getMembers();
-    if ($editForm->isValid()) {
+    if ($editForm->isValid())
+    {
 
       //Add members selected in forms to the current organization thank to the woning sir
       foreach ($personToAdd
@@ -277,7 +284,8 @@ class OrganizationController extends Controller
     $form = $this->createDeleteForm($id);
     $form->bind($request);
 
-    if ($form->isValid()) {
+    if ($form->isValid())
+    {
       $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('DELETE', 'Organization', $id);
       $em = $this->getDoctrine()->getManager();
       //The object must belong to the current conf

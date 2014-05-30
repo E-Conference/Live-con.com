@@ -43,9 +43,11 @@ class TopicController extends Controller
     $pager = new PagerFanta($adapter);
     $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
 
-    try {
+    try
+    {
       $pager->setCurrentPage($request->query->get('page', 1));
-    } catch (NotValidCurrentPageException $e) {
+    } catch (NotValidCurrentPageException $e)
+    {
       throw new NotFoundHttpException();
     }
 
@@ -72,7 +74,8 @@ class TopicController extends Controller
     $filters = $this->createForm(new TopicFilterType($this->getUser()));
     $filters->submit($request);
 
-    if ($filters->isValid()) {
+    if ($filters->isValid())
+    {
       // bind values from the request
 
       $entities = $em->getRepository('fibeWWWConfBundle:Topic')->filtering($filters->getData(), $conf);
@@ -82,9 +85,11 @@ class TopicController extends Controller
       $adapter = new ArrayAdapter($entities);
       $pager = new PagerFanta($adapter);
       $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
-      try {
+      try
+      {
         $pager->setCurrentPage($request->query->get('page', 1));
-      } catch (NotValidCurrentPageException $e) {
+      } catch (NotValidCurrentPageException $e)
+      {
         throw new NotFoundHttpException();
       }
 
@@ -112,7 +117,8 @@ class TopicController extends Controller
     $form = $this->createForm(new TopicType(), $entity);
     $form->bind($request);
 
-    if ($form->isValid()) {
+    if ($form->isValid())
+    {
       $em = $this->getDoctrine()->getManager();
       $entity->setConference($this->getUser()->getCurrentConf());
       $em->persist($entity);
@@ -214,7 +220,8 @@ class TopicController extends Controller
     $editForm = $this->createForm(new TopicType(), $entity);
     $editForm->bind($request);
 
-    if ($editForm->isValid()) {
+    if ($editForm->isValid())
+    {
       $em = $this->getDoctrine()->getManager();
       $em->persist($entity);
       $em->flush();
@@ -236,7 +243,8 @@ class TopicController extends Controller
     $form = $this->createDeleteForm($id);
     $form->bind($request);
 
-    if ($form->isValid()) {
+    if ($form->isValid())
+    {
       $em = $this->getDoctrine()->getManager();
       $em->remove($entity);
       $em->flush();

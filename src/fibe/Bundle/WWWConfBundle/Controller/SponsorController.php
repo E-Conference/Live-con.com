@@ -42,9 +42,11 @@ class SponsorController extends Controller
     $pager = new PagerFanta($adapter);
     $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
 
-    try {
+    try
+    {
       $pager->setCurrentPage($request->query->get('page', 1));
-    } catch (NotValidCurrentPageException $e) {
+    } catch (NotValidCurrentPageException $e)
+    {
       throw new NotFoundHttpException();
     }
 
@@ -72,7 +74,8 @@ class SponsorController extends Controller
 
     $filters->submit($this->get('request'));
 
-    if ($filters->isValid()) {
+    if ($filters->isValid())
+    {
       // bind values from the request
 
       $entities = $em->getRepository('fibeWWWConfBundle:Sponsor')->filtering($filters->getData(), $conf);
@@ -82,9 +85,11 @@ class SponsorController extends Controller
       $adapter = new ArrayAdapter($entities);
       $pager = new PagerFanta($adapter);
       $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
-      try {
+      try
+      {
         $pager->setCurrentPage($request->query->get('page', 1));
-      } catch (NotValidCurrentPageException $e) {
+      } catch (NotValidCurrentPageException $e)
+      {
         throw new NotFoundHttpException();
       }
 
@@ -112,7 +117,8 @@ class SponsorController extends Controller
     $user = $this->getUser();
     $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-    if (!$authorization->getFlagconfDatas()) {
+    if (!$authorization->getFlagconfDatas())
+    {
       throw new AccessDeniedException('Action not authorized !');
     }
 
@@ -120,7 +126,8 @@ class SponsorController extends Controller
     $form = $this->createForm(new SponsorType(), $entity);
     $form->bind($request);
 
-    if ($form->isValid()) {
+    if ($form->isValid())
+    {
       $em = $this->getDoctrine()->getManager();
       $entity->setConference($this->getUser()->getCurrentConf());
       $em->persist($entity);
@@ -151,7 +158,8 @@ class SponsorController extends Controller
     $user = $this->getUser();
     $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-    if (!$authorization->getFlagconfDatas()) {
+    if (!$authorization->getFlagconfDatas())
+    {
       throw new AccessDeniedException('Action not authorized !');
     }
     $entity = new Sponsor();
@@ -183,7 +191,8 @@ class SponsorController extends Controller
     //The object must belong to the current conf
     $currentConf = $this->getUser()->getCurrentConf();
     $entity = $em->getRepository('fibeWWWConfBundle:Sponsor')->findOneBy(['conference' => $currentConf, 'id' => $id]);
-    if (!$entity) {
+    if (!$entity)
+    {
       throw $this->createNotFoundException('Unable to find Topic entity.');
     }
 
@@ -209,7 +218,8 @@ class SponsorController extends Controller
     $user = $this->getUser();
     $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-    if (!$authorization->getFlagconfDatas()) {
+    if (!$authorization->getFlagconfDatas())
+    {
       throw new AccessDeniedException('Action not authorized !');
     }
 
@@ -218,7 +228,8 @@ class SponsorController extends Controller
     //The object must belong to the current conf
     $currentConf = $this->getUser()->getCurrentConf();
     $entity = $em->getRepository('fibeWWWConfBundle:Sponsor')->findOneBy(['conference' => $currentConf, 'id' => $id]);
-    if (!$entity) {
+    if (!$entity)
+    {
       throw $this->createNotFoundException('Unable to find Topic entity.');
     }
 
@@ -247,7 +258,8 @@ class SponsorController extends Controller
     $user = $this->getUser();
     $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-    if (!$authorization->getFlagconfDatas()) {
+    if (!$authorization->getFlagconfDatas())
+    {
       throw new AccessDeniedException('Action not authorized !');
     }
 
@@ -259,7 +271,8 @@ class SponsorController extends Controller
      * @var Sponsor
      */
     $entity = $em->getRepository('fibeWWWConfBundle:Sponsor')->findOneBy(['conference' => $currentConf, 'id' => $id]);
-    if (!$entity) {
+    if (!$entity)
+    {
       throw $this->createNotFoundException('Unable to find Topic entity.');
     }
 
@@ -267,7 +280,8 @@ class SponsorController extends Controller
     $editForm = $this->createForm(new SponsorType(), $entity);
     $editForm->bind($request);
 
-    if ($editForm->isValid()) {
+    if ($editForm->isValid())
+    {
       $entity->uploadLogo();
       $em->persist($entity);
       $em->flush();
@@ -295,19 +309,22 @@ class SponsorController extends Controller
     $user = $this->getUser();
     $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-    if (!$authorization->getFlagconfDatas()) {
+    if (!$authorization->getFlagconfDatas())
+    {
       throw new AccessDeniedException('Action not authorized !');
     }
 
     $form = $this->createDeleteForm($id);
     $form->bind($request);
 
-    if ($form->isValid()) {
+    if ($form->isValid())
+    {
       $em = $this->getDoctrine()->getManager();
       //The object must belong to the current conf
       $currentConf = $this->getUser()->getCurrentConf();
       $entity = $em->getRepository('fibeWWWConfBundle:Sponsor')->findOneBy(['conference' => $currentConf, 'id' => $id]);
-      if (!$entity) {
+      if (!$entity)
+      {
         throw $this->createNotFoundException('Unable to find Topic entity.');
       }
 

@@ -20,6 +20,7 @@ use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
 /**
  * User controller.
  *
@@ -27,197 +28,212 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class TeamController extends Controller
 {
-    /** 
-     * @Route("/", name="conference_team_index")
-     * @Method("GET")
-     * @Template()
-     */
-    public function indexAction()
+  /**
+   * @Route("/", name="conference_team_index")
+   * @Method("GET")
+   * @Template()
+   */
+  public function indexAction()
+  {
+
+    $currentConf = $this->getUser()->getcurrentConf();
+
+    $ACLService = $this->get('fibe_security.acl_user_permission_helper');
+    //here the access control is on the team and not on the teamate himself
+    $team = $ACLService->getEntityACL('VIEW', 'Team', $currentConf->getTeam());
+
+    $managers = $team->getConfManagers();
+
+    $delete_forms = array();
+    $managerConfAuthorizations = array();
+
+    foreach ($managers
+             as
+             $manager)
     {
+      if ($manager->getId() != $this->getUser()->getId())
+      {
 
-        $currentConf =$this->getUser()->getcurrentConf(); 
+        $delete_forms[] = $this->createDeleteForm($manager->getId())->createView();
 
-        $ACLService = $this->get('fibe_security.acl_user_permission_helper');
-        //here the access control is on the team and not on the teamate himself
-        $team = $ACLService->getEntityACL('VIEW','Team',$currentConf->getTeam());  
-
-        $managers =$team->getConfManagers(); 
-
-        $delete_forms= array();
-        $managerConfAuthorizations= array();
-
-        foreach($managers as $manager){
-          if($manager->getId() != $this->getUser()->getId()){
-
-            $delete_forms[] = $this->createDeleteForm($manager->getId())->createView();
-            
-            $managerConfAuthorizations[]  = $ACLService->getUserConfPermission($manager,false);
-          }
-        } 
-
-        $userConfPermission = $ACLService->getUserConfPermission($this->getUser(),false);  
-        $addTeamateForm = $this->createForm(new UserConfPermissionType($this->getUser()), $ACLService->getUserConfPermission()); 
-        return array(
-            'team'                                => $team,
-            'delete_forms'                        => $delete_forms,
-            'manager_conf_authorizations'         => $managerConfAuthorizations,
-            'current_manager_conf_authorizations' => $userConfPermission,
-            // 'update_forms'                     => $update_forms,
-            'add_teamate_form'                    => $addTeamateForm->createView(),
-            'currentConf'                         => $currentConf,
-            'authorized'                          => true
-        );
+        $managerConfAuthorizations[] = $ACLService->getUserConfPermission($manager, false);
+      }
     }
 
-    /**
-     * add teamate with his UserConfPermission
-     *
-     * @Route("/add", name="conference_team_add") 
-     * 
-     */
-    public function addTeamateAction(Request $request)
+    $userConfPermission = $ACLService->getUserConfPermission($this->getUser(), false);
+    $addTeamateForm = $this->createForm(
+      new UserConfPermissionType($this->getUser()),
+      $ACLService->getUserConfPermission()
+    );
+
+    return array(
+      'team' => $team,
+      'delete_forms' => $delete_forms,
+      'manager_conf_authorizations' => $managerConfAuthorizations,
+      'current_manager_conf_authorizations' => $userConfPermission,
+      // 'update_forms'                     => $update_forms,
+      'add_teamate_form' => $addTeamateForm->createView(),
+      'currentConf' => $currentConf,
+      'authorized' => true
+    );
+  }
+
+  /**
+   * add teamate with his UserConfPermission
+   *
+   * @Route("/add", name="conference_team_add")
+   *
+   */
+  public function addTeamateAction(Request $request)
+  {
+
+    $currentConf = $this->getUser()->getcurrentConf();
+    $ACLService = $this->get('fibe_security.acl_user_permission_helper');
+    $team = $ACLService->getEntityACL('CREATE', 'Team', $currentConf->getTeam()->getId());
+
+    $userConfPermission = $ACLService->getUserConfPermission();
+    $form = $this->createForm(new UserConfPermissionType($this->getUser()), $userConfPermission);
+    $form->bind($request);
+
+    if ($form->isValid())
     {
-        
-      $currentConf =$this->getUser()->getcurrentConf(); 
-      $ACLService = $this->get('fibe_security.acl_user_permission_helper');
-      $team = $ACLService->getEntityACL('CREATE','Team',$currentConf->getTeam()->getId());
+      $em = $this->getDoctrine()->getManager();
+      $teamate = $userConfPermission->getUser();
+      $team->addConfManager($teamate);
+      $teamate->addTeam($team);
+      $em->persist($teamate);
+      $em->persist($team);
+      $em->persist($currentConf);
 
-      $userConfPermission = $ACLService->getUserConfPermission(); 
-      $form = $this->createForm(new UserConfPermissionType($this->getUser()), $userConfPermission); 
-      $form->bind($request);
+      $ACLService->updateUserConfPermission($userConfPermission);
 
-      if ($form->isValid())
-      {
-        $em = $this->getDoctrine()->getManager();
-        $teamate = $userConfPermission->getUser();
-        $team->addConfManager($teamate);
-        $teamate->addTeam($team);
-        $em->persist($teamate); 
-        $em->persist($team); 
-        $em->persist($currentConf); 
+      $em->flush();
+      $this->container->get('session')->getFlashBag()->add(
+        'success',
+        $teamate->getUsername() . ' is now in your team!'
+      );
+    }
+    else
+    {
+      $this->container->get('session')->getFlashBag()->add(
+        'error',
+        'there was an error adding ' . $teamate->getUsername() . ' to your team!'
+      );
+    }
+    return $this->redirect($this->generateUrl('conference_team_index'));
+  }
 
-        $ACLService->updateUserConfPermission($userConfPermission);
 
-        $em->flush();
-        $this->container->get('session')->getFlashBag()->add(
-            'success',
-            $teamate->getUsername().' is now in your team!'
-        ); 
-      }
-      else {  
-        $this->container->get('session')->getFlashBag()->add(
-          'error',
-          'there was an error adding '.$teamate->getUsername().' to your team!'
-        ); 
-      }
+  /**
+   * Displays a form to edit an existing authorization.
+   * @Route("/{id}/edit", name="conference_team_edit")
+   * @Template()
+   */
+  public function editAction($id)
+  {
+    $currentConf = $this->getUser()->getCurrentConf();
+    $ACLService = $this->get('fibe_security.acl_user_permission_helper');
+    $team = $ACLService->getEntityACL('EDIT', 'Team', $currentConf->getTeam()->getId());
 
+    $em = $this->getDoctrine()->getManager();
+    $entity = $em->getRepository('fibeSecurityBundle:User')->find($id);
+
+    $userConfPermission = $ACLService->getUserConfPermission($entity);
+    $editForm = $this->createForm(new UserConfPermissionType($this->getUser()), $userConfPermission);
+
+    return array(
+      'entity' => $entity,
+      'edit_form' => $editForm->createView(),
+      'authorized' => true,
+    );
+  }
+
+  /**
+   * @Route("/{id}/update", name="conference_teamate_update")
+   */
+  public function updateAction(Request $request, $id)
+  {
+    $currentConf = $this->getUser()->getCurrentConf();
+    $ACLService = $this->get('fibe_security.acl_user_permission_helper');
+    $team = $ACLService->getEntityACL('EDIT', 'Team', $currentConf->getTeam()->getId());
+
+    $em = $this->getDoctrine()->getManager();
+    $entity = $em->getRepository('fibeSecurityBundle:User')->find($id);
+
+    $userConfPermission = $ACLService->getUserConfPermission($entity);
+    $editForm = $this->createForm(new UserConfPermissionType($this->getUser()), $userConfPermission);
+    $editForm->bind($request);
+
+    if ($editForm->isValid())
+    {
+      $ACLService->updateUserConfPermission($userConfPermission);
+
+      $em->persist($entity);
+      $em->flush();
+      $this->container->get('session')->getFlashBag()->add(
+        'success',
+        $entity->getUsername() . '\'s right have been successfully updated!'
+      );
 
       return $this->redirect($this->generateUrl('conference_team_index'));
     }
 
-    
-    /**
-     * Displays a form to edit an existing authorization.
-     * @Route("/{id}/edit", name="conference_team_edit")
-     * @Template()
-     */
-    public function editAction($id)
-    { 
-      $currentConf=$this->getUser()->getCurrentConf();
-      $ACLService = $this->get('fibe_security.acl_user_permission_helper');
-      $team = $ACLService->getEntityACL('EDIT','Team',$currentConf->getTeam()->getId());
-      
-      $em = $this->getDoctrine()->getManager();
-      $entity = $em->getRepository('fibeSecurityBundle:User')->find($id);
-      
-      $userConfPermission = $ACLService->getUserConfPermission($entity);
-      $editForm = $this->createForm(new UserConfPermissionType($this->getUser()), $userConfPermission);
-    
-      return array(
-        'entity'      => $entity,
-        'edit_form'   => $editForm->createView(),
-        'authorized'  => true,
+    return $this->redirect($this->generateUrl('conference_team_edit', array('id' => $id)));
+  }
+
+
+  /**
+   * Deletes a teamate entity.
+   *
+   * @Route("/{id}", name="conference_team_delete")
+   * @Method("DELETE")
+   */
+  public function deleteAction(Request $request, $id)
+  {
+    $form = $this->createDeleteForm($id);
+    $form->bind($request);
+
+    $em = $this->getDoctrine()->getManager();
+
+    if ($id == $this->getuser()->getId())
+    {
+      $this->container->get('session')->getFlashBag()->add(
+        'error',
+        'You cannot delete yourself !'
       );
     }
-
-    /** 
-     * @Route("/{id}/update", name="conference_teamate_update")
-     */
-    public function updateAction(Request $request, $id)
+    else
     {
-      $currentConf=$this->getUser()->getCurrentConf();
-      $ACLService = $this->get('fibe_security.acl_user_permission_helper');
-      $team = $ACLService->getEntityACL('EDIT','Team',$currentConf->getTeam()->getId());
-      
-      $em = $this->getDoctrine()->getManager();
-      $entity = $em->getRepository('fibeSecurityBundle:User')->find($id);
-      
-      $userConfPermission = $ACLService->getUserConfPermission($entity);
-      $editForm = $this->createForm(new UserConfPermissionType($this->getUser()), $userConfPermission);
-      $editForm->bind($request);
-
-      if ($editForm->isValid())
+      if ($form->isValid())
       {
-        $ACLService->updateUserConfPermission($userConfPermission);
+        $manager = $em->getRepository('fibeSecurityBundle:User')->find($id);
+        //cannot delete owner
+        if ("OWNER" == $ACLService->getACEByEntity($currentConf->getTeam(), $manager))
+        {
+          throw new AccessDeniedHttpException("cannot remove the owner");
+        }
+        $currentConf = $this->getUser()->getcurrentConf();
+        $ACLService = $this->get('fibe_security.acl_user_permission_helper');
+        $team = $ACLService->getEntityACL('DELETE', 'Team', $currentConf->getTeam());
 
-        $em->persist($entity);
+        if (!$manager)
+        {
+          throw $this->createNotFoundException('Unable to find User entity.');
+        }
+        $team->removeConfManager($manager);
+        $manager->removeTeam($team);
+        $em->persist($team);
+        $em->persist($manager);
         $em->flush();
         $this->container->get('session')->getFlashBag()->add(
-            'success',
-            $entity->getUsername().'\'s right have been successfully updated!'
-        ); 
-
-        return $this->redirect($this->generateUrl('conference_team_index'));
+          'success',
+          'This teamate doesn\'t belong to the current conference anymore!'
+        );
       }
-
-      return $this->redirect($this->generateUrl('conference_team_edit', array('id' => $id)));
     }
 
-     
-    /**
-     * Deletes a teamate entity.
-     *
-     * @Route("/{id}", name="conference_team_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, $id)
-    { 
-        $form = $this->createDeleteForm($id);
-        $form->bind($request);
-
-        $em = $this->getDoctrine()->getManager();
-        
-        if ($id == $this->getuser()->getId()) {
-          $this->container->get('session')->getFlashBag()->add(
-            'error',
-            'You cannot delete yourself !'
-          );
-        }else if ($form->isValid()) {
-          $manager = $em->getRepository('fibeSecurityBundle:User')->find($id);
-          //cannot delete owner
-          if("OWNER" == $ACLService->getACEByEntity($currentConf->getTeam(),$manager))
-          {
-            throw new AccessDeniedHttpException("cannot remove the owner");
-          }
-          $currentConf =$this->getUser()->getcurrentConf(); 
-          $ACLService = $this->get('fibe_security.acl_user_permission_helper');
-          $team = $ACLService->getEntityACL('DELETE','Team',$currentConf->getTeam());  
-
-          if (!$manager) {
-              throw $this->createNotFoundException('Unable to find User entity.');
-          }
-          $team->removeConfManager($manager);
-          $manager->removeTeam($team);
-          $em->persist($team);
-          $em->persist($manager);
-          $em->flush();
-            $this->container->get('session')->getFlashBag()->add(
-                'success',
-                'This teamate doesn\'t belong to the current conference anymore!'
-            );
-        }
-        return $this->redirect($this->generateUrl('conference_team_index'));
-    } 
+    return $this->redirect($this->generateUrl('conference_team_index'));
+  }
 
 
   /**
@@ -228,11 +244,10 @@ class TeamController extends Controller
    * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
    * @return Form The form
    */
-    private function createDeleteForm($id)
-    { 
-        return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
-        ;
-    }
+  private function createDeleteForm($id)
+  {
+    return $this->createFormBuilder(array('id' => $id))
+      ->add('id', 'hidden')
+      ->getForm();
+  }
 }

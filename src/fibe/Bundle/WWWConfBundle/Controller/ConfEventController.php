@@ -48,9 +48,11 @@ class ConfEventController extends Controller
     $pager = new PagerFanta($adapter);
     $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
 
-    try {
+    try
+    {
       $pager->setCurrentPage($request->query->get('page', 1));
-    } catch (NotValidCurrentPageException $e) {
+    } catch (NotValidCurrentPageException $e)
+    {
       throw new NotFoundHttpException();
     }
 
@@ -77,7 +79,8 @@ class ConfEventController extends Controller
     $filters = $this->createForm(new ConfEventFilterType($this->getUser()));
     $filters->submit($request);
 
-    if ($filters->isValid()) {
+    if ($filters->isValid())
+    {
       // bind values from the request
 
       $entities = $em->getRepository('fibeWWWConfBundle:ConfEvent')->filtering($filters->getData(), $conf);
@@ -87,9 +90,11 @@ class ConfEventController extends Controller
       $adapter = new ArrayAdapter($entities);
       $pager = new PagerFanta($adapter);
       $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
-      try {
+      try
+      {
         $pager->setCurrentPage($request->query->get('page', 1));
-      } catch (NotValidCurrentPageException $e) {
+      } catch (NotValidCurrentPageException $e)
+      {
         throw new NotFoundHttpException();
       }
 
@@ -114,7 +119,8 @@ class ConfEventController extends Controller
     $form = $this->createForm(new ConfEventType($this->getUser()), $entity);
     $form->bind($request);
 
-    if ($form->isValid()) {
+    if ($form->isValid())
+    {
       $em = $this->getDoctrine()->getManager();
       $entity->setConference($this->getUser()->getCurrentConf());
       $em->persist($entity);
@@ -255,10 +261,12 @@ class ConfEventController extends Controller
     $form = $this->createForm(new ConfEventType($this->getUser(), $entity), $entity);
     $form->bind($request);
 
-    if ($form->isValid()) {
+    if ($form->isValid())
+    {
       $em = $this->getDoctrine()->getManager();
       //If is a main confEvent => have to update the slug conference
-      if ($entity->getIsMainConfEvent()) {
+      if ($entity->getIsMainConfEvent())
+      {
 
         $conference = $entity->getConference();
         $conference->slugify();
@@ -284,11 +292,13 @@ class ConfEventController extends Controller
     $form = $this->createDeleteForm($id);
     $form->bind($request);
 
-    if ($form->isValid()) {
+    if ($form->isValid())
+    {
       $em = $this->getDoctrine()->getManager();
 
       $mainConfEvent = $this->getUser()->getCurrentConf()->getMainConfEvent();
-      if ($mainConfEvent->getId() == $entity->getId()) {
+      if ($mainConfEvent->getId() == $entity->getId())
+      {
         $this->container->get('session')->getFlashBag()->add(
           'error',
           'You cannot delete the Conference Event'
@@ -483,7 +493,8 @@ class ConfEventController extends Controller
     $em = $this->getDoctrine()->getManager();
     $type = $em->getRepository('fibeWWWConfBundle:RoleType')->find($id_type);
 
-    if (!$type) {
+    if (!$type)
+    {
       throw $this->createNotFoundException('Unable to find type.');
     }
 

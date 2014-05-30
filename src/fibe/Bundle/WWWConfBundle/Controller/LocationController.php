@@ -2,7 +2,7 @@
 
 /**
  *
- * @author:  Gabriel BONDAZ <gabriel.bondaz@idci-consulting.fr>
+ * @author :  Gabriel BONDAZ <gabriel.bondaz@idci-consulting.fr>
  * @licence: GPL
  *
  */
@@ -51,9 +51,11 @@ class LocationController extends Controller
     $pager = new PagerFanta($adapter);
     $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
 
-    try {
+    try
+    {
       $pager->setCurrentPage($request->query->get('page', 1));
-    } catch (NotValidCurrentPageException $e) {
+    } catch (NotValidCurrentPageException $e)
+    {
       throw new NotFoundHttpException();
     }
 
@@ -79,7 +81,8 @@ class LocationController extends Controller
     $filters = $this->createForm(new LocationFilterType($this->getUser()));
     $filters->submit($request);
 
-    if ($filters->isValid()) {
+    if ($filters->isValid())
+    {
       // bind values from the request
 
       $entities = $em->getRepository('fibeWWWConfBundle:Location')->filtering($filters->getData(), $conf);
@@ -89,9 +92,11 @@ class LocationController extends Controller
       $adapter = new ArrayAdapter($entities);
       $pager = new PagerFanta($adapter);
       $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
-      try {
+      try
+      {
         $pager->setCurrentPage($request->query->get('page', 1));
-      } catch (NotValidCurrentPageException $e) {
+      } catch (NotValidCurrentPageException $e)
+      {
         throw new NotFoundHttpException();
       }
 
@@ -162,7 +167,8 @@ class LocationController extends Controller
     $form = $this->createForm(new LocationType(), $entity);
     $form->bind($request);
 
-    if ($form->isValid()) {
+    if ($form->isValid())
+    {
       $em = $this->getDoctrine()->getManager();
       $entity->setConference($this->getUser()->getCurrentConf());
       $em->persist($entity);
@@ -235,7 +241,8 @@ class LocationController extends Controller
     $editForm = $this->createForm(new LocationType(), $entity);
     $editForm->bind($request);
 
-    if ($editForm->isValid()) {
+    if ($editForm->isValid())
+    {
       $em = $this->getDoctrine()->getManager();
       $em->persist($entity);
       $em->flush();
@@ -278,7 +285,8 @@ class LocationController extends Controller
     $form = $this->createDeleteForm($id);
     $form->bind($request);
 
-    if ($form->isValid()) {
+    if ($form->isValid())
+    {
       $em = $this->getDoctrine()->getManager();
 
       $em->remove($entity);

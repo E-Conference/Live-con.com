@@ -38,7 +38,6 @@ class PersonController extends Controller
 
   public function indexAction(Request $request)
   {
-
     $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('VIEW', 'Person');
     // $entities = $this->getUser()->getCurrentConf()->getPersons()->toArray();
 
