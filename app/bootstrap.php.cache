@@ -2235,12 +2235,12 @@ protected $booted = false;
 protected $name;
 protected $startTime;
 protected $loadClassCache;
-const VERSION ='2.5.0-BETA2';
+const VERSION ='2.5.0-RC1';
 const VERSION_ID ='20500';
 const MAJOR_VERSION ='2';
 const MINOR_VERSION ='5';
 const RELEASE_VERSION ='0';
-const EXTRA_VERSION ='BETA2';
+const EXTRA_VERSION ='RC1';
 public function __construct($environment, $debug)
 {
 $this->environment = $environment;
@@ -2892,7 +2892,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Debug\Exception\FatalErrorException;
 class HttpKernel implements HttpKernelInterface, TerminableInterface
 {
 protected $dispatcher;
@@ -2920,9 +2919,11 @@ public function terminate(Request $request, Response $response)
 {
 $this->dispatcher->dispatch(KernelEvents::TERMINATE, new PostResponseEvent($this, $request, $response));
 }
-public function handleFatalErrorException(FatalErrorException $exception)
+public function terminateWithException(\Exception $exception)
 {
-$request = $this->requestStack->getMasterRequest();
+if (!$request = $this->requestStack->getMasterRequest()) {
+throw new \LogicException('Request stack is empty', 0, $exception);
+}
 $response = $this->handleException($exception, $request, self::MASTER_REQUEST);
 $response->sendHeaders();
 $response->sendContent();

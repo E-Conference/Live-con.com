@@ -23,7 +23,8 @@
         "white-october/pagerfanta-bundle": "*",
         "idci/exporter-bundle": "*",
         "friendsofsymfony/user-bundle": "*",
-        "gregwar/captcha-bundle": "*"
+        "gregwar/captcha-bundle": "dev-master",
+        "lexik/form-filter-bundle": "*"
     },
     "scripts": {
         "post-install-cmd": [
