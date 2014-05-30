@@ -40,21 +40,21 @@ class ScheduleController extends Controller
    */
   public function scheduleAction()
   {
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+    // Si on peut récupérer un objet WwwConf, l'utilisateur à le droit...
+    $granted = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'WwwConf');
 
+    $user = $this->getUser();
     $em = $this->getDoctrine();
     $conf = $this->getUser()->getCurrentConf();
 
     //filters
     $categories = $em->getRepository('fibeWWWConfBundle:Category')->getOrdered();
-    $locations = $this->getUser()->getCurrentConf()->getLocations();
-    $topics = $this->getUser()->getCurrentConf()->getTopics();
+    $locations = $user->getCurrentConf()->getLocations();
+    $topics = $user->getCurrentConf()->getTopics();
 
     return array(
       'currentConf' => $conf,
-      'authorized' => $authorization->getFlagSched(),
+      'authorized' => isset($granted), // Si il existe une conference
       'categories' => $categories,
       'locations' => $locations,
       'topics' => $topics,
