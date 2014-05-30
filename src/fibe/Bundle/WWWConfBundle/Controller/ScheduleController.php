@@ -71,7 +71,7 @@ class ScheduleController extends Controller
 
     //Authorization Verification conference sched manager
     $user = $this->getUser();
-    if (!$user->getAuthorizationByConference($user->getCurrentConf())->getFlagSched())
+    if ($this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'WwwConf') == null)
     {
       throw new AccessDeniedException('Action not authorized !');
     }
@@ -199,11 +199,8 @@ class ScheduleController extends Controller
    */
   public function scheduleEditAction(Request $request)
   {
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagSched())
+    $granted = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'WwwConf');
+    if (!isset($granted))
     {
       throw new AccessDeniedException('Action not authorized !');
     }
@@ -265,85 +262,82 @@ class ScheduleController extends Controller
         'paper_form' => $form_paper->createView(),
         'topic_form' => $form_topic->createView(),
         'delete_form' => $deleteForm->createView(),
-        'authorized' => $authorization->getFlagSched(),
+        'authorized' => isset($granted),
       )
     );
 
   }
 
 
-  /**
-   * ajax version of event edit controller
-   * @Route("/{id}/updateEvents", name="schedule_view_event_update")
-   */
-  public function scheduleUpdateAction(Request $request, $id)
-  {
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagSched())
-    {
-      throw new AccessDeniedException('Action not authorized !');
-      $this->container->get('session')->getFlashBag()->add(
-        'error',
-        'You not authorized to modify the schedule'
-      );
-    }
-
-    $JSONArray = array();
-
-    //The object must belong to the current conf
-    $conf = $this->getUser()->getCurrentConf();
-    $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(
-      array('conference' => $conf, 'id' => $id)
-    ); //@TODO error
-    if (!$entity)
-    {
-      throw $this->createNotFoundException('Unable to find ConfEvent entity.');
-    }
-
-    if ($entity)
-    {
-
-      $JSONArray['Data'] = $id;
-
-      $editForm = $this->createForm(new EventType(), $entity); //@TODO error
-      $editForm->bind($request);
-      if ($editForm->isValid())
-      {
-        $em->persist($entity);
-        $em->flush();
-
-        $JSONArray['IsSuccess'] = true;
-        $JSONArray['Msg'] = "update succses";
-      }
-      else
-      {
-        $JSONArray['IsSuccess'] = false;
-        $JSONArray['Msg'] = "update failed";
-      }
-    }
-    else
-    {
-
-      $JSONArray['IsSuccess'] = false;
-      $JSONArray['Msg'] = "entity not found";
-    }
-
-    $response = new Response(json_encode($JSONArray));
-    $response->headers->set('Content-Type', 'application/json');
-
-    return $response;
-
-
-  }
+/* @TODO REFACTO : not used, to delete
+//  /**
+//   * ajax version of event edit controller
+//   * @Route("/{id}/updateEvents", name="schedule_view_event_update")
+//   */
+//  public function scheduleUpdateAction(Request $request, $id)
+//  {
+//    $granted = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'WwwConf');
+//    if (!isset($granted))
+//    {
+//      throw new AccessDeniedException('Action not authorized !');
+//      $this->container->get('session')->getFlashBag()->add(
+//        'error',
+//        'You not authorized to modify the schedule'
+//      );
+//    }
+//
+//    $em = $this->getDoctrine()->getManager();
+//
+//    $JSONArray = array();
+//
+//    //The object must belong to the current conf
+//    $conf = $this->getUser()->getCurrentConf();
+//    $entity = $em->getRepository('fibeWWWConfBundle:ConfEvent')->findOneBy(
+//      array('conference' => $conf, 'id' => $id)
+//    ); //@TODO error
+//    if (!$entity)
+//    {
+//      throw $this->createNotFoundException('Unable to find ConfEvent entity.');
+//    }
+//
+//    if ($entity)
+//    {
+//
+//      $JSONArray['Data'] = $id;
+//
+//      $editForm = $this->createForm(new EventType(), $entity); //@TODO error
+//      $editForm->bind($request);
+//      if ($editForm->isValid())
+//      {
+//        $em->persist($entity);
+//        $em->flush();
+//
+//        $JSONArray['IsSuccess'] = true;
+//        $JSONArray['Msg'] = "update succses";
+//      }
+//      else
+//      {
+//        $JSONArray['IsSuccess'] = false;
+//        $JSONArray['Msg'] = "update failed";
+//      }
+//    }
+//    else
+//    {
+//
+//      $JSONArray['IsSuccess'] = false;
+//      $JSONArray['Msg'] = "entity not found";
+//    }
+//
+//    $response = new Response(json_encode($JSONArray));
+//    $response->headers->set('Content-Type', 'application/json');
+//
+//    return $response;
+//  }
 
   /**
    * Override simplescehdule controller to provide json response
    * @Route("/{id}/xpropAdd", name="schedule_xproperty_add")
    */
-
   public function xpropAddAction(Request $request, $id)
   {
 
