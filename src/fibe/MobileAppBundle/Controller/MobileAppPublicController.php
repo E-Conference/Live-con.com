@@ -11,7 +11,7 @@
   use Symfony\Component\HttpFoundation\Response;
   use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-  use fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig;
+  use fibe\MobileAppBundle\Entity\MobileAppConfig;
   use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 
   /**
