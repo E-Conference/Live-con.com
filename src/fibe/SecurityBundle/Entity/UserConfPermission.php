@@ -18,6 +18,12 @@
 
     protected $confPermissions; 
 
+    /**
+     * if the user can edit the form ( need to have at least one master permission on a permission in the confPermission array)
+     * @var [type]
+     */
+    protected $restricted;
+
 
     public function __construct()
     {
@@ -52,5 +58,17 @@
 
       return $this;
     }
+
+    public function setRestricted($restricted)
+    {
+      $this->restricted = $restricted;
+
+      return $this;
+    }
+
+    public function getRestricted()
+    {
+      return $this->restricted;
+    }  
 
   }

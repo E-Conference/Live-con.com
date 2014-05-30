@@ -87,7 +87,15 @@
       }
       return $rtn;
     }
- 
+    
+    /**
+     * [getACEByEntity description]
+     * @param  [type] $entity     [description]
+     * @param  [type] $user       [description]
+     * @param  string $returnType mask|index|action (int binary mask | index of the ace in the acl | readable action i.e. VIEW)
+     * @param  [type] $acl        provide acl if you already got it
+     * @return [string|int]       the uppest permission
+     */
     public function getACEByEntity($entity,$user=null,$returnType="action",$acl=null)
     {
       $entitySecurityIdentity = ObjectIdentity::fromDomainObject($entity);
@@ -101,9 +109,8 @@
       }
       //find the ace for the given user
       foreach($acl->getObjectAces() as $index => $ace)
-      {
-        $aceSecurityId = $ace->getSecurityIdentity();
-        if($aceSecurityId ->equals($userSecurityIdentity))
+      { 
+        if($ace->getSecurityIdentity()->equals($userSecurityIdentity))
         {
           switch ($returnType) {
             case 'mask':
@@ -116,10 +123,11 @@
           } 
         }
       } 
-      throw new AceNotFoundException(sprintf('Cannot find ACE %s %s with user %s', 
-          get_class ($entity), 
-          '#'.$entity->getId(),
-          $user ? $user->getUsername():"[current user]"));
+      throw new AceNotFoundException(sprintf('Cannot find ACE %s %s for user %s', 
+        get_class ($entity), 
+        '#'.$entity->getId(),
+        $user ? $user->getUsername():"[current user]"
+      ));
     }
 
 
@@ -139,7 +147,7 @@
 
 
     /**
-     * filter by conferenceId if the repository != ACLEntityHelper::LINK_WITH 
+     * filter by conferenceId if the repository != this::LINK_WITH 
      * @param  [type] $repositoryName [description]
      * @param  [type] $id             [description]
      * @return [type]                 [description]

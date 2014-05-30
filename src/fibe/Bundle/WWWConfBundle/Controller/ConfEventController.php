@@ -43,7 +43,7 @@
     public function indexAction(Request $request)
     {
 
-      $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('EDIT','ConfEvent');
+      $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('VIEW','ConfEvent');
 
       $adapter = new ArrayAdapter($entities);
       $pager = new PagerFanta($adapter);
@@ -64,7 +64,7 @@
       $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return array(
         'pager'        => $pager,
-        'authorized'   => $authorization->getFlagSched(),
+        'authorized'   => true,
         'filters_form' => $filters->createView()
       );
     }
@@ -108,7 +108,6 @@
           'nbResult' => $nbResult,
         ));
       }
-
     }
 
     /**
@@ -146,7 +145,7 @@
       return $this->render('fibeWWWConfBundle:ConfEvent:new.html.twig', array(
         'entity'     => $entity,
         'form'       => $form->createView(),
-        'authorized' => $authorization->getFlagSched()
+        'authorized' => true
       ));
     }
 
@@ -165,7 +164,7 @@
       return $this->render('fibeWWWConfBundle:ConfEvent:new.html.twig', array(
         'entity'     => $entity,
         'form'       => $form->createView(),
-        'authorized' => $authorization->getFlagSched()
+        'authorized' => true
       ));
     }
 
@@ -185,7 +184,7 @@
       return $this->render('fibeWWWConfBundle:ConfEvent:show.html.twig', array(
         'entity'      => $entity,
         'delete_form' => $deleteForm->createView(),
-        'authorized'  => $authorization->getFlagSched()
+        'authorized'  => true
 
       ));
     }
@@ -234,7 +233,7 @@
         'role_form'   => $form_role->createView(),
         'paper_form'  => $form_paper->createView(),
         'topic_form'  => $form_topic->createView(),
-        'authorized'  => $authorization->getFlagSched()
+        'authorized'  => true
       ));
     }
 
@@ -361,7 +360,7 @@
       $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:ConfEvent:topicRelation.html.twig', array(
         'entity'     => $entity,
-        'authorized' => $authorization->getFlagSched()
+        'authorized' => true
       ));
     }
 
@@ -390,7 +389,7 @@
       $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:ConfEvent:topicRelation.html.twig', array(
         'entity'     => $entity,
-        'authorized' => $authorization->getFlagSched()
+        'authorized' => true
       ));
     }
 
@@ -421,7 +420,7 @@
       $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:ConfEvent:paperRelation.html.twig', array(
         'entity'     => $entity,
-        'authorized' => $authorization->getFlagSched()
+        'authorized' => true
       ));
     }
 
@@ -449,7 +448,7 @@
       $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:ConfEvent:paperRelation.html.twig', array(
         'entity'     => $entity,
-        'authorized' => $authorization->getFlagSched()
+        'authorized' => true
       ));
     }
 
@@ -496,7 +495,7 @@
       $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:ConfEvent:personRelation.html.twig', array(
         'entity'     => $entity,
-        'authorized' => $authorization->getFlagSched()
+        'authorized' => true
       ));
     }
 
@@ -527,7 +526,7 @@
       $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:ConfEvent:personRelation.html.twig', array(
         'entity'     => $entity,
-        'authorized' => $authorization->getFlagSched()
+        'authorized' => true
       ));
     }
   }

@@ -22,9 +22,13 @@
                  <a type="button" href="{{ path('schedule_confevent') }}" class="btn btn-warning">
                         <i class="fa fa-list"></i>
                   </a>
+
+                {% if is_granted('EDIT', entity) %} 
                    <a href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}" class="btn btn-success edit-event">
                          <i class="fa fa-pencil"></i>
                    </a>
+                {% endif %} 
+                {% if is_granted('DELETE', entity) %} 
                    <form action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
                       <input type="hidden" name="_method" value="DELETE" />
                         {{ form_widget(delete_form) }}
@@ -32,6 +36,7 @@
                         <i class="fa fa-trash-o"></i>
                     </button>
                   </form> 
+                {% endif %} 
             </div>
       </div>
       <div class="row page-content">

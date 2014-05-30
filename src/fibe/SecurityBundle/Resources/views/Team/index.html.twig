@@ -51,10 +51,10 @@
                     <tr>
                         <td> 
                           <b>{{ manager_conf_authorization.user.username }}</b> 
-                        </td>
-                        <td><a href="mailto:{{ manager_conf_authorization.user.email }}">{{ manager_conf_authorization.user.email }}</a></td>
+                        </td> 
+                        <td><a href="mailto:{{ manager_conf_authorization.user.email }}">{{ manager_conf_authorization.user.email }}</a>
                         <td class="moment">{% if manager_conf_authorization.user.lastLogin %}{{ manager_conf_authorization.user.lastLogin|date('Y-m-d H:i:s') }}{% endif %}</td>
- 
+                        
                         {% for confPermission in manager_conf_authorization.confPermissions %}
                          <td>
                             <span class="badge authorization-{{ confPermission.action }}">{{ confPermission.action }}</span> 
@@ -69,7 +69,8 @@
                           </form>
                         </td>
                         {% endif %}
-                        {% if is_granted('EDIT', team) %}
+                        {% if manager_conf_authorization.restricted == false %}
+                        {# if the user has at least one master permission #}
                         <td>
                           <a class="btn btn-large btn-warning edit" href="{{ path('conference_team_edit', { 'id': manager_conf_authorization.user.id }) }}"><i class="fa fa-pencil"></i></a>
                         </td>
@@ -93,11 +94,12 @@
                     <form action="{{ path('conference_team_add') }}" method="post" {{ form_enctype(add_teamate_form) }}>
  
                             {{ form_row(add_teamate_form.user) }}
-
+                                
+                            {{ add_teamate_form.vars.value.restricted }}
                             <div style="padding-top: 1em;" class="form-horizontal"> 
                                 {# itère sur chaque tag existant et affiche son unique champ : name #}
                                 {% for confPermission in add_teamate_form.confPermissions %}
-                                  {% if confPermission.vars.value.restricted %} 
+                                  {% if confPermission.vars.value.restricted == false %} 
                                   <div  class="form-group">
                                     <label class="col-sm-2 control-label">{{ confPermission.vars.value.entityLabel }}</label>
                                     <div class="col-sm-10">

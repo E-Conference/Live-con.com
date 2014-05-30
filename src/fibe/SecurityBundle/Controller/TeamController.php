@@ -82,7 +82,6 @@ class TeamController extends Controller
       $ACLService = $this->get('fibe_security.acl_user_permission_helper');
       $team = $ACLService->getEntityACL('CREATE','Team',$currentConf->getTeam()->getId());
 
-
       $userConfPermission = $ACLService->getUserConfPermission(); 
       $form = $this->createForm(new UserConfPermissionType($this->getUser()), $userConfPermission); 
       $form->bind($request);

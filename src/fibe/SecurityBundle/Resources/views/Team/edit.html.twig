@@ -24,7 +24,7 @@
     <form action="{{ path('conference_teamate_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
       <div class="form-horizontal"> 
           {% for confPermission in edit_form.confPermissions %}
-            {% if confPermission.vars.value.restricted %} 
+            {% if confPermission.vars.value.restricted == false %} 
               <div class="form-group">
                 <label class="col-sm-2 control-label">{{ confPermission.vars.value.entityLabel }}</label>  
                 <div class="col-sm-10 choiceList">

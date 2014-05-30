@@ -8,7 +8,8 @@
   use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity; 
   use Symfony\Component\Security\Acl\Permission\MaskBuilder;
   /**
-   * Doctrine listener post persist event filling ACL 
+   * Post persist doctrine listener that add the acl MASTER for the current user 
+   *   also set a right for all user of the team
    */
   class AddACL {
     protected $container;
@@ -20,15 +21,16 @@
 
     public function postPersist(LifecycleEventArgs $args)
     {
+      // $entityManager = $args->getEntityManager();
       $entity = $args->getEntity();
-      $entityManager = $args->getEntityManager();
       $token = $this->container->get('security.context')->getToken();
-      if (isset($token)) {
-        $user = $token->getUser();
-      }
+      if (!isset($token))return;
+      $user = $token->getUser();
+
       try {
         //check if the entity is managed with ACL 
-        $this->container->get('fibe_security.acl_entity_helper')->getClassNameByRepositoryName($this->get_real_class($entity));
+        $aclHelper = $this->container->get('fibe_security.acl_user_permission_helper');
+        $aclHelper->getClassNameByRepositoryName($this->get_real_class($entity));
         // creating the ACL
         $aclProvider = $this->container->get('security.acl.provider');
 
@@ -40,15 +42,17 @@
         // grant owner access
         $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
         $aclProvider->updateAcl($acl);
-        //TODO : SHARE WITH TEAMATES
-        //TODO : SHARE WITH TEAMATES
-        //TODO : SHARE WITH TEAMATES
-        //TODO : SHARE WITH TEAMATES
-        //TODO : SHARE WITH TEAMATES
-        //TODO : SHARE WITH TEAMATES
-        //TODO : SHARE WITH TEAMATES
-        //TODO : SHARE WITH TEAMATES
-      } catch(\RunTimeException $e){
+
+        //share with teamates
+        $teamates = $user->getCurrentConf()->getTeam()->getConfManagers();
+        foreach ($teamates as $teamate)
+        {
+          if($teamate->getId() != $user->getId())
+          {
+            $aclHelper->createUserACL($teamate,$entity);
+          }
+        }
+      } catch(\EntityACLNotRegisteredException $e){
         // just don't add acl
       }
     }
