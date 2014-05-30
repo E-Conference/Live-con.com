@@ -155,8 +155,7 @@
   <link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.print.css') }}" rel='stylesheet' media='print' /> 
   <link href="{{ asset('bundles/fibewwwconf/css/fullcalendarAddedUI.css') }}" rel='stylesheet'/>  
   <link href="{{ asset('bundles/fibewwwconf/css/jquery.mCustomScrollbar.css') }}" rel='stylesheet'/>  
-  <link href="{{ asset('bundles/fibewwwconf/css/jquery.mCustomScrollbar.css') }}" rel='stylesheet'/> 
-  <link href="{{ asset('css/slider.css') }}" rel='stylesheet'/>   
+  <link href="{{ asset('css/slider.css') }}" rel='stylesheet'/>  
 {% endblock stylesheets_page %}
 
 
@@ -293,6 +292,8 @@
               name: "Not defined",
               id  : "0"
             };
+
+        
       function fetchAllResources(callback){ 
         $.ajax({
           url:resConfig[currentRes].url,
@@ -345,7 +346,6 @@
       /*----------------------------------------------------------------------------------------*/
       /*------------------------------------- end resources ------------------------------------*/
       /*----------------------------------------------------------------------------------------*/
-
 
 
       /*-------------------------------------------------------------------------------------------------*/
@@ -424,25 +424,46 @@
           if(res == currentRes)filterResourcesByIds(val); //ADDED FOR RESOURCES
       }).on("changed", function(ev,data,ids){
           bootstrapAlert("success",ids.length+" events have been well fetched" );
-          ids.push(mainConfEvent.id);
+          // ids.push(mainConfEvent.id);
           var calEvents = $calendar.fullCalendar('clientEvents');
-          //hide filtered event 
+          var eventsToShow = [];
+          //hide/show filtered event 
           for(var i in calEvents){
             var e = Events[calEvents[i].id];
             if($.inArray(e.id, ids) === -1 ){
               //hide
               e.hideElem();
-            } else if( ($calendar.fullCalendar('getView').name != "resourceDay" || !e.hasChild()) && e.hide === true){
+              ids.remove(calEvents[i].id);
+            } else if(($calendar.fullCalendar('getView').name != "resourceDay" || !e.hasChild()) && e.hide === true){
               //show back
-              e.showElem();
-
+              e.showElem(); 
             }
-            // else{ 
-            //   if(e.elem)e.elem.show() 
-            // }
+            else
+            {
+              ids.remove(calEvents[i].id);
+            }
           }
+          $.each(ids,function()
+          {
+            event = Events[this];
+            if(event)
+            {
+              event.showElem();
+              event.renderForRefetch(); 
+            }
+          });
+          EventCollection.refetchEvents(false,true);
       }); 
-});//end $document.ready()  
+});//end $document.ready()
+
+// util fn
+
+  arrayRemoveKey = function(array,key) {
+    $.grep(array, function(e){ 
+      return e != key; 
+    });
+  };  
+
   </script>    
   
 {% endblock javascripts_page %}

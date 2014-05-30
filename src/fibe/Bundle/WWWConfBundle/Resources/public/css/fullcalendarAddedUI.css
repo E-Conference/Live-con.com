@@ -156,13 +156,15 @@
 
 /****  modal *****/
 
-#modal .modal-dialog {
-    width: 90%;
+#modal-edit-event .modal-dialog {
+    width: 80%;
 }
 
-#modal-set-parent .modal-body {
-    /*text-align: center; */
-}
+@media (min-width: 768px)
+#modal-edit-event .modal-dialog {
+    width: 80%;
+    margin: 30px auto;
+} 
 
 #calendar table {
     table-layout: fixed;

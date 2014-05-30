@@ -74,15 +74,13 @@
             </form>  
             <h3 class="text-info">Action</h3> 
             <a  class="empty-conf btn btn-danger btn-xs" 
-                {% if  wwwConf.isEmpty() %}
+                {% if  app.user.currentConf.isEmpty() %}
                 disabled="disabled" 
                 {% else %} 
                 {% endif %}
-                href="{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}"> 
+                href="{{ path('schedule_conference_empty', { 'id': app.user.currentConf.id }) }}"> 
                 <i class="fa fa-trash-o"></i> Empty conference
-            </a>
-
-             <a href="{{path('externalization_import_xls')}}">Test xls import</a>
+            </a> 
         </div>
 
         <div id="page-mapping-file" data-progress="20" data-desc="Step 2 : Please select a mapping file to use" class="page" style="display:none;">   
@@ -228,7 +226,7 @@
             ///confirm empty 
             $('.empty-conf').click(function(){
                 confirmEmpty(function(){
-                    window.location = "{{ path('schedule_conference_empty', { 'id': wwwConf.id }) }}";
+                    window.location = "{{ path('schedule_conference_empty', { 'id': app.user.currentConf.id }) }}";
                 })
                 return false;
             }); 

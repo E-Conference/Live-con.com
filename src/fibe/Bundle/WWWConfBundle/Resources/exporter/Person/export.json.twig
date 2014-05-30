@@ -10,7 +10,7 @@
     "given_name"  : {% if entity.givenName != null %}{{entity.givenName|json_encode|raw()}}{% else %}""{% endif %},
     "slug"        : {% if entity.slug != null %}{{entity.slug|json_encode|raw()}}{% else %}""{% endif %},
     "description" : {% if entity.description != null %}{{entity.description|json_encode|raw()}}{% else %}""{% endif %},
-    "homepage"    : {% if entity.homepage != null %}{{entity.homepage|json_encode|raw()}}{% else %}""{% endif %},
+    "homepage"    : {% if entity.page != null %}{{entity.page|json_encode|raw()}}{% else %}""{% endif %},
     "based_near"  : {% if entity.based_near != null %}{{entity.based_near|json_encode|raw()}}{% else %}""{% endif %},
     "image"       : {% if entity.img != null %}{{entity.img|json_encode|raw()}}{% else %}""{% endif %},
     {% spaceless %}
@@ -20,10 +20,10 @@
         {% if loop.first %}{% else %},{% endif %}
         { 
             "id": "{{ role.id }}", 
-            "type": {% if role.type != null %}{{role.type|json_encode|raw()}}{% else %}""{% endif %}, 
+            "type": {% if role.type != null %}{{role.type.name|json_encode|raw()}}{% else %}""{% endif %}, 
             "event": {
                 "id"  : "{{ role.event.id }}",
-                "name": {% if role.event != null %}{{role.event|json_encode|raw()}}{% else %}""{% endif %}
+                "name": {% if role.event != null %}{{role.event.summary|json_encode|raw()}}{% else %}""{% endif %}
             }
         }
     {% endfor %}

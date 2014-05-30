@@ -26,10 +26,10 @@
             <a href="{{ path('dashboard_index') }}"><i class="fa fa-list"></i> Conferences Homepage </a>
           </li>
           <li class="divider"></li>
-          {% for conference in app.user.getConferences() %}
+          {% for conference in app.user.conferences %}
             <li>
               <a style="padding-right:5px;" href="{{ path('schedule_conference_switch', {id: conference.id}) }}">
-                {{ conference.getConfName() }}
+                {{ conference.confName) }}
               </a>
             </li>
           {% endfor %}
@@ -40,13 +40,13 @@
       <li class="dropdown">
         <a href="{{ path('schedule_conference_show') }}" title="manage schedule" class="dropdown-toggle"
            data-toggle="dropdown">
-          {{ app.user.getCurrentConf().getConfName() }}
+          {{ app.user.currentConf.confName }}
           <b class="caret"></b>
         </a>
         <ul class="dropdown-menu">
-          {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
+          {% if is_granted('SHOW', app.user.currentConf) %}
             <li>
-              <a href="{{ path('schedule_conference_show') }}"><i class="icon-cog"></i> Conference settings </a>
+              <a href="{{ path('schedule_conference_show') }}"><i class="icon-cog"></i> Conference </a>
             </li>
           {% endif %}
         </ul>

@@ -22,44 +22,9 @@ class ImportController extends Controller
     * @Template()
     */
     public function indexAction()
-    {
-      
-        $em = $this->getDoctrine()->getManager();       
-        $wwwConf = $this->getUser()->getCurrentConf();
-
-        //Authorization Verification conference datas manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-        return array(
-              'wwwConf'  => $wwwConf,
-              'authorized' => $authorization->getFlagconfDatas()
-              );
+    { 
+        //check right
+        $conference = $this->get('fibe_security.acl_entity_helper')->getEntityACL('OPERATOR','WwwConf');
+        return array();
     }
-
-
-    /**
-     * Importer access.
-    *
-    * @Route("/xls", name="externalization_import_xls")
-    * @Template()
-    */
-    public function xlsImportAction()
-    {
-      
-        $em = $this->getDoctrine()->getManager();       
-        $wwwConf = $this->getUser()->getCurrentConf();
-
-        //Authorization Verification conference datas manager
-        $user=$this->getUser();
-        $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-        return array(
-              'wwwConf'  => $wwwConf,
-              'authorized' => $authorization->getFlagconfDatas()
-              );
-    }
-
-
-
 }
