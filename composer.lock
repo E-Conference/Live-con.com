@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "124bf7fb051d146d416423a2314a758f",
+    "hash": "3576d35bcd0e8a36e5f8252f2ad16c0f",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -753,17 +753,17 @@
         },
         {
             "name": "gregwar/captcha-bundle",
-            "version": "v1.0.11",
+            "version": "dev-master",
             "target-dir": "Gregwar/CaptchaBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Gregwar/CaptchaBundle.git",
-                "reference": "f2e07fe6f297da5720b16f5784ca5bc4c241ee41"
+                "reference": "7dd05f5389cd9471c092b8caee979977a8eb5b31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Gregwar/CaptchaBundle/zipball/f2e07fe6f297da5720b16f5784ca5bc4c241ee41",
-                "reference": "f2e07fe6f297da5720b16f5784ca5bc4c241ee41",
+                "url": "https://api.github.com/repos/Gregwar/CaptchaBundle/zipball/7dd05f5389cd9471c092b8caee979977a8eb5b31",
+                "reference": "7dd05f5389cd9471c092b8caee979977a8eb5b31",
                 "shasum": ""
             },
             "require": {
@@ -802,7 +802,7 @@
                 "spam",
                 "visual"
             ],
-            "time": "2014-03-19 15:15:10"
+            "time": "2014-05-14 09:55:23"
         },
         {
             "name": "idci/exporter-bundle",
@@ -1340,6 +1340,66 @@
                 "minification"
             ],
             "time": "2013-07-19 00:03:27"
+        },
+        {
+            "name": "lexik/form-filter-bundle",
+            "version": "v2.0.4",
+            "target-dir": "Lexik/Bundle/FormFilterBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lexik/LexikFormFilterBundle.git",
+                "reference": "cdaf5a9b33b5bf787d3075aad5b15f5004979771"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lexik/LexikFormFilterBundle/zipball/cdaf5a9b33b5bf787d3075aad5b15f5004979771",
+                "reference": "cdaf5a9b33b5bf787d3075aad5b15f5004979771",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/orm": "~2.2",
+                "php": ">=5.3.2",
+                "symfony/form": "~2.1",
+                "symfony/framework-bundle": "~2.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~3.7"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Lexik\\Bundle\\FormFilterBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dev Lexik",
+                    "email": "dev@lexik.fr"
+                },
+                {
+                    "name": "Cedric Girard",
+                    "email": "c.girard@lexik.fr"
+                }
+            ],
+            "description": "This bundle aim to provide classes to build some form filters and then build a doctrine query from this form filter.",
+            "homepage": "https://github.com/lexik/LexikFormFilterBundle",
+            "keywords": [
+                "Symfony2",
+                "bundle",
+                "doctrine",
+                "filter",
+                "form"
+            ],
+            "time": "2014-04-25 07:17:11"
         },
         {
             "name": "monolog/monolog",
@@ -2282,7 +2342,8 @@
     ],
     "minimum-stability": "alpha",
     "stability-flags": {
-        "doctrine/orm": 20
+        "doctrine/orm": 20,
+        "gregwar/captcha-bundle": 20
     },
     "platform": {
         "php": ">=5.3.3"

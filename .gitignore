@@ -2,7 +2,9 @@
 *.iml
 .idea
 
-/src/fibe/MobileAppBundle/Resources/public/DataConf/
+composer.lock
+
+src/fibe/MobileAppBundle/Resources/public/DataConf/
 
 reset
 
@@ -14,9 +16,8 @@ web/uploads/*
 web/bundles/*
 vendor/*
 
-# Configuration files
+# Symfony files
 app/config/parameters.yml
-
 app/bootstrap.php.cache
 
 # gedit temp file
