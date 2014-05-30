@@ -293,6 +293,15 @@ var rdfConfig = {
                 {
                     format : [{
                         fn : "children",
+                        arg : ["summary"]
+                    },{
+                        fn : "text"
+                    }],
+                    setter : 'setSummary'
+                },
+                {
+                    format : [{
+                        fn : "children",
                         arg : ["swc:hasacronym"]
                     },{
                         fn : "text"
@@ -324,7 +333,7 @@ var rdfConfig = {
                 {
                     format : [{
                         fn : "children",
-                        arg : ["ical:description"]
+                        arg : ["description"]
                     },{
                         fn : "text"
                     }],
@@ -333,7 +342,7 @@ var rdfConfig = {
                 {
                     format : [{
                         fn : "children",
-                        arg : ["icaltzd:dtstart"]
+                        arg : ["dtstart"]
                     },{
                         fn : "text"
                     }],
@@ -342,7 +351,7 @@ var rdfConfig = {
                 {
                     format : [{
                         fn : "children",
-                        arg : ["icaltzd:dtend"]
+                        arg : ["dtend"]
                     },{
                         fn : "text"
                     }],
@@ -351,19 +360,8 @@ var rdfConfig = {
                 {
                     format : [{
                         fn : "children",
-                        arg : ["ical:dtstart"]
-                    },{
-                        fn : "text",
-                    },{
-                        fn : "parseTime"
-                    }],
-                    setter : 'setStartAt', 
-                },
-                {
-                    format : [{
-                        fn : "children",
-                        arg : ["ical:dtend"]
-                    },{
+                        arg : ["dtend"]
+                    },{ 
                         fn : "text",
                     },{
                         fn : "parseTime"
@@ -417,7 +415,7 @@ var rdfConfig = {
                 {
                     format : [{
                         fn : "children",
-                        arg : ["icaltzd:location"]
+                        arg : ["location"]
                     },{
                         fn : "attr",
                         arg : ["rdf:resource"]
@@ -434,7 +432,7 @@ var rdfConfig = {
                 {
                     format : [{
                         fn : "children",
-                        arg : ["icaltzd:location"]
+                        arg : ["location"]
                     },{
                         fn : "attr",
                         arg : ["text"]

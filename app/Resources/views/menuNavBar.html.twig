@@ -9,7 +9,7 @@
     </button>
 
     <button class="btn btn-default btn-lg btn-conf" type="button">
-      <a href="{{ path('schedule_conference_show') }}">{{ app.user.getCurrentConf().getConfName() }} </a>
+      <a href="{{ path('schedule_conference_show') }}">{{ app.user.currentConf.confName }} </a>
     </button>
 
   </div>
@@ -33,17 +33,17 @@
                 <i class="fa  fa-search-plus fa-3x"></i> Overview
               </a>
 
-              {% if is_granted('VIEW', app.user.getCurrentConf()) %} 
+              {% if is_granted('VIEW', app.user.currentConf) %} 
                 <a style="padding-right:5px;" href="{{ path('schedule_conference_settings') }}">
                   <i class="fa fa-inbox fa-3x"></i> Modules manager
                 </a>
               {% endif %}
-              {% if is_granted('VIEW', app.user.getTeam()) %}  
+              {% if is_granted('VIEW', app.user.currentConf.team) %}  
                 <a style="padding-right:5px;" href="{{ path('conference_team_index') }}">
                   <i class="fa fa-users fa-3x"></i> Team
                 </a>
               {% endif %}
-              {% if is_granted('OPERATOR', app.user.getCurrentConf()) %}  
+              {% if is_granted('OPERATOR', app.user.currentConf) %}  
                 <a href="{{ path('externalization_import_index') }}">
                   <i class="fa fa-cloud-upload fa-3x"></i> Import
                 </a> 

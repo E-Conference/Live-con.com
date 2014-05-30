@@ -4,7 +4,7 @@
 
 composer.lock
 
-src/fibe/MobileAppBundle/Resources/public/DataConf/
+src/fibe/MobileAppBundle/Resources/public/mobileApp/*
 
 reset
 

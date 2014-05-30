@@ -120,8 +120,12 @@ xmlMapper = {
             } 
             return rtn;
         },
-        text : function(node){
-            return $(node).text();
+        text : function(node){ 
+            var rtn = [];
+            $(node).each( function(){
+                rtn.push($(this).text());
+            })
+            return rtn.length > 1 ? rtn : rtn.length == 1 ? rtn[0] : undefined;
         },
         split : function(text,arg){
             if(!text)return text;
@@ -142,7 +146,11 @@ xmlMapper = {
         // get a specific attr for the given node
         //arg[0] must contain the wanted attr
         attr : function(node,arg){
-            return $(node).attr(arg[0]) || $(node).attr(arg[0]);
+            var rtn = [];
+            $(node).each( function(){
+                rtn.push($(this).attr(arg[0]) );
+            })
+            return rtn.length > 1 ? rtn : rtn.length == 1 ? rtn[0] : undefined;
         },
         parseTime : function(node){ 
             var rtn;
@@ -171,7 +179,7 @@ xmlMapper = {
         }, 
         // get specific children in a nodeSet ( case sensitive )
         //arg[0] string : contains the seeked children nodeName. if undefined returns all
-        //arg[1] bool   : option to match with substring containment
+        //arg[1] bool   : if true : match with "===" else match with substring containment
         children : function(node,arg){
             var node = $(node)
             if(!arg)return $(node).children();

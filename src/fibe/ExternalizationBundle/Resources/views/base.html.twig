@@ -66,21 +66,7 @@
             <script type="text/javascript" >
             bootstrapAlert("warning","{{ flashMessage }}","Error : ",'<i class="icon-meh"></i> '); 
             </script> 
-        {% endfor %}
-
-        <!-- Authorization -->
-        {% if authorized == 0 %}
-            <script type="text/javascript" >
-             $(document).ready(function(){
-                 $(".edit").hide();
-                 $(".create").hide();
-                 $(".delete").hide();
-                 $(".edit-event").hide();
-                 $(".create-event").hide();
-                 $(".delete-event").hide(); 
-             });
-            </script> 
-        {% endif %}
+        {% endfor %} 
 
         <!-- Hide module not used in the conference -->
          {% if app.user.getCurrentConf().getModule().getPaperModule() == 0 %}

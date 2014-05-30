@@ -58,7 +58,7 @@
       $newManagerDefaultAction = 'EDIT';
       $repositoryName = 'WwwConf';
       $entityLabel = 'Conference';
-      $confPermission=$this->newConfPermission($user,$restrictForm,$formAllowed,$noManager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel);
+      $confPermission=$this->newConfPermission($user,$restrictForm,$formAllowed,$noManager,$manager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel);
       $userConfPermission->addConfPermission($confPermission);
 
 
@@ -66,7 +66,7 @@
       $newManagerDefaultAction = 'EDIT';
       $repositoryName = 'MobileAppConfig';
       $entityLabel = 'Mobile application';
-      $confPermission=$this->newConfPermission($user,$restrictForm,$formAllowed,$noManager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel);
+      $confPermission=$this->newConfPermission($user,$restrictForm,$formAllowed,$noManager,$manager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel);
       $userConfPermission->addConfPermission($confPermission);
 
 
@@ -74,7 +74,7 @@
       $newManagerDefaultAction = 'VIEW';
       $repositoryName = 'Team';
       $entityLabel = 'Team';
-      $confPermission=$this->newConfPermission($user,$restrictForm,$formAllowed,$noManager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel);
+      $confPermission=$this->newConfPermission($user,$restrictForm,$formAllowed,$noManager,$manager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel);
       $userConfPermission->addConfPermission($confPermission);
 
       $userConfPermission->setRestricted(!$formAllowed);
@@ -82,7 +82,7 @@
       return $userConfPermission; 
     } 
 
-    private function newConfPermission($user,$restrictForm,$formAllowed,$noManager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel)
+    private function newConfPermission($user,$restrictForm,$formAllowed,$noManager,$manager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel)
     {
       $currentUserAction = $this->getACEByEntity($entity,$user);
       $isMaster = ($currentUserAction == "OWNER" || $currentUserAction == "MASTER");

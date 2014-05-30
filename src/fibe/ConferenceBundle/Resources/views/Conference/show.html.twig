@@ -131,9 +131,9 @@
       var osm = new L.TileLayer(osmUrl, {minZoom: 1, maxZoom: 15, attribution: osmAttrib});
       map.addLayer(osm);
 
-      {% if (location.latitude is not empty) and (location.longitude is not empty) %}
-      map.setView(new L.LatLng({{location.latitude}}, {{location.longitude}}), 13);
-      marker = L.marker([{{location.latitude}}, {{location.longitude}}]).addTo(map);
+      {% if (conference.mainConfEvent.location.latitude is not empty) and (conference.mainConfEvent.location.longitude is not empty) %}
+      map.setView(new L.LatLng({{conference.mainConfEvent.location.latitude}}, {{conference.mainConfEvent.location.longitude}}), 13);
+      marker = L.marker([{{conference.mainConfEvent.location.latitude}}, {{conference.mainConfEvent.location.longitude}}]).addTo(map);
       {% else %}
       map.setView(new L.LatLng(40, 10), 1);
       $.get("http://ipinfo.io", function (response)
