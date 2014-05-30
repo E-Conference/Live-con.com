@@ -61,10 +61,8 @@
       //Form Filter
       $filters = $this->createForm(new ConfEventFilterType($this->getUser()));
 
-      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return array(
         'pager'        => $pager,
-        'authorized'   => true,
         'filters_form' => $filters->createView()
       );
     }
@@ -141,11 +139,9 @@
         return $this->redirect($this->generateUrl('schedule_confevent_show', array('id' => $entity->getId())));
       }
 
-      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:ConfEvent:new.html.twig', array(
         'entity'     => $entity,
         'form'       => $form->createView(),
-        'authorized' => true
       ));
     }
 
@@ -160,11 +156,9 @@
 
       $form = $this->createForm(new ConfEventType($this->getUser()), $entity);
 
-      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:ConfEvent:new.html.twig', array(
         'entity'     => $entity,
         'form'       => $form->createView(),
-        'authorized' => true
       ));
     }
 
@@ -180,11 +174,9 @@
 
       $deleteForm = $this->createDeleteForm($id);
 
-      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:ConfEvent:show.html.twig', array(
         'entity'      => $entity,
         'delete_form' => $deleteForm->createView(),
-        'authorized'  => true
 
       ));
     }
@@ -225,7 +217,6 @@
           'label'    => "Select topic"))
         ->getForm();
 
-      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:ConfEvent:edit.html.twig', array(
         'entity'      => $entity,
         'edit_form'   => $editForm->createView(),
@@ -233,7 +224,6 @@
         'role_form'   => $form_role->createView(),
         'paper_form'  => $form_paper->createView(),
         'topic_form'  => $form_topic->createView(),
-        'authorized'  => true
       ));
     }
 
@@ -357,10 +347,8 @@
       $em->persist($entity);
       $em->flush();
 
-      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:ConfEvent:topicRelation.html.twig', array(
         'entity'     => $entity,
-        'authorized' => true
       ));
     }
 
@@ -386,10 +374,8 @@
       $em->persist($entity);
       $em->flush();
 
-      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:ConfEvent:topicRelation.html.twig', array(
         'entity'     => $entity,
-        'authorized' => true
       ));
     }
 
@@ -417,10 +403,8 @@
       $em->persist($entity);
       $em->flush();
 
-      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:ConfEvent:paperRelation.html.twig', array(
         'entity'     => $entity,
-        'authorized' => true
       ));
     }
 
@@ -445,10 +429,8 @@
       $em->persist($entity);
       $em->flush();
 
-      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:ConfEvent:paperRelation.html.twig', array(
         'entity'     => $entity,
-        'authorized' => true
       ));
     }
 
@@ -492,10 +474,8 @@
       $em->persist($entity);
       $em->flush();
 
-      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:ConfEvent:personRelation.html.twig', array(
         'entity'     => $entity,
-        'authorized' => true
       ));
     }
 
@@ -523,10 +503,8 @@
       $em->persist($entity);
       $em->flush();
 
-      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return $this->render('fibeWWWConfBundle:ConfEvent:personRelation.html.twig', array(
         'entity'     => $entity,
-        'authorized' => true
       ));
     }
   }

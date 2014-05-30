@@ -54,58 +54,50 @@
       $noManager = ($manager == null);
       if($noManager) $manager = $user;
 
-
       $entity = $currentConf;
-      $currentUserAction = $this->getACEByEntity($entity,$user); 
-      $isMaster = ($currentUserAction == "OWNER" || $currentUserAction == "MASTER");
-      $allowed = !$restrictForm || $isMaster; 
-      $action = !$allowed ? 'VIEW' : ($noManager ? 'EDIT' : $this->getACEByEntity($entity,$manager));
-      $formAllowed |= $isMaster;
-      
-      $confPermission = new ConfPermission();
-      $confPermission->setEntityLabel('Conference');
-      $confPermission->setAction($action);
-      $confPermission->setRestricted(!$allowed);
-      $confPermission->setRepositoryName('WwwConf');
-      $confPermission->setEntityId($entity->getId());
+      $newManagerDefaultAction = 'EDIT';
+      $repositoryName = 'WwwConf';
+      $entityLabel = 'Conference';
+      $confPermission=$this->newConfPermission($user,$restrictForm,$formAllowed,$noManager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel);
       $userConfPermission->addConfPermission($confPermission);
 
 
       $entity = $currentConf->getAppConfig();
-      $currentUserAction = $this->getACEByEntity($entity,$user); 
-      $isMaster = ($currentUserAction == "OWNER" || $currentUserAction == "MASTER"); 
-      $allowed = !$restrictForm || $isMaster;
-      $action = !$allowed ? 'VIEW' : ($noManager ? 'EDIT' : $this->getACEByEntity($entity,$manager));
-      $formAllowed |= $isMaster;
-      
-      $confPermission = new ConfPermission();
-      $confPermission->setEntityLabel('Mobile application');
-      $confPermission->setAction($action);
-      $confPermission->setRestricted(!$allowed);
-      $confPermission->setRepositoryName('MobileAppConfig');
-      $confPermission->setEntityId($entity->getId());
+      $newManagerDefaultAction = 'EDIT';
+      $repositoryName = 'MobileAppConfig';
+      $entityLabel = 'Mobile application';
+      $confPermission=$this->newConfPermission($user,$restrictForm,$formAllowed,$noManager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel);
       $userConfPermission->addConfPermission($confPermission);
 
 
       $entity = $currentConf->getTeam();
-      $currentUserAction = $this->getACEByEntity($entity,$user); 
-      $isMaster = ($currentUserAction == "OWNER" || $currentUserAction == "MASTER");
-      $allowed = !$restrictForm || $isMaster;
-      $action = !$allowed ? 'VIEW' : ($noManager ? 'VIEW' : $this->getACEByEntity($entity,$manager));
-      $formAllowed |= $isMaster;
-      
-      $confPermission = new ConfPermission();
-      $confPermission->setEntityLabel('Team');
-      $confPermission->setAction($action);
-      $confPermission->setRestricted(!$allowed);
-      $confPermission->setRepositoryName('Team');
-      $confPermission->setEntityId($entity->getId());
+      $newManagerDefaultAction = 'VIEW';
+      $repositoryName = 'Team';
+      $entityLabel = 'Team';
+      $confPermission=$this->newConfPermission($user,$restrictForm,$formAllowed,$noManager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel);
       $userConfPermission->addConfPermission($confPermission);
-      
+
       $userConfPermission->setRestricted(!$formAllowed);
       
       return $userConfPermission; 
     } 
+
+    private function newConfPermission($user,$restrictForm,$formAllowed,$noManager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel)
+    {
+      $currentUserAction = $this->getACEByEntity($entity,$user);
+      $isMaster = ($currentUserAction == "OWNER" || $currentUserAction == "MASTER");
+      $allowed = !$restrictForm || $isMaster;
+      $action = !$allowed ? 'VIEW' : ($noManager ? $newManagerDefaultAction : $this->getACEByEntity($entity,$manager));
+      $formAllowed |= $isMaster;
+      
+      $confPermission = new ConfPermission();
+      $confPermission->setEntityLabel($entityLabel);
+      $confPermission->setAction($action);
+      $confPermission->setRestricted(!$allowed);
+      $confPermission->setRepositoryName($repositoryName);
+      $confPermission->setEntityId($entity->getId());
+      return $confPermission
+    }
  
     /**
      * process UserConfPermission to change permissions of UserConfPermission->getUser()

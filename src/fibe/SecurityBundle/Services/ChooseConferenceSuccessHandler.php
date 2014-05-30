@@ -7,6 +7,7 @@
       Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface,
       Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
+  
   class ChooseConferenceSuccessHandler implements AuthenticationSuccessHandlerInterface
   {
     protected $router;
@@ -21,7 +22,7 @@
       if (!$token->getUser()->getCurrentConf()) {
         return new RedirectResponse($this->router->generate('dashboard_index'));
       }else{
-        return new RedirectResponse($this->router->generate('schedule_conference_edit'));
+        return new RedirectResponse($this->router->generate('schedule_conference_show'));
       }
     }
   }

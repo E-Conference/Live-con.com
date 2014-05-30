@@ -16,20 +16,13 @@ use Symfony\Component\Form\FormEvent;
 
 abstract class LocationAwareCalendarEntityType extends CalendarEntityType
 {
-   
-    private $user;
-
-    public function __construct($user)
-    {
-        parent::__construct();
-        $this->user = $user;
-    }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event){ 
-            if (!$event->getData()->hasChildren()) {
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event){
+            //hide location field if the event has a child
+            if (!$event->getForm()->has("location") && !$event->getData()->hasChildren()) {
                 $event->getForm()->add('location', 'entity', array(
                     'class'    => 'fibeWWWConfBundle:Location',
                     'label'    => 'Location',

@@ -7,7 +7,6 @@
   use Symfony\Component\Validator\Constraints as Assert;
 
   use fibe\SecurityBundle\Entity\User;
-  use fibe\SecurityBundle\Entity\Authorization;
   use fibe\Bundle\WWWConfBundle\Entity\MappingFile;
   use fibe\Bundle\WWWConfBundle\Util\StringTools;
 
@@ -91,15 +90,7 @@
      *
      * @ORM\ManyToMany(targetEntity="fibe\SecurityBundle\Entity\User", mappedBy="conferences",cascade={"persist"})
      */
-    private $confManagers;
-
-    /**
-     *
-     * @ORM\OneToMany(targetEntity="fibe\SecurityBundle\Entity\Authorization",  mappedBy="conference",cascade={"persist"})
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     *
-     */
-    private $authorizations;
+    private $confManagers; 
 
 
     /**
@@ -695,135 +686,7 @@
     public function getLogoPath()
     {
       return $this->logoPath;
-    }
-
-    /**
-     * Add authorizations
-     *
-     * @param \fibe\SecurityBundle\Entity\Authorization $authorizations
-     *
-     * @return WwwConf
-     */
-    public function addAuthorization(\fibe\SecurityBundle\Entity\Authorization $authorizations)
-    {
-      $this->authorizations[] = $authorizations;
-
-      return $this;
-    }
-
-    /**
-     * Remove authorizations
-     *
-     * @param \fibe\SecurityBundle\Entity\Authorization $authorizations
-     */
-    public function removeAuthorization(\fibe\SecurityBundle\Entity\Authorization $authorizations)
-    {
-      $this->authorizations->removeElement($authorizations);
-    }
-
-    /**
-     * Get authorizations
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAuthorizations()
-    {
-      return $this->authorizations;
-    }
-
-    /**
-     *Get an authorization for a specific user
-     *
-     */
-    public function getAuthorizationByUser(\fibe\SecurityBundle\Entity\User $confManager)
-    {
-      foreach ($this->authorizations as $authorization)
-      {
-        if ($authorization->getUser()->getId() == $confManager->getId())
-        {
-          return $authorization;
-        }
-      }
-      return null;
-    }
-
-    /**
-     *Get an authorization falg app for a specific conference
-     *
-     */
-    public function getFlagAppByManagerId($userId)
-    {
-      foreach ($this->authorizations as $authorization)
-      {
-        if ($authorization->getUser()->getId() == $userId)
-        {
-          return $authorization->getFlagApp();
-        }
-      }
-      return false;
-    }
-
-    /**
-     *Get an authorization falg app for a specific conference
-     *
-     */
-    public function getFlagSchedByManagerId($userId)
-    {
-      foreach ($this->authorizations as $authorization)
-      {
-        if ($authorization->getUser()->getId() == $userId)
-        {
-          return $authorization->getFlagSched();
-        }
-      }
-      return false;
-    }
-
-    /**
-     *Get an authorization falg app for a specific conference
-     *
-     */
-    public function getFlagDatasByManagerId($userId)
-    {
-      foreach ($this->authorizations as $authorization)
-      {
-        if ($authorization->getUser()->getId() == $userId)
-        {
-          return $authorization->getFlagconfDatas();
-        }
-      }
-      return false;
-    }
-
-    /**
-     *Get an authorization flag app for a specific conference
-     *
-     */
-    public function getFlagByManagerId($userId, $flagType)
-    {
-      foreach ($this->authorizations as $authorization)
-      {
-        if ($authorization->getUser()->getId() == $userId)
-        {
-          switch ($flagType)
-          {
-            case 'sched':
-              return $authorization->getFlagSched();
-              break;
-            case 'app':
-              return $authorization->getFlagApp();
-              break;
-            case 'datas':
-              return $authorization->getFlagconfDatas();
-              break;
-            case 'team':
-              return $authorization->getFlagTeam();
-              break;
-          }
-        }
-      }
-      return false;
-    }
+    } 
 
     /**
      * @TODO comment

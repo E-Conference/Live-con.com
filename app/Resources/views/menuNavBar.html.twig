@@ -9,7 +9,7 @@
     </button>
 
     <button class="btn btn-default btn-lg btn-conf" type="button">
-      <a href="{{ path('schedule_conference_edit') }}">{{ app.user.getCurrentConf().getConfName() }} </a>
+      <a href="{{ path('schedule_conference_show') }}">{{ app.user.getCurrentConf().getConfName() }} </a>
     </button>
 
   </div>
@@ -29,25 +29,24 @@
           <ul class="dropdown-menu">
 
             <li>
-              <a style="padding-right:5px;" href="{{ path('schedule_conference_edit') }}">
+              <a style="padding-right:5px;" href="{{ path('schedule_conference_show') }}">
                 <i class="fa  fa-search-plus fa-3x"></i> Overview
               </a>
-              {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
+
+              {% if is_granted('VIEW', app.user.getCurrentConf()) %} 
                 <a style="padding-right:5px;" href="{{ path('schedule_conference_settings') }}">
                   <i class="fa fa-inbox fa-3x"></i> Modules manager
                 </a>
               {% endif %}
-              {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')== 1 %}
+              {% if is_granted('VIEW', app.user.getTeam()) %}  
                 <a style="padding-right:5px;" href="{{ path('conference_team_index') }}">
                   <i class="fa fa-users fa-3x"></i> Team
                 </a>
               {% endif %}
-              {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
+              {% if is_granted('OPERATOR', app.user.getCurrentConf()) %}  
                 <a href="{{ path('externalization_import_index') }}">
                   <i class="fa fa-cloud-upload fa-3x"></i> Import
-                </a>
-              {% endif %}
-              {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
+                </a> 
                 <a href="{{ path('externalization_export_index') }}">
                   <i class="fa fa-download fa-3x"></i> Export
                 </a>

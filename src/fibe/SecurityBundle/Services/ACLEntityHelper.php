@@ -23,37 +23,45 @@
     
     /** @const */
     public static $ACLEntityNameArray = array(
+      'WwwConf'        => 'fibe\\Bundle\\WWWConfBundle\\Entity',
       'Team'           => 'fibe\\SecurityBundle\\Entity',
       'MobileAppConfig'=> 'fibe\\MobileAppBundle\\Entity',
-      'WwwConf'        => 'fibe\\Bundle\\WWWConfBundle\\Entity',
+      'Module'         => 'fibe\\Bundle\\WWWConfBundle\\Entity',
+      
       'ConfEvent'      => 'fibe\\Bundle\\WWWConfBundle\\Entity',
       'Location'       => 'fibe\\Bundle\\WWWConfBundle\\Entity',
       'Paper'          => 'fibe\\Bundle\\WWWConfBundle\\Entity',
       'Person'         => 'fibe\\Bundle\\WWWConfBundle\\Entity',
       'Role'           => 'fibe\\Bundle\\WWWConfBundle\\Entity',
       'Organization'   => 'fibe\\Bundle\\WWWConfBundle\\Entity',
-      'Topic'          => 'fibe\\Bundle\\WWWConfBundle\\Entity',
-      'Module'         => 'fibe\\Bundle\\WWWConfBundle\\Entity'
+      'Topic'          => 'fibe\\Bundle\\WWWConfBundle\\Entity'
     ); 
 
 
     /**
-     * Examples
-     * $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE','Topic');
-     * $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','Person',$id);
+     * get an entity with permission check
+     * i.e.
+     *   $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE','Topic');
+     *   $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','Person',$id);
+     *   $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','Person',$entity);
      */
-    public function getEntityACL($action,$repositoryName,$id=null){
-        $entity = $this->getEntityInConf($repositoryName,$id);
+    public function getEntityACL($action,$repositoryName,$entity=null){
+
+        if(!is_object($entity))
+        {
+          $entity = $this->getEntityInConf($repositoryName,$entity);
+        }
         
         //check if action is correct
         $this->getMask($action);
 
+        //check permission
         if (false === $this->securityContext->isGranted($action, $entity))
         {
             throw new AccessDeniedException(sprintf(ACLHelper::NOT_AUTHORYZED_ENTITY_LABEL,
               $action,
               $repositoryName,
-              $id?'#'.$id:''
+              '#'.$entity->getId()
             )); 
         }
         return $entity;

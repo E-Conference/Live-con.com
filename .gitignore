@@ -10,6 +10,7 @@ reset
 */logs/*
 */cache/*
 web/uploads/*
+!web/uploads/livecon.png
 web/bundles/*
 vendor/*
 

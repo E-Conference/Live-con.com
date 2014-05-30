@@ -15,30 +15,27 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use fibe\Bundle\WWWConfBundle\Entity\CalendarEntity;
 
 class EventType extends LocationAwareCalendarEntityType
-{
-    public function __construct($user)
-    {
-        parent::__construct($user);
-    }
+{ 
+   
 
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        parent::buildForm($builder, $options);
-        /*
-        $builder
+    // public function buildForm(FormBuilderInterface $builder, array $options)
+    // {
+    //     parent::buildForm($builder, $options);
+    //    /*
+    //     $builder
 
-            ->add('endAt', 'datetime', array(  
-                'widget' =>'single_text',
-                'format' =>'dd/MM/yyyy HH:mm', 
-            ))
+    //         ->add('endAt', 'datetime', array(  
+    //             'widget' =>'single_text',
+    //             'format' =>'dd/MM/yyyy HH:mm', 
+    //         ))
 			
-            ->add('isTransparent', null, array( 
-			    'label' => 'is Transparent',
-                'required' => false
-            ))
-        ;
-        */
-    }
+    //         ->add('isTransparent', null, array( 
+			 //    'label' => 'is Transparent',
+    //             'required' => false
+    //         ))
+    //     ;*/
+        
+    // }
 
     public function getEntityDiscr()
     {

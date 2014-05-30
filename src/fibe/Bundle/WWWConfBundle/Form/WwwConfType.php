@@ -13,17 +13,14 @@
    */
   class WwwConfType extends AbstractType
   {
-    private $user;
-    private $entity;
+    protected $user;
 
     /**
      * @param $user
-     * @param $entity
      */
-    public function __construct($user, $entity)
+    public function __construct($user)
     {
       $this->user = $user;
-      $this->entity = $entity;
     }
 
     /**
@@ -35,7 +32,7 @@
         ->add('logo', 'file', array('required' => false,
                                     'label'    => 'Logo (jpeg - png - 2MO)',
                                     'attr'     => array('placeholder' => 'logoPath')))
-        ->add('mainConfEvent', new WwwConfEventType($this->user, $this->entity), array(
+        ->add('mainConfEvent', new WwwConfEventType($this->user), array(
           'label' => 'Conference event',
           'attr'  => array('class' => 'well')));
     }

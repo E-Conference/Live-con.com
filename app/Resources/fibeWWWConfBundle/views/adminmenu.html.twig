@@ -38,7 +38,7 @@
 
       <!-- Conference dropdown -->
       <li class="dropdown">
-        <a href="{{ path('schedule_conference_edit') }}" title="manage schedule" class="dropdown-toggle"
+        <a href="{{ path('schedule_conference_show') }}" title="manage schedule" class="dropdown-toggle"
            data-toggle="dropdown">
           {{ app.user.getCurrentConf().getConfName() }}
           <b class="caret"></b>
@@ -46,7 +46,7 @@
         <ul class="dropdown-menu">
           {% if app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'datas')== 1 %}
             <li>
-              <a href="{{ path('schedule_conference_edit') }}"><i class="icon-cog"></i> Conference settings </a>
+              <a href="{{ path('schedule_conference_show') }}"><i class="icon-cog"></i> Conference settings </a>
             </li>
           {% endif %}
         </ul>

@@ -1,35 +1,104 @@
 {% extends 'fibeConferenceBundle::base.html.twig' %}
 
-{% block title %}Conference details{{ parent() }}{% endblock title %}
-
+{% block title %}Edit conference{{ parent() }}{% endblock title %}
 
 {% block centerPanel %}
   {{ parent() }}
-  <div class="page-header">
+  <div class="page-header col-sm-12 col-md-12 col-lg-12">
     <div class="page-header well">
 
       <div class="row">
         <div class="col-lg-4">
-          <h1>{{ wwwConf.mainConfEvent.summary }}</h1>
+          <img src="{{ asset('uploads/') }}{{ conference.logoPath }}" style="max-height:100px;max-width:100%;"/>
+
+          <h1>{{ conference.mainConfEvent.summary }}</h1>
           <ul>
-            <li> {{ wwwConf.events|length }} events</li>
-            <li> {{ wwwConf.papers|length }} papers</li>
-            <li> {{ wwwConf.locations|length }} locations</li>
-            <li> {{ wwwConf.persons|length }} persons</li>
-            <li> {{ wwwConf.topics|length }} topics</li>
-            <li> {{ wwwConf.organizations|length }} organizations</li>
-            <li> {{ wwwConf.confManagers|length }} confManagers</li>
+            <li> {{ conference.events|length }} events</li>
+            <li> {{ conference.papers|length }} papers</li>
+            <li> {{ conference.locations|length }} locations</li>
+            <li> {{ conference.persons|length }} persons</li>
+            <li> {{ conference.topics|length }} topics</li>
+            <li> {{ conference.organizations|length }} organizations</li>
+            <li> {{ conference.confManagers|length }} confManagers</li>
           </ul>
         </div>
         <div class="col-lg-8">
+
           <div id="map" style="height:300px"></div>
         </div>
       </div>
+      <br/>
+
+      {% if is_granted('EDIT', conference.mainConfEvent) %}
+        <a id="showConfForm" class="btn btn-warning">
+          <i class="fa fa-pencil-square-o"></i> Edit conference
+        </a>
+
+        <div id="conference-edit">
+          <h3 class="text-info">Conference info </h3>
+
+          <form class="input-append" method="POST" action="" {{ form_enctype(form) }} >
+            {{ form_widget(form) }}
+            {{ form_errors(form) }}
+            <button type="submit" class="btn btn-block btn-success">
+              <i class="fa fa-check"></i>
+            </button>
+
+            <div style="visibility:hidden;display:none;height:0;" id="hiddenInputs">{{ form_rest(form) }}</div>
+          </form>
+        </div>
+        <!-- #conference-edit -->
+      {% endif %}
     </div>
   </div>
-{% endblock centerPanel %}
+  
+  {# <!-- confirm empty Modal -->
+  <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h3 class="modal-title" id="myModalLabel">Confirm empty</h3>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="modal-body">
+              <h4 class="text-wrning">In order to confirm, type
+                <b>Empty !</b> if you really want to empty the conference.</h4>
+
+              <div class="input-group input-group-lg">
+                <input name="confirmEmptyInput" id="confirmEmptyInput" type="text" class="form-control input-lg"
+                       value="Empty ?">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <a class="btn btn-default" data-dismiss="modal">Close</a>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+          </form>
+        </div>
+      </div> 
+    </div> 
+  </div>  #}
+{% endblock %}
 
 {% block stylesheets_page %}
+  <style type="text/css">
+    #conference-edit > * {
+      margin-top: 1.5em;
+      margin-bottom: 0.35em;
+    }
+
+    #toggleConfNameForm {
+      margin: 2em 1em 0em 0em;
+      float: left;
+    }
+
+    #confName {
+      padding: 1px;
+    }
+  </style>
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css"/>
 {% endblock %}
 
@@ -37,6 +106,20 @@
   <script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"></script>
   <script type="text/javascript">
 
+    /*
+
+     function FormPost(uri,form,callback){
+     $.ajax({
+     type: "POST",
+     url:uri,
+     async: false,
+     data: form.serialize(),
+     success:function(a,b,c) {
+     if(callback)callback();
+     }
+     });
+     }
+     */
     function initializeMap()
     {
       // set up the map
@@ -53,7 +136,14 @@
       marker = L.marker([{{location.latitude}}, {{location.longitude}}]).addTo(map);
       {% else %}
       map.setView(new L.LatLng(40, 10), 1);
+      $.get("http://ipinfo.io", function (response)
+      {
 
+        var lat = response.loc.split(",")[0];
+        var lng = response.loc.split(",")[1];
+        var latlng = L.latLng(lat, lng);
+        map.setView(latlng, 4, {animate: true});
+      }, "jsonp");
       {% endif %}
     }
     var marker;
@@ -61,13 +151,103 @@
     $(document).ready(function ()
     {
 
-      initializeMap();
+      try
+      {
+        initializeMap();
+      } catch (err)
+      {
+        $("#map").hide('fast');
+        bootstrapAlert("warning", "Failed to load the map plugin.");
+        console.warn("Cannot load Map")
+      }
 
+      /*********       show / hide edit mode          **********/
+      $('#conference-edit').hide();
+      // toggle edit form
+      function showForm()
+      {
+        $('#conference-edit').toggle({duration: 400});
+        $(this).html('<i class="icon-arrow-left" ></i> Hide edit mode');
+        $(this).one("click", hideForm);
+
+        try
+        {
+          //activate  map
+          map.on('click', function (e)
+          {
+            if (marker)map.removeLayer(marker);
+            //                      @TODO : TO REMOVE
+            console.log(e.latlng);
+            marker = new L.marker(e.latlng).addTo(map);
+            //UPDATE FIELDS
+            $('#fibe_bundle_wwwconfbundle_wwwconftype_mainConfEvent_location_latitude').val(e.latlng.lat);
+            $('#fibe_bundle_wwwconfbundle_wwwconftype_mainConfEvent_location_longitude').val(e.latlng.lng);
+          });
+        } catch (err)
+        {
+          console.warn("Map not loaded")
+        }
+      }
+
+      function hideForm()
+      {
+        $('#conference-edit').toggle({duration: 400});
+        $(this).html('<i class="fa fa-pencil-square-o"></i> Edit conference');
+        $(this).one("click", showForm);
+
+        try
+        {
+          //deactivate  map
+          map.off('click');
+        } catch (err)
+        {
+          console.warn("Map not loaded")
+        }
+      }
+
+      $("#showConfForm").one("click", showForm);
+
+      //send file
+      function sendSerializedConf(dataArray)
+      {
+        var data = {dataArray: JSON.stringify(dataArray)};
+        //DBimport
+        $.ajax({
+          type: "POST",
+          cache: false,
+          url: "{{ path('schedule_admin_DBimport') }}",
+          data: data,
+          success: function (a, b, c)
+          {
+            bootstrapAlert("success", ' ' + getMsgUl(dataArray, "added") + 'Please refresh this page to find out imported items.');
+          },
+          error: function (a, b, c)
+          {
+            bootstrapAlert("warning", 'import failed because : ' + c);
+            //                      @TODO : TO REMOVE
+            console.log(a);
+            console.log(b);
+            console.log(c);
+            $(confOwlUriInput).parent().addClass('has-warning');
+          }
+        });
+      }
     });
 
+    function getMsgUl(dataArray, endString)
+    {
+      var msg = "";
+      if (dataArray.conference.setAcronym)msg += dataArray.conference.setAcronym;
+      else if (dataArray.conference.setSummary)msg += dataArray.conference.setSummary;
+      msg += "<ul>";
+      for (var i in dataArray)
+        if (dataArray[i] && dataArray[i].length > 0)
+          msg += "<li>" + dataArray[i].length + " " + i + " " + endString + " !</li>";
+
+      return msg + "</ul>";
+    }
   </script>
 {% endblock %}
-
 
 
 

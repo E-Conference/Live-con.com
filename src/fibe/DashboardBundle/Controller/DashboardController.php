@@ -44,7 +44,7 @@ class DashboardController extends Controller
         $em->persist($user);
         $em->flush();
 
-        return $this->redirect($this->generateUrl('schedule_conference_edit'));
+        return $this->redirect($this->generateUrl('schedule_conference_show'));
     
     }
 

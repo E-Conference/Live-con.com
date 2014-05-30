@@ -39,7 +39,7 @@ class TeamController extends Controller
 
         $ACLService = $this->get('fibe_security.acl_user_permission_helper');
         //here the access control is on the team and not on the teamate himself
-        $team = $ACLService->getEntityACL('VIEW','Team',$currentConf->getTeam()->getId());  
+        $team = $ACLService->getEntityACL('VIEW','Team',$currentConf->getTeam());  
 
         $managers =$team->getConfManagers(); 
 
@@ -193,11 +193,15 @@ class TeamController extends Controller
             'You cannot delete yourself !'
           );
         }else if ($form->isValid()) {
-          
           $manager = $em->getRepository('fibeSecurityBundle:User')->find($id);
+          //cannot delete owner
+          if("OWNER" == $ACLService->getACEByEntity($currentConf->getTeam(),$manager))
+          {
+            throw new AccessDeniedHttpException("cannot remove the owner");
+          }
           $currentConf =$this->getUser()->getcurrentConf(); 
           $ACLService = $this->get('fibe_security.acl_user_permission_helper');
-          $team = $ACLService->getEntityACL('DELETE','Team',$currentConf->getTeam()->getId());  
+          $team = $ACLService->getEntityACL('DELETE','Team',$currentConf->getTeam());  
 
           if (!$manager) {
               throw $this->createNotFoundException('Unable to find User entity.');
@@ -211,8 +215,7 @@ class TeamController extends Controller
                 'success',
                 'This teamate doesn\'t belong to the current conference anymore!'
             );
-        } 
-
+        }
         return $this->redirect($this->generateUrl('conference_team_index'));
     } 
 

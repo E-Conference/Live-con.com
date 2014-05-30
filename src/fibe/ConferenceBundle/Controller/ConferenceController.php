@@ -12,11 +12,9 @@
   use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
   use fibe\MobileAppBundle\Entity\MobileAppConfig;
   use fibe\Bundle\WWWConfBundle\Form\WwwConfType;
-  use fibe\Bundle\WWWConfBundle\Form\ModuleType;
-  use fibe\Bundle\WWWConfBundle\Form\WwwConfEventType;
+  use fibe\Bundle\WWWConfBundle\Form\ModuleType; 
 
-  use fibe\SecurityBundle\Entity\Team;
-  use fibe\SecurityBundle\Entity\Authorization;
+  use fibe\SecurityBundle\Entity\Team; 
 
   use fibe\Bundle\WWWConfBundle\Form\XPropertyType;
   use fibe\Bundle\WWWConfBundle\Form\EventType;
@@ -39,16 +37,16 @@
 
 
     /**
-     * @Route("/edit", name="schedule_conference_edit")
+     * @Route("", name="schedule_conference_show")
      *
      * @Template()
      */
-    public function editAction(Request $request)
+    public function showAction(Request $request)
     {
-      $conference = $this->getUser()->getCurrentConf();
+      $conference = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW','WwwConf',$this->getUser()->getCurrentConf());
       
-      $mainConfEvent = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW','ConfEvent',$conference->getMainConfEvent()->getId()); 
-      $form = $this->createForm(new WwwConfType($this->getUser(), $mainConfEvent), $conference);
+      $mainConfEvent = $conference->getMainConfEvent();
+      $form = $this->createForm(new WwwConfType($this->getUser()), $conference);
 
       $request = $this->get('request');
       if ($request->getMethod() == 'POST')
@@ -79,38 +77,11 @@
       }
 
       return array(
-        'location'   => $mainConfEvent->getLocation(),
-        'wwwConf'    => $conference,
-        'form'       => $form->createView(),
-        'authorized' => true
+        'conference' => $conference,
+        'form'       => $form->createView(), 
       );
 
-    }
-
-
-    /**
-     * @Route("/show", name="schedule_conference_show")
-     *
-     * @Template()
-     */
-    public function showAction(Request $request)
-    {
-      $em = $this->getDoctrine()->getManager();
-      $conference = $this->getUser()->getCurrentConf();
-      //main conf event MUST have a location
-      $mainConfEvent = $conference->getMainConfEvent();
-
-      //Authorization Verification conference datas manager
-      $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-      return array(
-        'location'   => $mainConfEvent->getLocation(),
-        'wwwConf'    => $conference,
-        'authorized' => $authorization->getFlagconfDatas()
-      );
-
-    }
+    } 
 
 
     /**
@@ -120,18 +91,12 @@
     {
       $em = $this->getDoctrine()->getManager();
 
-      $conference = $em->getRepository('fibeWWWConfBundle:WwwConf')->find($id);
-      if (!$conference)
-      {
-        throw $this->createNotFoundException('Unable to find Conference.');
-      }
+      $conference = $this->get('fibe_security.acl_entity_helper')->getEntityACL('DELETE','WwwConf',$this->getUser()->getCurrentConf());
 
       //TODO CSRF TOKEN
-      // $csrf = $this->get('form.csrf_provider'); //Symfony\Component\Form\Extension\Csrf\CsrfProvider\SessionCsrfProvider by default
+      // $csrf = $this->get('form.csrf_provider'); //Symfony\Component\Form\Extension\Csrf\CsrfProvider\SessionCsrfProvider 
       // $token = $csrf->generateCsrfToken($intention); //Intention should be empty string, if you did not define it in parameters
       // BOOLEAN $csrf->isCsrfTokenValid($intention, $token);
-
-      //TODO CHECK RIGHT super_admin
 
       //check if the processed conference belongs to the user
       $user = $this->getUser();
@@ -156,11 +121,11 @@
         'success',
         'conference successfully emptied.'
       );
-      return $this->redirect($this->generateUrl('schedule_conference_edit'));
+      return $this->redirect($this->generateUrl('schedule_conference_show'));
     }
 
     /**
-     * Creates a new ConfEvent entity.
+     * Creates a new COnference.
      * @Route("/create", name="schedule_conference_create")
      */
     public function createAction(Request $request)
@@ -239,17 +204,7 @@
       $user->addTeam($defaultTeam);
       $defaultTeam->setConference($entity);
       $entity->setTeam($defaultTeam);
-      $em->persist($defaultTeam);
-
-      //Create authorization
-      $creatorAuthorization = new Authorization();
-      $creatorAuthorization->setConference($entity);
-      $creatorAuthorization->setUser($user);
-      $creatorAuthorization->setFlagApp(1);
-      $creatorAuthorization->setFlagSched(1);
-      $creatorAuthorization->setFlagconfDatas(1);
-      $creatorAuthorization->setFlagTeam(1);
-      $em->persist($creatorAuthorization);
+      $em->persist($defaultTeam); 
 
       //Linking app config to conference
       $entity->setAppConfig($defaultAppConfig);
@@ -270,60 +225,60 @@
       $em->flush();
 
 
-      return $this->redirect($this->generateUrl('schedule_conference_edit'));
+      return $this->redirect($this->generateUrl('schedule_conference_show'));
     }
 
 
-    /**
-     * @Route("/removeManager", name="schedule_conference_remove_manager")
-     */
-    public function removeManager(Request $request)
-    {
+    // /**
+    //  * @Route("/removeManager", name="schedule_conference_remove_manager")
+    //  */
+    // public function removeManager(Request $request)
+    // {
 
-      $id = $request->request->get('id');
+    //   $id = $request->request->get('id');
 
-      $em = $this->getDoctrine()->getManager();
-      $manager = $em->getRepository('fibeSecurityBundle:User')->find($id);
-      if (!$manager)
-      {
-        throw $this->createNotFoundException('Unable to find Manager.');
-      }
+    //   $em = $this->getDoctrine()->getManager();
+    //   $manager = $em->getRepository('fibeSecurityBundle:User')->find($id);
+    //   if (!$manager)
+    //   {
+    //     throw $this->createNotFoundException('Unable to find Manager.');
+    //   }
 
-        $currentConf = $this->getUser()->getCurrentConf();
-        if(!$this->getUser()->getAuthorizationByConference($currentConf)->getFlagTeam())
-        {
-            // Sinon on déclenche une exception "Accès Interdit"
-            throw new AccessDeniedHttpException('Access reserved to team Manager');
-        }
+    //     $currentConf = $this->getUser()->getCurrentConf();
+    //     if(!$this->getUser()->getAuthorizationByConference($currentConf)->getFlagTeam())
+    //     {
+    //         // Sinon on déclenche une exception "Accès Interdit"
+    //         throw new AccessDeniedHttpException('Access reserved to team Manager');
+    //     }
 
-      //It must stay one manager in a conference
-      if (count($currentConf->getConfManagers()) > 1)
-      {
-        //Remove authorization
-        $authorization = $currentConf->getAuthorizationByUser($manager);
-        $em->remove($authorization);
-        //Remove current conf from the user conferences collection
-        $manager->removeConference($currentConf);
-        $em->persist($manager);
-        $em->flush();
+    //   //It must stay one manager in a conference
+    //   if (count($currentConf->getConfManagers()) > 1)
+    //   {
+    //     //Remove authorization
+    //     $authorization = $currentConf->getAuthorizationByUser($manager);
+    //     $em->remove($authorization);
+    //     //Remove current conf from the user conferences collection
+    //     $manager->removeConference($currentConf);
+    //     $em->persist($manager);
+    //     $em->flush();
 
-        $this->container->get('session')->getFlashBag()->add(
-          'success',
-          'The manager has been successfully remove from the conferences'
-        );
-      }
-      else
-      {
+    //     $this->container->get('session')->getFlashBag()->add(
+    //       'success',
+    //       'The manager has been successfully remove from the conferences'
+    //     );
+    //   }
+    //   else
+    //   {
 
-        $this->container->get('session')->getFlashBag()->add(
-          'error',
-          'It must stay at least one manager by conference.'
-        );
-      }
+    //     $this->container->get('session')->getFlashBag()->add(
+    //       'error',
+    //       'It must stay at least one manager by conference.'
+    //     );
+    //   }
 
-      return $this->redirect($this->generateUrl('conference_team_index'));
+    //   return $this->redirect($this->generateUrl('conference_team_index'));
 
-    }
+    // }
 
     /**
      * @Route("/settings", name="schedule_conference_settings")
@@ -331,28 +286,14 @@
      * @Template()
      */
     public function settingsAction(Request $request)
-    {
-      $em = $this->getDoctrine()->getManager();
-      $conference = $this->getUser()->getCurrentConf();
-      $module = $conference->getModule();
+    { 
+      $module = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','Module',$this->getUser()->getCurrentConf()->getModule());
 
+      $moduleForm = $this->createForm(new ModuleType(), $module); 
 
-      //Authorization Verification conference datas manager
-      $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-      $ModuleForm = $this->createForm(new ModuleType(), $conference->getModule());
-
-
-      /*  if(!$authorization->getFlagconfDatas()){
-          throw new AccessDeniedException('Action not authorized !');
-        }  */
-
-      return array(
-        'wwwConf'     => $conference,
+      return array( 
         'module'      => $module,
-        'authorized'  => $authorization->getFlagconfDatas(),
-        'module_form' => $ModuleForm->createView(),
+        'module_form' => $moduleForm->createView(),
       );
 
     }

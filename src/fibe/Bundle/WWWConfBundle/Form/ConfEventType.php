@@ -14,19 +14,7 @@
    * @package fibe\Bundle\WWWConfBundle\Form
    */
   class ConfEventType extends EventType
-  {
-
-    /**
-     * Constructor
-     *
-     * @param $user
-     * @param $entity
-     */
-    public function __construct($user)
-    {
-      parent::__construct($user); 
-      $this->user = $user;
-    }
+  { 
 
 
     /**

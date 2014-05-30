@@ -24,6 +24,8 @@
     protected $id;
 
     /**
+     * owner of those conferences
+     *  
      * @ORM\ManyToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="confManagers", cascade={"persist"})
      * @ORM\JoinTable(name="manager_conference",
      *     joinColumns={@ORM\JoinColumn(name="manager_id", referencedColumnName="id")},
@@ -32,6 +34,8 @@
     protected $conferences;
 
     /**
+     *  invited in a conf
+     *  
      * @ORM\ManyToMany(targetEntity="Team", inversedBy="confManagers", cascade={"persist"})
      * @ORM\JoinTable(name="manager_team",
      *     joinColumns={@ORM\JoinColumn(name="manager_id", referencedColumnName="id")},
@@ -44,15 +48,7 @@
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf")
      * @ORM\JoinColumn(name="currentConf", referencedColumnName="id")
      */
-    protected $currentConf;
-
-    /**
-     *
-     * @ORM\OneToMany(targetEntity="Authorization",  mappedBy="user",cascade={"persist"})
-     * @ORM\JoinColumn(onDelete="CASCADE")
-     *
-     */
-    protected $authorizations;
+    protected $currentConf; 
 
     protected $captcha;
 
@@ -168,141 +164,6 @@
     {
       return $this->currentConf;
     }
-
-
-    /**
-     * Add authorizations
-     *
-     * @param \fibe\SecurityBundle\Entity\Authorization $authorizations
-     *
-     * @return User
-     */
-    public function addAuthorization(\fibe\SecurityBundle\Entity\Authorization $authorizations)
-    {
-      $this->authorizations[] = $authorizations;
-
-      return $this;
-    }
-
-    /**
-     * Remove authorizations
-     *
-     * @param \fibe\SecurityBundle\Entity\Authorization $authorizations
-     */
-    public function removeAuthorization(\fibe\SecurityBundle\Entity\Authorization $authorizations)
-    {
-      $this->authorizations->removeElement($authorizations);
-    }
-
-    /**
-     * Get authorizations
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAuthorizations()
-    {
-      return $this->authorizations;
-    }
-
-    /**
-     *Get an authorization for a specific conference
-     *
-     */
-    public function getAuthorizationByConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conf = null)
-    {
-      if ($conf == null)
-      {
-        throw new AccessDeniedException('you have to choose a conference !');
-      }
-      foreach ($this->authorizations as $authorization)
-      {
-        if ($authorization->getConference()->getId() == $conf->getId())
-        {
-          return $authorization;
-        }
-      }
-      return null;
-    }
-
-    /**
-     *Get an authorization falg app for a specific conference
-     *
-     */
-    public function getFlagAppByConferenceId($confId)
-    {
-      foreach ($this->authorizations as $authorization)
-      {
-        if ($authorization->getConference()->getId() == $confId)
-        {
-          return $authorization->getFlagApp();
-        }
-      }
-      return false;
-    }
-
-    /**
-     *Get an authorization falg app for a specific conference
-     *
-     */
-    public function getFlagSchedByConferenceId($confId)
-    {
-      foreach ($this->authorizations as $authorization)
-      {
-        if ($authorization->getConference()->getId() == $confId)
-        {
-          return $authorization->getFlagSched();
-        }
-      }
-      return false;
-    }
-
-    /**
-     *Get an authorization flag app for a specific conference
-     *
-     */
-    public function getFlagDatasByConferenceId($confId)
-    {
-      foreach ($this->authorizations as $authorization)
-      {
-        if ($authorization->getConference()->getId() == $confId)
-        {
-          return $authorization->getFlagconfDatas();
-        }
-      }
-      return false;
-    }
-
-    /**
-     *Get an authorization flag app for a specific conference
-     *
-     */
-    public function getFlagByConferenceId($confId, $flagType)
-    {
-      foreach ($this->authorizations as $authorization)
-      {
-        if ($authorization->getConference()->getId() == $confId)
-        {
-          switch ($flagType)
-          {
-            case 'sched':
-              return $authorization->getFlagSched();
-              break;
-            case 'app':
-              return $authorization->getFlagApp();
-              break;
-            case 'datas':
-              return $authorization->getFlagconfDatas();
-              break;
-            case 'team':
-              return $authorization->getFlagTeam();
-              break;
-          }
-        }
-      }
-      return false;
-    }
-
-
     /**
      * @TODO comment
      *
