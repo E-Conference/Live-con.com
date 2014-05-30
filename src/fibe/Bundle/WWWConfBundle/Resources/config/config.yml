@@ -1,6 +1,19 @@
 
+# services:
+#     event.listener:
+#         class: fibe\Bundle\WWWConfBundle\Listener\updateChildrenDate
+#         arguments: ["@session"]
+#         tags:
+#             - { name: doctrine.event_listener, event: prePersist }
+#             - { name: doctrine.event_listener, event: preUpdate }
+
+
+services:
+    emptyConf:
+        class:        "fibe\\Bundle\\WWWConfBundle\\Services\\EmptyConf"
+
 idci_exporter:
-    api_route: "/api/{entityReference}.{_format}"
+    api_route: "/api/{entity_reference}.{_format}"
     entities:
         WwwConf:
             class: "fibe\\Bundle\\WWWConfBundle\\Entity\\WwwConf"
@@ -21,8 +34,9 @@ idci_exporter:
 #                            template_path:
                             template_name_format: "export.json.twig"
 
-        schedule_role:
-            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\RoleType"
+
+        schedule_category:
+            class: "IDCI\\Bundle\\SimpleScheduleBundle\\Entity\\Category"
             formats:
                 jsonp:
                     transformer:
@@ -30,9 +44,8 @@ idci_exporter:
                         options:
 #                            template_path:
                             template_name_format: "export.json.twig"
-
-        schedule_person:
-            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Person"
+        schedule_location:
+            class: "IDCI\\Bundle\\SimpleScheduleBundle\\Entity\\Location"
             formats:
                 jsonp:
                     transformer:
@@ -51,15 +64,6 @@ idci_exporter:
 #                            template_path:
                             template_name_format: "export.json.twig"
 
-        schedule_category:
-            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Category"
-            formats:
-                jsonp:
-                    transformer:
-#                        service: "idci_exporter.transformer_twig"
-                        options:
-#                            template_path:
-                            template_name_format: "export.json.twig"
         schedule_paper:
             class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Paper"
             formats:
@@ -69,8 +73,9 @@ idci_exporter:
                         options:
 #                            template_path:
                             template_name_format: "export.json.twig"
-        schedule_sponsor:
-            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Sponsor"
+
+        schedule_person:
+            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Person"
             formats:
                 jsonp:
                     transformer:
@@ -78,8 +83,29 @@ idci_exporter:
                         options:
 #                            template_path:
                             template_name_format: "export.json.twig"
-        schedule_location:
-            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Location"
+
+        schedule_role:
+            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\RoleType"
+            formats:
+                jsonp:
+                    transformer:
+#                        service: "idci_exporter.transformer_twig"
+                        options:
+#                            template_path:
+                            template_name_format: "export.json.twig"
+
+        schedule_topic:
+            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Topic"
+            formats:
+                jsonp:
+                    transformer:
+#                        service: "idci_exporter.transformer_twig"
+                        options:
+#                            template_path:
+                            template_name_format: "export.json.twig"
+
+        schedule_sponsor:
+            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Sponsor"
             formats:
                 jsonp:
                     transformer:
