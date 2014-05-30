@@ -75,6 +75,21 @@
           ->setParameter('id', $params['email']);
       }
 
+        if(isset($params['paper'])) {
+            $qb
+                ->leftJoin('pers.papers', 'p')
+                ->andWhere('pers.id = :paper_id')
+                ->setParameter('paper_id', $params['paper'])
+            ;
+           
+        }
+
+        if(isset($params['isAuthor'])) {
+            $qb
+                ->leftJoin('pers.papers', 'p')
+            ;
+           
+        }
       if (isset($params['organization']))
       {
         $qb
