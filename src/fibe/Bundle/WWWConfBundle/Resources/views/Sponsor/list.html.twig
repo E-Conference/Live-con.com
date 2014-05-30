@@ -1,4 +1,11 @@
-<div id="resultsFound"><h4>{{ nbResult }} results found</h4></div>
+<div id="resultsFound"><h4>
+    {% if nbResult is defined %}
+      {{ nbResult }}
+    {% else %}
+      0
+    {% endif %}
+    results found
+  </h4></div>
 <table class="table table-hover records_list">
   <thead>
     <tr>

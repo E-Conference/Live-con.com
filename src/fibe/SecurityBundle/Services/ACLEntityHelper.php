@@ -34,7 +34,8 @@
       'Person'         => 'fibe\\Bundle\\WWWConfBundle\\Entity',
       'Role'           => 'fibe\\Bundle\\WWWConfBundle\\Entity',
       'Organization'   => 'fibe\\Bundle\\WWWConfBundle\\Entity',
-      'Topic'          => 'fibe\\Bundle\\WWWConfBundle\\Entity'
+      'Topic'          => 'fibe\\Bundle\\WWWConfBundle\\Entity',
+      'Sponsor'        => 'fibe\\Bundle\\WWWConfBundle\\Entity'
     ); 
 
 

@@ -34,7 +34,7 @@
      */
     public function indexAction(Request $request)
     { 
-      $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('EDIT','Paper');
+      $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('VIEW','Paper');
       // $entities = $this->getUser()->getCurrentConf()->getPapers()->toArray();
 
       $adapter = new ArrayAdapter($entities);
@@ -51,10 +51,8 @@
       }
 
       $filters = $this->createForm(new PaperFilterType($this->getUser()));
-      $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
       return array(
         'pager'        => $pager,
-        'authorized'   => $authorization->getFlagconfDatas(),
         'filters_form' => $filters->createView(),
       );
     }
@@ -72,7 +70,7 @@
       $conf = $this->getUser()->getCurrentConf();
       //Filters
       $filters = $this->createForm(new PaperFilterType($this->getUser()));
-      $filters->bind($request);
+      $filters->submit($request);
 
       if ($filters->isValid())
       {
