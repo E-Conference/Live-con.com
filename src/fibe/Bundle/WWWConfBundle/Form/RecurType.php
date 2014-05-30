@@ -61,6 +61,6 @@ class RecurType extends AbstractType
 
     public function getName()
     {
-        return 'idci_bundle_simpleschedulebundle_recurtype';
+        return 'fibe_bundle_wwwconfbundle_recurtype';
     }
 }

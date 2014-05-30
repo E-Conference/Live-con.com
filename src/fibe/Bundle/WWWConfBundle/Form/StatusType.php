@@ -36,6 +36,6 @@ class StatusType extends AbstractType
 
     public function getName()
     {
-        return 'idci_bundle_simpleschedulebundle_statustype';
+        return 'fibe_bundle_wwwconfbundle_statustype';
     }
 }

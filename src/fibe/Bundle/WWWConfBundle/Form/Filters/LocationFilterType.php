@@ -43,10 +43,6 @@ class LocationFilterType extends AbstractType
                 'required' => false,
                 'attr'  => array('placeholder'  => 'max capacity')
             ))
-          
-            
-
-
         ;
     }
 
@@ -61,6 +57,6 @@ class LocationFilterType extends AbstractType
 
     public function getName()
     {
-        return 'IDCI_bundle_simpleschedulebundle_locationfiltertype';
+        return 'fibe_bundle_wwwconfbundle_locationfiltertype';
     }
 }

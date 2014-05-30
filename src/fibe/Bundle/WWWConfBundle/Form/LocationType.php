@@ -42,6 +42,6 @@ class LocationType extends AbstractType
 
     public function getName()
     {
-        return 'idci_bundle_simpleschedulebundle_locationtype';
+        return 'fibe_bundle_wwwconfbundle_locationtype';
     }
 }
