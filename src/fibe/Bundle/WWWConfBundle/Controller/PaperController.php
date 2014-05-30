@@ -149,14 +149,11 @@ class PaperController extends Controller
     //Authorization Verification conference sched manager
     $form = $this->createForm(new PaperType($this->getUser()), $entity);
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return $this->render(
       'fibeWWWConfBundle:Paper:new.html.twig',
       array(
         'entity' => $entity,
         'form' => $form->createView(),
-        'authorized' => $authorization->getFlagconfDatas(),
       )
     );
   }
@@ -171,14 +168,11 @@ class PaperController extends Controller
     $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'Paper', $id);
     $deleteForm = $this->createDeleteForm($id);
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return $this->render(
       'fibeWWWConfBundle:Paper:show.html.twig',
       array(
         'entity' => $entity,
-        'delete_form' => $deleteForm->createView(),
-        'authorized' => $authorization->getFlagconfDatas()
+        'delete_form' => $deleteForm->createView()
       )
     );
   }
@@ -195,15 +189,12 @@ class PaperController extends Controller
     $editForm = $this->createForm(new PaperType($this->getUser()), $entity);
     $deleteForm = $this->createDeleteForm($id);
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return $this->render(
       'fibeWWWConfBundle:Paper:edit.html.twig',
       array(
         'entity' => $entity,
         'edit_form' => $editForm->createView(),
-        'delete_form' => $deleteForm->createView(),
-        'authorized' => $authorization->getFlagconfDatas(),
+        'delete_form' => $deleteForm->createView()
       )
     );
   }
