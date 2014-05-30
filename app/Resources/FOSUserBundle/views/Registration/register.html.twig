@@ -22,7 +22,7 @@
 {% include "fibeHomePageBundle::topBar.html.twig" %}
 <div id="login_page">
 
-  {% if error %}
+  {% if error is defined %}
     <div class="alert alert-error">{{ error.message }}</div>
   {% endif %}
 
