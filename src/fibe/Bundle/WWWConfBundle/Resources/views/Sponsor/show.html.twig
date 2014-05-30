@@ -37,28 +37,28 @@
       <h2> {{ entity.name }}</h2>
       <table class="table table-hover record_properties">
         <tbody>
-          <tr>
-            <th>Logo</th>
-            {% if entity.logoPath is null %}
-              <td><em>No logo uploaded</em></td>
-            {% else %}
-              <td><a href="{{ path('schedule_sponsor_show', { 'id': entity.id }) }}"><img
-                      src="{{ asset('uploads/sponsors/') }}{{ entity.logoPath }}" style="height:100px;width:auto;"/></a>
-              </td>
-            {% endif %}
-          </tr>
-          <tr>
-            <th>Name</th>
-            <td>{{ entity.name }}</td>
-          </tr>
-          <tr>
-            <th>Url</th>
-            <td><a href="{{ entity.url }}">{{ entity.url }}</a></td>
-          </tr>
-          <tr>
-            <th>Message to display</th>
-            <td>{{ entity.message }}</a></td>
-          </tr>
+        <tr>
+          <th>Logo</th>
+          {% if entity.logoPath is null %}
+            <td><em>No logo uploaded</em></td>
+          {% else %}
+            <td><a href="{{ path('schedule_sponsor_show', { 'id': entity.id }) }}"><img
+                  src="{{ asset('uploads/sponsors/') }}{{ entity.logoPath }}" style="height:100px;width:auto;"/></a>
+            </td>
+          {% endif %}
+        </tr>
+        <tr>
+          <th>Name</th>
+          <td>{{ entity.name }}</td>
+        </tr>
+        <tr>
+          <th>Url</th>
+          <td><a href="{{ entity.url }}">{{ entity.url }}</a></td>
+        </tr>
+        <tr>
+          <th>Message to display</th>
+          <td>{{ entity.description }}</a></td>
+        </tr>
         </tbody>
       </table>
     </div>

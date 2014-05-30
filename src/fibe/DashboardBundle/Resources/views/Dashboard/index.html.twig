@@ -11,148 +11,160 @@
 
 
 {% block centerPanel %}
-     <div class="row page-top-header ">
-            <div class="page-title col-xs-5  col-sm-4 col-md-4 col-lg-3">
-                <span>Conference list</span>
-                <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Generalities' }) }}" title="Help">
-                     <i class="fa fa-question"></i> 
-                </a>
-            </div>
-
-            <div class=" col-xs-2 col-sm-4 col-md-5 col-lg-7">
-            </div>
-            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                <a class="btn btn-info btn-create create"  href="{{ path('schedule_conference_create') }}">
-                    <i class="fa fa-plus"></i> New conference
-                </a>
-            </div>
-      </div>
-      <div class="row page-content">
-                
-          <div class="row-fluid">
-          {% for conference  in conferences  %}
-          
-          <div class="col-lg-5">
-            <div class="panel panel-livecon-dashboard">
-             <div class="panel-heading" style="min-height:30px;">                   
-                      <h4 style="display:inline"> {{conference.getConfName()}}</h4>
-                        <img src="{{ asset('uploads/')}}{{conference.logoPath}}" style="height:30px;width:auto;float:right;"  class="img-rounded img-responsive"/>  
-              </div>
-                 <div class="panel-body">
-                      <ul class="list-group">
-                        <li class="list-group-item"> 
-                          <ul class="nav nav-pills nav-stacked">
-                            <li>
-                              <h5>App Manager
-                                  {% if conference.getFlagAppByManagerId(app.user.id)==1 %}
-                                        <i class="fa fa-check"></i>
-                                   {% else %}
-                                        <span class="glyphicon glyphicon-ban-circle"></span> 
-                                   {% endif %}
-                              </h5>
-                            </li>
-                             <li>
-                              <h5>Schedule Manager
-                                  {% if conference.getFlagSchedByManagerId(app.user.id)==1 %}
-                                        <i class="fa fa-check"></i>
-                                   {% else %}
-                                          <span class="glyphicon glyphicon-ban-circle"></span> 
-                                   {% endif %}
-                              </h5>
-                             </li>
-                             <li>
-                              <h5>Datas Manager
-                                  {% if conference.getFlagDatasByManagerId(app.user.id)==1 %}
-                                        <i class="fa fa-check"></i>
-                                   {% else %}
-                                        <span class="glyphicon glyphicon-ban-circle"></span> 
-                                   {% endif %}
-                              </h5>
-                            </li>
-                            <li>
-                              <h5>Team Manager
-                                  {% if conference.getFlagByManagerId(app.user.id,'team')==1 %}
-                                        <i class="fa fa-check"></i>
-                                   {% else %}
-                                        <span class="glyphicon glyphicon-ban-circle"></span> 
-                                   {% endif %}
-                              </h5>
-                            </li>
-                          </ul>
-                          </li>
-                        <li class="list-group-item"><h5>Events <span class="badge">{{ conference.events|length }}</span></h5></li>
-                        {% if conference.getModule().getPaperModule() == 1 %}
-                        <li class="list-group-item"><h5>Papers <span class="badge">{{ conference.papers|length }}</span></h5> </li>
-                        {% endif %}
-                        <li class="list-group-item"><h5>Locations <span class="badge">{{ conference.locations|length }}</span></h5></li>
-                        <li class="list-group-item"><h5>Persons <span class="badge">{{ conference.persons|length }}</span></h5> </li>
-                        <li class="list-group-item"><h5>Topics <span class="badge">{{ conference.topics|length }}</span></h5> </li>
-                        {% if conference.getModule().getOrganizationModule() == 1 %}
-                        <li class="list-group-item"><h5>Organizations <span class="badge">{{ conference.organizations|length }}</span></h5> </li> 
-                        {% endif %}
-                        <li class="list-group-item"><h5>Conf Managers <span class="badge">{{ conference.confManagers|length }}</span></h5> </li>
-                      </ul>
-                        <a href="{{ path('dashboard_enter_conference', {id: conference.id} ) }}" class="edit_conference btn btn-livecon btn-block">
-                                  <i class="fa fa-sign-in"></i>
-                        </a> 
-                        {% if is_granted('OWNER', conference) %} 
-                          <a data-url="{{ path('schedule_conference_delete', {id: conference.id}) }}" class="delete_conference btn btn-danger btn-block modal-toggle" data-message ="Are you sure you want to delete '{{ conference.getConfName() }}' conference ?" data-toggle="modal" data-target="#myModal">
-                                  <i class="fa fa-trash-o"></i>
-                          </a>
-
-                      {% endif %}
-                     </div>
-
-                  </div>
-                  
-            </div>
-             {% endfor  %}
-        </div>
-</div>
-
-
-<!-- Delete Confirmation Modal -->
-
-<div id="deleteConfirmation" class="modal fade bs-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-      <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Delete Conference</h4>
-              </div>
-              <div class="modal-body">
-              </div>
-              <div class="modal-footer">
-                 <a href="#" id="confirm" class="btn btn-danger">Yes</a>
-                 <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">Canceled</a>
-              </div>
-          </div>
-      </div>
+  <div class="row page-top-header ">
+    <div class="page-title col-xs-5  col-sm-4 col-md-4 col-lg-3">
+      <span>Conference list</span>
+      <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Generalities' }) }}" title="Help">
+        <i class="fa fa-question"></i>
+      </a>
     </div>
 
-{% endblock%}
+    <div class=" col-xs-2 col-sm-4 col-md-5 col-lg-7">
+    </div>
+    <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+      <a class="btn btn-info btn-create create" href="{{ path('schedule_conference_create') }}">
+        <i class="fa fa-plus"></i> New conference
+      </a>
+    </div>
+  </div>
+  <div class="row page-content">
 
-{%  block javascripts_page %}
-    {{parent()}}
-    <script  type="text/javascript">
+    <div class="row-fluid">
+      {% for conference  in conferences %}
 
-     $(document).ready(function() {
-        $('#deleteConfirmation').modal('hide');
-            
+        <div class="col-lg-5">
+          <div class="panel panel-livecon-dashboard">
+            <div class="panel-heading" style="min-height:30px;">
+              <h4 style="display:inline"> {{ conference.getConfName() }}</h4>
+              <img src="{{ asset('uploads/') }}{{ conference.logoPath }}" style="height:30px;width:auto;float:right;"
+                   class="img-rounded img-responsive"/>
+            </div>
+            <div class="panel-body">
+              <ul class="list-group">
+                <li class="list-group-item">
+                  <ul class="nav nav-pills nav-stacked">
+                    <li>
+                      <h5>App Manager
+                        {% if conference.getFlagAppByManagerId(app.user.id)==1 %}
+                          <i class="fa fa-check"></i>
+                        {% else %}
+                          <span class="glyphicon glyphicon-ban-circle"></span>
+                        {% endif %}
+                      </h5>
+                    </li>
+                    <li>
+                      <h5>Schedule Manager
+                        {% if conference.getFlagSchedByManagerId(app.user.id)==1 %}
+                          <i class="fa fa-check"></i>
+                        {% else %}
+                          <span class="glyphicon glyphicon-ban-circle"></span>
+                        {% endif %}
+                      </h5>
+                    </li>
+                    <li>
+                      <h5>Datas Manager
+                        {% if conference.getFlagDatasByManagerId(app.user.id)==1 %}
+                          <i class="fa fa-check"></i>
+                        {% else %}
+                          <span class="glyphicon glyphicon-ban-circle"></span>
+                        {% endif %}
+                      </h5>
+                    </li>
+                    <li>
+                      <h5>Team Manager
+                        {% if conference.getFlagByManagerId(app.user.id,'team')==1 %}
+                          <i class="fa fa-check"></i>
+                        {% else %}
+                          <span class="glyphicon glyphicon-ban-circle"></span>
+                        {% endif %}
+                      </h5>
+                    </li>
+                  </ul>
+                </li>
+                <li class="list-group-item"><h5>Events <span class="badge">{{ conference.events|length }}</span></h5>
+                </li>
+                {% if conference.getModule().getPaperModule() == 1 %}
+                  <li class="list-group-item"><h5>Papers <span class="badge">{{ conference.papers|length }}</span></h5>
+                  </li>
+                {% endif %}
+                <li class="list-group-item"><h5>Locations <span class="badge">{{ conference.locations|length }}</span>
+                  </h5></li>
+                <li class="list-group-item"><h5>Persons <span class="badge">{{ conference.persons|length }}</span></h5>
+                </li>
+                <li class="list-group-item"><h5>Topics <span class="badge">{{ conference.topics|length }}</span></h5>
+                </li>
+                {% if conference.getModule().getOrganizationModule() == 1 %}
+                  <li class="list-group-item"><h5>Organizations <span
+                        class="badge">{{ conference.organizations|length }}</span></h5></li>
+                {% endif %}
+                <li class="list-group-item"><h5>Conf Managers <span
+                      class="badge">{{ conference.confManagers|length }}</span></h5></li>
+              </ul>
+              <a href="{{ path('dashboard_enter_conference', {id: conference.id} ) }}"
+                 class="edit_conference btn btn-livecon btn-block">
+                <i class="fa fa-sign-in"></i>
+              </a>
+              {% if is_granted('OWNER', conference) %}
+                <a data-url="{{ path('schedule_conference_delete', {id: conference.id}) }}"
+                   class="delete_conference btn btn-danger btn-block modal-toggle"
+                   data-message="Are you sure you want to delete '{{ conference.getConfName() }}' conference ?"
+                   data-toggle="modal" data-target="#myModal">
+                  <i class="fa fa-trash-o"></i>
+                </a>
 
-        $('.delete_conference').click(function() {
-            var message = $(this).attr('data-message');
-            var deleteUrl = $(this).attr('data-url');
+              {% endif %}
+            </div>
 
-            $('#confirm').attr('href',deleteUrl);
-            $('.modal-body').append("<h5>"+message+"</h5>");
+          </div>
 
-            $('#deleteConfirmation').modal('show');
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 
-        })
 
-        });
-   
-    </script>
+  <!-- Delete Confirmation Modal -->
+
+  <div id="deleteConfirmation" class="modal fade bs-modal-sm" tabindex="-1" role="dialog"
+       aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Delete Conference</h4>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <a href="#" id="confirm" class="btn btn-danger">Yes</a>
+          <a href="#" data-dismiss="modal" aria-hidden="true" class="btn secondary">Canceled</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block javascripts_page %}
+  {{ parent() }}
+  <script type="text/javascript">
+
+    $(document).ready(function () {
+      $('#deleteConfirmation').modal('hide');
+
+      $('.delete_conference').click(function () {
+        var message = $(this).attr('data-message');
+        var deleteUrl = $(this).attr('data-url');
+
+        $('#confirm').attr('href', deleteUrl);
+        $('.modal-body').append("<h5>" + message + "</h5>");
+
+        $('#deleteConfirmation').modal('show');
+
+      })
+
+    });
+
+  </script>
 {% endblock %}
 

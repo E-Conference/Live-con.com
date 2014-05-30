@@ -150,12 +150,9 @@ class TopicController extends Controller
     $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE', 'Topic');
     $form = $this->createForm(new TopicType(), $entity);
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return array(
       'entity' => $entity,
-      'form' => $form->createView(),
-      'authorized' => $authorization->getFlagSched(),
+      'form' => $form->createView()
     );
   }
 
@@ -168,17 +165,13 @@ class TopicController extends Controller
    */
   public function showAction($id)
   {
-
     $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'Topic', $id);
 
     $deleteForm = $this->createDeleteForm($id);
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return array(
       'entity' => $entity,
-      'delete_form' => $deleteForm->createView(),
-      'authorized' => $authorization->getFlagSched(),
+      'delete_form' => $deleteForm->createView()
     );
   }
 
@@ -196,13 +189,10 @@ class TopicController extends Controller
     $editForm = $this->createForm(new TopicType(), $entity);
     $deleteForm = $this->createDeleteForm($id);
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return array(
       'entity' => $entity,
       'edit_form' => $editForm->createView(),
-      'delete_form' => $deleteForm->createView(),
-      'authorized' => $authorization->getFlagSched(),
+      'delete_form' => $deleteForm->createView()
     );
   }
 

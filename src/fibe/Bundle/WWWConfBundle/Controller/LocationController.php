@@ -45,7 +45,7 @@ class LocationController extends Controller
   {
 
     //Authorization Verification conference sched manager
-    $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('VIEW', 'Organization');
+    $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('VIEW', 'Location');
 
     $adapter = new ArrayAdapter($entities);
     $pager = new PagerFanta($adapter);
@@ -123,13 +123,9 @@ class LocationController extends Controller
 
     $deleteForm = $this->createDeleteForm($id);
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-    $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
-
     return array(
       'entity' => $entity,
-      'delete_form' => $deleteForm->createView(),
-      'authorized' => $authorized,
+      'delete_form' => $deleteForm->createView()
     );
   }
 
@@ -144,13 +140,9 @@ class LocationController extends Controller
     $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE', 'Location');
     $form = $this->createForm(new LocationType(), $entity);
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-    $authorized = ($authorization->getFlagconfDatas() || $authorization->getFlagSched());
-
     return array(
       'entity' => $entity,
-      'form' => $form->createView(),
-      'authorized' => $authorized,
+      'form' => $form->createView()
     );
   }
 
@@ -215,14 +207,11 @@ class LocationController extends Controller
       'fibeWWWConfBundle:Equipment'
     )->getEquipmentForLocationSelect($entity);
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return array(
       'entity' => $entity,
       'edit_form' => $editForm->createView(),
       'delete_form' => $deleteForm->createView(),
-      'equipments' => $equipments,
-      'authorized' => $authorization->getFlagconfDatas() || $authorization->getFlagSched(),
+      'equipments' => $equipments
     );
   }
 

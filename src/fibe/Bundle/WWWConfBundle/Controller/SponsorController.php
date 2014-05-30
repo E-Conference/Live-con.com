@@ -113,16 +113,7 @@ class SponsorController extends Controller
    */
   public function createAction(Request $request)
   {
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagconfDatas())
-    {
-      throw new AccessDeniedException('Action not authorized !');
-    }
-
-    $entity = new Sponsor();
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE', 'Sponsor');
     $form = $this->createForm(new SponsorType(), $entity);
     $form->bind($request);
 
@@ -139,8 +130,7 @@ class SponsorController extends Controller
 
     return [
       'entity' => $entity,
-      'form' => $form->createView(),
-      'authorized' => $authorization->getFlagSched(),
+      'form' => $form->createView()
     ];
   }
 
@@ -153,22 +143,12 @@ class SponsorController extends Controller
    */
   public function newAction()
   {
-
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagconfDatas())
-    {
-      throw new AccessDeniedException('Action not authorized !');
-    }
-    $entity = new Sponsor();
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE', 'Sponsor');
     $form = $this->createForm(new SponsorType(), $entity);
 
     return [
       'entity' => $entity,
-      'form' => $form->createView(),
-      'authorized' => $authorization->getFlagSched(),
+      'form' => $form->createView()
     ];
   }
 
@@ -181,16 +161,8 @@ class SponsorController extends Controller
    */
   public function showAction($id)
   {
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'Sponsor', $id);
 
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    $em = $this->getDoctrine()->getManager();
-
-    //The object must belong to the current conf
-    $currentConf = $this->getUser()->getCurrentConf();
-    $entity = $em->getRepository('fibeWWWConfBundle:Sponsor')->findOneBy(['conference' => $currentConf, 'id' => $id]);
     if (!$entity)
     {
       throw $this->createNotFoundException('Unable to find Topic entity.');
@@ -200,8 +172,7 @@ class SponsorController extends Controller
 
     return [
       'entity' => $entity,
-      'delete_form' => $deleteForm->createView(),
-      'authorized' => $authorization->getFlagSched(),
+      'delete_form' => $deleteForm->createView()
     ];
   }
 
@@ -214,20 +185,7 @@ class SponsorController extends Controller
    */
   public function editAction($id)
   {
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagconfDatas())
-    {
-      throw new AccessDeniedException('Action not authorized !');
-    }
-
-    $em = $this->getDoctrine()->getManager();
-
-    //The object must belong to the current conf
-    $currentConf = $this->getUser()->getCurrentConf();
-    $entity = $em->getRepository('fibeWWWConfBundle:Sponsor')->findOneBy(['conference' => $currentConf, 'id' => $id]);
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT', 'Sponsor', $id);
     if (!$entity)
     {
       throw $this->createNotFoundException('Unable to find Topic entity.');
@@ -239,8 +197,7 @@ class SponsorController extends Controller
     return [
       'entity' => $entity,
       'edit_form' => $editForm->createView(),
-      'delete_form' => $deleteForm->createView(),
-      'authorized' => $authorization->getFlagSched(),
+      'delete_form' => $deleteForm->createView()
     ];
   }
 
@@ -253,28 +210,13 @@ class SponsorController extends Controller
    */
   public function updateAction(Request $request, $id)
   {
-
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagconfDatas())
-    {
-      throw new AccessDeniedException('Action not authorized !');
-    }
-
-    $em = $this->getDoctrine()->getManager();
-
-    //The object must belong to the current conf
-    $currentConf = $this->getUser()->getCurrentConf();
-    /**
-     * @var Sponsor
-     */
-    $entity = $em->getRepository('fibeWWWConfBundle:Sponsor')->findOneBy(['conference' => $currentConf, 'id' => $id]);
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT', 'Sponsor', $id);
     if (!$entity)
     {
       throw $this->createNotFoundException('Unable to find Topic entity.');
     }
+
+    $em = $this->getDoctrine()->getManager();
 
     $deleteForm = $this->createDeleteForm($id);
     $editForm = $this->createForm(new SponsorType(), $entity);
@@ -292,8 +234,7 @@ class SponsorController extends Controller
     return [
       'entity' => $entity,
       'edit_form' => $editForm->createView(),
-      'delete_form' => $deleteForm->createView(),
-      'authorized' => $authorization->getFlagSched(),
+      'delete_form' => $deleteForm->createView()
     ];
   }
 
@@ -305,24 +246,13 @@ class SponsorController extends Controller
    */
   public function deleteAction(Request $request, $id)
   {
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagconfDatas())
-    {
-      throw new AccessDeniedException('Action not authorized !');
-    }
-
     $form = $this->createDeleteForm($id);
     $form->bind($request);
 
     if ($form->isValid())
     {
       $em = $this->getDoctrine()->getManager();
-      //The object must belong to the current conf
-      $currentConf = $this->getUser()->getCurrentConf();
-      $entity = $em->getRepository('fibeWWWConfBundle:Sponsor')->findOneBy(['conference' => $currentConf, 'id' => $id]);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('DELETE', 'Sponsor', $id);
       if (!$entity)
       {
         throw $this->createNotFoundException('Unable to find Topic entity.');

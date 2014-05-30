@@ -45,9 +45,11 @@ class PersonController extends Controller
     $pager = new PagerFanta($adapter);
     $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
 
-    try {
+    try
+    {
       $pager->setCurrentPage($request->query->get('page', 1));
-    } catch (NotValidCurrentPageException $e) {
+    } catch (NotValidCurrentPageException $e)
+    {
       throw new NotFoundHttpException();
     }
 
@@ -75,7 +77,8 @@ class PersonController extends Controller
     $filters = $this->createForm(new PersonFilterType($this->getUser()));
     $filters->submit($request);
 
-    if ($filters->isValid()) {
+    if ($filters->isValid())
+    {
       // bind values from the request
 
       $entities = $em->getRepository('fibeWWWConfBundle:Person')->filtering($filters->getData(), $conf);
@@ -85,9 +88,11 @@ class PersonController extends Controller
       $adapter = new ArrayAdapter($entities);
       $pager = new PagerFanta($adapter);
       $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
-      try {
+      try
+      {
         $pager->setCurrentPage($request->query->get('page', 1));
-      } catch (NotValidCurrentPageException $e) {
+      } catch (NotValidCurrentPageException $e)
+      {
         throw new NotFoundHttpException();
       }
 
@@ -113,7 +118,8 @@ class PersonController extends Controller
     $form = $this->createForm(new PersonType($this->getUser()), $entity);
     $form->bind($request);
 
-    if ($form->isValid()) {
+    if ($form->isValid())
+    {
       $em = $this->getDoctrine()->getManager();
       $entity->setConference($this->getUser()->getCurrentConf());
 
@@ -156,14 +162,11 @@ class PersonController extends Controller
     $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE', 'Person');
     $form = $this->createForm(new PersonType($this->getUser()), $entity);
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return $this->render(
       'fibeWWWConfBundle:Person:new.html.twig',
       array(
         'entity' => $entity,
         'form' => $form->createView(),
-        'authorized' => $authorization->getFlagconfDatas(),
       )
     );
   }
@@ -179,14 +182,11 @@ class PersonController extends Controller
 
     $deleteForm = $this->createDeleteForm($id);
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return $this->render(
       'fibeWWWConfBundle:Person:show.html.twig',
       array(
         'entity' => $entity,
-        'delete_form' => $deleteForm->createView(),
-        'authorized' => $authorization->getFlagconfDatas()
+        'delete_form' => $deleteForm->createView()
       )
     );
   }
@@ -203,15 +203,12 @@ class PersonController extends Controller
     $editForm = $this->createForm(new PersonType($this->getUser()), $entity);
     $deleteForm = $this->createDeleteForm($id);
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return $this->render(
       'fibeWWWConfBundle:Person:edit.html.twig',
       array(
         'entity' => $entity,
         'edit_form' => $editForm->createView(),
-        'delete_form' => $deleteForm->createView(),
-        'authorized' => $authorization->getFlagconfDatas(),
+        'delete_form' => $deleteForm->createView()
       )
     );
   }
@@ -253,7 +250,8 @@ class PersonController extends Controller
     $organizationToAdd = $entity->getOrganizations();
     // $accountToAdd = $entity->getAccounts();
 
-    if ($editForm->isValid()) {
+    if ($editForm->isValid())
+    {
 
       foreach ($paperToAdd
                as
@@ -298,7 +296,8 @@ class PersonController extends Controller
     $form = $this->createDeleteForm($id);
     $form->bind($request);
 
-    if ($form->isValid()) {
+    if ($form->isValid())
+    {
       $em = $this->getDoctrine()->getManager();
       $em->remove($entity);
       $em->flush();

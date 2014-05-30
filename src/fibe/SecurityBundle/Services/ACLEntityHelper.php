@@ -34,7 +34,8 @@ class ACLEntityHelper extends ACLHelper
     'Role' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
     'Organization' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
     'Topic' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
-    'Sponsor' => 'fibe\\Bundle\\WWWConfBundle\\Entity'
+    'Sponsor' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
+    'SocialServiceAccount' => 'fibe\\Bundle\\WWWConfBundle\\Entity'
   );
 
 
