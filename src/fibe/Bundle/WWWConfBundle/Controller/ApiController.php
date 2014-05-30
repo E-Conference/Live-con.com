@@ -1,11 +1,11 @@
 <?php
-  namespace fibe\Bundle\WWWConfBundle\Controller;
+namespace fibe\Bundle\WWWConfBundle\Controller;
 
-  use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-  use Symfony\Component\HttpFoundation\Request;
-  use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Api controller.
@@ -33,7 +33,7 @@ class ApiController extends Controller
 
 //     return $response;
 // */
-        
+
 // 	    $em = $this->getDoctrine()->getManager();
 // 	    $query = $request->query;
 // 	    $uriParam = $query->get('uri', '');
@@ -49,6 +49,6 @@ class ApiController extends Controller
 //         $response->headers->set('Content-Type', $result->getContentType()); 
 //         return $response;
 //     }
-    
-    
+
+
 }

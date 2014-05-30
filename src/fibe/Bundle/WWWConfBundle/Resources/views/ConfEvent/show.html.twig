@@ -8,159 +8,128 @@
 {% block centerPanel %}
   {{ parent() }}
 
-         <div class="row page-top-header ">
-            <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                <span>Event details</span>
-                <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Event' }) }}" title="Help">
-                     <i class="fa fa-question"></i> 
-                </a>
-            </div>
+  <div class="row page-top-header ">
+    <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
+      <span>Event details</span>
+      <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Event' }) }}" title="Help">
+        <i class="fa fa-question"></i>
+      </a>
+    </div>
 
-            <div class="col-xs-2 col-sm-4 col-md-6 col-lg-8">
-            </div>
-            <div class="page-btn-list col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                 <a type="button" href="{{ path('schedule_confevent') }}" class="btn btn-warning">
-                        <i class="fa fa-list"></i>
-                  </a>
+    <div class="col-xs-2 col-sm-4 col-md-6 col-lg-8">
+    </div>
+    <div class="page-btn-list col-xs-5  col-sm-4 col-md-3 col-lg-2">
+      <a type="button" href="{{ path('schedule_confevent') }}" class="btn btn-warning">
+        <i class="fa fa-list"></i>
+      </a>
 
-                {% if is_granted('EDIT', entity) %} 
-                   <a href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}" class="btn btn-success edit-event">
-                         <i class="fa fa-pencil"></i>
-                   </a>
-                {% endif %}
-                {% if is_granted('DELETE', entity) %} 
-                   <form action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
-                      <input type="hidden" name="_method" value="DELETE" />
-                        {{ form_widget(delete_form) }}
-                    <button type="submit" class="btn btn-danger delete-event">
-                        <i class="fa fa-trash-o"></i>
-                    </button>
-                  </form> 
-                {% endif %} 
-            </div>
-      </div>
-      <div class="row page-content">
+      {% if is_granted('EDIT', entity) %}
+        <a href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}" class="btn btn-success edit-event">
+          <i class="fa fa-pencil"></i>
+        </a>
+      {% endif %}
+      {% if is_granted('DELETE', entity) %}
+        <form action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
+          <input type="hidden" name="_method" value="DELETE"/>
+          {{ form_widget(delete_form) }}
+          <button type="submit" class="btn btn-danger delete-event">
+            <i class="fa fa-trash-o"></i>
+          </button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+  <div class="row page-content">
 
 
-            <div class="col-lg-12">
-                <h2> {{ entity.summary }}</h2>
-                <table class="table table-hover">
-                    <tbody>
-                        <tr>
-                            <th>Id</th>
-                            <td>{{ entity.id }}</td>
-                        </tr>
-                         <tr>
-                            <th>Summary</th>
-                            <td>{{ entity.summary }}</td>
-                        </tr>
-                         <tr>
-                            <th>Acronym</th>
-                            <td>{{ entity.acronym }}</td>
-                        </tr>
-                        <tr>
-                            <th>Start At</th>
-                            <td>{{ entity.startAt|date('Y-m-d H:i:s') }}</td>
-                        </tr>
-                        <tr>
-                            <th>End At</th>
-                            <td>{{ entity.endAt|date('Y-m-d H:i:s') }}</td>
-                        </tr>
-                         <tr>
-                            <th>Location</th>
-                            <td>{{ entity.location.name }}</td>
-                        </tr>
-                       
-                        <tr>
-                            <th>Description</th>
-                            <td>{{ entity.description }}</td>
-                        </tr>
-                        <tr>
-                            <th>Comment</th>
-                            <td>{{ entity.comment }}</td>
-                        </tr>
-                        <tr>
-                            <th>Url</th>
-                            <td>{{ entity.url }}</td>
-                        </tr>
-                        <tr>
-                            <th>Parent</th>
-                            <td>{{ entity.parent.summary }}</td>
-                        </tr>
-                         <tr>
-                            <th>Created At</th>
-                            <td>{{ entity.createdAt|date('Y-m-d H:i:s') }}</td>
-                        </tr>
-                        <tr>
-                            <th>Last Modified At</th>
-                            <td>{{ entity.lastModifiedAt|date('Y-m-d H:i:s') }}</td>
-                        </tr>
-                       <!-- <tr>
-                            <th>Organizer</th>
-                            <td>{{ entity.organizer }}</td>
-                        </tr>
-                        <tr>
-                            <th>Revisionsequence</th>
-                            <td>{{ entity.revisionSequence }}</td>
-                        </tr>
-                        <tr>
-                            <th>Contacts</th>
-                            <td>{{ entity.contacts }}</td>
-                        </tr>
-                        <tr>
-                            <th>Excludeddates</th>
-                            <td>{{ entity.excludedDates }}</td>
-                        </tr>
-                        <tr>
-                            <th>Includeddates</th>
-                            <td>{{ entity.includedDates }}</td>
-                        </tr>
-                        <tr>
-                            <th>Classification</th>
-                            <td>{{ entity.classification }}</td>
-                        </tr>
-                        <tr>
-                            <th>Priority</th>
-                            <td>{{ entity.priority }}</td>
-                        </tr>
-                        <tr>
-                            <th>Resources</th>
-                            <td>{{ entity.resources }}</td>
-                        </tr>
-                        <tr>
-                            <th>Duration</th>
-                            <td class="duration">{{ entity.duration }}</td>
-                        </tr>
-                        <tr>
-                            <th>Istransparent</th>
-                            <td>{{ entity.isTransparent }}</td>
-                        </tr>-->
-                        
-                    </tbody>
-                </table>
-                <div class="row">
-                    <h2>Event Relations</h2>
-                    <div class="col-lg-12">
-                          <h3>Topics</h3><br />
-                          {% include "fibeWWWConfBundle:ConfEvent:topicRelation.html.twig" %}
-                     </div>
-               </div>
+    <div class="col-lg-12">
+      <h2> {{ entity.summary }}</h2>
+      <table class="table table-hover">
+        <tbody>
+        <tr>
+          <th>Id</th>
+          <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+          <th>Summary</th>
+          <td>{{ entity.summary }}</td>
+        </tr>
+        <tr>
+          <th>Acronym</th>
+          <td>{{ entity.acronym }}</td>
+        </tr>
+        <tr>
+          <th>Start At</th>
+          <td>{{ entity.startAt|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+          <th>End At</th>
+          <td>{{ entity.endAt|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+          <th>Location</th>
+          <td>
+            {% if entity.location is not null %}
+              {{ entity.location.name }}
+            {% endif %}
+          </td>
+        </tr>
 
-              <div class="row">
-                     <div class="col-lg-12">
-                          <h3>Publication</h3><br />
-                          {% include "fibeWWWConfBundle:ConfEvent:paperRelation.html.twig" %}
-                    </div>
-              </div>
+        <tr>
+          <th>Description</th>
+          <td>{{ entity.description }}</td>
+        </tr>
+        <tr>
+          <th>Comment</th>
+          <td>{{ entity.comment }}</td>
+        </tr>
+        <tr>
+          <th>Url</th>
+          <td>{{ entity.url }}</td>
+        </tr>
+        <tr>
+          <th>Parent</th>
+          <td>
+            {% if entity.parent is not null %}
+              {{ entity.parent.summary }}
+            {% endif %}
+          </td>
+        </tr>
+        <tr>
+          <th>Created At</th>
+          <td>{{ entity.createdAt|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+          <th>Last Modified At</th>
+          <td>{{ entity.lastModifiedAt|date('Y-m-d H:i:s') }}</td>
+        </tr>
 
-              <div class="row">
-                     <div class="col-lg-12">
-                          <h3>Person</h3><br />
-                          {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
-                     </div>
-              </div>
-            </div>
-           
+        </tbody>
+      </table>
+      <div class="row">
+        <h2>Event Relations</h2>
+
+        <div class="col-lg-12">
+          <h3>Topics</h3><br/>
+          {% include "fibeWWWConfBundle:ConfEvent:topicRelation.html.twig" %}
         </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <h3>Publication</h3><br/>
+          {% include "fibeWWWConfBundle:ConfEvent:paperRelation.html.twig" %}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <h3>Person</h3><br/>
+          {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
+        </div>
+      </div>
+    </div>
+
+  </div>
 
 {% endblock %}
