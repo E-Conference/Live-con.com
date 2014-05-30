@@ -17,5 +17,7 @@ vendor/*
 # Configuration files
 app/config/parameters.yml
 
+app/bootstrap.php.cache
+
 # gedit temp file
 *~

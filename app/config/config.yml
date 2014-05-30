@@ -26,7 +26,6 @@ framework:
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
-    twig:
     form:
         resources:
             - 'fibeSecurityBundle:Form:fields.html.twig'

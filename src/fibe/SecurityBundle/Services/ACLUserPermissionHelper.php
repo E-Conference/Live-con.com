@@ -96,7 +96,7 @@
       $confPermission->setRestricted(!$allowed);
       $confPermission->setRepositoryName($repositoryName);
       $confPermission->setEntityId($entity->getId());
-      return $confPermission
+      return $confPermission;
     }
  
     /**
