@@ -82,7 +82,7 @@
       return $userConfPermission; 
     } 
 
-    private function newConfPermission($user,$restrictForm,$formAllowed,$noManager,$manager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel)
+    private function newConfPermission($user,$restrictForm,&$formAllowed,$noManager,$manager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel)
     {
       $currentUserAction = $this->getACEByEntity($entity,$user);
       $isMaster = ($currentUserAction == "OWNER" || $currentUserAction == "MASTER");
