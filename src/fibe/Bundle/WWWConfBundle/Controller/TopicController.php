@@ -165,7 +165,6 @@ class TopicController extends Controller
    */
   public function showAction($id)
   {
-
     $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'Topic', $id);
 
     $deleteForm = $this->createDeleteForm($id);
