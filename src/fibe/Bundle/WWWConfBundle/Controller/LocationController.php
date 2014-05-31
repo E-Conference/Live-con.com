@@ -43,8 +43,6 @@ class LocationController extends Controller
    */
   public function indexAction(Request $request)
   {
-
-    //Authorization Verification conference sched manager
     $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('VIEW', 'Location');
 
     $adapter = new ArrayAdapter($entities);
@@ -108,7 +106,6 @@ class LocationController extends Controller
         )
       );
     }
-
   }
 
   /**
@@ -223,7 +220,6 @@ class LocationController extends Controller
   {
     $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT', 'Location', $id);
 
-
     $editForm = $this->createForm(new LocationType(), $entity);
     $editForm->bind($request);
 
@@ -263,7 +259,6 @@ class LocationController extends Controller
   public function deleteAction(Request $request, $id)
   {
     $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('DELETE', 'Location', $id);
-
 
     $form = $this->createDeleteForm($id);
     $form->bind($request);
