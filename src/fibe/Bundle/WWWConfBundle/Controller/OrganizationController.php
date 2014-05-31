@@ -141,12 +141,9 @@ class OrganizationController extends Controller
       return $this->redirect($this->generateUrl('schedule_organization_index'));
     }
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return array(
       'entity' => $entity,
-      'form' => $form->createView(),
-      'authorized' => $authorization->getFlagconfDatas()
+      'form' => $form->createView()
     );
   }
 
@@ -258,8 +255,7 @@ class OrganizationController extends Controller
     return array(
       'entity' => $entity,
       'edit_form' => $editForm->createView(),
-      'delete_form' => $deleteForm->createView(),
-      'authorized' => $authorization->getFlagconfDatas()
+      'delete_form' => $deleteForm->createView()
     );
   }
 
@@ -271,7 +267,6 @@ class OrganizationController extends Controller
    */
   public function deleteAction(Request $request, $id)
   {
-
     $form = $this->createDeleteForm($id);
     $form->bind($request);
 

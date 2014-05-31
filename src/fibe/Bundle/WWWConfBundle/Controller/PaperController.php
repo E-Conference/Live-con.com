@@ -35,7 +35,6 @@ class PaperController extends Controller
   public function indexAction(Request $request)
   {
     $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('VIEW', 'Paper');
-    // $entities = $this->getUser()->getCurrentConf()->getPapers()->toArray();
 
     $adapter = new ArrayAdapter($entities);
     $pager = new PagerFanta($adapter);
@@ -125,14 +124,11 @@ class PaperController extends Controller
       return $this->redirect($this->generateUrl('schedule_paper'));
     }
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return $this->render(
       'fibeWWWConfBundle:Paper:new.html.twig',
       array(
         'entity' => $entity,
-        'form' => $form->createView(),
-        'authorized' => $authorization->getFlagconfDatas(),
+        'form' => $form->createView()
       )
     );
   }

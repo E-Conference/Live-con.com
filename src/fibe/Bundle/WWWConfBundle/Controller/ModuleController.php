@@ -130,9 +130,7 @@ class ModuleController extends Controller
    */
   public function editAction($id)
   {
-    $em = $this->getDoctrine()->getManager();
-
-    $entity = $em->getRepository('fibeWWWConfBundle:Module')->find($id);
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT', 'Module', $id);
 
     if (!$entity)
     {

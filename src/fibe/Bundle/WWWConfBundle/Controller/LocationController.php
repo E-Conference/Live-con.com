@@ -181,12 +181,9 @@ class LocationController extends Controller
       return $this->redirect($this->generateUrl('schedule_location'));
     }
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return array(
       'entity' => $entity,
-      'form' => $form->createView(),
-      'authorized' => $authorization->getFlagconfDatas() || $authorization->getFlagSched(),
+      'form' => $form->createView()
     );
   }
 
@@ -250,12 +247,9 @@ class LocationController extends Controller
       return $this->redirect($this->generateUrl('schedule_location'));
     }
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return array(
       'entity' => $entity,
-      'edit_form' => $editForm->createView(),
-      'authorized' => $authorization->getFlagconfDatas() || $authorization->getFlagSched(),
+      'edit_form' => $editForm->createView()
     );
   }
 
@@ -306,12 +300,9 @@ class LocationController extends Controller
 
     $deleteForm = $this->createDeleteForm($id);
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return array(
       'entity' => $entity,
-      'delete_form' => $deleteForm->createView(),
-      'authorized' => $authorization->getFlagconfDatas() || $authorization->getFlagSched(),
+      'delete_form' => $deleteForm->createView()
     );
   }
 

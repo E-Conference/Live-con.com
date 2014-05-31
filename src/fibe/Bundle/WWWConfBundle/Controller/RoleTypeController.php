@@ -29,17 +29,10 @@ class RoleTypeController extends Controller
    */
   public function indexAction()
   {
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    $em = $this->getDoctrine()->getManager();
-
-    $entities = $em->getRepository('fibeWWWConfBundle:RoleType')->findAll();
+    $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('VIEW', 'RoleType');
 
     return array(
-      'entities' => $entities,
-      'authorized' => $authorization->getFlagconfDatas(),
+      'entities' => $entities
     );
   }
 
@@ -52,17 +45,8 @@ class RoleTypeController extends Controller
    */
   public function createAction(Request $request)
   {
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE', 'RoleType');
 
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagconfDatas())
-    {
-      throw new AccessDeniedException('Action not authorized !');
-    }
-
-    $entity = new RoleType();
     $form = $this->createForm(new RoleTypeType(), $entity);
     $form->bind($request);
 
@@ -77,8 +61,7 @@ class RoleTypeController extends Controller
 
     return array(
       'entity' => $entity,
-      'form' => $form->createView(),
-      'authorized' => $authorization->getFlagconfDatas(),
+      'form' => $form->createView()
     );
   }
 
@@ -91,23 +74,12 @@ class RoleTypeController extends Controller
    */
   public function newAction()
   {
-
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagconfDatas())
-    {
-      throw new AccessDeniedException('Action not authorized !');
-    }
-
-    $entity = new RoleType();
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE', 'RoleType');
     $form = $this->createForm(new RoleTypeType(), $entity);
 
     return array(
       'entity' => $entity,
-      'form' => $form->createView(),
-      'authorized' => $authorization->getFlagconfDatas(),
+      'form' => $form->createView()
     );
   }
 
@@ -120,14 +92,8 @@ class RoleTypeController extends Controller
    */
   public function showAction($id)
   {
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'RoleType', $id);
 
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    $em = $this->getDoctrine()->getManager();
-
-    $entity = $em->getRepository('fibeWWWConfBundle:RoleType')->find($id);
     if (!$entity)
     {
       throw $this->createNotFoundException('Unable to find RoleType entity.');
@@ -137,8 +103,7 @@ class RoleTypeController extends Controller
 
     return array(
       'entity' => $entity,
-      'delete_form' => $deleteForm->createView(),
-      'authorized' => $authorization->getFlagconfDatas(),
+      'delete_form' => $deleteForm->createView()
     );
   }
 
@@ -151,19 +116,7 @@ class RoleTypeController extends Controller
    */
   public function editAction($id)
   {
-
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagconfDatas())
-    {
-      throw new AccessDeniedException('Action not authorized !');
-    }
-
-    $em = $this->getDoctrine()->getManager();
-
-    $entity = $em->getRepository('fibeWWWConfBundle:RoleType')->find($id);
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT', 'RoleType', $id);
 
     if (!$entity)
     {
@@ -176,8 +129,7 @@ class RoleTypeController extends Controller
     return array(
       'entity' => $entity,
       'edit_form' => $editForm->createView(),
-      'delete_form' => $deleteForm->createView(),
-      'authorized' => $authorization->getFlagconfDatas(),
+      'delete_form' => $deleteForm->createView()
     );
   }
 
@@ -190,19 +142,7 @@ class RoleTypeController extends Controller
    */
   public function updateAction(Request $request, $id)
   {
-
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagconfDatas())
-    {
-      throw new AccessDeniedException('Action not authorized !');
-    }
-
-    $em = $this->getDoctrine()->getManager();
-
-    $entity = $em->getRepository('fibeWWWConfBundle:RoleType')->find($id);
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT', 'RoleType', $id);
 
     if (!$entity)
     {
@@ -215,6 +155,7 @@ class RoleTypeController extends Controller
 
     if ($editForm->isValid())
     {
+      $em = $this->getDoctrine()->getManager();
       $em->persist($entity);
       $em->flush();
 
@@ -224,8 +165,7 @@ class RoleTypeController extends Controller
     return array(
       'entity' => $entity,
       'edit_form' => $editForm->createView(),
-      'delete_form' => $deleteForm->createView(),
-      'authorized' => $authorization->getFlagconfDatas(),
+      'delete_form' => $deleteForm->createView()
     );
   }
 
@@ -237,16 +177,7 @@ class RoleTypeController extends Controller
    */
   public function deleteAction(Request $request, $id)
   {
-
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagconfDatas())
-    {
-      throw new AccessDeniedException('Action not authorized !');
-    }
-
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('DELETE', 'RoleType', $id);
 
     $form = $this->createDeleteForm($id);
     $form->bind($request);
@@ -254,7 +185,6 @@ class RoleTypeController extends Controller
     if ($form->isValid())
     {
       $em = $this->getDoctrine()->getManager();
-      $entity = $em->getRepository('fibeWWWConfBundle:RoleType')->find($id);
 
       if (!$entity)
       {

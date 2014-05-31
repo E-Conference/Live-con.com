@@ -140,14 +140,12 @@ class PersonController extends Controller
       return $this->redirect($this->generateUrl('schedule_person_show', array('id' => $entity->getId())));
 
     }
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
 
     return $this->render(
       'fibeWWWConfBundle:Person:new.html.twig',
       array(
         'entity' => $entity,
-        'form' => $form->createView(),
-        'authorized' => $authorization->getFlagconfDatas(),
+        'form' => $form->createView()
       )
     );
   }
