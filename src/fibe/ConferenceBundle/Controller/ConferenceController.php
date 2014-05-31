@@ -96,21 +96,7 @@
       //TODO CSRF TOKEN
       // $csrf = $this->get('form.csrf_provider'); //Symfony\Component\Form\Extension\Csrf\CsrfProvider\SessionCsrfProvider 
       // $token = $csrf->generateCsrfToken($intention); //Intention should be empty string, if you did not define it in parameters
-      // BOOLEAN $csrf->isCsrfTokenValid($intention, $token);
-
-      //check if the processed conference belongs to the user
-      $user = $this->getUser();
-      if (!$user->authorizedAccesToConference($conference))
-      {
-        throw new AccessDeniedException('Look at your conferences !!!');
-      }
-      //Authorization Verification conference datas manager
-
-      $authorization = $user->getAuthorizationByConference($conference);
-      if (!$authorization->getFlagconfDatas())
-      {
-        throw new AccessDeniedException('Action not authorized !');
-      }
+      // BOOLEAN $csrf->isCsrfTokenValid($intention, $token); 
 
       $emptyConf = $this->get('emptyConf');
       $emptyConf->emptyConf($conference, $em);

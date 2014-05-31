@@ -569,6 +569,7 @@ function Importer()
         } 
         for (var i in format)
         {
+            if(!rtn)break;
             var currentFormat = format[i];
             if(log && utils[currentFormat.fn](rtn,currentFormat.arg,log)===undefined)
                 console.log( "couldn't have proceed "+currentFormat.fn+ " for ",rtn," with arg : ",currentFormat.arg);

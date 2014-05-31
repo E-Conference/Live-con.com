@@ -47,24 +47,6 @@
     </div>
     <div id="sidebar-container" class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
       <div id="sidebar-div" class="bordered">
-        {# <div class="checkbox">
-          <label>
-            <input id="reposition" checked="checked" type="checkbox"> Reposition parent/child <small>(<i>need performance</i>)</small>
-          </label>
-        </div> 
-        <div class="history ">
-          <button id="backwardBtn" class="btn btn-default" disabled="disabled" ><i class="icon-undo"></i></button>
-          <button id="forewardBtn" class="btn btn-default" disabled="disabled" ><i class="icon-repeat"></i></button>
-        </div> #}
-        {# <div id="resourceView">
-            <select class="form-control"> 
-                <option value="classic">Calendar</option> 
-                <optgroup label="Ressources views">
-                  <option value="location" >Location</option> 
-                  <option value="category" >Category</option>
-                </optgroup>
-            </select>
-        </div> #}  
         <h4>Time scale</h4>
         <input type="text" class="slider" data-slider-id='sliderTimeScale' type="number" data-slider-min="5" data-slider-max="120" data-slider-step="5" data-slider-value="30"/>
         <span id="sliderTimeScaleValLabel">
@@ -359,7 +341,7 @@
       });
      $('.slider').css("width","100%");
       //requires changes made by christian on https://code.google.com/p/fullcalendar/issues/detail?id=293&can=4
-      
+      // TO REPRODUCE WHEN FULLCALENDAR.JS IS UPDATED
       /*
       #19 cristian...@gmail.com
       I made some changes on the plugin and now I can change minTime and maxTime dynamically. I think that it works for the other options too.

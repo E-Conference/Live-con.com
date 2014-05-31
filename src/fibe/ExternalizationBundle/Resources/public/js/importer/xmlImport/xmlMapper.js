@@ -127,18 +127,24 @@ xmlMapper = {
             })
             return rtn.length > 1 ? rtn : rtn.length == 1 ? rtn[0] : undefined;
         },
-        split : function(text,arg){
-            if(!text)return text;
-            var rtn = text.split(arg[0]);
-            switch(arg[1])
-            {
-            case "last":
-                rtn = rtn[rtn.length-1];
-            break;
-            default:
-                rtn = rtn[arg[1]];
-            }
-            return rtn;
+        split : function(texts,arg){
+            var rtn = [];
+            $(texts).each( function(){
+                var text = this.split(arg[0]);
+                switch(arg[1])
+                {
+                    case "last":
+                        rtn = text[text.length-1];
+                    break;
+                    case "first":
+                        rtn = text[0];
+                    break;
+                    default:
+                        rtn = text[arg[1]];
+                }
+                rtn.push(text);
+            })
+            return rtn.length > 1 ? rtn : rtn.length == 1 ? rtn[0] : undefined;  
         },
         localName : function(node){
             return $(node)[0].localName;
@@ -148,7 +154,7 @@ xmlMapper = {
         attr : function(node,arg){
             var rtn = [];
             $(node).each( function(){
-                rtn.push($(this).attr(arg[0]) );
+                rtn.push(attr);
             })
             return rtn.length > 1 ? rtn : rtn.length == 1 ? rtn[0] : undefined;
         },
