@@ -44,27 +44,32 @@
       <script type="text/javascript">
         $(function ()
         { 
-          $("select").select2();
+          
+          $("select").select2({width:"resolve"});
            
           $('.switch').bootstrapSwitch();
 
           $(".duration").each(function ()
           {
             //DateInterval example : P612DT18H30M00S
-            var s = $(this).text().split("M")[1].split("S")[0],
-                m = $(this).text().split("H")[1].split("M")[0],
-                h = $(this).text().split("T")[1].split("H")[0],
-                d = $(this).text().split("P")[1].split("D")[0] % 7,
-                w = $(this).text().split("P")[1].split("D")[0] / 7
-                ;
-            var momentDur = moment.duration({
-              seconds: s,
-              minutes: m,
-              hours: h,
-              days: d,
-              weeks: w
-            });
-            $(this).text(momentDur.humanize());
+            if($(this).text())
+            {
+                
+              var s = $(this).text().split("M")[1].split("S")[0],
+                  m = $(this).text().split("H")[1].split("M")[0],
+                  h = $(this).text().split("T")[1].split("H")[0],
+                  d = $(this).text().split("P")[1].split("D")[0] % 7,
+                  w = $(this).text().split("P")[1].split("D")[0] / 7
+                  ;
+              var momentDur = moment.duration({
+                seconds: s,
+                minutes: m,
+                hours: h,
+                days: d,
+                weeks: w
+              });
+              $(this).text(momentDur.humanize());
+            }
           });
         });
       </script>

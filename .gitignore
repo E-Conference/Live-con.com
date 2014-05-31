@@ -6,8 +6,6 @@ composer.lock
 
 src/fibe/MobileAppBundle/Resources/public/mobileApp/*
 
-reset
-
 # Symfony directories
 */logs/*
 */cache/*

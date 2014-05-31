@@ -1,6 +1,16 @@
+
+
+
+
+
+
+
+
+
+
 {% extends 'fibeWWWConfBundle::base.html.twig' %}
 
-{% block title %}New conference{% endblock title %}
+{% block title %}New event{% endblock title %}
 
 {% block stylesheets_page %}
 {% endblock stylesheets_page %}
@@ -8,52 +18,115 @@
 {% block centerPanel %}
   {{ parent() }}
 
-    <h1>Event creation</h1>
-
-    <div class="row">
-     <div class="col-lg-9"></div>
-          <div class="col-lg-2 btn-group">
-              <a type="button" href="{{ path('schedule_confevent') }}" class="btn btn-warning">
-                    <i class="fa fa-list"></i>
-              </a>
-              
-          </div>    
-    </div>     
-
-    <form action="{{ path('schedule_confevent_create') }}" method="post" {{ form_enctype(form) }}>
-
-     <div class="row-fluid">
-        <div class="col-lg-2"></div>
-        <div class="col-lg-4">
-                {{ form_row(form.summary) }}
-                {{ form_row(form.acronym) }}
-                {{ form_row(form.categories) }}
-                {# {{ form_row(form.startAt) }}
-                {{ form_row(form.endAt) }} #}
-                {{ form_row(form.description) }} 
-                {{ form_row(form.url) }} 
+      <div class="row page-top-header ">
+        <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
+            <span>Edit event</span>
+            <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Event' }) }}" target="_blank" title="Help">
+                 <i class="fa fa-question"></i> 
+            </a>
         </div>
-        <div class="col-lg-4">
-                {{ form_row(form.comment) }}
-                {{ form_row(form.contacts) }}
-                {{ form_row(form.organizer) }}
-                {{ form_row(form.location) }}
-                {{ form_row(form.organizer) }}
-                {{ form_row(form.attach) }}
-           <br />
+
+        <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8"> </div>
+        <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+           <a type="button" href="{{ path('schedule_confevent') }}" class="btn btn-warning">
+              <i class="fa fa-list"></i>
+          </a> 
         </div>
-        <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">
-                {{ form_rest(form)}}
+      </div>
+      <div class="row page-content"> 
+        <form action="{{ path('schedule_confevent_create') }}" method="post" {{ form_enctype(form) }}>
+
+          <div class="row-fluid">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-4">
+              {{ form_row(form.summary) }}
+              {{ form_row(form.acronym) }}
+              {{ form_row(form.categories) }}
+              {# {{ form_row(form.startAt) }}
+              {{ form_row(form.endAt) }} #}
+              {{ form_row(form.description) }} 
+              {{ form_row(form.url) }} 
+            </div>
+            <div class="col-lg-4">
+              {{ form_row(form.comment) }}
+              {{ form_row(form.contacts) }}
+              {{ form_row(form.organizer) }}
+              {{ form_row(form.location) }}
+              {{ form_row(form.organizer) }}
+              {{ form_row(form.attach) }}
+              <br />
+            </div>
+            <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">
+              {{ form_rest(form)}}
             </div>                       
-        </div>
-        <br />
-         <div class="row"> 
+          </div> 
+          <div class="row"> 
             <div class="col-lg-4"></div>
             <div class="col-lg-4">  
                  <button type="submit" class="btn btn-block btn-success">
-                          <i class="fa fa-check"></i>
+                    <i class="fa fa-check"></i>
                 </button>
             </div>
-        </div>
-    </form>
+          </div>
+        </form>
+        <br /><br /> 
+      </div> 
+
+
 {% endblock %}
+
+{% block javascripts_page %}
+<script type="text/javascript">
+
+   $(document).ready(function() {
+    $('.loaders').hide();
+   //listen for the form beeing submitted
+   $("#form_papers").change(function(){
+      //get the url for the form
+      var id_paper= $(this).val();
+      //start send the post request
+       $.post('{{path("schedule_confevent_addPaper") }}',               
+                {id_entity : '{{entity.id}}', id_paper: id_paper}, 
+            function(response){
+                   $('#paper_related_list').html(response);
+                
+            }, "html");    
+       });
+
+    //listen for the form beeing submitted
+   $("#form_topics").change(function(){
+      //get the url for the form
+      var id_topic= $(this).val();
+      //start send the post request
+       $.post('{{path("schedule_confevent_addTopic") }}',               
+                {id_entity : '{{entity.id}}', id_topic: id_topic}, 
+            function(response){
+                   $('#topics_related_list').html(response);
+            }, "html");    
+       });
+
+   $("#role_form").submit(function(){
+        //get the url for the form
+        var id_person = $('#fibe_bundle_wwwconfbundle_roletype_person').val();
+        var id_type = $('#fibe_bundle_wwwconfbundle_roletype_type').val();
+        //start send the post request
+         $.post("{{path('schedule_confevent_addPerson')}}",               
+                 {id_person : id_person, id_type:id_type, id_entity: "{{entity.id }}"} , 
+              function(response){
+                     $('#person_related_list').html(response);
+                  
+              }, "html");    
+          return false;
+         });
+
+    
+       
+
+     $('.help').popover({ 'trigger': 'click', 'placement':'bottom'});
+   
+  
+  });
+  
+</script>
+
+{% endblock javascripts_page %}
