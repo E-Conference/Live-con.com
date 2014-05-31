@@ -28,6 +28,14 @@
     private $id;
 
     /**
+     * Conference
+     *
+     * @ORM\OneToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf",cascade={"persist","remove"})
+     * @ORM\JoinColumn(name="conference", referencedColumnName="id",onDelete="CASCADE")
+     */
+    private $conference;
+
+    /**
      *
      * @ORM\Column(type="boolean",options={"default" = 1})
      *

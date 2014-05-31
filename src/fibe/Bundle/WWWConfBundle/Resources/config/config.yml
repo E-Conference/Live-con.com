@@ -36,7 +36,7 @@ idci_exporter:
 
 
         schedule_category:
-            class: "IDCI\\Bundle\\SimpleScheduleBundle\\Entity\\Category"
+            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Category"
             formats:
                 jsonp:
                     transformer:
@@ -45,7 +45,7 @@ idci_exporter:
 #                            template_path:
                             template_name_format: "export.json.twig"
         schedule_location:
-            class: "IDCI\\Bundle\\SimpleScheduleBundle\\Entity\\Location"
+            class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Location"
             formats:
                 jsonp:
                     transformer:

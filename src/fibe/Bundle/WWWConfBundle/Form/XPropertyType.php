@@ -54,6 +54,6 @@
      */
     public function getName()
     {
-      return 'idci_bundle_simpleschedulebundle_xpropertytype';
+      return 'fibe_bundle_wwwconfbundle_xpropertytype';
     }
   }

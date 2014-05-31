@@ -113,8 +113,8 @@
                     href="{{ path('schedule_conference_show') }}" class='ellipsis'><i
                       class="fa  fa-search-plus fa-1x"></i><span> Overview </span></a></li>
               {% if is_granted('EDIT', app.user.currentConf) %}
-                <li class="schedule_conference_settings col-xs-2 col-sm-2  col-mg-2 col-lg-2"><a
-                      href="{{ path('schedule_conference_settings') }}" class='ellipsis'> <i
+                <li class="schedule_conference_module col-xs-2 col-sm-2  col-mg-2 col-lg-2"><a
+                      href="{{ path('schedule_conference_module') }}" class='ellipsis'> <i
                         class="fa fa-inbox fa-1x"></i><span> Modules  </span></a></li>
               {% endif %}
               {% if is_granted('VIEW', app.user.currentConf.team) %}

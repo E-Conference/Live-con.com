@@ -226,66 +226,16 @@
 
 
       return $this->redirect($this->generateUrl('schedule_conference_show'));
-    }
+    } 
 
-
-    // /**
-    //  * @Route("/removeManager", name="schedule_conference_remove_manager")
-    //  */
-    // public function removeManager(Request $request)
-    // {
-
-    //   $id = $request->request->get('id');
-
-    //   $em = $this->getDoctrine()->getManager();
-    //   $manager = $em->getRepository('fibeSecurityBundle:User')->find($id);
-    //   if (!$manager)
-    //   {
-    //     throw $this->createNotFoundException('Unable to find Manager.');
-    //   }
-
-    //     $currentConf = $this->getUser()->getCurrentConf();
-    //     if(!$this->getUser()->getAuthorizationByConference($currentConf)->getFlagTeam())
-    //     {
-    //         // Sinon on déclenche une exception "Accès Interdit"
-    //         throw new AccessDeniedHttpException('Access reserved to team Manager');
-    //     }
-
-    //   //It must stay one manager in a conference
-    //   if (count($currentConf->getConfManagers()) > 1)
-    //   {
-    //     //Remove authorization
-    //     $authorization = $currentConf->getAuthorizationByUser($manager);
-    //     $em->remove($authorization);
-    //     //Remove current conf from the user conferences collection
-    //     $manager->removeConference($currentConf);
-    //     $em->persist($manager);
-    //     $em->flush();
-
-    //     $this->container->get('session')->getFlashBag()->add(
-    //       'success',
-    //       'The manager has been successfully remove from the conferences'
-    //     );
-    //   }
-    //   else
-    //   {
-
-    //     $this->container->get('session')->getFlashBag()->add(
-    //       'error',
-    //       'It must stay at least one manager by conference.'
-    //     );
-    //   }
-
-    //   return $this->redirect($this->generateUrl('conference_team_index'));
-
-    // }
+    /*************************** MODULE *************************/
 
     /**
-     * @Route("/settings", name="schedule_conference_settings")
+     * @Route("/module", name="schedule_conference_module")
      *
      * @Template()
      */
-    public function settingsAction(Request $request)
+    public function moduleAction(Request $request)
     { 
       $module = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','Module',$this->getUser()->getCurrentConf()->getModule());
 
@@ -297,6 +247,48 @@
       );
 
     }
+
+
+  /**
+   * Edits an existing Module entity.
+   * @Route("{id}/module", name="schedule_module_update")
+   *
+   * @param Request $request
+   * @param         $id
+   *
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
+   * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+   */
+  public function updateModuleAction(Request $request, $id)
+  {
+
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT','Module',$this->getUser()->getCurrentConf()->getModule());
+ 
+    $editForm = $this->createForm(new ModuleType(), $entity);
+    $editForm->bind($request);
+
+    if ($editForm->isValid())
+    {
+      $em = $this->getDoctrine()->getManager();
+      $em->persist($entity);
+      $em->flush();
+
+      $this->container->get('session')->getFlashBag()->add(
+        'success',
+        'The module is succesfully updated'
+      );
+    }
+    else
+    {
+
+      $this->container->get('session')->getFlashBag()->add(
+        'error',
+        'The module cannot be saved'
+      );
+    }
+
+    return $this->redirect($this->generateUrl('schedule_conference_module'));
+  }
 
 
     /**
