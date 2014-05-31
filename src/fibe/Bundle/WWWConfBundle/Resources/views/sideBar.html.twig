@@ -1,11 +1,10 @@
-
 <div class="panel-group">
- 
+
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
         <a href="{{ path('dashboard_index') }}" title="Go to current conference dashboard">
-           <i class="fa fa-tachometer fa-3x"></i> Dashboard
+          <i class="fa fa-tachometer fa-3x"></i> Dashboard
         </a>
       </h4>
     </div>
@@ -14,18 +13,19 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#sideBarBtn" href="#collapseConferences"  title="Switch conference">
-            <i class="fa fa-folder-open fa-3x"></i> Conferences  
+        <a data-toggle="collapse" data-parent="#sideBarBtn" href="#collapseConferences" title="Switch conference">
+          <i class="fa fa-folder-open fa-3x"></i> Conferences
         </a>
       </h4>
     </div>
-     <div id="collapseConferences" class="panel-collapse collapse">
+    <div id="collapseConferences" class="panel-collapse collapse">
       <div class="panel-body">
         {% for conference in app.user.getConferences() %}
-              <a role="button" class="btn btn-info btn-medium" href="{{ path('schedule_conference_switch', {id: conference.id}) }}"  >
-              {{conference.getConfName()}}
-              </a>
-           {% endfor %}
+          <a role="button" class="btn btn-info btn-medium"
+             href="{{ path('schedule_conference_switch', {id: conference.id}) }}">
+            {{ conference.getConfName() }}
+          </a>
+        {% endfor %}
       </div>
     </div>
   </div>
@@ -34,37 +34,37 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a data-toggle="collapse" data-parent="#sideBarBtn" href="#collapseExternalization"  title="import/export">
-            <i class="fa fa-arrows-v fa-3x"></i> Import/export  
+        <a data-toggle="collapse" data-parent="#sideBarBtn" href="#collapseExternalization" title="import/export">
+          <i class="fa fa-arrows-v fa-3x"></i> Import/export
         </a>
       </h4>
     </div>
-     <div id="collapseExternalization" class="panel-collapse collapse">
+    <div id="collapseExternalization" class="panel-collapse collapse">
       <div class="panel-body">
-     
-              <a role="button" class="btn btn-info btn-medium" href="{{ path('externalization_import_index')}}">
-              Import
-              </a>
 
-              <a role="button" class="btn btn-info btn-medium" href="{{ path('externalization_export_index')}}">
-              Export
-              </a>
+        <a role="button" class="btn btn-info btn-medium" href="{{ path('externalization_import_index') }}">
+          Import
+        </a>
+
+        <a role="button" class="btn btn-info btn-medium" href="{{ path('externalization_export_index') }}">
+          Export
+        </a>
       </div>
     </div>
   </div>
-  
-   {%  app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')==1 %} 
+
+  {% app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')==1 %}
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a  href="{{ path('conference_team_index') }}" title="Manage team">
-         <i class="fa fa-users fa-3x"></i> Team
+        <a href="{{ path('conference_team_index') }}" title="Manage team">
+          <i class="fa fa-users fa-3x"></i> Team
         </a>
       </h4>
     </div>
   </div>
   {% endif %}
-   <div class="panel panel-default">
+  <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
         <a href="{{ path('dashboard_index') }}" title="Go to homepage">
@@ -77,12 +77,12 @@
     <div class="panel-heading">
       <h4 class="panel-title">
         <a href="{{ path('fos_user_profile_edit') }}">
-         <i class="fa fa fa-user fa-3x"></i><span> {{ app.user.username }}</span>
+          <i class="fa fa fa-user fa-3x"></i><span> {{ app.user.username }}</span>
         </a>
       </h4>
     </div>
   </div>
-   <div class="panel panel-default">
+  <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
         <a href="{{ path('logout') }}" title="logout">

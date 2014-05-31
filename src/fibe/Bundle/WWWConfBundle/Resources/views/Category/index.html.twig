@@ -4,50 +4,30 @@
 
 {% block centerPanel %}
   {{ parent() }}
-         <div class="row page-top-header ">
-            <div class="page-title  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                <span>Category list</span>
-                <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Category' }) }}" target="_blank" title="Help">
-                     <i class="fa fa-question"></i> 
-                </a>
-            </div>
 
-            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
-            </div>
-          
-        </div>
-        <div class="row page-content">
-            <table class="table table-hover records_list">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Color</th>
-                        <th>Name</th> 
-                        <th colspan="3">{% trans %}Actions{% endtrans %}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for entity in pager.currentPageResults %}
-                    <tr>
-                        <td><a href="{{ path('schedule_category_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                        <td>
-                            <div style="width:28px;height:28px;border:1px solid #222;background:{{ entity.color }}" title="{{ entity.color }}">
-                            </div>
-                        </td>
-                        <td>{{ entity.label }}</td> 
-                        <td>
-                            <a class="btn btn-block btn-default" href="{{ path('schedule_category_show', { 'id': entity.id }) }}" title="Show category"><i class="fa fa-eye"></i></a>
-                        </td>
-                        {# <td>
-                            <a class="btn btn-block btn-warning" href="{{ path('schedule_category_edit', { 'id': entity.id }) }}"><i class="fa fa-pencil-square-o"></i></a>
-                        </td> #}
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            <p>
-                {{ pagerfanta(pager, 'twitter_bootstrap3') }}
-            </p>
-        </div>
+  <div class="row page-top-header ">
+    <div class="page-title  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+      <span>Category list</span>
+      <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Category' }) }}" target="_blank" title="Help">
+        <i class="fa fa-question"></i>
+      </a>
+    </div>
+
+    <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+    </div>
+    {% if is_granted('CREATE', app.user.getCurrentConf()) %}
+      <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+        <a class="btn btn-info btn-create create" href="{{ path('schedule_category_create') }}" title="Add a category">
+          <i class="fa fa-plus"></i> New Category
+        </a>
+      </div>
+    {% endif %}
+
+  </div>
+  <div class="row page-content">
+    <div id="category_list" class="table-responsive">
+      {% include "fibeWWWConfBundle:Category:list.html.twig" %}
+    </div>
+  </div>
 
 {% endblock %}
