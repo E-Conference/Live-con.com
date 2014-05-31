@@ -38,8 +38,7 @@ class CategoryController extends Controller
    */
   public function indexAction(Request $request)
   {
-    $em = $this->getDoctrine()->getManager();
-    $entities = $em->getRepository('fibeWWWConfBundle:Category')->getOrdered();
+    $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('VIEW', 'Category');
 
     $adapter = new ArrayAdapter($entities);
     $pager = new PagerFanta($adapter);
@@ -66,8 +65,7 @@ class CategoryController extends Controller
    */
   public function showAction($id)
   {
-    $em = $this->getDoctrine()->getManager();
-    $entity = $em->getRepository('fibeWWWConfBundle:Category')->find($id);
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'Category', $id);
 
     if (!$entity)
     {
@@ -91,7 +89,7 @@ class CategoryController extends Controller
   public function newAction()
   {
     throw new ServiceUnavailableHttpException('Not available yet.');
-    $entity = new Category();
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE', 'Category');
     $form = $this->createForm(new CategoryType(), $entity);
 
     return array(
@@ -110,7 +108,7 @@ class CategoryController extends Controller
   public function createAction(Request $request)
   {
     throw new ServiceUnavailableHttpException('Not available yet.');
-    $entity = new Category();
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE', 'Category');
     $form = $this->createForm(new CategoryType(), $entity);
     $form->bind($request);
 
@@ -149,8 +147,7 @@ class CategoryController extends Controller
   public function editAction($id)
   {
     throw new ServiceUnavailableHttpException('Not available yet.');
-    $em = $this->getDoctrine()->getManager();
-    $entity = $em->getRepository('fibeWWWConfBundle:Category')->find($id);
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT', 'Category', $id);
 
     if (!$entity)
     {
@@ -178,7 +175,7 @@ class CategoryController extends Controller
   {
     throw new ServiceUnavailableHttpException('Not available yet.');
     $em = $this->getDoctrine()->getManager();
-    $entity = $em->getRepository('fibeWWWConfBundle:Category')->find($id);
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT', 'Category', $id);
 
     if (!$entity)
     {
@@ -230,7 +227,7 @@ class CategoryController extends Controller
     if ($form->isValid())
     {
       $em = $this->getDoctrine()->getManager();
-      $entity = $em->getRepository('fibeWWWConfBundle:Category')->find($id);
+      $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('DELETE', 'Category', $id);
 
       if (!$entity)
       {

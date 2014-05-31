@@ -66,9 +66,6 @@ class TopicController extends Controller
    */
   public function filterAction(Request $request)
   {
-
-    $em = $this->getDoctrine()->getManager();
-
     $conf = $this->getUser()->getCurrentConf();
     //Filters
     $filters = $this->createForm(new TopicFilterType($this->getUser()));
@@ -77,7 +74,7 @@ class TopicController extends Controller
     if ($filters->isValid())
     {
       // bind values from the request
-
+      $em = $this->getDoctrine()->getManager();
       $entities = $em->getRepository('fibeWWWConfBundle:Topic')->filtering($filters->getData(), $conf);
       $nbResult = count($entities);
 
@@ -129,12 +126,9 @@ class TopicController extends Controller
       return $this->redirect($this->generateUrl('schedule_topic'));
     }
 
-    $authorization = $this->getUser()->getAuthorizationByConference($this->getUser()->getCurrentConf());
-
     return array(
       'entity' => $entity,
-      'form' => $form->createView(),
-      'authorized' => $authorization->getFlagSched(),
+      'form' => $form->createView()
     );
   }
 

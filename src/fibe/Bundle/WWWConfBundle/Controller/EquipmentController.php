@@ -28,9 +28,7 @@ class EquipmentController extends Controller
    */
   public function indexAction()
   {
-    $em = $this->getDoctrine()->getManager();
-
-    $entities = $em->getRepository('fibeWWWConfBundle:Equipment')->findAll();
+    $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('VIEW', 'Equipment');
 
     return $this->render(
       'fibeWWWConfBundle:Equipment:index.html.twig',
@@ -48,15 +46,7 @@ class EquipmentController extends Controller
    */
   public function createAction(Request $request)
   {
-
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagconfDatas())
-    {
-      throw new AccessDeniedException('Action not authorized !');
-    }
+    $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE', 'Equipment');
 
     $entity = new Equipment();
     $form = $this->createForm(new EquipmentType(), $entity);
@@ -75,8 +65,7 @@ class EquipmentController extends Controller
       'fibeWWWConfBundle:Equipment:new.html.twig',
       array(
         'entity' => $entity,
-        'form' => $form->createView(),
-        'authorized' => $authorization->getFlagSched()
+        'form' => $form->createView()
       )
     );
   }
@@ -89,15 +78,8 @@ class EquipmentController extends Controller
    */
   public function newAction()
   {
-
     //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagconfDatas())
-    {
-      throw new AccessDeniedException('Action not authorized !');
-    }
+    $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE', 'Equipment');
 
     $entity = new Equipment();
     $form = $this->createForm(new EquipmentType(), $entity);
@@ -106,8 +88,7 @@ class EquipmentController extends Controller
       'fibeWWWConfBundle:Equipment:new.html.twig',
       array(
         'entity' => $entity,
-        'form' => $form->createView(),
-        'authorized' => $authorization->getFlagSched()
+        'form' => $form->createView()
       )
     );
   }
@@ -125,14 +106,7 @@ class EquipmentController extends Controller
    */
   public function showAction($id)
   {
-
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    $em = $this->getDoctrine()->getManager();
-
-    $entity = $em->getRepository('fibeWWWConfBundle:Equipment')->find($id);
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'Equipment', $id);
 
     if (!$entity)
     {
@@ -145,8 +119,7 @@ class EquipmentController extends Controller
       'fibeWWWConfBundle:Equipment:show.html.twig',
       array(
         'entity' => $entity,
-        'delete_form' => $deleteForm->createView(),
-        'authorized' => $authorization->getFlagSched()
+        'delete_form' => $deleteForm->createView()
       )
     );
   }
@@ -168,17 +141,7 @@ class EquipmentController extends Controller
   {
 
     //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagconfDatas())
-    {
-      throw new AccessDeniedException('Action not authorized !');
-    }
-
-    $em = $this->getDoctrine()->getManager();
-
-    $entity = $em->getRepository('fibeWWWConfBundle:Equipment')->find($id);
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT', 'Equipment', $id);
 
     if (!$entity)
     {
@@ -193,8 +156,7 @@ class EquipmentController extends Controller
       array(
         'entity' => $entity,
         'edit_form' => $editForm->createView(),
-        'delete_form' => $deleteForm->createView(),
-        'authorized' => $authorization->getFlagSched()
+        'delete_form' => $deleteForm->createView()
       )
     );
   }
@@ -213,19 +175,7 @@ class EquipmentController extends Controller
    */
   public function updateAction(Request $request, $id)
   {
-
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagconfDatas())
-    {
-      throw new AccessDeniedException('Action not authorized !');
-    }
-
-    $em = $this->getDoctrine()->getManager();
-
-    $entity = $em->getRepository('fibeWWWConfBundle:Equipment')->find($id);
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT', 'Equipment', $id);
 
     if (!$entity)
     {
@@ -238,6 +188,7 @@ class EquipmentController extends Controller
 
     if ($editForm->isValid())
     {
+      $em = $this->getDoctrine()->getManager();
       $em->persist($entity);
       $em->flush();
 
@@ -249,8 +200,7 @@ class EquipmentController extends Controller
       array(
         'entity' => $entity,
         'edit_form' => $editForm->createView(),
-        'delete_form' => $deleteForm->createView(),
-        'authorized' => $authorization->getFlagSched()
+        'delete_form' => $deleteForm->createView()
       )
     );
   }
@@ -270,15 +220,7 @@ class EquipmentController extends Controller
    */
   public function deleteAction(Request $request, $id)
   {
-
-    //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagconfDatas())
-    {
-      throw new AccessDeniedException('Action not authorized !');
-    }
+    $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('DELETE', 'ConfEvent', $id);
 
     $form = $this->createDeleteForm($id);
     $form->bind($request);
@@ -286,8 +228,6 @@ class EquipmentController extends Controller
     if ($form->isValid())
     {
       $em = $this->getDoctrine()->getManager();
-      $entity = $em->getRepository('fibeWWWConfBundle:Equipment')->find($id);
-
       if (!$entity)
       {
         throw $this->createNotFoundException('Unable to find Equipment entity.');
