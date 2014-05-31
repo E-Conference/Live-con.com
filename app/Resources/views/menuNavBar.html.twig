@@ -34,7 +34,7 @@
               </a>
 
               {% if is_granted('VIEW', app.user.currentConf) %} 
-                <a style="padding-right:5px;" href="{{ path('schedule_conference_settings') }}">
+                <a style="padding-right:5px;" href="{{ path('schedule_conference_module') }}">
                   <i class="fa fa-inbox fa-3x"></i> Modules manager
                 </a>
               {% endif %}

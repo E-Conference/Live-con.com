@@ -70,6 +70,14 @@
       $userConfPermission->addConfPermission($confPermission);
 
 
+      $entity = $currentConf->getAppConfig();
+      $newManagerDefaultAction = 'EDIT';
+      $repositoryName = 'Module';
+      $entityLabel = 'Modules';
+      $confPermission=$this->newConfPermission($user,$restrictForm,$formAllowed,$noManager,$manager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel);
+      $userConfPermission->addConfPermission($confPermission);
+
+
       $entity = $currentConf->getTeam();
       $newManagerDefaultAction = 'VIEW';
       $repositoryName = 'Team';
