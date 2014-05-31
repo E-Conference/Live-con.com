@@ -13,7 +13,6 @@ use fibe\Bundle\WWWConfBundle\Entity\Location;
 use fibe\Bundle\WWWConfBundle\Entity\Role;
 
 use fibe\Bundle\WWWConfBundle\Form\EventType;
-use fibe\Bundle\WWWConfBundle\Form\RecurType;
 use fibe\Bundle\WWWConfBundle\Form\RoleType;
 use fibe\Bundle\WWWConfBundle\Form\ConfEventType;
 

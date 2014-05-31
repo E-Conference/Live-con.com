@@ -33,7 +33,7 @@
                 <i class="fa  fa-search-plus fa-3x"></i> Overview
               </a>
 
-              {% if is_granted('VIEW', app.user.currentConf) %} 
+              {% if is_granted('VIEW', app.user.currentConf.module) %} 
                 <a style="padding-right:5px;" href="{{ path('schedule_conference_module') }}">
                   <i class="fa fa-inbox fa-3x"></i> Modules manager
                 </a>
@@ -45,8 +45,10 @@
               {% endif %}
               {% if is_granted('OPERATOR', app.user.currentConf) %}  
                 <a href="{{ path('externalization_import_index') }}">
-                  <i class="fa fa-cloud-upload fa-3x"></i> Import
+                  <i class="fa fa-exchange fa-3x"></i> Import
                 </a> 
+              {% endif %}
+              {% if is_granted('VIEW', app.user.currentConf.team) %}  
                 <a href="{{ path('externalization_export_index') }}">
                   <i class="fa fa-download fa-3x"></i> Export
                 </a>

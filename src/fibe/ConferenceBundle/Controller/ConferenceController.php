@@ -133,6 +133,7 @@
       $defaultModule->setPaperModule(1);
       $defaultModule->setOrganizationModule(1);
       $defaultModule->setSponsorModule(1);
+      $defaultModule->setConference($entity);
       $em->persist($defaultModule);
 
       //Create new App config for the conference

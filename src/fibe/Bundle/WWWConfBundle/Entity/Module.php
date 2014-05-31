@@ -68,6 +68,30 @@
     }
 
     /**
+     * Set conference
+     *
+     * @param boolean $conference
+     *
+     * @return MobileAppConfig
+     */
+    public function setConference($conference)
+    {
+      $this->conference = $conference;
+
+      return $this;
+    }
+
+    /**
+     * Get conference
+     *
+     * @return boolean
+     */
+    public function getConference()
+    {
+      return $this->conference;
+    }
+
+    /**
      * Set paperModule
      *
      * @param boolean $paperModule

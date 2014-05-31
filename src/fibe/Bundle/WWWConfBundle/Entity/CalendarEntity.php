@@ -210,25 +210,25 @@ class CalendarEntity
      */
      protected $contacts;
 
-    /**
-     * exdate
-     *
-     * This property defines the list of date/time exceptions for a
-     * recurring calendar component.
-     *
-     * @ORM\Column(type="string", length=255, nullable=true, name="excluded_dates")
-     */
-     protected $excludedDates;
+    // *
+    //  * exdate
+    //  *
+    //  * This property defines the list of date/time exceptions for a
+    //  * recurring calendar component.
+    //  *
+    //  * @ORM\Column(type="string", length=255, nullable=true, name="excluded_dates")
+     
+     // protected $excludedDates;
 
-    /**
-     * rdate
-     *
-     * This property defines the list of date/times for a
-     * recurrence set.
-     *
-     * @ORM\Column(type="string", length=255, nullable=true, name="included_dates")
-     */
-     protected $includedDates;
+    // *
+    //  * rdate
+    //  *
+    //  * This property defines the list of date/times for a
+    //  * recurrence set.
+    //  *
+    //  * @ORM\Column(type="string", length=255, nullable=true, name="included_dates")
+     
+     // protected $includedDates;
 
     /**
      * class
@@ -286,19 +286,19 @@ class CalendarEntity
      */
      protected $categories;
 
-    /**
-     * rrule
-     *
-     * @ORM\OneToOne(targetEntity="Recur", mappedBy="includedEntity", cascade={"all"})
-     */
-     protected $includedRule;
+    // /**
+    //  * rrule
+    //  *
+    //  * @ORM\OneToOne(targetEntity="Recur", mappedBy="includedEntity", cascade={"all"})
+    //  */
+    //  protected $includedRule;
 
-    /**
-     * exrule
-     *
-     * @ORM\OneToOne(targetEntity="Recur", mappedBy="excludedEntity", cascade={"all"})
-     */
-     protected $excludedRule;
+    // /**
+    //  * exrule
+    //  *
+    //  * @ORM\OneToOne(targetEntity="Recur", mappedBy="excludedEntity", cascade={"all"})
+    //  */
+    //  protected $excludedRule;
 
 // To keep recurid attachs ?
 
@@ -326,7 +326,7 @@ class CalendarEntity
      *  RECURRENCE-ID;RANGE=THISANDFUTURE:19960120T120000Z
      *
      */
-    protected $recurid;
+    // protected $recurid;
 
     /**
      * attach
@@ -339,7 +339,7 @@ class CalendarEntity
     /**
      * options
      */
-    protected $options;
+    // protected $options;
 
     /**
      * getClassifications
@@ -438,18 +438,18 @@ class CalendarEntity
         );
     }
 
-    /**
-     * Set options
-     *
-     * @param string $options
-     * @return Recur
-     */
-    public function setOptions($options)
-    {
-        $this->options = $options;
+    // /**
+    //  * Set options
+    //  *
+    //  * @param string $options
+    //  * @return Recur
+    //  */
+    // public function setOptions($options)
+    // {
+    //     $this->options = $options;
     
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * Get options
@@ -750,51 +750,51 @@ class CalendarEntity
         return $this->contacts;
     }
 
-    /**
-     * Set excludedDates
-     *
-     * @param string $excludedDates
-     * @return CalendarEntity
-     */
-    public function setExcludedDates($excludedDates)
-    {
-        $this->excludedDates = $excludedDates;
+    // /**
+    //  * Set excludedDates
+    //  *
+    //  * @param string $excludedDates
+    //  * @return CalendarEntity
+    //  */
+    // public function setExcludedDates($excludedDates)
+    // {
+    //     $this->excludedDates = $excludedDates;
     
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    /**
-     * Get excludedDates
-     *
-     * @return string 
-     */
-    public function getExcludedDates()
-    {
-        return $this->excludedDates;
-    }
+    // /**
+    //  * Get excludedDates
+    //  *
+    //  * @return string 
+    //  */
+    // public function getExcludedDates()
+    // {
+    //     return $this->excludedDates;
+    // }
 
-    /**
-     * Set includedDates
-     *
-     * @param string $includedDates
-     * @return CalendarEntity
-     */
-    public function setIncludedDates($includedDates)
-    {
-        $this->includedDates = $includedDates;
+    // /**
+    //  * Set includedDates
+    //  *
+    //  * @param string $includedDates
+    //  * @return CalendarEntity
+    //  */
+    // public function setIncludedDates($includedDates)
+    // {
+    //     $this->includedDates = $includedDates;
     
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    /**
-     * Get includedDates
-     *
-     * @return string 
-     */
-    public function getIncludedDates()
-    {
-        return $this->includedDates;
-    }
+    // /**
+    //  * Get includedDates
+    //  *
+    //  * @return string 
+    //  */
+    // public function getIncludedDates()
+    // {
+    //     return $this->includedDates;
+    // }
 
     /**
      * Set classification
@@ -936,22 +936,22 @@ class CalendarEntity
      * @param \fibe\Bundle\WWWConfBundle\Entity\Recur $includedRule
      * @return CalendarEntity
      */
-    public function setIncludedRule(\fibe\Bundle\WWWConfBundle\Entity\Recur $includedRule = null)
-    {
-        $this->includedRule = $includedRule;
+    // public function setIncludedRule(\fibe\Bundle\WWWConfBundle\Entity\Recur $includedRule = null)
+    // {
+    //     $this->includedRule = $includedRule;
     
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * Get includedRule
      *
      * @return \fibe\Bundle\WWWConfBundle\Entity\Recur 
      */
-    public function getIncludedRule()
-    {
-        return $this->includedRule;
-    }
+    // public function getIncludedRule()
+    // {
+    //     return $this->includedRule;
+    // }
 
     /**
      * Set excludedRule
@@ -959,20 +959,20 @@ class CalendarEntity
      * @param \fibe\Bundle\WWWConfBundle\Entity\Recur $excludedRule
      * @return CalendarEntity
      */
-    public function setExcludedRule(\fibe\Bundle\WWWConfBundle\Entity\Recur $excludedRule = null)
-    {
-        $this->excludedRule = $excludedRule;
+    // public function setExcludedRule(\fibe\Bundle\WWWConfBundle\Entity\Recur $excludedRule = null)
+    // {
+    //     $this->excludedRule = $excludedRule;
     
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * Get excludedRule
      *
      * @return \fibe\Bundle\WWWConfBundle\Entity\Recur 
      */
-    public function getExcludedRule()
-    {
-        return $this->excludedRule;
-    }
+    // public function getExcludedRule()
+    // {
+    //     return $this->excludedRule;
+    // }
 }

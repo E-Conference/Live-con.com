@@ -24,7 +24,10 @@
   class ACLUserPermissionHelper extends ACLEntityHelper
   {
 
-    /** @const */
+    /** 
+     * entities to change right when changing right of the conference
+     * @var array
+     */
     public static $belongsToConfRepositories = array(
       'ConfEvent',
       'Location',
@@ -50,6 +53,7 @@
 
       $userConfPermission = new UserConfPermission();
       $formAllowed = false;
+      $isOwner = false;
       if($manager)$userConfPermission->setUser($manager);
       $noManager = ($manager == null);
       if($noManager) $manager = $user;
@@ -70,7 +74,7 @@
       $userConfPermission->addConfPermission($confPermission);
 
 
-      $entity = $currentConf->getAppConfig();
+      $entity = $currentConf->getModule();
       $newManagerDefaultAction = 'EDIT';
       $repositoryName = 'Module';
       $entityLabel = 'Modules';
@@ -86,6 +90,7 @@
       $userConfPermission->addConfPermission($confPermission);
 
       $userConfPermission->setRestricted(!$formAllowed);
+      $userConfPermission->setIsOwner("OWNER" == $this->getACEByEntity($currentConf,$manager));
       
       return $userConfPermission; 
     } 
@@ -238,9 +243,7 @@
               $index,
               $this->getMask($action)
             );
-          }else{ 
-            throw new \Exception("   user : ".$user."   action : ".$action."   entity : ".$entity);
-          }
+          } 
       }
       catch (AceNotFoundException $e)
       {
@@ -253,15 +256,13 @@
           );
         } 
         //if not master : set default right to view
-        else if("OPERATOR" == $currentUserRight || "CREATE" == $currentUserRight )
+        else
         {
           $acl->insertObjectAce(
             $userSecurityIdentity,
             $this->getMask("VIEW")
           );
-        }else{ 
-            throw new \Exception("   user : ".$user."   action : ".$action."   entity : ".$entity);
-          }
+        }
       }  
     }
   } 

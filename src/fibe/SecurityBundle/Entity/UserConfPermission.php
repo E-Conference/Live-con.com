@@ -24,6 +24,12 @@
      */
     protected $restricted;
 
+    /**
+     * if the user can edit the form ( need to have at least one master permission on a permission in the confPermission array)
+     * @var [type]
+     */
+    protected $isOwner;
+
 
     public function __construct()
     {
@@ -68,7 +74,19 @@
 
     public function getRestricted()
     {
-      return $this->restricted;
+      return $this->isOwner;
+    }  
+
+    public function setIsOwner($isOwner)
+    {
+      $this->isOwner = $isOwner;
+
+      return $this;
+    }
+
+    public function getIsOwner()
+    {
+      return $this->isOwner;
     }  
 
   }

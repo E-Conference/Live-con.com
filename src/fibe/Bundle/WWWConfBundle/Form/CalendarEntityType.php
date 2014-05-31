@@ -14,7 +14,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use fibe\Bundle\WWWConfBundle\Entity\CalendarEntity;
 use fibe\Bundle\WWWConfBundle\Repository\StatusRepository;
-use fibe\Bundle\WWWConfBundle\Form\EventListener\RecurFieldSubscriber;
+// use fibe\Bundle\WWWConfBundle\Form\EventListener\RecurFieldSubscriber;
 
 class CalendarEntityType extends AbstractType
 {
@@ -27,8 +27,8 @@ class CalendarEntityType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $subscriber = new RecurFieldSubscriber($builder->getFormFactory());
-        $builder->addEventSubscriber($subscriber);
+        // $subscriber = new RecurFieldSubscriber($builder->getFormFactory());
+        // $builder->addEventSubscriber($subscriber);
 
         // $discr = $this->getEntityDiscr();
 

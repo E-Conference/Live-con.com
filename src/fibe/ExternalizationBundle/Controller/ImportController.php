@@ -24,7 +24,7 @@ class ImportController extends Controller
     public function indexAction()
     { 
         //check right
-        $conference = $this->get('fibe_security.acl_entity_helper')->getEntityACL('OPERATOR','WwwConf');
+        $conference = $this->get('fibe_security.acl_entity_helper')->getEntityACL('OPERATOR','WwwConf',$this->getUser()->getCurrentConf());
         return array();
     }
 }

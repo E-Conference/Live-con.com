@@ -208,13 +208,13 @@ class TeamController extends Controller
       {
         $manager = $em->getRepository('fibeSecurityBundle:User')->find($id);
         //cannot delete owner
-        if ("OWNER" == $ACLService->getACEByEntity($currentConf->getTeam(), $manager))
-        {
-          throw new AccessDeniedHttpException("cannot remove the owner");
-        }
         $currentConf = $this->getUser()->getcurrentConf();
         $ACLService = $this->get('fibe_security.acl_user_permission_helper');
         $team = $ACLService->getEntityACL('DELETE', 'Team', $currentConf->getTeam());
+        if ("OWNER" == $ACLService->getACEByEntity($team, $manager))
+        {
+          throw new AccessDeniedHttpException("cannot remove the owner");
+        }
 
         if (!$manager)
         {
