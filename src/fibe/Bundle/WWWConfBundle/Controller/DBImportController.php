@@ -46,13 +46,7 @@ class DBImportController extends Controller
   public function importAction(Request $request)
   {
     //Authorization Verification conference sched manager
-    $user = $this->getUser();
-    $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
-
-    if (!$authorization->getFlagconfDatas())
-    {
-      throw new AccessDeniedException('Action not authorized !');
-    }
+    $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE', 'WwwConf');
 
     $JSONFile = json_decode($request->request->get('dataArray'), true);
 
