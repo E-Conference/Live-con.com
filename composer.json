@@ -25,7 +25,6 @@
         "friendsofsymfony/user-bundle": "*",
         "gregwar/captcha-bundle": "dev-master",
         "lexik/form-filter-bundle": "*",
-        "leafo/lessphp": "*"
     },
     "scripts": {
         "post-install-cmd": [
