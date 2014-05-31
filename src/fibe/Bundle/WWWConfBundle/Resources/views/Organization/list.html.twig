@@ -24,10 +24,14 @@
       <td><a href="{ entity.page }}" target="_blank">{{ entity.page }}</a></td>
       <td>{{ entity.country }}</td>
       <td>
+        {% if is_granted('VIEW', entity) %} 
         <a class="btn btn-large btn-default" href="{{ path('schedule_organization_show', { 'id': entity.id }) }}"><i
             class="fa fa-eye"></i></a>
+        {% endif %}
+        {% if is_granted('EDIT', entity) %} 
         <a class="btn btn-large btn-warning edit"
            href="{{ path('schedule_organization_edit', { 'id': entity.id }) }}"><i class="fa fa-pencil"></i></a>
+        {% endif %}
       </td>
     </tr>
   {% endfor %}

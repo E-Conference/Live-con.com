@@ -36,7 +36,7 @@
 
       //Authorization Verification conference sched manager
       $user = $this->getUser();
-      $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
+     
 
       $mobile_app_config = $user->getCurrentConf()->getAppConfig();
       $mobile_app_form = $this->createForm(new MobileAppConfigType(), $mobile_app_config);
@@ -46,8 +46,7 @@
       return $this->render('fibeMobileAppBundle:MobileAppTheme:index.html.twig', array(
         'mobile_app_form'   => $mobile_app_form->createView(),
         'mobile_app_config' => $mobile_app_config,
-        'conference'        => $conference,
-        'authorized'        => $authorization->getFlagApp(),
+        'conference'        => $conference
 
       ));
     }

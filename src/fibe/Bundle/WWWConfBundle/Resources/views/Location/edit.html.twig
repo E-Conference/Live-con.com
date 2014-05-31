@@ -15,6 +15,7 @@
                 <a type="button" href="{{ path('schedule_location') }}" class="btn btn-warning" title="Go back to the list">
                     <i class="fa fa-list"></i>
               </a>
+              {% if is_granted('DELETE', entity) %} 
                <form action="{{ path('schedule_location_delete', { 'id': entity.id }) }}" method="post" title="Delete event">
                   <input type="hidden" name="_method" value="DELETE" />
                     {{ form_widget(delete_form) }}
@@ -22,6 +23,7 @@
                     <i class="fa fa-trash-o"></i>
                 </button>
               </form> 
+              {% endif %}
             </div>
       </div>
       <div class="row page-content">

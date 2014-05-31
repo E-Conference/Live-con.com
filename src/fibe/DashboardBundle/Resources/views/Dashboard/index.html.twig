@@ -45,7 +45,7 @@
                   <ul class="nav nav-pills nav-stacked">
                     <li>
                       <h5>App Manager
-                        {% if conference.getFlagAppByManagerId(app.user.id)==1 %}
+                        {% if is_granted('EDIT', conference.getAppConfig()) %}
                           <i class="fa fa-check"></i>
                         {% else %}
                           <span class="glyphicon glyphicon-ban-circle"></span>
@@ -54,7 +54,7 @@
                     </li>
                     <li>
                       <h5>Schedule Manager
-                        {% if conference.getFlagSchedByManagerId(app.user.id)==1 %}
+                        {% if is_granted('EDIT', conference) %}
                           <i class="fa fa-check"></i>
                         {% else %}
                           <span class="glyphicon glyphicon-ban-circle"></span>
@@ -63,7 +63,7 @@
                     </li>
                     <li>
                       <h5>Datas Manager
-                        {% if conference.getFlagDatasByManagerId(app.user.id)==1 %}
+                        {% if is_granted('EDIT', conference) %}
                           <i class="fa fa-check"></i>
                         {% else %}
                           <span class="glyphicon glyphicon-ban-circle"></span>
@@ -72,7 +72,7 @@
                     </li>
                     <li>
                       <h5>Team Manager
-                        {% if conference.getFlagByManagerId(app.user.id,'team')==1 %}
+                        {% if is_granted('CREATE', conference.getTeam()) %}
                           <i class="fa fa-check"></i>
                         {% else %}
                           <span class="glyphicon glyphicon-ban-circle"></span>

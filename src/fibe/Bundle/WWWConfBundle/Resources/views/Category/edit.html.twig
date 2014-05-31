@@ -15,10 +15,12 @@
             <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
                  <a type="button" href="{{ path('schedule_topic') }}" class="btn btn-warning" title="Go back to the list">
                     <i class="fa fa-list"></i>
+                {% if is_granted('DELETE', entity) %} 
                  <form action="{{ path('schedule_category_delete', { 'id': entity.id }) }}" method="post">
                    {{ form_widget(delete_form) }}
                   <button type="submit" class="btn btn-danger" title="Remove category"><i class="fa fa-trash-o"></i></button>
                   </form>
+                {% endif %}
             </div>
     </div>
        <div class="row page-content">

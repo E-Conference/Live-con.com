@@ -124,11 +124,11 @@
               <a style="padding-right:5px;" href="{{ path('mobileAppTheme_index') }}">
                 <i class="fa fa-pencil  fa-3x"></i> Theme builder
               </a>
-
+              {% if is_granted('EDIT', app.user.currentConf.appConfig) %}
               <a style="padding-right:5px;" href="{{ path('mobileAppSettings_index') }}">
                 <i class="fa fa-wrench fa-3x"></i> Settings
               </a>
-
+              {% endif %}
             </li>
           </ul>
         </li>

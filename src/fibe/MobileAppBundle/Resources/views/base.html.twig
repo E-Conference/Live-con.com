@@ -112,9 +112,11 @@
               <li class="mobileAppTheme_index  col-xs-3 col-sm-3 col-mg-3 col-lg-3"><a
                     href="{{ path('mobileAppTheme_index') }}" class='ellipsis'><i
                       class="fa fa-pencil  fa-1x"></i><span> Theme builder </span> </a></li>
+             {% if is_granted('EDIT', app.user.currentConf.appConfig) %}
               <li class="mobileAppSettings_index   col-xs-3 col-sm-3 col-mg-3 col-lg-3"><a
                     href="{{ path('mobileAppSettings_index') }}" class='ellipsis'> <i
                       class="fa fa-wrench fa-1x"></i><span> Settings </span></a></li>
+              {% endif %}
 
               {% block menu_page %}
               {% endblock menu_page %}
