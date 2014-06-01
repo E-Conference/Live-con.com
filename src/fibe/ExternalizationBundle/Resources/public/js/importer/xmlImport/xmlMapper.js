@@ -129,8 +129,9 @@ xmlMapper = {
         },
         split : function(texts,arg){
             var rtn = [];
-            $(texts).each( function(){
-                var text = this.split(arg[0]);
+            $.each(texts, function(i,val){
+                if(!val)return;
+                var text = $(this).text().split(arg[0]);
                 switch(arg[1])
                 {
                     case "last":
@@ -154,7 +155,7 @@ xmlMapper = {
         attr : function(node,arg){
             var rtn = [];
             $(node).each( function(){
-                rtn.push(attr);
+                rtn.push($(this).attr(arg[0]));
             })
             return rtn.length > 1 ? rtn : rtn.length == 1 ? rtn[0] : undefined;
         },

@@ -64,7 +64,7 @@ security:
             form_login:
                 login_path: login
                 check_path: login_check
-                success_handler: fibe_security.select_conference_success_handler
+                # success_handler: fibe_security.select_conference_success_handler
             logout:
                 path:   logout
                 target: /login

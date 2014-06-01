@@ -254,7 +254,7 @@ function Importer()
 
                  //post processing
                 if(mapping.postProcess)
-                {
+                { 
                     if(mapping.postProcess(node,rtnArray,self.getNodeName(node,index)) === true)
                     {
                         //if it was the main conf event
@@ -401,6 +401,11 @@ function Importer()
         function computeFk(fkKey, fk, index)
         {
             // console.log("computeFk : "+fk,addArray);
+            if(!fkKey)
+            {
+                console.warn("error while retreiving fk of "+fk.entity+" to "+fk.setter+". Cannot find "+fkKey);
+                return; 
+            }
             var objInd = objectsIndexes[fkKey] || objectsIndexes[fkKey.replace(fk.fkArray+"-","")];
             if(!objInd )
             {

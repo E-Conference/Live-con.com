@@ -41,7 +41,7 @@
     const NOT_AUTHORYZED_UPDATE_RIGHT_LABEL = 'You need to be MASTER to be able to change other user permission on %s %s ';
   
     /**
-     * get or create a UserConfPermission object for the given user or the current user if manager=null
+     * get or create a UserConfPermission object to show or get a form
      * @param  [User]  $manager       the manager to get permissions of. if null : current user
      * @param  boolean $restrict      if none : returns "view" as action  if no manager given to add teamate when the given user doesn't have the owner required permission to update others permission  on the object   
      * @return [UserConfPermission]   object listing permission for an user used to show or build a form
@@ -94,26 +94,10 @@
       
       return $userConfPermission; 
     } 
-
-    private function newConfPermission($user,$restrictForm,&$formAllowed,$noManager,$manager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel)
-    {
-      $currentUserAction = $this->getACEByEntity($entity,$user);
-      $isMaster = ($currentUserAction == "OWNER" || $currentUserAction == "MASTER");
-      $allowed = !$restrictForm || $isMaster;
-      $action = !$allowed ? 'VIEW' : ($noManager ? $newManagerDefaultAction : $this->getACEByEntity($entity,$manager));
-      $formAllowed |= $isMaster;
-      
-      $confPermission = new ConfPermission();
-      $confPermission->setEntityLabel($entityLabel);
-      $confPermission->setAction($action);
-      $confPermission->setRestricted(!$allowed);
-      $confPermission->setRepositoryName($repositoryName);
-      $confPermission->setEntityId($entity->getId());
-      return $confPermission;
-    }
  
     /**
-     * process UserConfPermission to change permissions of UserConfPermission->getUser()
+     * process UserConfPermission to change all given permissions 
+     *    with "checks" on user given in UserConfPermission->getUser()
      * @param  UserConfPermission $userConfPermission the object with the user & his permission
      */
     public function updateUserConfPermission(UserConfPermission $userConfPermission)
@@ -139,6 +123,13 @@
         $action = $confPermission->getAction();
         $id=$confPermission->getEntityId();
 
+        //check if update is required
+        try {
+          if($action == $this->getACEByRepositoryName($repositoryName, $teamate, $id))continue; 
+        } catch (AceNotFoundException $e) {
+          //ignore AceNotFoundException : new teamate without ace cannot be found...
+        }
+
         //if it's the conference object, update all object in static::$belongsToConfRepositories
         if($repositoryName == ACLEntityHelper::LINK_WITH)
         {
@@ -150,6 +141,11 @@
       }
     }
 
+    /** 
+     * create acl with permission check for one entity
+     * @param  [User] $teamate           the choosen teamate
+     * @param  [type] $entity            the entity to update permissions 
+     */
     public function createUserACL($teamate,$entity)
     {
       try {
@@ -160,29 +156,12 @@
       $this->performUpdateUserACL($teamate,$action,$entity);
     }
 
-    /**
-     * update user acl by entity 
-     *   /!\ doesn't check owner demoting and own permission change
-     *   /!\ see updateUserConfPermission for those requirment check
-     * @param  [type] $teamate [description]
-     * @param  [type] $action  [description]
-     * @param  [type] $entity  [description] 
-     */
-    private function performUpdateUserACL($teamate,$action,$entity)
-    { 
-      $entitySecurityIdentity = ObjectIdentity::fromDomainObject($entity);
-      $acl = $this->getOrCreateAcl($entitySecurityIdentity,$teamate);
-      $this->updateOrCreateAce($acl,$entity,$teamate,$action);
- 
-      $this->aclProvider->updateAcl($acl);
-    }
-
     /** 
      * update the teamate right by repository & id
-     * @param  [type] $teamate        the choosen teamate id
-     * @param  [type] $action         [description]
-     * @param  [type] $repositoryName [description]
-     * @param  [type] $id             if not set, update all objects of the repository given linked with the current conf
+     * @param  [User] $teamate           the choosen teamate
+     * @param  [String] $action          [description]
+     * @param  [String] $repositoryName  [description]
+     * @param  [type] $id                if not set, update all objects of the repository given linked with the current conf
      */
     private function updateUserACL($teamate,$action,$repositoryName,$id=null)
     { 
@@ -198,6 +177,20 @@
         $entity = $this->getEntityACL("VIEW",$repositoryName,$id);  
         $this->performUpdateUserACL($teamate,$action,$entity);
       } 
+    }
+
+    /**
+     * update user acl by entity 
+     *   /!\ doesn't check owner demoting and own permission change, see updateUserConfPermission for those requirment check
+     * @param  [User] $teamate [description]
+     * @param  [String] $action[description]
+     * @param  [type] $entity  [description] 
+     */
+    private function performUpdateUserACL($teamate,$action,$entity)
+    { 
+      $entitySecurityIdentity = ObjectIdentity::fromDomainObject($entity);
+      $acl = $this->getOrCreateAcl($entitySecurityIdentity,$teamate);
+      $this->updateOrCreateAce($acl,$entity,$teamate,$action); 
     }
 
     private function getOrCreateAcl($entitySecurityIdentity,$user)
@@ -224,29 +217,30 @@
      *  else if he's OPERATOR and he wants to add a member ( catch (AclNotFoundException $e) )
      *        affect VIEW as default right
      *  else : do nothing
-     * @param  [type] $entity               the object ot change permission
+     * @param  [type] $entity               the object to change permission
      * @param  [type] $user                 the user to change permission
      * @param  [type] $acl                  the acl to update
-     * @param  [type] $action               the action to set
+     * @param  [String] $action             the action to set
      */
     private function updateOrCreateAce($acl,$entity,$user,$action)
     {
-      $currentUserRight = $this->getACEByEntity($entity); 
+      $currentUserRight = $this->getACEByEntity($entity);  
       try {
           //get the ace index
-          $index = $this->getACEByEntity($entity,$user,"index",$acl); 
-
+          $ace = $this->getACEByEntity($entity,$user,"all",$acl); 
           //master permission required to update permissions
-          if("MASTER" == $currentUserRight || "OWNER" == $currentUserRight )
+          if($ace['action'] != $action && ("MASTER" == $currentUserRight || "OWNER" == $currentUserRight))
           {
             $acl->updateObjectAce(
-              $index,
+              $ace['index'],
               $this->getMask($action)
             );
+            $this->aclProvider->updateAcl($acl);
           } 
       }
       catch (AceNotFoundException $e)
       {
+        //if it's a new manager or object thus the ace isn't found
         $userSecurityIdentity = UserSecurityIdentity::fromAccount($user); 
         if("MASTER" == $currentUserRight || "OWNER" == $currentUserRight )
         {
@@ -263,6 +257,25 @@
             $this->getMask("VIEW")
           );
         }
+        $this->aclProvider->updateAcl($acl);
       }  
+    }
+
+    //used only by getUserConfPermission
+    private function newConfPermission($user,$restrictForm,&$formAllowed,$noManager,$manager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel)
+    {
+      $currentUserAction = $this->getACEByEntity($entity,$user);
+      $isMaster = ($currentUserAction == "OWNER" || $currentUserAction == "MASTER");
+      $allowed = !$restrictForm || $isMaster;
+      $action = !$allowed ? 'VIEW' : ($noManager ? $newManagerDefaultAction : $this->getACEByEntity($entity,$manager));
+      $formAllowed |= $isMaster;
+      
+      $confPermission = new ConfPermission();
+      $confPermission->setEntityLabel($entityLabel);
+      $confPermission->setAction($action);
+      $confPermission->setRestricted(!$allowed);
+      $confPermission->setRepositoryName($repositoryName);
+      $confPermission->setEntityId($entity->getId());
+      return $confPermission;
     }
   } 

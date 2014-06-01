@@ -113,6 +113,13 @@ class ACLEntityHelper extends ACLHelper
     return $rtn;
   }
 
+
+  public function getACEByRepositoryName($repositoryName, $user = null, $id = null)
+  { 
+    $entity = $this->getEntityInConf($repositoryName, $id);  
+    return $this->getACEByEntity($entity,$user);
+  }
+
   /**
    * [getACEByEntity description]
    *
@@ -135,16 +142,18 @@ class ACLEntityHelper extends ACLHelper
       );
     }
     //find the ace for the given user
-    foreach ($acl->getObjectAces()
-             as
-             $index
-    =>
-             $ace)
+    foreach ($acl->getObjectAces() as $index => $ace)
     {
       if ($ace->getSecurityIdentity()->equals($userSecurityIdentity))
       {
         switch ($returnType)
         {
+          case 'all':
+            return array(
+              'mask'   => $ace->getMask(),
+              'index'  => $index,
+              'action' => $this->getMask($ace->getMask())
+            );
           case 'mask':
             return $ace->getMask();
           case 'index':
