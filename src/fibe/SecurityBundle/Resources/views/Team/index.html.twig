@@ -69,7 +69,6 @@
                           </td>
                           {% endif %}
                           {# if the user has at least one master permission #}
-                          {{manager_conf_authorization.restricted }}
                           {% if manager_conf_authorization.restricted == false %}
                           <td>
                             <a class="btn btn-large btn-warning edit" href="{{ path('conference_team_edit', { 'id': manager_conf_authorization.user.id }) }}"><i class="fa fa-pencil"></i></a>
