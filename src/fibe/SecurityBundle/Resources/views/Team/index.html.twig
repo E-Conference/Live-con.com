@@ -58,20 +58,23 @@
                           <span class="badge authorization-{{ confPermission.action }}">{{ confPermission.action }}</span> 
                         </td>
                         {% endfor %}
-                        {% if manager_conf_authorization.isOwner == false and is_granted('DELETE', team) %}
-                        <td>
-                          <form id="delete-form{{ loop.index0 }}" action="{{ path('conference_team_delete', { 'id': manager_conf_authorization.user.id }) }}" method="post">
-                            <button type="submit" class="btn btn-large btn-danger delete" onclick="removeManager({{manager_conf_authorization.user.id}});"><i class="fa fa-trash-o"></i> </button>
-                              <input type="hidden" name="_method" value="DELETE" />
-                              {{ form_widget(delete_forms[loop.index0]) }}
-                          </form>
-                        </td>
-                        {% endif %}
-                        {# if the user has at least one master permission #}
-                        {% if manager_conf_authorization.isOwner == false and manager_conf_authorization.restricted == false %}
-                        <td>
-                          <a class="btn btn-large btn-warning edit" href="{{ path('conference_team_edit', { 'id': manager_conf_authorization.user.id }) }}"><i class="fa fa-pencil"></i></a>
-                        </td>
+                        {% if manager_conf_authorization.isOwner == false %}
+                          {% if is_granted('DELETE', team) %} 
+                          <td>
+                            <form id="delete-form{{ loop.index0 }}" action="{{ path('conference_team_delete', { 'id': manager_conf_authorization.user.id }) }}" method="post">
+                              <button type="submit" class="btn btn-large btn-danger delete" ><i class="fa fa-trash-o"></i> </button>
+                                <input type="hidden" name="_method" value="DELETE" />
+                                {{ form_widget(delete_forms[loop.index0]) }}
+                            </form>
+                          </td>
+                          {% endif %}
+                          {# if the user has at least one master permission #}
+                          {{manager_conf_authorization.restricted }}
+                          {% if manager_conf_authorization.restricted == false %}
+                          <td>
+                            <a class="btn btn-large btn-warning edit" href="{{ path('conference_team_edit', { 'id': manager_conf_authorization.user.id }) }}"><i class="fa fa-pencil"></i></a>
+                          </td>
+                          {% endif %}
                         {% endif %}
                     </tr>
                 {% endfor %}

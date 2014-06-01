@@ -9,6 +9,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+use IDCI\Bundle\ExporterBundle\Export\ExportFactory;
+use IDCI\Bundle\ExporterBundle\Service\Manager;
+
 /**
  * Exporter controller.
  * @Route("/exporter")
@@ -24,7 +27,7 @@ class ExportController extends Controller
    */
   public function indexAction()
   {
-    $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE', 'WwwConf');
+    $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'WwwConf');
     $wwwConf = $this->getUser()->getCurrentConf();
 
     $export_form = $this->createFormBuilder()
@@ -57,7 +60,7 @@ class ExportController extends Controller
    */
   public function processAction(Request $request)
   {
-    $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE', 'WwwConf');
+    $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'WwwConf');
     $export_form = $this->createFormBuilder()
       ->add(
         'export_format',
@@ -70,23 +73,50 @@ class ExportController extends Controller
       ->getForm();
     $export_form->bind($request);
 
+    if ($export_form->isValid())
+    {
+      $format = $export_form["export_format"]->getData();
+      
+      $conference = $this->getUser()->getCurrentConf();
+      $conferenceArr = new \Doctrine\Common\Collections\ArrayCollection();
+      $conferenceArr->add($conference);
 
-    $format = $export_form["export_format"]->getData();
+      $exportManager = $this->get('idci_exporter.manager');
+      if("xml" == $format)
+      {
+        //override export function to override buildHeader / Footer in order to remove the <entities> wrapper tag
+        $export = ExportFactory::getInstance(
+            $format,
+            array()
+        );
+        $export->setContent('<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL); 
+        $transformer = $exportManager->guessTransformer($conference, $format);
+        $export->addContent($transformer->transform($conference, $format)); 
+      }
+      else
+      {
+        $export = $exportManager->export($conferenceArr, $format);
+      }
+      //override export function to override buildHeader / Footer
+      $filename = $conference->getConfName() . "." . $format;
 
-    $wwwConf = $this->getUser()->getCurrentConf();
-    $conferences = new \Doctrine\Common\Collections\ArrayCollection();
-    $conferences->add($wwwConf);
+      $response = new Response($export->getContent());
+      $response->headers->set('Content-Type', 'text/' . $format);
+      $response->headers->set('Content-Disposition', 'attachment;filename=' . $filename);
+      return $response;
+    }
+    return $this->redirect($this->generateUrl('externalization_export_index'));
 
-    $export = $this->get('idci_exporter.manager')->export($conferences, $format);
-    $filename = $wwwConf->getConfName() . "." . $format;
-
-    $response = new Response($export->getContent());
-    $response->headers->set('Content-Type', 'text/' . $format);
-    $response->headers->set('Content-Disposition', 'attachment;filename=' . $filename);
-
-
-    return $response;
   }
 
-
+  function cleanParams($params)
+  {
+    $clean = array();
+    foreach($params as $k => $v) {
+      if($v != '') {
+        $clean[$k] = $v;
+      }
+    } 
+    return $clean;
+  }
 }

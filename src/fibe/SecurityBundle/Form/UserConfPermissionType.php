@@ -56,7 +56,7 @@
                   'property' => 'username',
                   'required'  => true,
                   'query_builder' => function(EntityRepository $er) {
-                    return $er->ManagerForSelectTeamQuery($this->user->getTeams()); 
+                    return $er->ManagerForSelectTeamQuery($this->user->getCurrentConf()->getTeam()); 
                   },
                 )); 
                 // seems to be bugged https://github.com/symfony/symfony/issues/7807

@@ -100,6 +100,12 @@ class ACLEntityHelper extends ACLHelper
     }
 
     $entities = $queryBuilder->getQuery()->getResult();
+
+    if("VIEW" == $action && $repositoryName != ACLEntityHelper::LINK_WITH) 
+    {
+      return $entities;
+    }
+    
     $rtn = array();
     //TODO : fix getAllowedEntitiesIds to don't waste time to loop over each entities
     foreach ($entities as $entity)

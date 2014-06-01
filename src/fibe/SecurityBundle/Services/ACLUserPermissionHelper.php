@@ -52,11 +52,12 @@
       $user = $this->getUser();
 
       $userConfPermission = new UserConfPermission();
-      $formAllowed = false;
-      $isOwner = false;
       if($manager)$userConfPermission->setUser($manager);
       $noManager = ($manager == null);
       if($noManager) $manager = $user;
+
+      $formAllowed = false;
+      $isOwner = false;
 
       $entity = $currentConf;
       $newManagerDefaultAction = 'EDIT';
@@ -65,7 +66,6 @@
       $confPermission=$this->newConfPermission($user,$restrictForm,$formAllowed,$noManager,$manager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel);
       $userConfPermission->addConfPermission($confPermission);
 
-
       $entity = $currentConf->getAppConfig();
       $newManagerDefaultAction = 'EDIT';
       $repositoryName = 'MobileAppConfig';
@@ -73,14 +73,12 @@
       $confPermission=$this->newConfPermission($user,$restrictForm,$formAllowed,$noManager,$manager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel);
       $userConfPermission->addConfPermission($confPermission);
 
-
       $entity = $currentConf->getModule();
       $newManagerDefaultAction = 'EDIT';
       $repositoryName = 'Module';
       $entityLabel = 'Modules';
       $confPermission=$this->newConfPermission($user,$restrictForm,$formAllowed,$noManager,$manager,$entity,$newManagerDefaultAction,$repositoryName,$entityLabel);
       $userConfPermission->addConfPermission($confPermission);
-
 
       $entity = $currentConf->getTeam();
       $newManagerDefaultAction = 'VIEW';

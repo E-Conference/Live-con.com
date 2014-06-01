@@ -72,14 +72,14 @@
                     <input id="datasetFile" class="btn btn-primary " title="Search for a file to add" type="file"/>
                 </div> 
             </form>  
-            <h3 class="text-info">Action</h3> 
+            <h3 class="text-info">Clean conference</h3> 
             <a  class="empty-conf btn btn-danger btn-xs" 
-                {% if  app.user.currentConf.isEmpty() %}
+                {% if  app.user.currentConf.isEmpty %}
                 disabled="disabled" 
                 {% else %} 
                 {% endif %}
                 href="{{ path('schedule_conference_empty', { 'id': app.user.currentConf.id }) }}"> 
-                <i class="fa fa-trash-o"></i> Empty conference
+                <i class="fa fa-trash-o"></i> Clean conference
             </a> 
         </div>
 

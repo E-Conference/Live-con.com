@@ -22,19 +22,15 @@
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function ManagerForSelectTeamQuery($teams)
+    public function ManagerForSelectTeamQuery($team,$excludedId = -1)
     {
 
       //Init array with all id of managers actually in the team.
-      $managers_ids = array(); 
-      foreach ($teams as $team)
-      {
-        foreach ($team->getConfManagers() as $manager_id)
-        {
-          
-          $managers_ids[] = $manager_id;
-        }
-      }
+      $managers_ids = array();  
+      foreach ($team->getConfManagers() as $manager_id)
+      {  
+        $managers_ids[] = $manager_id;
+      } 
       $qb = $this->createQueryBuilder('mng');
       $qb
         ->where($qb->expr()->notIn('mng.id', ':managers_ids'))

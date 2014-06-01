@@ -74,7 +74,7 @@
 
     public function getRestricted()
     {
-      return $this->isOwner;
+      return $this->restricted;
     }  
 
     public function setIsOwner($isOwner)
