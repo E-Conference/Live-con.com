@@ -100,6 +100,13 @@
      */
     private $team;
 
+    /**
+     * Team
+     *
+     * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Category", mappedBy="conference",cascade={"persist", "remove"})
+     */
+    private $categories;
+
 
     /**
      * Mobile app configurations

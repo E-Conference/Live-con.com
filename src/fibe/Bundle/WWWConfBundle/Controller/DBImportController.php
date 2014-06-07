@@ -287,18 +287,19 @@ class DBImportController extends Controller
         {
           array_push($this->categoryEntities, $existsTest);
           continue; //skip existing category
-        }
-        else
+        }  
+
+        $entity = new Category();
+        foreach ($current as $setter => $value)
         {
-          array_push($this->categoryEntities, $defaultCategory);
+
+          call_user_func_array(array($entity, $setter), array($value));
         }
-        // echo $current['setName']. " don't exists<br/>";
+        $entity->setConference($this->conference);
+        $em->persist($entity);
+        array_push($this->categoryEntities, $entity);
 
-
-      }
-      // for ($i=0; $i < count($this->categoryEntities); $i++) {
-      //     echo $i. " " . $this->categoryEntities[$i]->getName()."<br/>";
-      // }
+      } 
       $entities = null;
     }
 

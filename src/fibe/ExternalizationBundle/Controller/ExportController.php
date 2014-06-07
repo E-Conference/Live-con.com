@@ -27,8 +27,8 @@ class ExportController extends Controller
    */
   public function indexAction()
   {
-    $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'WwwConf');
     $wwwConf = $this->getUser()->getCurrentConf();
+    $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'WwwConf',$wwwConf);
 
     $export_form = $this->createFormBuilder()
       ->add(

@@ -133,7 +133,7 @@ class TeamController extends Controller
   {
     $currentConf = $this->getUser()->getCurrentConf();
     $ACLService = $this->get('fibe_security.acl_user_permission_helper');
-    $team = $ACLService->getEntityACL('EDIT', 'Team', $currentConf->getTeam()->getId());
+    $team = $ACLService->getEntityACL('VIEW', 'Team', $currentConf->getTeam()->getId());
 
     $em = $this->getDoctrine()->getManager();
     $entity = $em->getRepository('fibeSecurityBundle:User')->find($id);
@@ -155,7 +155,7 @@ class TeamController extends Controller
   {
     $currentConf = $this->getUser()->getCurrentConf();
     $ACLService = $this->get('fibe_security.acl_user_permission_helper');
-    $team = $ACLService->getEntityACL('EDIT', 'Team', $currentConf->getTeam()->getId());
+    $team = $ACLService->getEntityACL('VIEW', 'Team', $currentConf->getTeam()->getId());
 
     $em = $this->getDoctrine()->getManager();
     $entity = $em->getRepository('fibeSecurityBundle:User')->find($id);

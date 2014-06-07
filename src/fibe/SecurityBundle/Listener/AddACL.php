@@ -7,6 +7,7 @@
   use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
   use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity; 
   use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+  use fibe\SecurityBundle\Services\ACLEntityHelper;
   /**
    * Post persist doctrine listener that add the acl MASTER for the current user 
    *   also set a right for all user of the team
@@ -28,8 +29,10 @@
       $user = $token->getUser();
 
       try {
-        //check if the entity is managed with ACL 
         $aclHelper = $this->container->get('fibe_security.acl_user_permission_helper');
+        //check if the entity doesn't have a parent in the hierarchy of ACL
+        if(isset(ACLEntityHelper::$ACLEntityNameArray[ACLEntityHelper::getRepositoryNameByClassName(get_class($entity))]['parent']))
+          return;
         $aclHelper->getClassNameByRepositoryName($this->get_real_class($entity));
         // creating the ACL
         $aclProvider = $this->container->get('security.acl.provider');
@@ -57,7 +60,7 @@
       }
     }
     /**
-     * Obtains an object class name without namespaces
+     * Get an object class name without namespaces
      */
     function get_real_class($obj) {
         $classname = get_class($obj);

@@ -14,6 +14,10 @@ security:
     acl:
         connection: default
 
+    access_decision_manager:
+        # La valeur de « Strategy » peut être : affirmative, unanimous ou consensus
+        strategy: affirmative
+
 #        in_memory:
 #            memory:
 #                users:

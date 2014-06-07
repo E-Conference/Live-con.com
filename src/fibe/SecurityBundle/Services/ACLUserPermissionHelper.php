@@ -9,16 +9,16 @@
   use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
   use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
   use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+  use Symfony\Component\Security\Acl\Exception\NoAceFoundException;
   use fibe\SecurityBundle\Services\ACLHelper;
   use fibe\SecurityBundle\Services\ACLEntityHelper;
   use fibe\SecurityBundle\Entity\UserConfPermission;
-  use fibe\SecurityBundle\Entity\ConfPermission;
-  use fibe\SecurityBundle\Services\AceNotFoundException;
+  use fibe\SecurityBundle\Entity\ConfPermission; 
 
   use fibe\SecurityBundle\Form\UserConfPermissionType;
 
   /** 
-   * EXPLICATION DE LA TABLE DES ROLES :
+   * Explaination on the role table :
    *     http://symfony.com/fr/doc/current/cookbook/security/acl_advanced.html#table-de-permission-integree
    */
   class ACLUserPermissionHelper extends ACLEntityHelper
@@ -28,15 +28,15 @@
      * entities to change right when changing right of the conference
      * @var array
      */
-    public static $belongsToConfRepositories = array(
-      'ConfEvent',
-      'Location',
-      'Paper',
-      'Person',
-      'Role',
-      'Organization',
-      'Topic'
-    ); 
+    // public static $belongsToConfRepositories = array(
+    //   'ConfEvent',
+    //   'Location',
+    //   'Paper',
+    //   'Person',
+    //   'Role',
+    //   'Organization',
+    //   'Topic'
+    // ); 
 
     const NOT_AUTHORYZED_UPDATE_RIGHT_LABEL = 'You need to be MASTER to be able to change other user permission on %s %s ';
   
@@ -112,8 +112,8 @@
         {
           throw new AccessDeniedException("You cannot demote the owner.");
         }
-      } catch (AceNotFoundException $e) {
-        //ignore AceNotFoundException : new teamate without ace cannot be found...
+      } catch (NoAceFoundException $e) {
+        //ignore NoAceFoundException : new teamate without ace cannot be found...
       }
       foreach ($userConfPermission->getConfPermissions() as $confPermission)
       {
@@ -124,17 +124,17 @@
         //check if update is required
         try {
           if($action == $this->getACEByRepositoryName($repositoryName, $teamate, $id))continue; 
-        } catch (AceNotFoundException $e) {
-          //ignore AceNotFoundException : new teamate without ace cannot be found...
+        } catch (NoAceFoundException $e) {
+          //ignore NoAceFoundException : new teamate without ace cannot be found...
         }
 
         //if it's the conference object, update all object in static::$belongsToConfRepositories
-        if($repositoryName == ACLEntityHelper::LINK_WITH)
-        {
-          foreach (static::$belongsToConfRepositories as $subRepositoryName) {
-            $this->updateUserACL($teamate, $action, $subRepositoryName);
-          }
-        }
+        // if($repositoryName == ACLEntityHelper::LINK_WITH)
+        // {
+        //   foreach (static::$belongsToConfRepositories as $subRepositoryName) {
+        //     $this->updateUserACL($teamate, $action, $subRepositoryName);
+        //   }
+        // }
         $this->updateUserACL($teamate, $action, $repositoryName, $id);
       }
     }
@@ -148,7 +148,7 @@
     {
       try {
         $action = $this->getACEByEntity($entity,$teamate);
-      } catch (AceNotFoundException $e) {
+      } catch (NoAceFoundException $e) {
         $action = $this->getACEByEntity($this->getCurrentConf(),$teamate);
       }
       $this->performUpdateUserACL($teamate,$action,$entity);
@@ -236,7 +236,7 @@
             $this->aclProvider->updateAcl($acl);
           } 
       }
-      catch (AceNotFoundException $e)
+      catch (NoAceFoundException $e)
       {
         //if it's a new manager or object thus the ace isn't found
         $userSecurityIdentity = UserSecurityIdentity::fromAccount($user); 

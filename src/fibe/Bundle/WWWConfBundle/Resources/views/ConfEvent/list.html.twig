@@ -20,7 +20,7 @@
             <td>{{ entity.summary }}</td>
             <td>
                 {% for category in entity.categories %}
-                <div style="background:{{ category.color }};float:left;margin-right:6px;" title="{{ category.label }}">{{ category.label }}</div>
+                <div style="background:{{ category.color }};float:left;margin-right:6px;" title="{{ category.name }}">{{ category.name }}</div>
                 <br>
                 {% endfor %}
             </td>
@@ -28,7 +28,7 @@
             <td>{% if entity.startAt %}{{ entity.startAt|date('Y-m-d H:i:s') }}{% endif %}</td>
             <td class="duration">{% if entity.duration %}{{ entity.duration }}{% endif %}</td>
             <td>{% if entity.endAt %}{{ entity.endAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-          
+          {# 
             <td>
             {% if entity.includedRule %}
                 {{ entity.includedRule }}
@@ -36,7 +36,7 @@
             </td>
             <td>
                
-            </td>
+            </td> #}
             <td>
                 <a class="btn btn-default" href="{{ path('schedule_confevent_show', { 'id': entity.id }) }}">
                     <i class="fa fa-eye"></i>
