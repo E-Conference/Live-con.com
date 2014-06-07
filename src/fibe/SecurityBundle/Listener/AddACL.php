@@ -31,28 +31,30 @@
       try {
         $aclHelper = $this->container->get('fibe_security.acl_user_permission_helper');
         //check if the entity doesn't have a parent in the hierarchy of ACL
-        if(isset(ACLEntityHelper::$ACLEntityNameArray[ACLEntityHelper::getRepositoryNameByClassName(get_class($entity))]['parent']))
-          return;
-        $aclHelper->getClassNameByRepositoryName($this->get_real_class($entity));
-        // creating the ACL
-        $aclProvider = $this->container->get('security.acl.provider');
-
-        $objectIdentity = ObjectIdentity::fromDomainObject($entity);
-        $acl = $aclProvider->createAcl($objectIdentity);
-
-        $securityIdentity = UserSecurityIdentity::fromAccount($user);
-
-        // grant owner access
-        $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-        $aclProvider->updateAcl($acl);
-
-        //share with teamates
-        $teamates = $user->getCurrentConf()->getTeam()->getConfManagers();
-        foreach ($teamates as $teamate)
+        if(!isset(ACLEntityHelper::$ACLEntityNameArray[ACLEntityHelper::getRepositoryNameByClassName(get_class($entity))]['parent']))
         {
-          if($teamate->getId() != $user->getId())
+            
+          $aclHelper->getClassNameByRepositoryName($this->get_real_class($entity));
+          // creating the ACL
+          $aclProvider = $this->container->get('security.acl.provider');
+
+          $objectIdentity = ObjectIdentity::fromDomainObject($entity);
+          $acl = $aclProvider->createAcl($objectIdentity);
+
+          $securityIdentity = UserSecurityIdentity::fromAccount($user);
+
+          // grant owner access
+          $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+          $aclProvider->updateAcl($acl);
+
+          //share with teamates
+          $teamates = $user->getCurrentConf()->getTeam()->getConfManagers();
+          foreach ($teamates as $teamate)
           {
-            $aclHelper->createUserACL($teamate,$entity);
+            if($teamate->getId() != $user->getId())
+            {
+              $aclHelper->createUserACL($teamate,$entity);
+            }
           }
         }
       } catch(\EntityACLNotRegisteredException $e){

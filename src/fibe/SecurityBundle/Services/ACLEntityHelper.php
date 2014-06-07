@@ -132,23 +132,23 @@ class ACLEntityHelper extends ACLHelper
    */
   public function getEntitiesACL($action, $repositoryName)
   { 
-    $ids = $this->aclProvider->getAllowedEntitiesIds($this->getClassNameByRepositoryName($repositoryName), $action);
+    // $ids = $this->aclProvider->getAllowedEntitiesIds($this->getClassNameByRepositoryName($repositoryName), $action);
     $queryBuilder = $this->entityManager->getRepository('fibeWWWConfBundle:' . $repositoryName)->createQueryBuilder(
       'entity'
     );
-    if ($repositoryName != ACLEntityHelper::LINK_WITH)
-    {
-      $this->restrictQueryBuilderByConferenceId($queryBuilder);
-    }
-    $this->restrictQueryBuilderByIds($queryBuilder, $ids);
 
     if (is_null($queryBuilder))
     {
       return array();
     }
 
-    $entities = $queryBuilder->getQuery()->getResult();
+    if ($repositoryName != ACLEntityHelper::LINK_WITH)
+    {
+      $this->restrictQueryBuilderByConferenceId($queryBuilder);
+    }
+    // $this->restrictQueryBuilderByIds($queryBuilder, $ids);
 
+    $entities = $queryBuilder->getQuery()->getResult();
     if("VIEW" == $action && $repositoryName != ACLEntityHelper::LINK_WITH) 
     {
       return $entities;
