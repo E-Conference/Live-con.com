@@ -52,16 +52,16 @@
     </div>
   </div>
 
-  {%  app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')==1 %}
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <a href="{{ path('conference_team_index') }}" title="Manage team">
-            <i class="fa fa-users fa-3x"></i> Team
-          </a>
-        </h4>
-      </div>
+  {% app.user.getFlagByConferenceId(app.user.getCurrentConf().getId(),'team')==1 %}
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a href="{{ path('conference_team_index') }}" title="Manage team">
+          <i class="fa fa-users fa-3x"></i> Team
+        </a>
+      </h4>
     </div>
+  </div>
   {% endif %}
   <div class="panel panel-default">
     <div class="panel-heading">
