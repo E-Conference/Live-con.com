@@ -7,16 +7,16 @@
     <div class="row center">
       <table class="records_listb table table-hover">
         <thead>
-          <tr>
-            <th>Title</th>
-          </tr>
+        <tr>
+          <th>Title</th>
+        </tr>
         </thead>
         <tbody>
-          {% for entity in entities %}
-            <tr>
-              <td><a href="{{ path('object', { 'slug': entity.slug, 'object': 'Paper' }) }}">{{ entity.title }}</td>
-            </tr>
-          {% endfor %}
+        {% for entity in entities %}
+          <tr>
+            <td><a href="{{ path('object', { 'slug': entity.slug, 'object': 'Paper' }) }}">{{ entity.title }}</td>
+          </tr>
+        {% endfor %}
         </tbody>
       </table>
     </div>

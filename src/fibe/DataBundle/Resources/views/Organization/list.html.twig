@@ -6,20 +6,20 @@
     <div class="row center">
       <table class=" table table-hover">
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Page</th>
-            <th>Country</th>
-          </tr>
+        <tr>
+          <th>Name</th>
+          <th>Page</th>
+          <th>Country</th>
+        </tr>
         </thead>
         <tbody>
-          {% for entity in entities %}
-            <tr>
-              <td>{{ entity.name }}</td>
-              <td>{{ entity.page }}</td>
-              <td>{{ entity.country }}</td>
-            </tr>
-          {% endfor %}
+        {% for entity in entities %}
+          <tr>
+            <td>{{ entity.name }}</td>
+            <td>{{ entity.page }}</td>
+            <td>{{ entity.country }}</td>
+          </tr>
+        {% endfor %}
         </tbody>
       </table>
     </div>
