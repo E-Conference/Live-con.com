@@ -8,182 +8,194 @@
 {% block centerPanel %}
   {{ parent() }}
 
-     <div class="row page-top-header ">
-            <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                <span>Edit event</span>
-                <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Event' }) }}" target="_blank" title="Help">
-                     <i class="fa fa-question"></i> 
-                </a>
-            </div>
+  <div class="row page-top-header ">
+    <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
+      <span>Edit event</span>
+      <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Event' }) }}" target="_blank" title="Help">
+        <i class="fa fa-question"></i>
+      </a>
+    </div>
 
-            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
-            </div>
-            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                 <a type="button" href="{{ path('schedule_confevent') }}" class="btn btn-warning">
-                    <i class="fa fa-list"></i>
-                </a>
-                {% if is_granted('DELETE', entity) %} 
-                 <form action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
-                    <input type="hidden" name="_method" value="DELETE" />
-                      {{ form_widget(delete_form) }}
-                  <button type="submit" class="btn btn-danger">
-                      <i class="fa fa-trash-o"></i>
-                  </button>
-                </form> 
-                {% endif %}
-            </div>
-      </div>
-      <div class="row page-content">
-
-     
- 
-        <form action="{{ path('schedule_confevent_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
-           <input type="hidden" name="_method" value="PUT" />
-           <div class="row">
-               <div class="col-lg-2"></div>
-               <div class="col-lg-4">
-                      {{ form_row(edit_form.summary) }}
-                      {{ form_row(edit_form.acronym) }}
-                      {{ form_row(edit_form.categories) }} 
-                      {{ form_row(edit_form.description) }} 
-                      {{ form_row(edit_form.url) }} 
-                </div>
-                <div class="col-lg-4">
-                      {{ form_rest(edit_form)}}
-                      <br />
-                  </div>          
-            </div> 
-            <br />
-             <div class="row"> 
-                <div class="col-lg-4"></div>
-                <div class="col-lg-4">  
-                     <button type="submit" class="btn btn-block btn-success">
-                              <i class="fa fa-check"></i>
-                    </button>
-                </div>
-            </div>
+    <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+    </div>
+    <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+      <a type="button" href="{{ path('schedule_confevent') }}" class="btn btn-warning">
+        <i class="fa fa-list"></i>
+      </a>
+      {% if is_granted('DELETE', entity) %}
+        <form action="{{ path('schedule_confevent_delete', { 'id': entity.id }) }}" method="post">
+          <input type="hidden" name="_method" value="DELETE"/>
+          {{ form_widget(delete_form) }}
+          <button type="submit" class="btn btn-danger">
+            <i class="fa fa-trash-o"></i>
+          </button>
         </form>
-          
-            <br /><br />
+      {% endif %}
+    </div>
+  </div>
+  <div class="row page-content">
 
-             
-                <div class="row">
-                   <div class="col-lg-2"></div>
-                   <div class="col-lg-8">
-                    <h1>Topics</h1>
-                     <a  class="btn btn-link btn-small help"  data-toggle="popover" title="Add topic to the event" data-content="For add a topic to the event, select it in the  select field.">
-                           <i class="icon-question"></i>
-                      </a>    
-                     
-                    <div id="topics_related_list">
-                      {% include "fibeWWWConfBundle:ConfEvent:topicRelation.html.twig" %}
-                    </div>
-                     {{ form_widget(topic_form) }}    
-                  </div>  
-                </div>
 
-            <br /><br />
+    <form action="{{ path('schedule_confevent_update', { 'id': entity.id }) }}"
+          method="post" {{ form_enctype(edit_form) }}>
+      <input type="hidden" name="_method" value="PUT"/>
 
-            {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
-                <div class="row">
-                   <div class="col-lg-2"></div>
-                   <div class="col-lg-8">
-                    <h1 style="display:inline;">Papers Relation</h1>
-                     <a  class="btn btn-link btn-small help" data-toggle="popover" title="Add paper to the event" data-content="For add a paper to the event, select it in the select field.">
-                           <i class="icon-question"></i>
-                        </a>
-                    
-                     <div id="paper_related_list">
-                        {% include "fibeWWWConfBundle:ConfEvent:paperRelation.html.twig" %}
-                    </div>
-                    {{ form_widget(paper_form) }}
-                  </div>
-                </div>
-              {% endif %}
-
-              <br /><br />
-
-                <div class="row">
-                   <div class="col-lg-2"></div>
-                   <div class="col-lg-8">
-                      <h1 style="display:inline;">Persons Relation</h1>
-                      <a  class="btn btn-link btn-small help" data-toggle="popover" title="Add a person to the event" data-content='For add a person to the event, select it in the select field and the role of this person for the event. Then, click on "add person".'>
-                           <i class="icon-question"></i>
-                      </a>
-                    <div id="person_related_list"> 
-                        {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
-                    </div>
-
-                <form id="role_form" action="{{ path('schedule_confevent_addPerson')}}" method="post" {{ form_enctype(role_form) }}>
-                     {{ form_errors(role_form) }}
-                     {{ form_widget(role_form) }}
-                     <br />
-                      <button id="role_form_submit"class="btn btn-info" type="submit" >
-                        <i class="fa fa-plus"></i> add Person
-                    </button>
-                     </form>
-                     <br />
-                   
-              </div>
-            </div>
-          <br />
+      <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-4">
+          {{ form_row(edit_form.summary) }}
+          {{ form_row(edit_form.acronym) }}
+          {{ form_row(edit_form.categories) }}
+          {{ form_row(edit_form.description) }}
+          {{ form_row(edit_form.url) }}
+        </div>
+        <div class="col-lg-4">
+          {{ form_rest(edit_form) }}
+          <br/>
+        </div>
       </div>
+      <br/>
+
+      <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+          <button type="submit" class="btn btn-block btn-success">
+            <i class="fa fa-check"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <br/><br/>
+
+
+    <div class="row">
+      <div class="col-lg-2"></div>
+      <div class="col-lg-8">
+        <h1>Topics</h1>
+        <a class="btn btn-link btn-small help" data-toggle="popover" title="Add topic to the event"
+           data-content="For add a topic to the event, select it in the  select field.">
+          <i class="icon-question"></i>
+        </a>
+
+        <div id="topics_related_list">
+          {% include "fibeWWWConfBundle:ConfEvent:topicRelation.html.twig" %}
+        </div>
+        {{ form_widget(topic_form) }}
+      </div>
+    </div>
+
+    <br/><br/>
+
+    {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
+      <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+          <h1 style="display:inline;">Papers Relation</h1>
+          <a class="btn btn-link btn-small help" data-toggle="popover" title="Add paper to the event"
+             data-content="For add a paper to the event, select it in the select field.">
+            <i class="icon-question"></i>
+          </a>
+
+          <div id="paper_related_list">
+            {% include "fibeWWWConfBundle:ConfEvent:paperRelation.html.twig" %}
+          </div>
+          {{ form_widget(paper_form) }}
+        </div>
+      </div>
+    {% endif %}
+
+    <br/><br/>
+
+    <div class="row">
+      <div class="col-lg-2"></div>
+      <div class="col-lg-8">
+        <h1 style="display:inline;">Persons Relation</h1>
+        <a class="btn btn-link btn-small help" data-toggle="popover" title="Add a person to the event"
+           data-content='For add a person to the event, select it in the select field and the role of this person for the event. Then, click on "add person".'>
+          <i class="icon-question"></i>
+        </a>
+
+        <div id="person_related_list">
+          {% include "fibeWWWConfBundle:ConfEvent:personRelation.html.twig" %}
+        </div>
+
+        <form id="role_form" action="{{ path('schedule_confevent_addPerson') }}"
+              method="post" {{ form_enctype(role_form) }}>
+          {{ form_errors(role_form) }}
+          {{ form_widget(role_form) }}
+          <br/>
+          <button id="role_form_submit" class="btn btn-info" type="submit">
+            <i class="fa fa-plus"></i> add Person
+          </button>
+        </form>
+        <br/>
+
+      </div>
+    </div>
+    <br/>
+  </div>
 
 
 {% endblock %}
 
 {% block javascripts_page %}
-<script type="text/javascript">
+  <script type="text/javascript">
 
-   $(document).ready(function() {
-    $('.loaders').hide();
-   //listen for the form beeing submitted
-   $("#form_papers").change(function(){
-      //get the url for the form
-      var id_paper= $(this).val();
-      //start send the post request
-       $.post('{{path("schedule_confevent_addPaper") }}',               
-                {id_entity : '{{entity.id}}', id_paper: id_paper}, 
-            function(response){
-                   $('#paper_related_list').html(response);
-                
-            }, "html");    
-       });
+    $(document).ready(function ()
+    {
+      $('.loaders').hide();
+      //listen for the form beeing submitted
+      $("#form_papers").change(function ()
+      {
+        //get the url for the form
+        var id_paper = $(this).val();
+        //start send the post request
+        $.post('{{path("schedule_confevent_addPaper") }}',
+            {id_entity: '{{entity.id}}', id_paper: id_paper},
+            function (response)
+            {
+              $('#paper_related_list').html(response);
 
-    //listen for the form beeing submitted
-   $("#form_topics").change(function(){
-      //get the url for the form
-      var id_topic= $(this).val();
-      //start send the post request
-       $.post('{{path("schedule_confevent_addTopic") }}',               
-                {id_entity : '{{entity.id}}', id_topic: id_topic}, 
-            function(response){
-                   $('#topics_related_list').html(response);
-            }, "html");    
-       });
+            }, "html");
+      });
 
-   $("#role_form").submit(function(){
+      //listen for the form beeing submitted
+      $("#form_topics").change(function ()
+      {
+        //get the url for the form
+        var id_topic = $(this).val();
+        //start send the post request
+        $.post('{{path("schedule_confevent_addTopic") }}',
+            {id_entity: '{{entity.id}}', id_topic: id_topic},
+            function (response)
+            {
+              $('#topics_related_list').html(response);
+            }, "html");
+      });
+
+      $("#role_form").submit(function ()
+      {
         //get the url for the form
         var id_person = $('#fibe_bundle_wwwconfbundle_roletype_person').val();
         var id_type = $('#fibe_bundle_wwwconfbundle_roletype_type').val();
         //start send the post request
-         $.post("{{path('schedule_confevent_addPerson')}}",               
-                 {id_person : id_person, id_type:id_type, id_entity: "{{entity.id }}"} , 
-              function(response){
-                     $('#person_related_list').html(response);
-                  
-              }, "html");    
-          return false;
-         });
+        $.post("{{path('schedule_confevent_addPerson')}}",
+            {id_person: id_person, id_type: id_type, id_entity: "{{entity.id }}"},
+            function (response)
+            {
+              $('#person_related_list').html(response);
 
-    
-       
+            }, "html");
+        return false;
+      });
 
-     $('.help').popover({ 'trigger': 'click', 'placement':'bottom'});
-   
-  
-  });
-  
-</script>
+
+      $('.help').popover({ 'trigger': 'click', 'placement': 'bottom'});
+
+
+    });
+
+  </script>
 
 {% endblock javascripts_page %}

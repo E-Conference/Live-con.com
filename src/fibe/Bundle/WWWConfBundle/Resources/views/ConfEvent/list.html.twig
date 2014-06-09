@@ -1,56 +1,56 @@
-
 {% if nbResult is defined %}
-<div id="resultsFound"><h4>{{ nbResult }} results found</h4></div>
+  <div id="resultsFound"><h4>{{ nbResult }} results found</h4></div>
 {% endif %}
 <table class="table table-hover .table-responsive records_list">
-    <thead>
-        <tr>
-            <th>Summary</th>
-            <th>Categories</th>
-            <th>Location</th>
-            <th>Start At</th>
-            <th>Duration</th>
-            <th>End At</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for entity in pager.currentPageResults %}
-        <tr>
-            <td>{{ entity.summary }}</td>
-            <td>
-                {% for category in entity.categories %}
-                <div style="background:{{ category.color }};float:left;margin-right:6px;" title="{{ category.label }}">{{ category.label }}</div>
-                <br>
-                {% endfor %}
-            </td>
-            <td>{{ entity.location }}</td>
-            <td>{% if entity.startAt %}{{ entity.startAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-            <td class="duration">{% if entity.duration %}{{ entity.duration }}{% endif %}</td>
-            <td>{% if entity.endAt %}{{ entity.endAt|date('Y-m-d H:i:s') }}{% endif %}</td>
-          
-            <td>
-            {% if entity.includedRule %}
-                {{ entity.includedRule }}
-            {% endif %}
-            </td>
-            <td>
-               
-            </td>
-            <td>
-                <a class="btn btn-default" href="{{ path('schedule_confevent_show', { 'id': entity.id }) }}">
-                    <i class="fa fa-eye"></i>
-                </a>
-               
-                {% if is_granted('EDIT', entity) %} 
-                    <a class="btn btn-warning edit" href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}">
-                         <i class="fa fa-pencil"></i>
-                    </a>
-                {% endif %} 
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
+  <thead>
+  <tr>
+    <th>Summary</th>
+    <th>Categories</th>
+    <th>Location</th>
+    <th>Start At</th>
+    <th>Duration</th>
+    <th>End At</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for entity in pager.currentPageResults %}
+    <tr>
+      <td>{{ entity.summary }}</td>
+      <td>
+        {% for category in entity.categories %}
+          <div style="background:{{ category.color }};float:left;margin-right:6px;"
+               title="{{ category.label }}">{{ category.label }}</div>
+          <br>
+        {% endfor %}
+      </td>
+      <td>{{ entity.location }}</td>
+      <td>{% if entity.startAt %}{{ entity.startAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+      <td class="duration">{% if entity.duration %}{{ entity.duration }}{% endif %}</td>
+      <td>{% if entity.endAt %}{{ entity.endAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+
+      <td>
+        {% if entity.includedRule %}
+          {{ entity.includedRule }}
+        {% endif %}
+      </td>
+      <td>
+
+      </td>
+      <td>
+        <a class="btn btn-default" href="{{ path('schedule_confevent_show', { 'id': entity.id }) }}">
+          <i class="fa fa-eye"></i>
+        </a>
+
+        {% if is_granted('EDIT', entity) %}
+          <a class="btn btn-warning edit" href="{{ path('schedule_confevent_edit', { 'id': entity.id }) }}">
+            <i class="fa fa-pencil"></i>
+          </a>
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
 </table>
 
 

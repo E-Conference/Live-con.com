@@ -3,53 +3,59 @@
 {% block title %}Organization{% endblock title %}
 
 {% block centerPanel %}
-    {{ parent() }}
-        <div class="row page-top-header ">
-            <div class="page-title  col-xs-6  col-sm-5 col-md-4 col-lg-3">
-                <span>Organization list</span>
-                <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Organization' }) }}" target="_blank" title="Help">
-                     <i class="fa fa-question"></i> 
-                </a>
-            </div>
+  {{ parent() }}
+  <div class="row page-top-header ">
+    <div class="page-title  col-xs-6  col-sm-5 col-md-4 col-lg-3">
+      <span>Organization list</span>
+      <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Organization' }) }}" target="_blank"
+         title="Help">
+        <i class="fa fa-question"></i>
+      </a>
+    </div>
 
-            <div class=" col-xs-1 col-sm-3 col-md-5 col-lg-7">
-            </div>
-            {% if is_granted('CREATE', app.user.getCurrentConf()) %} 
-            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                <a class="btn btn-info btn-create create" href="{{ path('schedule_organization_new') }}" title="Add an organization">
-                     <i class="fa fa-plus"></i> New organization
-                </a>
-            </div>
-            {% endif %}
-        </div>
-        <div class="row page-content">
+    <div class=" col-xs-1 col-sm-3 col-md-5 col-lg-7">
+    </div>
+    {% if is_granted('CREATE', app.user.getCurrentConf()) %}
+      <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+        <a class="btn btn-info btn-create create" href="{{ path('schedule_organization_new') }}"
+           title="Add an organization">
+          <i class="fa fa-plus"></i> New organization
+        </a>
+      </div>
+    {% endif %}
+  </div>
+  <div class="row page-content">
 
-            {% include "fibeWWWConfBundle:Filters:filters.html.twig"%}
-            <div id="organization_list" class="table-responsive">
-               {% include "fibeWWWConfBundle:Organization:list.html.twig" %}
-            </div>
-        </div>
+    {% include "fibeWWWConfBundle:Filters:filters.html.twig" %}
+    <div id="organization_list" class="table-responsive">
+      {% include "fibeWWWConfBundle:Organization:list.html.twig" %}
+    </div>
+  </div>
 {% endblock %}
 
 {% block javascripts_page %}
-<script type="text/javascript">
-  $(document).ready(function() {
-        $("#resultsFound").hide();
-   });
+  <script type="text/javascript">
+    $(document).ready(function ()
+    {
+      $("#resultsFound").hide();
+    });
 
-    function filter(){
-        $datas = $("#filter_form").serialize();
+    function filter()
+    {
+      $datas = $("#filter_form").serialize();
 
-        //start send the post request
-         $.post("{{path('schedule_organization_filter')}}",               
-                 $datas, 
-              function(response){
-                     $('#organization_list').html(response);
-                     $("#resultsFound").show();
-                  
-              }, "html");    
-          return false;
-    };
-</script>
+      //start send the post request
+      $.post("{{path('schedule_organization_filter')}}",
+          $datas,
+          function (response)
+          {
+            $('#organization_list').html(response);
+            $("#resultsFound").show();
+
+          }, "html");
+      return false;
+    }
+    ;
+  </script>
 
 {% endblock javascripts_page %}

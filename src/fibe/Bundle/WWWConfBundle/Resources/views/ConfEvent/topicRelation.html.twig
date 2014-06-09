@@ -1,44 +1,47 @@
 <table class="table">
-    <thead>
-        <tr>
-            <th>Relation Id</th>
-            <th>Topic</th>
-            <th>Action</th>
-        </tr>
-    </thead>
+  <thead>
+  <tr>
+    <th>Relation Id</th>
+    <th>Topic</th>
+    <th>Action</th>
+  </tr>
+  </thead>
 
-    <tbody>
-        {% for topic in entity.getTopics() %} 
-            <tr> 
-                <td>{{ topic.id }}</td>
-                <td>{{ topic.name }}</td>
-                <td>
-                     <a id="{{topic.id}}" class="btn btn-danger delete_topic edit-event" data-toggle="tooltip" title="Remove this Topic from the list"><i class="fa fa-trash-o"></i>
-                     </a>
-                </td>
-                 
-            </tr> 
-        {% endfor %}
-    </tbody>
+  <tbody>
+  {% for topic in entity.getTopics() %}
+    <tr>
+      <td>{{ topic.id }}</td>
+      <td>{{ topic.name }}</td>
+      <td>
+        <a id="{{ topic.id }}" class="btn btn-danger delete_topic edit-event" data-toggle="tooltip"
+           title="Remove this Topic from the list"><i class="fa fa-trash-o"></i>
+        </a>
+      </td>
 
-   
+    </tr>
+  {% endfor %}
+  </tbody>
+
+
 </table>
 
 {% block javascripts %}
-<script type="text/javascript">
+  <script type="text/javascript">
 
-$(".delete_topic").click(function(){
+    $(".delete_topic").click(function ()
+    {
 
       var id_topic = $(this).attr('id');
       $('#loader_topics').show();
       //start send the post request
-       $.post("{{path('schedule_confevent_deleteTopic')}}",               
-               {id_topic : id_topic, id_entity: "{{ entity.id }}"} , 
-            function(response){
-                   $('#topics_related_list').html(response);
-                   $('#loader_topics').hide();
-            }, "html");    
-       });
+      $.post("{{path('schedule_confevent_deleteTopic')}}",
+          {id_topic: id_topic, id_entity: "{{ entity.id }}"},
+          function (response)
+          {
+            $('#topics_related_list').html(response);
+            $('#loader_topics').hide();
+          }, "html");
+    });
 
-</script>
+  </script>
 {% endblock javascripts %}

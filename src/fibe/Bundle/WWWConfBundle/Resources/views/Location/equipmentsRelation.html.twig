@@ -1,59 +1,62 @@
 <h3>Equipments</h3>
 
- {% for equipment in entity.getEquipments() %}
-   <button class="btn btn-default equipment_button" title="{{equipment.label}}">
-        <i class='fa fa-{{ equipment.icon }} fa-2x'></i>
-        <i id='{{equipment.id}}' class='fa fa-times delete_equipment'></i>
-   </button>
+{% for equipment in entity.getEquipments() %}
+  <button class="btn btn-default equipment_button" title="{{ equipment.label }}">
+    <i class='fa fa-{{ equipment.icon }} fa-2x'></i>
+    <i id='{{ equipment.id }}' class='fa fa-times delete_equipment'></i>
+  </button>
 
- {% endfor %}
-     
- </br> 
- <!-- Select box equipment -->            
+{% endfor %}
+
+</br>
+<!-- Select box equipment -->
 <select id="equipment_list" class="form-control">
-        {% for equipment in equipments %}
-            <option value="{{ equipment.id }}">{{ equipment.label }}</option>
-        {% endfor %}
-</select>   
-<br>     
+  {% for equipment in equipments %}
+    <option value="{{ equipment.id }}">{{ equipment.label }}</option>
+  {% endfor %}
+</select>
+<br>
 <button class="btn btn-small btn-info" id="add_equipment">
-    <i class="fa fa-plus"></i>
+  <i class="fa fa-plus"></i>
 </button>
-   
 
 
 {% block javascripts %}
-<script type="text/javascript">
+  <script type="text/javascript">
 
 
- $("#add_equipment").click(function(){
+    $("#add_equipment").click(function ()
+    {
 
-       var id_equipment = $('#equipment_list').val();
-       console.log(id_equipment);
+      var id_equipment = $('#equipment_list').val();
+      console.log(id_equipment);
       //start send the post request
-       $.post("{{path('schedule_location_addEquipment')}}",               
-               {id_equipment : id_equipment, id_location: "{{ entity.id }}"} , 
-            function(response){
-              console.log(response);
-                   $('#equipment_manage').html(response);
-                 
-            }, "html");    
-       });
+      $.post("{{path('schedule_location_addEquipment')}}",
+          {id_equipment: id_equipment, id_location: "{{ entity.id }}"},
+          function (response)
+          {
+            console.log(response);
+            $('#equipment_manage').html(response);
+
+          }, "html");
+    });
 
 
- $(".delete_equipment").click(function(){
+    $(".delete_equipment").click(function ()
+    {
 
       var id_equipment = $(this).attr('id');
-     
-      //start send the post request
-       $.post("{{path('schedule_location_deleteEquipment')}}",               
-               {id_equipment : id_equipment, id_location: "{{ entity.id }}"} , 
-            function(response){
-                   $('#equipment_manage').html(response);
-                   $('this').parent().remove();
-                
-            }, "html");    
-       });
 
-</script>
+      //start send the post request
+      $.post("{{path('schedule_location_deleteEquipment')}}",
+          {id_equipment: id_equipment, id_location: "{{ entity.id }}"},
+          function (response)
+          {
+            $('#equipment_manage').html(response);
+            $('this').parent().remove();
+
+          }, "html");
+    });
+
+  </script>
 {% endblock javascripts %}

@@ -3,43 +3,44 @@
 {% block title %}Equipment detail{% endblock title %}
 
 {% block centerPanel %}
-    {{ parent() }}
-    <h1>Equipment</h1>
+  {{ parent() }}
+  <h1>Equipment</h1>
 
-    <table class="table-hover record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Label</th>
-                <td>{{ entity.label }}</td>
-            </tr>
-            <tr>
-                <th>Icon</th>
-                <td>{{ entity.icon }}</td>
-            </tr>
-        </tbody>
-    </table>
+  <table class="table-hover record_properties">
+    <tbody>
+    <tr>
+      <th>Id</th>
+      <td>{{ entity.id }}</td>
+    </tr>
+    <tr>
+      <th>Label</th>
+      <td>{{ entity.label }}</td>
+    </tr>
+    <tr>
+      <th>Icon</th>
+      <td>{{ entity.icon }}</td>
+    </tr>
+    </tbody>
+  </table>
 
-        <ul class="record_actions">
+  <ul class="record_actions">
     <li>
-        <a class="btn btn-warning" href="{{ path('equipment') }}">
-          <i class="icon-list"></i>  
+      <a class="btn btn-warning" href="{{ path('equipment') }}">
+        <i class="icon-list"></i>
+      </a>
+    </li>
+    <li>
+      <a class="btn btn-warning" href="{{ path('schedule_equipment_edit', { 'id': entity.id }) }}"> <a
+            class="btn btn-info" href="{{ path('schedule_equipment_new') }}">
+          <i class="fa fa-pencil-square-o"></i>
         </a>
     </li>
     <li>
-        <a class="btn btn-warning" href="{{ path('schedule_equipment_edit', { 'id': entity.id }) }}">  <a  class="btn btn-info" href="{{ path('schedule_equipment_new') }}">
-                 <i class="fa fa-pencil-square-o"></i>       
-        </a>
+      <form action="{{ path('schedule_equipment_delete', { 'id': entity.id }) }}" method="post">
+        <input type="hidden" name="_method" value="DELETE"/>
+        {{ form_widget(delete_form) }}
+        <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+      </form>
     </li>
-    <li>
-        <form action="{{ path('schedule_equipment_delete', { 'id': entity.id }) }}" method="post">
-            <input type="hidden" name="_method" value="DELETE" />
-            {{ form_widget(delete_form) }}
-            <button type="submit" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
-        </form>
-    </li>
-</ul>
+  </ul>
 {% endblock %}

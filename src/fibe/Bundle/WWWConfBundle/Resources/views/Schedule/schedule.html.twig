@@ -6,126 +6,145 @@
 {% block content %}
 
 
-{% block sideBarPanel%} 
- {{ parent() }}
+  {% block sideBarPanel %}
+    {{ parent() }}
 
-{% endblock %}
+  {% endblock %}
 
 
-<div class="content" id="schedule-view"> 
-  <div id="filters" class="row">  
- 
-    <div class="filter col-sm-4">
-      <select multiple class="form-control" data-res="category" placeholder="Filter by categories" data-filter="category_ids">
-        {% for category in categories %}
-          <option data-color="{{category.color}};" value="{{category.id}}">{{category.name}}</option>
-        {% endfor %}
-      </select>
+  <div class="content" id="schedule-view">
+    <div id="filters" class="row">
+
+      <div class="filter col-sm-4">
+        <select multiple class="form-control" data-res="category" placeholder="Filter by categories"
+                data-filter="category_ids">
+          {% for category in categories %}
+            <option data-color="{{ category.color }};" value="{{ category.id }}">{{ category.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="filter col-sm-4">
+        <select multiple class="form-control" data-res="location" placeholder="Filter by locations"
+                data-filter="location_ids">
+          {% for location in locations %}
+            <option value="{{ location.id }}">{{ location.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="filter col-sm-4">
+        <select multiple class="form-control" data-res="topic" placeholder="Filter by topics" data-filter="topic_ids">
+          {% for topic in topics %}
+            <option value="{{ topic.id }}">{{ topic.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
     </div>
- 
-    <div class="filter col-sm-4">
-      <select multiple class="form-control" data-res="location" placeholder="Filter by locations" data-filter="location_ids">
-        {% for location in locations %}
-          <option value="{{location.id}}">{{location.name}}</option>
-        {% endfor %}
-      </select>
-    </div> 
- 
-    <div class="filter col-sm-4">
-      <select multiple class="form-control" data-res="topic" placeholder="Filter by topics" data-filter="topic_ids">
-        {% for topic in topics %}
-          <option value="{{topic.id}}">{{topic.name}}</option>
-        {% endfor %}
-      </select>  
-    </div>
 
-  </div> 
-
-  <div class="row">
-    <div id="calendar-container" class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
-        <div id='calendar' class="bordered"></div> 
-    </div>
-    <div id="sidebar-container" class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
-      <div id="sidebar-div" class="bordered">
-        <h4>Time scale</h4>
-        <input type="text" class="slider" data-slider-id='sliderTimeScale' type="number" data-slider-min="5" data-slider-max="120" data-slider-step="5" data-slider-value="30"/>
+    <div class="row">
+      <div id="calendar-container" class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+        <div id='calendar' class="bordered"></div>
+      </div>
+      <div id="sidebar-container" class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+        <div id="sidebar-div" class="bordered">
+          <h4>Time scale</h4>
+          <input type="text" class="slider" data-slider-id='sliderTimeScale' type="number" data-slider-min="5"
+                 data-slider-max="120" data-slider-step="5" data-slider-value="30"/>
         <span id="sliderTimeScaleValLabel">
           <span id="sliderTimeScaleVal">30</span>
           mn
         </span>
-        <h4>Dateless Events</h4>
-        <div id='external-events' class='scroller'>
-        </div> 
-      </div>  
+          <h4>Dateless Events</h4>
+
+          <div id='external-events' class='scroller'>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
 
 
-  <div id="modal-edit-event"  class="modal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h3 class="modal-title">Edit event</h3>
-        </div>
-        <div class="modal-body"> 
-        </div> 
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
-   
-  <div id="modal-new-event"  class="modal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h3 class="modal-title">Event creation</h3>
-        </div>
-        <form>
+    <div id="modal-edit-event" class="modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 class="modal-title">Edit event</h3>
+          </div>
           <div class="modal-body">
-            <div class="input-group input-group-lg"> 
-              <input name="name" id="name" type="text" class="form-control input-lg" placeholder="Give me a name!">
-            </div> 
           </div>
-          <div class="modal-footer">
-            <a  class="btn btn-default" data-dismiss="modal">Close</a>
-            <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div id="modal-new-event" class="modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 class="modal-title">Event creation</h3>
           </div>
-        </form>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
-    
-  <div id="modal-set-parent"  class="modal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h3 class="modal-title">  
+          <form>
+            <div class="modal-body">
+              <div class="input-group input-group-lg">
+                <input name="name" id="name" type="text" class="form-control input-lg" placeholder="Give me a name!">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <a class="btn btn-default" data-dismiss="modal">Close</a>
+              <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+          </form>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <div id="modal-set-parent" class="modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 class="modal-title">
             <span class="fa-stack fa-lg">
               <i class="fa fa-square-o fa-stack-2x"></i>
               <i class="fa fa-sitemap fa-stack-1x"></i>
             </span>
-            Affect parent
-          </h3>
-        </div>
-        <div class="modal-body"> 
-          Set 
-          <p class="sub-event event-name well"></p> 
-          as sub event of 
-          <p class="super-event event-name well"></p>
-          ?
-        </div> 
-        
-        <div class="modal-footer row-fluid">
-          <div class="col-xs-6"><button class="col-sm-6 btn btn-default btn-block no" data-dismiss="modal"><i class='fa-remove'></i> no</button></div>
-          <div class="col-xs-6"><button class="col-sm-6 btn btn-success btn-block yes" data-dismiss="modal"><i class='fa-ok'></i> ok</button></div>
-        </div>
+              Affect parent
+            </h3>
+          </div>
+          <div class="modal-body">
+            Set
+            <p class="sub-event event-name well"></p>
+            as sub event of
+            <p class="super-event event-name well"></p>
+            ?
+          </div>
 
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
-</div>
+          <div class="modal-footer row-fluid">
+            <div class="col-xs-6">
+              <button class="col-sm-6 btn btn-default btn-block no" data-dismiss="modal"><i class='fa-remove'></i> no
+              </button>
+            </div>
+            <div class="col-xs-6">
+              <button class="col-sm-6 btn btn-success btn-block yes" data-dismiss="modal"><i class='fa-ok'></i> ok
+              </button>
+            </div>
+          </div>
+
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+  </div>
 
 
 {% endblock %}
@@ -133,17 +152,18 @@
 
 
 {% block stylesheets_page %}
-  <link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.css') }}" rel='stylesheet' />
-  <link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.print.css') }}" rel='stylesheet' media='print' /> 
-  <link href="{{ asset('bundles/fibewwwconf/css/fullcalendarAddedUI.css') }}" rel='stylesheet'/>  
-  <link href="{{ asset('bundles/fibewwwconf/css/jquery.mCustomScrollbar.css') }}" rel='stylesheet'/>  
-  <link href="{{ asset('css/slider.css') }}" rel='stylesheet'/>  
+  <link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.css') }}" rel='stylesheet'/>
+  <link href="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar.print.css') }}" rel='stylesheet'
+        media='print'/>
+  <link href="{{ asset('bundles/fibewwwconf/css/fullcalendarAddedUI.css') }}" rel='stylesheet'/>
+  <link href="{{ asset('bundles/fibewwwconf/css/jquery.mCustomScrollbar.css') }}" rel='stylesheet'/>
+  <link href="{{ asset('css/slider.css') }}" rel='stylesheet'/>
 {% endblock stylesheets_page %}
 
 
 
-{%  block javascripts_page %} 
-       
+{% block javascripts_page %}
+
   <script type="text/javascript" src="{{ asset('js/jquery-ui.custom.js') }}"></script>
   <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar_res.js') }}"></script>
 
@@ -152,301 +172,342 @@
 
   <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/added/CalEvent.js') }}"></script>
   <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/added/EventCollection.js') }}"></script>
-    
+
   <script src="{{ asset('bundles/fibewwwconf/js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
   <script src="{{ asset('js/bootstrap-slider.js') }}"></script>
 
-  <script src ="{{ asset('js/loginModal.js') }}" type="text/javascript" ></script>  
+  <script src="{{ asset('js/loginModal.js') }}" type="text/javascript"></script>
   <script type="text/javascript">
-    var Events = {}, // every events hashmap (calendar and sidebar)
-        calendar_events   = [], //calendar evnt array
-        calendar_events_indexes   = {},  // calendar event indexes
-        mainConfEvent, // the main conf event
-        dragged = null, //the last dragged object
-        $sidebar, //$div containing the sidebar
-        $calendar, //$div containing the calendar
-        stopRender = false,
-        fetched = false, // are the event fresh in memory ? if not we need a fetch request
-        firstWeekDay = 1, // avoid first day to be sunday
-        firstDay = moment('{{currentConf.mainConfEvent.startAt|date("Y-m-d")}}'), //first mainconfevent day
-        authorized = {% if authorized == 1 %}true{% else %}false{% endif %}, 
-        filter, // filter.js
-        sidebar, //sidebar.js
-        logtime, // global benchmark var 
-        startView = "agendaWeek", 
-        //bootstrap modals
-        $modal,
-        $modalNewEvent,
-        $modalSetParent,
-        $modalBody , 
-        //url
-        DATA_FEED_URL = "{{ path('schedule_view_event_get') }}",
-        op = {  
-          getOrderedUrl     : "{{ path('exporter_api', { 'entityReference': 'schedule_event','_format': 'json' }) }}?conference_id={{currentConf.id}}",
-          getDatalessUrl     : "{{ path('exporter_api', { 'entityReference': 'schedule_event','_format': 'json' }) }}?only_instant=whatever&conference_id={{currentConf.id}}",
-          updateUrl     : "{{ path('schedule_view_event_edit') }}", //event modal form
-          quickAddUrl   : DATA_FEED_URL + "?method=add", 
-          quickUpdateUrl: DATA_FEED_URL + "?method=update",
-          quickDeleteUrl: DATA_FEED_URL + "?method=remove", 
-          resFeedURL    : "",
-          data          : {} // request parameters
-        }; 
-
-    $(document).ready(function() {
-
-      //init $ vars
-      $modal = $('#modal-edit-event').hide();
-      $modalNewEvent = $('#modal-new-event').hide().draggable({ handle: ".modal-header" });
-      $modalSetParent = $('#modal-set-parent').hide().draggable({ handle: ".modal-header" });
-      $modalBody = $modal.find(".modal-body");
-      
-      $calendar = $('#calendar');
-      $sidebar = $('#external-events'); 
-       
-
-      /*-----------------------------------------------------------------------------------------------------*/
-      /*------------------------------------- fullcalendar options ------------------------------------------*/
-      /*-----------------------------------------------------------------------------------------------------*/
-      calendarOption = { 
-          header: {
-              left: 'prev,next',
-              center: 'title',
-              right: 'month,agendaWeek,agendaDay' // computed in resource view
-          },
-          aspectRatio        : 1.6,
-          firstDay           : firstWeekDay,         
-          year               : firstDay.year(), 
-          month              : firstDay.month(),
-          date               : firstDay.date(),
-          events             : EventCollection.events, //fetch event
-          eventAfterAllRender: EventCollection.eventAfterAllRender,  
-          eventCalculateWidth: EventCollection.eventCalculateWidth,
-          eventAfterRender   : EventCollection.eventAfterRender, 
-
-          {% if authorized == 1 %} //editing function that require schedule flag
-              editable      : true,
-              eventClick    : EventCollection.eventClick,
-              selectable    : true,
-              selectHelper  : true,
-              select        : EventCollection.eventCreate,
-              //resizing events in calendar (only the end date is changed)
-              eventResize   : EventCollection.eventResize,
-              
-              droppable     : true, // allows things to be dropped into the calendar
-              drop          : EventCollection.eventSidebarDrop,
-              
-              eventDragStart: EventCollection.eventDragStart,
-              eventDragStop : EventCollection.eventDragStop,
-              eventDrop     : EventCollection.eventDrop,
-          {% endif %}
+  var Events = {}, // every events hashmap (calendar and sidebar)
+      calendar_events = [], //calendar evnt array
+      calendar_events_indexes = {},  // calendar event indexes
+      mainConfEvent, // the main conf event
+      dragged = null, //the last dragged object
+      $sidebar, //$div containing the sidebar
+      $calendar, //$div containing the calendar
+      stopRender = false,
+      fetched = false, // are the event fresh in memory ? if not we need a fetch request
+      firstWeekDay = 1, // avoid first day to be sunday
+      firstDay = moment('{{currentConf.mainConfEvent.startAt|date("Y-m-d")}}'), //first mainconfevent day
+      authorized = {% if authorized == 1 %}true{% else %}false{% endif %},
+      filter, // filter.js
+      sidebar, //sidebar.js
+      logtime, // global benchmark var
+      startView = "agendaWeek",
+  //bootstrap modals
+      $modal,
+      $modalNewEvent,
+      $modalSetParent,
+      $modalBody ,
+  //url
+      DATA_FEED_URL = "{{ path('schedule_view_event_get') }}",
+      op = {
+        getOrderedUrl: "{{ path('exporter_api', { 'entityReference': 'schedule_event','_format': 'json' }) }}?conference_id={{currentConf.id}}",
+        getDatalessUrl: "{{ path('exporter_api', { 'entityReference': 'schedule_event','_format': 'json' }) }}?only_instant=whatever&conference_id={{currentConf.id}}",
+        updateUrl: "{{ path('schedule_view_event_edit') }}", //event modal form
+        quickAddUrl: DATA_FEED_URL + "?method=add",
+        quickUpdateUrl: DATA_FEED_URL + "?method=update",
+        quickDeleteUrl: DATA_FEED_URL + "?method=remove",
+        resFeedURL: "",
+        data: {} // request parameters
       };
 
-      /*----------------------------------------------------------------------------------------*/
-      /*------------------------------------- resources ----------------------------------------*/
-      /*----------------------------------------------------------------------------------------*/
-      var resConfig = {
-        location : {
-          url : "{{ path('exporter_api', { 'entityReference': 'schedule_location','_format': 'json' }) }}?conference_id={{currentConf.id}}",
-          parse : function(e){ 
-            if(e.location && e.location.id!= ""){
-              return e.location.id;
-            }else{
-              return "other";
-            }
-          }
-        },category : {
-          url : "{{ path('exporter_api', { 'entityReference': 'schedule_category','_format': 'json' }) }}?conference_id={{currentConf.id}}",
-          parse : function(e){
-            console.log(e)
-            if( e.categories && e.categories.length < 1) return "other" ; 
-            for(var i in e.categories){
-              var c = e.categories[i];
-              rtn.push(c.id);
-            } 
-            return rtn;
-          }
-        }
-      };
-      currentRes = "location";
-      var res,
-          allRes,
-          unknownRes = {
-              name: "Not defined",
-              id  : "0"
-            };
+  $(document).ready(function ()
+  {
 
-        
-      function fetchAllResources(callback){ 
-        $.ajax({
-          url:resConfig[currentRes].url,
-          data :  op.data, 
-          success :  function(events) {
-            events.push(unknownRes)
-            allRes = events.slice(0);
-            res = events;
-            if(callback)callback(res); 
-          }
-        });
-      }
-      function filterResourcesByIds(ids){
-        if(!ids || ids.length == 0)return $calendar.fullCalendar('setResources',allRes);
-        var filteredRes = [];
-        for(var i  = 0; i < res.length; i ++){
-          if($.inArray(res[i].id, ids) !== -1 )
-            filteredRes.push(res[i])
-        }
-        filteredRes.push(unknownRes)
-        $calendar.fullCalendar('setResources',filteredRes);
-      }
+    //init $ vars
+    $modal = $('#modal-edit-event').hide();
+    $modalNewEvent = $('#modal-new-event').hide().draggable({ handle: ".modal-header" });
+    $modalSetParent = $('#modal-set-parent').hide().draggable({ handle: ".modal-header" });
+    $modalBody = $modal.find(".modal-body");
 
-      calendarOption.header.right = "month agendaWeek agendaDay,resourceDay";
-      calendarOption["buttonText"] = {resourceDay:currentRes}; 
-
-      fetchAllResources(function(){
-          calendarOption["eventResources"] = res;
-          //launch calendar
-          $calendar.fullCalendar(calendarOption);  
-          $calendar.fullCalendar('changeView', startView ); 
-
-          //additional schedule controls : first day and refresh
-          $('.fc-header-left')
-            .append(
-              $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"> First day</button>')
-                .click(function(e){ 
-                  $calendar.fullCalendar( 'gotoDate', firstDay.year(), firstDay.month(), firstDay.date() ) 
-                  EventCollection.refetchEvents();
-                })
-            ).append(
-              $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"><span class="fa fa-refresh"></span></button>')
-                .click(function(e){ 
-                  EventCollection.resetEvents();
-                })
-            );  
-      }); 
+    $calendar = $('#calendar');
+    $sidebar = $('#external-events');
 
 
-      /*----------------------------------------------------------------------------------------*/
-      /*------------------------------------- end resources ------------------------------------*/
-      /*----------------------------------------------------------------------------------------*/
+    /*-----------------------------------------------------------------------------------------------------*/
+    /*------------------------------------- fullcalendar options ------------------------------------------*/
+    /*-----------------------------------------------------------------------------------------------------*/
+    calendarOption = {
+      header: {
+        left: 'prev,next',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay' // computed in resource view
+      },
+      aspectRatio: 1.6,
+      firstDay: firstWeekDay,
+      year: firstDay.year(),
+      month: firstDay.month(),
+      date: firstDay.date(),
+      events: EventCollection.events, //fetch event
+      eventAfterAllRender: EventCollection.eventAfterAllRender,
+      eventCalculateWidth: EventCollection.eventCalculateWidth,
+      eventAfterRender: EventCollection.eventAfterRender,
 
+      {% if authorized == 1 %} //editing function that require schedule flag
+      editable: true,
+      eventClick: EventCollection.eventClick,
+      selectable: true,
+      selectHelper: true,
+      select: EventCollection.eventCreate,
+      //resizing events in calendar (only the end date is changed)
+      eventResize: EventCollection.eventResize,
 
-      /*-------------------------------------------------------------------------------------------------*/
-      /*----------------------------------------- slider ------------------------------------------------*/
-      /*-------------------------------------------------------------------------------------------------*/
-      $('.slider').slider().on('slide', function(slideEvt) {
-        $("#"+$(this).data("sliderId")+"Val").text(slideEvt.value); 
-      })
-     .on('slideStop', function(slideEvt) { 
-        $('#calendar').fullCalendar('setOptions', {'slotMinutes':slideEvt.value});
-      });
-     $('.slider').css("width","100%");
-      //requires changes made by christian on https://code.google.com/p/fullcalendar/issues/detail?id=293&can=4
-      // TO REPRODUCE WHEN FULLCALENDAR.JS IS UPDATED
-      /*
-      #19 cristian...@gmail.com
-      I made some changes on the plugin and now I can change minTime and maxTime dynamically. I think that it works for the other options too.
+      droppable: true, // allows things to be dropped into the calendar
+      drop: EventCollection.eventSidebarDrop,
 
-      I simply changed the "changeView" function to support a "force_reload" parameter that, when set to true, recreates the current View with the existent options. Then, I made a function called setOptions that simply has this code:
+      eventDragStart: EventCollection.eventDragStart,
+      eventDragStop: EventCollection.eventDragStop,
+      eventDrop: EventCollection.eventDrop,
+      {% endif %}
+    };
 
-      function setOptions(new_options) {
-          $.extend(options, new_options);
-          var viewName=currentView.name;
-          changeView(viewName,true);
-      }
-
-      I hope this can help someone in need =)
-      Jan 25, 2012 #20 cristian...@gmail.com
-      I forgot to specify the changes made on "changeView"...
-      Here are the important lines:
-
-          function changeView(newViewName,force_reload) {
-              [+]if (force_reload || !currentView || newViewName != currentView.name) {
-              ....
-              content.css('overflow', 'hidden');
-          
-              currentView = viewInstances[newViewName];
-        [+]if (force_reload)
-            [+]currentView.element.remove();
-        [+]if (currentView && !force_reload) {
-            currentView.element.show();
-        }else{
-            currentView = viewInstances[newViewName] = new fcViews[newViewName](
-           ....
-
-      The "[+]" signals indicate changes or additions.
-
-      */ 
-                            
-      /*-------------------------------------------------------------------------------------------------*/
-      /*------------------------------------- initialize sidebar ----------------------------------------*/
-      /*-------------------------------------------------------------------------------------------------*/
-      
-      sidebar = new Sidebar(!authorized);
-      sidebar.populate(op.getDatalessUrl);
-
-      {% if authorized == 1 %} 
-          //dropped from calendar to sidebar;
-          $(sidebar).on("dropped",function(ev,calEvent){
-              console.log("dropped",calEvent)
-              Events[calEvent.id].dropFromSidebar();  
-          }).on("drag",function(ev,event){ 
-              event.dragChildren();
-          });  
-      {% endif %}   
-
-      /*-----------------------------------------------------------------------------------------------------*/
-      /*------------------------------------- initialize filters --------------------------------------------*/
-      /*-----------------------------------------------------------------------------------------------------*/
-
-
-      //init filters
-      filter = new initFilter(op.getOrderedUrl);
-      $(filter).on("change", function(ev,key,val,res){
-          bootstrapAlert("info","event request sent","","<i class='fa-2x fa fa-spinner fa-spin'></i>");
-          if(res == currentRes)filterResourcesByIds(val); //ADDED FOR RESOURCES
-      }).on("changed", function(ev,data,ids){
-          bootstrapAlert("success",ids.length+" events have been well fetched" );
-          // ids.push(mainConfEvent.id);
-          var calEvents = $calendar.fullCalendar('clientEvents');
-          var eventsToShow = [];
-          //hide/show filtered event 
-          for(var i in calEvents){
-            var e = Events[calEvents[i].id];
-            if($.inArray(e.id, ids) === -1 ){
-              //hide
-              e.hideElem();
-              ids.remove(calEvents[i].id);
-            } else if(($calendar.fullCalendar('getView').name != "resourceDay" || !e.hasChild()) && e.hide === true){
-              //show back
-              e.showElem(); 
-            }
-            else
-            {
-              ids.remove(calEvents[i].id);
-            }
-          }
-          $.each(ids,function()
+    /*----------------------------------------------------------------------------------------*/
+    /*------------------------------------- resources ----------------------------------------*/
+    /*----------------------------------------------------------------------------------------*/
+    var resConfig = {
+      location: {
+        url: "{{ path('exporter_api', { 'entityReference': 'schedule_location','_format': 'json' }) }}?conference_id={{currentConf.id}}",
+        parse: function (e)
+        {
+          if (e.location && e.location.id != "")
           {
-            event = Events[this];
-            if(event)
-            {
-              event.showElem();
-              event.renderForRefetch(); 
-            }
-          });
-          EventCollection.refetchEvents(false,true);
-      }); 
-});//end $document.ready()
+            return e.location.id;
+          }
+          else
+          {
+            return "other";
+          }
+        }
+      }, category: {
+        url: "{{ path('exporter_api', { 'entityReference': 'schedule_category','_format': 'json' }) }}?conference_id={{currentConf.id}}",
+        parse: function (e)
+        {
+          console.log(e)
+          if (e.categories && e.categories.length < 1)
+          {
+            return "other";
+          }
+          for (var i in e.categories)
+          {
+            var c = e.categories[i];
+            rtn.push(c.id);
+          }
+          return rtn;
+        }
+      }
+    };
+    currentRes = "location";
+    var res,
+        allRes,
+        unknownRes = {
+          name: "Not defined",
+          id: "0"
+        };
 
-// util fn
 
-  arrayRemoveKey = function(array,key) {
-    $.grep(array, function(e){ 
-      return e != key; 
+    function fetchAllResources(callback)
+    {
+      $.ajax({
+        url: resConfig[currentRes].url,
+        data: op.data,
+        success: function (events)
+        {
+          events.push(unknownRes)
+          allRes = events.slice(0);
+          res = events;
+          if (callback)
+          {
+            callback(res);
+          }
+        }
+      });
+    }
+
+    function filterResourcesByIds(ids)
+    {
+      if (!ids || ids.length == 0)
+      {
+        return $calendar.fullCalendar('setResources', allRes);
+      }
+      var filteredRes = [];
+      for (var i = 0; i < res.length; i++)
+      {
+        if ($.inArray(res[i].id, ids) !== -1)
+        {
+          filteredRes.push(res[i])
+        }
+      }
+      filteredRes.push(unknownRes)
+      $calendar.fullCalendar('setResources', filteredRes);
+    }
+
+    calendarOption.header.right = "month agendaWeek agendaDay,resourceDay";
+    calendarOption["buttonText"] = {resourceDay: currentRes};
+
+    fetchAllResources(function ()
+    {
+      calendarOption["eventResources"] = res;
+      //launch calendar
+      $calendar.fullCalendar(calendarOption);
+      $calendar.fullCalendar('changeView', startView);
+
+      //additional schedule controls : first day and refresh
+      $('.fc-header-left')
+          .append(
+          $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"> First day</button>')
+              .click(function (e)
+              {
+                $calendar.fullCalendar('gotoDate', firstDay.year(), firstDay.month(), firstDay.date())
+                EventCollection.refetchEvents();
+              })
+      ).append(
+          $('<span class="fc-header-space"></span><button class="fc-button fc-state-default fc-corner-left fc-corner-right"><span class="fa fa-refresh"></span></button>')
+              .click(function (e)
+              {
+                EventCollection.resetEvents();
+              })
+      );
     });
-  };  
 
-  </script>    
-  
+
+    /*----------------------------------------------------------------------------------------*/
+    /*------------------------------------- end resources ------------------------------------*/
+    /*----------------------------------------------------------------------------------------*/
+
+
+    /*-------------------------------------------------------------------------------------------------*/
+    /*----------------------------------------- slider ------------------------------------------------*/
+    /*-------------------------------------------------------------------------------------------------*/
+    $('.slider').slider().on('slide', function (slideEvt)
+    {
+      $("#" + $(this).data("sliderId") + "Val").text(slideEvt.value);
+    })
+        .on('slideStop', function (slideEvt)
+        {
+          $('#calendar').fullCalendar('setOptions', {'slotMinutes': slideEvt.value});
+        });
+    $('.slider').css("width", "100%");
+    //requires changes made by christian on https://code.google.com/p/fullcalendar/issues/detail?id=293&can=4
+    // TO REPRODUCE WHEN FULLCALENDAR.JS IS UPDATED
+    /*
+     #19 cristian...@gmail.com
+     I made some changes on the plugin and now I can change minTime and maxTime dynamically. I think that it works for the other options too.
+
+     I simply changed the "changeView" function to support a "force_reload" parameter that, when set to true, recreates the current View with the existent options. Then, I made a function called setOptions that simply has this code:
+
+     function setOptions(new_options) {
+     $.extend(options, new_options);
+     var viewName=currentView.name;
+     changeView(viewName,true);
+     }
+
+     I hope this can help someone in need =)
+     Jan 25, 2012 #20 cristian...@gmail.com
+     I forgot to specify the changes made on "changeView"...
+     Here are the important lines:
+
+     function changeView(newViewName,force_reload) {
+     [+]if (force_reload || !currentView || newViewName != currentView.name) {
+     ....
+     content.css('overflow', 'hidden');
+
+     currentView = viewInstances[newViewName];
+     [+]if (force_reload)
+     [+]currentView.element.remove();
+     [+]if (currentView && !force_reload) {
+     currentView.element.show();
+     }else{
+     currentView = viewInstances[newViewName] = new fcViews[newViewName](
+     ....
+
+     The "[+]" signals indicate changes or additions.
+
+     */
+
+    /*-------------------------------------------------------------------------------------------------*/
+    /*------------------------------------- initialize sidebar ----------------------------------------*/
+    /*-------------------------------------------------------------------------------------------------*/
+
+    sidebar = new Sidebar(!authorized);
+    sidebar.populate(op.getDatalessUrl);
+
+    {% if authorized == 1 %}
+    //dropped from calendar to sidebar;
+    $(sidebar).on("dropped", function (ev, calEvent)
+    {
+      console.log("dropped", calEvent)
+      Events[calEvent.id].dropFromSidebar();
+    }).on("drag", function (ev, event)
+    {
+      event.dragChildren();
+    });
+    {% endif %}
+
+    /*-----------------------------------------------------------------------------------------------------*/
+    /*------------------------------------- initialize filters --------------------------------------------*/
+    /*-----------------------------------------------------------------------------------------------------*/
+
+
+    //init filters
+    filter = new initFilter(op.getOrderedUrl);
+    $(filter).on("change", function (ev, key, val, res)
+    {
+      bootstrapAlert("info", "event request sent", "", "<i class='fa-2x fa fa-spinner fa-spin'></i>");
+      if (res == currentRes)
+      {
+        filterResourcesByIds(val);
+      } //ADDED FOR RESOURCES
+    }).on("changed", function (ev, data, ids)
+    {
+      bootstrapAlert("success", ids.length + " events have been well fetched");
+      // ids.push(mainConfEvent.id);
+      var calEvents = $calendar.fullCalendar('clientEvents');
+      var eventsToShow = [];
+      //hide/show filtered event
+      for (var i in calEvents)
+      {
+        var e = Events[calEvents[i].id];
+        if ($.inArray(e.id, ids) === -1)
+        {
+          //hide
+          e.hideElem();
+          ids.remove(calEvents[i].id);
+        }
+        else if (($calendar.fullCalendar('getView').name != "resourceDay" || !e.hasChild()) && e.hide === true)
+        {
+          //show back
+          e.showElem();
+        }
+        else
+        {
+          ids.remove(calEvents[i].id);
+        }
+      }
+      $.each(ids, function ()
+      {
+        event = Events[this];
+        if (event)
+        {
+          event.showElem();
+          event.renderForRefetch();
+        }
+      });
+      EventCollection.refetchEvents(false, true);
+    });
+  });//end $document.ready()
+
+  // util fn
+
+  arrayRemoveKey = function (array, key)
+  {
+    $.grep(array, function (e)
+    {
+      return e != key;
+    });
+  };
+
+  </script>
+
 {% endblock javascripts_page %}
 

@@ -3,55 +3,59 @@
 {% block title %}Paper{% endblock title %}
 
 {% block centerPanel %}
-    {{ parent() }}
-    <div class="row page-top-header ">
-            <div class="page-title  col-xs-6  col-sm-4 col-md-4 col-lg-3">
-                <span>Publication list</span>
-                <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Paper' }) }}" target="_blank" title="Help">
-                     <i class="fa fa-question"></i> 
-                </a>
-            </div>
-
-            <div class=" col-xs-1 col-sm-4 col-md-5 col-lg-7">
-            </div>
-            {% if is_granted('CREATE', app.user.getCurrentConf()) %} 
-            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                <a class="btn btn-info btn-create create" href="{{ path('schedule_paper_new') }}" title="Add a publication">
-                     <i class="fa fa-plus"></i> New publication
-                </a>
-            </div>
-            {% endif %} 
+  {{ parent() }}
+  <div class="row page-top-header ">
+    <div class="page-title  col-xs-6  col-sm-4 col-md-4 col-lg-3">
+      <span>Publication list</span>
+      <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Paper' }) }}" target="_blank" title="Help">
+        <i class="fa fa-question"></i>
+      </a>
     </div>
 
-    <div class="row page-content">
-           {% include "fibeWWWConfBundle:Filters:filters.html.twig"%}
-        <div id="paper_list" class="table-responsive">
-           {% include "fibeWWWConfBundle:Paper:list.html.twig" %}
-        </div>
-
+    <div class=" col-xs-1 col-sm-4 col-md-5 col-lg-7">
     </div>
+    {% if is_granted('CREATE', app.user.getCurrentConf()) %}
+      <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+        <a class="btn btn-info btn-create create" href="{{ path('schedule_paper_new') }}" title="Add a publication">
+          <i class="fa fa-plus"></i> New publication
+        </a>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="row page-content">
+    {% include "fibeWWWConfBundle:Filters:filters.html.twig" %}
+    <div id="paper_list" class="table-responsive">
+      {% include "fibeWWWConfBundle:Paper:list.html.twig" %}
+    </div>
+
+  </div>
 
 {% endblock %}
 
 {% block javascripts_page %}
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#resultsFound").hide();
-   });
+  <script type="text/javascript">
+    $(document).ready(function ()
+    {
+      $("#resultsFound").hide();
+    });
 
-    function filter(){
-        $datas = $("#filter_form").serialize();
+    function filter()
+    {
+      $datas = $("#filter_form").serialize();
 
-        //start send the post request
-         $.post("{{path('schedule_paper_filter')}}",               
-                 $datas, 
-              function(response){
-                     $('#paper_list').html(response);
-                     $("#resultsFound").show();
-                  
-              }, "html");    
-          return false;
-    };
-</script>
+      //start send the post request
+      $.post("{{path('schedule_paper_filter')}}",
+          $datas,
+          function (response)
+          {
+            $('#paper_list').html(response);
+            $("#resultsFound").show();
+
+          }, "html");
+      return false;
+    }
+    ;
+  </script>
 
 {% endblock javascripts_page %}

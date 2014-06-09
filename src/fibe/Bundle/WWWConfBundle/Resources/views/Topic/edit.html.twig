@@ -3,50 +3,51 @@
 {% block title %}Topic edit{% endblock title %}
 
 {% block centerPanel %}
-    {{ parent() }}
-      <div class="row page-top-header ">
-            <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                <span>Edit topic</span>
-                <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Topic' }) }}" title="Help">
-                     <i class="fa fa-question"></i> 
-                </a>
-            </div>
+  {{ parent() }}
+  <div class="row page-top-header ">
+    <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
+      <span>Edit topic</span>
+      <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Topic' }) }}" title="Help">
+        <i class="fa fa-question"></i>
+      </a>
+    </div>
 
-            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
-            </div>
-            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                 <a type="button" href="{{ path('schedule_topic') }}" class="btn btn-warning" title="Go back to the list">
-                    <i class="fa fa-list"></i>
-              </a>
-              {% if is_granted('DELETE', entity) %}
-              <form action="{{ path('schedule_topic_delete', { 'id': entity.id }) }}" method="post">
-                  <input type="hidden" name="_method" value="DELETE" />
-                    {{ form_widget(delete_form) }}
-                  <button type="submit" class="btn btn-danger" title="Remove topic">
-                      <i class="fa fa-trash-o"></i>
-                  </button>
-              </form> 
-            </div>
-            {% endif %}
-      </div>
-      <div class="row page-content">
-         
-          <div class="row"> 
+    <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+    </div>
+    <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+      <a type="button" href="{{ path('schedule_topic') }}" class="btn btn-warning" title="Go back to the list">
+        <i class="fa fa-list"></i>
+      </a>
+      {% if is_granted('DELETE', entity) %}
+      <form action="{{ path('schedule_topic_delete', { 'id': entity.id }) }}" method="post">
+        <input type="hidden" name="_method" value="DELETE"/>
+        {{ form_widget(delete_form) }}
+        <button type="submit" class="btn btn-danger" title="Remove topic">
+          <i class="fa fa-trash-o"></i>
+        </button>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+  <div class="row page-content">
 
-              <div class="col-lg-12">  
-                  <form action="{{ path('schedule_topic_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
-                      <input type="hidden" name="_method" value="PUT" />
-                      {{ form_widget(edit_form) }} 
-                       
-                  <br/>
-                   <button type="submit" class="btn btn-block btn-success">
-                            <i class="fa fa-check"></i>
-                  </button>
-                  </form>
-              </div>
-          </div>
+    <div class="row">
+
+      <div class="col-lg-12">
+        <form action="{{ path('schedule_topic_update', { 'id': entity.id }) }}"
+              method="post" {{ form_enctype(edit_form) }}>
+          <input type="hidden" name="_method" value="PUT"/>
+          {{ form_widget(edit_form) }}
+
+          <br/>
+          <button type="submit" class="btn btn-block btn-success">
+            <i class="fa fa-check"></i>
+          </button>
+        </form>
       </div>
-    
+    </div>
+  </div>
+
 
 
 

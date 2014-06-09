@@ -1,47 +1,51 @@
 <table class="table">
-    <thead>
-        <tr>
-            <th>Role</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
+  <thead>
+  <tr>
+    <th>Role</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
 
-    <tbody>
-        {% for role in entity.getRoles() %} 
-            <tr> 
-                <td>{{ role.getType().name }}</td>
-                <td>{{ role.getPerson().name }}</td>
-                <td>{{ role.getPerson().email }}</td>
-                <td> <a id="{{role.id}}" class="btn btn-danger delete_role edit-event" data-toggle="tooltip" title="Remove this Person from the list"><i class="fa fa-trash-o"></i>
-                 </a>
-                </td>
-            </tr> 
-        {% endfor %}
-    </tbody>
+  <tbody>
+  {% for role in entity.getRoles() %}
+    <tr>
+      <td>{{ role.getType().name }}</td>
+      <td>{{ role.getPerson().name }}</td>
+      <td>{{ role.getPerson().email }}</td>
+      <td><a id="{{ role.id }}" class="btn btn-danger delete_role edit-event" data-toggle="tooltip"
+             title="Remove this Person from the list"><i class="fa fa-trash-o"></i>
+        </a>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
 </table>
 
 {% block javascripts %}
-<script type="text/javascript">
+  <script type="text/javascript">
 
-$(".delete_role").click(function(){
+    $(".delete_role").click(function ()
+    {
 
       var id_role = $(this).attr('id');
       $('#loader_persons').show();
       //start send the post request
-       $.post("{{path('schedule_confevent_deletePerson')}}",               
-               {id_role : id_role, id_entity: "{{ entity.id }}"} , 
-            function(response){
-                   $('#person_related_list').html(response);
-                   $('#loader_persons').hide();
-            }, "html");    
-       });
+      $.post("{{path('schedule_confevent_deletePerson')}}",
+          {id_role: id_role, id_entity: "{{ entity.id }}"},
+          function (response)
+          {
+            $('#person_related_list').html(response);
+            $('#loader_persons').hide();
+          }, "html");
+    });
 
-$(document).ready(function() {
-     $('.abstract_paper').popover({ 'trigger': 'click', 'placement':'bottom'});
-   
-  
-});
-</script>
+    $(document).ready(function ()
+    {
+      $('.abstract_paper').popover({ 'trigger': 'click', 'placement': 'bottom'});
+
+
+    });
+  </script>
 {% endblock javascripts %}
