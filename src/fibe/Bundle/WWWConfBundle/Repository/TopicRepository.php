@@ -123,8 +123,6 @@ class TopicRepository extends EntityRepository
    */
   public function filtering($params, $currentConf)
   {
-
-    $entities = array();
     $qb = $this->createQueryBuilder('t');
     $qb
       ->where('t.conference = :conference_id')

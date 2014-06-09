@@ -21,7 +21,7 @@
     <tr>
       <td><a href="{{ path('schedule_organization_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
       <td>{{ entity.name }}</td>
-      <td><a href="{ entity.page }}" target="_blank">{{ entity.page }}</a></td>
+      <td><a href="{{ entity.page }}" target="_blank">{{ entity.page }}</a></td>
       <td>{{ entity.country }}</td>
       <td>
         {% if is_granted('VIEW', entity) %}

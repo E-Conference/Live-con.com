@@ -14,8 +14,6 @@ class ConfEventRepository extends EntityRepository
 {
   public function filtering($params, $currentConf)
   {
-
-    $entities = array();
     $qb = $this->getAllOrderByStartAtQueryBuilder();
     $qb
       ->where('confevent.conference = :conference_id')
@@ -53,7 +51,6 @@ class ConfEventRepository extends EntityRepository
         ->andWhere('cat.id = :cat_id')
         ->setParameter('cat_id', $params['category']);
     }
-
 
     $query = $qb->getQuery();
 

@@ -63,7 +63,6 @@ class PaperController extends Controller
    */
   public function filterAction(Request $request)
   {
-
     $em = $this->getDoctrine()->getManager();
 
     $conf = $this->getUser()->getCurrentConf();
@@ -98,7 +97,6 @@ class PaperController extends Controller
         )
       );
     }
-
   }
 
   /**

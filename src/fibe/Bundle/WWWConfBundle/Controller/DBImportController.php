@@ -64,10 +64,6 @@ class DBImportController extends Controller
       ->getRepository('fibeWWWConfBundle:Category')
       ->findOneBy(array('name' => 'TalkEvent'));
 
-    $defaultCategory = $this->getDoctrine()
-      ->getRepository('fibeWWWConfBundle:Category')
-      ->findOneBy(array('name' => 'TalkEvent'));
-
     //categories color.
     $colorArray = array(
       'lime',
@@ -84,7 +80,6 @@ class DBImportController extends Controller
       'purple',
       'seaGreen'
     );
-
 
     //////////////////////  topics  //////////////////////
     if (isset($JSONFile['topics']))
@@ -274,7 +269,6 @@ class DBImportController extends Controller
     if (isset($JSONFile['categories']))
     {
       $entities = $JSONFile['categories'];
-      $j = 0;
       for ($i = 0; $i < count($entities); $i++)
       {
         $current = $entities[$i];
@@ -420,7 +414,6 @@ class DBImportController extends Controller
 
   private function doEvent($entity, $data, $isMainConfEvent)
   {
-
     foreach ($data as $setter => $value)
     {
       if ($setter == "setStartAt" || $setter == "setEndAt")
@@ -495,7 +488,6 @@ class DBImportController extends Controller
         }
         if ($setter == "addChair")
         {
-
           $setter = "addRole";
           foreach ($value as $chair)
           {
@@ -510,7 +502,6 @@ class DBImportController extends Controller
         }
         else if ($setter == "addPresenter")
         {
-
           $setter = "addRole";
           foreach ($value as $presenter)
           {

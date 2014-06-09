@@ -67,9 +67,7 @@ class ScheduleController extends Controller
    */
   public function getEventsAction(Request $request)
   {
-
     //Authorization Verification conference sched manager
-    $user = $this->getUser();
     if ($this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'WwwConf') == null)
     {
       throw new AccessDeniedException('Action not authorized !');
@@ -86,7 +84,7 @@ class ScheduleController extends Controller
     $conf = $this->getUser()->getCurrentConf();
     $mainConfEvent = $conf->getMainConfEvent();
 
-
+    $event = null;
     if ($methodParam == "add")
     {
       $event = new Event();

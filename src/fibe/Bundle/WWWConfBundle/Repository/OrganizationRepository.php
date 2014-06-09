@@ -128,8 +128,6 @@ class OrganizationRepository extends EntityRepository
    */
   public function filtering($params, $currentConf)
   {
-
-    $entities = array();
     $qb = $this->createQueryBuilder('org');
     $qb
       ->where('org.conference = :conference_id')

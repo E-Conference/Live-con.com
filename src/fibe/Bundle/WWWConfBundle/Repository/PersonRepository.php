@@ -52,8 +52,6 @@ class PersonRepository extends EntityRepository
    */
   public function filtering($params, $currentConf)
   {
-
-    $entities = array();
     $qb = $this->createQueryBuilder('pers');
     $qb
       ->where('pers.conference = :conference_id')
