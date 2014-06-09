@@ -35,7 +35,7 @@ class ExportController extends Controller
         'export_format',
         'choice',
         array(
-          'choices' => array('xml' => 'SWC', 'csv' => 'CSV'),
+          'choices'  => array('xml' => 'SWC', 'csv' => 'CSV'),
           'required' => true,
         )
       )
@@ -45,7 +45,7 @@ class ExportController extends Controller
     $user = $this->getUser();
 
     return array(
-      'wwwConf' => $wwwConf,
+      'wwwConf'     => $wwwConf,
       'export_form' => $export_form->createView()
     );
   }
@@ -66,7 +66,7 @@ class ExportController extends Controller
         'export_format',
         'choice',
         array(
-          'choices' => array('xml' => 'SWC', 'csv' => 'CSV'),
+          'choices'  => array('xml' => 'SWC', 'csv' => 'CSV'),
           'required' => true,
         )
       )
@@ -76,22 +76,22 @@ class ExportController extends Controller
     if ($export_form->isValid())
     {
       $format = $export_form["export_format"]->getData();
-      
+
       $conference = $this->getUser()->getCurrentConf();
       $conferenceArr = new \Doctrine\Common\Collections\ArrayCollection();
       $conferenceArr->add($conference);
 
       $exportManager = $this->get('idci_exporter.manager');
-      if("xml" == $format)
+      if ("xml" == $format)
       {
         //override export function to override buildHeader / Footer in order to remove the <entities> wrapper tag
         $export = ExportFactory::getInstance(
-            $format,
-            array()
+          $format,
+          array()
         );
-        $export->setContent('<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL); 
+        $export->setContent('<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL);
         $transformer = $exportManager->guessTransformer($conference, $format);
-        $export->addContent($transformer->transform($conference, $format)); 
+        $export->addContent($transformer->transform($conference, $format));
       }
       else
       {
@@ -103,8 +103,10 @@ class ExportController extends Controller
       $response = new Response($export->getContent());
       $response->headers->set('Content-Type', 'text/' . $format);
       $response->headers->set('Content-Disposition', 'attachment;filename=' . $filename);
+
       return $response;
     }
+
     return $this->redirect($this->generateUrl('externalization_export_index'));
 
   }
@@ -112,11 +114,14 @@ class ExportController extends Controller
   function cleanParams($params)
   {
     $clean = array();
-    foreach($params as $k => $v) {
-      if($v != '') {
+    foreach ($params as $k => $v)
+    {
+      if ($v != '')
+      {
         $clean[$k] = $v;
       }
-    } 
+    }
+
     return $clean;
   }
 }
