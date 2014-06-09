@@ -23,23 +23,23 @@ class ACLEntityHelper extends ACLHelper
 
   /** @const */
   public static $ACLEntityNameArray = array(
-    'WwwConf' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
-    'Team' => 'fibe\\SecurityBundle\\Entity',
-    'MobileAppConfig' => 'fibe\\MobileAppBundle\\Entity',
-    'Module' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
-    'ConfEvent' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
-    'Location' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
-    'Paper' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
-    'Person' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
-    'Role' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
-    'Organization' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
-    'Topic' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
-    'Sponsor' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
+    'WwwConf'              => 'fibe\\Bundle\\WWWConfBundle\\Entity',
+    'Team'                 => 'fibe\\SecurityBundle\\Entity',
+    'MobileAppConfig'      => 'fibe\\MobileAppBundle\\Entity',
+    'Module'               => 'fibe\\Bundle\\WWWConfBundle\\Entity',
+    'ConfEvent'            => 'fibe\\Bundle\\WWWConfBundle\\Entity',
+    'Location'             => 'fibe\\Bundle\\WWWConfBundle\\Entity',
+    'Paper'                => 'fibe\\Bundle\\WWWConfBundle\\Entity',
+    'Person'               => 'fibe\\Bundle\\WWWConfBundle\\Entity',
+    'Role'                 => 'fibe\\Bundle\\WWWConfBundle\\Entity',
+    'Organization'         => 'fibe\\Bundle\\WWWConfBundle\\Entity',
+    'Topic'                => 'fibe\\Bundle\\WWWConfBundle\\Entity',
+    'Sponsor'              => 'fibe\\Bundle\\WWWConfBundle\\Entity',
     'SocialServiceAccount' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
-    'Category' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
-    'Equipment' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
-    'RoleType' => 'fibe\\Bundle\\WWWConfBundle\\Entity',
-    'MobileAppConfig' => 'fibe\\MobileAppBundle\\Entity'
+    'Category'             => 'fibe\\Bundle\\WWWConfBundle\\Entity',
+    'Equipment'            => 'fibe\\Bundle\\WWWConfBundle\\Entity',
+    'RoleType'             => 'fibe\\Bundle\\WWWConfBundle\\Entity',
+    'MobileAppConfig'      => 'fibe\\MobileAppBundle\\Entity'
   );
 
 
@@ -101,11 +101,11 @@ class ACLEntityHelper extends ACLHelper
 
     $entities = $queryBuilder->getQuery()->getResult();
 
-    if("VIEW" == $action && $repositoryName != ACLEntityHelper::LINK_WITH) 
+    if ("VIEW" == $action && $repositoryName != ACLEntityHelper::LINK_WITH)
     {
       return $entities;
     }
-    
+
     $rtn = array();
     //TODO : fix getAllowedEntitiesIds to don't waste time to loop over each entities
     foreach ($entities as $entity)
@@ -121,9 +121,10 @@ class ACLEntityHelper extends ACLHelper
 
 
   public function getACEByRepositoryName($repositoryName, $user = null, $id = null)
-  { 
-    $entity = $this->getEntityInConf($repositoryName, $id);  
-    return $this->getACEByEntity($entity,$user);
+  {
+    $entity = $this->getEntityInConf($repositoryName, $id);
+
+    return $this->getACEByEntity($entity, $user);
   }
 
   /**

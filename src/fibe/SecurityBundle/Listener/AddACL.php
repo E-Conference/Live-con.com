@@ -1,67 +1,80 @@
 <?php
-  namespace fibe\SecurityBundle\Listener;
+namespace fibe\SecurityBundle\Listener;
 
-  use Doctrine\ORM\Event\LifecycleEventArgs; 
-  use Symfony\Component\DependencyInjection\ContainerInterface; 
-  use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-  use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
-  use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity; 
-  use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-  /**
-   * Post persist doctrine listener that add the acl MASTER for the current user 
-   *   also set a right for all user of the team
-   */
-  class AddACL {
-    protected $container;
+use Doctrine\ORM\Event\LifecycleEventArgs;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
+use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
-    public function __construct(ContainerInterface $container)
+/**
+ * Post persist doctrine listener that add the acl MASTER for the current user
+ *   also set a right for all user of the team
+ */
+class AddACL
+{
+  protected $container;
+
+  public function __construct(ContainerInterface $container)
+  {
+    $this->container = $container;
+  }
+
+  public function postPersist(LifecycleEventArgs $args)
+  {
+    // $entityManager = $args->getEntityManager();
+    $entity = $args->getEntity();
+    $token = $this->container->get('security.context')->getToken();
+    if (!isset($token))
     {
-      $this->container = $container;
+      return;
     }
+    $user = $token->getUser();
 
-    public function postPersist(LifecycleEventArgs $args)
+    try
     {
-      // $entityManager = $args->getEntityManager();
-      $entity = $args->getEntity();
-      $token = $this->container->get('security.context')->getToken();
-      if (!isset($token))return;
-      $user = $token->getUser();
+      //check if the entity is managed with ACL
+      $aclHelper = $this->container->get('fibe_security.acl_user_permission_helper');
+      $aclHelper->getClassNameByRepositoryName($this->get_real_class($entity));
+      // creating the ACL
+      $aclProvider = $this->container->get('security.acl.provider');
 
-      try {
-        //check if the entity is managed with ACL 
-        $aclHelper = $this->container->get('fibe_security.acl_user_permission_helper');
-        $aclHelper->getClassNameByRepositoryName($this->get_real_class($entity));
-        // creating the ACL
-        $aclProvider = $this->container->get('security.acl.provider');
+      $objectIdentity = ObjectIdentity::fromDomainObject($entity);
+      $acl = $aclProvider->createAcl($objectIdentity);
 
-        $objectIdentity = ObjectIdentity::fromDomainObject($entity);
-        $acl = $aclProvider->createAcl($objectIdentity);
+      $securityIdentity = UserSecurityIdentity::fromAccount($user);
 
-        $securityIdentity = UserSecurityIdentity::fromAccount($user);
+      // grant owner access
+      $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
+      $aclProvider->updateAcl($acl);
 
-        // grant owner access
-        $acl->insertObjectAce($securityIdentity, MaskBuilder::MASK_OWNER);
-        $aclProvider->updateAcl($acl);
-
-        //share with teamates
-        $teamates = $user->getCurrentConf()->getTeam()->getConfManagers();
-        foreach ($teamates as $teamate)
+      //share with teamates
+      $teamates = $user->getCurrentConf()->getTeam()->getConfManagers();
+      foreach ($teamates as $teamate)
+      {
+        if ($teamate->getId() != $user->getId())
         {
-          if($teamate->getId() != $user->getId())
-          {
-            $aclHelper->createUserACL($teamate,$entity);
-          }
+          $aclHelper->createUserACL($teamate, $entity);
         }
-      } catch(\EntityACLNotRegisteredException $e){
-        // just don't add acl
       }
-    }
-    /**
-     * Obtains an object class name without namespaces
-     */
-    function get_real_class($obj) {
-        $classname = get_class($obj);
-        if ($pos = strrpos($classname, '\\')) return substr($classname, $pos + 1);
-        return $pos;
+    } catch (\EntityACLNotRegisteredException $e)
+    {
+      // just don't add acl
     }
   }
+
+  /**
+   * Obtains an object class name without namespaces
+   */
+  function get_real_class($obj)
+  {
+    $classname = get_class($obj);
+    if ($pos = strrpos($classname, '\\'))
+    {
+      return substr($classname, $pos + 1);
+    }
+
+    return $pos;
+  }
+}

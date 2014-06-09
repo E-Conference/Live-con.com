@@ -67,14 +67,14 @@ class TeamController extends Controller
     );
 
     return array(
-      'team' => $team,
-      'delete_forms' => $delete_forms,
-      'manager_conf_authorizations' => $managerConfAuthorizations,
+      'team'                                => $team,
+      'delete_forms'                        => $delete_forms,
+      'manager_conf_authorizations'         => $managerConfAuthorizations,
       'current_manager_conf_authorizations' => $userConfPermission,
       // 'update_forms'                     => $update_forms,
-      'add_teamate_form' => $addTeamateForm->createView(),
-      'currentConf' => $currentConf,
-      'authorized' => true
+      'add_teamate_form'                    => $addTeamateForm->createView(),
+      'currentConf'                         => $currentConf,
+      'authorized'                          => true
     );
   }
 
@@ -120,6 +120,7 @@ class TeamController extends Controller
         'there was an error adding ' . $teamate->getUsername() . ' to your team!'
       );
     }
+
     return $this->redirect($this->generateUrl('conference_team_index'));
   }
 
@@ -142,8 +143,8 @@ class TeamController extends Controller
     $editForm = $this->createForm(new UserConfPermissionType($this->getUser()), $userConfPermission);
 
     return array(
-      'entity' => $entity,
-      'edit_form' => $editForm->createView(),
+      'entity'     => $entity,
+      'edit_form'  => $editForm->createView(),
       'authorized' => true,
     );
   }

@@ -1,65 +1,70 @@
 <?php
-  namespace fibe\SecurityBundle\Services;
+namespace fibe\SecurityBundle\Services;
 
-  use Symfony\Component\Security\Acl\Dbal\MutableAclProvider;
-  use Symfony\Component\Security\Acl\Permission\MaskBuilder;
+use Symfony\Component\Security\Acl\Dbal\MutableAclProvider;
+use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 
-  // filter-a-list-of-domain-objects-according-to-a-certain-use
-  // http://stackoverflow.com/questions/6621220/how-do-one-use-acl-to-filter-a-list-of-domain-objects-according-to-a-certain-use
-    
+// filter-a-list-of-domain-objects-according-to-a-certain-use
+// http://stackoverflow.com/questions/6621220/how-do-one-use-acl-to-filter-a-list-of-domain-objects-according-to-a-certain-use
 
-  class AclProvider extends MutableAclProvider {
 
-    /**
-     * Get the entities Ids for the className that match the given role & mask
-     * 
-     * @param string $className
-     * @param string $roles
-     * @param integer $mask 
-     * @param bool $asString - Return a comma-delimited string with the ids instead of an array
-     * 
-     * @return bool|array|string - True if its allowed to all entities, false if its not
-     *          allowed, array or string depending on $asString parameter.
-     */
-    public function getAllowedEntitiesIds($className,$mask, array $roles = array(), $asString = true)
+class AclProvider extends MutableAclProvider
+{
+
+  /**
+   * Get the entities Ids for the className that match the given role & mask
+   *
+   * @param string  $className
+   * @param string  $roles
+   * @param integer $mask
+   * @param bool    $asString - Return a comma-delimited string with the ids instead of an array
+   *
+   * @return bool|array|string - True if its allowed to all entities, false if its not
+   *          allowed, array or string depending on $asString parameter.
+   */
+  public function getAllowedEntitiesIds($className, $mask, array $roles = array(), $asString = true)
+  {
+    if (!defined($mask = 'Symfony\Component\Security\Acl\Permission\MaskBuilder::MASK_' . $mask))
     {
-        if (!defined($mask = 'Symfony\Component\Security\Acl\Permission\MaskBuilder::MASK_'.$mask)) {
-            throw new \RuntimeException('There was no code defined for mask '.$mask.'!');
-        }
-        $mask =  constant($mask); 
+      throw new \RuntimeException('There was no code defined for mask ' . $mask . '!');
+    }
+    $mask = constant($mask);
 
-        // Check for class-level global permission (its a very similar query to the one
-        // posted above
-        // If there is a class-level grant permission, then do not query object-level
-        // if ($this->_maskMatchesRoleForClass($className, $roles, $requiredMask)) {
-        //     return true;
-        // }         
+    // Check for class-level global permission (its a very similar query to the one
+    // posted above
+    // If there is a class-level grant permission, then do not query object-level
+    // if ($this->_maskMatchesRoleForClass($className, $roles, $requiredMask)) {
+    //     return true;
+    // }
 
-        // Query the database for ACE's matching the mask for the given roles
-        $sql = $this->_getEntitiesIdsMatchingRoleMaskSql($className, $roles, $mask);
-        $ids = $this->connection->executeQuery($sql)->fetchAll(\PDO::FETCH_COLUMN);
+    // Query the database for ACE's matching the mask for the given roles
+    $sql = $this->_getEntitiesIdsMatchingRoleMaskSql($className, $roles, $mask);
+    $ids = $this->connection->executeQuery($sql)->fetchAll(\PDO::FETCH_COLUMN);
 
-        // No ACEs found
-        if (!count($ids)) {
-            return false;
-        }
-
-        if ($asString) {
-            return implode(',', $ids);
-        }
-
-        return $ids;
+    // No ACEs found
+    if (!count($ids))
+    {
+      return false;
     }
 
-    private function _getEntitiesIdsMatchingRoleMaskSql($className, array $roles,$mask)
-    { 
-        $rolesSql = array();
-        foreach($roles as $role) {
-            $rolesSql[] = 's.identifier = ' . $this->connection->quote($role);
-        }
-        $rolesSql = count($rolesSql) > 0 ? 'AND (' . implode(' OR ', $rolesSql) . ')' : '';
+    if ($asString)
+    {
+      return implode(',', $ids);
+    }
 
-        $sql = <<<SELECTCLAUSE
+    return $ids;
+  }
+
+  private function _getEntitiesIdsMatchingRoleMaskSql($className, array $roles, $mask)
+  {
+    $rolesSql = array();
+    foreach ($roles as $role)
+    {
+      $rolesSql[] = 's.identifier = ' . $this->connection->quote($role);
+    }
+    $rolesSql = count($rolesSql) > 0 ? 'AND (' . implode(' OR ', $rolesSql) . ')' : '';
+
+    $sql = <<<SELECTCLAUSE
         SELECT 
             oid.object_identifier
         FROM 
@@ -83,10 +88,10 @@
             oid.object_identifier    
 SELECTCLAUSE;
 
-        return sprintf(
-            $sql,
-            $mask,
-            $this->connection->quote($className)
-        );
-    }
+    return sprintf(
+      $sql,
+      $mask,
+      $this->connection->quote($className)
+    );
   }
+}
