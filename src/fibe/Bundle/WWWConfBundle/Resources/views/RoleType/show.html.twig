@@ -3,32 +3,32 @@
 {% block title %}Role detail{% endblock title %}
 
 {% block centerPanel %}
-    {{ parent() }}
-<h1>RoleType</h1>
-<div class="row">
-  <div class="col-lg-1"></div>
-  <div class="col-lg-6">
-    <h2> {{ entity.name }}</h2>
-    <table class="table table-hover">
-      <tbody>
-      <tr>
-        <th>Id</th>
-        <td>{{ entity.id }}</td>
-      </tr>
-      <tr>
-        <th>name</th>
-        <td>{{ entity.name }}</td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+  {{ parent() }}
+  <h1>RoleType</h1>
   <div class="row">
-    <div class="col-lg-6"></div>
-    <div class="col-lg-2 btn-group">
-      <a type="button" href="{{ path('schedule_roletype') }}" class="btn btn-warning">
-        <i class="fa fa-list"></i>
-      </a>
-      <!--   <a href="{{ path('schedule_roletype_edit', { 'id': entity.id }) }}" class="btn btn-success edit">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-6">
+      <h2> {{ entity.name }}</h2>
+      <table class="table table-hover">
+        <tbody>
+        <tr>
+          <th>Id</th>
+          <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+          <th>name</th>
+          <td>{{ entity.name }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="row">
+      <div class="col-lg-6"></div>
+      <div class="col-lg-2 btn-group">
+        <a type="button" href="{{ path('schedule_roletype') }}" class="btn btn-warning">
+          <i class="fa fa-list"></i>
+        </a>
+        <!--   <a href="{{ path('schedule_roletype_edit', { 'id': entity.id }) }}" class="btn btn-success edit">
                          <i class="fa fa-pencil"></i>
                    </a>
                    <form action="{{ path('schedule_roletype_delete', { 'id': entity.id }) }}" method="post">
@@ -38,6 +38,7 @@
                         <i class="fa fa-trash-o"></i>
                     </button>
                   </form> -->
+      </div>
     </div>
   </div>
-  {% endblock %}
+{% endblock %}

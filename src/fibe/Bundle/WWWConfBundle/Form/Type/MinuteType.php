@@ -40,5 +40,5 @@ class MinuteType extends AbstractType
     // public function getName()
     // {
     //     return 'minute';
-    }
+    // }
 }

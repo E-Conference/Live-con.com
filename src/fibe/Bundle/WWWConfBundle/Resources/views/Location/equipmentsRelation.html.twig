@@ -8,14 +8,14 @@
 
 {% endfor %}
 
-</br>
+<br/>
 <!-- Select box equipment -->
 <select id="equipment_list" class="form-control">
   {% for equipment in equipments %}
     <option value="{{ equipment.id }}">{{ equipment.label }}</option>
   {% endfor %}
 </select>
-<br>
+<br/>
 <button class="btn btn-small btn-info" id="add_equipment">
   <i class="fa fa-plus"></i>
 </button>
