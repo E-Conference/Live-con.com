@@ -1,29 +1,29 @@
 <?php
 
-  namespace fibe\UserDataBundle\Controller;
+namespace fibe\UserDataBundle\Controller;
 
-  use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-  use fibe\Bundle\WWWConfBundle\Entity\Paper;
-  use fibe\Bundle\WWWConfBundle\Form\PaperType;
+use fibe\Bundle\WWWConfBundle\Entity\Paper;
+use fibe\Bundle\WWWConfBundle\Form\PaperType;
 
+/**
+ * user data controller.
+ *
+ * @Route("/UserData")
+ */
+class UserDataController extends Controller
+{
   /**
-   * user data controller.
-   *
-   * @Route("/UserData")
+   * @Route("/",name="userData_index")
+   * @Template()
    */
-  class UserDataController extends Controller
+  public function indexAction()
   {
-    /**
-     * @Route("/",name="userData_index")
-     * @Template()
-     */
-    public function indexAction()
-    {
-      return array();
-    }
-
-
+    return array();
   }
+
+
+}
