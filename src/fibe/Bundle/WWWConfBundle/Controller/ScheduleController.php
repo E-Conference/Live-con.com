@@ -53,10 +53,10 @@ class ScheduleController extends Controller
 
     return array(
       'currentConf' => $conf,
-      'authorized' => isset($granted), // Si il existe une conference
-      'categories' => $categories,
-      'locations' => $locations,
-      'topics' => $topics,
+      'authorized'  => isset($granted), // Si il existe une conference
+      'categories'  => $categories,
+      'locations'   => $locations,
+      'topics'      => $topics,
     );
   }
 
@@ -99,7 +99,7 @@ class ScheduleController extends Controller
     //resource(s)
     $resConfig = array(
       "location" => array(
-        "name" => "Location",
+        "name"       => "Location",
         "methodName" => "setLocation",
       )
     );
@@ -163,7 +163,7 @@ class ScheduleController extends Controller
       $em->persist($mainConfEvent);
       $JSONArray['mainConfEvent'] = array(
         "start" => $mainConfEvent->getStartAt()->format(\DateTime::ISO8601),
-        "end" => $mainConfEvent->getEndAt()->format(\DateTime::ISO8601)
+        "end"   => $mainConfEvent->getEndAt()->format(\DateTime::ISO8601)
       );
     }
     $em->flush();
@@ -226,10 +226,10 @@ class ScheduleController extends Controller
         'papers',
         'entity',
         array(
-          'class' => 'fibeWWWConfBundle:Paper',
+          'class'    => 'fibeWWWConfBundle:Paper',
           'property' => 'title',
           'required' => false,
-          'choices' => $papersForSelect,
+          'choices'  => $papersForSelect,
           'multiple' => false
         )
       )
@@ -241,10 +241,10 @@ class ScheduleController extends Controller
         'topics',
         'entity',
         array(
-          'class' => 'fibeWWWConfBundle:Topic',
+          'class'    => 'fibeWWWConfBundle:Topic',
           'required' => false,
           'property' => 'name',
-          'choices' => $topicsForSelect,
+          'choices'  => $topicsForSelect,
           'multiple' => false
         )
       )
@@ -255,24 +255,24 @@ class ScheduleController extends Controller
     return $this->render(
       'fibeWWWConfBundle:Schedule:scheduleEdit.html.twig',
       array(
-        'entity' => $entity,
-        'edit_form' => $editForm->createView(),
-        'role_form' => $roleForm->createView(),
-        'paper_form' => $form_paper->createView(),
-        'topic_form' => $form_topic->createView(),
+        'entity'      => $entity,
+        'edit_form'   => $editForm->createView(),
+        'role_form'   => $roleForm->createView(),
+        'paper_form'  => $form_paper->createView(),
+        'topic_form'  => $form_topic->createView(),
         'delete_form' => $deleteForm->createView(),
-        'authorized' => isset($granted),
+        'authorized'  => isset($granted),
       )
     );
 
   }
 
 
-/* @TODO REFACTO : not used, to delete
-//  /**
-//   * ajax version of event edit controller
-//   * @Route("/{id}/updateEvents", name="schedule_view_event_update")
-//   */
+  /* @TODO REFACTO : not used, to delete
+   * //  /**
+   * //   * ajax version of event edit controller
+   * //   * @Route("/{id}/updateEvents", name="schedule_view_event_update")
+   * //   */
 //  public function scheduleUpdateAction(Request $request, $id)
 //  {
 //    $granted = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'WwwConf');
