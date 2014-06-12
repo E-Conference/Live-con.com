@@ -8,6 +8,7 @@
   use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity; 
   use Symfony\Component\Security\Acl\Permission\MaskBuilder;
   use fibe\SecurityBundle\Services\ACLEntityHelper;
+  use fibe\SecurityBundle\Services\EntityACLNotRegisteredException;
   /**
    * Post persist doctrine listener that add the acl MASTER for the current user 
    *   also set a right for all user of the team
@@ -57,7 +58,7 @@
             }
           }
         }
-      } catch(\EntityACLNotRegisteredException $e){
+      } catch(EntityACLNotRegisteredException $e){
         // just don't add acl
       }
     }

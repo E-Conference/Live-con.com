@@ -19,10 +19,19 @@
    */
   class ProfileController extends BaseController
   {
-
+ 
+    /**
+     * Show the user
+     * @Template()
+     */
     public function showAction()
-    { 
-        return new RedirectResponse($this->container->get('router')->generate('fos_user_profile_edit'));
+    {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        if (!is_object($user) || !$user instanceof UserInterface) {
+            throw new AccessDeniedException('This user does not have access to this section.');
+        }
+        return array('user' => $user);
+        // return $this->container->get('templating')->renderResponse('FOSUserBundle:Profile:show.html.'.$this->container->getParameter('fos_user.template.engine'), array('user' => $user));
     }
 
     /**

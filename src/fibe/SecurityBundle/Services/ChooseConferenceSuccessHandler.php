@@ -7,7 +7,7 @@
       Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface,
       Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-  
+  // TODO : remove
   class ChooseConferenceSuccessHandler implements AuthenticationSuccessHandlerInterface
   {
     protected $router;

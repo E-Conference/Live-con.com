@@ -33,7 +33,8 @@ class AppKernel extends Kernel
       new fibe\DocumentationBundle\DocumentationBundle(),
       new FOS\UserBundle\FOSUserBundle(),
       new Gregwar\CaptchaBundle\GregwarCaptchaBundle(),
-      new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle()
+      new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle(),
+      new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
     );
 
     if (in_array($this->getEnvironment(), array('dev', 'test'))) {

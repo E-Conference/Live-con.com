@@ -31,7 +31,7 @@
               src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon"/></a>
 
         <div style="color:#811B06"><strong>{{ error }}</strong></div>
-        <form action="{{ path('login_check') }}" method="post">
+        <form id="login-form" action="{{ path('login_check') }}" method="post">
           <label for="username"><p>Login :</p></label>
           <input type="text" id="username" name="_username" value="{{ last_username }}"/>
 
@@ -43,11 +43,16 @@
 
           <br/>
           <input class="btn btn-success" id="submitButton" type="submit" value="Connexion"/>
-        </form>
+        </form> 
+
+        {% for owner in hwi_oauth_resource_owners() %}
+          <a class="btn btn-success btn-connect btn-connect-{{ owner }}" href="{{ hwi_oauth_login_url(owner) }}">
+            Connect with {{ owner | trans({}, 'HWIOAuthBundle') }}
+          </a> 
+        {% endfor %}
       </div>
     </div>
   </div>
-
 
 
 

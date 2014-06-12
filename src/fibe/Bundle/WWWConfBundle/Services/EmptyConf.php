@@ -170,19 +170,36 @@
       {
         $conference->removePerson($person);
         $em->remove($person);
+      } 
+      // module
+      $module = $conference->getModule();
+      $conference->setModule(null);
+      if($module)
+      { 
+        $em->flush();
+        $em->remove($module);
+        $em->flush();
       }
-
-      //authorizations
-      $authorizations = $conference->getAuthorizations();
-      foreach ($authorizations as $authorization)
-      {
-        $conference->removeAuthorization($authorization);
-        $em->remove($authorization);
+ 
+      //appConfig
+      $appConfig = $conference->getAppConfig();
+      $conference->setAppConfig(null);
+      if($appConfig)
+      { 
+        $em->flush();
+        $em->remove($appConfig);
+        $em->flush();
       }
 
       //team
       $team = $conference->getTeam();
-      $conference->setTeam(null);
+      if($team)
+      { 
+        $conference->setTeam(null);
+        $em->flush();
+        $em->remove($team);
+        $em->flush();
+      }
 
       //Remove link between manager and conference
       $managers = $conference->getConfManagers();
@@ -197,9 +214,7 @@
         $conference->setMainConfEvent(null);
         $em->flush();
         $em->remove($mainConfEvent);
-      }
-      $em->flush();
-      $em->remove($team);
+      } 
       $em->flush();
 
       // $em->persist($conference);

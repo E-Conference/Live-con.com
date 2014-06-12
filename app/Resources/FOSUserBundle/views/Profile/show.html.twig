@@ -1,0 +1,42 @@
+{% extends 'fibeSecurityBundle::base.html.twig' %}
+
+{% block title %}Profile{% endblock title %}
+
+{% block centerPanel %}
+
+  <div class="row page-top-header ">
+    <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
+      <span> Profile </span>
+    </div>
+
+    <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+    </div>
+    <div class="page-btn-list col-xs-5  col-sm-4 col-md-3 col-lg-2">
+         <a type="button" href="{{ path('fos_user_profile_edit') }}" class="btn btn-warning" title="Go back to the list">
+                <i class="fa fa-edit"></i>
+          </a>
+    </div>
+  </div> 
+  <div class="row page-content">
+		<div class="col-sm-4">
+	    {% if user.picture is defined and user.picture is not empty %}
+	      <img style="max-width: 100%;max-width: 100%;" alt="profile picture of {{ user.name }}" src="{{ user.picture }}" />
+	    {% endif %}
+		</div>
+	  <div class="col-sm-8">
+		  <div class="panel panel-default">
+		    <div class="panel-heading">{{ user.name }}</div> 
+		      <ul class="list-group">
+		        <li class="list-group-item"><a href="mailto:{{ user.email }}?Subject=[Live-con.com] message from {{ app.user.name}}" target="_top">{{ user.email }}</a></li>
+		      </ul>
+		  </div>  
+	  </div>  
+  </div>
+
+{% endblock %}
+
+
+
+
+
+ 

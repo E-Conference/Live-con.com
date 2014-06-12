@@ -125,12 +125,13 @@ function Importer()
             return;
         } 
 
+        //processing steps
         doParseConference(); 
         doMappings();
         doFkProcessing();
         doStartAtLess();
         
-        // SEND TO IMPORT PHP SCRIPT 
+        // delete uri 
         for (var i=0;i<objects.locations.length;i++)
         
         {
@@ -463,7 +464,6 @@ function Importer()
                     //try to get children date
                     var childrenDate = getChildrenDate(i);
                     if(childrenDate)
-                    
                     {
                         event['setEndAt']   = childrenDate.end; 
                         event['setStartAt'] = childrenDate.start; 

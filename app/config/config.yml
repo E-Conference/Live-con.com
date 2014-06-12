@@ -3,6 +3,29 @@ imports:
     - { resource: security.yml }
     - { resource: @fibeWWWConfBundle/Resources/config/config.yml}
     - { resource: @fibeWWWConfBundle/Resources/config/services.yml}
+
+hwi_oauth:
+    #this is my custom user provider, created from FOSUBUserProvider - will manage the 
+    #automatic user registration on your site, with data from the provider (facebook. google, etc.)
+    #and also, the connecting part (get the token and the user_id)
+    connect:
+        account_connector: my_user_provider
+    # name of the firewall in which this bundle is active, this setting MUST be set
+    firewall_name: main
+    fosub:
+        username_iterations: 30
+        properties:
+            # these properties will be used/redefined later in the custom FOSUBUserProvider service.
+            google: google_id
+    resource_owners:
+        google:
+            type:                google
+            client_id:           381296840409-ajut55prn2ahl0n8hakpufia7pbc5ovd.apps.googleusercontent.com
+            client_secret:       EHb_tRcleAqL5siGjovNuKPy
+            scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
+            # options:
+            #     access_type:     offline
+
 framework:
     #esi:             ~
     translator:      { fallback: %locale% }

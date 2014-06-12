@@ -255,7 +255,7 @@ class ACLEntityHelper extends ACLHelper
     if (!isset(self::$ACLEntityNameArray[$class->getShortName()]))
     {
       throw new EntityACLNotRegisteredException(
-        "Can't get ACL for Entity [" . $repositoryName . "] as it's not registered in ACLEntityHelper::\$ACLEntityNameArray"
+        "Can't get ACL for Entity [" . $className . "] as it's not registered in ACLEntityHelper::\$ACLEntityNameArray"
       );
     }
 

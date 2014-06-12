@@ -6,7 +6,6 @@
   use Doctrine\ORM\Mapping as ORM;
 
   use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
-  use fibe\SecurityBundle\Entity\Authorization;
   use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
   /**
@@ -24,6 +23,13 @@
     protected $id;
 
     /**
+     *
+     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf")
+     * @ORM\JoinColumn(name="currentConf", referencedColumnName="id")
+     */
+    protected $currentConf; 
+
+    /**
      * owner of those conferences
      *  
      * @ORM\ManyToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="confManagers", cascade={"persist"})
@@ -36,22 +42,29 @@
     /**
      *  invited in a conf
      *  
-     * @ORM\ManyToMany(targetEntity="Team", inversedBy="confManagers", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Team", inversedBy="confManagers", cascade={"persist","remove"})
      * @ORM\JoinTable(name="manager_team",
-     *     joinColumns={@ORM\JoinColumn(name="manager_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="team_id", referencedColumnName="id")})
+     *     joinColumns={@ORM\JoinColumn(name="manager_id", referencedColumnName="id", onDelete="Cascade")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="Cascade")})
      */
     protected $teams;
+ 
+ 
+    /** @ORM\Column(name="name", type="string", length=255, nullable=true) */
+    protected $name;
+ 
+    /** @ORM\Column(name="picture", type="string", length=255, nullable=true) */
+    protected $picture;
 
-    /**
-     *
-     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf")
-     * @ORM\JoinColumn(name="currentConf", referencedColumnName="id")
-     */
-    protected $currentConf; 
+ 
+    /** @ORM\Column(name="google_id", type="string", length=255, nullable=true) */
+    protected $google_id;
+ 
+    /** @ORM\Column(name="google_access_token", type="string", length=255, nullable=true) */
+    protected $google_access_token;
+
 
     protected $captcha;
-
 
     /**
      * Constructor
@@ -180,7 +193,80 @@
       }
 
       return false;
+    }  
+
+    public function getName()
+    {
+      return $this->name;
     }
 
+
+    public function setName( $name )
+    {
+      $this->name = $name;
+
+      return $this;
+    }
+
+    public function getPicture()
+    {
+      return $this->picture;
+    }
+
+
+    public function setPicture( $picture )
+    {
+      $this->picture = $picture;
+
+      return $this;
+    }
+
+    /**
+     * Get conferences
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGoogleId()
+    {
+      return $this->google_id;
+    }
+
+    /**
+     * Set currentConf
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $currentConf
+     *
+     * @return User
+     */
+    public function setGoogleId( $googleId )
+    {
+      $this->google_id = $googleId;
+
+      return $this;
+    }
+
+    /**
+     * Get conferences
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGoogleAccessToken()
+    {
+      return $this->google_access_token;
+    }
+
+    /**
+     * Set currentConf
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $currentConf
+     *
+     * @return User
+     */
+    public function setGoogleAccessToken( $googleAccessToken )
+    {
+      $this->google_access_token = $googleAccessToken;
+
+      return $this;
+    }
 
   }

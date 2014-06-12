@@ -40,7 +40,11 @@
 
     public function supportsClass($class)
     { 
-      return $this->getACLEntityInfo($class);
+      try {
+        return $this->getACLEntityInfo($class);
+      } catch (\RunTimeException $e) {
+        return false;
+      }
     }
  
     public function vote(TokenInterface $token, $entity, array $attributes)
