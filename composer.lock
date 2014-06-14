@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9ecf68c85264ed744a143e9296d8198f",
+    "hash": "1a5bc6b0e41856af68bb1f18da5a1f58",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -636,18 +636,117 @@
             "time": "2014-06-07 13:12:09"
         },
         {
+            "name": "endroid/twitter",
+            "version": "1.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/endroid/Twitter.git",
+                "reference": "d01f45d9740787125ad73ec554c0aad8ae49d898"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/endroid/Twitter/zipball/d01f45d9740787125ad73ec554c0aad8ae49d898",
+                "reference": "d01f45d9740787125ad73ec554c0aad8ae49d898",
+                "shasum": ""
+            },
+            "require": {
+                "kriswallsmith/buzz": "~0.3",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Endroid": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeroen van den Enden",
+                    "email": "info@endroid.nl",
+                    "homepage": "http://endroid.nl/"
+                }
+            ],
+            "description": "Endroid Twitter",
+            "homepage": "https://github.com/endroid/Twitter",
+            "keywords": [
+                "endroid",
+                "twitter"
+            ],
+            "time": "2013-12-18 23:56:18"
+        },
+        {
+            "name": "endroid/twitter-bundle",
+            "version": "dev-master",
+            "target-dir": "Endroid/Bundle/TwitterBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/endroid/EndroidTwitterBundle.git",
+                "reference": "4f6ab5d9c7d3f5ff016d3978d466b379dd360c18"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/endroid/EndroidTwitterBundle/zipball/4f6ab5d9c7d3f5ff016d3978d466b379dd360c18",
+                "reference": "4f6ab5d9c7d3f5ff016d3978d466b379dd360c18",
+                "shasum": ""
+            },
+            "require": {
+                "endroid/twitter": "~1.0",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Endroid\\Bundle\\TwitterBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeroen van den Enden",
+                    "email": "info@endroid.nl",
+                    "homepage": "http://endroid.nl/"
+                }
+            ],
+            "description": "Endroid Twitter Bundle for Symfony",
+            "homepage": "https://github.com/endroid/EndroidTwitterBundle",
+            "keywords": [
+                "bundle",
+                "endroid",
+                "symfony",
+                "twitter"
+            ],
+            "time": "2013-12-18 23:56:46"
+        },
+        {
             "name": "friendsofsymfony/user-bundle",
-            "version": "v1.3.3",
+            "version": "v1.3.4",
             "target-dir": "FOS/UserBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "0fc044447ca41acc73d424a6a90d1b9f7fa25d7b"
+                "reference": "2deeca89551c28ae27c19bad36861d732e69217e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/0fc044447ca41acc73d424a6a90d1b9f7fa25d7b",
-                "reference": "0fc044447ca41acc73d424a6a90d1b9f7fa25d7b",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/2deeca89551c28ae27c19bad36861d732e69217e",
+                "reference": "2deeca89551c28ae27c19bad36861d732e69217e",
                 "shasum": ""
             },
             "require": {
@@ -701,7 +800,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2013-09-23 08:24:12"
+            "time": "2014-06-13 14:51:01"
         },
         {
             "name": "gregwar/captcha",
@@ -1944,16 +2043,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.2.0",
+            "version": "v5.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "043e336b871f17a117f76ef8e190eddfc04c8d48"
+                "reference": "2b9af56cc676c338d52fca4c657e5bdff73bb7af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/043e336b871f17a117f76ef8e190eddfc04c8d48",
-                "reference": "043e336b871f17a117f76ef8e190eddfc04c8d48",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/2b9af56cc676c338d52fca4c657e5bdff73bb7af",
+                "reference": "2b9af56cc676c338d52fca4c657e5bdff73bb7af",
                 "shasum": ""
             },
             "require": {
@@ -1994,7 +2093,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2014-05-08 08:11:19"
+            "time": "2014-06-13 11:44:54"
         },
         {
             "name": "symfony/assetic-bundle",
@@ -2513,7 +2612,8 @@
     "stability-flags": {
         "doctrine/orm": 20,
         "gregwar/captcha-bundle": 20,
-        "hwi/oauth-bundle": 20
+        "hwi/oauth-bundle": 20,
+        "endroid/twitter-bundle": 20
     },
     "platform": {
         "php": ">=5.3.3"

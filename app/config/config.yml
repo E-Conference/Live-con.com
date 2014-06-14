@@ -1,5 +1,6 @@
 imports:
     - { resource: parameters.yml }
+    - { resource: parameters_common.yml }
     - { resource: security.yml }
     - { resource: @fibeWWWConfBundle/Resources/config/config.yml}
     - { resource: @fibeWWWConfBundle/Resources/config/services.yml}
@@ -15,29 +16,8 @@ hwi_oauth:
     fosub:
         username_iterations: 30
         properties:
-            # these properties will be used/redefined later in the custom FOSUBUserProvider service.
-            google: google_id
-            twitter: twitter_id
-    resource_owners:
-        google:
-            type:                google
-            client_id:           381296840409-ajut55prn2ahl0n8hakpufia7pbc5ovd.apps.googleusercontent.com
-            client_secret:       EHb_tRcleAqL5siGjovNuKPy
-            scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
-            # options:
-            #     access_type:     offline
-        twitter:
-            type:                twitter
-            client_id:           lPRWT7tKPwkmiFlu3Y8RC69vs
-            client_secret:       FlbL682NCbFBNcgHPkk5W2NTL1QTqs82lqO4ZWRas0yjQrm87Z
-        facebook:
-            type:                facebook
-            client_id:           302138773286062
-            client_secret:       2ff19b48db1508de43e56be63525d0e4 
-        linkedin:
-            type:                linkedin
-            client_id:           77t2v9vcniqt0s
-            client_secret:       MvFQtxReXq2eS7pB 
+    resource_owners: %social_networks%
+
 
 framework:
     #esi:             ~
@@ -132,6 +112,9 @@ fos_user:
             type: fibe_user_registration
         confirmation:
              enabled:   true # change to true for required email confirmation
+    profile:
+        form:
+            type:  fibe_user_profile
     from_email:
          # Adresse de l'expediteur
          address:      noreply@live-con.com

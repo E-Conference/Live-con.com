@@ -4,6 +4,7 @@ parameters:
     security.acl.dbal.provider.class: fibe\SecurityBundle\Services\AclProvider
     fos_user.registration.confirmation.enabled: true
     my_user_provider.class: fibe\SecurityBundle\Services\FOSUBUserProvider
+    twitter.api_url: "https://api.twitter.com/1.1/"
 
     fibe_security.mailer.random_pwd_email_message.subject:    "Livecon : upgrade your conference"
     fibe_security.mailer.random_pwd_email_message.html_body:  >
@@ -41,6 +42,12 @@ services:
         arguments: [%fos_user.model.user.class%]
         tags:
             - { name: form.type, alias: fibe_user_registration }
+
+    fibe_user.profile.form.type:
+        class: fibe\SecurityBundle\Form\ProfileFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: fibe_user_profile }
 
     fibe_security.select_conference_success_handler:
         class: fibe\SecurityBundle\Services\ChooseConferenceSuccessHandler
@@ -92,8 +99,14 @@ services:
                 random_pwd_email_message:
                     from_email  : "%fos_user.registration.confirmation.from_email%"
                     subject     : "%fibe_security.mailer.random_pwd_email_message.subject%"
-                    html_body    : "%fibe_security.mailer.random_pwd_email_message.html_body%"
-                    text_body    : "%fibe_security.mailer.random_pwd_email_message.text_body%"
+                    html_body   : "%fibe_security.mailer.random_pwd_email_message.html_body%"
+                    text_body   : "%fibe_security.mailer.random_pwd_email_message.text_body%"  
+
+    fibe_security.twitter:
+        class: fibe\SecurityBundle\Services\TwitterAPI
+        arguments: [ %twitter.client_id%, %twitter.client_secret%, %twitter.access_token%, %twitter.access_token_secret%, %twitter.api_url% ]
+
+
 
         # <service id="fos_user.mailer.twig_swift" class="FOS\UserBundle\Mailer\TwigSwiftMailer" public="false">
         #     <argument type="service" id="mailer" />
