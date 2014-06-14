@@ -26,7 +26,15 @@ services:
     my_user_provider:
         class: "%my_user_provider.class%"
         #this is the place where the properties are passed to the UserProvider - see config.yml
-        arguments: [@fos_user.user_manager,{google: google_id},@session,@fibe_security.mailer]
+        arguments: 
+            - @fos_user.user_manager
+            - 
+                google:         google_id
+                twitter:        twitter_id
+                facebook:       facebook_id
+                linkedin:       linkedin_id
+            - @session
+            - @fibe_security.mailer
 
     fibe_user.registration.form.type:
         class: fibe\SecurityBundle\Form\RegistrationFormType

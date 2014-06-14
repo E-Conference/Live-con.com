@@ -22,7 +22,7 @@
         {% else %}
           <a class="btn btn-success btn-lg btn-connect btn-connect-{{ owner }} " href="{{ path('enrich_account', { 'socialService': owner }) }}">
           <i class="fa fa-check"></i>
-            update datas with {{ owner | trans({}, 'HWIOAuthBundle') }}
+            synchronize with {{ owner | trans({}, 'HWIOAuthBundle') }}
         {% endif %}
           </a> 
         {% endfor %}

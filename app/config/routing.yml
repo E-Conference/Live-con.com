@@ -93,3 +93,12 @@ hwi_oauth_redirect:
 
 google_login:
     pattern: /login/check-google
+
+twitter_login:
+    pattern: /login/check-twitter
+
+facebook_login:
+    pattern: /login/check-facebook
+
+linkedin_login:
+    pattern: /login/check-linkedin

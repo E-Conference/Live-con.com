@@ -21,7 +21,6 @@
       $session = $this->get('session');
       $session->set('userId',$this->getUser()->getId());
       $oAuthHelper = $this->get('hwi_oauth.templating.helper.oauth');
-      return new RedirectResponse($oAuthHelper->getLoginUrl($socialService));
-      return $this->redirect($this->generateUrl($oAuthHelper->getLoginUrl($socialService)));
+      return new RedirectResponse($oAuthHelper->getLoginUrl($socialService)); 
     }
   }

@@ -130,9 +130,12 @@ class FOSUBUserProvider extends BaseClass
 
     private function enrichUserDatas($user,$serviceName,$response)
     {
-            $user->setEmail($response->getEmail());
-            $user->setName($response->getRealName());
-            $user->setPicture($response->getProfilePicture());
+            if(!empty($response->getEmail()))
+                $user->setEmail($response->getEmail());
+            if(!empty($response->getRealName()))
+                $user->setName($response->getRealName());
+            if(!empty($response->getProfilePicture()))
+                $user->setPicture($response->getProfilePicture());
     }
 
 

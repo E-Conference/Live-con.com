@@ -54,17 +54,40 @@
     protected $name;
  
     /** @ORM\Column(name="picture", type="string", length=255, nullable=true) */
-    protected $picture;
+    protected $picture; 
 
+    protected $captcha;
+
+
+
+
+    /***************** SOCIAL NETWORK ID*******************/
  
     /** @ORM\Column(name="google_id", type="string", length=255, nullable=true) */
     protected $google_id;
  
     /** @ORM\Column(name="google_access_token", type="string", length=255, nullable=true) */
     protected $google_access_token;
+ 
+    /** @ORM\Column(name="twitter_id", type="string", length=255, nullable=true) */
+    protected $twitter_id;
+ 
+    /** @ORM\Column(name="twitter_access_token", type="string", length=255, nullable=true) */
+    protected $twitter_access_token;
+ 
+    /** @ORM\Column(name="facebook_id", type="string", length=255, nullable=true) */
+    protected $facebook_id;
+ 
+    /** @ORM\Column(name="facebook_access_token", type="string", length=255, nullable=true) */
+    protected $facebook_access_token;
+ 
+    /** @ORM\Column(name="linkedin_id", type="string", length=255, nullable=true) */
+    protected $linkedin_id;
+ 
+    /** @ORM\Column(name="linkedin_access_token", type="string", length=255, nullable=true) */
+    protected $linkedin_access_token;
 
 
-    protected $captcha;
 
     /**
      * Constructor
@@ -221,6 +244,8 @@
       return $this;
     }
 
+    /***************** SOCIAL NETWORK ID *******************/
+
     /**
      * Get conferences
      *
@@ -265,6 +290,150 @@
     public function setGoogleAccessToken( $googleAccessToken )
     {
       $this->google_access_token = $googleAccessToken;
+
+      return $this;
+    }
+
+    /**
+     * Get conferences
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTwitterId()
+    {
+      return $this->twitter_id;
+    }
+
+    /**
+     * Set currentConf
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $currentConf
+     *
+     * @return User
+     */
+    public function setTwitterId( $twitterId )
+    {
+      $this->twitter_id = $twitterId;
+
+      return $this;
+    }
+
+    /**
+     * Get conferences
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTwitterAccessToken()
+    {
+      return $this->twitter_access_token;
+    }
+
+    /**
+     * Set currentConf
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $currentConf
+     *
+     * @return User
+     */
+    public function setTwitterAccessToken( $twitterAccessToken )
+    {
+      $this->twitter_access_token = $twitterAccessToken;
+
+      return $this;
+    }
+
+    /**
+     * Get conferences
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacebookId()
+    {
+      return $this->facebook_id;
+    }
+
+    /**
+     * Set currentConf
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $currentConf
+     *
+     * @return User
+     */
+    public function setFacebookId( $facebookId )
+    {
+      $this->facebook_id = $facebookId;
+
+      return $this;
+    }
+
+    /**
+     * Get conferences
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacebookAccessToken()
+    {
+      return $this->facebook_access_token;
+    }
+
+    /**
+     * Set currentConf
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $currentConf
+     *
+     * @return User
+     */
+    public function setFacebookAccessToken( $facebookAccessToken )
+    {
+      $this->facebook_access_token = $facebookAccessToken;
+
+      return $this;
+    }
+
+    /**
+     * Get conferences
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLinkedinId()
+    {
+      return $this->linkedin_id;
+    }
+
+    /**
+     * Set currentConf
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $currentConf
+     *
+     * @return User
+     */
+    public function setLinkedinId( $linkedinId )
+    {
+      $this->linkedin_id = $linkedinId;
+
+      return $this;
+    }
+
+    /**
+     * Get conferences
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLinkedinAccessToken()
+    {
+      return $this->linkedin_access_token;
+    }
+
+    /**
+     * Set currentConf
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $currentConf
+     *
+     * @return User
+     */
+    public function setLinkedinAccessToken( $linkedinAccessToken )
+    {
+      $this->linkedin_access_token = $linkedinAccessToken;
 
       return $this;
     }

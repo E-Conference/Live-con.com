@@ -46,9 +46,12 @@
         </form> 
 
         {% for owner in hwi_oauth_resource_owners() %}
+            {# can't register with twitter as long as they chose to not return user's mail :( fuck'em #}
+          {% if owner != 'twitter' %}  
           <a class="btn btn-success btn-connect btn-connect-{{ owner }}" href="{{ hwi_oauth_login_url(owner) }}">
             Connect with {{ owner | trans({}, 'HWIOAuthBundle') }}
           </a> 
+          {% endif %}
         {% endfor %}
       </div>
     </div>

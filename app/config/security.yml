@@ -79,7 +79,10 @@ security:
                 # success_handler: fibe_security.select_conference_success_handler
             oauth:
                 resource_owners:
-                    google:             "/login/check-google"
+                    google:         "/login/check-google"
+                    twitter:        "/login/check-twitter"
+                    facebook:       "/login/check-facebook"
+                    linkedin:       "/login/check-linkedin"
                 login_path:        /login
                 failure_path:      /login
                 default_target_path: /Dashboard
