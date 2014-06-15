@@ -204,10 +204,10 @@
       <h1>The <span class="logoname"><b>Live</b>con</span> App</h1>
 
       <div id="app01" class="grid_5">
-        <iframe src="http://dataconf.liris.cnrs.fr/eswc2013/" width="315" height="560"></iframe>
+        <iframe data-src="http://dataconf.liris.cnrs.fr/eswc2013/" width="315" height="560"></iframe>
       </div>
       <div id="app02" class="grid_5">
-        <iframe src="http://dataconf.liris.cnrs.fr/www2012/" width="315" height="560"></iframe>
+        <iframe data-src="http://dataconf.liris.cnrs.fr/www2012/" width="315" height="560"></iframe>
       </div>
     </div>
   </div>
@@ -388,6 +388,18 @@
 
         controller.addTween('#overview05',
             TweenMax.from($('#overview06'), .45, {css: {left: -200, top: 100, opacity: 0}, ease: Cubic.easeoUt}), 0, -75);
+
+        //load apps on scroll        
+        var appLoaded=false;
+        var appsDiv = $('#app');
+        $(document).scroll(function() {
+            if (!appLoaded && appsDiv.offset().top <= $(document).scrollTop()) {
+              appLoaded=true;
+              appsDiv.find("iframe").each(function(){
+                $(this).attr("src",$(this).data("src"))
+              })
+            }
+        });
 
         controller.addTween('#app',
             TweenMax.from($('#app01'), .45, {css: {left: -200, opacity: 0}, ease: Cubic.easeoUt}), 0, 150);
