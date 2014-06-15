@@ -1,4 +1,4 @@
-{% extends 'fibeExternalizationBundle::base.html.twig' %}
+{% extends 'fibeConferenceBundle::base.html.twig' %}
 
 {% block title %}Import data{% endblock title %}
 {% block stylesheets_page %}
@@ -163,20 +163,20 @@
         <script type="text/javascript" src="{{ asset('js/jquery-ui.custom.js') }}"></script>
         <script src="{{ asset('bundles/fibeexternalization/js/moment.min.js') }}" type="text/javascript" ></script> 
 
-        <script src="{{ asset('bundles/fibeexternalization/js/importer/Pager.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeconference/js/importer/Pager.js') }}" type="text/javascript" ></script>
         
-        <script src="{{ asset('bundles/fibeexternalization/js/importer/Mapper.js') }}" type="text/javascript" ></script>
-        <script src="{{ asset('bundles/fibeexternalization/js/importer/Importer.js') }}" type="text/javascript" ></script>
-        <script src="{{ asset('bundles/fibeexternalization/js/importer/dbMapping/jsonModel.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeconference/js/importer/Mapper.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeconference/js/importer/Importer.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeconference/js/importer/dbMapping/jsonModel.js') }}" type="text/javascript" ></script>
 
-        <script src="{{ asset('bundles/fibeexternalization/js/importer/xmlImport/xmlMapper.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeconference/js/importer/xmlImport/xmlMapper.js') }}" type="text/javascript" ></script>
         
-        <script src="{{ asset('bundles/fibeexternalization/js/importer/xlsxImport/jszip.js') }}" type="text/javascript" ></script>
-        <script src="{{ asset('bundles/fibeexternalization/js/importer/xlsxImport/xlsx.js') }}" type="text/javascript" ></script>
-        <script src="{{ asset('bundles/fibeexternalization/js/importer/xlsxImport/xlsxMapper.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeconference/js/importer/xlsxImport/jszip.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeconference/js/importer/xlsxImport/xlsx.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeconference/js/importer/xlsxImport/xlsxMapper.js') }}" type="text/javascript" ></script>
 
-        <script src="{{ asset('bundles/fibeexternalization/js/importer/xmlImport/rdf_config.js') }}" type="text/javascript" ></script>
-        <script src="{{ asset('bundles/fibeexternalization/js/importer/xmlImport/ocs_config.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeconference/js/importer/xmlImport/rdf_config.js') }}" type="text/javascript" ></script>
+        <script src="{{ asset('bundles/fibeconference/js/importer/xmlImport/ocs_config.js') }}" type="text/javascript" ></script>
 
         <script src="{{ asset('js/bootstrap-file-input/bootstrap.file-input.js') }}"></script>  
         <script src="{{ asset('js/bootstrap-file-input/file-dropper.js') }}"></script>  
@@ -323,7 +323,7 @@
                 if($("#file-format").val() == "xml"){
                     mapper.setMapper(xmlMapper); 
                 }else{
-                    var worker = new Worker("{{ asset('bundles/fibeexternalization/js/importer/xlsxImport/xlsxWorker.js') }}");
+                    var worker = new Worker("{{ asset('bundles/fibeconference/js/importer/xlsxImport/xlsxWorker.js') }}");
                     xlsxMapper.setWorker(worker);
                     mapper.setMapper(xlsxMapper); 
                 }

@@ -6,12 +6,7 @@ documentation:
 fibe_conference:
     resource: "@fibeConferenceBundle/Controller/"
     type:     annotation
-    prefix:   /
-
-fibe_externalization:
-    resource: "@fibeExternalizationBundle/Controller/"
-    type:     annotation
-    prefix:   /externalization
+    prefix:   / 
 
 fibe_home_page:
     resource: "@fibeHomePageBundle/Controller/"

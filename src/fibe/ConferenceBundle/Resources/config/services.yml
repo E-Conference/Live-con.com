@@ -1,8 +1,6 @@
-
-
 services:
     emptyConf:
-        class:        "fibe\\Bundle\\WWWConfBundle\\Services\\EmptyConf"
+        class:        "fibe\\ConferenceBundle\\Services\\EmptyConf"
 
 idci_exporter:
     entities:
@@ -12,7 +10,6 @@ idci_exporter:
                 xml:
                     transformer:
                         service: "idci_exporter.transformer_twig"
-                        options:
-#                            template_path:
+                        options: 
                             template_name_format: "export.xml.twig"
 

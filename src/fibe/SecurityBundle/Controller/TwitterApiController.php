@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class TwitterApiController extends Controller
 {
@@ -14,7 +15,7 @@ class TwitterApiController extends Controller
      * Passes a request to the Twitter API while adding OAuth headers. This enables
      * you to expose the Twitter API on your own domain.
      *
-     * @Route("{name}.{format}", requirements={"name"=".+", "format"="(json|xml)"})
+     * @Route("/twitter-api/{name}.{format}", requirements={"name"=".+", "format"="(json|xml)"})
      * @Template()
      */
     public function apiAction($name, $format, Request $request)

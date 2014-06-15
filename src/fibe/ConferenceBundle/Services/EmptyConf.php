@@ -1,6 +1,6 @@
 <?php
 
-  namespace fibe\Bundle\WWWConfBundle\Services;
+  namespace fibe\ConferenceBundle\Services;
 
   use fibe\Bundle\WWWConfBundle\Entity\Location;
 

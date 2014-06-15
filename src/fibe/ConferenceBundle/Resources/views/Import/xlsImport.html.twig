@@ -1,4 +1,4 @@
-{% extends 'fibeExternalizationBundle::base.html.twig' %}
+{% extends 'fibeConferenceBundle::base.html.twig' %}
 
 {% block title %}Equipment edit{% endblock title %}
 
@@ -43,8 +43,8 @@
 
  {% block javascripts_page %}
 
-   <script src="{{ asset('bundles/fibeexternalization/js/importer/xls/jszip.js') }}" type="text/javascript"></script>
-   <script src="{{ asset('bundles/fibeexternalization/js/importer/xls/xlsx.js') }}" type="text/javascript"></script>
+   <script src="{{ asset('bundles/fibeconference/js/importer/xls/jszip.js') }}" type="text/javascript"></script>
+   <script src="{{ asset('bundles/fibeconference/js/importer/xls/xlsx.js') }}" type="text/javascript"></script>
 
 
    <script>
@@ -53,7 +53,7 @@
      {
        function xlsxworker(data, cb)
        {
-         var worker = new Worker("{{ asset('bundles/fibeexternalization/js/importer/xls/xlsxworker.js') }}");
+         var worker = new Worker("{{ asset('bundles/fibeconference/js/importer/xls/xlsxworker.js') }}");
          worker.onmessage = function (e)
          {
            switch (e.data.t)
