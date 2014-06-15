@@ -1,6 +1,11 @@
 services:
-    emptyConf:
-        class: fibe\Bundle\WWWConfBundle\Services\EmptyConf
+    # idci_simpleschedule.type.duration:
+    #     class: fibe\Bundle\WWWConfBundle\Form\Type\DurationType
+    #     tags:
+    #         - { name: form.type, alias: duration }
+
+    # emptyConf:
+    #     class: fibe\Bundle\WWWConfBundle\Services\EmptyConf
 
     # idci_simpleschedule.type.year_day:
     #     class: fibe\Bundle\WWWConfBundle\Form\Type\YearDayType
@@ -36,8 +41,3 @@ services:
     #     class: fibe\Bundle\WWWConfBundle\Form\Type\SecondType
     #     tags:
     #         - { name: form.type, alias: second }
-
-    idci_simpleschedule.type.duration:
-        class: fibe\Bundle\WWWConfBundle\Form\Type\DurationType
-        tags:
-            - { name: form.type, alias: duration }

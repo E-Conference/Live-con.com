@@ -4,6 +4,7 @@ imports:
     - { resource: security.yml }
     - { resource: @fibeWWWConfBundle/Resources/config/config.yml}
     - { resource: @fibeWWWConfBundle/Resources/config/services.yml}
+    - { resource: @fibeConferenceBundle/Resources/config/services.yml}
 
 hwi_oauth:
     #this is my custom user provider, created from FOSUBUserProvider - will manage the 

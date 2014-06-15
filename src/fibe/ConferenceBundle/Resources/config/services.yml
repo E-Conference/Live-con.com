@@ -1,6 +1,6 @@
 services:
     emptyConf:
-        class:        "fibe\\ConferenceBundle\\Services\\EmptyConf"
+        class:  fibe\ConferenceBundle\Services\EmptyConf
 
 idci_exporter:
     entities:
