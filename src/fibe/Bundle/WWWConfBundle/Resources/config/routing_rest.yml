@@ -1,0 +1,9 @@
+organization:
+    type: rest
+    resource: fibe\Bundle\WWWConfBundle\Controller\REST\OrganizationRESTController
+    name_prefix: apiREST_
+
+person:
+    type: rest
+    resource: fibe\Bundle\WWWConfBundle\Controller\REST\PersonRESTController
+    name_prefix: apiREST_
