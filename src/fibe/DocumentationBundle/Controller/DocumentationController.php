@@ -1,32 +1,32 @@
 <?php
 
-  namespace fibe\DocumentationBundle\Controller;
+namespace fibe\DocumentationBundle\Controller;
 
-  use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 
+/**
+ * Documentation controller.
+ * @Route("/documentation")
+ */
+class DocumentationController extends Controller
+{
   /**
-   * Documentation controller.
-   * @Route("/documentation")
+   * @Route("/{anchor}", name="documentation")
+   * @Template()
    */
-  class DocumentationController extends Controller
+  public function documentationAction($anchor)
   {
-    /**
-     * @Route("/{anchor}", name="documentation")
-     * @Template()
-     */
-    public function documentationAction($anchor)
-    {
 
 
-      $this->redirect($this->generateUrl('documentation', array('anchor' => $anchor)) . '#' . $anchor);
+    $this->redirect($this->generateUrl('documentation', array('anchor' => $anchor)) . '#' . $anchor);
 
-      /*return $this->render('DocumentationBundle:Documentation:documentation.html.twig', array(
-          'anchor' => $anchor,
-      ));*/
-
-    }
+    /*return $this->render('DocumentationBundle:Documentation:documentation.html.twig', array(
+        'anchor' => $anchor,
+    ));*/
 
   }
+
+}

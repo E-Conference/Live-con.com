@@ -2,6 +2,7 @@
 *.iml
 .idea
 
+#actually not working
 composer.lock
 
 src/fibe/MobileAppBundle/Resources/public/mobileApp/*

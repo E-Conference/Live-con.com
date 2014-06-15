@@ -44,7 +44,8 @@
       {
         $('#sideBar').animate({left: '0px'});
         deployed = true;
-      } else
+      }
+      else
       {
         $('#sideBar').animate({left: '-180px'});
         deployed = false;
@@ -56,13 +57,13 @@
 
   {% for flashMessage in app.session.flashbag.get('info') %}
     <script type="text/javascript">
-      bootstrapAlert("info", "{{ flashMessage }}", "Info : " );
+      bootstrapAlert("info", "{{ flashMessage }}", "Info : ");
     </script>
   {% endfor %}
 
   {% for flashMessage in app.session.flashbag.get('success') %}
     <script type="text/javascript">
-      bootstrapAlert("success", "{{ flashMessage }}", "Success : " );
+      bootstrapAlert("success", "{{ flashMessage }}", "Success : ");
     </script>
   {% endfor %}
 
@@ -70,7 +71,7 @@
     <script type="text/javascript">
       bootstrapAlert("warning", "{{ flashMessage }}", "Error : ");
     </script>
-  {% endfor %} 
+  {% endfor %}
 
   <!-- Hide module not used in the conference -->
   {% if app.user.getCurrentConf().getModule().getPaperModule() == 0 %}
@@ -112,7 +113,7 @@
               <li class="schedule_conference_show col-xs-2 col-sm-2  col-mg-2 col-lg-2"><a
                     href="{{ path('schedule_conference_show') }}" class='ellipsis'><i
                       class="fa  fa-search-plus fa-1x"></i><span> Overview </span></a></li>
-              {% if is_granted('EDIT', app.user.currentConf) %}
+              {% if is_granted('EDIT', app.user.currentConf.module) %}
                 <li class="schedule_conference_module col-xs-2 col-sm-2  col-mg-2 col-lg-2"><a
                       href="{{ path('schedule_conference_module') }}" class='ellipsis'> <i
                         class="fa fa-inbox fa-1x"></i><span> Modules  </span></a></li>
@@ -122,10 +123,12 @@
                       href="{{ path('conference_team_index') }}" class='ellipsis'><i
                         class="fa fa-users fa-1x"></i><span> Team   </span></a></li>
               {% endif %}
-              {% if is_granted('EDIT', app.user.currentConf) %}
+              {% if is_granted('OPERATOR', app.user.currentConf) %}
                 <li class="externalization_import_index col-xs-2 col-sm-2 col-mg-2 col-lg-2"><a
                       href="{{ path('externalization_import_index') }}" class='ellipsis'><i
-                        class="fa fa-cloud-upload fa-1x"></i><span> Import </span></a></li>
+                        class="fa fa-exchange fa-1x"></i><span> Import </span></a></li>
+              {% endif %}
+              {% if is_granted('VIEW', app.user.currentConf) %}
                 <li class="externalization_export_index col-xs-2 col-sm-2 col-mg-2 col-lg-2"><a
                       href="{{ path('externalization_export_index') }}" class='ellipsis'><i
                         class="fa fa-download fa-1x"></i><span> Export </span></a></li>

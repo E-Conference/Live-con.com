@@ -1,8 +1,25 @@
 imports:
     - { resource: parameters.yml }
+    - { resource: parameters_common.yml }
     - { resource: security.yml }
     - { resource: @fibeWWWConfBundle/Resources/config/config.yml}
     - { resource: @fibeWWWConfBundle/Resources/config/services.yml}
+    - { resource: @fibeConferenceBundle/Resources/config/services.yml}
+
+hwi_oauth:
+    #this is my custom user provider, created from FOSUBUserProvider - will manage the 
+    #automatic user registration on your site, with data from the provider (facebook. google, etc.)
+    #and also, the connecting part (get the token and the user_id)
+    connect:
+        account_connector: my_user_provider
+    # name of the firewall in which this bundle is active, this setting MUST be set
+    firewall_name: main
+    fosub:
+        username_iterations: 30
+        properties:
+    resource_owners: %social_networks%
+
+
 framework:
     #esi:             ~
     translator:      { fallback: %locale% }
@@ -96,11 +113,31 @@ fos_user:
             type: fibe_user_registration
         confirmation:
              enabled:   true # change to true for required email confirmation
+    profile:
+        form:
+            type:  fibe_user_profile
     from_email:
          # Adresse de l'expediteur
          address:      noreply@live-con.com
          # Nom de l'expediteur
          sender_name:  Admin Livecon Manager
+
+sensio_framework_extra:
+    view:
+        annotations: false
+    request: { converters: true }
+
+fos_rest:
+    param_fetcher_listener: true
+    body_listener: true
+    body_converter:
+        enabled: true
+        validate: true
+        validation_errors_argument: validationErrors # This is the default value
+    format_listener: true
+    view:
+        view_response_listener: 'force'
+    disable_csrf_role: ROLE_API
 
 
 gregwar_captcha: ~

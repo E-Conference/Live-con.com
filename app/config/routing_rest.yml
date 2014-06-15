@@ -1,0 +1,4 @@
+#app/routing_rest.yml
+Rest_WWWConf : 
+  type : rest
+  resource: "@fibeWWWConfBundle/Resources/config/routing_rest.yml"

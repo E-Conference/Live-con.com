@@ -1,0 +1,41 @@
+
+{% if nbResult is defined %}
+<div id="resultsFound"><h4>{{ nbResult }} results found</h4></div>
+{% endif %}
+<table class="table table-hover .table-responsive records_list">
+    <thead>
+        <tr> 
+            <th>Name</th>
+            <th>Description</th>
+            <th>Color</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in pager.currentPageResults %}
+        <tr>
+            <td>{{ entity.name }}</td>
+
+            <td>{{ entity.description }}</td>
+
+            <td>
+                <div style="width:28px;height:28px;border:1px solid #222;background:{{ entity.color }}" title="{{ entity.color }}">
+                </div>
+            </td>
+            <td>
+                <a class="btn btn-default" href="{{ path('schedule_category_show', { 'id': entity.id }) }}">
+                    <i class="fa fa-eye"></i>
+                </a>
+               
+                {% if is_granted('EDIT', entity) %} 
+                    <a class="btn btn-warning edit" href="{{ path('schedule_category_edit', { 'id': entity.id }) }}">
+                         <i class="fa fa-pencil"></i>
+                    </a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+

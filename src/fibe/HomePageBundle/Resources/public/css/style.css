@@ -853,6 +853,11 @@ outline: none;
 	margin-left: 50px;
 }
 
+#login_page .btn-connect {
+	width: auto;
+	margin: 10px 0px 0px 34px;
+}
+
 #login_page.btn:hover, #login_page.btn:focus, #login_page.btn-success:hover, #login_page.btn-success:focus{
 	border: none;
 	background: #19313b;

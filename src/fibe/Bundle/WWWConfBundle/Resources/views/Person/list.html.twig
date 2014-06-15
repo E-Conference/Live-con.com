@@ -36,15 +36,15 @@
         </td>
       {% endif %}
       <td>
-        {% if is_granted('VIEW', entity) %} 
-        <a class="btn btn-default" href="{{ path('schedule_person_show', { 'id': entity.id }) }}">
-          <i class="fa fa-eye"></i>
-        </a>
-         {% endif %}
-        {% if is_granted('EDIT', entity) %} 
-        <a class="btn btn-warning" href="{{ path('schedule_person_edit', { 'id': entity.id }) }}">
-          <i class="fa fa-pencil"></i>
-        </a>
+        {% if is_granted('VIEW', entity) %}
+          <a class="btn btn-default" href="{{ path('schedule_person_show', { 'id': entity.id }) }}">
+            <i class="fa fa-eye"></i>
+          </a>
+        {% endif %}
+        {% if is_granted('EDIT', entity) %}
+          <a class="btn btn-warning" href="{{ path('schedule_person_edit', { 'id': entity.id }) }}">
+            <i class="fa fa-pencil"></i>
+          </a>
         {% endif %}
       </td>
     </tr>

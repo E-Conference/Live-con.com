@@ -28,7 +28,6 @@
         </div>
       </div>
       <br/>
-
       {% if is_granted('EDIT', conference.mainConfEvent) %}
         <a id="showConfForm" class="btn btn-warning">
           <i class="fa fa-pencil-square-o"></i> Edit conference
@@ -51,7 +50,7 @@
       {% endif %}
     </div>
   </div>
-  
+
   {# <!-- confirm empty Modal -->
   <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
        aria-hidden="true">
@@ -85,17 +84,20 @@
 
 {% block stylesheets_page %}
   <style type="text/css">
-    #conference-edit > * {
+    #conference-edit > *
+    {
       margin-top: 1.5em;
       margin-bottom: 0.35em;
     }
 
-    #toggleConfNameForm {
+    #toggleConfNameForm
+    {
       margin: 2em 1em 0em 0em;
       float: left;
     }
 
-    #confName {
+    #confName
+    {
       padding: 1px;
     }
   </style>
@@ -175,7 +177,10 @@
           //activate  map
           map.on('click', function (e)
           {
-            if (marker)map.removeLayer(marker);
+            if (marker)
+            {
+              map.removeLayer(marker);
+            }
             //                      @TODO : TO REMOVE
             console.log(e.latlng);
             marker = new L.marker(e.latlng).addTo(map);
@@ -237,12 +242,22 @@
     function getMsgUl(dataArray, endString)
     {
       var msg = "";
-      if (dataArray.conference.setAcronym)msg += dataArray.conference.setAcronym;
-      else if (dataArray.conference.setSummary)msg += dataArray.conference.setSummary;
+      if (dataArray.conference.setAcronym)
+      {
+        msg += dataArray.conference.setAcronym;
+      }
+      else if (dataArray.conference.setSummary)
+      {
+        msg += dataArray.conference.setSummary;
+      }
       msg += "<ul>";
       for (var i in dataArray)
+      {
         if (dataArray[i] && dataArray[i].length > 0)
+        {
           msg += "<li>" + dataArray[i].length + " " + i + " " + endString + " !</li>";
+        }
+      }
 
       return msg + "</ul>";
     }

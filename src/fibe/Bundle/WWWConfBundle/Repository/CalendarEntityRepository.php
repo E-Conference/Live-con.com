@@ -1,8 +1,8 @@
 <?php
 
 /**
- * 
- * @author:  Gabriel BONDAZ <gabriel.bondaz@idci-consulting.fr>
+ *
+ * @author :  Gabriel BONDAZ <gabriel.bondaz@idci-consulting.fr>
  * @licence: GPL
  *
  */
@@ -20,297 +20,305 @@ use fibe\Bundle\WWWConfBundle\Entity\Category;
  */
 class CalendarEntityRepository extends EntityRepository
 {
-    /**
-     * getRelatedAvailableCalendarEntitiesQueryBuilder
-     *
-     * @param $entity CalendarEntity
-     * @return QueryBuilder
-     */
-    public function getRelatedAvailableCalendarEntitiesQueryBuilder($entity = null)
+  /**
+   * getRelatedAvailableCalendarEntitiesQueryBuilder
+   *
+   * @param $entity CalendarEntity
+   *
+   * @return QueryBuilder
+   */
+  public function getRelatedAvailableCalendarEntitiesQueryBuilder($entity = null)
+  {
+    $qb = $this->getAllOrderByStartAtQueryBuilder();
+
+    if ($entity)
     {
-        $qb = $this->getAllOrderByStartAtQueryBuilder();
+      $ids = array();
+      foreach ($entity->getRelateds() as $related)
+      {
+        $ids[] = $related->getRelatedTo()->getId();
+      }
 
-        if($entity) {
-            $ids = array();
-            foreach($entity->getRelateds() as $related) {
-                $ids[] = $related->getRelatedTo()->getId();
-            }
-
-            $qb
-                ->where('cer.id not in (:entities_id)')
-                ->setParameter('entities_id', array_merge(
-                    array($entity->getId()),
-                    $ids
-                ))
-            ;
-        }
-
-        return $qb;
+      $qb
+        ->where('cer.id not in (:entities_id)')
+        ->setParameter('entities_id', array_merge(
+          array($entity->getId()),
+          $ids
+        ));
     }
 
-    /**
-     * getRelatedAvailableCalendarEntitiesQuery
-     *
-     * @param $entity CalendarEntity
-     * @return Query
-     */
-    public function getRelatedAvailableCalendarEntitiesQuery($entity = null)
-    {
-        $qb = $this->getRelatedAvailableCalendarEntitiesQueryBuilder($entity);
+    return $qb;
+  }
 
-        return is_null($qb) ? $qb : $qb->getQuery();
+  /**
+   * getRelatedAvailableCalendarEntitiesQuery
+   *
+   * @param $entity CalendarEntity
+   *
+   * @return Query
+   */
+  public function getRelatedAvailableCalendarEntitiesQuery($entity = null)
+  {
+    $qb = $this->getRelatedAvailableCalendarEntitiesQueryBuilder($entity);
+
+    return is_null($qb) ? $qb : $qb->getQuery();
+  }
+
+  /**
+   * getRelatedAvailableCalendarEntities
+   *
+   * @param $entity CalendarEntity
+   *
+   * @return DoctrineCollection
+   */
+  public function getRelatedAvailableCalendarEntities($entity = null)
+  {
+    $q = $this->getRelatedAvailableCalendarEntitiesQuery($entity);
+
+    return is_null($q) ? array() : $q->getResult();
+  }
+
+  /**
+   * getAllOrderByStartAtQueryBuilder
+   *
+   * @return QueryBuilder
+   */
+  public function getAllOrderByStartAtQueryBuilder()
+  {
+    $qb = $this->createQueryBuilder('cer');
+    $qb
+      ->orderBy('cer.startAt', 'ASC')
+      ->addOrderBy('cer.location', 'ASC');
+
+    return $qb;
+  }
+
+  /**
+   * getAllOrderByStartAtQuery
+   *
+   * @return Query
+   */
+  public function getAllOrderByStartAtQuery()
+  {
+    $qb = $this->getAllOrderByStartAtQueryBuilder();
+
+    return is_null($qb) ? $qb : $qb->getQuery();
+  }
+
+  /**
+   * getAllOrderByStartAt
+   *
+   * @return DoctrineCollection
+   */
+  public function getAllOrderByStartAt()
+  {
+    $q = $this->getAllOrderByStartAtQuery();
+
+    return is_null($q) ? array() : $q->getResult();
+  }
+
+  /**
+   * extractQueryBuilder
+   *
+   * @param array $params
+   *
+   * @return QueryBuilder
+   */
+  public function extractQueryBuilder($params)
+  {
+    $qb = $this->getAllOrderByStartAtQueryBuilder();
+
+    if (isset($params['id']))
+    {
+      $qb
+        ->andWhere('cer.id = :id')
+        ->setParameter('id', $params['id']);
     }
 
-    /**
-     * getRelatedAvailableCalendarEntities
-     *
-     * @param $entity CalendarEntity
-     * @return DoctrineCollection
-     */
-    public function getRelatedAvailableCalendarEntities($entity = null)
+    if (isset($params['ids']))
     {
-        $q = $this->getRelatedAvailableCalendarEntitiesQuery($entity);
-
-        return is_null($q) ? array() : $q->getResult();
+      $qb
+        ->andWhere($qb->expr()->in('cer.id', $params['ids']));
     }
 
-    /**
-     * getAllOrderByStartAtQueryBuilder
-     *
-     * @return QueryBuilder
-     */
-    public function getAllOrderByStartAtQueryBuilder()
+    if (isset($params['category_id']))
     {
-        $qb = $this->createQueryBuilder('cer');
-        $qb
-            ->orderBy('cer.startAt', 'ASC')
-            ->addOrderBy('cer.location', 'ASC')
-        ;
-
-        return $qb;
+      $qb
+        ->leftJoin('cer.categories', 'c')
+        ->andWhere('c.id = :cat_id')
+        ->setParameter('cat_id', $params['category_id']);
     }
 
-    /**
-     * getAllOrderByStartAtQuery
-     *
-     * @return Query
-     */
-    public function getAllOrderByStartAtQuery()
+    if (isset($params['category_ids']))
     {
-        $qb = $this->getAllOrderByStartAtQueryBuilder();
-
-        return is_null($qb) ? $qb : $qb->getQuery();
+      $qb
+        ->leftJoin('cer.categories', 'cs')
+        ->andWhere($qb->expr()->in('cs.id', $params['category_ids']));
     }
 
-    /**
-     * getAllOrderByStartAt
-     *
-     * @return DoctrineCollection
-     */
-    public function getAllOrderByStartAt()
+    if (isset($params['parent_category_id']))
     {
-        $q = $this->getAllOrderByStartAtQuery();
-
-        return is_null($q) ? array() : $q->getResult();
+      $qb
+        ->leftJoin('cer.categories', 'pc')
+        ->andWhere('pc.parent = :parent_id')
+        ->setParameter('parent_id', $params['parent_category_id']);
     }
 
-    /**
-     * extractQueryBuilder
-     *
-     * @param array $params
-     * @return QueryBuilder
-     */
-    public function extractQueryBuilder($params)
+    if (isset($params['parent_category_ids']))
     {
-        $qb = $this->getAllOrderByStartAtQueryBuilder();
-
-        if(isset($params['id'])) {
-            $qb
-                ->andWhere('cer.id = :id')
-                ->setParameter('id', $params['id'])
-            ;
-        }
-
-        if(isset($params['ids'])) {
-            $qb
-                ->andWhere($qb->expr()->in('cer.id', $params['ids']))
-            ;
-        }
-
-        if(isset($params['category_id'])) {
-            $qb
-                ->leftJoin('cer.categories', 'c')
-                ->andWhere('c.id = :cat_id')
-                ->setParameter('cat_id', $params['category_id'])
-            ;
-        }
-
-        if(isset($params['category_ids'])) {
-            $qb
-                ->leftJoin('cer.categories', 'cs')
-                ->andWhere($qb->expr()->in('cs.id', $params['category_ids']))
-            ;
-        }
-
-        if(isset($params['parent_category_id'])) {
-            $qb
-                ->leftJoin('cer.categories', 'pc')
-                ->andWhere('pc.parent = :parent_id')
-                ->setParameter('parent_id', $params['parent_category_id'])
-            ;
-        }
-
-        if(isset($params['parent_category_ids'])) {
-            $qb
-                ->leftJoin('cer.categories', 'pcs')
-                ->andWhere($qb->expr()->in('pcs.parent', $params['parent_category_ids']))
-            ;
-        }
-
-        if(isset($params['ancestor_category_id'])) {
-            $qb
-                ->leftJoin('cer.categories', 'pc')
-                ->andWhere($qb->expr()->like('pc.tree', sprintf(
-                    "'%%%d%s'",
-                    $params['ancestor_category_id'],
-                    Category::getTreeSeparator()
-                )))
-            ;
-        }
-
-        if(isset($params['ancestor_category_ids'])) {
-            $qb->leftJoin('cer.categories', 'pcs');
-            $temp = array();
-            foreach($params['ancestor_category_ids'] as $id) {
-                $temp[] = $qb->expr()->like('pcs.tree', sprintf(
-                    "'%%%d%s'",
-                    $id,
-                    Category::getTreeSeparator()
-                ));
-            }
-            $qb->andWhere(call_user_func_array(array($qb->expr(),'orx'), $temp));
-        }
-
-        if(isset($params['location_id'])) {
-            $qb
-                ->andWhere('cer.location = :location_id')
-                ->setParameter('location_id', $params['location_id'])
-            ;
-        }
-
-        if(isset($params['location_ids'])) {
-            $qb
-                ->andWhere($qb->expr()->in('cer.location', $params['location_ids']))
-            ;
-        }
-
-        if(isset($params['xproperty_namespace'])) {
-            $qb
-                ->leftJoin('cer.xProperties', 'xpn')
-                ->andWhere('xpn.xNamespace = :xproperty_namespace')
-                ->setParameter('xproperty_namespace', $params['xproperty_namespace'])
-            ;
-        }
-
-        if(isset($params['xproperty_key'])) {
-            $qb
-                ->leftJoin('cer.xProperties', 'xpk')
-                ->andWhere('xpk.xKey = :xproperty_key')
-                ->setParameter('xproperty_key', $params['xproperty_key'])
-            ;
-        }
-
-        if(isset($params['xproperty_value'])) {
-            $qb
-                ->leftJoin('cer.xProperties', 'xpv')
-                ->andWhere('xpv.xValue = :xproperty_value')
-                ->setParameter('xproperty_value', $params['xproperty_value'])
-            ;
-        }
-
-        if(isset($params['parent_xproperty_value'])) {
-            $qb
-                ->leftJoin('cer.relateds', 'rlt')
-                ->leftJoin('rlt.relatedTo','parent')
-                ->leftJoin('parent.xProperties','parentxp')
-                ->andWhere('parentxp.xValue = :parent_xproperty_value')
-                ->andWhere("rlt.relationType = 'CHILD'") 
-                ->setParameter('parent_xproperty_value', $params['parent_xproperty_value'])
-            ;
-        }
-
-        if(isset($params['child_xproperty_value'])) {
-            $qb
-                ->leftJoin('cer.relateds', 'rlt')
-                ->leftJoin('rlt.relatedTo','child')
-                ->leftJoin('child.xProperties','childxp')
-                ->andWhere('childxp.xValue = :child_xproperty_value')
-                ->andWhere("rlt.relationType = 'PARENT'") 
-                ->setParameter('child_xproperty_value', $params['child_xproperty_value'])
-            ;
-        }
-
-
-        if(isset($params['location_name'])) {
-            $qb
-                ->leftJoin('cer.location', 'lct')
-                ->andWhere('lct.name = :location_name')
-                ->setParameter('location_name', $params['location_name'])
-            ;
-        }
-        
-
-        if(isset($params['parent_id'])) {
-            $qb
-                ->leftJoin('cer.relateds', 'pid')
-                ->andWhere('pid.relatedTo = :parent_id')
-                ->andWhere("pid.relationType = 'CHILD'")
-                ->setParameter('parent_id', $params['parent_id'])
-            ;
-        }
-
-        if(isset($params['child_id'])) {
-            $qb
-                ->leftJoin('cer.relateds', 'pid')
-                ->andWhere('pid.relatedTo = :child_id')
-                ->andWhere("pid.relationType = 'PARENT'")
-                ->setParameter('child_id', $params['child_id'])
-            ;
-        }
-        
-        if(isset($params['schedule_id'])) {
-            $qb
-                ->andWhere('cer.wwwConf = :schedule_id')
-                ->setParameter('schedule_id', $params['schedule_id'])
-            ;
-        }
-
-        return $qb;
+      $qb
+        ->leftJoin('cer.categories', 'pcs')
+        ->andWhere($qb->expr()->in('pcs.parent', $params['parent_category_ids']));
     }
 
-    /**
-     * extractQuery
-     *
-     * @param array $params
-     * @return Query
-     */
-    public function extractQuery($params)
+    if (isset($params['ancestor_category_id']))
     {
-        $qb = $this->extractQueryBuilder($params);
-
-        return is_null($qb) ? $qb : $qb->getQuery();
+      $qb
+        ->leftJoin('cer.categories', 'pc')
+        ->andWhere($qb->expr()->like('pc.tree', sprintf(
+          "'%%%d%s'",
+          $params['ancestor_category_id'],
+          Category::getTreeSeparator()
+        )));
     }
 
-    /**
-     * extract
-     *
-     * @param array $params
-     * @return DoctrineCollection
-     */
-    public function extract($params)
+    if (isset($params['ancestor_category_ids']))
     {
-        $q = $this->extractQuery($params);
-
-        return is_null($q) ? array() : $q->getResult();
+      $qb->leftJoin('cer.categories', 'pcs');
+      $temp = array();
+      foreach ($params['ancestor_category_ids'] as $id)
+      {
+        $temp[] = $qb->expr()->like('pcs.tree', sprintf(
+          "'%%%d%s'",
+          $id,
+          Category::getTreeSeparator()
+        ));
+      }
+      $qb->andWhere(call_user_func_array(array($qb->expr(), 'orx'), $temp));
     }
+
+    if (isset($params['location_id']))
+    {
+      $qb
+        ->andWhere('cer.location = :location_id')
+        ->setParameter('location_id', $params['location_id']);
+    }
+
+    if (isset($params['location_ids']))
+    {
+      $qb
+        ->andWhere($qb->expr()->in('cer.location', $params['location_ids']));
+    }
+
+    if (isset($params['xproperty_namespace']))
+    {
+      $qb
+        ->leftJoin('cer.xProperties', 'xpn')
+        ->andWhere('xpn.xNamespace = :xproperty_namespace')
+        ->setParameter('xproperty_namespace', $params['xproperty_namespace']);
+    }
+
+    if (isset($params['xproperty_key']))
+    {
+      $qb
+        ->leftJoin('cer.xProperties', 'xpk')
+        ->andWhere('xpk.xKey = :xproperty_key')
+        ->setParameter('xproperty_key', $params['xproperty_key']);
+    }
+
+    if (isset($params['xproperty_value']))
+    {
+      $qb
+        ->leftJoin('cer.xProperties', 'xpv')
+        ->andWhere('xpv.xValue = :xproperty_value')
+        ->setParameter('xproperty_value', $params['xproperty_value']);
+    }
+
+    if (isset($params['parent_xproperty_value']))
+    {
+      $qb
+        ->leftJoin('cer.relateds', 'rlt')
+        ->leftJoin('rlt.relatedTo', 'parent')
+        ->leftJoin('parent.xProperties', 'parentxp')
+        ->andWhere('parentxp.xValue = :parent_xproperty_value')
+        ->andWhere("rlt.relationType = 'CHILD'")
+        ->setParameter('parent_xproperty_value', $params['parent_xproperty_value']);
+    }
+
+    if (isset($params['child_xproperty_value']))
+    {
+      $qb
+        ->leftJoin('cer.relateds', 'rlt')
+        ->leftJoin('rlt.relatedTo', 'child')
+        ->leftJoin('child.xProperties', 'childxp')
+        ->andWhere('childxp.xValue = :child_xproperty_value')
+        ->andWhere("rlt.relationType = 'PARENT'")
+        ->setParameter('child_xproperty_value', $params['child_xproperty_value']);
+    }
+
+
+    if (isset($params['location_name']))
+    {
+      $qb
+        ->leftJoin('cer.location', 'lct')
+        ->andWhere('lct.name = :location_name')
+        ->setParameter('location_name', $params['location_name']);
+    }
+
+
+    if (isset($params['parent_id']))
+    {
+      $qb
+        ->leftJoin('cer.relateds', 'pid')
+        ->andWhere('pid.relatedTo = :parent_id')
+        ->andWhere("pid.relationType = 'CHILD'")
+        ->setParameter('parent_id', $params['parent_id']);
+    }
+
+    if (isset($params['child_id']))
+    {
+      $qb
+        ->leftJoin('cer.relateds', 'pid')
+        ->andWhere('pid.relatedTo = :child_id')
+        ->andWhere("pid.relationType = 'PARENT'")
+        ->setParameter('child_id', $params['child_id']);
+    }
+
+    if (isset($params['schedule_id']))
+    {
+      $qb
+        ->andWhere('cer.wwwConf = :schedule_id')
+        ->setParameter('schedule_id', $params['schedule_id']);
+    }
+
+    return $qb;
+  }
+
+  /**
+   * extractQuery
+   *
+   * @param array $params
+   *
+   * @return Query
+   */
+  public function extractQuery($params)
+  {
+    $qb = $this->extractQueryBuilder($params);
+
+    return is_null($qb) ? $qb : $qb->getQuery();
+  }
+
+  /**
+   * extract
+   *
+   * @param array $params
+   *
+   * @return DoctrineCollection
+   */
+  public function extract($params)
+  {
+    $q = $this->extractQuery($params);
+
+    return is_null($q) ? array() : $q->getResult();
+  }
 }

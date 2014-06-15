@@ -2,9 +2,9 @@ parameters:
     database_driver:   pdo_mysql
     database_host:     127.0.0.1
     database_port:     ~
-    database_name:     wwwConference-blend
-    database_user:     wwwConf
-    database_password: dataconfTER
+    database_name:     wwwConference
+    database_user:     proc_admin
+    database_password: proc_admin
 
     mailer_transport:  smtp
     mailer_encryption: ssl

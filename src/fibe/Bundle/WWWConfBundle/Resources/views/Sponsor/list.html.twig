@@ -8,39 +8,39 @@
   </h4></div>
 <table class="table table-hover records_list">
   <thead>
-    <tr>
-      <th>Logo</th>
-      <th>Name</th>
-      <th>Url</th>
-      <th>Actions</th>
-    </tr>
+  <tr>
+    <th>Logo</th>
+    <th>Name</th>
+    <th>Url</th>
+    <th>Actions</th>
+  </tr>
   </thead>
   <tbody>
-    {% for entity in pager.currentPageResults %}
-      <tr>
-        {% if entity.logoPath is null %}
-          <td><em>No logo uploaded</em></td>
-        {% else %}
-          <td><a href="{{ path('schedule_sponsor_show', { 'id': entity.id }) }}"><img
-                  src="{{ asset('uploads/sponsors/') }}{{ entity.logoPath }}" style="height:100px;width:auto;"/></a>
-          </td>
-        {% endif %}
-        <td><a href="{{ path('schedule_sponsor_show', { 'id': entity.id }) }}">{{ entity.name }}</a></td>
-        <td><a href="{{ entity.url }}">{{ entity.url }}</a></td>
-        <td>
-           {% if is_granted('VIEW', entity) %} 
+  {% for entity in pager.currentPageResults %}
+    <tr>
+      {% if entity.logoPath is null %}
+        <td><em>No logo uploaded</em></td>
+      {% else %}
+        <td><a href="{{ path('schedule_sponsor_show', { 'id': entity.id }) }}"><img
+                src="{{ asset('uploads/sponsors/') }}{{ entity.logoPath }}" style="height:100px;width:auto;"/></a>
+        </td>
+      {% endif %}
+      <td><a href="{{ path('schedule_sponsor_show', { 'id': entity.id }) }}">{{ entity.name }}</a></td>
+      <td><a href="{{ entity.url }}">{{ entity.url }}</a></td>
+      <td>
+        {% if is_granted('VIEW', entity) %}
           <a class="btn btn-default" href="{{ path('schedule_sponsor_show', { 'id': entity.id }) }}">
             <i class="fa fa-eye"></i>
           </a>
-          {% endif %}
-          {% if is_granted('EDIT', entity) %} 
+        {% endif %}
+        {% if is_granted('EDIT', entity) %}
           <a class="btn btn-warning edit" href="{{ path('schedule_sponsor_edit', { 'id': entity.id }) }}">
             <i class="fa fa-pencil"></i>
           </a>
-          {% endif %}
-        </td>
-      </tr>
-    {% endfor %}
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
   </tbody>
 </table>
 <p>

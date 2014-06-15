@@ -70,70 +70,7 @@ EOT
       $newUser = $manipulator->create($username, $password, $email, !$inactive, $superadmin);
       $newUser->addRole('ROLE_ADMIN');
 
-      $em = $this->getContainer()->get('doctrine')->getManager('default');
-
-      /*
-      //Create the default conference
-      $defaultConference = new WwwConf();
-      $defaultConference->setLogoPath("livecon.png");
-      $em->persist($defaultConference);
-
-      //Create new App config for the conference
-      $defaultAppConfig = new MobileAppConfig();
-
-      //header color
-      $defaultAppConfig->setBGColorHeader("#f2f2f2");
-      $defaultAppConfig->setTitleColorHeader("#000000");
-      //navBar color
-      $defaultAppConfig->setBGColorNavBar("#305c6b");
-      $defaultAppConfig->setTitleColorNavBar("#f3f6f6");
-      //content color
-      $defaultAppConfig->setBGColorContent("#f3f6f6");
-      $defaultAppConfig->setTitleColorContent("#8c949c");
-      //buttons color
-      $defaultAppConfig->setBGColorButton("#f3f6f6");
-      $defaultAppConfig->setTitleColorButton("#000000");
-      //footer color
-      $defaultAppConfig->setBGColorfooter("#305c6b");
-      $defaultAppConfig->setTitleColorFooter("#f3f6f6");
-      $defaultAppConfig->setIsPublished(true);
-
-
-
-
-      $em->persist($defaultAppConfig);
-
-      $categorie = $em->getRepository('fibeWWWConfBundle:Category')->findOneByName("ConferenceEvent");
-
-      //Main conf event
-      $mainConfEvent = new ConfEvent();
-      $mainConfEvent->setIsMainConfEvent(true);
-      $mainConfEvent->setSummary("Conference");
-      $mainConfEvent->setStartAt( new \DateTime('now'));
-      $end = new \DateTime('now');
-      $mainConfEvent->setEndAt( $end->add(new \DateInterval('P2D')));
-      $mainConfEvent->addCategorie($categorie);
-      $mainConfEvent->setSummary("Conference Event");
-      $mainConfEvent->setConference($defaultConference);
-
-      // conference location
-      $mainConfEventLocation = new Location();
-      $mainConfEventLocation->setName("Conference's location");
-      $mainConfEvent->setLocation($mainConfEventLocation);
-      $mainConfEventLocation->setConference($defaultConference);
-      $em->persist($mainConfEventLocation);
-
-      $em->persist($mainConfEvent);
-
-      //Linking app config to conference
-      $defaultConference->setAppConfig($defaultAppConfig);
-      $defaultConference->setMainConfEvent($mainConfEvent);
-      $em->persist($defaultConference);
-
-      //Join the new user with his default conference
-      $newUser->addConference($defaultConference);
-      $newUser->setCurrentConf($defaultConference);
-      */
+      $em = $this->getContainer()->get('doctrine')->getManager('default'); 
       $em->flush();
 
       $output->writeln(sprintf('Created user <comment>%s</comment>', $username));

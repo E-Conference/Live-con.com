@@ -1,6 +1,7 @@
 var bootstrapAlertTimeout;
 function bootstrapAlert(type,msg,title,icon){
-    var showDuration = 5000;
+    var displayDuration = 5000;
+    var fadeInDuration = 'fast';
     var fadeOutDuration = 1500;
     setTimeout(function(){
 
@@ -49,13 +50,14 @@ function bootstrapAlert(type,msg,title,icon){
 
         $bootstrapAlert.attr("class","")
                        .addClass("alert alert-"+type) 
-                       .html('<button type="button" class="close" data-dismiss="alert">&times;</button><strong> '+title+' </strong>'+msg)  
+                       .html('<button type="button" class="close" data-dismiss="alert">&times;</button><strong> '+title+' </strong>')
+                       .append($('<div/>').html(msg).text())  
                        .prepend($(icon).addClass("fa-2x").css("margin-right","0.5em"));
 
-        $bootstrapAlert.stop().hide().fadeIn('fast');
+        $bootstrapAlert.stop().hide().fadeIn(fadeInDuration);
         clearTimeout(bootstrapAlertTimeout);
         bootstrapAlertTimeout=setTimeout(function(){
             $bootstrapAlert.fadeOut(fadeOutDuration);
-        },5000);
+        },displayDuration);
     }, 1);
 }

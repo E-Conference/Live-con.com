@@ -47,7 +47,8 @@
       {
         $('#sidebar').animate({left: '0px'});
         deployed = true;
-      } else
+      }
+      else
       {
         $('#sidebar').animate({left: '-180px'});
         deployed = false;
@@ -59,13 +60,13 @@
 
   {% for flashMessage in app.session.flashbag.get('info') %}
     <script type="text/javascript">
-      bootstrapAlert("info", "{{ flashMessage }}", "Info : " );
+      bootstrapAlert("info", "{{ flashMessage }}", "Info : ");
     </script>
   {% endfor %}
 
   {% for flashMessage in app.session.flashbag.get('success') %}
     <script type="text/javascript">
-      bootstrapAlert("success", "{{ flashMessage }}", "Success : " );
+      bootstrapAlert("success", "{{ flashMessage }}", "Success : ");
     </script>
   {% endfor %}
 
@@ -73,7 +74,7 @@
     <script type="text/javascript">
       bootstrapAlert("warning", "{{ flashMessage }}", "Error : ");
     </script>
-  {% endfor %} 
+  {% endfor %}
 
   <!-- Hide module not used in the conference -->
   {% if app.user.getCurrentConf().getModule().getPaperModule() == 0 %}
@@ -112,32 +113,39 @@
           <div class="row ">
             <ul class="nav breadcrum nav-tabs">
 
-              <li class="schedule_event schedule_event_new schedule_event_edit schedule_event_show schedule_confevent_show schedule_confevent schedule_confevent_new schedule_confevent_edit col-xs-1 col-sm-1  col-mg-1 col-lg-1">
+              <li
+                  class="schedule_event schedule_event_new schedule_event_edit schedule_event_show schedule_confevent_show schedule_confevent schedule_confevent_new schedule_confevent_edit col-xs-1 col-sm-1  col-mg-1 col-lg-1">
                 <a href="{{ path('schedule_confevent') }}" class='ellipsis'> <i class="fa fa-calendar-o fa-1x"></i>
                   <span> Events </span> </a></li>
-              <li class="schedule_person_index schedule_person_edit schedule_person_new schedule_person_show  col-xs-1 col-sm-1  col-mg-1 col-lg-1">
+              <li
+                  class="schedule_person_index schedule_person_edit schedule_person_new schedule_person_show  col-xs-1 col-sm-1  col-mg-1 col-lg-1">
                 <a href="{{ path('schedule_person_index') }}" class='ellipsis'> <i class="fa fa-user fa-1x"></i>
                   <span> Persons </span> </a></li>
 
               {% if app.user.getCurrentConf().getModule().getPaperModule()== true %}
-                <li class="schedule_paper schedule_paper_edit schedule_paper_new schedule_paper_show  col-xs-1 col-sm-1  col-mg-1 col-lg-2">
+                <li
+                    class="schedule_paper schedule_paper_edit schedule_paper_new schedule_paper_show  col-xs-1 col-sm-1  col-mg-1 col-lg-2">
                   <a href="{{ path('schedule_paper') }}" class='ellipsis'><i class="fa fa-book fa-1x"></i>
                     <span> Publications  </span></a></li>
               {% endif %}
 
               {% if app.user.getCurrentConf().getModule().getOrganizationModule()== true %}
-                <li class="schedule_organization_index  schedule_organization_new schedule_organization_edit schedule_organization_show col-xs-1 col-sm-1  ccol-mg-2 col-lg-2">
+                <li
+                    class="schedule_organization_index  schedule_organization_new schedule_organization_edit schedule_organization_show col-xs-1 col-sm-1  ccol-mg-2 col-lg-2">
                   <a href="{{ path('schedule_organization_index') }}" class='ellipsis'><i class="fa fa-users fa-1x"></i><span> Organizations</span>
                   </a></li>
               {% endif %}
 
-              <li class="schedule_location schedule_location_edit schedule_location_new schedule_location_show  col-xs-1 col-sm-1  col-mg-1 col-lg-1">
+              <li
+                  class="schedule_location schedule_location_edit schedule_location_new schedule_location_show  col-xs-1 col-sm-1  col-mg-1 col-lg-1">
                 <a href="{{ path('schedule_location') }}" class='ellipsis'> <i
                       class="fa fa-map-marker fa-1x"></i><span>  Locations</span></a></li>
-              <li class="schedule_category schedule_category_new schedule_category_edit schedule_category_show  col-xs-1 col-sm-1  col-mg-1 col-lg-2">
+              <li
+                  class="schedule_category schedule_category_new schedule_category_edit schedule_category_show  col-xs-1 col-sm-1  col-mg-1 col-lg-2">
                 <a href="{{ path('schedule_category') }}" class='ellipsis'><i class="fa fa-sort-amount-asc fa-1x"></i>
                   <span> Categories</span> </a></li>
-              <li class="schedule_topic schedule_topic_new  schedule_topic_edit schedule_topic_show  col-xs-1 col-sm-1  col-mg-1 col-lg-1">
+              <li
+                  class="schedule_topic schedule_topic_new  schedule_topic_edit schedule_topic_show  col-xs-1 col-sm-1  col-mg-1 col-lg-1">
                 <a href="{{ path('schedule_topic') }}" class='ellipsis'> <i class="fa fa-crosshairs fa-1x"></i>
                   <span>  Topics</span></a></li>
               {% if app.user.getCurrentConf().getModule().getSponsorModule()== true %}

@@ -45,7 +45,8 @@
       {
         $('#sideBar').animate({left: '0px'});
         deployed = true;
-      } else
+      }
+      else
       {
         $('#sideBar').animate({left: '-180px'});
         deployed = false;
@@ -57,13 +58,13 @@
 
   {% for flashMessage in app.session.flashbag.get('info') %}
     <script type="text/javascript">
-      bootstrapAlert("info", "{{ flashMessage }}", "Info : " );
+      bootstrapAlert("info", "{{ flashMessage }}", "Info : ");
     </script>
   {% endfor %}
 
   {% for flashMessage in app.session.flashbag.get('success') %}
     <script type="text/javascript">
-      bootstrapAlert("success", "{{ flashMessage }}", "Success : " );
+      bootstrapAlert("success", "{{ flashMessage }}", "Success : ");
     </script>
   {% endfor %}
 
@@ -71,7 +72,7 @@
     <script type="text/javascript">
       bootstrapAlert("warning", "{{ flashMessage }}", "Error : ");
     </script>
-  {% endfor %} 
+  {% endfor %}
 
   <!-- Hide module not used in the conference -->
   {% if app.user.getCurrentConf().getModule().getPaperModule() == 0 %}

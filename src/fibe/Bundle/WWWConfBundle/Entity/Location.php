@@ -2,7 +2,7 @@
 
 /**
  *
- * @author:  Gabriel BONDAZ <gabriel.bondaz@idci-consulting.fr>
+ * @author :  Gabriel BONDAZ <gabriel.bondaz@idci-consulting.fr>
  * @licence: GPL
  *
  */
@@ -19,308 +19,315 @@ use fibe\Bundle\WWWConfBundle\Entity\Equipment;
  */
 class Location
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
+  /**
+   * @ORM\Id
+   * @ORM\Column(type="integer")
+   * @ORM\GeneratedValue(strategy="AUTO")
+   */
+  protected $id;
 
-    /**
-     * @ORM\Column(type="string", length=128)
-     */
-    protected $name;
+  /**
+   * @ORM\Column(type="string", length=128)
+   */
+  protected $name;
 
-     /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    protected $capacity;
+  /**
+   * @ORM\Column(type="integer", nullable=true)
+   */
+  protected $capacity;
 
-	/**
-     * 
-     * @ORM\ManyToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Equipment")
-     */
-    protected $equipments;   
-	
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    protected $description;
+  /**
+   *
+   * @ORM\ManyToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Equipment")
+   */
+  protected $equipments;
 
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=6, nullable=true)
-     * 
-     * @Assert\Length(
-     *      min = "-90",
-     *      max = "90",
-     *      minMessage = "You must be between -90 and 90.",
-     *      maxMessage = "YYou must be between -90 and 90."
-     * )
-     */
-    protected $latitude;
+  /**
+   * @ORM\Column(type="text", nullable=true)
+   */
+  protected $description;
 
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=6, nullable=true)
-     * @Assert\Length(
-     *      min = "-180",
-     *      max = "180",
-     *      minMessage = "You must be between -180 and 180.",
-     *      maxMessage = "YYou must be between -180 and 180."
-     * )
-     */
-    protected $longitude;
+  /**
+   * @ORM\Column(type="decimal", precision=10, scale=6, nullable=true)
+   *
+   * @Assert\Length(
+   *      min = "-90",
+   *      max = "90",
+   *      minMessage = "You must be between -90 and 90.",
+   *      maxMessage = "YYou must be between -90 and 90."
+   * )
+   */
+  protected $latitude;
 
-    /**
-     * @ORM\OneToMany(targetEntity="CalendarEntity", mappedBy="location")
-     */
-    protected $calendarEntities;
+  /**
+   * @ORM\Column(type="decimal", precision=10, scale=6, nullable=true)
+   * @Assert\Length(
+   *      min = "-180",
+   *      max = "180",
+   *      minMessage = "You must be between -180 and 180.",
+   *      maxMessage = "YYou must be between -180 and 180."
+   * )
+   */
+  protected $longitude;
 
-    /**
-     * conference
-     *
-     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="locations", cascade={"persist"})
-     * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
-     */
-    private $conference;
+  /**
+   * @ORM\OneToMany(targetEntity="CalendarEntity", mappedBy="location")
+   */
+  protected $calendarEntities;
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-    }
+  /**
+   * conference
+   *
+   * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="locations", cascade={"persist"})
+   * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
+   */
+  private $conference;
 
-    /**
-     * toString
-     *
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getName();
-    }
+  /**
+   * Constructor
+   */
+  public function __construct()
+  {
+  }
 
-    /**
-     * getGeo
-     *
-     * @return string
-     */
-    public function getGeo()
-    {
-        return sprintf('%.6f;%.6f', $this->getLatitude(), $this->getLongitude());
-    }
+  /**
+   * toString
+   *
+   * @return string
+   */
+  public function __toString()
+  {
+    return $this->getName();
+  }
 
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+  /**
+   * getGeo
+   *
+   * @return string
+   */
+  public function getGeo()
+  {
+    return sprintf('%.6f;%.6f', $this->getLatitude(), $this->getLongitude());
+  }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     * @return Location
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    
-        return $this;
-    }
+  /**
+   * Get id
+   *
+   * @return integer
+   */
+  public function getId()
+  {
+    return $this->id;
+  }
 
-    /**
-     * Get name
-     *
-     * @return string 
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
+  /**
+   * Set name
+   *
+   * @param string $name
+   *
+   * @return Location
+   */
+  public function setName($name)
+  {
+    $this->name = $name;
 
-    /** Set capacity
-     *
-     * @param string $capacity
-     * @return Location
-     */
-    public function setCapacity($capacity)
-    {
-        $this->capacity = $capacity;
-    
-        return $this;
-    }
+    return $this;
+  }
 
-    /**
-     * Get capacity
-     *
-     * @return integer 
-     */
-    public function getCapacity()
-    {
-        return $this->capacity;
-    }
+  /**
+   * Get name
+   *
+   * @return string
+   */
+  public function getName()
+  {
+    return $this->name;
+  }
 
-    /**
-     * Set description
-     *
-     * @param string $description
-     * @return Location
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    
-        return $this;
-    }
+  /** Set capacity
+   *
+   * @param string $capacity
+   *
+   * @return Location
+   */
+  public function setCapacity($capacity)
+  {
+    $this->capacity = $capacity;
 
-    /**
-     * Get description
-     *
-     * @return string 
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
+    return $this;
+  }
 
-    /**
-     * Set latitude
-     *
-     * @param float $latitude
-     * @return Location
-     */
-    public function setLatitude($latitude)
-    {
-        $this->latitude = $latitude;
-    
-        return $this;
-    }
+  /**
+   * Get capacity
+   *
+   * @return integer
+   */
+  public function getCapacity()
+  {
+    return $this->capacity;
+  }
 
-    /**
-     * Get latitude
-     *
-     * @return float 
-     */
-    public function getLatitude()
-    {
-        return $this->latitude;
-    }
+  /**
+   * Set description
+   *
+   * @param string $description
+   *
+   * @return Location
+   */
+  public function setDescription($description)
+  {
+    $this->description = $description;
 
-    /**
-     * Set longitude
-     *
-     * @param float $longitude
-     * @return Location
-     */
-    public function setLongitude($longitude)
-    {
-        $this->longitude = $longitude;
-    
-        return $this;
-    }
+    return $this;
+  }
 
-    /**
-     * Get longitude
-     *
-     * @return float 
-     */
-    public function getLongitude()
-    {
-        return $this->longitude;
-    }
+  /**
+   * Get description
+   *
+   * @return string
+   */
+  public function getDescription()
+  {
+    return $this->description;
+  }
 
-    /**
-     * Add locationAwareCalendarEntities
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\LocationAwareCalendarEntity $locationAwareCalendarEntities
-     * @return Location
-     */
-    public function addLocationAwareCalendarEntitie(\fibe\Bundle\WWWConfBundle\Entity\LocationAwareCalendarEntity $locationAwareCalendarEntities)
-    {
-        $this->locationAwareCalendarEntities[] = $locationAwareCalendarEntities;
-    
-        return $this;
-    }
+  /**
+   * Set latitude
+   *
+   * @param float $latitude
+   *
+   * @return Location
+   */
+  public function setLatitude($latitude)
+  {
+    $this->latitude = $latitude;
 
-    /**
-     * Remove locationAwareCalendarEntities
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\LocationAwareCalendarEntity $locationAwareCalendarEntities
-     */
-    public function removeLocationAwareCalendarEntitie(\fibe\Bundle\WWWConfBundle\Entity\LocationAwareCalendarEntity $locationAwareCalendarEntities)
-    {
-        $this->locationAwareCalendarEntities->removeElement($locationAwareCalendarEntities);
-    }
+    return $this;
+  }
 
-    /**
-     * Get locationAwareCalendarEntities
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getLocationAwareCalendarEntities()
-    {
-        return $this->locationAwareCalendarEntities;
-    }
+  /**
+   * Get latitude
+   *
+   * @return float
+   */
+  public function getLatitude()
+  {
+    return $this->latitude;
+  }
 
-    /**
-     * Add Equipment
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Equipment $equipments
-     * @return ConfEvent
-     */
-    public function addEquipment(\fibe\Bundle\WWWConfBundle\Entity\Equipment $equipments)
-    {
-        $this->equipments[] = $equipments;
-    
-        return $this;
-    }
+  /**
+   * Set longitude
+   *
+   * @param float $longitude
+   *
+   * @return Location
+   */
+  public function setLongitude($longitude)
+  {
+    $this->longitude = $longitude;
 
-    /**
-     * Remove Equipment
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Equipment $equipments
-     */
-    public function removeEquipment(\fibe\Bundle\WWWConfBundle\Entity\Equipment $equipments)
-    {
-        $this->equipments->removeElement($equipments);
-    }
+    return $this;
+  }
 
-    /**
-     * Get Equipments
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getEquipments()
-    {
-        return $this->equipments;
-    }
-   
-    /**
-     * Set conference
-     *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
-     * @return ConfEvent
-     */
-    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference)
-    {
-        $this->conference = $conference;
-    
-        return $this;
-    }
+  /**
+   * Get longitude
+   *
+   * @return float
+   */
+  public function getLongitude()
+  {
+    return $this->longitude;
+  }
 
-    /**
-     * Get conference
-     *
-     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
-     */
-    public function getConference()
-    {
-        return $this->conference;
-    }
+  /**
+   * Add locationAwareCalendarEntities
+   *
+   * @param \fibe\Bundle\WWWConfBundle\Entity\LocationAwareCalendarEntity $locationAwareCalendarEntities
+   *
+   * @return Location
+   */
+  public function addLocationAwareCalendarEntitie(\fibe\Bundle\WWWConfBundle\Entity\LocationAwareCalendarEntity $locationAwareCalendarEntities)
+  {
+    $this->locationAwareCalendarEntities[] = $locationAwareCalendarEntities;
 
+    return $this;
+  }
+
+  /**
+   * Remove locationAwareCalendarEntities
+   *
+   * @param \fibe\Bundle\WWWConfBundle\Entity\LocationAwareCalendarEntity $locationAwareCalendarEntities
+   */
+  public function removeLocationAwareCalendarEntitie(\fibe\Bundle\WWWConfBundle\Entity\LocationAwareCalendarEntity $locationAwareCalendarEntities)
+  {
+    $this->locationAwareCalendarEntities->removeElement($locationAwareCalendarEntities);
+  }
+
+  /**
+   * Get locationAwareCalendarEntities
+   *
+   * @return \Doctrine\Common\Collections\Collection
+   */
+  public function getLocationAwareCalendarEntities()
+  {
+    return $this->locationAwareCalendarEntities;
+  }
+
+  /**
+   * Add Equipment
+   *
+   * @param \fibe\Bundle\WWWConfBundle\Entity\Equipment $equipments
+   *
+   * @return ConfEvent
+   */
+  public function addEquipment(\fibe\Bundle\WWWConfBundle\Entity\Equipment $equipments)
+  {
+    $this->equipments[] = $equipments;
+
+    return $this;
+  }
+
+  /**
+   * Remove Equipment
+   *
+   * @param \fibe\Bundle\WWWConfBundle\Entity\Equipment $equipments
+   */
+  public function removeEquipment(\fibe\Bundle\WWWConfBundle\Entity\Equipment $equipments)
+  {
+    $this->equipments->removeElement($equipments);
+  }
+
+  /**
+   * Get Equipments
+   *
+   * @return \Doctrine\Common\Collections\Collection
+   */
+  public function getEquipments()
+  {
+    return $this->equipments;
+  }
+
+  /**
+   * Set conference
+   *
+   * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference
+   *
+   * @return ConfEvent
+   */
+  public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference)
+  {
+    $this->conference = $conference;
+
+    return $this;
+  }
+
+  /**
+   * Get conference
+   *
+   * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf
+   */
+  public function getConference()
+  {
+    return $this->conference;
+  }
 }

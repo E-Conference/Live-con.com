@@ -6,22 +6,12 @@ documentation:
 fibe_conference:
     resource: "@fibeConferenceBundle/Controller/"
     type:     annotation
-    prefix:   /
-
-fibe_externalization:
-    resource: "@fibeExternalizationBundle/Controller/"
-    type:     annotation
-    prefix:   /externalization
+    prefix:   / 
 
 fibe_home_page:
     resource: "@fibeHomePageBundle/Controller/"
     type:     annotation
-    prefix:   /
-
-fibe_user_data:
-    resource: "@fibeUserDataBundle/Controller/"
-    type:     annotation
-    prefix:   /
+    prefix:   / 
 
 fibe_mobile_app:
     resource: "@fibeMobileAppBundle/Controller/"
@@ -54,13 +44,13 @@ login:
     defaults:  { _controller: FOSUserBundle:Security:login }
 
 login_check:
-    pattern:   /login_check
+    pattern:   /login/login_check
 
 logout:
     pattern:   /logout
 
-fos_user_security:
-    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+# fos_user_security:
+#     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 
 fos_user_registration:
     resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
@@ -78,3 +68,33 @@ fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: user/profile
 
+#HWIOAuthBundle routes
+hwi_oauth_security:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix: /login
+
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+    prefix: /login
+
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect
+
+google_login:
+    pattern: /login/check-google
+
+twitter_login:
+    pattern: /login/check-twitter
+
+facebook_login:
+    pattern: /login/check-facebook
+
+linkedin_login:
+    pattern: /login/check-linkedin
+
+#REST 
+rest : 
+  type : rest 
+  resource : "routing_rest.yml"
+  prefix : /apiREST

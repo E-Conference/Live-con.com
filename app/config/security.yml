@@ -9,10 +9,14 @@ security:
 
     providers:
         main:
-            entity: { class: fibe\SecurityBundle\Entity\User, property: username }
+            id: fos_user.user_manager
 
     acl:
         connection: default
+
+    access_decision_manager:
+        # La valeur de « Strategy » peut être : affirmative, unanimous ou consensus
+        strategy: affirmative
 
 #        in_memory:
 #            memory:
@@ -26,18 +30,25 @@ security:
             security: false
 
 
+        # main_login:
+        #     pattern:   ^/login$
+        #     anonymous: true # On autorise les anonymes sur ce pare-feu
+
         main_login:
+            pattern:   /login$
+            anonymous: true # On autorise les anonymes sur ce pare-feu
+
+        login:
             # Cette expression régulière permet de prendre /login (mais pas /login_check !)
-            pattern:   ^/login$
+            pattern:   ^/connect
             anonymous: true # On autorise les anonymes sur ce pare-feu
 
         main_homepage:
-            # Cette expression régulière permet de prendre /login (mais pas /login_check !)
             pattern:   ^/$
             anonymous: true # On autorise les anonymes sur ce pare-feu
 
         public_apps:
-            # Cette expression régulière permet de prendre /login (mais pas /login_check !)
+            # /apps/*
             pattern:   ^/apps/
             anonymous: true # On autorise les anonymes sur ce pare-feu
 
@@ -62,9 +73,25 @@ security:
             anonymous: false
             provider:  main
             form_login:
-                login_path: login
-                check_path: login_check
-                success_handler: fibe_security.select_conference_success_handler
+                login_path: /login
+                check_path: /login/login_check
+                default_target_path: dashboard_index
+                # success_handler: fibe_security.select_conference_success_handler
+            oauth:
+                resource_owners:
+                    google:         "/login/check-google"
+                    twitter:        "/login/check-twitter"
+                    facebook:       "/login/check-facebook"
+                    linkedin:       "/login/check-linkedin"
+                login_path:        /login
+                failure_path:      /login
+                default_target_path: /Dashboard
+                # use_forward:       true
+
+                oauth_user_provider:
+                    #this is my custom user provider, created from FOSUBUserProvider - will manage the
+                    #automatic user registration on your site, with data from the provider (facebook. google, etc.)
+                    service: my_user_provider
             logout:
                 path:   logout
                 target: /login

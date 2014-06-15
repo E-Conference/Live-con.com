@@ -1,0 +1,51 @@
+{% extends 'fibeSecurityBundle::base.html.twig' %}
+
+{% block title %}Profile{% endblock title %}
+
+{% block centerPanel %}
+
+  <div class="row page-top-header ">
+    <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
+      <span> Profile </span>
+    </div>
+
+    <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+    </div>
+    <div class="page-btn-list col-xs-5  col-sm-4 col-md-3 col-lg-2">
+     <a type="button" href="{{ path('fos_user_profile_edit') }}" class="btn btn-warning" title="Go back to the list">
+                <i class="fa fa-edit"></i>
+          </a>
+    </div>
+  </div> 
+  <div class="row page-content">
+		<div class="col-sm-4">
+	    {% if user.picture is defined and user.picture is not empty %}
+	      <img style="max-width: 100%;max-width: 100%;" alt="profile picture of {{ user.name }}" src="{{ user.picture }}" />
+	    {% endif %}
+		</div>
+	  <div class="col-sm-8">
+		  <div class="panel panel-default">
+		    <div class="panel-heading">{{ user.name }}</div> 
+		      <ul class="list-group">
+		        <li class="list-group-item"><a href="mailto:{{ user.email }}?Subject=[Live-con.com] message from {{ app.user.name}}" target="_top">{{ user.email }}</a></li>
+		      </ul>
+		  </div>  
+	  </div>
+
+    {% if user.twitterScreenName is defined and user.twitterScreenName is not empty %} 
+    <div class="col-sm-8">
+    <a class="twitter-timeline" href="https://twitter.com/{{ user.twitterScreenName }}" data-widget-id="477881107765948416" data-screen-name="{{ user.twitterScreenName }}" data-show-replies="true" style="width:100%;" data-tweet-limit="5">Tweets by @{{ user.twitterScreenName }}</a> 
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    </div>
+    {% endif %} 
+
+
+</div>
+
+{% endblock %}
+
+
+
+
+
+ 

@@ -3,11 +3,51 @@
 parameters:
     security.acl.dbal.provider.class: fibe\SecurityBundle\Services\AclProvider
     fos_user.registration.confirmation.enabled: true
+    my_user_provider.class: fibe\SecurityBundle\Services\FOSUBUserProvider
+    twitter.api_url: "https://api.twitter.com/1.1/"
 
+    fibe_security.mailer.random_pwd_email_message.subject:    "Livecon : upgrade your conference"
+    fibe_security.mailer.random_pwd_email_message.html_body:  >
+        Dear user,
+        <br><br> You have created an account on live-con.com with the following password :
+        <br/><br/>password : #password#
+        <br/><br/>Please notice that you can still connect to live-con with your account on #serviceName#!
+        <br/><br/>All the live-con's team welcome you and wish you will like our service! Do not hesitate to get in touch with us!
+        <br/><br/>Do not hesitate to get in touch with us!
+        <br/><br/>  The live-con team!
+    fibe_security.mailer.random_pwd_email_message.text_body:  >
+        Dear user,
+        You have created an account on live-con.com with the following password :
+        password : #password#
+        Please notice that you can still connect to live-con with your account on #serviceName#!
+        All the live-con's team welcome you and wish you will like our service! Do not hesitate to get in touch with us!
+        Do not hesitate to get in touch with us!
+            The live-con team!
 services:
-    fibe_security.select_conference_success_handler:
-        class: fibe\SecurityBundle\Services\ChooseConferenceSuccessHandler
-        arguments: ["@router"]
+    my_user_provider:
+        class: "%my_user_provider.class%"
+        #this is the place where the properties are passed to the UserProvider - see config.yml
+        arguments: 
+            - @fos_user.user_manager
+            - 
+                google:         google_id
+                twitter:        twitter_id
+                facebook:       facebook_id
+                linkedin:       linkedin_id
+            - @session
+            - @fibe_security.mailer
+
+    fibe_user.registration.form.type:
+        class: fibe\SecurityBundle\Form\RegistrationFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: fibe_user_registration }
+
+    fibe_user.profile.form.type:
+        class: fibe\SecurityBundle\Form\ProfileFormType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: fibe_user_profile }
 
     fibe_security.acl_entity_helper:
         class: fibe\SecurityBundle\Services\ACLEntityHelper
@@ -28,9 +68,54 @@ services:
         arguments: ["@service_container"]
         tags:
             - { name: doctrine.event_listener, event: postPersist }
+    # TODO POST DELETE
+    # TODO POST DELETE
 
-    fibe_user.registration.form.type:
-        class: fibe\SecurityBundle\Form\RegistrationFormType
-        arguments: [%fos_user.model.user.class%]
+    security.access.acl_inheritance_voter:
+        class:      fibe\SecurityBundle\Voter\ACLInheritanceVoter
+        public:     false
         tags:
-            - { name: form.type, alias: fibe_user_registration }
+            - { name: security.voter }
+            - { name: security.voter , priority: 1 }
+            - { name: monolog.logger , channel: security }
+        arguments: 
+            - '@security.acl.provider'
+            - '@security.acl.object_identity_retrieval_strategy'
+            - '@security.acl.security_identity_retrieval_strategy'
+            - '@security.acl.permission.map' 
+            - '@?logger'
+
+    fibe_security.mailer:
+        class:  fibe\SecurityBundle\Services\Mailer
+        public: false
+        arguments:
+            - "@mailer"
+            - "@router" 
+            -
+                random_pwd_email_message:
+                    from_email  : "%fos_user.registration.confirmation.from_email%"
+                    subject     : "%fibe_security.mailer.random_pwd_email_message.subject%"
+                    html_body   : "%fibe_security.mailer.random_pwd_email_message.html_body%"
+                    text_body   : "%fibe_security.mailer.random_pwd_email_message.text_body%"  
+
+    fibe_security.twitter:
+        class: fibe\SecurityBundle\Services\TwitterAPI
+        arguments: [ %twitter.client_id%, %twitter.client_secret%, %twitter.access_token%, %twitter.access_token_secret%, %twitter.api_url% ]
+
+
+
+        # <service id="fos_user.mailer.twig_swift" class="FOS\UserBundle\Mailer\TwigSwiftMailer" public="false">
+        #     <argument type="service" id="mailer" />
+        #     <argument type="service" id="router" />
+        #     <argument type="service" id="twig" />
+        #     <argument type="collection">
+        #         <argument key="template" type="collection">
+        #             <argument key="confirmation">%fos_user.registration.confirmation.template%</argument>
+        #             <argument key="resetting">%fos_user.resetting.email.template%</argument>
+        #         </argument>
+        #         <argument key="from_email" type="collection">
+        #             <argument key="confirmation">%fos_user.registration.confirmation.from_email%</argument>
+        #             <argument key="resetting">%fos_user.resetting.email.from_email%</argument>
+        #         </argument>
+        #     </argument>
+        # </service>

@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE rdf:RDF [
     <!ENTITY dcterms "http://purl.org/dc/terms/" >
     <!ENTITY foaf "http://xmlns.com/foaf/0.1/" >
@@ -17,8 +14,6 @@
     <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
     <!ENTITY swc "http://data.semanticweb.org/ns/swc/ontology#" >
 ]>
-
-
 <rdf:RDF xmlns="http://www.w3.org/2002/07/owl#"
      xml:base="http://www.w3.org/2002/07/owl"
      xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -355,18 +350,20 @@
 
     <NamedIndividual rdf:about="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}">
         <rdf:type rdf:resource="&swc;ConferenceEvent"/>
-        <rdfs:label>{{ entity.getConfName() }}</rdfs:label>
-        <ical:dtstart rdf:datatype="&xsd;date">{{ entity.getMainConfEvent().getStartAt()| date('Y-m-d H:i')}}</ical:dtstart>
-        <ical:dtend rdf:datatype="&xsd;date">{{ entity.getMainConfEvent().getEndAt()| date('Y-m-d H:i')}}</ical:dtend>
-        <swc:hasAcronym>{{ entity.getMainConfEvent().getAcronym()}}</swc:hasAcronym>
-        <foaf:homepage rdf:resource="{{ entity.getMainConfEvent().getUrl() }}"/>
+        <rdfs:label>{{ entity.confName }}</rdfs:label>
+        <ical:dtstart rdf:datatype="&xsd;date">{{ entity.mainConfEvent.startAt| date('Y-m-d H:i')}}</ical:dtstart>
+        <ical:dtend rdf:datatype="&xsd;date">{{ entity.mainConfEvent.endAt| date('Y-m-d H:i')}}</ical:dtend>
+        <swc:hasAcronym>{{ entity.mainConfEvent.acronym}}</swc:hasAcronym>
+        <foaf:homepage rdf:resource="{{ entity.mainConfEvent.url }}"/>
         {% for role in entity.mainConfEvent.roles %}
         <swc:hasRole rdf:resource="http://data.live-con.com/page/role/{{entity.mainConfEvent.id}}/{{role.type.name}}"/>
         {% endfor %}
-        <swc:hasLogo rdf:resource="{{ entity.getLogoPath() }}"/>
-        <swc:hasLocation rdf:resource="http://data.live-con.com/page/location/{{entity.getMainConfEvent().getLocation().getId()}}/{{entity.getMainConfEvent().getLocation().getSlug()}}"/>
+        <swc:hasLogo rdf:resource="{{ entity.logoPath }}"/>
+        {% if entity.mainConfEvent.location %}
+            <swc:hasLocation rdf:resource="http://data.live-con.com/page/location/{{entity.mainConfEvent.location.id}}/{{entity.mainConfEvent.location.slug}}"/>
+        {% endif %}
         <swc:hasRelatedDocument rdf:resource="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}/proceedings"/>
-        {% for event in entity.getEvents() %}
+        {% for event in entity.events %}
             {% if event.isMainConfEvent == false %}
                  <swc:isSuperEventOf rdf:resource="http://data.live-con.com/page/event/{{ event.id }}/{{ event.slug }}"/>
             {% endif %}
@@ -377,9 +374,9 @@
 
     <NamedIndividual rdf:about="http://data.live-con.com/page/role/{{entity.mainConfEvent.id}}/Delegate">
         <rdf:type rdf:resource="&swc;Delegate"/>
-        <rdfs:label>{{ entity.getConfName() }}  delegate</rdfs:label>
+        <rdfs:label>{{ entity.confName }}  delegate</rdfs:label>
         <swc:isRoleAt rdf:resource="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}"/>
-        {% for role in entity.mainConfEvent.getRoles() %}
+        {% for role in entity.mainConfEvent.roles %}
             {% if role.type =="Delegate" %}
                 <swc:heldBy rdf:resource="http://data.live-con.com/page/person/{{role.person.id}}/{{role.person.slug}}"/>
             {% endif %}
@@ -388,9 +385,9 @@
 
     <NamedIndividual rdf:about="http://data.live-con.com/page/role/{{entity.mainConfEvent.id}}/Chair">
         <rdf:type rdf:resource="&swc;Chair"/>
-        <rdfs:label>{{ entity.getConfName() }}  chair</rdfs:label>
+        <rdfs:label>{{ entity.confName }}  chair</rdfs:label>
         <swc:isRoleAt rdf:resource="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}"/>
-        {% for role in entity.mainConfEvent.getRoles() %}
+        {% for role in entity.mainConfEvent.roles %}
             {% if role.type =="Chair" %}
                 <swc:heldBy rdf:resource="http://data.live-con.com/page/person/{{role.person.id}}/{{role.person.slug}}"/>
             {% endif %}
@@ -399,9 +396,9 @@
 
     <NamedIndividual rdf:about="http://data.live-con.com/page/role/{{entity.mainConfEvent.id}}/Presenter">
         <rdf:type rdf:resource="&swc;Presenter"/>
-        <rdfs:label>{{ entity.getConfName() }}  presenter</rdfs:label>
+        <rdfs:label>{{ entity.confName }}  presenter</rdfs:label>
         <swc:isRoleAt rdf:resource="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}"/>
-        {% for role in entity.mainConfEvent.getRoles() %}
+        {% for role in entity.mainConfEvent.roles %}
             {% if role.type =="Presenter" %}
                 <swc:heldBy rdf:resource="http://data.live-con.com/page/person/{{role.person.id}}/{{role.person.slug}}"/>
             {% endif %}
@@ -410,9 +407,9 @@
 
     <NamedIndividual rdf:about="http://data.live-con.com/page/role/{{entity.mainConfEvent.id}}/ProgrammeCommitteeMember">
         <rdf:type rdf:resource="&swc;ProgrammeCommitteeMember"/>
-        <rdfs:label>{{ entity.getConfName() }} programme committee member</rdfs:label>
+        <rdfs:label>{{ entity.confName }} programme committee member</rdfs:label>
         <swc:isRoleAt rdf:resource="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}"/>
-        {% for role in entity.mainConfEvent.getRoles() %}
+        {% for role in entity.mainConfEvent.roles %}
             {% if role.type =="ProgrammeCommitteeMember" %}
                 <swc:heldBy rdf:resource="http://data.live-con.com/page/person/{{role.person.id}}/{{role.person.slug}}"/>
             {% endif %}
@@ -423,8 +420,8 @@
 
     <NamedIndividual rdf:about="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}/proceedings">
         <rdf:type rdf:resource="&swrc;Proceedings"/>
-        <rdfs:label>Proceedings of {{ entity.getConfName() }}</rdfs:label>
-        <swrc:booktitle>Proceedings of {{ entity.getConfName() }}</swrc:booktitle>
+        <rdfs:label>Proceedings of {{ entity.confName }}</rdfs:label>
+        <swrc:booktitle>Proceedings of {{ entity.confName }}</swrc:booktitle>
         <swc:relatedToEvent rdf:resource="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}"/>
         {% for paper in entity.papers %}
         <swc:hasPart rdf:resource="http://data.live-con.com/page/paper/{{ paper.id }}/{{ paper.slug }}"/>
@@ -454,7 +451,7 @@
             <swc:hasRole rdf:resource="http://data.live-con.com/page/role/{{role.event.id}}/{{role.person.id}}/{{role.type.name}}"/>
             {% endfor %}
             {% if entity.location %}
-            <swc:hasLocation rdf:resource="http://data.live-con.com/page/location/{{entity.location.id}}/{{entity.location.getSlug()}}"/>
+            <swc:hasLocation rdf:resource="http://data.live-con.com/page/location/{{entity.location.id}}/{{entity.location.slug}}"/>
             {% endif %}
             {% for topic in event.topics %}
             <dc:subject>{{topic.name}}</dc:subject>
@@ -470,7 +467,7 @@
     <NamedIndividual rdf:about="http://data.live-con.com/page/paper/{{paper.id}}/{{paper.slug}}">
         <rdf:type rdf:resource="&swrc;InProceedings"/>
         <rdfs:label>{{paper.title}}</rdfs:label>
-        <swrc:date>{{entity.publishDate()}}</swrc:date>
+        <swrc:date>{{entity.publishDate}}</swrc:date>
         {% for topic in paper.topics %}
         <dc:subject>{{topic.name}}</dc:subject>
         {% endfor %}
@@ -478,7 +475,7 @@
         <dc:title>{{paper.title}}</dc:title>
         <swc:isPartOf rdf:resource="http://data.live-con.com/page/conference/{{ entity.id }}/{{ entity.slug }}/proceedings"/>
         {% for event in paper.events %}
-        <swc:relatedToEvent rdf:resource="http://data.live-con.com/page/event/{{event.getParent().getId()}}/{{event.getParent().getSlug()}}"/>
+        <swc:relatedToEvent rdf:resource="http://data.live-con.com/page/event/{{event.parent.id}}/{{event.parent.slug}}"/>
         {% endfor %}
         {% for author in paper.authors %}
         <dc:creator rdf:resource="http://data.live-con.com/page/person/{{author.id}}/{{author.slug}}"/>

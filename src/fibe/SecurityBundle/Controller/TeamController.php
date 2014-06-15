@@ -9,12 +9,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use fibe\SecurityBundle\Entity\User;
-use fibe\SecurityBundle\Entity\Authorization;
-use fibe\SecurityBundle\Entity\Authorisation;
 use fibe\SecurityBundle\Entity\UserConfPermission;
 use fibe\SecurityBundle\Form\UserAuthorizationType;
 use fibe\SecurityBundle\Form\UserConfPermissionType;
-use fibe\ConferenceBundle\Form\AuthorizationType;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
@@ -67,14 +64,14 @@ class TeamController extends Controller
     );
 
     return array(
-      'team' => $team,
-      'delete_forms' => $delete_forms,
-      'manager_conf_authorizations' => $managerConfAuthorizations,
+      'team'                                => $team,
+      'delete_forms'                        => $delete_forms,
+      'manager_conf_authorizations'         => $managerConfAuthorizations,
       'current_manager_conf_authorizations' => $userConfPermission,
       // 'update_forms'                     => $update_forms,
-      'add_teamate_form' => $addTeamateForm->createView(),
-      'currentConf' => $currentConf,
-      'authorized' => true
+      'add_teamate_form'                    => $addTeamateForm->createView(),
+      'currentConf'                         => $currentConf,
+      'authorized'                          => true
     );
   }
 
@@ -120,6 +117,7 @@ class TeamController extends Controller
         'there was an error adding ' . $teamate->getUsername() . ' to your team!'
       );
     }
+
     return $this->redirect($this->generateUrl('conference_team_index'));
   }
 
@@ -133,7 +131,7 @@ class TeamController extends Controller
   {
     $currentConf = $this->getUser()->getCurrentConf();
     $ACLService = $this->get('fibe_security.acl_user_permission_helper');
-    $team = $ACLService->getEntityACL('EDIT', 'Team', $currentConf->getTeam()->getId());
+    $team = $ACLService->getEntityACL('VIEW', 'Team', $currentConf->getTeam()->getId());
 
     $em = $this->getDoctrine()->getManager();
     $entity = $em->getRepository('fibeSecurityBundle:User')->find($id);
@@ -142,8 +140,8 @@ class TeamController extends Controller
     $editForm = $this->createForm(new UserConfPermissionType($this->getUser()), $userConfPermission);
 
     return array(
-      'entity' => $entity,
-      'edit_form' => $editForm->createView(),
+      'entity'     => $entity,
+      'edit_form'  => $editForm->createView(),
       'authorized' => true,
     );
   }
@@ -155,7 +153,7 @@ class TeamController extends Controller
   {
     $currentConf = $this->getUser()->getCurrentConf();
     $ACLService = $this->get('fibe_security.acl_user_permission_helper');
-    $team = $ACLService->getEntityACL('EDIT', 'Team', $currentConf->getTeam()->getId());
+    $team = $ACLService->getEntityACL('VIEW', 'Team', $currentConf->getTeam()->getId());
 
     $em = $this->getDoctrine()->getManager();
     $entity = $em->getRepository('fibeSecurityBundle:User')->find($id);
@@ -208,13 +206,13 @@ class TeamController extends Controller
       {
         $manager = $em->getRepository('fibeSecurityBundle:User')->find($id);
         //cannot delete owner
-        if ("OWNER" == $ACLService->getACEByEntity($currentConf->getTeam(), $manager))
-        {
-          throw new AccessDeniedHttpException("cannot remove the owner");
-        }
         $currentConf = $this->getUser()->getcurrentConf();
         $ACLService = $this->get('fibe_security.acl_user_permission_helper');
         $team = $ACLService->getEntityACL('DELETE', 'Team', $currentConf->getTeam());
+        if ("OWNER" == $ACLService->getACEByEntity($team, $manager))
+        {
+          throw new AccessDeniedHttpException("cannot remove the owner");
+        }
 
         if (!$manager)
         {

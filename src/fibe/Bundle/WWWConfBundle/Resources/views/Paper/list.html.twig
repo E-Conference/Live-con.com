@@ -41,13 +41,13 @@
         </ul>
       </td>
       <td>
-        {% if is_granted('VIEW', entity) %} 
-        <a class="btn btn-large btn-default" href="{{ path('schedule_paper_show', { 'id': entity.id }) }}"><i
-            class="fa fa-eye"></i></a>
+        {% if is_granted('VIEW', entity) %}
+          <a class="btn btn-large btn-default" href="{{ path('schedule_paper_show', { 'id': entity.id }) }}"><i
+                class="fa fa-eye"></i></a>
         {% endif %}
-        {% if is_granted('EDIT', entity) %} 
-        <a class="btn btn-large btn-warning edit" href="{{ path('schedule_paper_edit', { 'id': entity.id }) }}"><i
-            class="fa fa-pencil"></i></a>
+        {% if is_granted('EDIT', entity) %}
+          <a class="btn btn-large btn-warning edit" href="{{ path('schedule_paper_edit', { 'id': entity.id }) }}"><i
+                class="fa fa-pencil"></i></a>
         {% endif %}
       </td>
     </tr>

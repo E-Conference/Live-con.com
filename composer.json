@@ -25,6 +25,10 @@
         "friendsofsymfony/user-bundle": "*",
         "gregwar/captcha-bundle": "dev-master",
         "lexik/form-filter-bundle": "*",
+        "hwi/oauth-bundle": "0.4.*@dev",
+        "friendsofsymfony/rest-bundle": "1.3.*",
+        "jms/serializer-bundle": "*"
+
     },
     "scripts": {
         "post-install-cmd": [

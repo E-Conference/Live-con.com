@@ -14,7 +14,6 @@
   use fibe\Bundle\WWWConfBundle\Entity\Location;
   use fibe\Bundle\WWWConfBundle\Form\WwwConfType;
   use fibe\Bundle\WWWConfBundle\Form\WwwConfEventType;
-  use fibe\SecurityBundle\Entity\Authorization;
   use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
   use Symfony\Component\Console\Input\InputInterface;
   use Symfony\Component\Console\Output\OutputInterface;
@@ -252,11 +251,11 @@
 
       for ($counter = 0; $counter <= 1; $counter += 1)
       {
+        // get a fresh EM
         $container = $this->getContainer();
         $container->set('doctrine.orm.default', null);
         $container->set('doctrine.orm.entity_manager', null);
         $container->set('doctrine.orm.default_entity_manager', null);
-        // get a fresh EM
         $this->createConf($counter, 3000, $output, $roleType, $roleTypeChair, $roleTypePresenter);
       }
 

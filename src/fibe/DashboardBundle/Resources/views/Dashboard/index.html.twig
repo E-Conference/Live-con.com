@@ -95,10 +95,10 @@
                 </li>
                 {% if conference.getModule().getOrganizationModule() == 1 %}
                   <li class="list-group-item"><h5>Organizations <span
-                        class="badge">{{ conference.organizations|length }}</span></h5></li>
+                          class="badge">{{ conference.organizations|length }}</span></h5></li>
                 {% endif %}
                 <li class="list-group-item"><h5>Conf Managers <span
-                      class="badge">{{ conference.confManagers|length }}</span></h5></li>
+                        class="badge">{{ conference.confManagers|length }}</span></h5></li>
               </ul>
               <a href="{{ path('dashboard_enter_conference', {id: conference.id} ) }}"
                  class="edit_conference btn btn-livecon btn-block">
@@ -149,10 +149,12 @@
   {{ parent() }}
   <script type="text/javascript">
 
-    $(document).ready(function () {
+    $(document).ready(function ()
+    {
       $('#deleteConfirmation').modal('hide');
 
-      $('.delete_conference').click(function () {
+      $('.delete_conference').click(function ()
+      {
         var message = $(this).attr('data-message');
         var deleteUrl = $(this).attr('data-url');
 

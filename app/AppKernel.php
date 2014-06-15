@@ -24,19 +24,22 @@ class AppKernel extends Kernel
       new fibe\Bundle\WWWConfBundle\fibeWWWConfBundle(),
       new fibe\SecurityBundle\fibeSecurityBundle(),
       new fibe\MobileAppBundle\fibeMobileAppBundle(),
-      new fibe\UserDataBundle\fibeUserDataBundle(),
       new fibe\DashboardBundle\fibeDashboardBundle(),
       new fibe\HomePageBundle\fibeHomePageBundle(),
-      new fibe\DataBundle\DataBundle(),
-      new fibe\ExternalizationBundle\fibeExternalizationBundle(),
+      new fibe\DataBundle\DataBundle(), 
       new fibe\ConferenceBundle\fibeConferenceBundle(),
       new fibe\DocumentationBundle\DocumentationBundle(),
       new FOS\UserBundle\FOSUserBundle(),
       new Gregwar\CaptchaBundle\GregwarCaptchaBundle(),
-      new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle()
+      new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle(),
+      new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+      new JMS\SerializerBundle\JMSSerializerBundle(),
+      new FOS\RestBundle\FOSRestBundle(),
+
     );
 
-    if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+    if (in_array($this->getEnvironment(), array('dev', 'test')))
+    {
       $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
       $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
       $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();

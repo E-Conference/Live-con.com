@@ -1,43 +1,43 @@
 services:
-    emptyConf:
-        class: fibe\Bundle\WWWConfBundle\Services\EmptyConf
+    # idci_simpleschedule.type.duration:
+    #     class: fibe\Bundle\WWWConfBundle\Form\Type\DurationType
+    #     tags:
+    #         - { name: form.type, alias: duration }
 
-    idci_simpleschedule.type.year_day:
-        class: fibe\Bundle\WWWConfBundle\Form\Type\YearDayType
-        tags:
-            - { name: form.type, alias: year_day }
+    # emptyConf:
+    #     class: fibe\Bundle\WWWConfBundle\Services\EmptyConf
 
-    idci_simpleschedule.type.month:
-        class: fibe\Bundle\WWWConfBundle\Form\Type\MonthType
-        tags:
-            - { name: form.type, alias: month }
+    # idci_simpleschedule.type.year_day:
+    #     class: fibe\Bundle\WWWConfBundle\Form\Type\YearDayType
+    #     tags:
+    #         - { name: form.type, alias: year_day }
 
-    idci_simpleschedule.type.month_day:
-        class: fibe\Bundle\WWWConfBundle\Form\Type\MonthDayType
-        tags:
-            - { name: form.type, alias: month_day }
+    # idci_simpleschedule.type.month:
+    #     class: fibe\Bundle\WWWConfBundle\Form\Type\MonthType
+    #     tags:
+    #         - { name: form.type, alias: month }
 
-    idci_simpleschedule.type.week_day:
-        class: fibe\Bundle\WWWConfBundle\Form\Type\WeekDayType
-        tags:
-            - { name: form.type, alias: week_day }
+    # idci_simpleschedule.type.month_day:
+    #     class: fibe\Bundle\WWWConfBundle\Form\Type\MonthDayType
+    #     tags:
+    #         - { name: form.type, alias: month_day }
 
-    idci_simpleschedule.type.hour:
-        class: fibe\Bundle\WWWConfBundle\Form\Type\HourType
-        tags:
-            - { name: form.type, alias: hour }
+    # idci_simpleschedule.type.week_day:
+    #     class: fibe\Bundle\WWWConfBundle\Form\Type\WeekDayType
+    #     tags:
+    #         - { name: form.type, alias: week_day }
 
-    idci_simpleschedule.type.minute:
-        class: fibe\Bundle\WWWConfBundle\Form\Type\MinuteType
-        tags:
-            - { name: form.type, alias: minute }
+    # idci_simpleschedule.type.hour:
+    #     class: fibe\Bundle\WWWConfBundle\Form\Type\HourType
+    #     tags:
+    #         - { name: form.type, alias: hour }
 
-    idci_simpleschedule.type.second:
-        class: fibe\Bundle\WWWConfBundle\Form\Type\SecondType
-        tags:
-            - { name: form.type, alias: second }
+    # idci_simpleschedule.type.minute:
+    #     class: fibe\Bundle\WWWConfBundle\Form\Type\MinuteType
+    #     tags:
+    #         - { name: form.type, alias: minute }
 
-    idci_simpleschedule.type.duration:
-        class: fibe\Bundle\WWWConfBundle\Form\Type\DurationType
-        tags:
-            - { name: form.type, alias: duration }
+    # idci_simpleschedule.type.second:
+    #     class: fibe\Bundle\WWWConfBundle\Form\Type\SecondType
+    #     tags:
+    #         - { name: form.type, alias: second }

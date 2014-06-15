@@ -16,29 +16,29 @@ use Symfony\Component\Form\FormEvents;
 
 class RecurFieldSubscriber implements EventSubscriberInterface
 {
-    private $factory;
+    // private $factory;
 
-    public function __construct(FormFactoryInterface $factory)
-    {
-        $this->factory = $factory;
-    }
+    // public function __construct(FormFactoryInterface $factory)
+    // {
+    //     $this->factory = $factory;
+    // }
 
-    public static function getSubscribedEvents()
-    {
-        return array(
-            FormEvents::POST_BIND => 'fixRecurRelation'
-        );
-    }
+    // public static function getSubscribedEvents()
+    // {
+    //     return array(
+    //         FormEvents::POST_BIND => 'fixRecurRelation'
+    //     );
+    // }
 
-    public function fixRecurRelation(FormEvent $event)
-    {
-        $data = $event->getData();
+    // public function fixRecurRelation(FormEvent $event)
+    // {
+    //     $data = $event->getData();
 
-        $options = $data->getOptions();
-        if($options && in_array('is_recur', array_keys($options))) {
-            $data->getIncludedRule()->setIncludedEntity($data);
-        } else {
-            //TODO
-        }
-    }
+    //     $options = $data->getOptions();
+    //     if($options && in_array('is_recur', array_keys($options))) {
+    //         $data->getIncludedRule()->setIncludedEntity($data);
+    //     } else {
+    //         //TODO
+    //     }
+    // }
 }

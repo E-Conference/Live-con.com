@@ -39,15 +39,10 @@ class Category
     /**
      * @ORM\Column(type="string", length=128)
      */
-    protected $name;
+    protected $name; 
 
     /**
      * @ORM\Column(type="string", length=128)
-     */
-    protected $label;
-
-    /**
-     * @ORM\Column(type="string", length=128, unique=true)
      */
     protected $slug;
 
@@ -88,6 +83,12 @@ class Category
     private $calendarEntities;
 
     /**
+     * @ORM\ManyToOne(targetEntity="WwwConf", inversedBy="categories")
+     * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
+     */
+    protected $conference;
+
+    /**
      * toString
      *
      * @return string
@@ -97,11 +98,11 @@ class Category
         if($this->getParent()) {
             return sprintf('%s > %s',
                 $this->getParent(),
-                $this->getLabel()
+                $this->getName()
             );
         }
 
-        return $this->getLabel();
+        return $this->getName();
     }
 
     /**
@@ -247,31 +248,7 @@ class Category
     public function getName()
     {
         return $this->name;
-    }
-
-
-    /**
-     * Set label
-     *
-     * @param string $label
-     * @return Category
-     */
-    public function setLabel($label)
-    {
-        $this->label = $label;
-    
-        return $this;
-    }
-
-    /**
-     * Get label
-     *
-     * @return string 
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
+    } 
 
     /**
      * Set slug
@@ -480,4 +457,28 @@ class Category
     {
         return $this->calendarEntities;
     }
+
+    /**
+     * Set conference
+     *
+     * @param \fibe\Bundle\WWWConfBundle\Entity\WwwConf $wwwConf
+     * @return Category
+     */
+    public function setConference(\fibe\Bundle\WWWConfBundle\Entity\WwwConf $conference = null)
+    {
+        $this->conference = $conference;
+    
+        return $this;
+    }
+
+    /**
+     * Get conference
+     *
+     * @return \fibe\Bundle\WWWConfBundle\Entity\WwwConf 
+     */
+    public function getConference()
+    {
+        return $this->conference;
+    }
+
 }

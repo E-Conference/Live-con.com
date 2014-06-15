@@ -10,6 +10,7 @@
 
   use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
   use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
+  use fibe\Bundle\WWWConfBundle\Entity\Category;
   use fibe\MobileAppBundle\Entity\MobileAppConfig;
   use fibe\Bundle\WWWConfBundle\Form\WwwConfType;
   use fibe\Bundle\WWWConfBundle\Form\ModuleType; 
@@ -96,21 +97,7 @@
       //TODO CSRF TOKEN
       // $csrf = $this->get('form.csrf_provider'); //Symfony\Component\Form\Extension\Csrf\CsrfProvider\SessionCsrfProvider 
       // $token = $csrf->generateCsrfToken($intention); //Intention should be empty string, if you did not define it in parameters
-      // BOOLEAN $csrf->isCsrfTokenValid($intention, $token);
-
-      //check if the processed conference belongs to the user
-      $user = $this->getUser();
-      if (!$user->authorizedAccesToConference($conference))
-      {
-        throw new AccessDeniedException('Look at your conferences !!!');
-      }
-      //Authorization Verification conference datas manager
-
-      $authorization = $user->getAuthorizationByConference($conference);
-      if (!$authorization->getFlagconfDatas())
-      {
-        throw new AccessDeniedException('Action not authorized !');
-      }
+      // BOOLEAN $csrf->isCsrfTokenValid($intention, $token); 
 
       $emptyConf = $this->get('emptyConf');
       $emptyConf->emptyConf($conference, $em);
@@ -147,6 +134,7 @@
       $defaultModule->setPaperModule(1);
       $defaultModule->setOrganizationModule(1);
       $defaultModule->setSponsorModule(1);
+      $defaultModule->setConference($entity);
       $em->persist($defaultModule);
 
       //Create new App config for the conference
@@ -173,9 +161,7 @@
       $defaultAppConfig->setDuckduckgoDatasource(true);
       $defaultAppConfig->setLang("EN");
 
-      $em->persist($defaultAppConfig);
-
-      $categorie = $em->getRepository('fibeWWWConfBundle:Category')->findOneByName("ConferenceEvent");
+      $em->persist($defaultAppConfig); 
 
       //Main conf event
       $mainConfEvent = new ConfEvent();
@@ -184,7 +170,6 @@
       $mainConfEvent->setStartAt(new \DateTime('now'));
       $end = new \DateTime('now');
       $mainConfEvent->setEndAt($end->add(new \DateInterval('P2D')));
-      $mainConfEvent->addCategorie($categorie);
       $mainConfEvent->setConference($entity);
       $em->persist($mainConfEvent);
 
@@ -198,6 +183,104 @@
       $mainConfEvent->setLocation($mainConfEventLocation);
       $em->persist($mainConfEvent);
 
+      //conference categories
+
+
+      //categories
+
+      //abstract category
+
+      // $OrganisedEvent = new Category();
+      // $OrganisedEvent->setName("OrganisedEvent")
+      //          ->setColor("#0EFF74") ;
+      // $em->persist($OrganisedEvent);
+
+      // $NonAcademicEvent = new Category();
+      // $NonAcademicEvent->setName("NonAcademicEvent")
+      //                 ->setColor("#A6FF88")
+      //                 ->setParent($OrganisedEvent);
+      // $em->persist($NonAcademicEvent);
+
+      // $AcademicEvent = new Category();
+      // $AcademicEvent->setName("AcademicEvent")
+      //               ->setColor("#57A5C9")
+      //               ->setParent($OrganisedEvent);
+      // $em->persist($AcademicEvent);
+
+      // non academic
+
+      $SocialEvent = new Category();
+      $SocialEvent->setConference($entity)
+                    ->setName("Social event")
+                    ->setColor("#B186D7")// ->setParent($NonAcademicEvent)
+      ;
+      $em->persist($SocialEvent);
+
+      $MealEvent = new Category();
+      $MealEvent->setConference($entity)
+                    ->setName("Meal Event")
+                    ->setColor("#00a2e0")// ->setParent($NonAcademicEvent)
+      ;
+      $em->persist($MealEvent);
+
+      $BreakEvent = new Category();
+      $BreakEvent->setConference($entity)
+                    ->setName("Break event")
+                    ->setColor("#00a2e0")// ->setParent($NonAcademicEvent)
+      ;
+      $em->persist($BreakEvent);
+
+      // academic
+
+      $KeynoteEvent = new Category();
+      $KeynoteEvent->setConference($entity)
+                    ->setName("Keynote event")
+                    ->setColor("#afcbe0")// ->setParent($AcademicEvent)
+      ;
+      $em->persist($KeynoteEvent);
+
+      $TrackEvent = new Category();
+      $TrackEvent->setConference($entity)
+                    ->setName("Track event")
+                    ->setColor("#afcbe0")// ->setParent($AcademicEvent)
+      ;
+      $em->persist($TrackEvent);
+
+      $PanelEvent = new Category();
+      $PanelEvent->setConference($entity)
+                    ->setName("Panel event")
+                    ->setColor("#e7431e")// ->setParent($AcademicEvent)
+      ;
+      $em->persist($PanelEvent);
+
+      $ConferenceEvent = new Category();
+      $ConferenceEvent->setConference($entity)
+                    ->setName("Conference event")
+                    ->setColor("#b0ca0f")// ->setParent($AcademicEvent)
+      ;
+      $em->persist($ConferenceEvent);
+
+      $WorkshopEvent = new Category();
+      $WorkshopEvent->setConference($entity)
+                    ->setName("Workshop event")
+                    ->setColor("#EBD94E")// ->setParent($AcademicEvent)
+      ;
+      $em->persist($WorkshopEvent);
+
+      $SessionEvent = new Category();
+      $SessionEvent->setConference($entity)
+                    ->setName("Session event")
+                    ->setColor("#8F00FF")// ->setParent($AcademicEvent)
+      ;
+      $em->persist($SessionEvent);
+
+      $TalkEvent = new Category();
+      $TalkEvent->setConference($entity)
+                    ->setName("Talk event")
+                    ->setColor("#FF5A45")// ->setParent($AcademicEvent)
+      ;
+      $em->persist($TalkEvent);
+
       //Team
       $defaultTeam = new Team();
       $defaultTeam->addConfManager($user);
@@ -210,6 +293,7 @@
       $entity->setAppConfig($defaultAppConfig);
       $entity->setMainConfEvent($mainConfEvent);
       $entity->setModule($defaultModule);
+      $mainConfEvent->addCategorie($ConferenceEvent);
 
       //Add conference to current manager
       $user->setCurrentConf($entity);

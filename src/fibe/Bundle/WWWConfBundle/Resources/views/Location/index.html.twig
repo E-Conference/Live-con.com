@@ -5,53 +5,58 @@
 {% block centerPanel %}
   {{ parent() }}
 
-   <div class="row page-top-header ">
-        <div class="page-title  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-            <span>Location list</span>
-             <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Location' }) }}" target="_blank" title="Help">
-                     <i class="fa fa-question"></i> 
-            </a>
-        </div>
-
-        <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
-        </div>
-        {% if is_granted('CREATE', app.user.getCurrentConf()) %} 
-        <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-            <a class="btn btn-info btn-create create" href="{{ path('schedule_location_new') }}"  title="Add a location">
-                 <i class="fa fa-plus"></i> New location
-            </a>
-        </div>
-        {% endif %}
+  <div class="row page-top-header ">
+    <div class="page-title  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+      <span>Location list</span>
+      <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Location' }) }}" target="_blank" title="Help">
+        <i class="fa fa-question"></i>
+      </a>
     </div>
-    <div class="row page-content">
-          {% include "fibeWWWConfBundle:Filters:filters.html.twig"%}
-        <div id="location_list" class="table-responsive">
-           {% include "fibeWWWConfBundle:Location:list.html.twig" %}
-        </div>
 
+    <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
     </div>
+    {% if is_granted('CREATE', app.user.getCurrentConf()) %}
+      <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+        <a class="btn btn-info btn-create create" href="{{ path('schedule_location_new') }}" title="Add a location">
+          <i class="fa fa-plus"></i> New location
+        </a>
+      </div>
+    {% endif %}
+
+  </div>
+  <div class="row page-content">
+    {% include "fibeWWWConfBundle:Filters:filters.html.twig" %}
+    <div id="location_list" class="table-responsive">
+      {% include "fibeWWWConfBundle:Location:list.html.twig" %}
+    </div>
+
+  </div>
 
 {% endblock %}
 
 {% block javascripts_page %}
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#resultsFound").hide();
+  <script type="text/javascript">
+    $(document).ready(function ()
+    {
+      $("#resultsFound").hide();
     });
 
-    function filter(){
-        $datas = $("#filter_form").serialize();
+    function filter()
+    {
+      $datas = $("#filter_form").serialize();
 
-        //start send the post request
-         $.post("{{path('schedule_location_filter')}}",               
-                 $datas, 
-              function(response){
-                     $('#location_list').html(response);
-                     $("#resultsFound").show();
-                  
-              }, "html");    
-          return false;
-    };
-</script>
+      //start send the post request
+      $.post("{{path('schedule_location_filter')}}",
+          $datas,
+          function (response)
+          {
+            $('#location_list').html(response);
+            $("#resultsFound").show();
+
+          }, "html");
+      return false;
+    }
+    ;
+  </script>
 
 {% endblock javascripts_page %}

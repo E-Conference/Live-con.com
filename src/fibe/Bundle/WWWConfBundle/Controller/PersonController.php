@@ -57,7 +57,7 @@ class PersonController extends Controller
     $filters = $this->createForm(new PersonFilterType($this->getUser()));
 
     return array(
-      'pager' => $pager,
+      'pager'        => $pager,
       'filters_form' => $filters->createView(),
     );
   }
@@ -99,7 +99,7 @@ class PersonController extends Controller
       return $this->render(
         'fibeWWWConfBundle:Person:list.html.twig',
         array(
-          'pager' => $pager,
+          'pager'    => $pager,
           'nbResult' => $nbResult,
         )
       );
@@ -145,7 +145,7 @@ class PersonController extends Controller
       'fibeWWWConfBundle:Person:new.html.twig',
       array(
         'entity' => $entity,
-        'form' => $form->createView()
+        'form'   => $form->createView()
       )
     );
   }
@@ -164,7 +164,7 @@ class PersonController extends Controller
       'fibeWWWConfBundle:Person:new.html.twig',
       array(
         'entity' => $entity,
-        'form' => $form->createView(),
+        'form'   => $form->createView(),
       )
     );
   }
@@ -183,7 +183,7 @@ class PersonController extends Controller
     return $this->render(
       'fibeWWWConfBundle:Person:show.html.twig',
       array(
-        'entity' => $entity,
+        'entity'      => $entity,
         'delete_form' => $deleteForm->createView()
       )
     );
@@ -204,8 +204,8 @@ class PersonController extends Controller
     return $this->render(
       'fibeWWWConfBundle:Person:edit.html.twig',
       array(
-        'entity' => $entity,
-        'edit_form' => $editForm->createView(),
+        'entity'      => $entity,
+        'edit_form'   => $editForm->createView(),
         'delete_form' => $deleteForm->createView()
       )
     );

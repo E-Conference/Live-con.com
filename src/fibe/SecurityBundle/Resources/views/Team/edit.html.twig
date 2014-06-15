@@ -21,28 +21,31 @@
   <div class="row page-content">
 
     <h1>Edit <strong>{{ entity.username }}</strong>'s permissions</h1>
-    <form action="{{ path('conference_teamate_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
-      <div class="form-horizontal"> 
-          {% for confPermission in edit_form.confPermissions %}
-            {% if confPermission.vars.value.restricted == false %} 
-              <div class="form-group">
-                <label class="col-sm-2 control-label">{{ confPermission.vars.value.entityLabel }}</label>  
-                <div class="col-sm-10 choiceList">
-                  {{ form_widget(confPermission.action) }}
-                </div>
-              </div> 
-              {{ form_rest(confPermission) }}
-            {% endif %}
-          {% endfor %}
+
+    <form action="{{ path('conference_teamate_update', { 'id': entity.id }) }}"
+          method="post" {{ form_enctype(edit_form) }}>
+      <div class="form-horizontal">
+        {% for confPermission in edit_form.confPermissions %}
+          {% if confPermission.vars.value.restricted == false %}
+            <div class="form-group">
+              <label class="col-sm-2 control-label">{{ confPermission.vars.value.entityLabel }}</label>
+
+              <div class="col-sm-10 choiceList">
+                {{ form_widget(confPermission.action) }}
+              </div>
+            </div>
+            {{ form_rest(confPermission) }}
+          {% endif %}
+        {% endfor %}
       </div>
 
-      <div  class="hide"> 
-        {{ form_rest(edit_form) }} 
-      </div> 
-      <br />
+      <div class="hide">
+        {{ form_rest(edit_form) }}
+      </div>
+      <br/>
       <button type="submit" class="btn btn-block btn-success">
-          <i class="fa fa-check"></i>
+        <i class="fa fa-check"></i>
       </button>
-    </form> 
+    </form>
   </div>
 {% endblock %}

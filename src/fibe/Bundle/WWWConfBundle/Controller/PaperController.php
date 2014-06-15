@@ -51,7 +51,7 @@ class PaperController extends Controller
     $filters = $this->createForm(new PaperFilterType($this->getUser()));
 
     return array(
-      'pager' => $pager,
+      'pager'        => $pager,
       'filters_form' => $filters->createView(),
     );
   }
@@ -63,7 +63,6 @@ class PaperController extends Controller
    */
   public function filterAction(Request $request)
   {
-
     $em = $this->getDoctrine()->getManager();
 
     $conf = $this->getUser()->getCurrentConf();
@@ -93,12 +92,11 @@ class PaperController extends Controller
       return $this->render(
         'fibeWWWConfBundle:Paper:list.html.twig',
         array(
-          'pager' => $pager,
+          'pager'    => $pager,
           'nbResult' => $nbResult,
         )
       );
     }
-
   }
 
   /**
@@ -128,7 +126,7 @@ class PaperController extends Controller
       'fibeWWWConfBundle:Paper:new.html.twig',
       array(
         'entity' => $entity,
-        'form' => $form->createView()
+        'form'   => $form->createView()
       )
     );
   }
@@ -149,7 +147,7 @@ class PaperController extends Controller
       'fibeWWWConfBundle:Paper:new.html.twig',
       array(
         'entity' => $entity,
-        'form' => $form->createView(),
+        'form'   => $form->createView(),
       )
     );
   }
@@ -167,7 +165,7 @@ class PaperController extends Controller
     return $this->render(
       'fibeWWWConfBundle:Paper:show.html.twig',
       array(
-        'entity' => $entity,
+        'entity'      => $entity,
         'delete_form' => $deleteForm->createView()
       )
     );
@@ -188,8 +186,8 @@ class PaperController extends Controller
     return $this->render(
       'fibeWWWConfBundle:Paper:edit.html.twig',
       array(
-        'entity' => $entity,
-        'edit_form' => $editForm->createView(),
+        'entity'      => $entity,
+        'edit_form'   => $editForm->createView(),
         'delete_form' => $deleteForm->createView()
       )
     );

@@ -43,8 +43,6 @@ class LocationController extends Controller
    */
   public function indexAction(Request $request)
   {
-
-    //Authorization Verification conference sched manager
     $entities = $this->get('fibe_security.acl_entity_helper')->getEntitiesACL('VIEW', 'Location');
 
     $adapter = new ArrayAdapter($entities);
@@ -62,7 +60,7 @@ class LocationController extends Controller
     $filters = $this->createForm(new LocationFilterType($this->getUser()));
 
     return array(
-      'pager' => $pager,
+      'pager'        => $pager,
       'filters_form' => $filters->createView(),
     );
   }
@@ -103,12 +101,11 @@ class LocationController extends Controller
       return $this->render(
         'fibeWWWConfBundle:Location:list.html.twig',
         array(
-          'pager' => $pager,
+          'pager'    => $pager,
           'nbResult' => $nbResult,
         )
       );
     }
-
   }
 
   /**
@@ -124,7 +121,7 @@ class LocationController extends Controller
     $deleteForm = $this->createDeleteForm($id);
 
     return array(
-      'entity' => $entity,
+      'entity'      => $entity,
       'delete_form' => $deleteForm->createView()
     );
   }
@@ -142,7 +139,7 @@ class LocationController extends Controller
 
     return array(
       'entity' => $entity,
-      'form' => $form->createView()
+      'form'   => $form->createView()
     );
   }
 
@@ -173,7 +170,7 @@ class LocationController extends Controller
           '%entity%[%id%] has been created',
           array(
             '%entity%' => 'Location',
-            '%id%' => $entity->getId()
+            '%id%'     => $entity->getId()
           )
         )
       );
@@ -183,7 +180,7 @@ class LocationController extends Controller
 
     return array(
       'entity' => $entity,
-      'form' => $form->createView()
+      'form'   => $form->createView()
     );
   }
 
@@ -205,10 +202,10 @@ class LocationController extends Controller
     )->getEquipmentForLocationSelect($entity);
 
     return array(
-      'entity' => $entity,
-      'edit_form' => $editForm->createView(),
+      'entity'      => $entity,
+      'edit_form'   => $editForm->createView(),
       'delete_form' => $deleteForm->createView(),
-      'equipments' => $equipments
+      'equipments'  => $equipments
     );
   }
 
@@ -222,7 +219,6 @@ class LocationController extends Controller
   public function updateAction(Request $request, $id)
   {
     $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT', 'Location', $id);
-
 
     $editForm = $this->createForm(new LocationType(), $entity);
     $editForm->bind($request);
@@ -239,7 +235,7 @@ class LocationController extends Controller
           '%entity%[%id%] has been updated',
           array(
             '%entity%' => 'Location',
-            '%id%' => $entity->getId()
+            '%id%'     => $entity->getId()
           )
         )
       );
@@ -248,7 +244,7 @@ class LocationController extends Controller
     }
 
     return array(
-      'entity' => $entity,
+      'entity'    => $entity,
       'edit_form' => $editForm->createView()
     );
   }
@@ -263,7 +259,6 @@ class LocationController extends Controller
   public function deleteAction(Request $request, $id)
   {
     $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('DELETE', 'Location', $id);
-
 
     $form = $this->createDeleteForm($id);
     $form->bind($request);
@@ -301,7 +296,7 @@ class LocationController extends Controller
     $deleteForm = $this->createDeleteForm($id);
 
     return array(
-      'entity' => $entity,
+      'entity'      => $entity,
       'delete_form' => $deleteForm->createView()
     );
   }

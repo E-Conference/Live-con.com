@@ -1,20 +1,20 @@
 <div class="row" style="background: #E5E5EB; margin-bottom:20px ">
 
-    <form id ="filter_form"  method="get" >
-             <div class="col-xs-12 col-sm-4 col-md-2 col-lg-2">
-             	<label> Filters : </label>
-             </div>
-            {% for child in filters_form %}
-            <div class="col-xs-12 col-sm-4 col-md-2 col-lg-2">
+  <form id="filter_form" method="get">
+    <div class="col-xs-12 col-sm-4 col-md-2 col-lg-2">
+      <label> Filters : </label>
+    </div>
+    {% for child in filters_form %}
+      <div class="col-xs-12 col-sm-4 col-md-2 col-lg-2">
 
-			  	  {{ form_widget(child) }}
+        {{ form_widget(child) }}
 
-			  </div>
-			{% endfor %}
-         
-          <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2"></div>
-          <div class="col-xs-12 col-sm-4 col-md-2 col-lg-1" style="float:right;">
-         <a id="submit_form_filter"  class="btn btn-default btn-block" onclick="filter()" ><i class="fa fa-search"></i></a>
-     </div>
-    </form>
- </div>
+      </div>
+    {% endfor %}
+
+    <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2"></div>
+    <div class="col-xs-12 col-sm-4 col-md-2 col-lg-1" style="float:right;">
+      <a id="submit_form_filter" class="btn btn-default btn-block" onclick="filter()"><i class="fa fa-search"></i></a>
+    </div>
+  </form>
+</div>

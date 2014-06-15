@@ -88,7 +88,7 @@ class CategoryController extends Controller
    */
   public function newAction()
   {
-    throw new ServiceUnavailableHttpException('Not available yet.');
+    // throw new ServiceUnavailableHttpException('Not available yet.');
     $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE', 'Category');
     $form = $this->createForm(new CategoryType(), $entity);
 
@@ -102,12 +102,10 @@ class CategoryController extends Controller
    * Creates a new Category entity.
    *
    * @Route("/create", name="schedule_category_create")
-   * @Method("POST")
-   * @Template("fibeWWWConfBundle:Category:new.html.twig")
    */
   public function createAction(Request $request)
   {
-    throw new ServiceUnavailableHttpException('Not available yet.');
+    // throw new ServiceUnavailableHttpException('Not available yet.');
     $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('CREATE', 'Category');
     $form = $this->createForm(new CategoryType(), $entity);
     $form->bind($request);
@@ -131,11 +129,7 @@ class CategoryController extends Controller
 
       return $this->redirect($this->generateUrl('schedule_category_show', array('id' => $entity->getId())));
     }
-
-    return array(
-      'entity' => $entity,
-      'form' => $form->createView(),
-    );
+    return $this->redirect($this->generateUrl('schedule_category_new'));
   }
 
   /**
@@ -146,7 +140,6 @@ class CategoryController extends Controller
    */
   public function editAction($id)
   {
-    throw new ServiceUnavailableHttpException('Not available yet.');
     $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT', 'Category', $id);
 
     if (!$entity)
@@ -173,7 +166,6 @@ class CategoryController extends Controller
    */
   public function updateAction(Request $request, $id)
   {
-    throw new ServiceUnavailableHttpException('Not available yet.');
     $em = $this->getDoctrine()->getManager();
     $entity = $this->get('fibe_security.acl_entity_helper')->getEntityACL('EDIT', 'Category', $id);
 
@@ -202,7 +194,7 @@ class CategoryController extends Controller
         )
       );
 
-      return $this->redirect($this->generateUrl('schedule_category_edit', array('id' => $id)));
+      return $this->redirect($this->generateUrl('schedule_category_show', array('id' => $id)));
     }
 
     return array(
@@ -220,7 +212,6 @@ class CategoryController extends Controller
    */
   public function deleteAction(Request $request, $id)
   {
-    throw new ServiceUnavailableHttpException('Not available yet.');
     $form = $this->createDeleteForm($id);
     $form->bind($request);
 
@@ -257,28 +248,26 @@ class CategoryController extends Controller
    *
    * @Template()
    */
-  public function deleteFormAction($id)
-  {
-    throw new ServiceUnavailableHttpException('Not available yet.');
-    $em = $this->getDoctrine()->getManager();
-    $entity = $em->getRepository('fibeWWWConfBundle:Category')->find($id);
+  // public function deleteFormAction($id)
+  // {
+  //   $em = $this->getDoctrine()->getManager();
+  //   $entity = $em->getRepository('fibeWWWConfBundle:Category')->find($id);
 
-    if (!$entity)
-    {
-      throw $this->createNotFoundException('Unable to find Category entity.');
-    }
+  //   if (!$entity)
+  //   {
+  //     throw $this->createNotFoundException('Unable to find Category entity.');
+  //   }
 
-    $deleteForm = $this->createDeleteForm($id);
+  //   $deleteForm = $this->createDeleteForm($id);
 
-    return array(
-      'entity' => $entity,
-      'delete_form' => $deleteForm->createView(),
-    );
-  }
+  //   return array(
+  //     'entity' => $entity,
+  //     'delete_form' => $deleteForm->createView(),
+  //   );
+  // }
 
   private function createDeleteForm($id)
   {
-    throw new ServiceUnavailableHttpException('Not available yet.');
 
     return $this->createFormBuilder(array('id' => $id))
       ->add('id', 'hidden')

@@ -21,7 +21,7 @@
   {% include "fibeHomePageBundle::topBar.html.twig" %}
 
   <div id="login_page">
- 
+
 
     <div id="background"></div>
     <div class="container_12">
@@ -31,23 +31,31 @@
               src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon"/></a>
 
         <div style="color:#811B06"><strong>{{ error }}</strong></div>
-        <form action="{{ path('login_check') }}" method="post">
+        <form id="login-form" action="{{ path('login_check') }}" method="post">
           <label for="username"><p>Login :</p></label>
           <input type="text" id="username" name="_username" value="{{ last_username }}"/>
 
           <label for="password"><p>Password :</p></label>
           <input type="password" id="password" name="_password"/>
           <br/>
-          <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+          <input type="checkbox" id="remember_me" name="_remember_me" value="on"/>
           <label for="remember_me">Remember me</label>
 
           <br/>
           <input class="btn btn-success" id="submitButton" type="submit" value="Connexion"/>
-        </form>
+        </form> 
+
+        {% for owner in hwi_oauth_resource_owners() %}
+            {# can't register with twitter as long as they chose to not return user's mail :( fuck'em #}
+          {% if owner != 'twitter' %}  
+          <a class="btn btn-success btn-connect btn-connect-{{ owner }}" href="{{ hwi_oauth_login_url(owner) }}">
+            Connect with {{ owner | trans({}, 'HWIOAuthBundle') }}
+          </a> 
+          {% endif %}
+        {% endfor %}
       </div>
     </div>
   </div>
-
 
 
 
