@@ -3,55 +3,59 @@
 {% block title %}Topic edit{% endblock title %}
 
 {% block centerPanel %}
-    {{ parent() }}
+  {{ parent() }}
 
-         <div class="row page-top-header ">
-            <div class="page-title  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                <span>Topic list</span>
-                <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Topic' }) }}" target="_blank" title="Help">
-                     <i class="fa fa-question"></i> 
-                </a>
-            </div>
+  <div class="row page-top-header ">
+    <div class="page-title  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+      <span>Topic list</span>
+      <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Topic' }) }}" target="_blank" title="Help">
+        <i class="fa fa-question"></i>
+      </a>
+    </div>
 
-            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
-            </div>
-            {% if is_granted('CREATE', app.user.getCurrentConf()) %} 
-            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                <a class="btn btn-info btn-create create" href="{{ path('schedule_topic_new') }}" title="Add a topic">
-                     <i class="fa fa-plus"></i> New topic
-                </a>
-            </div>
-            {% endif %} 
-        </div>
-        <div class="row page-content">
-            {% include "fibeWWWConfBundle:Filters:filters.html.twig"%}
+    <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+    </div>
+    {% if is_granted('CREATE', app.user.getCurrentConf()) %}
+      <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+        <a class="btn btn-info btn-create create" href="{{ path('schedule_topic_new') }}" title="Add a topic">
+          <i class="fa fa-plus"></i> New topic
+        </a>
+      </div>
+    {% endif %}
+  </div>
+  <div class="row page-content">
+    {% include "fibeWWWConfBundle:Filters:filters.html.twig" %}
 
 
-        <div id="topic_list" class="table-responsive">
-           {% include "fibeWWWConfBundle:Topic:list.html.twig" %}
-        </div>
-        </div>
+    <div id="topic_list" class="table-responsive">
+      {% include "fibeWWWConfBundle:Topic:list.html.twig" %}
+    </div>
+  </div>
 {% endblock %} 
 
 
 {% block javascripts_page %}
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#resultsFound").hide();
-   });
+  <script type="text/javascript">
+    $(document).ready(function ()
+    {
+      $("#resultsFound").hide();
+    });
 
-    function filter(){
-        $datas = $("#filter_form").serialize();
+    function filter()
+    {
+      $datas = $("#filter_form").serialize();
 
-        //start send the post request
-         $.post("{{path('schedule_topic_filter')}}",               
-                 $datas, 
-              function(response){
-                     $('#topic_list').html(response);
-                     $("#resultsFound").show();                  
-              }, "html");    
-          return false;
-    };
-</script>
+      //start send the post request
+      $.post("{{path('schedule_topic_filter')}}",
+          $datas,
+          function (response)
+          {
+            $('#topic_list').html(response);
+            $("#resultsFound").show();
+          }, "html");
+      return false;
+    }
+    ;
+  </script>
 
 {% endblock javascripts_page %}

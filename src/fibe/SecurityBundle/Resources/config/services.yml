@@ -49,10 +49,6 @@ services:
         tags:
             - { name: form.type, alias: fibe_user_profile }
 
-    fibe_security.select_conference_success_handler:
-        class: fibe\SecurityBundle\Services\ChooseConferenceSuccessHandler
-        arguments: ["@router"]
-
     fibe_security.acl_entity_helper:
         class: fibe\SecurityBundle\Services\ACLEntityHelper
         arguments: ["@security.context","@doctrine.orm.entity_manager","@security.acl.provider"]

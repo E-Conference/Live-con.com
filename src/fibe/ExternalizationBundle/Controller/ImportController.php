@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 /**
  * Importer controller.
  * @Route("/importer")
@@ -15,16 +16,17 @@ use Symfony\Component\HttpFoundation\Response;
 class ImportController extends Controller
 {
 
-	/**
-     * Importer access.
-    *
-    * @Route("/", name="externalization_import_index")
-    * @Template()
-    */
-    public function indexAction()
-    { 
-        //check right
-        $conference = $this->get('fibe_security.acl_entity_helper')->getEntityACL('OPERATOR','WwwConf',$this->getUser()->getCurrentConf());
-        return array();
-    }
+  /**
+   * Importer access.
+   *
+   * @Route("/", name="externalization_import_index")
+   * @Template()
+   */
+  public function indexAction()
+  {
+    //check right
+    $conference = $this->get('fibe_security.acl_entity_helper')->getEntityACL('OPERATOR', 'WwwConf', $this->getUser()->getCurrentConf());
+
+    return array();
+  }
 }

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * 
- * @author:  Gabriel BONDAZ <gabriel.bondaz@idci-consulting.fr>
+ *
+ * @author :  Gabriel BONDAZ <gabriel.bondaz@idci-consulting.fr>
  * @licence: GPL
  *
  */
@@ -19,4 +19,5 @@ use Doctrine\ORM\EntityRepository;
  */
 class LocationAwareCalendarEntityRepository extends CalendarEntityRepository
 {
+
 }

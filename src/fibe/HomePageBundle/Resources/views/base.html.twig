@@ -1,12 +1,12 @@
 {% extends '::base.html.twig' %}
 
 {% block meta %}
+  <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
   {% block meta_page %}
   {% endblock meta_page %}
 {% endblock meta %}
 
 {% block title %}{% endblock title %}
-
 {% block stylesheets %}
   {{ parent() }}
   {% block stylesheets_page %}
@@ -16,7 +16,6 @@
 
 {% block javascripts %}
   {{ parent() }}
-  <script type="text/javascript" src="{{ asset('js/jquery.js') }}"></script>
   {% block javascripts_page %}
   {% endblock %}
 {% endblock %}

@@ -3,140 +3,152 @@
 {% block title %}Person edit{% endblock title %}
 
 {% block centerPanel %}
-    {{ parent() }}
-      <div class="row page-top-header ">
-            <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                <span>Edit person</span>
-                <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Person' }) }}" title="Help">
-                     <i class="fa fa-question"></i> 
-                </a>
-            </div>
-
-            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
-            </div>
-            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                 <a type="button" href="{{ path('schedule_person_index') }}" class="btn btn-warning" title="Go back to the list">
-                    <i class="fa fa-list"></i>
-              </a>
-              {% if is_granted('DELETE', entity) %}
-                 <form action="{{ path('schedule_person_delete', { 'id': entity.id }) }}" method="post">
-                  <input type="hidden" name="_method" value="DELETE" />
-                    {{ form_widget(delete_form) }}
-                    <button type="submit" class="btn btn-danger" title="Remove person">
-                        <i class="fa fa-trash-o"></i>
-                    </button>
-              </form> 
-              {% endif %}
-            </div>
-      </div>
-      <div class="row page-content">
-
-          <form action="{{ path('schedule_person_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
-              <input type="hidden" name="_method" value="PUT" />
-               <div class="row">
-                     <div class="col-lg-2"></div>
-                     <div class="col-lg-4">
-                           {{ form_row(edit_form.firstName) }}
-                           {{ form_row(edit_form.familyName) }}
-                           {{ form_row(edit_form.email) }}
-                           {{ form_row(edit_form.age) }}
-                           {{ form_row(edit_form.img) }}
-                    </div>
-                    <div class="col-lg-4">
-                           {{ form_row(edit_form.page) }}
-                           {{ form_row(edit_form.description) }}
-                           {{ form_row(edit_form.openId) }}
-                           {# {{ form_row(edit_form.nick) }} #}
-                           
-                           {% if app.user.getCurrentConf().getModule().getOrganizationModule() == 1 %}
-                           {{ form_row(edit_form.organizations) }}
-                           {% endif %}
-
-                           {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
-                              {{ form_row(edit_form.papers) }}
-                           {% endif %}
-
-                           {{ form_row(edit_form.accounts) }}
-                           {{ form_errors(edit_form) }}
-                    </div>
-                    <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">     
-                          {{ form_rest(edit_form)}}
-                   </div>  
-              </div> 
-              <br />
-               <div class="row"> 
-                  <div class="col-lg-4"></div>
-                  <div class="col-lg-4">  
-                       <button type="submit" class="btn btn-block btn-success">
-                                <i class="fa fa-check"></i>
-                      </button>
-                  </div>
-              </div>
-          </form>
+  {{ parent() }}
+  <div class="row page-top-header ">
+    <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
+      <span>Edit person</span>
+      <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Person' }) }}" title="Help">
+        <i class="fa fa-question"></i>
+      </a>
     </div>
+
+    <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+    </div>
+    <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+      <a type="button" href="{{ path('schedule_person_index') }}" class="btn btn-warning" title="Go back to the list">
+        <i class="fa fa-list"></i>
+      </a>
+      {% if is_granted('DELETE', entity) %}
+        <form action="{{ path('schedule_person_delete', { 'id': entity.id }) }}" method="post">
+          <input type="hidden" name="_method" value="DELETE"/>
+          {{ form_widget(delete_form) }}
+          <button type="submit" class="btn btn-danger" title="Remove person">
+            <i class="fa fa-trash-o"></i>
+          </button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+  <div class="row page-content">
+
+    <form action="{{ path('schedule_person_update', { 'id': entity.id }) }}"
+          method="post" {{ form_enctype(edit_form) }}>
+      <input type="hidden" name="_method" value="PUT"/>
+
+      <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-4">
+          {{ form_row(edit_form.firstName) }}
+          {{ form_row(edit_form.familyName) }}
+          {{ form_row(edit_form.email) }}
+          {{ form_row(edit_form.age) }}
+          {{ form_row(edit_form.img) }}
+        </div>
+        <div class="col-lg-4">
+          {{ form_row(edit_form.page) }}
+          {{ form_row(edit_form.description) }}
+          {{ form_row(edit_form.openId) }}
+          {# {{ form_row(edit_form.nick) }} #}
+
+          {% if app.user.getCurrentConf().getModule().getOrganizationModule() == 1 %}
+            {{ form_row(edit_form.organizations) }}
+          {% endif %}
+
+          {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
+            {{ form_row(edit_form.papers) }}
+          {% endif %}
+
+          {{ form_row(edit_form.accounts) }}
+          {{ form_errors(edit_form) }}
+        </div>
+        <div style="visibility:hidden;display:none;height:0px;" id="hiddenInputs">
+          {{ form_rest(edit_form) }}
+        </div>
+      </div>
+      <br/>
+
+      <div class="row">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+          <button type="submit" class="btn btn-block btn-success">
+            <i class="fa fa-check"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
 {% endblock %}
 
-{%  block javascripts_page %} 
-<script type="text/javascript">
-$(document).ready(function() {
-  // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
-  var $container = $('#fibe_bundle_wwwconfbundle_persontype_accounts');
+{% block javascripts_page %}
+  <script type="text/javascript">
+    $(document).ready(function ()
+    {
+      // On récupère la balise <div> en question qui contient l'attribut « data-prototype » qui nous intéresse.
+      var $container = $('#fibe_bundle_wwwconfbundle_persontype_accounts');
 
-  // On ajoute un lien pour ajouter une nouvelle catégorie
-  var $lienAjout = $('<a href="#" id="add_account" class="btn btn-info btn-create"><i class="fa fa-plus"></i></a>');
-  $container.append($lienAjout);
+      // On ajoute un lien pour ajouter une nouvelle catégorie
+      var $lienAjout = $('<a href="#" id="add_account" class="btn btn-info btn-create"><i class="fa fa-plus"></i></a>');
+      $container.append($lienAjout);
 
-  // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
-  $lienAjout.click(function(e) {
-    addAccount($container);
-    e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-    return false;
-  });
+      // On ajoute un nouveau champ à chaque clic sur le lien d'ajout.
+      $lienAjout.click(function (e)
+      {
+        addAccount($container);
+        e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+        return false;
+      });
 
-  // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
-  var index = $container.find(':input').length;
+      // On définit un compteur unique pour nommer les champs qu'on va ajouter dynamiquement
+      var index = $container.find(':input').length;
 
-  // On ajoute un premier champ directement s'il n'en existe pas déjà un (cas d'un nouvel article par exemple).
-  if (index == 0) {
-  } else {
-    // Pour chaque catégorie déjà existante, on ajoute un lien de suppression
-    $container.children('div').each(function() {
-      addDeleteLink($(this));
+      // On ajoute un premier champ directement s'il n'en existe pas déjà un (cas d'un nouvel article par exemple).
+      if (index == 0)
+      {
+      }
+      else
+      {
+        // Pour chaque catégorie déjà existante, on ajoute un lien de suppression
+        $container.children('div').each(function ()
+        {
+          addDeleteLink($(this));
+        });
+      }
+
+      // La fonction qui ajoute un formulaire Categorie
+      function addAccount($container)
+      {
+        // Dans le contenu de l'attribut « data-prototype », on remplace :
+        // - le texte "__name__label__" qu'il contient par le label du champ
+        // - le texte "__name__" qu'il contient par le numéro du champ
+        var $prototype = $($container.attr('data-prototype').replace(/__name__label__/g, 'Account n°' + (index + 1))
+            .replace(/__name__/g, index));
+
+        // On ajoute au prototype un lien pour pouvoir supprimer la catégorie
+        addDeleteLink($prototype);
+
+        // On ajoute le prototype modifié à la fin de la balise <div>
+        $container.append($prototype);
+
+        // Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
+        index++;
+      }
+
+      // La fonction qui ajoute un lien de suppression d'une catégorie
+      function addDeleteLink($prototype)
+      {
+        // Création du lien
+        $lienSuppression = $('<a href="#" class="btn btn-danger"> <i class="fa fa-trash-o"></i></a>');
+
+        // Ajout du lien
+        $prototype.append($lienSuppression);
+        // Ajout du listener sur le clic du lien
+        $lienSuppression.click(function (e)
+        {
+          $prototype.remove();
+          e.preventDefault(); // évite qu'un # apparaisse dans l'URL
+          return false;
+        });
+      }
     });
-  }
-
-  // La fonction qui ajoute un formulaire Categorie
-  function addAccount($container) {
-    // Dans le contenu de l'attribut « data-prototype », on remplace :
-    // - le texte "__name__label__" qu'il contient par le label du champ
-    // - le texte "__name__" qu'il contient par le numéro du champ
-    var $prototype = $($container.attr('data-prototype').replace(/__name__label__/g, 'Account n°' + (index+1))
-                                                        .replace(/__name__/g, index));
-
-    // On ajoute au prototype un lien pour pouvoir supprimer la catégorie
-    addDeleteLink($prototype);
-
-    // On ajoute le prototype modifié à la fin de la balise <div>
-    $container.append($prototype);
-
-    // Enfin, on incrémente le compteur pour que le prochain ajout se fasse avec un autre numéro
-    index++;
-  }
-
-  // La fonction qui ajoute un lien de suppression d'une catégorie
-  function addDeleteLink($prototype) {
-    // Création du lien
-    $lienSuppression = $('<a href="#" class="btn btn-danger"> <i class="fa fa-trash-o"></i></a>');
-
-    // Ajout du lien
-    $prototype.append($lienSuppression);
-    // Ajout du listener sur le clic du lien
-    $lienSuppression.click(function(e) {
-      $prototype.remove();
-      e.preventDefault(); // évite qu'un # apparaisse dans l'URL
-      return false;
-    });
-  }
-});
-</script>
+  </script>
 {% endblock %}

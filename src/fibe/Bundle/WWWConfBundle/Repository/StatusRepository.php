@@ -1,8 +1,8 @@
 <?php
 
 /**
- * 
- * @author:  Gabriel BONDAZ <gabriel.bondaz@idci-consulting.fr>
+ *
+ * @author :  Gabriel BONDAZ <gabriel.bondaz@idci-consulting.fr>
  * @licence: GPL
  *
  */
@@ -19,46 +19,48 @@ use Doctrine\ORM\EntityRepository;
  */
 class StatusRepository extends EntityRepository
 {
-    /**
-     * getDiscrStatusQueryBuilder
-     *
-     * @param $discr string the discriminant
-     * @return QueryBuilder
-     */
-    public function getDiscrStatusQueryBuilder($discr)
-    {
-        $qb = $this->createQueryBuilder('s')
-            ->where('s.discr = :discr')
-            ->setParameter('discr', $discr)
-            ->orderBy('s.value', 'ASC')
-        ;
+  /**
+   * getDiscrStatusQueryBuilder
+   *
+   * @param $discr string the discriminant
+   *
+   * @return QueryBuilder
+   */
+  public function getDiscrStatusQueryBuilder($discr)
+  {
+    $qb = $this->createQueryBuilder('s')
+      ->where('s.discr = :discr')
+      ->setParameter('discr', $discr)
+      ->orderBy('s.value', 'ASC');
 
-        return $qb;
-    }
+    return $qb;
+  }
 
-    /**
-     * getDiscrStatusQuery
-     *
-     * @param $discr string the discriminant
-     * @return Query
-     */
-    public function getDiscrStatusQuery($discr)
-    {
-        $qb = $this->getDiscrStatusQueryBuilder($discr);
+  /**
+   * getDiscrStatusQuery
+   *
+   * @param $discr string the discriminant
+   *
+   * @return Query
+   */
+  public function getDiscrStatusQuery($discr)
+  {
+    $qb = $this->getDiscrStatusQueryBuilder($discr);
 
-        return is_null($qb) ? $qb : $qb->getQuery();
-    }
+    return is_null($qb) ? $qb : $qb->getQuery();
+  }
 
-    /**
-     * getDiscrStatus
-     *
-     * @param $discr string the discriminant
-     * @return DoctrineCollection
-     */
-    public function getDiscrStatus($discr)
-    {
-        $q = $this->getDiscrStatusQuery($discr);
+  /**
+   * getDiscrStatus
+   *
+   * @param $discr string the discriminant
+   *
+   * @return DoctrineCollection
+   */
+  public function getDiscrStatus($discr)
+  {
+    $q = $this->getDiscrStatusQuery($discr);
 
-        return is_null($q) ? array() : $q->getResult();
-    }
+    return is_null($q) ? array() : $q->getResult();
+  }
 }

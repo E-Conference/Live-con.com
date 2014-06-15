@@ -1,60 +1,65 @@
 <table class="table">
-    <thead>
-        <tr>
-            <th>Relation Id</th>
-            <th>Paper Title</th>
-            <th>Paper Author</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
+  <thead>
+  <tr>
+    <th>Relation Id</th>
+    <th>Paper Title</th>
+    <th>Paper Author</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
 
-    <tbody>
-        {% for paper in entity.getPapers() %} 
-            <tr> 
-                <td>{{ paper.id }}</td>
-                <td>{{ paper.title }}</td>
-                <td>
-                    {% for author in paper.getAuthor() %} 
-                        {{author.getPerson().name}}
-                    {% endfor %}
-                </td>
-                <td>
-                
-                     <a  class="btn btn-default abstract_paper" data-toggle="popover" title="{{ paper.title }} Abstract" data-content="{{ paper.abstract }}"><i class="fa fa-file-text"></i>
-                     </a>
-                 {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
-                     <a id="{{paper.id}}" class="btn btn-danger delete_paper edit-event" data-toggle="tooltip" title="Remove this Paper from the list"><i class="fa fa-trash-o"></i>
-                     </a>
-                 {% endif %}
-                </td>
-                 
-            </tr> 
+  <tbody>
+  {% for paper in entity.getPapers() %}
+    <tr>
+      <td>{{ paper.id }}</td>
+      <td>{{ paper.title }}</td>
+      <td>
+        {% for author in paper.getAuthor() %}
+          {{ author.getPerson().name }}
         {% endfor %}
-    </tbody>
+      </td>
+      <td>
 
-   
+        <a class="btn btn-default abstract_paper" data-toggle="popover" title="{{ paper.title }} Abstract"
+           data-content="{{ paper.abstract }}"><i class="fa fa-file-text"></i>
+        </a>
+        {% if app.user.getCurrentConf().getModule().getPaperModule() == 1 %}
+          <a id="{{ paper.id }}" class="btn btn-danger delete_paper edit-event" data-toggle="tooltip"
+             title="Remove this Paper from the list"><i class="fa fa-trash-o"></i>
+          </a>
+        {% endif %}
+      </td>
+
+    </tr>
+  {% endfor %}
+  </tbody>
+
+
 </table>
 
 {% block javascripts %}
-<script type="text/javascript">
+  <script type="text/javascript">
 
-$(".delete_paper").click(function(){
+    $(".delete_paper").click(function ()
+    {
 
       var id_paper = $(this).attr('id');
-       $('#loader_papers').show();
+      $('#loader_papers').show();
       //start send the post request
-       $.post("{{path('schedule_confevent_deletePaper')}}",               
-               {id_paper : id_paper, id_entity: "{{ entity.id }}"} , 
-            function(response){
-                   $('#paper_related_list').html(response);
-                   $('#loader_papers').hide();
-            }, "html");    
-       });
+      $.post("{{path('schedule_confevent_deletePaper')}}",
+          {id_paper: id_paper, id_entity: "{{ entity.id }}"},
+          function (response)
+          {
+            $('#paper_related_list').html(response);
+            $('#loader_papers').hide();
+          }, "html");
+    });
 
-$(document).ready(function() {
-     $('.abstract_paper').popover({ 'trigger': 'click', 'placement':'bottom'});
-   
-  
-});
-</script>
+    $(document).ready(function ()
+    {
+      $('.abstract_paper').popover({ 'trigger': 'click', 'placement': 'bottom'});
+
+
+    });
+  </script>
 {% endblock javascripts %}

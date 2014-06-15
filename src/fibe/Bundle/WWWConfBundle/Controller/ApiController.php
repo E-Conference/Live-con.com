@@ -19,27 +19,27 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ApiController extends Controller
 {
-/**
- * Needed to get api url for the mobile app DONT REMOVE !!
- * @Route("/", name="idci_exporter_api_homeapi")
- */
-    public function apiAction(Request $request)
-    {
-	    // $em = $this->getDoctrine()->getManager();
-	    // $query = $request->query;
-	    // $uriParam = $query->get('uri', '');
-	    // if($uriParam!='')
-	    // {
-	    //     $query->add(array( "xproperty_value" => $uriParam));
-	    //     $query->remove("uri");
-	    // }
-     //    $entities = $em->getRepository('IDCISimpleScheduleBundle:CalendarEntity')->extract($query->all()); 
-     //    $result = $this->get('idci_exporter.manager')->export($entities,"jsonp"); 
-     //    $response = new Response();
-     //    $response->setContent($result->getContent());
-     //    $response->headers->set('Content-Type', $result->getContentType()); 
-     //    return $response;
-    }
+  /**
+   * Needed to get api url for the mobile app DONT REMOVE !!
+   * @Route("/", name="idci_exporter_api_homeapi")
+   */
+  public function apiAction(Request $request)
+  {
+    // $em = $this->getDoctrine()->getManager();
+    // $query = $request->query;
+    // $uriParam = $query->get('uri', '');
+    // if($uriParam!='')
+    // {
+    //     $query->add(array( "xproperty_value" => $uriParam));
+    //     $query->remove("uri");
+    // }
+    //    $entities = $em->getRepository('IDCISimpleScheduleBundle:CalendarEntity')->extract($query->all());
+    //    $result = $this->get('idci_exporter.manager')->export($entities,"jsonp");
+    //    $response = new Response();
+    //    $response->setContent($result->getContent());
+    //    $response->headers->set('Content-Type', $result->getContentType());
+    //    return $response;
+  }
 
 
 }

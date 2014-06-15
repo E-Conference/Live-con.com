@@ -9,18 +9,18 @@
         <div class="row">
           <table class="table table-hover records_list">
             <thead>
-              <tr>
-                <th>Name</th>
-              </tr>
+            <tr>
+              <th>Name</th>
+            </tr>
             </thead>
             <tbody>
-              {% for entity in entities %}
-                <tr>
-                  <td>
-                    <a href="{{ path('person', { 'slug': entity.slug, 'object': 'Person'  }) }}">{{ entity.name }}</a>
-                  </td>
-                </tr>
-              {% endfor %}
+            {% for entity in entities %}
+              <tr>
+                <td>
+                  <a href="{{ path('person', { 'slug': entity.slug, 'object': 'Person'  }) }}">{{ entity.name }}</a>
+                </td>
+              </tr>
+            {% endfor %}
             </tbody>
           </table>
         </div>

@@ -36,21 +36,24 @@
 
 {% block javascripts_page %}
   <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function ()
+    {
       $("#resultsFound").hide();
     });
 
-    function filter() {
+    function filter()
+    {
       $datas = $("#filter_form").serialize();
 
       //start send the post request
       $.post("{{path('schedule_location_filter')}}",
-        $datas,
-        function (response) {
-          $('#location_list').html(response);
-          $("#resultsFound").show();
+          $datas,
+          function (response)
+          {
+            $('#location_list').html(response);
+            $("#resultsFound").show();
 
-        }, "html");
+          }, "html");
       return false;
     }
     ;

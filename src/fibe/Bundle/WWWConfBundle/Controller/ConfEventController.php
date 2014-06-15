@@ -60,7 +60,7 @@ class ConfEventController extends Controller
     $filters = $this->createForm(new ConfEventFilterType($this->getUser()));
 
     return array(
-      'pager' => $pager,
+      'pager'        => $pager,
       'filters_form' => $filters->createView()
     );
   }
@@ -101,7 +101,7 @@ class ConfEventController extends Controller
       return $this->render(
         'fibeWWWConfBundle:ConfEvent:list.html.twig',
         array(
-          'pager' => $pager,
+          'pager'    => $pager,
           'nbResult' => $nbResult,
         )
       );
@@ -143,7 +143,7 @@ class ConfEventController extends Controller
       'fibeWWWConfBundle:ConfEvent:new.html.twig',
       array(
         'entity' => $entity,
-        'form' => $form->createView(),
+        'form'   => $form->createView(),
       )
     );
   }
@@ -163,7 +163,7 @@ class ConfEventController extends Controller
       'fibeWWWConfBundle:ConfEvent:new.html.twig',
       array(
         'entity' => $entity,
-        'form' => $form->createView(),
+        'form'   => $form->createView(),
       )
     );
   }
@@ -183,7 +183,7 @@ class ConfEventController extends Controller
     return $this->render(
       'fibeWWWConfBundle:ConfEvent:show.html.twig',
       array(
-        'entity' => $entity,
+        'entity'      => $entity,
         'delete_form' => $deleteForm->createView(),
 
       )
@@ -210,12 +210,12 @@ class ConfEventController extends Controller
         'papers',
         'entity',
         array(
-          'class' => 'fibeWWWConfBundle:Paper',
+          'class'    => 'fibeWWWConfBundle:Paper',
           'property' => 'title',
           'required' => false,
           'multiple' => false,
-          'choices' => $papersForSelect,
-          'label' => "Select paper"
+          'choices'  => $papersForSelect,
+          'label'    => "Select paper"
         )
       )
       ->getForm();
@@ -226,12 +226,12 @@ class ConfEventController extends Controller
         'topics',
         'entity',
         array(
-          'class' => 'fibeWWWConfBundle:Topic',
+          'class'    => 'fibeWWWConfBundle:Topic',
           'required' => false,
           'property' => 'name',
           'multiple' => false,
-          'choices' => $topicsForSelect,
-          'label' => "Select topic"
+          'choices'  => $topicsForSelect,
+          'label'    => "Select topic"
         )
       )
       ->getForm();
@@ -239,12 +239,12 @@ class ConfEventController extends Controller
     return $this->render(
       'fibeWWWConfBundle:ConfEvent:edit.html.twig',
       array(
-        'entity' => $entity,
-        'edit_form' => $editForm->createView(),
+        'entity'      => $entity,
+        'edit_form'   => $editForm->createView(),
         'delete_form' => $deleteForm->createView(),
-        'role_form' => $form_role->createView(),
-        'paper_form' => $form_paper->createView(),
-        'topic_form' => $form_topic->createView(),
+        'role_form'   => $form_role->createView(),
+        'paper_form'  => $form_paper->createView(),
+        'topic_form'  => $form_topic->createView(),
       )
     );
   }
