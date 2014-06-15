@@ -33,13 +33,13 @@
         ->add('name')
         ->add('page', 'text', array('required' => false, 'label' => 'Homepage'))
         ->add('country')
-        ->add('members', 'entity', array(
+       /* ->add('members', 'entity', array(
           'class'    => 'fibeWWWConfBundle:Person',
           'label'    => 'Members',
           'multiple' => true,
           'choices'  => $this->user->getCurrentConf()->getPersons()->toArray(),
           'required' => false
-        ));
+        ));*/
     }
 
     /**
@@ -49,6 +49,7 @@
     {
       $resolver->setDefaults(array(
         'data_class' => 'fibe\Bundle\WWWConfBundle\Entity\Organization'
+        'csrf_protection' => false
       ));
     }
 

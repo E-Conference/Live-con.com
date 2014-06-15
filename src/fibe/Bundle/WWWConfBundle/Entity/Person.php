@@ -3,9 +3,14 @@
 namespace fibe\Bundle\WWWConfBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\VirtualProperty;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
+
 use fibe\Bundle\WWWConfBundle\Util\StringTools;
 
 /**
@@ -23,6 +28,7 @@ class Person
    * @ORM\Id
    * @ORM\Column(type="integer")
    * @ORM\GeneratedValue(strategy="AUTO")
+   * @Expose
    */
   protected $id;
 
@@ -31,6 +37,7 @@ class Person
    * A name for some thing. Name of the person
    * / ! \  auto built with the concatenation of first and last name
    * @ORM\Column(type="string", name="name")
+   * @Expose
    */
   protected $name;
 

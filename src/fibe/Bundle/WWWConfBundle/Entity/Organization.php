@@ -3,6 +3,10 @@
 namespace fibe\Bundle\WWWConfBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\VirtualProperty;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use fibe\Bundle\WWWConfBundle\Util\StringTools;
@@ -22,6 +26,7 @@ class Organization
    * @ORM\Id
    * @ORM\Column(type="integer")
    * @ORM\GeneratedValue(strategy="AUTO")
+   * @Expose
    */
   protected $id;
 
@@ -30,6 +35,7 @@ class Organization
    *
    *
    * @ORM\Column(type="string", name="name")
+   * @Expose
    */
   protected $name;
 

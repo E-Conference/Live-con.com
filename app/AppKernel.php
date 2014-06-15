@@ -33,6 +33,9 @@ class AppKernel extends Kernel
       new Gregwar\CaptchaBundle\GregwarCaptchaBundle(),
       new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle(),
       new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+      new JMS\SerializerBundle\JMSSerializerBundle(),
+      new FOS\RestBundle\FOSRestBundle(),
+
     );
 
     if (in_array($this->getEnvironment(), array('dev', 'test')))

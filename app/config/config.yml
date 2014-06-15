@@ -122,6 +122,23 @@ fos_user:
          # Nom de l'expediteur
          sender_name:  Admin Livecon Manager
 
+sensio_framework_extra:
+    view:
+        annotations: false
+    request: { converters: true }
+
+fos_rest:
+    param_fetcher_listener: true
+    body_listener: true
+    body_converter:
+        enabled: true
+        validate: true
+        validation_errors_argument: validationErrors # This is the default value
+    format_listener: true
+    view:
+        view_response_listener: 'force'
+    disable_csrf_role: ROLE_API
+
 
 gregwar_captcha: ~
 

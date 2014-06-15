@@ -92,3 +92,9 @@ facebook_login:
 
 linkedin_login:
     pattern: /login/check-linkedin
+
+#REST 
+rest : 
+  type : rest 
+  resource : "routing_rest.yml"
+  prefix : /apiREST
