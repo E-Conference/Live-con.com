@@ -24,7 +24,6 @@ class AppKernel extends Kernel
       new fibe\Bundle\WWWConfBundle\fibeWWWConfBundle(),
       new fibe\SecurityBundle\fibeSecurityBundle(),
       new fibe\MobileAppBundle\fibeMobileAppBundle(),
-      new fibe\UserDataBundle\fibeUserDataBundle(),
       new fibe\DashboardBundle\fibeDashboardBundle(),
       new fibe\HomePageBundle\fibeHomePageBundle(),
       new fibe\DataBundle\DataBundle(), 
