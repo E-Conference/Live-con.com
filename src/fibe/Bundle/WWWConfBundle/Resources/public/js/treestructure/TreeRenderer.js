@@ -1,31 +1,47 @@
-var TreeRenderer = {
-
-  initTreeStructure : function(){
-      debugger;
-        $('#tree-structure').jstree({
-          "core" : {
-            "themes" : {
-              "variant" : "large"
-            },
-
-          'data' : [
-             { "id" : "ajson1", "parent" : "#", "text" : "Simple root node" },
-             { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },
-             { "id" : "ajson3", "parent" : "ajson2", "text" : "Child 1" },
-             { "id" : "ajson4", "parent" : "ajson2", "text" : "Child 2" },
-          ]
+  var TreeRenderer = {
+    initted : false,
+    $treeDiv : undefined,
+    updateTreeStructure : function(events){
+    if(!TreeRenderer.$treeDiv)
+      TreeRenderer.$treeDiv = $('#tree-structure');
+    if(!TreeRenderer.initted)
+    {
+      TreeRenderer.initted = true;
+      TreeRenderer.$treeDiv.jstree({
+        "core" : {
+          "themes" : {
+            "variant" : "large"
           },
-          "checkbox" : {
-            "keep_selected_style" : false
-          },
-          "plugins" : [ "checkbox" ]
+
+          'data' : events
+        },
+        "checkbox" : {
+          "keep_selected_style" : false,
+        },
+        "plugins" : [ "checkbox" ]
       });
- }
+      TreeRenderer.$treeDiv
+        .bind("loaded.jstree", $.proxy(function (e, data)
+        {
+            //TODO show only a default session at initialisation
+            data.instance.select_node(mainConfEvent.id,false,true);
+        }))
+        .bind("changed.jstree", $.proxy(function (e, data)
+        {
+          $(TreeRenderer).trigger("TreeRenderer.updated", [ data.instance.get_selected() ])
+        }))
+        ;
+    }
+    else
+    {
+      TreeRenderer.$treeDiv.jstree({
+        'core' : {
+          'data' : events
+        }
+      });
+      //TODO make this work
+      TreeRenderer.$treeDiv.jstree("reload");
 
-
-
-
-
-
-
-}
+    }
+   }
+  };

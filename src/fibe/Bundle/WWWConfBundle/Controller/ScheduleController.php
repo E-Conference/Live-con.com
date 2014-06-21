@@ -138,8 +138,8 @@ class ScheduleController extends Controller
     $event->setStartAt($start);
     $event->setEndAt($end);
     $event->setParent(
-      ($postData['parent']['id'] != "" ? $em->getRepository('fibeWWWConfBundle:ConfEvent')->find(
-        $postData['parent']['id']
+      ($postData['parent'] != "" ? $em->getRepository('fibeWWWConfBundle:ConfEvent')->find(
+        $postData['parent']
       ) : $mainConfEvent)
     );
     $event->setSummary($postData['title']);

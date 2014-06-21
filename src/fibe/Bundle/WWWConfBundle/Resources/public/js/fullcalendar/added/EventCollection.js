@@ -25,94 +25,94 @@ var EventCollection = {
           return; 
         }  
         EventCollection.forceMainConfRendering = false;
-        TreeRenderer.initTreeStructure();
+        $(EventCollection).trigger("EventCollection.updated");
         // function doWork() {
         
 
           // mainConfEvent.renderForRefetch(); 
           
-          updateBroCountRange();  
+          // updateBroCountRange();  
           stopRender = false;
           fetched = !refetch;
           $calendar.fullCalendar('refetchEvents');   
         // }
         // setTimeout(doWork, 1);
 
-        function updateBroCountRange(doChildren){ 
-            //if there's no EventCollection.eventToRender, calculate for every events
-            var done     = []
-                ,brothersIds= [] 
-                ,minLeft 
-                ,bro
-                ,curBro
-                ,baseCount; 
+        // function updateBroCountRange(doChildren){ 
+        //     //if there's no EventCollection.eventToRender, calculate for every events
+        //     var done     = []
+        //         ,brothersIds= [] 
+        //         ,minLeft 
+        //         ,bro
+        //         ,curBro
+        //         ,baseCount; 
   
-              brothersIds = EventCollection.eventsToComputeBroCountRangeIndexes;   
+        //       brothersIds = EventCollection.eventsToComputeBroCountRangeIndexes;   
             
-            // console.log("----------------------------------------------------");
-            console.log(brothersIds.length+" affected :",brothersIds); 
-            // console.log("non affected : ",EventCollection.broCountRange);
-            // console.log("----------------------------------------------------");
+        //     // console.log("----------------------------------------------------");
+        //     console.log(brothersIds.length+" affected :",brothersIds); 
+        //     // console.log("non affected : ",EventCollection.broCountRange);
+        //     // console.log("----------------------------------------------------");
             
-            var startScript = moment();
-            computeCountRange(brothersIds,doChildren);
-            console.log("BroCountRange : updated "+brothersIds.length+" events in "+moment().diff(startScript)+" ms",EventCollection.broCountRange);
+        //     var startScript = moment();
+        //     computeCountRange(brothersIds,doChildren);
+        //     console.log("BroCountRange : updated "+brothersIds.length+" events in "+moment().diff(startScript)+" ms",EventCollection.broCountRange);
 
-            EventCollection.eventsToComputeBroCountRangeIndexes = []; 
-            return EventCollection.eventsToComputeBroCountRangeIndexes;
+        //     EventCollection.eventsToComputeBroCountRangeIndexes = []; 
+        //     return EventCollection.eventsToComputeBroCountRangeIndexes;
             
-            function computeCountRange(brosIds,doChildren){
+        // function computeCountRange(brosIds,doChildren){
               
-              var brosIdsofcurBro,
-                  curBroResId,
-                  sameRes,
-                  remainingIds = brosIds.slice(0); //array copy 
-              for (var i in brosIds){
-                curBro = Events[brosIds[i]];  
-                if(curBro.allDay)continue;
+        //       var brosIdsofcurBro,
+        //           curBroResId,
+        //           sameRes,
+        //           remainingIds = brosIds.slice(0); //array copy 
+        //       for (var i in brosIds){
+        //         curBro = Events[brosIds[i]];  
+        //         if(curBro.allDay)continue;
 
-                brosIdsofcurBro = curBro.getNonAllDayBrosId(); 
-                curBroResId = curBro.resourceId || curBro.resource.id;
+        //         brosIdsofcurBro = curBro.getNonAllDayBrosId(); 
+        //         curBroResId = curBro.resourceId || curBro.resource.id;
 
-                baseCount = EventCollection.broCountRange[curBro.id].count;
-                baseResCount = EventCollection.broCountRange[curBro.id].resCount;
-                // console.log(curBro.id +" has "+brosIdsofcurBro.length+" non all day bros")
+        //         baseCount = EventCollection.broCountRange[curBro.id].count;
+        //         baseResCount = EventCollection.broCountRange[curBro.id].resCount;
+        //         // console.log(curBro.id +" has "+brosIdsofcurBro.length+" non all day bros")
                 
-                for (var j in remainingIds){
+        //         for (var j in remainingIds){
 
-                  bro = Events[ remainingIds[j] ];  
+        //           bro = Events[ remainingIds[j] ];  
                   
-                  if(curBro.id===bro.id || bro.allDay )continue;   //ensure the bro is not itself or an all day event 
+        //           if(curBro.id===bro.id || bro.allDay )continue;   //ensure the bro is not itself or an all day event 
                   
-                  if(curBro.isOutOf(bro,true) || ($.inArray(bro.id, brosIdsofcurBro) === -1))continue;    //ensure the bro is a real bro  
-                  EventCollection.broCountRange[curBro.id]["count"]++;  //increments self count  
-                  EventCollection.broCountRange[curBro.id]["resCount"]++;  //increments self count  
+        //           if(curBro.isOutOf(bro,true) || ($.inArray(bro.id, brosIdsofcurBro) === -1))continue;    //ensure the bro is a real bro  
+        //           EventCollection.broCountRange[curBro.id]["count"]++;  //increments self count  
+        //           EventCollection.broCountRange[curBro.id]["resCount"]++;  //increments self count  
 
-                  var baseBroResCount = EventCollection.broCountRange[bro.id]["resCount"];
-                  var baseBroResRange = EventCollection.broCountRange[bro.id]["resRange"];
-                  //increments bro count and range
-                  EventCollection.broCountRange[bro.id] = {
-                    count   :baseCount+1,
-                    range   :EventCollection.broCountRange[curBro.id]["range"]+1, 
-                    resCount:baseResCount+1,
-                    resRange:EventCollection.broCountRange[curBro.id]["resRange"]+1
-                  };
+        //           var baseBroResCount = EventCollection.broCountRange[bro.id]["resCount"];
+        //           var baseBroResRange = EventCollection.broCountRange[bro.id]["resRange"];
+        //           //increments bro count and range
+        //           EventCollection.broCountRange[bro.id] = {
+        //             count   :baseCount+1,
+        //             range   :EventCollection.broCountRange[curBro.id]["range"]+1, 
+        //             resCount:baseResCount+1,
+        //             resRange:EventCollection.broCountRange[curBro.id]["resRange"]+1
+        //           };
 
-                  //resource view : check if bros have the same resource 
-                  if(curBroResId != (bro.resourceId || bro.resource.id)){
-                    // console.log("decrementing "+curBro.id+" and "+bro.id)
+        //           //resource view : check if bros have the same resource 
+        //           if(curBroResId != (bro.resourceId || bro.resource.id)){
+        //             // console.log("decrementing "+curBro.id+" and "+bro.id)
 
-                    //decrements bro resCount and resRange
-                    EventCollection.broCountRange[bro.id]["resCount"] = baseBroResCount;
-                    EventCollection.broCountRange[bro.id]["resRange"] = baseBroResRange;
+        //             //decrements bro resCount and resRange
+        //             EventCollection.broCountRange[bro.id]["resCount"] = baseBroResCount;
+        //             EventCollection.broCountRange[bro.id]["resRange"] = baseBroResRange;
 
-                    EventCollection.broCountRange[curBro.id]["resCount"]--;
-                  }
-                }
-                delete remainingIds[i];
-              } 
-            } 
-        }
+        //             EventCollection.broCountRange[curBro.id]["resCount"]--;
+        //           }
+        //         }
+        //         delete remainingIds[i];
+        //       } 
+            // } 
+        // }
     },
  
 
@@ -129,13 +129,59 @@ var EventCollection = {
      *         events   : db model events
      *         elements : jquery draggable div array;
      */
-    find : function (id,op){ 
-          if(id==="" || !id)return ;
-          if(!op)op={}; 
-          var event = Events[id];
-          if(!Events[id] || (op.noSidebar ===true && Events[id].isInstant()) || (op.noAllDay === true && Events[id].allDay ))return; 
-          return event; 
-    }, 
+    find : function (id,op){
+        if(id==="" || !id)return ;
+        if(!op)op={};
+        var event = Events[id];
+        if(!Events[id] || (op.noSidebar ===true && Events[id].isInstant()) || (op.noAllDay === true && Events[id].allDay ))return;
+        return event;
+    },
+
+    asArray: function (){
+        var rtnArr =[];
+        for(var i in Events)
+        {
+            rtnArr.push(Events[i]);
+        }
+        return rtnArr;
+    },
+
+    filterIds : function(ids)
+    {
+      // ids.push(mainConfEvent.id);
+      var calEvents = $calendar.fullCalendar('clientEvents');
+      var eventsToShow = [];
+      //hide/show filtered event
+      for (var i in calEvents)
+      {
+        var e = Events[calEvents[i].id];
+        if ($.inArray(e.id, ids) === -1)
+        {
+          //hide
+          e.hideElem();
+          ids.remove(calEvents[i].id);
+        }
+        else if (e.hide === true)
+        {
+          //show back
+          e.showElem();
+        }
+        else
+        {
+          ids.remove(calEvents[i].id);
+        }
+      }
+      $.each(ids, function ()
+      {
+        event = Events[this];
+        if (event)
+        {
+          event.showElem();
+          event.renderForRefetch();
+        }
+      });
+      EventCollection.refetchEvents(false, true);
+    },
     /** 
      * @param parent        :  event
      * @param op            : concat : ( boolean default : false ) if true : dont preserve the tree nature of the relation (just concat children/subchildren/subsu...)
@@ -146,35 +192,35 @@ var EventCollection = {
      * events               : db modele events
      * elements             : jquery draggable div array;
      */
-    getChildren : function(parent,op){
-          // console.log("getChildren("+parent.id+")",op);
-          var children = [];
-          if(!op)op={};
+    // getChildren : function(parent,op){
+    //       // console.log("getChildren("+parent+")",op);
+    //       var children = [];
+    //       if(!op)op={};
 
-          // console.log("getChildren",parent)
-          $.each(parent.children,function(i,childId){
-            if( !parent.children.hasOwnProperty( i )  ) return;
-            if( childId === parent.id)parent.deleteParent();
-            var child = EventCollection.find(childId.id,op);
-            if( !child) return;
-            // console.log("child",child);
+    //       // console.log("getChildren",parent)
+    //       $.each(parent.children,function(i,childId){
+    //         if( !parent.children.hasOwnProperty( i )  ) return;
+    //         if( childId === parent)parent.deleteParent();
+    //         var child = EventCollection.find(childId.id,op);
+    //         if( !child) return;
+    //         // console.log("child",child);
 
-            if(op.recursive!==false){
-              var subChildren  = EventCollection.getChildren(child,op);  
+    //         if(op.recursive!==false){
+    //           var subChildren  = EventCollection.getChildren(child,op);  
 
-              if (subChildren && subChildren.length > 0){
-                if(op.concat===true)
-                  children = children.concat(subChildren);
-                else{
-                  child['subChildren'] = subChildren;
-                } 
-              }
-            }
-            children.push(child );   
+    //           if (subChildren && subChildren.length > 0){
+    //             if(op.concat===true)
+    //               children = children.concat(subChildren);
+    //             else{
+    //               child['subChildren'] = subChildren;
+    //             } 
+    //           }
+    //         }
+    //         children.push(child );   
 
-          }); 
-          return children; 
-    },
+    //       }); 
+    //       return children; 
+    // },
 
     updateMainConfEvent : function(newStart,newEnd){
     if(moment(mainConfEvent.start).dayOfYear() !== moment(newStart).dayOfYear() ||
@@ -198,9 +244,9 @@ var EventCollection = {
     }, 
 
 
-    getToppestParent : function (){ 
-        return EventCollection.getChildren(mainConfEvent, {recursive:false,onlyEvent:true,noSidebar:true});  
-    },
+    // getToppestParent : function (){ 
+    //     return EventCollection.getChildren(mainConfEvent, {recursive:false,onlyEvent:true,noSidebar:true});  
+    // },
  
     /**
     * @param id : event i
@@ -275,97 +321,97 @@ var EventCollection = {
                   element.find(".ui-resizable-handle").remove();
                 }
                 //droppable = set as child
-                element.droppable({ 
-                  tolerance: "pointer" ,
-                  over: function( ev, ui ) {
-                    if ( $(ui.draggable).hasClass("fc-event") ){ 
-                        var event = EventCollection.getEventByDiv($(this));
-                        var draggedEvent = dragged[1];
+                // element.droppable({ 
+                //   tolerance: "pointer" ,
+                //   over: function( ev, ui ) {
+                //     if ( $(ui.draggable).hasClass("fc-event") ){ 
+                //         var event = EventCollection.getEventByDiv($(this));
+                //         var draggedEvent = dragged[1];
 
-                        //check if it's going to do a loop in the tree
-                        if(event.isChild(draggedEvent)){
-                          return;
-                        }
+                //         //check if it's going to do a loop in the tree
+                //         if(event.isChild(draggedEvent)){
+                //           return;
+                //         }
 
-                        if(currentDragOverEvent)currentDragOverEvent.elem.removeClass("drag-over-events");
+                //         if(currentDragOverEvent)currentDragOverEvent.elem.removeClass("drag-over-events");
 
-                        currentDragOverEvent = {id:event.id,elem:$(this)};  
-                        dragOverEvents.push(currentDragOverEvent);
-                        if(draggedEvent.parent.id !== event.id) currentDragOverEvent.elem.addClass("drag-over-events")  
+                //         currentDragOverEvent = {id:event.id,elem:$(this)};  
+                //         dragOverEvents.push(currentDragOverEvent);
+                //         // if(draggedEvent.parent !== event.id) currentDragOverEvent.elem.addClass("drag-over-events")  
                         
-                    }
-                  },
-                  out: function( ev, ui ) { 
-                    if ( $(ui.draggable).hasClass("fc-event") ){
-                        // $(this).animate({"background-color":$(this).data("background-color")},{queue:false});
-                        $(this).removeClass("drag-over-events")
-                        var event = EventCollection.getEventByDiv($(this));
+                //     }
+                //   },
+                //   out: function( ev, ui ) { 
+                //     if ( $(ui.draggable).hasClass("fc-event") ){
+                //         // $(this).animate({"background-color":$(this).data("background-color")},{queue:false});
+                //         $(this).removeClass("drag-over-events")
+                //         var event = EventCollection.getEventByDiv($(this));
 
-                        for(var i in dragOverEvents){
-                          if(dragOverEvents[i].id == event.id){
-                            dragOverEvents.splice(i,1); 
-                          }
-                        }
-                        if(dragOverEvents.length>0){
-                          currentDragOverEvent = dragOverEvents[dragOverEvents.length-1]; 
+                //         for(var i in dragOverEvents){
+                //           if(dragOverEvents[i].id == event.id){
+                //             dragOverEvents.splice(i,1); 
+                //           }
+                //         }
+                //         if(dragOverEvents.length>0){
+                //           currentDragOverEvent = dragOverEvents[dragOverEvents.length-1]; 
 
-                          // if(dragged[1].parent.id !== event.id)
-                            currentDragOverEvent.elem.addClass("drag-over-events");
-                        }
-                    }
-                  },
-                  drop: function( ev, ui ) { 
-                    if ( $(ui.draggable).hasClass("fc-event") &&  currentDragOverEvent){  
+                //           // if(dragged[1].parent !== event.id)
+                //             currentDragOverEvent.elem.addClass("drag-over-events");
+                //         }
+                //     }
+                //   },
+                //   drop: function( ev, ui ) { 
+                //     if ( $(ui.draggable).hasClass("fc-event") &&  currentDragOverEvent){  
                     
-                      var event = Events[currentDragOverEvent.id];
-                      if(currentDragOverEvent.id === event.id){
-                        currentDragOverEvent.elem.removeClass("drag-over-events");
-                        dragOverEvents = []; 
-                        currentDragOverEvent = null;
-                      } else {
-                        return;
-                      }
+                //       var event = Events[currentDragOverEvent.id];
+                //       if(currentDragOverEvent.id === event.id){
+                //         currentDragOverEvent.elem.removeClass("drag-over-events");
+                //         dragOverEvents = []; 
+                //         currentDragOverEvent = null;
+                //       } else {
+                //         return;
+                //       }
 
-                      var draggedEvent = dragged[1]; 
-                      // check if it's not already a child
-                      if(draggedEvent.parent.id === event.id){
-                        return;
-                      }  
-                      //check if it's going to do a loop in the tree
-                      if(event.isChild(draggedEvent)){ 
-                        return;
-                      }  
-                      console.log(event)
-                      console.log(draggedEvent)
+                //       var draggedEvent = dragged[1]; 
+                //       // check if it's not already a child
+                //       if(draggedEvent.parent === event.id){
+                //         return;
+                //       }  
+                //       //check if it's going to do a loop in the tree
+                //       if(event.isChild(draggedEvent)){ 
+                //         return;
+                //       }  
+                //       console.log(event)
+                //       console.log(draggedEvent)
 
-                      // if(event.isOutOf(draggedEvent))return;  
+                //       // if(event.isOutOf(draggedEvent))return;  
                       
-                      setTimeout(function(){   
+                //       setTimeout(function(){   
 
-                        $modalSetParent.modal('show').find(".sub-event").text(draggedEvent.title);
-                        $modalSetParent.find(".super-event").text(event.title);
+                //         $modalSetParent.modal('show').find(".sub-event").text(draggedEvent.title);
+                //         $modalSetParent.find(".super-event").text(event.title);
 
-                        $modalSetParent.find('button.yes').off("click").click(function(){ 
-                          //set event as parent of draggedEvent and children relation
-                          console.log(draggedEvent+" is now the child of "+event.id)
+                //         $modalSetParent.find('button.yes').off("click").click(function(){ 
+                //           //set event as parent of draggedEvent and children relation
+                //           console.log(draggedEvent+" is now the child of "+event.id)
                           
-                          draggedEvent.computeCountRange({allBrosInDay:true});
-                          draggedEvent.setParent(event);
-                          draggedEvent.updateParentDate(); 
+                //           // draggedEvent.computeCountRange({allBrosInDay:true});
+                //           draggedEvent.setParent(event);
+                //           draggedEvent.updateParentDate(); 
                           
-                          draggedEvent.renderForRefetch();
-                          draggedEvent.computeCountRange({allBrosInDay:true});
+                //           draggedEvent.renderForRefetch();
+                //           // draggedEvent.computeCountRange({allBrosInDay:true});
 
-                          event.renderForRefetch();
-                          event.computeCountRange({allBrosInDay:true});
-                          EventCollection.refetchEvents();
+                //           event.renderForRefetch();
+                //           // event.computeCountRange({allBrosInDay:true});
+                //           EventCollection.refetchEvents();
                            
-                          draggedEvent.persist(); 
-                        });    
-                      },0);  
-                    }
-                  }
-                }); 
+                //           draggedEvent.persist(); 
+                //         });    
+                //       },0);  
+                //     }
+                //   }
+                // }); 
               }//end if authorized
           }//end stylize only event in the calendar
 
@@ -374,22 +420,22 @@ var EventCollection = {
                 //enter
                 $(this).animate({"border-color":"#3F3F3F"},{queue:false});
 
-                var elemEvent = EventCollection.getEventByDiv($(this));
-                var childrenDiv = EventCollection.getChildren(elemEvent,{concat:true,onlyEvent:true});
-                for (var j in childrenDiv){
-                  var curChildDiv = childrenDiv[j].elem;
-                  if(!curChildDiv || childrenDiv[j].hide)continue;
-                  curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false});
-                }
+                // var elemEvent = EventCollection.getEventByDiv($(this));
+                // var childrenDiv = EventCollection.getChildren(elemEvent,{concat:true,onlyEvent:true});
+                // for (var j in childrenDiv){
+                //   var curChildDiv = childrenDiv[j].elem;
+                //   if(!curChildDiv || childrenDiv[j].hide)continue;
+                //   curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false});
+                // }
             },function(){
                 $(this).animate({"border-color":$(this).data("border-color")},{queue:false})
-                var elemEvent = EventCollection.getEventByDiv($(this));
-                var childrenDiv = EventCollection.getChildren(elemEvent,{concat:true,onlyEvent:true});
-                for (var j in childrenDiv){
-                  var curChildDiv = childrenDiv[j].elem;
-                  if(!curChildDiv || childrenDiv[j].hide)continue;
-                  curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
-                }
+                // var elemEvent = EventCollection.getEventByDiv($(this));
+                // var childrenDiv = EventCollection.getChildren(elemEvent,{concat:true,onlyEvent:true});
+                // for (var j in childrenDiv){
+                //   var curChildDiv = childrenDiv[j].elem;
+                //   if(!curChildDiv || childrenDiv[j].hide)continue;
+                //   curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
+                // }
           });    
         })
       }
@@ -451,7 +497,7 @@ var EventCollection = {
                 
                 var known = !!Events[events[i].id];
                 var event = new CalEvent(events[i]);
-                if(!known)event.computeCountRange();
+                // if(!known)event.computeCountRange();
 
                 if(event.mainconfevent){
                   mainConfEvent = event; 
@@ -504,26 +550,26 @@ var EventCollection = {
       $(element).data("id",event.id)
 
       //add class to the mainConfEvent
-      if(event.id == mainConfEvent.id)return $(element).addClass("main-conf-event");
+      // if(event.id == mainConfEvent.id)return $(element).addClass("main-conf-event");
 
       // hide filtered events
       if(event.hide === true) 
         $(element).hide();
       
       //set z-index calculated in calculateWidth
-      if(!event.allDay)
-        $(element).css("z-index",EventCollection.broCountRange[event.id].zindex)
+      // if(!event.allDay)
+      //   $(element).css("z-index",EventCollection.broCountRange[event.id].zindex)
       
       // hide events that aren't a leaf in the hierarchy in resource mode 
-      if($calendar.fullCalendar('getView').name == "resourceDay" && event.hasChild() ) 
-        $(element).hide();
+      // if($calendar.fullCalendar('getView').name == "resourceDay" && event.hasChild() ) 
+      //   $(element).hide();
     },
-    eventCalculateWidth : function(event, seg, leftmost, availWidth, outerWidth, levelI, bottom, top, forward, dis,rtl) {  
-      if(event.allDay){
-        return;
-      }
-      event.calculateWidth(seg, leftmost, availWidth, outerWidth, levelI, bottom, top, forward, dis,rtl); 
-    },
+    // eventCalculateWidth : function(event, seg, leftmost, availWidth, outerWidth, levelI, bottom, top, forward, dis,rtl) {  
+    //   if(event.allDay){
+    //     return;
+    //   }
+    //   event.calculateWidth(seg, leftmost, availWidth, outerWidth, levelI, bottom, top, forward, dis,rtl); 
+    // },
     eventClick : function(calEvent, jsEvent, view) {  // get the full edit form
       $.ajax({
           url: op.updateUrl+"?id="+calEvent.id,  
@@ -576,6 +622,10 @@ var EventCollection = {
         if (title) {
             var tmp = {
                 title    : title,
+                //TODO : get a session
+                //TODO : get a session
+                //TODO : get a session
+                //TODO : get a session
                 parent   : {id:mainConfEvent.id},
                 children : [],
                 start    : start,
@@ -595,10 +645,14 @@ var EventCollection = {
                     if(EventCollection.isLoginPage(response))return; 
                     bootstrapAlert("success","event <b>"+tmp['title']+"</b> has been well added");
                     tmp.id =response.id;
-                    var ev = new CalEvent(tmp);    
-                    ev.setParent(mainConfEvent)  
+                    var ev = new CalEvent(tmp);   
+                //TODO : get a session
+                //TODO : get a session
+                //TODO : get a session
+                //TODO : get a session 
+                    ev.setParent(mainConfEvent.id);
                     ev.renderForRefetch(); 
-                    ev.computeCountRange({allBrosInDay:true});  
+                    // ev.computeCountRange({allBrosInDay:true});  
                     if(response.mainConfEvent){
                       EventCollection.updateMainConfEvent(response.mainConfEvent.start,response.mainConfEvent.end); 
                     }  
@@ -634,10 +688,10 @@ var EventCollection = {
       //   event.fitToDay( event["start"],oldEnd.format());  
       // }
 
-      event.updateParentDate();
-      event.updateChildrenDate(); 
+      // event.updateParentDate();
+      // event.updateChildrenDate(); 
 
-      event.computeCountRange({allBrosInDay:true}); 
+      // event.computeCountRange({allBrosInDay:true}); 
       event.renderForRefetch();
 
       EventCollection.refetchEvents();
@@ -665,9 +719,13 @@ var EventCollection = {
       // event.deleteParent();
       Events[event.id] = event;
 
+      //TODO : get a session
+      //TODO : get a session
+      //TODO : get a session
+      //TODO : get a session 
       event.setParent(mainConfEvent);
-      event.updateParentDate(); 
-      event.computeCountRange({allBrosInDay:true});
+      // event.updateParentDate(); 
+      // event.computeCountRange({allBrosInDay:true});
       event.renderForRefetch();
       EventCollection.refetchEvents();
       event.persist();
@@ -675,27 +733,27 @@ var EventCollection = {
     },
     eventDragStart : function( event, jsEvent, ui, view ) { 
       dragged = [ ui.helper[0], event ];
-      setTimeout(function(){   
-        event.dragChildren(jsEvent, ui, view);
-      },1);
+      // setTimeout(function(){   
+      //   event.dragChildren(jsEvent, ui, view);
+      // },1);
     },
     eventDragStop : function( event, jsEvent, ui, view ) {  
-      // var parent = EventCollection.find(event.parent.id,{noSidebar:true});  
-      var event = Events[event.id]
+      // var parent = EventCollection.find(event.parent,{noSidebar:true});  
+      var event = Events[event.id];
       if(mainConfEvent.id==event.id && !event.allDay)return;
-      var parent = EventCollection.find(event.parent.id,{noSidebar:true}); 
-      var children = EventCollection.getChildren(event,{concat:true,onlyEvent:true}); 
+      // var parent = EventCollection.find(event.parent,{noSidebar:true}); 
+      // var children = EventCollection.getChildren(event,{concat:true,onlyEvent:true}); 
       
       //compute old day too 
       //TODO put this in dragstart 
-      event.computeCountRange({allBrosInDay:true});  
+      // event.computeCountRange({allBrosInDay:true});  
       //TODO : parent  has here a wrong start/end updated from somewhere and need to be computed back :S 
       //TODO : parent  has here a wrong start/end updated from somewhere and need to be computed back :S  
       dragged = [ ui.helper[0], 
                   event, 
                   {start:moment(event.start), end:moment(event.end)},
-                  (parent?{start:moment(parent.start),end:moment(parent.end)}:{}),
-                  $(children).map(function(){return {start:moment(this.start),end:moment(this.end)};})
+                  // (parent?{start:moment(parent.start),end:moment(parent.end)}:{}),
+                  // $(children).map(function(){return {start:moment(this.start),end:moment(this.end)};})
                 ];
     },
     eventDrop : function( event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) {
@@ -705,39 +763,39 @@ var EventCollection = {
       //TODO : parent  has here a wrong start/end updated from somewhere and need to be computed back :S 
 
       var event = dragged[1];
-      var diff = moment(dragged[2].start).diff(moment(event['start']));
+      // var diff = moment(dragged[2].start).diff(moment(event['start']));
 
-      var parent = EventCollection.find(event.parent.id,{noSidebar:true});
+      // var parent = EventCollection.find(event.parent,{noSidebar:true});
 
       stopRender = true;
       // if(!event.isOneDayLong())event["allDay"]
 
       //apply to children   
-      var childrenDates = dragged[4]; 
-      var children = EventCollection.getChildren(event,{concat:true,onlyEvent:true});
-      $.each(children,function(i,child){ 
-          child['start'] = moment(childrenDates[i]['start']).subtract(diff);
-          child['end']   = moment(childrenDates[i]['end']).subtract(diff);
+      // var childrenDates = dragged[4]; 
+      // var children = EventCollection.getChildren(event,{concat:true,onlyEvent:true});
+      // $.each(children,function(i,child){ 
+      //     child['start'] = moment(childrenDates[i]['start']).subtract(diff);
+      //     child['end']   = moment(childrenDates[i]['end']).subtract(diff);
 
-          child.computeCountRange();
-          child.renderForRefetch();
-          child.formatDate();
-          child.persist();
-      });   
+      //     // child.computeCountRange();
+      //     child.renderForRefetch();
+      //     child.formatDate();
+      //     child.persist();
+      // });   
 
-      //apply to parent 
-      if(parent){
-        var parentDate = dragged[3];
-        parent.start = parentDate.start.format(); 
-        parent.end = parentDate.end.format(); 
-        if(event.isOutOf(parent,true)){
-          //event dropped out of parent
-          console.log(" #### moved out ####");  
-          event.setParent(mainConfEvent); 
-        } 
-        event.updateParentDate();  
-      } 
-      event.computeCountRange({allBrosInDay:true});
+      // //apply to parent 
+      // if(parent){
+      //   var parentDate = dragged[3];
+      //   parent.start = parentDate.start.format(); 
+      //   parent.end = parentDate.end.format(); 
+      //   if(event.isOutOf(parent,true)){
+      //     //event dropped out of parent
+      //     console.log(" #### moved out ####");  
+      //     event.setParent(mainConfEvent); 
+      //   } 
+      //   event.updateParentDate();  
+      // } 
+      // event.computeCountRange({allBrosInDay:true});
 
       EventCollection.refetchEvents(false,true); 
       event.persist(); 
