@@ -36,6 +36,7 @@ class AppKernel extends Kernel
       new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
       new JMS\SerializerBundle\JMSSerializerBundle(),
       new FOS\RestBundle\FOSRestBundle(),
+      new fibe\FrontendBundle\FrontendBundle(),
     );
 
     if (in_array($this->getEnvironment(), array('dev', 'test')))

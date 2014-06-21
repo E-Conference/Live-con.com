@@ -20,6 +20,7 @@ use fibe\Bundle\WWWConfBundle\Util\StringTools;
  * @ORM\Table(name="person")
  * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\PersonRepository")
+ * @ExclusionPolicy("all") 
  *
  */
 class Person
@@ -58,6 +59,7 @@ class Person
   /**
    * based_near
    * @ORM\Column(type="string", nullable=true,  name="based_near")
+   * @Expose
    */
   protected $based_near;
 
@@ -65,6 +67,7 @@ class Person
    * description
    *
    * @ORM\Column(type="string", length=1024, nullable=true, name="description")
+   * @Expose
    */
   protected $description;
 
@@ -73,6 +76,7 @@ class Person
    *
    *
    * @ORM\Column(type="integer", nullable=true,  name="age")
+   * @Expose
    */
   protected $age;
 
@@ -92,6 +96,7 @@ class Person
    * @ORM\JoinTable(name="member",
    *     joinColumns={@ORM\JoinColumn(name="person_id", referencedColumnName="id", onDelete="Cascade")})
    *     inverseJoinColumns={@ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="Cascade")},
+   * @Expose
    */
   private $organizations;
 

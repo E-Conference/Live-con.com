@@ -47,9 +47,7 @@ class OrganizationRESTController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('fibeWWWConfBundle:Organization')->findAll();
    
-        return array(
-            'organizations' => $entities,
-        );
+        return  $entities;
     }
 
 

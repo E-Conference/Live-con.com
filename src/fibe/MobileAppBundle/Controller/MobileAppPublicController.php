@@ -23,7 +23,7 @@
   {
     /**
      * @Route("/rest/{slug}",name="mobileAppPublic_index")
-     * @Template()
+     * @Template("fibeMobileAppBundle:MobileAppPublic:angularIndex.html.twig")
      */
     public function indexAction($slug)
     {
@@ -47,7 +47,7 @@
 
     /**
      * @Route("/{slug}",name="mobileAppPublic_sparql_index")
-     * @Template("fibeMobileAppBundle:MobileAppPublic:index.html.twig")
+     * @Template("fibeMobileAppBundle:MobileAppPublic:angularIndex.html.twig")
      */
     public function indexSparqlAction($slug)
     {
