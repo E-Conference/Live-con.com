@@ -1,0 +1,10 @@
+<div class="well">
+	<img class="img-circle" data-src="holder.js/140x140" alt="140x140" src="http://socialmi.com/wp-content/uploads/2012/10/facebook-no-image1.gif" style="width: 90px; height: 70px;"/>
+	<h3>{{person.name}}</h3>
+	<p>{{person.description}} bogosss test bos  bogosss test bos  bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos bogosss test bos</p>
+</div>
+<div ng-repeat="organization in person.organizations | filter:query" class="col-md-4 col-lg-4 well">
+      <img class="img-circle" data-src="holder.js/140x140" alt="140x140" src="http://blog.getjobber.com/wp-content/uploads/2013/01/Users-Image.png" style="width: 70px; height: 70px;">
+      <h3>{{organization.name}}</h2>
+      <p><a class="btn" href="#/organization/{{organization.id}}" role="button">View details »</a></p>
+  </div>

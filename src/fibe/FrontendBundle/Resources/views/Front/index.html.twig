@@ -1,0 +1,64 @@
+
+<!doctype html>
+<html lang="en" ng-app="liveconApp">
+<head>
+  <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>livecon app'</title>
+  <link rel="stylesheet" href="{{ asset('bundles/frontend/app/css/app.css') }}">
+  <link rel="stylesheet" href="{{ asset('bundles/frontend/app/css/animations.css') }}">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css"/> 
+
+  <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type='text/javascript' src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+
+  <script src="https://code.angularjs.org/1.2.9/angular.js"></script>
+  <script src="https://code.angularjs.org/1.2.9/angular-animate.js"></script>
+  <script src="https://code.angularjs.org/1.2.9/angular-route.js"></script>
+  <script src="https://code.angularjs.org/1.2.9/angular-resource.js "></script>
+
+ 
+
+  <script src="{{ asset('bundles/frontend/app/js/app.js') }}"></script>
+  <!-- <script src="{{ asset('bundles/frontend/app/js/animations.js') }}"></script> -->
+  <script src="{{ asset('bundles/frontend/app/js/filters.js') }}"></script>
+  <script src="{{ asset('bundles/frontend/app/js/controllers.js') }}"></script>
+  <script src="{{ asset('bundles/frontend/app/js/services.js') }}"></script>
+    <script src="{{ asset('bundles/frontend/app/js/loadingBarModule.js') }}"></script>
+
+  <script>
+    angular.module('liveconApp').value('CONFERENCE_CONFIG', {
+      baseUrl: '{{ api_uri }}',
+      liveconLogoPath : "localhost/live-con.com/web/img/livecon.png",
+      lang: 'EN'
+    });
+  </script>
+
+  
+</head>
+<body ng-controller="mainCtrl">
+
+      <div class="navTop" ng-include="'../../web/bundles/frontend/app/partials/layout/nav-top.html'"  ng-controller="navTopCtrl"></div>
+      <div class="navMenuTop" ng-include="'../../web/bundles/frontend/app/partials/layout/nav-menu-top.html'"></div>
+      <div id="wrapper">
+       
+        <div class="navLeft" ng-include="'../../web/bundles/frontend/app/partials/layout/nav-left.html'" ng-controller="navLeftCtrl"></div>
+        <!-- Page content -->
+        <div id="page-content-wrapper">
+ 
+            <div class="page-content inset view-container" >
+                <div class="row view-frame" ng-class="view-frame" data-ng-view="">
+                   
+                </div>
+            </div>
+        </div>
+       
+
+    </div>
+
+     
+
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+
+<!doctype html>
+<html lang="en" ng-app="liveconApp">
+<head>
+  <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>livecon app'</title>
+  <link rel="stylesheet" href="{{ asset('bundles/fibemobileapp/angularApp/app/css/app.css') }}">
+  <link rel="stylesheet" href="{{ asset('bundles/fibemobileapp/angularApp/app/css/animations.css') }}">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css"/> 
+
+  <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script type='text/javascript' src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+
+  <script src="https://code.angularjs.org/1.2.9/angular.js"></script>
+  <script src="https://code.angularjs.org/1.2.9/angular-animate.js"></script>
+  <script src="https://code.angularjs.org/1.2.9/angular-route.js"></script>
+  <script src="https://code.angularjs.org/1.2.9/angular-resource.js "></script>
+
+ 
+
+  <script src="{{ asset('bundles/fibemobileapp/angularApp/app/js/app.js') }}"></script>
+  <!-- <script src="{{ asset('bundles/fibemobileapp/angularApp/app/js/animations.js') }}"></script> -->
+  <script src="{{ asset('bundles/fibemobileapp/angularApp/app/js/filters.js') }}"></script>
+  <script src="{{ asset('bundles/fibemobileapp/angularApp/app/js/controllers.js') }}"></script>
+  <script src="{{ asset('bundles/fibemobileapp/angularApp/app/js/services.js') }}"></script>
+    <script src="{{ asset('bundles/fibemobileapp/angularApp/app/js/loadingBarModule.js') }}"></script>
+
+  <script>
+    angular.module('liveconApp').value('CONFERENCE_CONFIG', {
+      liveconLogoPath : "{{ asset('img/livecon.png') }}",
+      baseUrl: '{{ api_uri }}',
+      conferenceId: '{{ conference.id |json_encode|raw }}',
+      conferenceEventId: '{{ conference.mainConfEvent.id |json_encode|raw }}',
+      conferenceLogoPath : "{{ asset('uploads/')}}{{conference.logoPath}}",
+      lang: 'EN'
+
+    });
+  </script>
+
+  <style type="text/css">
+    .sidebar-nav-wrapper {
+      background: {{ mobile_app_config.BGColorNavBar}} !important;
+     
+    }
+    .sidebar-nav li a{
+       color: {{ mobile_app_config.TitleColorNavBar}} !important;
+    }
+
+    .navbar {   
+      background: {{ mobile_app_config.BGColorHeader}} !important;
+     
+    }
+
+    .badge{
+      margin-top: 10px;
+    }
+
+    #title{
+       color: {{ mobile_app_config.TitleColorHeader}} !important;
+    }
+
+    .list-group-item{
+      background-color:  {{ mobile_app_config.BGColorNavBar}}  !important;
+    }
+
+    .page-content-wrapper {   
+      background: {{ mobile_app_config.BGColorContent}} !important;
+      color: {{ mobile_app_config.TitleColorContent}} !important;
+    }
+
+    .btn {   
+      background: {{ mobile_app_config.BGColorButton}} !important;
+      color: {{ mobile_app_config.TitleColorButton}} !important;
+      border: 1px solid {{ mobile_app_config.TitleColorContent}} !important;
+    }
+
+
+
+  </style>
+</head>
+<body ng-controller="mainCtrl">
+
+      <div class="navTop" ng-include="'../../../../web/bundles/fibemobileapp/angularApp/app/partials/nav-top.html'"  ng-controller="navTopCtrl"></div>
+      <div id="wrapper">
+       
+        <div class="navLeft" ng-include="'../../../../web/bundles/fibemobileapp/angularApp/app/partials/nav-left.html'" ng-controller="navLeftCtrl"></div>
+        <!-- Page content -->
+        <div id="page-content-wrapper">
+ 
+            <div class="page-content inset view-container" >
+                <div class="row view-frame" ng-class="view-frame" data-ng-view="">
+                   
+                </div>
+            </div>
+        </div>
+        <div class="navRight" ng-include="'../../../../web/bundles/fibemobileapp/angularApp/app/partials/nav-right.html'" ng-controller="navRightCtrl"></div>
+
+    </div>
+
+     
+
+
+</body>
+</html>

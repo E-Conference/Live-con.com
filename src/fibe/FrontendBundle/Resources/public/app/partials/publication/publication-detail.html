@@ -1,0 +1,13 @@
+
+
+ <div class="well">
+	<h3>  <i class="fa fa-book fa-2x"></i>  {{publication.title}}</h3>
+	<p>{{publication.abstract}}</p>
+ </div>
+ 
+
+ <div ng-repeat="author in publication.authors | filter:query" class="col-md-4 col-lg-4 well">
+      <img class="img-circle" data-src="holder.js/140x140" alt="140x140" src="http://www.compwize.com.au/wp-content/uploads/2011/10/User.png" style="width: 70px; height: 70px;">
+      <h3>{{author.name}}</h2>
+      <p><a class="btn" href="#/speaker/{{author.id}}" role="button">View details »</a></p>
+  </div>

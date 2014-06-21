@@ -1,0 +1,11 @@
+
+<input type="text" class="form-control" placeholder="Search" ng-model="query">
+
+<div ng-repeat="person in persons | filter:query" class="panel panel-default list">
+  <div class="panel-body">
+  	  <a href="#/speaker/{{person.id}}" class="thumb">  <i class="fa fa-user"></i> {{person.name}}</a>
+  </div>
+  <div class="panel-footer">{{person.description}}</div>
+</div>
+
+
