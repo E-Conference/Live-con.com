@@ -1,0 +1,12 @@
+
+<input type="text" class="form-control" placeholder="Search" ng-model="query">
+
+<div ng-repeat="publication in publications | filter:query" class="panel panel-default list">
+  <div class="panel-body">
+  	 <a href="#/publication/{{publication.id}}" class="thumb"> <i class="fa fa-book"></i>  {{publication.title}}</a>
+  </div>
+  <div class="panel-footer">{{publication.abstract}}</div>
+</div>
+
+
+

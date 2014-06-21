@@ -1,0 +1,25 @@
+
+<input type="text" class="form-control" placeholder="Search" ng-model="query">
+ <a class="btn btn-info btn-create create" href="#/organization/new/{{organization.id}}" title="Add an organization"> <i class="fa fa-plus"></i> New organization </a>
+ <table class=" table table-hover">
+	<thead>
+	<tr>
+	  <th>Name</th>
+	  <th>Page</th>
+	  <th>Country</th>
+	  <th>Members</th>
+	  <th>Actions</th>
+	</tr>
+	</thead>
+	<tbody>
+	  <tr ng-repeat="organization in organizations | filter:query">
+	    <td>{{ organization.name }}</td>
+	    <td>{{ organization.page }}</td>
+	    <td>{{ organization.country }}</td>
+	    <td><p ng-repeat="member in organizations.members | filter:query">member.name</p></td>
+	    <td> <a class="btn btn-large btn-warning" href="#/organization/edit/{{organization.id}}"><i class="fa fa-pencil"></i></a>
+	    	<a class="btn btn-large btn-info" href="#/organization/show/{{organization.id}}"><i class="fa fa-eye"></i></a>
+         </td>
+	  </tr>
+	</tbody>
+</table>
