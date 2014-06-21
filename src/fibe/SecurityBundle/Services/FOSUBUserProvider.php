@@ -49,8 +49,10 @@ class FOSUBUserProvider extends BaseClass
       if (null === $socialServiceUser)
       { //social service user not found
         if($loggedUser instanceof UserInterface)
-        {   //enrich account on demand
-          return $this->firstEnrich($loggedUser,$serviceName,$response,$socialServiceId);
+        { //first account  
+          $setter = 'set' . ucfirst($serviceName) . 'Id'; 
+          $user->$setter($socialServiceId);
+          return $this->enrich($loggedUser,$serviceName,$response);  
         }
         else
         { //no user with this social service Id and not logged
@@ -64,7 +66,7 @@ class FOSUBUserProvider extends BaseClass
         { //social service already registered by current user 
           if($socialServiceUser->getId() === $loggedUser->getId())
           { //enrich account on demand
-            return $this->enrich($socialServiceUser,$serviceName,$response);
+            return $this->enrich($loggedUser,$serviceName,$response);
           }else
           { //social service already registered for another user
             $this->session->getFlashBag()->add('warning', 'This '.ucfirst($serviceName).' account is already registered for another account.');
@@ -84,14 +86,6 @@ class FOSUBUserProvider extends BaseClass
       $user->$setter($response->getAccessToken());
       $this->session->getFlashBag()->add('success', 'Welcome back!');
       return $user; 
-    }
-
-    //first enrich on a livecon existing account
-    private function firstEnrich(UserInterface $user,$serviceName,UserResponseInterface $response,$socialServiceId)
-    { 
-      $setter = 'set' . ucfirst($serviceName) . 'Id'; 
-      $user->$setter($socialServiceId);
-      return $this->enrich($user,$serviceName,$response); 
     } 
 
     //enrich account on demand

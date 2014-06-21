@@ -63,23 +63,7 @@ class DBImportController extends Controller
     $defaultCategory = $this->getDoctrine()
       ->getRepository('fibeWWWConfBundle:Category')
       ->findOneBy(array('name' => 'TalkEvent'));
-
-    //categories color.
-    $colorArray = array(
-      'lime',
-      'red',
-      'blue',
-      'orange',
-      'gold',
-      'coral',
-      'crimson',
-      'aquamarine',
-      'darkOrchid',
-      'forestGreen',
-      'peru',
-      'purple',
-      'seaGreen'
-    );
+ 
 
     //////////////////////  topics  //////////////////////
     if (isset($JSONFile['topics']))
