@@ -6,12 +6,17 @@
   use Doctrine\ORM\Mapping as ORM;
 
   use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
-  use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+  use Symfony\Component\Security\Core\Exception\AccessDeniedException; 
+  use JMS\Serializer\Annotation\Type; 
+  use JMS\Serializer\Annotation\ExclusionPolicy;
+  use JMS\Serializer\Annotation\Expose;
+  use JMS\Serializer\Annotation\Groups;
+  use JMS\Serializer\Annotation\VirtualProperty;
 
   /**
    * @ORM\Entity(repositoryClass="fibe\SecurityBundle\Repository\UserRepository")
-   * @ORM\Table(name="manager")
-   *
+   * @ORM\Table(name="manager")  
+   * @ExclusionPolicy("all") 
    */
   class User extends BaseUser
   {
@@ -19,6 +24,7 @@
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Expose
      */
     protected $id;
 
@@ -27,7 +33,7 @@
      * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf")
      * @ORM\JoinColumn(name="currentConf", referencedColumnName="id")
      */
-    protected $currentConf; 
+    protected $currentConf;
 
     /**
      * owner of those conferences
@@ -90,7 +96,29 @@
     /** @ORM\Column(name="linkedin_access_token", type="string", length=255, nullable=true) */
     protected $linkedin_access_token;
 
+    /*********** SERIALIZE ***********/
 
+
+    /**
+     * @var string
+     * @Type("string")
+     * @Expose
+     */
+    protected $username;
+
+    /**
+     * @var string
+     * @Type("string")
+     * @Expose
+     */
+    protected $password;
+
+    /**
+     * @var string to send after authentication, don't persist
+     * @Type("string")
+     * @Expose
+     */
+    protected $session_id;
 
     /**
      * Constructor
@@ -360,4 +388,17 @@
       return $this;
     }
 
+    /***************** SERIALISE *******************/
+
+    public function getsessionId()
+    {
+      return $this->session_id;
+    }
+
+    public function setsessionId( $sessionId )
+    {
+      $this->session_id = $sessionId;
+
+      return $this;
+    }
   }

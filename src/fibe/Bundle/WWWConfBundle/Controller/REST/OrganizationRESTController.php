@@ -25,7 +25,8 @@ class OrganizationRESTController extends FOSRestController
    public function getOrganizationAction($id){
 
           $em = $this->getDoctrine()->getManager();
-          $organization = $em->getRepository('fibeWWWConfBundle:Organization')->find($id);
+          $organization = $this->get('fibe_security.acl_entity_helper')->getEntityACL('VIEW', 'Organization',$id);
+          // $organization = $em->getRepository('fibeWWWConfBundle:Organization')->find($id);
              if(!is_object($organization)){
                 throw $this->createNotFoundException();
                 }
@@ -71,7 +72,7 @@ class OrganizationRESTController extends FOSRestController
       $organization = $serializer->deserialize( $request->getContent(), ' fibe\Bundle\WWWConfBundle\Entity\Organization', 'json');
 
       $form = $this->createForm(new OrganizationType($this->getUser()), $entity);
-      $form->bind($organization);
+      $form->bind($request);
   
 
      if ($form->isValid()) {
@@ -79,13 +80,14 @@ class OrganizationRESTController extends FOSRestController
          $em->persist($organization);
          $em->flush();
 
-          return $this->redirectView(
-                  $this->generateUrl(
-                      'apiREST_get_organization',
-                      array('id' => $organization->getId())
-                      ),
-                  Codes::HTTP_CREATED
-                  );
+         return $this->redirect($this->generateUrl('apiREST_get_organization', array('id' => $organization->getId())));
+          // return $this->redirectView(
+          //         $this->generateUrl(
+          //             'apiREST_get_organization',
+          //             array('id' => $organization->getId())
+          //             ),
+          //         Codes::HTTP_CREATED
+          //         );
       }
 
       return array(
@@ -115,7 +117,7 @@ public function putOrganizationAction(Request $request, $id)
     
 
     $form = $this->createForm(new OrganizationType($this->getUser()), $organization);
-    $form->bindRequest($request);
+    $form->bind($request);
 
     if($form->isValid()){
         $em = $this->getDoctrine()->getManager();

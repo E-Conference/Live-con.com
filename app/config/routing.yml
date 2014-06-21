@@ -1,3 +1,8 @@
+fibe_rest:
+    resource: "@fibeRestBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 documentation:
     resource: "@DocumentationBundle/Controller/"
     type:     annotation

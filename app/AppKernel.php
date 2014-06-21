@@ -26,6 +26,7 @@ class AppKernel extends Kernel
       new fibe\MobileAppBundle\fibeMobileAppBundle(),
       new fibe\DashboardBundle\fibeDashboardBundle(),
       new fibe\HomePageBundle\fibeHomePageBundle(),
+      new fibe\RestBundle\fibeRestBundle(),
       new fibe\DataBundle\DataBundle(), 
       new fibe\ConferenceBundle\fibeConferenceBundle(),
       new fibe\DocumentationBundle\DocumentationBundle(),
@@ -35,7 +36,6 @@ class AppKernel extends Kernel
       new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
       new JMS\SerializerBundle\JMSSerializerBundle(),
       new FOS\RestBundle\FOSRestBundle(),
-
     );
 
     if (in_array($this->getEnvironment(), array('dev', 'test')))
