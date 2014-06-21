@@ -18,6 +18,7 @@ use fibe\Bundle\WWWConfBundle\Util\StringTools;
  * @ORM\Table(name="organization")
  * @ORM\Entity(repositoryClass="fibe\Bundle\WWWConfBundle\Repository\OrganizationRepository")
  * @ORM\HasLifecycleCallbacks
+ * @ExclusionPolicy("all") 
  *
  */
 class Organization
@@ -41,9 +42,8 @@ class Organization
 
   /**
    * page
-   *
-   *
    * @ORM\Column(type="string", name="page",nullable=true)
+   * @Expose
    */
   protected $page;
 
@@ -57,6 +57,7 @@ class Organization
 
   /**
    * @ORM\ManyToMany(targetEntity="Person",  mappedBy="organizations", cascade={"persist","merge","remove"})
+   * @Expose
    */
   protected $members;
 

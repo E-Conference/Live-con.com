@@ -44,10 +44,14 @@
     </div>
 
     <div class="row">
-      <div id="calendar-container" class="col-xs-12 col-sm-12 col-md-12 col-lg-9">
+      <div  id="tree-structure" class="col-sm-12 col-md-2 col-lg-2">
+
+
+      </div>
+      <div id="calendar-container" class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
         <div id='calendar' class="bordered"></div>
       </div>
-      <div id="sidebar-container" class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+      <div id="sidebar-container" class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
         <div id="sidebar-div" class="bordered">
           <h4>Time scale</h4>
           <input type="text" class="slider" data-slider-id='sliderTimeScale' type="number" data-slider-min="5"
@@ -158,12 +162,17 @@
   <link href="{{ asset('bundles/fibewwwconf/css/fullcalendarAddedUI.css') }}" rel='stylesheet'/>
   <link href="{{ asset('bundles/fibewwwconf/css/jquery.mCustomScrollbar.css') }}" rel='stylesheet'/>
   <link href="{{ asset('css/slider.css') }}" rel='stylesheet'/>
+   <link rel='stylesheet' type='text/css' href="{{ asset('bundles/fibewwwconf/js/treestructure/style.css') }}">
 {% endblock stylesheets_page %}
 
 
 
-{% block javascripts_page %}
 
+{% block javascripts_page %}
+  <script src="{{ asset('bundles/fibewwwconf/js/treestructure/jstree.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/fibewwwconf/js/treestructure/TreeRenderer.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('bundles/fibewwwconf/js/treestructure/jstree.checkbox.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('bundles/fibewwwconf/js/treestructure/jstree.search.js') }}" type="text/javascript"></script>
   <script type="text/javascript" src="{{ asset('js/jquery-ui.custom.js') }}"></script>
   <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar_res.js') }}"></script>
 
@@ -314,6 +323,7 @@
         success: function (events)
         {
           events.push(unknownRes)
+
           allRes = events.slice(0);
           res = events;
           if (callback)
@@ -508,6 +518,8 @@
   };
 
   </script>
+
+<!-- *************************************************   TREE STRUCTURE ***************************************************-->
 
 {% endblock javascripts_page %}
 

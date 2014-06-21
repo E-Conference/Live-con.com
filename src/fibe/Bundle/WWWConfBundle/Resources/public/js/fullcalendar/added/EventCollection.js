@@ -25,6 +25,7 @@ var EventCollection = {
           return; 
         }  
         EventCollection.forceMainConfRendering = false;
+        TreeRenderer.initTreeStructure();
         // function doWork() {
         
 
