@@ -39,7 +39,8 @@
           'multiple' => true,
           'choices'  => $this->user->getCurrentConf()->getPersons()->toArray(),
           'required' => false
-        ));*/
+        ))*/
+      ;
     }
 
     /**
@@ -48,7 +49,7 @@
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
       $resolver->setDefaults(array(
-        'data_class' => 'fibe\Bundle\WWWConfBundle\Entity\Organization'
+        'data_class' => 'fibe\Bundle\WWWConfBundle\Entity\Organization',
         'csrf_protection' => false
       ));
     }
