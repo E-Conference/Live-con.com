@@ -273,13 +273,13 @@ CalEvent.prototype.dropFromSidebar = function(){
 // CalEvent.prototype.dragChildren = function(){ 
 //     var children = EventCollection.getChildren(this,{concat:true}),
 //         draggedStart = moment(this['start']),
-//         draggedProp = getProp(this.elem),
+//         draggedProp = getProp(this.getElem()),
 //         newdraggedProp,
 //         diff,
 //         childProp;
 
 //     //update helper
-//     $(this.elem).mousemove( function(ev){ 
+//     $(this.getElem()).mousemove( function(ev){
 //       newdraggedProp = getProp(this); 
 //       diff = { 
 //         x : (draggedProp.x - newdraggedProp.x) , 
@@ -289,13 +289,13 @@ CalEvent.prototype.dropFromSidebar = function(){
 //         draggedProp =  newdraggedProp;  
 
 //         $.each(children,function(i,child){ 
-//           childProp = getProp(child.elem); 
-//           $(child.elem).css("left",childProp.x-diff.x+"px")
+//           childProp = getProp(child.getElem());
+//           $(child.getElem()).css("left",childProp.x-diff.x+"px")
 //                        .css("top" ,childProp.y-diff.y+"px");
 //         });
 //       }
 //     }); 
-//     $(this.elem).mouseup(function(){
+//     $(this.getElem()).mouseup(function(){
 //       $(this).off("mousemove").off("mouseup")
 //     })
 // }
@@ -435,7 +435,7 @@ CalEvent.prototype.SetRecurDate = function(){
     // var children = EventCollection.getChildren(this, {concat:false,onlyEvent:true});
     // if(!this.subChildren ||  children.length > 0) {
     //   for(var i in children){
-    //     children[i].elem.remove();
+    //     children[i].getElem().remove();
     //     setRecurChildDate(children[i]); 
     //   } 
     // }else{
@@ -453,7 +453,7 @@ CalEvent.prototype.SetRecurDate = function(){
 
       //   if(child.subChildren && child.subChildren.length > 0){
       //     for(var i in child.subChildren){
-      //       child.subChildren[i].elem.remove();
+      //       child.subChildren[i].getElem().remove();
       //       setRecurChildDate(child.subChildren[i]); 
       //     }
       //   }else{
@@ -464,7 +464,7 @@ CalEvent.prototype.SetRecurDate = function(){
       //   lastMoment = lastMoment.add("minutes",30);
 
       //   child['end']  = moment(lastMoment).format();    
-      //   // child.elem.remove();  
+      //   // child.getElem().remove();
       //   child.computeCountRange()
       //   child.renderForRefetch();
       //   child.persist();

@@ -28,7 +28,7 @@
         }))
         .bind("changed.jstree", $.proxy(function (e, data)
         {
-          $(TreeRenderer).trigger("TreeRenderer.updated", [ data.instance.get_selected() ])
+          $(TreeRenderer).trigger("TreeRenderer.updated", [ data.instance.get_selected() ]);
         }))
         ;
     }

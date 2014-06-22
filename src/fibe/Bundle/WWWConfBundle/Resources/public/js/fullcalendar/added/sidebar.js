@@ -7,27 +7,28 @@ function Sidebar(readOnly){
         this.setInstantEvents = setInstantEvents; 
         this.setSidebarEvent = setSidebarEvent; 
  
-        var eventHtml =  "<div class='external-event fc-event"+(readOnly?" fc-event-draggable":"")+" fc-event-sidebar'></div>";
-        var $sidebarTmp = $(eventHtml);
-        
-        var readOnly = readOnly ;
-        function populate(url){ 
-        $.get(
-          url,
-          null,
-          function(events) {
- 
-              self.setInstantEvents(events); 
-              
+        var eventHtml =  "<div class='external-event fc-event" + (readOnly ? " fc-event-draggable":"") + " fc-event-sidebar'></div>",
+            $sidebarTmp = $(eventHtml),
+            readOnly = readOnly;
+        function populate(url)
+        {
+          $.get(
+            url,
+            null,
+            function (events)
+            {
+
+              self.setInstantEvents(events);
+
               scrollable();
-              
-              bootstrapAlert("success",events.length+" dateless events have been well fetched" ); 
-              
-          },
-          'json'
-        ).error(function(jqXHR, textStatus, errorThrown) {
-          bootstrapAlert("warning","there was an error during the fetch of events",""); 
-        });
+
+              bootstrapAlert("success",events.length + " dateless events have been well fetched" );
+
+            },
+            'json'
+          ).error(function(jqXHR, textStatus, errorThrown) {
+            bootstrapAlert("warning","there was an error during the fetch of events","");
+          });
         }
 
         function setInstantEvents(instant_events){
@@ -39,13 +40,13 @@ function Sidebar(readOnly){
             var $event = $(eventHtml);
             var event = new CalEvent(instant_events[i]); 
             $event = sidebarDraggable($event,event);
-            Events[event.id]['elem'] = $event;
+//            Events[event.id]['elem'] = $event;
           } 
  
           if (!readOnly){ 
               $sidebar.droppable({
                 accept: ".fc-event-start:not(.main-conf-event)",
-                tolerance: "pointer" ,
+                tolerance: "pointer",
                 over: function( event, ui ) {
                     if( $(ui.draggable).hasClass("fc-event")) {
                         var event = Events[dragged[1].id];
@@ -90,34 +91,34 @@ function Sidebar(readOnly){
           sidebarEventHtml($event,event);
 
           $event.attr("data-id",event.id);
-          event['elem'] = $event;
+//          event['elem'] = $event;
           //set child drag     
           if (!readOnly){  
-              $event.draggable({
-                        zIndex: 999,
-                        revert: true,      // will cause the event to go back to its
-                        revertDuration: 0,  //  original position after the drag
-                        appendTo: 'body',
-                        containment: 'window', 
-                        helper: 'clone',
-                        start : function (ev,ui){
-                            $(this).hide();   
-                            dragged = [ ui.helper[0], event ];
-                            setTimeout(function(){ //bug... event isn't yet updated  
-                              $(self).trigger("drag",[event]); 
-                            },1);//event isn't yet updated   
-                        },
-                        stop: function(a,b,c){   
-                            // setTimeout(function(){ //bug... event isn't yet updated   
-                              if(calendar_events_indexes[event.id] === undefined){
-                                $(this).show()
-                              }else{
-                                // $(this).hide()
-                              } 
-                            // },1);//event isn't yet updated   
-                        } 
-                      }) 
-              // alert("update")
+            $event.draggable({
+              zIndex: 999,
+              revert: true,      // will cause the event to go back to its
+              revertDuration: 0,  //  original position after the drag
+              appendTo: 'body',
+              containment: 'window',
+              helper: 'clone',
+              start : function (ev,ui){
+                  $(this).hide();
+                  dragged = [ ui.helper[0], event ];
+                  setTimeout(function(){ //bug... event isn't yet updated
+                    $(self).trigger("drag",[event]);
+                  },1);//event isn't yet updated
+              },
+              stop: function(a,b,c){
+                  // setTimeout(function(){ //bug... event isn't yet updated
+                    if(calendar_events_indexes[event.id] === undefined){
+                      $(this).show()
+                    }else{
+                      // $(this).hide()
+                    }
+                  // },1);//event isn't yet updated
+              }
+            });
+            // alert("update")
           } else{$event.css("cursor","default")}  
           // $(".scroller").mCustomScrollbar("update");
           // store the Event Object in the DOM element so we can get to it later
