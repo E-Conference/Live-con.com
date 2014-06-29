@@ -1,0 +1,74 @@
+<?php
+namespace fibe\Bundle\WWWConfBundle\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+//On insere l'entity Event  de simple schedule
+
+use fibe\Bundle\WWWConfBundle\Entity\ConfEvent as Event;
+use fibe\Bundle\WWWConfBundle\Entity\Location;
+use fibe\Bundle\WWWConfBundle\Entity\Role;
+
+use fibe\Bundle\WWWConfBundle\Form\EventType;
+use fibe\Bundle\WWWConfBundle\Form\RoleType;
+use fibe\Bundle\WWWConfBundle\Form\ConfEventType;
+
+
+
+
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+
+/**
+ * Schedule Controller
+ *
+ * @Route("/")
+ */
+class TreeStructureController extends Controller
+{
+
+  /**
+   * Create a new element from the tree structure
+   * @Route("/", name="tree_structure_create")
+   * @Template()
+   */
+  public function createAction()
+  {
+      $entity = new ConfEvent();
+      $user=$this->getUser();
+
+      $serializer = $this->container->get('jms_serializer');
+      $organization = $serializer->deserialize( $request->getContent(), ' fibe\Bundle\WWWConfBundle\Entity\Organization', 'json');
+
+      $form = $this->createForm(new OrganizationType($this->getUser()), $entity);
+      $form->bind($request);
+  
+
+     if ($form->isValid()) {
+         $em = $this->getDoctrine()->getManager();
+         $em->persist($organization);
+         $em->flush();
+
+         return $this->redirect($this->generateUrl('apiREST_get_organization', array('id' => $organization->getId())));
+          // return $this->redirectView(
+          //         $this->generateUrl(
+          //             'apiREST_get_organization',
+          //             array('id' => $organization->getId())
+          //             ),
+          //         Codes::HTTP_CREATED
+          //         );
+      }
+  }
+
+
+  
+
+}
+
+
+
+

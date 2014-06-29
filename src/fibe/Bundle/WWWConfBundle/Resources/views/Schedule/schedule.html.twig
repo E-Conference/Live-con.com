@@ -44,7 +44,8 @@
     </div>
 
     <div class="row">
-      <div  id="tree-structure" class="col-sm-12 col-md-2 col-lg-2">
+     <input type="text" id="tree-structure-search">
+      <div id="tree-structure" class="col-sm-12 col-md-2 col-lg-2">
 
 
       </div>
@@ -173,6 +174,9 @@
     <script src="{{ asset('bundles/fibewwwconf/js/treestructure/TreeRenderer.js') }}" type="text/javascript"></script>
   <script src="{{ asset('bundles/fibewwwconf/js/treestructure/jstree.checkbox.js') }}" type="text/javascript"></script>
   <script src="{{ asset('bundles/fibewwwconf/js/treestructure/jstree.search.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('bundles/fibewwwconf/js/treestructure/jstree.types.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('bundles/fibewwwconf/js/treestructure/jstree.contextmenu.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('bundles/fibewwwconf/js/treestructure/jstree.dnd.js') }}" type="text/javascript"></script>
   <script type="text/javascript" src="{{ asset('js/jquery-ui.custom.js') }}"></script>
   <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/fullcalendar_res.js') }}"></script>
 
@@ -482,7 +486,7 @@
     });
     $(TreeRenderer).on("TreeRenderer.updated",function(e,selectedIds){
 //      console.log("TreeRenderer.updated",selectedIds);
-      EventCollection.filterIds($(selectedIds));
+      console.log( EventCollection.filterIds($(selectedIds)));
     });
   });//end $document.ready()
 

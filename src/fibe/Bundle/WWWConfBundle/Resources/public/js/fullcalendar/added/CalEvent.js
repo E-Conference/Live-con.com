@@ -21,11 +21,21 @@ var CalEvent = function(event){ //constructor
                                 event.is_mainconfevent ==="true" ;
     if(this["is_mainconfevent"]){
       mainConfEvent = this;
-      this["parent"] = "#"
+      this["parent"] = "#";
+    }
+    if(event.categories[0].name == "Conference event"){
+      this["type"]="Conference";
+    }
+    else if(event.categories[0].name.toLowerCase() == "sessionevent"){
+      this["type"]="Session";
+    }else if(event.categories[0].name.toLowerCase() == "trackevent"){
+      this["type"]="Track";
+    }else{
+      this["type"]="Event";
     }
     if(event.parent.id != "")
     {
-      this["parent"]     = event.parent.id;
+      this["parent"] = event.parent.id;
     }
 
     if( event.categories && event.categories.length > 0 && event.categories[0].color)
