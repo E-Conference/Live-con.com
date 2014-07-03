@@ -9,6 +9,11 @@ use fibe\Bundle\WWWConfBundle\Entity\Event;
 use fibe\Bundle\WWWConfBundle\Entity\Person;
 use fibe\Bundle\WWWConfBundle\Entity\Paper;
 
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\VirtualProperty;
+
 use fibe\Bundle\WWWConfBundle\Util\StringTools;
 
 
@@ -27,11 +32,13 @@ class ConfEvent extends Event
    *
    * @ORM\ManyToOne(targetEntity="ConfEvent", inversedBy="children", cascade={"persist","detach"})
    * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
+   * @Expose
    */
   protected $parent;
 
   /**
    * @ORM\OneToMany(targetEntity="ConfEvent", mappedBy="parent", cascade={"persist"})
+   * @Expose
    */
   protected $children;
 
@@ -40,6 +47,7 @@ class ConfEvent extends Event
    * Url to slides presentation
    *
    * @ORM\Column(type="string", nullable=true,  name="slidePresentation")
+   * 
    */
   protected $slidePresentation;
 
@@ -48,6 +56,7 @@ class ConfEvent extends Event
    *
    * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="events", cascade={"persist"})
    * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
+   * @Expose
    */
   private $conference;
 
@@ -56,6 +65,7 @@ class ConfEvent extends Event
    * @ORM\JoinTable(name="confEvent_paper",
    *     joinColumns={@ORM\JoinColumn(name="confEvent_id", referencedColumnName="id")},
    *     inverseJoinColumns={@ORM\JoinColumn(name="paper_id", referencedColumnName="id")})
+   * @Expose
    */
   private $papers;
 
@@ -64,6 +74,7 @@ class ConfEvent extends Event
    * @ORM\JoinTable(name="confEvent_topic",
    *     joinColumns={@ORM\JoinColumn(name="confEvent_id", referencedColumnName="id")},
    *     inverseJoinColumns={@ORM\JoinColumn(name="topic_id", referencedColumnName="id")})
+   * @Expose
    */
   private $topics;
 
@@ -73,6 +84,7 @@ class ConfEvent extends Event
    *
    * @ORM\OneToMany(targetEntity="Role", mappedBy="event",cascade={"persist","remove"})
    * @ORM\JoinColumn( onDelete="CASCADE")
+   * @Expose
    */
   private $roles;
 
@@ -82,6 +94,7 @@ class ConfEvent extends Event
    * Used for ui representation in the calendar view
    *
    * @ORM\Column(name="is_allday", type="boolean")
+   * @Expose
    */
   private $isAllDay;
 
