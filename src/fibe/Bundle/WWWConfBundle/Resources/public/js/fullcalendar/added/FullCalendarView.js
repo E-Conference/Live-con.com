@@ -131,10 +131,10 @@ function FullCalendarView()
       {
         dragged = [ ui.helper[0], event ];
       },
-      eventDragStop: function (event, jsEvent, ui, view)
-      {
-        trigger("update", event);
-      }
+//      eventDragStop: function (event, jsEvent, ui, view)
+//      {
+//        trigger("update", event);
+//      }
     };
   };
 }

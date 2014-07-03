@@ -63,8 +63,7 @@
           </span>
           <br/><br/>
           <span class="fc-header-space"></span><button id="refetchBtn" class="btn btn-block btn-default"><span class="fa fa-refresh"></span></button>
-          <h4>Dateless Events</h4>
-          <div id='external-events' class='scroller'></div>
+          <br/>
         </div>
       </div>
     </div>
@@ -236,16 +235,64 @@
 //    $sidebar = $('#external-events');
 
     var eventManager = new EventManager(),
-        fullCalendar = new FullCalendarView()
+        fullCalendarView = new FullCalendarView()
 //      treeStructure = new TreeRenderer()
     ;
-    eventManager.addView(fullCalendar);
+    eventManager.addView(fullCalendarView);
 
     eventManager.fetch();
 
     $refetchBtn.on("click",function(){
       eventManager.fetch();
     });
+
+    //slider
+    $('.slider').slider().css("width", "100%")
+      .on('slide', function (slideEvt)
+      {
+        $("#" + $(this).data("sliderId") + "Val").text(slideEvt.value);
+      })
+      .on('slideStop', function (slideEvt)
+      {
+        $('#calendar').fullCalendar('setOptions', {'slotMinutes': slideEvt.value});
+      });
+    //requires changes made by christian on https://code.google.com/p/fullcalendar/issues/detail?id=293&can=4
+    // TO REPRODUCE WHEN FULLCALENDAR.JS IS UPDATED
+    //    original post is :
+    /*
+     #19 cristian...@gmail.com
+     I made some changes on the plugin and now I can change minTime and maxTime dynamically. I think that it works for the other options too.
+
+     I simply changed the "changeView" function to support a "force_reload" parameter that, when set to true, recreates the current View with the existent options. Then, I made a function called setOptions that simply has this code:
+
+     function setOptions(new_options) {
+     $.extend(options, new_options);
+     var viewName=currentView.name;
+     changeView(viewName,true);
+     }
+
+     I hope this can help someone in need =)
+     Jan 25, 2012 #20 cristian...@gmail.com
+     I forgot to specify the changes made on "changeView"...
+     Here are the important lines:
+
+     function changeView(newViewName,force_reload) {
+     [+]if (force_reload || !currentView || newViewName != currentView.name) {
+     ....
+     content.css('overflow', 'hidden');
+
+     currentView = viewInstances[newViewName];
+     [+]if (force_reload)
+     [+]currentView.element.remove();
+     [+]if (currentView && !force_reload) {
+     currentView.element.show();
+     }else{
+     currentView = viewInstances[newViewName] = new fcViews[newViewName](
+     ....
+
+     The "[+]" signals indicate changes or additions.
+
+     */
 
 
     /*-----------------------------------------------------------------------------------------------------*/
@@ -400,56 +447,6 @@
     /*----------------------------------------------------------------------------------------*/
 
 
-    /*-------------------------------------------------------------------------------------------------*/
-    /*----------------------------------------- slider ------------------------------------------------*/
-    /*-------------------------------------------------------------------------------------------------*/
-    $('.slider').slider()
-      .on('slide', function (slideEvt)
-      {
-        $("#" + $(this).data("sliderId") + "Val").text(slideEvt.value);
-      })
-      .on('slideStop', function (slideEvt)
-      {
-        $('#calendar').fullCalendar('setOptions', {'slotMinutes': slideEvt.value});
-      })
-      .css("width", "100%");
-    //requires changes made by christian on https://code.google.com/p/fullcalendar/issues/detail?id=293&can=4
-    // TO REPRODUCE WHEN FULLCALENDAR.JS IS UPDATED
-    //    original post is :
-    /*
-     #19 cristian...@gmail.com
-     I made some changes on the plugin and now I can change minTime and maxTime dynamically. I think that it works for the other options too.
-
-     I simply changed the "changeView" function to support a "force_reload" parameter that, when set to true, recreates the current View with the existent options. Then, I made a function called setOptions that simply has this code:
-
-     function setOptions(new_options) {
-     $.extend(options, new_options);
-     var viewName=currentView.name;
-     changeView(viewName,true);
-     }
-
-     I hope this can help someone in need =)
-     Jan 25, 2012 #20 cristian...@gmail.com
-     I forgot to specify the changes made on "changeView"...
-     Here are the important lines:
-
-     function changeView(newViewName,force_reload) {
-     [+]if (force_reload || !currentView || newViewName != currentView.name) {
-     ....
-     content.css('overflow', 'hidden');
-
-     currentView = viewInstances[newViewName];
-     [+]if (force_reload)
-     [+]currentView.element.remove();
-     [+]if (currentView && !force_reload) {
-     currentView.element.show();
-     }else{
-     currentView = viewInstances[newViewName] = new fcViews[newViewName](
-     ....
-
-     The "[+]" signals indicate changes or additions.
-
-     */
 
     /*-------------------------------------------------------------------------------------------------*/
     /*------------------------------------- initialize sidebar ----------------------------------------*/
@@ -490,50 +487,7 @@
       EventCollection.filterIds(ids);
     });*/
 
-    /*-----------------------------------------------------------------------------------------------------*/
-    /*--------------------  comunication between treejs and fullcalendar  -------------------------------*/
-    /*-----------------------------------------------------------------------------------------------------*/
-
-//    $(eventManager).on("EventCollection.updated",function(){
-//      TreeRenderer.updateTreeStructure(EventCollection.asArray());
-//    });
-//    $(TreeRenderer).on("TreeRenderer.updated",function(e,selectedIds){
-////      console.log("TreeRenderer.updated",selectedIds);
-//      EventCollection.filterIds($(selectedIds));
-//    });
   });//end $document.ready()
-  /* jQuery Tiny Pub/Sub - v0.7 - 10/27/2011
-   * http://benalman.com/
-   * Copyright (c) 2011 "Cowboy" Ben Alman; Licensed MIT, GPL */
-
-  (function ($) {
-
-    var o = $({});
-
-    $.subscribe = function () {
-      o.on.apply(o, arguments);
-    };
-
-    $.unsubscribe = function () {
-      o.off.apply(o, arguments);
-    };
-
-    $.publish = function () {
-      o.trigger.apply(o, arguments);
-    };
-
-  }(jQuery));
-
-  // util fn
-
-//  arrayRemoveKey = function (array, key)
-//  {
-//    $.grep(array, function (e)
-//    {
-//      return e != key;
-//    });
-//  };
-
   </script>
 
 <!-- *************************************************   TREE STRUCTURE ***************************************************-->

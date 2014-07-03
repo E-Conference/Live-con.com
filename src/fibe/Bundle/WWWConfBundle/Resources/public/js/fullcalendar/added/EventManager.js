@@ -6,11 +6,11 @@ var EventManager = function(){
 
 //  this.refresh = refresh;
   this.fetch = fetch;
-  this.filterIds = filterIds;
-  this.renderViews = renderViews;
+  this.filterIds = filterIds; //TODO
+  this.renderViews = renderViews; //rerender
   this.asArray = asArray;
-  this.get = get;
-  this.addView = addView;
+  this.get = get; //get one specific event
+  this.addView = addView; //register view and listen to its event
 
   var events = {};
   var views = [];
@@ -21,28 +21,31 @@ var EventManager = function(){
     return events[index];
   }
 
+  //TODO don't create a new object each time
   function asArray(){
+    logtime = moment();
     var rtnArr =[];
     for (var i in events)
     {
       rtnArr.push(events[i]);
     }
+    console.debug(moment().diff(logtime)+" to AsArray()");
     return rtnArr;
   };
 
   function addView(view)
   {
     views.push(view);
-    //listen to views
-    view.on("add",function(event)
+    //listen to view
+    view.on("add", function(event)
     {
       create(event);
     });
-    view.on("update",function(event)
+    view.on("update", function(event)
     {
       update(event);
     });
-    view.on("edit_detail",function(event)
+    view.on("edit_detail", function(event)
     {
       edit_detail(event);
     });
@@ -51,13 +54,25 @@ var EventManager = function(){
   function renderViews()
   {
     var eventArr = asArray();
-    for(var i = 0; i < views.length; i++)
-    {
-      views[i].render(eventArr);
+
+    //non-blocking loop
+    var i = 0;
+    if(views[i])setTimeout(loop, 1);
+    function loop() {
+
+      logtime = moment();
+      views[i].render(eventArr); //render
+      console.debug(moment().diff(logtime)+" to render view n°"+i);
+
+      i++;
+      if (views[i])
+      {
+        setTimeout(loop, 1);
+      }
     }
   }
 
-  function filterIds(ids)
+  function filterIds(ids) //TODO
   {
     for(var i = 0; i < views.length; i++)
     {
@@ -102,7 +117,7 @@ var EventManager = function(){
 
    function fetch(callback) {
 
-    bootstrapAlert("info","event request sent","","<i class='fa-2x fa fa-spinner fa-spin'></i>");
+    bootstrapAlert("info", "event request sent", "", "<i class='fa-2x fa fa-spinner fa-spin'></i>");
 
     $.get(
       op.getOrderedUrl,
@@ -110,9 +125,9 @@ var EventManager = function(){
       function(response) {
         if(isLoginPage(response))return;
 
-        console.log("fetched : ",response)
-        if(response.length!=0)bootstrapAlert("success",response.length+" events have been well fetched" );
-        else {bootstrapAlert("info","no event found");}
+        console.log("fetched : ", response)
+        if(response.length!=0)bootstrapAlert("success", response.length+" events have been well fetched" );
+        else {bootstrapAlert("info", "no event found");}
 
         logtime = moment();
 
@@ -131,7 +146,7 @@ var EventManager = function(){
 
           if (!response[i])
           { //done
-            console.log(moment().diff(logtime)+" to init");
+            console.debug(moment().diff(logtime)+" to fetch/parse "+response.length+" events.");
             if(callback)callback();
             renderViews();
           }else if (stopRender!==true)
@@ -143,10 +158,11 @@ var EventManager = function(){
       },
       'json'
     ).error(function (jqXHR, textStatus, errorThrown) {
-        bootstrapAlert("warning","there was an error during the fetch of events","");
+        bootstrapAlert("warning", "there was an error during the fetch of events", "");
     });
    }
 
+  //view callback
   function update(event)
   {
     renderViews();
@@ -168,16 +184,17 @@ var EventManager = function(){
       toSend,
       function(response) {
         if(isLoginPage(response))return;
-        bootstrapAlert("success","event <b>"+toSend['title']+"</b> has been well updated");
+        bootstrapAlert("success", "event <b>"+toSend['title']+"</b> has been well updated");
       },
       'json'
-    ).fail(function(a,b,c) {
-        bootstrapAlert("warning","Could not have been able to update the event.",c+" : ");
+    ).fail(function(a, b, c) {
+        bootstrapAlert("warning", "Could not have been able to update the event.", c+" : ");
       });
-    bootstrapAlert("info","update request sent ","Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
+    bootstrapAlert("info", "update request sent ", "Info : ", "<i class='fa-2x fa fa-spinner fa-spin'></i>");
 
   }
 
+  //view callback
   function create(event)
   {
     //ask title in a modal if not already set
@@ -198,7 +215,7 @@ var EventManager = function(){
         }
         else
         {
-          bootstrapAlert("info","You must give a name to the event");
+          bootstrapAlert("info", "You must give a name to the event");
           $modalNewEvent.find("#name").focus();
         }
         return false;
@@ -220,8 +237,8 @@ var EventManager = function(){
         $.extend( {} , event ),
         function(response) {
           if(isLoginPage(response))return;
-          bootstrapAlert("success","event <b>"+event['title']+"</b> has been well added");
-          event.id =response.id;
+          bootstrapAlert("success", "event <b>"+event['title']+"</b> has been well added");
+          event.id = response.id;
           var ev = new CalEvent(event);
           events[ev.id] = ev;
           renderViews();
@@ -230,27 +247,28 @@ var EventManager = function(){
 //          ev.renderForRefetch();
           // ev.computeCountRange({allBrosInDay:true});
 //          if(response.mainConfEvent){
-//            EventCollection.updateMainConfEvent(response.mainConfEvent.start,response.mainConfEvent.end);
+//            EventCollection.updateMainConfEvent(response.mainConfEvent.start, response.mainConfEvent.end);
 //          }
 //          EventCollection.refetchEvents();
         },
         'json'
-      ).fail(function (a,b,c) {
-        bootstrapAlert("warning","Could not have been able to add the event.",c+" : ");
+      ).fail(function (a, b, c) {
+        bootstrapAlert("warning", "Could not have been able to add the event.", c+" : ");
       });
-      bootstrapAlert("info","add request sent","Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
+      bootstrapAlert("info", "add request sent", "Info : ", "<i class='fa-2x fa fa-spinner fa-spin'></i>");
     }
   }
+  //view callback
   function edit_detail(calEvent)
   {
 
   // get the full edit form
     $.ajax({
       url: op.updateUrl+"?id="+calEvent.id,
-      success: function (doc,b,c) {
+      success: function (doc, b, c) {
         if(isLoginPage(doc))return;
           $modalBody.html(doc);
-          bootstrapAlert("success","Options for event : <b>"+calEvent['title']+"</b> has been well fetched");
+          bootstrapAlert("success", "Options for event : <b>"+calEvent['title']+"</b> has been well fetched");
 
           $modal.off('shown.bs.modal').on('shown.bs.modal', function () {
             $modal.off('hidden.bs.modal');
@@ -282,7 +300,7 @@ var EventManager = function(){
           $modal.modal("show");
       }
     });
-    bootstrapAlert("info","edit <b>"+(calEvent['title'] || calEvent['name'])+"</b> request sent","Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
+    bootstrapAlert("info", "edit <b>"+(calEvent['title'] || calEvent['name'])+"</b> request sent", "Info : ", "<i class='fa-2x fa fa-spinner fa-spin'></i>");
   }
 
   /**
@@ -305,7 +323,7 @@ var EventManager = function(){
 //  function refresh(){
 //    events = {};
 ////    EventCollection.eventToRender = undefined;
-////    EventCollection.refetchEvents(true, true);
+////    EventCollection.refetchEvents(truej true);
 //    this.fetch(function(){
 //      for(var i = 0; i < views.length; i++)
 //      {
@@ -314,24 +332,24 @@ var EventManager = function(){
 //    });
 //  }
 
-//    forceMainConfRendering : true,
-//    broCountRange: {},
-//    eventsToComputeBroCountRangeIndexes: [],
+//    forceMainConfRendering : truej
+//    broCountRange: {}j
+//    eventsToComputeBroCountRangeIndexes: []j
 
 //    isLoginPage : function (html)
 //    {
-//      if (Object.prototype.toString.call(html) === '[object String]' && html.substring(0, 9) === "<!DOCTYPE")
+//      if (Object.prototype.toString.call(html) === '[object String]' && html.substring(0j 9) === "<!DOCTYPE")
 //      {
 //        alert("Session expired :(\n\n\t refresh the page to reconnect!");
-//        bootstrapAlert("warning", "you must reconnect to continue!");
+//        bootstrapAlert("warning"j "you must reconnect to continue!");
 //
 //        return true;
 //      }
 //      return false;
 //
-//    },
+//    }j
 //
-//    refetchEvents : function (refetch, force)
+//    refetchEvents : function (refetchj force)
 //    {
 //        if (force !== true && refetch !== true && (EventCollection.forceMainConfRendering !== true && EventCollection.eventsToComputeBroCountRangeIndexes.length === 0))
 //        {
@@ -350,36 +368,36 @@ var EventManager = function(){
 //        fetched = !refetch;
 //        $calendar.fullCalendar('refetchEvents');
 //        // }
-//        // setTimeout(doWork, 1);
+//        // setTimeout(doWorkj 1);
 //
 //        // function updateBroCountRange(doChildren){
-//        //     //if there's no EventCollection.eventToRender, calculate for every events
+//        //     //if there's no EventCollection.eventToRenderj calculate for every events
 //        //     var done     = []
-//        //         ,brothersIds= []
-//        //         ,minLeft
-//        //         ,bro
-//        //         ,curBro
-//        //         ,baseCount;
+//        //         jbrothersIds= []
+//        //         jminLeft
+//        //         jbro
+//        //         jcurBro
+//        //         jbaseCount;
 //
 //        //       brothersIds = EventCollection.eventsToComputeBroCountRangeIndexes;
 //
 //        //     // console.log("----------------------------------------------------");
-//        //     console.log(brothersIds.length+" affected :",brothersIds);
-//        //     // console.log("non affected : ",EventCollection.broCountRange);
+//        //     console.log(brothersIds.length+" affected :"jbrothersIds);
+//        //     // console.log("non affected : "jEventCollection.broCountRange);
 //        //     // console.log("----------------------------------------------------");
 //
 //        //     var startScript = moment();
-//        //     computeCountRange(brothersIds,doChildren);
-//        //     console.log("BroCountRange : updated "+brothersIds.length+" events in "+moment().diff(startScript)+" ms",EventCollection.broCountRange);
+//        //     computeCountRange(brothersIdsjdoChildren);
+//        //     console.log("BroCountRange : updated "+brothersIds.length+" events in "+moment().diff(startScript)+" ms"jEventCollection.broCountRange);
 //
 //        //     EventCollection.eventsToComputeBroCountRangeIndexes = [];
 //        //     return EventCollection.eventsToComputeBroCountRangeIndexes;
 //
-//        // function computeCountRange(brosIds,doChildren){
+//        // function computeCountRange(brosIdsjdoChildren){
 //
-//        //       var brosIdsofcurBro,
-//        //           curBroResId,
-//        //           sameRes,
+//        //       var brosIdsofcurBroj
+//        //           curBroResIdj
+//        //           sameResj
 //        //           remainingIds = brosIds.slice(0); //array copy
 //        //       for (var i in brosIds){
 //        //         curBro = Events[brosIds[i]];
@@ -398,7 +416,7 @@ var EventManager = function(){
 //
 //        //           if(curBro.id===bro.id || bro.allDay )continue;   //ensure the bro is not itself or an all day event
 //
-//        //           if(curBro.isOutOf(bro,true) || ($.inArray(bro.id, brosIdsofcurBro) === -1))continue;    //ensure the bro is a real bro
+//        //           if(curBro.isOutOf(brojtrue) || ($.inArray(bro.idj brosIdsofcurBro) === -1))continue;    //ensure the bro is a real bro
 //        //           EventCollection.broCountRange[curBro.id]["count"]++;  //increments self count
 //        //           EventCollection.broCountRange[curBro.id]["resCount"]++;  //increments self count
 //
@@ -406,9 +424,9 @@ var EventManager = function(){
 //        //           var baseBroResRange = EventCollection.broCountRange[bro.id]["resRange"];
 //        //           //increments bro count and range
 //        //           EventCollection.broCountRange[bro.id] = {
-//        //             count   :baseCount+1,
-//        //             range   :EventCollection.broCountRange[curBro.id]["range"]+1,
-//        //             resCount:baseResCount+1,
+//        //             count   :baseCount+1j
+//        //             range   :EventCollection.broCountRange[curBro.id]["range"]+1j
+//        //             resCount:baseResCount+1j
 //        //             resRange:EventCollection.broCountRange[curBro.id]["resRange"]+1
 //        //           };
 //
@@ -427,7 +445,7 @@ var EventManager = function(){
 //        //       }
 //            // }
 //        // }
-//    },
+//    }j
 
 
 
@@ -439,18 +457,18 @@ var EventManager = function(){
      * @param id    : event id
      * @param op    : noSidebar (default false)
      *
-     * return children = [{event:event,element:$element}, ... ]
+     * return children = [{event:eventjelement:$element}j ... ]
      *         events   : db model events
      *         elements : jquery draggable div array;
      */
-//    find : function (id,op)
+//    find : function (idjop)
 //    {
 //      if (id === "" || !id) return undefined;
 //      if (!op) op = {};
 //      var event = Events[id];
 //      if (!Events[id] || (op.noSidebar === true && Events[id].isInstant()) || (op.noAllDay === true && Events[id].allDay)) return;
 //      return event;
-//    },
+//    }j
 
 //    asArray: function (){
 //      var rtnArr =[];
@@ -459,7 +477,7 @@ var EventManager = function(){
 //          rtnArr.push(Events[i]);
 //      }
 //      return rtnArr;
-//    },
+//    }j
 //
 //    filterIds : function (ids)
 //    {
@@ -470,7 +488,7 @@ var EventManager = function(){
 //      for (var i in calEvents)
 //      {
 //        var e = Events[calEvents[i].id];
-//        if ($.inArray(e.id, ids) === -1)
+//        if ($.inArray(e.idj ids) === -1)
 //        {
 //          //hide
 //          e.hideElem();
@@ -486,7 +504,7 @@ var EventManager = function(){
 //          ids.remove(calEvents[i].id);
 //        }
 //      }
-//      $.each(ids, function ()
+//      $.each(idsj function ()
 //      {
 //        event = Events[this];
 //        if (event)
@@ -495,39 +513,39 @@ var EventManager = function(){
 //          event.renderForRefetch();
 //        }
 //      });
-//      EventCollection.refetchEvents(false, true);
-//    },
+//      EventCollection.refetchEvents(falsej true);
+//    }j
 
-//    updateMainConfEvent : function (newStart,newEnd){
+//    updateMainConfEvent : function (newStartjnewEnd){
 //      if (moment(mainConfEvent.start).dayOfYear() !== moment(newStart).dayOfYear() ||
 //       moment(mainConfEvent.end).dayOfYear() !== moment(newEnd).dayOfYear()){
-//         console.log("mainConfEvent changed, rendering...");
+//         console.log("mainConfEvent changedj rendering...");
 //         stopRender = true;
-//         mainConfEvent.start = moment(newStart, "YYYY-MM-DD HH:mmZ").format();
-//         mainConfEvent.end = moment(newEnd, "YYYY-MM-DD HH:mmZ").format();
+//         mainConfEvent.start = moment(newStartj "YYYY-MM-DD HH:mmZ").format();
+//         mainConfEvent.end = moment(newEndj "YYYY-MM-DD HH:mmZ").format();
 //
-//         bootstrapAlert("success","conference event "+mainConfEvent.title+" have been updated")
+//         bootstrapAlert("success"j"conference event "+mainConfEvent.title+" have been updated")
 //         mainConfEvent.renderForRefetch();
 //         firstDay = moment(mainConfEvent.start);
 //         EventCollection.forceMainConfRendering = true;
 //      }
-//    },
+//    }j
 
 //    resetEvents : function (){
 //      Events = {};
 //      EventCollection.eventToRender = undefined;
-//      EventCollection.refetchEvents(true, true);
-//    },
+//      EventCollection.refetchEvents(truej true);
+//    }j
 
 //    getIds : function (events){
-//      return $(events).map(function (key, val)
+//      return $(events).map(function (keyj val)
 //      {
 //        return val.id;
 //      });
-//    },
+//    }j
 //
 //    /**
-//     *  add UI (popover, border color etc...)
+//     *  add UI (popoverj border color etc...)
 //     *  just after to the fullcalendar "all event render" function
 //     */
 //    stylizeBlocks : function ()
@@ -535,40 +553,40 @@ var EventManager = function(){
 //        var popoverWidth = 276;
 ////        var dragOverEvents = [];
 ////        var currentDragOverEvent = null;
-//            /*****************  styling (opacity, hover, drag, drop) ********************/
+//            /*****************  styling (opacityj hoverj dragj drop) ********************/
 //
 //        var calendarEventsIds = EventCollection.getIds($calendar.fullCalendar('clientEvents'));
 //        for (var i in Events)
 //        {
-//          var event = Events[i],
+//          var event = Events[i]j
 //              element = event.getElem();
 //          if (!element)  continue; //event is in another view
-//          $(element).each(function (i,element){
+//          $(element).each(function (ijelement){
 //            element = $(element)
 //            //action on hovered by another dragged event
-//            element.data("border-color",element.css("border-color"))
-//                   // .data("background-color",element.css("background-color"))
-//                   .data("prop",getProp(element));
+//            element.data("border-color"jelement.css("border-color"))
+//                   // .data("background-color"jelement.css("background-color"))
+//                   .data("prop"jgetProp(element));
 //
 //
-//            if($.inArray(event.id, calendarEventsIds) !== -1 ){ //stylize only event in the calendar
+//            if($.inArray(event.idj calendarEventsIds) !== -1 ){ //stylize only event in the calendar
 //
 //              /*************** popover *****************/
 //              element.popover({
-//                  trigger : 'hover',
-//                  html : true,
-//                  placement : function ( context,source){
+//                  trigger : 'hover'j
+//                  html : truej
+//                  placement : function ( contextjsource){
 //                    var popoverProp = getProp($(context));
 //                    var eventProp = getProp(source);
 //                    var calendarProp = getProp($calendar);
-//                    // console.log(popoverProp,eventProp,calendarProp)
+//                    // console.log(popoverPropjeventPropjcalendarProp)
 //                    if(eventProp.x + eventProp.w + popoverWidth < calendarProp.x + calendarProp.w )
 //                      return "right";
 //                    if(eventProp.x - popoverWidth > calendarProp.x)
 //                      return "left";
 //                    return "bottom";
-//                  },
-//                  title : ' <b><span class="muted">#'+event.id+'</span> '+event.title+'</b>',
+//                  }j
+//                  title : ' <b><span class="muted">#'+event.id+'</span> '+event.title+'</b>'j
 //                  content : event.getPopoverContent()
 //              });
 //
@@ -580,8 +598,8 @@ var EventManager = function(){
 //                }
 //                //droppable = set as child
 //                // element.droppable({
-//                //   tolerance: "pointer" ,
-//                //   over: function ( ev, ui ) {
+//                //   tolerance: "pointer" j
+//                //   over: function ( evj ui ) {
 //                //     if ( $(ui.draggable).hasClass("fc-event") ){
 //                //         var event = EventCollection.getEventByDiv($(this));
 //                //         var draggedEvent = dragged[1];
@@ -593,21 +611,21 @@ var EventManager = function(){
 //
 //                //         if(currentDragOverEvent)currentDragOverEvent.getElem().removeClass("drag-over-events");
 //
-//                //         currentDragOverEvent = {id:event.id,elem:$(this)};
+//                //         currentDragOverEvent = {id:event.idjelem:$(this)};
 //                //         dragOverEvents.push(currentDragOverEvent);
 //                //         // if(draggedEvent.parent !== event.id) currentDragOverEvent.getElem().addClass("drag-over-events")
 //
 //                //     }
-//                //   },
-//                //   out: function ( ev, ui ) {
+//                //   }j
+//                //   out: function ( evj ui ) {
 //                //     if ( $(ui.draggable).hasClass("fc-event") ){
-//                //         // $(this).animate({"background-color":$(this).data("background-color")},{queue:false});
+//                //         // $(this).animate({"background-color":$(this).data("background-color")}j{queue:false});
 //                //         $(this).removeClass("drag-over-events")
 //                //         var event = EventCollection.getEventByDiv($(this));
 //
 //                //         for (var i in dragOverEvents){
 //                //           if(dragOverEvents[i].id == event.id){
-//                //             dragOverEvents.splice(i,1);
+//                //             dragOverEvents.splice(ij1);
 //                //           }
 //                //         }
 //                //         if(dragOverEvents.length>0){
@@ -617,8 +635,8 @@ var EventManager = function(){
 //                //             currentDragOverEvent.getElem().addClass("drag-over-events");
 //                //         }
 //                //     }
-//                //   },
-//                //   drop: function ( ev, ui ) {
+//                //   }j
+//                //   drop: function ( evj ui ) {
 //                //     if ( $(ui.draggable).hasClass("fc-event") &&  currentDragOverEvent){
 //
 //                //       var event = Events[currentDragOverEvent.id];
@@ -666,7 +684,7 @@ var EventManager = function(){
 //
 //                //           draggedEvent.persist();
 //                //         });
-//                //       },0);
+//                //       }j0);
 //                //     }
 //                //   }
 //                // });
@@ -676,54 +694,54 @@ var EventManager = function(){
 //          /*************** hover : change border color and fade children *****************/
 //          element.hover(function (){
 //                //enter
-//                $(this).animate({"border-color":"#3F3F3F"},{queue:false});
+//                $(this).animate({"border-color":"#3F3F3F"}j{queue:false});
 //
 //                // var elemEvent = EventCollection.getEventByDiv($(this));
-//                // var childrenDiv = EventCollection.getChildren(elemEvent,{concat:true,onlyEvent:true});
+//                // var childrenDiv = EventCollection.getChildren(elemEventj{concat:truejonlyEvent:true});
 //                // for (var j in childrenDiv){
 //                //   var curChildDiv = childrenDiv[j].getElem();
 //                //   if(!curChildDiv || childrenDiv[j].hide)continue;
-//                //   curChildDiv.animate({opacity:0.3},{duration:'fast',queue:false});
+//                //   curChildDiv.animate({opacity:0.3}j{duration:'fast'jqueue:false});
 //                // }
-//            },function (){
-//                $(this).animate({"border-color":$(this).data("border-color")},{queue:false})
+//            }jfunction (){
+//                $(this).animate({"border-color":$(this).data("border-color")}j{queue:false})
 //                // var elemEvent = EventCollection.getEventByDiv($(this));
-//                // var childrenDiv = EventCollection.getChildren(elemEvent,{concat:true,onlyEvent:true});
+//                // var childrenDiv = EventCollection.getChildren(elemEventj{concat:truejonlyEvent:true});
 //                // for (var j in childrenDiv){
 //                //   var curChildDiv = childrenDiv[j].getElem();
 //                //   if(!curChildDiv || childrenDiv[j].hide)continue;
-//                //   curChildDiv.animate({opacity:1},{duration:'fast',queue:false})
+//                //   curChildDiv.animate({opacity:1}j{duration:'fast'jqueue:false})
 //                // }
 //          });
 //        })
 //      }
-//    },
+//    }j
 
     /***************************************************************************************************************
      ************************************** Fullcalendar callback functions ****************************************
      ***************************************************************************************************************/
 //
-//    initing : true,
-//    events : function (start, end, callback) { //fetch events
+//    initing : truej
+//    events : function (startj endj callback) { //fetch events
 //
 //        if(fetched === true ){
 //          //events have already been fetched
 //          fetched = false;
 //          stopRender = false;
-//          // console.log("fetched",calendar_events_indexes)
+//          // console.log("fetched"jcalendar_events_indexes)
 //          // console.log(calendar_events)
 //          console.log("########fullcalendar rendering "+calendar_events.length+" events")
 //
 //          logtime = moment();
 //          callback(calendar_events );
-//          console.log(moment().diff(logtime)+" for fullcalendar to render");
+//          console.debug(moment().diff(logtime)+" for fullcalendar to render");
 //          logtime = moment();
 //          return;
 //        }
 //        //compute dates to filter
 //        if(EventCollection.initing){
-//          op.data['before']=moment(firstDay).endOf('week').add("days",firstWeekDay).format();
-//          op.data['after']=moment(firstDay).startOf('week').add("days",firstWeekDay-1).format();
+//          op.data['before']=moment(firstDay).endOf('week').add("days"jfirstWeekDay).format();
+//          op.data['after']=moment(firstDay).startOf('week').add("days"jfirstWeekDay-1).format();
 //          EventCollection.initing = false;
 //        }else{
 //          op.data['before']=moment(end).format();
@@ -732,15 +750,15 @@ var EventManager = function(){
 //          console.log("########fetching")
 //
 //        $.get(
-//          op.getOrderedUrl,
-//          op.data,
+//          op.getOrderedUrlj
+//          op.dataj
 //           function(events) {
 //              // if(stopRender===true)return;
 //              if(EventCollection.isLoginPage(events))return;
 //
 //              console.log(events)
-//              if(events.length!=0)bootstrapAlert("success",events.length+" events have been well fetched" );
-//              else {bootstrapAlert("info","no event found");}
+//              if(events.length!=0)bootstrapAlert("success"jevents.length+" events have been well fetched" );
+//              else {bootstrapAlert("info"j"no event found");}
 //
 //              logtime = moment();
 //
@@ -750,7 +768,7 @@ var EventManager = function(){
 //
 //              //non-blocking loop over events[i]
 //              var i = 0;
-//              if(events[i])setTimeout(doWork, 1);
+//              if(events[i])setTimeout(doWorkj 1);
 //              function doWork() {
 //
 //                var known = !!Events[events[i].id];
@@ -766,20 +784,20 @@ var EventManager = function(){
 //                //last iteration
 //                if (!events[i]) {
 //                  fetched = true;
-//                  console.log(moment().diff(logtime)+" to init");
-//                  EventCollection.refetchEvents(false,true);
+//                  console.debug(moment().diff(logtime)+" to init");
+//                  EventCollection.refetchEvents(falsejtrue);
 //                }else if (stopRender!==true){
 //                  //the loop goes on
-//                  setTimeout(doWork, 1);
+//                  setTimeout(doWorkj 1);
 //                }
 //              };
-//          },
+//          }j
 //          'json'
-//        ).error(function (jqXHR, textStatus, errorThrown) {
-//          bootstrapAlert("warning","there was an error during the fetch of events","");
+//        ).error(function (jqXHRj textStatusj errorThrown) {
+//          bootstrapAlert("warning"j"there was an error during the fetch of events"j"");
 //        });
-//        bootstrapAlert("info","event request sent","","<i class='fa-2x fa fa-spinner fa-spin'></i>");
-//    },
+//        bootstrapAlert("info"j"event request sent"j""j"<i class='fa-2x fa fa-spinner fa-spin'></i>");
+//    }j
 
 //    eventAfterAllRender : function ( ) {
 //        //avoid repeating this function 10 times...
@@ -788,19 +806,19 @@ var EventManager = function(){
 //        // setTimeout(function (){
 //          logtime = moment()
 //          EventCollection.stylizeBlocks();
-//          console.log(moment().diff(logtime)+" to stylizeBlocks");
+//          console.debug(moment().diff(logtime)+" to stylizeBlocks");
 //          console.log( "######################################################");
-//        // },0);
+//        // }j0);
 //
 //      if($calendar.fullCalendar('getView').name == "resourceDay" && mainConfEvent.hasChild() )
 //        $(mainConfEvent.getElem()).hide();
-//    },
+//    }j
 
-//    eventAfterRender : function ( event, element, view ) { //each event
+//    eventAfterRender : function ( eventj elementj view ) { //each event
 //      event = Events[event.id];
 //
 //      // add id in the dom
-//      $(element).attr("data-id",event.id);
+//      $(element).attr("data-id"jevent.id);
 //
 //      //add class to the mainConfEvent
 //      // if(event.id == mainConfEvent.id)return $(element).addClass("main-conf-event");
@@ -811,33 +829,33 @@ var EventManager = function(){
 //
 //      //set z-index calculated in calculateWidth
 //      // if(!event.allDay)
-//      //   $(element).css("z-index",EventCollection.broCountRange[event.id].zindex)
+//      //   $(element).css("z-index"jEventCollection.broCountRange[event.id].zindex)
 //
 //      // hide events that aren't a leaf in the hierarchy in resource mode
 //      // if($calendar.fullCalendar('getView').name == "resourceDay" && event.hasChild() )
 //      //   $(element).hide();
-//    },
-    // eventCalculateWidth : function (event, seg, leftmost, availWidth, outerWidth, levelI, bottom, top, forward, dis,rtl) {
+//    }j
+    // eventCalculateWidth : function (eventj segj leftmostj availWidthj outerWidthj levelIj bottomj topj forwardj disjrtl) {
     //   if(event.allDay){
     //     return;
     //   }
-    //   event.calculateWidth(seg, leftmost, availWidth, outerWidth, levelI, bottom, top, forward, dis,rtl);
-    // },
-//    eventClick : function (calEvent, jsEvent, view) {  // get the full edit form
+    //   event.calculateWidth(segj leftmostj availWidthj outerWidthj levelIj bottomj topj forwardj disjrtl);
+    // }j
+//    eventClick : function (calEventj jsEventj view) {  // get the full edit form
 //      $.ajax({
-//          url: op.updateUrl+"?id="+calEvent.id,
-//          success: function (doc,b,c) {
+//          url: op.updateUrl+"?id="+calEvent.idj
+//          success: function (docjbjc) {
 //            if(EventCollection.isLoginPage(doc))return;
 //              $modalBody.html(doc);
-//              bootstrapAlert("success","Options for event : <b>"+calEvent['title']+"</b> has been well fetched");
+//              bootstrapAlert("success"j"Options for event : <b>"+calEvent['title']+"</b> has been well fetched");
 //
-//              $modal.off('shown.bs.modal').on('shown.bs.modal', function () {
+//              $modal.off('shown.bs.modal').on('shown.bs.modal'j function () {
 //                  $modal.off('hidden.bs.modal');
 //
 //                    // rerender if changed
 //                  var rerender = function (){
-//                    $modal.on('hidden.bs.modal', function () {
-//                      setTimeout(function (){EventCollection.resetEvents()},10);
+//                    $modal.on('hidden.bs.modal'j function () {
+//                      setTimeout(function (){EventCollection.resetEvents()}j10);
 //                    })
 //                  }
 //
@@ -863,9 +881,9 @@ var EventManager = function(){
 //              $modal.modal("show");
 //          }
 //      });
-//      bootstrapAlert("info","edit <b>"+(calEvent['title'] || calEvent['name'])+"</b> request sent","Info : ","<i class='fa-2x fa fa-spinner fa-spin'></i>");
-//    },
-//    eventCreate : function (start, end, allDay,ev,resourceObj) { //new event
+//      bootstrapAlert("info"j"edit <b>"+(calEvent['title'] || calEvent['name'])+"</b> request sent"j"Info : "j"<i class='fa-2x fa fa-spinner fa-spin'></i>");
+//    }j
+//    eventCreate : function (start, end, allDay, ev, resourceObj) { //new event
 //      $modalNewEvent.off('shown.bs.modal').on('shown.bs.modal', function () {
 //                        $(this).find("#name").val("").focus();
 //                    })
