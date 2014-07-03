@@ -137,11 +137,14 @@ class ScheduleController extends Controller
     $end = $this->parseDate($postData['end']);
     $event->setStartAt($start);
     $event->setEndAt($end);
-    $event->setParent(
-      ($postData['parent'] != "" ? $em->getRepository('fibeWWWConfBundle:ConfEvent')->find(
-        $postData['parent']
-      ) : $mainConfEvent)
-    );
+    if(isset($postData['parent']) && $postData['parent']!= "")
+    {
+      $parent = $em->getRepository('fibeWWWConfBundle:ConfEvent')->find($postData['parent']);
+      $event->setParent($parent);
+    }else
+    {
+      $event->setParent($mainConfEvent);
+    }
     $event->setSummary($postData['title']);
     $event->setIsAllDay($postData['allDay'] == "true");
     $mainConfEvent->setParent(null);

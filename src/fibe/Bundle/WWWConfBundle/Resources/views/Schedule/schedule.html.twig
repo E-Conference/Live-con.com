@@ -44,26 +44,27 @@
     </div>
 
     <div class="row">
+
       <div  id="tree-structure" class="col-sm-12 col-md-2 col-lg-2">
-
-
       </div>
+
       <div id="calendar-container" class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
         <div id='calendar' class="bordered"></div>
       </div>
+
       <div id="sidebar-container" class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
         <div id="sidebar-div" class="bordered">
           <h4>Time scale</h4>
           <input type="text" class="slider" data-slider-id='sliderTimeScale' type="number" data-slider-min="5"
                  data-slider-max="120" data-slider-step="5" data-slider-value="30"/>
-        <span id="sliderTimeScaleValLabel">
-          <span id="sliderTimeScaleVal">30</span>
-          mn
-        </span>
+          <span id="sliderTimeScaleValLabel">
+            <span id="sliderTimeScaleVal">30</span>
+            mn
+          </span>
+          <br/><br/>
+          <span class="fc-header-space"></span><button id="refetchBtn" class="btn btn-block btn-default"><span class="fa fa-refresh"></span></button>
           <h4>Dateless Events</h4>
-
-          <div id='external-events' class='scroller'>
-          </div>
+          <div id='external-events' class='scroller'></div>
         </div>
       </div>
     </div>
@@ -180,28 +181,29 @@
   <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/added/sidebar.js') }}"></script>
 
   <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/added/CalEvent.js') }}"></script>
-  <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/added/EventCollection.js') }}"></script>
+  <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/added/EventManager.js') }}"></script>
+  <script src="{{ asset('bundles/fibewwwconf/js/fullcalendar/added/FullCalendarView.js') }}"></script>
 
   <script src="{{ asset('bundles/fibewwwconf/js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
   <script src="{{ asset('js/bootstrap-slider.js') }}"></script>
 
   <script type="text/javascript">
   var Events = {}, // every events hashmap (calendar and sidebar)
-      calendar_events = [], //calendar evnt array
-      calendar_events_indexes = {},  // calendar event indexes
-      mainConfEvent, // the main conf event
-      dragged = null, //the last dragged object
-      $sidebar, //$div containing the sidebar
+//      calendar_events = [], //calendar evnt array
+//      calendar_events_indexes = {},  // calendar event indexes
+//      mainConfEvent, // the main conf event
+//      dragged = null, //the last dragged object
+//      $sidebar, //$div containing the sidebar
       $calendar, //$div containing the calendar
       stopRender = false,
-      fetched = false, // are the event fresh in memory ? if not we need a fetch request
-      firstWeekDay = 1, // avoid first day to be sunday
+//      fetched = false, // are the event fresh in memory ? if not we need a fetch request
+//      firstWeekDay = 1, // avoid first day to be sunday
       firstDay = moment('{{currentConf.mainConfEvent.startAt|date("Y-m-d")}}'), //first mainconfevent day
       authorized = {% if authorized == 1 %}true{% else %}false{% endif %},
       filter, // filter.js
       sidebar, //sidebar.js
       logtime, // global benchmark var
-      startView = "agendaWeek",
+//      startView = "agendaWeek",
   //bootstrap modals
       $modal,
       $modalNewEvent,
@@ -228,15 +230,28 @@
     $modalNewEvent = $('#modal-new-event').hide().draggable({ handle: ".modal-header" });
 //    $modalSetParent = $('#modal-set-parent').hide().draggable({ handle: ".modal-header" });
     $modalBody = $modal.find(".modal-body");
-
     $calendar = $('#calendar');
-    $sidebar = $('#external-events');
+    $refetchBtn = $('#refetchBtn');
+
+//    $sidebar = $('#external-events');
+
+    var eventManager = new EventManager(),
+        fullCalendar = new FullCalendarView()
+//      treeStructure = new TreeRenderer()
+    ;
+    eventManager.addView(fullCalendar);
+
+    eventManager.fetch();
+
+    $refetchBtn.on("click",function(){
+      eventManager.fetch();
+    });
 
 
     /*-----------------------------------------------------------------------------------------------------*/
     /*------------------------------------- fullcalendar options ------------------------------------------*/
     /*-----------------------------------------------------------------------------------------------------*/
-    calendarOption = {
+    /*calendarOption = {
       header: {
         left: 'prev,next',
         center: 'title',
@@ -268,12 +283,12 @@
       eventDragStop: EventCollection.eventDragStop,
       eventDrop: EventCollection.eventDrop,
       {% endif %}
-    };
+    };*/
 
     /*----------------------------------------------------------------------------------------*/
     /*------------------------------------- resources ----------------------------------------*/
     /*----------------------------------------------------------------------------------------*/
-    var resConfig = {
+    /*var resConfig = {
       location: {
         url: "{{ path('exporter_api', { 'entityReference': 'schedule_location','_format': 'json' }) }}?conference_id={{currentConf.id}}",
         parse: function (e)
@@ -307,11 +322,11 @@
     };
     currentRes = "location";
     var res,
-        allRes,
-        unknownRes = {
-          name: "Not defined",
-          id: "0"
-        };
+      allRes,
+      unknownRes = {
+        name: "Not defined",
+        id: "0"
+      };
 
 
     function fetchAllResources(callback)
@@ -321,7 +336,7 @@
         data: op.data,
         success: function (events)
         {
-          events.push(unknownRes)
+          events.push(unknownRes);
 
           allRes = events.slice(0);
           res = events;
@@ -377,7 +392,7 @@
                 EventCollection.resetEvents();
               })
       );
-    });
+    });*/
 
 
     /*----------------------------------------------------------------------------------------*/
@@ -388,17 +403,19 @@
     /*-------------------------------------------------------------------------------------------------*/
     /*----------------------------------------- slider ------------------------------------------------*/
     /*-------------------------------------------------------------------------------------------------*/
-    $('.slider').slider().on('slide', function (slideEvt)
-    {
-      $("#" + $(this).data("sliderId") + "Val").text(slideEvt.value);
-    })
-        .on('slideStop', function (slideEvt)
-        {
-          $('#calendar').fullCalendar('setOptions', {'slotMinutes': slideEvt.value});
-        });
-    $('.slider').css("width", "100%");
+    $('.slider').slider()
+      .on('slide', function (slideEvt)
+      {
+        $("#" + $(this).data("sliderId") + "Val").text(slideEvt.value);
+      })
+      .on('slideStop', function (slideEvt)
+      {
+        $('#calendar').fullCalendar('setOptions', {'slotMinutes': slideEvt.value});
+      })
+      .css("width", "100%");
     //requires changes made by christian on https://code.google.com/p/fullcalendar/issues/detail?id=293&can=4
     // TO REPRODUCE WHEN FULLCALENDAR.JS IS UPDATED
+    //    original post is :
     /*
      #19 cristian...@gmail.com
      I made some changes on the plugin and now I can change minTime and maxTime dynamically. I think that it works for the other options too.
@@ -438,7 +455,7 @@
     /*------------------------------------- initialize sidebar ----------------------------------------*/
     /*-------------------------------------------------------------------------------------------------*/
 
-    sidebar = new Sidebar(!authorized);
+    /*sidebar = new Sidebar(!authorized);
     sidebar.populate(op.getDatalessUrl);
 
     {% if authorized == 1 %}
@@ -450,7 +467,7 @@
     }).on("drag", function (ev, event)
     {
 //      event.dragChildren();
-    });
+    });*/
     {% endif %}
 
     /*-----------------------------------------------------------------------------------------------------*/
@@ -459,7 +476,7 @@
 
 
     //init filters
-    filter = new initFilter(op.getOrderedUrl);
+    /*filter = new initFilter(op.getOrderedUrl);
     $(filter).on("change", function (ev, key, val, res)
     {
       bootstrapAlert("info", "event request sent", "", "<i class='fa-2x fa fa-spinner fa-spin'></i>");
@@ -471,30 +488,51 @@
     {
       bootstrapAlert("success", ids.length + " events have been well fetched");
       EventCollection.filterIds(ids);
-    });
+    });*/
 
     /*-----------------------------------------------------------------------------------------------------*/
     /*--------------------  comunication between treejs and fullcalendar  -------------------------------*/
     /*-----------------------------------------------------------------------------------------------------*/
 
-    $(EventCollection).on("EventCollection.updated",function(){
-      TreeRenderer.updateTreeStructure(EventCollection.asArray());
-    });
-    $(TreeRenderer).on("TreeRenderer.updated",function(e,selectedIds){
-//      console.log("TreeRenderer.updated",selectedIds);
-      EventCollection.filterIds($(selectedIds));
-    });
+//    $(eventManager).on("EventCollection.updated",function(){
+//      TreeRenderer.updateTreeStructure(EventCollection.asArray());
+//    });
+//    $(TreeRenderer).on("TreeRenderer.updated",function(e,selectedIds){
+////      console.log("TreeRenderer.updated",selectedIds);
+//      EventCollection.filterIds($(selectedIds));
+//    });
   });//end $document.ready()
+  /* jQuery Tiny Pub/Sub - v0.7 - 10/27/2011
+   * http://benalman.com/
+   * Copyright (c) 2011 "Cowboy" Ben Alman; Licensed MIT, GPL */
+
+  (function ($) {
+
+    var o = $({});
+
+    $.subscribe = function () {
+      o.on.apply(o, arguments);
+    };
+
+    $.unsubscribe = function () {
+      o.off.apply(o, arguments);
+    };
+
+    $.publish = function () {
+      o.trigger.apply(o, arguments);
+    };
+
+  }(jQuery));
 
   // util fn
 
-  arrayRemoveKey = function (array, key)
-  {
-    $.grep(array, function (e)
-    {
-      return e != key;
-    });
-  };
+//  arrayRemoveKey = function (array, key)
+//  {
+//    $.grep(array, function (e)
+//    {
+//      return e != key;
+//    });
+//  };
 
   </script>
 
