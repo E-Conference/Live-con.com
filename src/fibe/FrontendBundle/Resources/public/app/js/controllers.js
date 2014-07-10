@@ -24,19 +24,12 @@ liveconControllers.controller('navRightCtrl', ['$scope', '$routeParams',
 
 liveconControllers.controller('navTopCtrl', ['$scope', '$routeParams', 'CONFERENCE_CONFIG',
   function($scope, $routeParams, CONFERENCE_CONFIG) {
-
      $scope.liveconLogoPath = CONFERENCE_CONFIG.liveconLogoPath;
      $scope.toggleNavLeft = function() {
         $("#wrapper").removeClass("active-right");
         $("#wrapper").toggleClass("active-left");
- 
+    
       };
-
-      $scope.toggleNavRight = function() {
-        $("#wrapper").removeClass("active-left");
-        $("#wrapper").toggleClass("active-right");
-      };
-
   }]);
 
 /*********************************** PUBOLICATIONS **********************************************/
@@ -98,3 +91,23 @@ liveconControllers.controller('organizationCtrl', ['$scope', '$rootScope','$rout
     $scope.organization = organizationFactory.query({organizationId: $routeParams.organizationId});
     $scope.create = function(){$scope.organization.$create()};
  }]);
+
+/*********************************** DASHBOARDS **********************************************/
+liveconControllers.controller('dashboardCtrl', ['$scope', '$rootScope','$routeParams', 'organizationFactory', 'CONFERENCE_CONFIG',
+  function($scope, $rootScope, $routeParams, organizationFactory, CONFERENCE_CONFIG) {
+    
+}]);
+
+/*********************************** WIDGETS **********************************************/
+liveconControllers.controller('widgetCtrl', ['$scope', '$rootScope','$routeParams', 'organizationFactory', 'CONFERENCE_CONFIG',
+  function($scope, $rootScope, $routeParams, organizationFactory, CONFERENCE_CONFIG) {
+    
+}]);
+
+
+/*********************************** SCHEDULE **********************************************/
+liveconControllers.controller('scheduleCtrl', ['$scope', '$rootScope','$routeParams', 'organizationFactory', 'CONFERENCE_CONFIG',
+  function($scope, $rootScope, $routeParams, organizationFactory, CONFERENCE_CONFIG) {
+    
+}]);
+

@@ -1,17 +1,23 @@
 <div class="navbar navbar-default navbar-fixed-top" role="navigation">
 
       <div class="navbar-header">
-         
-           <button type="button"  id="sidebar-right-toggle" ng-click="toggleNavRight()" class="navbar-toggle" data-toggle="offcanvas" data-target=".sidebar-nav">
+       
+           <button type="button"  id="sidebar-right-toggle"  class="navbar-toggle" data-toggle="offcanvas" data-target=".sidebar-nav">
             <i class="fa fa-user fa-1x"></i>
            </button>
             <button type="button"  id="sidebar-left-toggle" ng-click="toggleNavLeft()" class="navbar-toggle" data-toggle="offcanvas" data-target=".sidebar-nav">
             <i class="fa fa-bars fa-1x"></i>
            </button>
             
-           <a  href="#" title="Go back to Index" > <img style="height:45px; width:auto;" src="{{conferenceLogoPath}}"/></a>
+           <a  href="#" title="Go back to Index" > <img style="height:45px; width:auto;" src="{{liveconLogoPath}}"/></a>
+         
       </div>
-      
+      <form class="navbar-form navbar-right" role="search">
+         <div class="form-group">
+
+              <input type="text" class="form-control" placeholder="Search" ng-model="query">
+          </div>
+      </form>
        <!-- <h3 id="title" class="navbar-text navbar-right">{{title}}</h3> -->
       
   </div>

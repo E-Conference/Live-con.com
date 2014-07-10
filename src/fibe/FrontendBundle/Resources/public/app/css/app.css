@@ -17,14 +17,38 @@ body { padding-top: 50px; }
   white-space: nowrap;
 }
 
+hr{
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+ul{
+  padding-left: 0px !important;
+}
 
 
 /*************************** NAV'S***************************/
 
+
+/******************************** nav top ****************************/
+
+
+.navbar-fixed-top{
+   background-color:#fff !important;
+}
+
+
+
+
+
+
+
+/******************************** nav left ****************************/
 #page-content-wrapper {
   width: 100%;
   min-height:800px;
 }
+
 
 .sidebar-nav {
   position: absolute;
@@ -34,13 +58,18 @@ body { padding-top: 50px; }
   padding: 0;
 }
 
+.sidebar-nav h1{
+  color:white;
+  font-size:1.6em;
+}
+
 .sidebar-nav li {
   line-height: 40px;
   text-indent: 2px;
 }
 
 .sidebar-nav li a {
-  color: #999999;
+  color: #19313b;
   display: block;
   text-decoration: none;
 }
@@ -71,6 +100,10 @@ body { padding-top: 50px; }
   background: none;
 }
 
+.sidebar-nav-list{
+  margin-left:2px;
+}
+
 .content-header {
   height: 65px;
   line-height: 65px;
@@ -91,7 +124,6 @@ body { padding-top: 50px; }
   padding: 20px;
 }
 
-/******************************** nav left ****************************/
 
 #sidebar-left-wrapper {
   margin-left: -250px;

@@ -30,7 +30,7 @@
   <script>
     angular.module('liveconApp').value('CONFERENCE_CONFIG', {
       baseUrl: '{{ api_uri }}',
-      liveconLogoPath : "localhost/live-con.com/web/img/livecon.png",
+      liveconLogoPath : "../../web/img/livecon.png",
       lang: 'EN'
     });
   </script>
@@ -40,7 +40,6 @@
 <body ng-controller="mainCtrl">
 
       <div class="navTop" ng-include="'../../web/bundles/frontend/app/partials/layout/nav-top.html'"  ng-controller="navTopCtrl"></div>
-      <div class="navMenuTop" ng-include="'../../web/bundles/frontend/app/partials/layout/nav-menu-top.html'"></div>
       <div id="wrapper">
        
         <div class="navLeft" ng-include="'../../web/bundles/frontend/app/partials/layout/nav-left.html'" ng-controller="navLeftCtrl"></div>
