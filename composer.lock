@@ -140,7 +140,7 @@
                 {
                     "name": "Johannes Schmitt",
                     "email": "schmittjoh@gmail.com",
-                    "homepage": "https://github.com/schmittjoh",
+                    "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
                 }
             ],
@@ -564,12 +564,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "c370426792edda8290843e601e9f95d86a7e873f"
+                "reference": "8c0166d3bf72366085a0f5485d622f7cd30f9071"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/c370426792edda8290843e601e9f95d86a7e873f",
-                "reference": "c370426792edda8290843e601e9f95d86a7e873f",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/8c0166d3bf72366085a0f5485d622f7cd30f9071",
+                "reference": "8c0166d3bf72366085a0f5485d622f7cd30f9071",
                 "shasum": ""
             },
             "require": {
@@ -633,7 +633,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2014-06-27 20:37:36"
+            "time": "2014-07-02 03:11:53"
         },
         {
             "name": "friendsofsymfony/rest-bundle",
@@ -837,12 +837,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Gregwar/CaptchaBundle.git",
-                "reference": "7dd05f5389cd9471c092b8caee979977a8eb5b31"
+                "reference": "6b573121a560d99d809616cfb403ae91313b47bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Gregwar/CaptchaBundle/zipball/7dd05f5389cd9471c092b8caee979977a8eb5b31",
-                "reference": "7dd05f5389cd9471c092b8caee979977a8eb5b31",
+                "url": "https://api.github.com/repos/Gregwar/CaptchaBundle/zipball/6b573121a560d99d809616cfb403ae91313b47bb",
+                "reference": "6b573121a560d99d809616cfb403ae91313b47bb",
                 "shasum": ""
             },
             "require": {
@@ -881,7 +881,7 @@
                 "spam",
                 "visual"
             ],
-            "time": "2014-05-14 09:55:23"
+            "time": "2014-07-03 08:55:24"
         },
         {
             "name": "hwi/oauth-bundle",
@@ -890,12 +890,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/hwi/HWIOAuthBundle.git",
-                "reference": "26033b75bda64e33d9258dda50defd10e6b6dbb2"
+                "reference": "d40a96c536a5fc1f735be52ca7314527ed644fe1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/26033b75bda64e33d9258dda50defd10e6b6dbb2",
-                "reference": "26033b75bda64e33d9258dda50defd10e6b6dbb2",
+                "url": "https://api.github.com/repos/hwi/HWIOAuthBundle/zipball/d40a96c536a5fc1f735be52ca7314527ed644fe1",
+                "reference": "d40a96c536a5fc1f735be52ca7314527ed644fe1",
                 "shasum": ""
             },
             "require": {
@@ -996,7 +996,7 @@
                 "yahoo",
                 "yandex"
             ],
-            "time": "2014-06-02 13:28:07"
+            "time": "2014-07-04 07:48:35"
         },
         {
             "name": "idci/exporter-bundle",
@@ -2611,25 +2611,25 @@
         },
         {
             "name": "twig/extensions",
-            "version": "v1.0.1",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Twig-extensions.git",
-                "reference": "f91a82ec225e5bb108e01a0f93c9be04f84dcfa0"
+                "reference": "c0ab818595338dd5569369bfce2552d02cec5d50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig-extensions/zipball/f91a82ec225e5bb108e01a0f93c9be04f84dcfa0",
-                "reference": "f91a82ec225e5bb108e01a0f93c9be04f84dcfa0",
+                "url": "https://api.github.com/repos/fabpot/Twig-extensions/zipball/c0ab818595338dd5569369bfce2552d02cec5d50",
+                "reference": "c0ab818595338dd5569369bfce2552d02cec5d50",
                 "shasum": ""
             },
             "require": {
-                "twig/twig": "~1.0"
+                "twig/twig": "~1.12"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.1.x-dev"
                 }
             },
             "autoload": {
@@ -2652,24 +2652,23 @@
             "description": "Common additional features for Twig that do not directly belong in core",
             "homepage": "https://github.com/fabpot/Twig-extensions",
             "keywords": [
-                "debug",
                 "i18n",
                 "text"
             ],
-            "time": "2013-10-18 19:37:15"
+            "time": "2014-07-05 10:01:35"
         },
         {
             "name": "twig/twig",
-            "version": "v1.15.1",
+            "version": "v1.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Twig.git",
-                "reference": "1fb5784662f438d7d96a541e305e28b812e2eeed"
+                "reference": "8ce37115802e257a984a82d38254884085060024"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/1fb5784662f438d7d96a541e305e28b812e2eeed",
-                "reference": "1fb5784662f438d7d96a541e305e28b812e2eeed",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/8ce37115802e257a984a82d38254884085060024",
+                "reference": "8ce37115802e257a984a82d38254884085060024",
                 "shasum": ""
             },
             "require": {
@@ -2678,7 +2677,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.15-dev"
+                    "dev-master": "1.16-dev"
                 }
             },
             "autoload": {
@@ -2713,7 +2712,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2014-02-13 10:19:29"
+            "time": "2014-07-05 12:19:05"
         },
         {
             "name": "white-october/pagerfanta-bundle",
@@ -2801,7 +2800,7 @@
             ],
             "authors": [
                 {
-                    "name": "William Durand",
+                    "name": "William DURAND",
                     "email": "william.durand1@gmail.com",
                     "homepage": "http://www.willdurand.fr"
                 }

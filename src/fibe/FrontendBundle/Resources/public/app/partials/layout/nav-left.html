@@ -1,35 +1,139 @@
 
 <div id="sidebar-left-wrapper" class="sidebar-nav-wrapper ">
-    <input type="text" class="form-control" placeholder="Search" ng-model="query">
-    <ul class="sidebar-nav">
-        <li  class="list-group-item"><a href="#conference"><i class="fa fa-calendar fa-2x"></i>  Conference</a>
-        </li>
-        <li class="list-group-item">
-             <span class="badge">14</span><a href="#publications"><i class="fa fa-book fa-2x"></i>  Publications</a>
-        </li>
-        <li class="list-group-item">
-             <span class="badge">32</span><a href="#organizations"><i class="fa fa-users fa-2x"></i>  Organizations</a>
-        </li>
-        <li  class="list-group-item">
-            <span class="badge">150</span><a href="#speakers"><i class="fa fa-user fa-2x"></i>  Speakers</a>
-        </li>
-         <li class="list-group-item">
-             <span class="badge">500</span><a href="#attendees"><i class="fa fa-user fa-2x"></i>  Attendees</a>
-        </li>
-        <li class="list-group-item"><a href="#locations"><i class="fa fa-map-marker fa-2x"></i>  Locations</a>
-        </li>
-        <li class="list-group-item"><a href="#schedule"><i class="fa fa-calendar fa-2x"></i>  Schedule</a>
-        </li>
-        <li class="list-group-item"></i><a href="#infos"><i class="fa fa-info fa-2x"></i>  Infos</a>
-        </li>
+    <div class="sidebar-nav">
+
+        <h1>Home</h1>
+
+        <ul class="sidebar-nav-list">
+             <li  class="list-group-item"><a href="#home/"><i class="fa fa-home fa-2x"></i>  Home</a>
+            </li>
+            <li  class="list-group-item"><a href="#search/event"><i class="fa fa-calendar fa-2x"></i>  Search a event</a>
+            </li>
+            <li class="list-group-item">
+                <a href="#search/event"><i class="fa fa-book fa-2x"></i>  Search a publications</a>
+            </li>
+            <li class="list-group-item">
+                 <a href="#search/organization"><i class="fa fa-users fa-2x"></i>  Search an organizations</a>
+            </li>
+            <li  class="list-group-item">
+               <a href="#search/person"><i class="fa fa-user fa-2x"></i>  Search a persons</a>
+            </li>
+        </ul>
+
+        <h1>My space</h1>
+
+        <ul class="sidebar-nav-list">
+             <li class="list-group-item"><a href="#schedule"><i class="fa fa-calendar fa-2x"></i>  My events</a>
+            </li>
+             <li class="list-group-item">
+                 <span class="badge">500</span><a href="#attendees"><i class="fa fa-bookmark fa-2x"></i>  My bookmarks</a>
+            </li>
+            <li class="list-group-item"><a href="#locations"><i class="fa fa-ticket fa-2x"></i>  My tickets</a>
+            </li>
+            <li class="list-group-item"><a href="#schedule"><i class="fa fa-thumbs-o-up fa-2x"></i>  My recommandation</a>
+            </li>
+        </ul>
+
+        <h1>WWW2012'</h1>
+
+        <div class="panel-group" id="accordion">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><i class="fa fa-th fa-2x"></i>  Overview</a>
+                <a href="#dashboard/overview"> go </a>
+              </h4>
+            </div>
+            <div id="collapseOne" class="panel-collapse collapse in">
+              <div class="panel-body">
+                <ul class="sidebar-nav-list">
+                    <li class="list-group-item">
+                        <a href="#publications"><i class="fa fa-cogs fa-2x"></i>  Settings</a>
+                    </li>
+                     <li class="list-group-item">
+                        <span class="badge">14</span><a href="#publications"><i class="fa fa-book fa-2x"></i>  Publications</a>
+                    </li>
+                    <li class="list-group-item">
+                        <span class="badge">32</span><a href="#organizations"><i class="fa fa-users fa-2x"></i>  Organizations</a>
+                    </li>
+                    <li  class="list-group-item">
+                        <span class="badge">150</span><a href="#speakers"><i class="fa fa-user fa-2x"></i>  Speakers</a>
+                    </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><i class="fa fa-calendar fa-2x"></i>  Schedule</a>
+                 <a href="#dashboard/schedule"> go </a>
+              </h4>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse">
+              <div class="panel-body">
+                <ul class="sidebar-nav-list">
+                     <li  class="list-group-item"><a href="#schedule/calendar"><i class="fa fa-clock-o fa-2x"></i>  Calendar</a>
+                    </li>
+                    <li class="list-group-item">
+                         <span class="badge">14</span><a href="#schedule/location"><i class="fa fa-map-marker fa-2x"></i>  Locations</a>
+                    </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"><i class="fa fa-bullhorn fa-2x"></i>  Widgets</a>
+                 <a href="#dashboard/widget"> go </a>
+              </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse">
+              <div class="panel-body">
+                <ul class="sidebar-nav-list">
+                    <li  class="list-group-item"><a href="#conference"><i class="fa fa-mobile fa-2x"></i>  Mobile app'</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="#publications"><i class="fa fa-ticket fa-2x"></i>  Ticket page</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="#publications"><i class="fa fa-calendar fa-2x"></i>  embedded calendar</a>
+                    </li>
+                     <li class="list-group-item">
+                        <a href="#publications"><i class="fa fa-desktop fa-2x"></i>  Highlight</a>
+                    </li>
+                </ul>
+            </div>
+          </div>
+           </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour"><i class="fa fa-download fa-2x"></i>  Import</a>
+                     <a href="#dashboard/widget"> go </a>
+                  </h4>
+                </div>
+                <div id="collapseFour" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <ul class="sidebar-nav-list">
+                        <li  class="list-group-item"><a href="#conference"><i class="fa fa-download fa-2x"></i>  Import</a>
+                        </li>
+                    </ul>
+                </div>
+              </div>
+            </div>
+         </div>
          <hr/>
-        <li class="list-group-item"><a href="#help"><i class="fa fa-magic fa-2x"></i>  Help</a>
-        </li>
-        <br/>
-        <br/>
-        <li><p style="text-align:center;">Powered by live-con.com</p>
-            <img src="{{liveconLogoPath}}" style="margin-left:55px;height:30px;width:auto;"/>
-        </li>
-    </ul>
+        <ul class="sidebar-nav-list">
+            <li class="list-group-item"></i><a href="#infos"><i class="fa fa-info fa-2x"></i>  Infos</a>
+            </li>
+            <li class="list-group-item"><a href="#help"><i class="fa fa-magic fa-2x"></i>  Help</a>
+            </li>
+            <li><p style="text-align:center;">Powered by live-con.com</p>
+                <img src="{{liveconLogoPath}}" style="margin-left:55px;height:30px;width:auto;"/>
+            </li>
+        </ul>
+    <div>
   
 </div>

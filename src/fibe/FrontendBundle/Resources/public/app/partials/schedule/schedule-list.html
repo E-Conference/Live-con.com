@@ -1,28 +1,6 @@
 
-<input type="text" class="form-control" placeholder="Search" ng-model="query">
- <a class="btn btn-info btn-create create" href="#/organization/new/{{organization.id}}" title="Add an organization"> <i class="fa fa-plus"></i> New organization </a>
- <!-- <table class=" table table-hover">
-	<thead>
-	<tr>
-	  <th>Name</th>
-	  <th>Page</th>
-	  <th>Country</th>
-	  <th>Members</th>
-	  <th>Actions</th>
-	</tr>
-	</thead>
-	<tbody>
-	  <tr ng-repeat="organization in organizations | filter:query">
-	    <td>{{ organization.name }}</td>
-	    <td>{{ organization.page }}</td>
-	    <td>{{ organization.country }}</td>
-	    <td><p ng-repeat="member in organizations.members | filter:query">member.name</p></td>
-	    <td> <a class="btn btn-large btn-warning" href="#/organization/edit/{{organization.id}}"><i class="fa fa-pencil"></i></a>
-	    	<a class="btn btn-large btn-info" href="#/organization/show/{{organization.id}}"><i class="fa fa-eye"></i></a>
-         </td>
-	  </tr>
-	</tbody>
-</table> -->
+<div ng-include="'../../web/bundles/frontend/app/partials/dashboards/dashboard-conference.html'"></div>
+<div ng-include="'../../web/bundles/frontend/app/partials/schedule/schedule-views.html'"></div>
 
 <div class="table-responsive">
 <table class="table table-striped">
@@ -37,7 +15,7 @@
   </thead>
   <tbody>
     <tr>
-      <td>Organization 1</td>
+      <td>Event 1</td>
       <td>Lorem</td>
       <td>ipsum</td>
       <td>dolor</td>
@@ -49,7 +27,7 @@
       </td>
     </tr>
     <tr>
-      <td>Organization 2</td>
+      <td>Event 2</td>
       <td>Integer</td>
       <td>nec</td>
       <td>odio</td>
@@ -61,7 +39,7 @@
       </td>
     </tr>
     <tr>
-      <td>Organization 3</td>
+      <td>Event 3</td>
       <td>libero</td>
       <td>Sed</td>
       <td>cursus</td>
@@ -73,7 +51,7 @@
       </td>
     </tr>
     <tr>
-      <td>Organization 4</td>
+      <td>Event 4</td>
       <td>dapibus</td>
       <td>diam</td>
       <td>Sed</td>
@@ -85,7 +63,7 @@
       </td>
     </tr>
     <tr>
-      <td>Organization 5</td>
+      <td>Event 5</td>
       <td>Nulla</td>
       <td>quis</td>
       <td>sem</td>
@@ -97,7 +75,7 @@
       </td>
     </tr>
     <tr>
-      <td>Organization 6</td>
+      <td>Event 6</td>
       <td>nibh</td>
       <td>elementum</td>
       <td>imperdiet</td>
@@ -109,7 +87,7 @@
       </td>
     </tr>
     <tr>
-      <td>Organization 7</td>
+      <td>Event 7</td>
       <td>sagittis</td>
       <td>ipsum</td>
       <td>Praesent</td>
@@ -121,7 +99,7 @@
       </td>
     </tr>
     <tr>
-      <td>Organization 8</td>
+      <td>Event 8</td>
       <td>Fusce</td>
       <td>nec</td>
       <td>tellus</td>
@@ -133,7 +111,7 @@
       </td>
     </tr>
     <tr>
-      <td>Organization 9</td>
+      <td>Event 9</td>
       <td>augue</td>
       <td>semper</td>
       <td>porta</td>
@@ -145,7 +123,7 @@
       </td>
     </tr>
     <tr>
-      <td>Organization 9</td>
+      <td>1,010</td>
       <td>massa</td>
       <td>Vestibulum</td>
       <td>lacinia</td>
@@ -157,7 +135,7 @@
       </td>
     </tr>
     <tr>
-       <td>Organization 9</td>
+      <td>1,011</td>
       <td>eget</td>
       <td>nulla</td>
       <td>Class</td>
@@ -169,7 +147,7 @@
       </td>
     </tr>
     <tr>
-      <td>Organization 9</td>
+      <td>1,012</td>
       <td>taciti</td>
       <td>sociosqu</td>
       <td>ad</td>
@@ -218,7 +196,3 @@
     </tr>
   </tbody>
 </table>
-
-
-
-
