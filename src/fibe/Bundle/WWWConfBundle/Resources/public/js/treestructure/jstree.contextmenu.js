@@ -152,7 +152,7 @@
 							"label"				: "Paste",
 							"action"			: function (data) {
 								var inst = $.jstree.reference(data.reference),
-									obj = inst.get_node(data.reference);
+								obj = inst.get_node(data.reference);
 								inst.paste(obj);
 							}
 						}
