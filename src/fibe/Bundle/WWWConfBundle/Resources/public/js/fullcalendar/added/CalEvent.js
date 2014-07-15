@@ -24,15 +24,17 @@ var CalEvent = function(event){ //constructor
       mainConfEvent = this;
       this["parent"] = "#";
     }
+
     if(event.categories[0].name == "Conference event"){
-      this["type"]="Conference";
+      this["type"]="Conference event";
     }
-    else if(event.categories[0].name.toLowerCase() == "sessionevent"){
-      this["type"]="Session";
-    }else if(event.categories[0].name.toLowerCase() == "trackevent"){
-      this["type"]="Track";
+    else if(event.categories[0].name == "Session event"){
+      this["type"]="Session event";
+    }else if(event.categories[0].name == "Track event"){
+      console.log(event.categories[0]);
+      this["type"]="Track event";
     }else{
-      this["type"]="Event";
+      this["type"]="Talk event";
     }
     if(event.parent.id != "")
     {
