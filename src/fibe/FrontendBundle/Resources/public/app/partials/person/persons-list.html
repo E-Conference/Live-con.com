@@ -1,5 +1,19 @@
 
-<input type="text" class="form-control" placeholder="Search" ng-model="query">
+
+<div class="row">
+  <div class="col-lg-8">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="active"><a href="#schedule/list"><i class="fa fa-list fa-2x"></i>Persons</a></li> 
+      <li><a href="#schedule/tree"><i class="fa fa-code-fork fa-2x"></i>Import/export persons</a></li>
+      <li><a href="#schedule/calendar"><i class="fa fa-calendar fa-2x"></i>Email persons</a></li>
+    </ul>
+  </div>
+  <div class="col-lg-4">
+    <input type="text" class="form-control" placeholder="Search" ng-model="query">
+  </div>
+</div>
+</br>
+</br>
 
 <!-- <div ng-repeat="person in persons | filter:query" class="panel panel-default list">
   <div class="panel-body">
@@ -7,6 +21,56 @@
   </div>
   <div class="panel-footer">{{person.description}}</div>
 </div> -->
+
+<div class="row">
+  <div class="col-lg-2">
+    <div class="input-group">
+      <span class="input-group-addon">
+        <input type="checkbox">
+      </span>
+      <input type="text" class="form-control" disabled="disabled" placeholder="Speakers" ></input>
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+  <div class="col-lg-2">
+    <div class="input-group">
+      <span class="input-group-addon">
+        <input type="checkbox">
+      </span>
+      <input type="text" class="form-control" disabled="disabled" placeholder="Attendees"></input>
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+   <div class="col-lg-2">
+    <div class="input-group">
+      <span class="input-group-addon">
+        <input type="checkbox">
+      </span>
+      <input type="text" class="form-control" disabled="disabled" placeholder="Team"></input>
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+   <div class="col-lg-2">
+    <div class="input-group">
+      <span class="input-group-addon">
+        <input type="checkbox">
+      </span>
+      <input type="text" class="form-control" disabled="disabled" placeholder="VIP"></input>
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+   <div class="col-lg-2">
+    <div class="input-group">
+      <span class="input-group-addon">
+        <input type="checkbox">
+      </span>
+      <input type="text" class="form-control" disabled="disabled" placeholder="Sponsors"></input>
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+   <div class="col-lg-2">
+    <div class="input-group">
+     <a class="btn btn-primary" href="schedule/event/copy" role="button"><i class="fa fa-plus fa-2x"></i>Add person</a>
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+</div><!-- /.row -->
+
+
 <div class="table-responsive">
 <table class="table table-striped">
   <thead>
