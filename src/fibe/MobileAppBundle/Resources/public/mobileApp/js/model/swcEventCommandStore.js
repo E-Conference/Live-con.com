@@ -460,7 +460,8 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 
 					JSONToken.twitter =  dataXML[0].Twitter || "";
                     JSONToken.facebook =  dataXML[0].Facebook || "";
-                    JSONToken.facebook =  dataXML[0].LinkedIn || "";
+                    JSONToken.linkedin =  dataXML[0].LinkedIn || "";
+                    JSONToken.email =  dataXML[0].email || "";
 
 					JSONToken.id =  dataXML[0].id || "";
 
@@ -505,6 +506,14 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].person.homepage+'</h2>'));
 								parameters.contentEl.append($('<a href='+parameters.JSONdata.homepage+'>'+parameters.JSONdata.homepage+'</a>'));    
 							}
+                            if(parameters.JSONdata.twitter || parameters.JSONdata.facebook || parameters.JSONdata.linkedin || parameters.JSONdata.email ){
+                                parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].person.contact+'</h2>'));
+                                if(parameters.JSONdata.twitter) parameters.contentEl.append($("<div style='display:block'><i class='fa fa-twitter fa-2x'></i><a href="+parameters.JSONdata.twitter+'>  '+parameters.JSONdata.twitter+'</a></div></br>'));
+                                if(parameters.JSONdata.facebook) parameters.contentEl.append($("<div style='display:block'><i class='fa fa-facebook fa-2x'></i><a href="+parameters.JSONdata.facebook+'>  '+parameters.JSONdata.facebook+'</a></div></br>'));
+                                if(parameters.JSONdata.linkedin) parameters.contentEl.append($("<div style='display:block'><i class='fa fa-linkedin fa-2x'></i><a href="+parameters.JSONdata.linkedin+'>  '+parameters.JSONdata.linkedin+'</a></div></br>'));
+                                if(parameters.JSONdata.email) parameters.contentEl.append($("<div style='display:block'><i class='fa fa-envelope-o fa-2x'></i><a href="+parameters.JSONdata.email+'>  '+parameters.JSONdata.email+'</a></div></br>'));
+
+                            }
 							
 							if(parameters.JSONdata.roles) {
 								for(var roleType in parameters.JSONdata.roles){
@@ -519,7 +528,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 													 {type:"Node",labelCllbck:function(str){return "person : "+str["id"];}});
 								};
 							
-								parameters.contentEl.append($('<a href='+parameters.JSONdata.twitter+'>'+parameters.JSONdata.twitter+'</a>'));    
+
 							}
 
 							if(_.size(parameters.JSONdata.organizations) > 0 ){

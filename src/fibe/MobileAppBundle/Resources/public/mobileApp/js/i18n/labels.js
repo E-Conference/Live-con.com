@@ -30,6 +30,7 @@ define([],function() {
 
 			},
 			'person' : {
+                'contact' : 'Contact',
 				'website' : 'Website',
 				'description' : 'Description',
 				'homepage' : 'Homepage',
@@ -191,6 +192,7 @@ define([],function() {
 
 			},
 			'person' : {
+                'contact' : 'Contact',
 				'website' : 'Site web',
 				'description' : 'Description',
 				'homepage' : 'Homepage',
