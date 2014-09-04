@@ -457,7 +457,11 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 					JSONToken.description =  dataXML[0].description || "";
 					JSONToken.homepage =  dataXML[0].homepage || "";
 					JSONToken.image =  dataXML[0].image || "";
-					JSONToken.twitter =  dataXML[0].twitter || "";
+
+					JSONToken.twitter =  dataXML[0].Twitter || "";
+                    JSONToken.facebook =  dataXML[0].Facebook || "";
+                    JSONToken.facebook =  dataXML[0].LinkedIn || "";
+
 					JSONToken.id =  dataXML[0].id || "";
 
 					JSONToken.roles = {};
