@@ -132,6 +132,12 @@ class PersonController extends Controller
                 $em->persist($paper);
             }
 
+
+          foreach ($entity->getAccounts() as $account) {
+            $account->setOwner($entity);
+            $em->persist($account);
+          }
+
             $em->persist($entity);
             $em->flush();
 
