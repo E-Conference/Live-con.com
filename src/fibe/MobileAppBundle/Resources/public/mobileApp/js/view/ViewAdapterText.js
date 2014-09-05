@@ -130,11 +130,11 @@ define(['jquery','twttr'], function($,Twttr){
 					a.append(img);
 					
 					var li = $('<li class="button"></li>');
-					if(isfilter){
+//					if(isfilter){
 						ulContainer.append(li.append(a));
-					}else{
-						appendToDiv.append(a);
-					}   
+//					}else{
+//						appendToDiv.append(a);
+//					}
 					
 					a.append(currentLabel);
 					
@@ -154,7 +154,8 @@ define(['jquery','twttr'], function($,Twttr){
 				remainder = currentLabel;
 				
 		   });//end each
-		   if(isfilter)ulContainer.appendTo(appendToDiv);
+//		   if(isfilter)
+         ulContainer.appendTo(appendToDiv);
 		},
 
 
