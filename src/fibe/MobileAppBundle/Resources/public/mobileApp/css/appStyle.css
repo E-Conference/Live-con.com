@@ -10,7 +10,7 @@
 H2, H3 {
 	color : #F06E50;
 	font-family:  Helvetica;
-	
+
 }
 
 H1 , H2 {
@@ -48,16 +48,16 @@ header{
 
 
 nav  .ui-btn-inner:hover{
-	
+
 	background : #F06E50!important;
 	color:#F06E50;
 }
 
 nav  .ui-btn-inner{
-	
+
 	background :  #4C9DDB!important;
 	color : white!important;
-	
+
 }
 
 nav  a{
@@ -93,7 +93,7 @@ a, span {
 #logoContainer img {
   height : 100%;
   width : 100%;
- 
+
 }
 
 #textHeader H1{
@@ -140,17 +140,17 @@ a .swtich{
 #getConferenceSchedule .ui-btn-inner{
 	padding-top : 0!important;
 	padding-bottom : 0!important;
-	
+
 
 }
 
 #getConferenceSchedule H2 {
 	padding-left:0.5em;
-	line-height:1.5em; 
-} 
-#getConferenceSchedule H2 span{ 
+	line-height:1.5em;
+}
+#getConferenceSchedule H2 span{
 	font-size : 10pt !important;
-} 
+}
 #getConferenceSchedule p.ui-li-desc{
 	font-size : 11pt !important;
 	margin-top : 0em!important;
