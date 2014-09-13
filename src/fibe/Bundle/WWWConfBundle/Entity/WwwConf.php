@@ -2,6 +2,8 @@
 
 namespace fibe\Bundle\WWWConfBundle\Entity;
 
+use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
+use IDCI\Bundle\SimpleScheduleBundle\Entity\Category;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -42,7 +44,14 @@ class WwwConf
     *
     * @ORM\OneToMany(targetEntity="IDCI\Bundle\SimpleScheduleBundle\Entity\Location", mappedBy="conference",cascade={"persist", "remove"})
     */
-    private $locations; 
+    private $locations;
+
+    /**
+    * categorys
+    *
+    * @ORM\OneToMany(targetEntity="IDCI\Bundle\SimpleScheduleBundle\Entity\Category", mappedBy="conference",cascade={"persist", "remove"})
+    */
+    private $categories;
 
     /**
     * Papers
@@ -268,6 +277,7 @@ class WwwConf
         $this->events = new \Doctrine\Common\Collections\ArrayCollection();
         $this->confManagers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -458,10 +468,10 @@ class WwwConf
     /**
      * Set mainConfEvent
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $mainConfEvent
+     * @param ConfEvent $mainConfEvent
      * @return WwwConf
      */
-    public function setMainConfEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $mainConfEvent = null)
+    public function setMainConfEvent(ConfEvent $mainConfEvent = null)
     {
         $this->mainConfEvent = $mainConfEvent;
     
@@ -471,7 +481,7 @@ class WwwConf
     /**
      * Get mainConfEvent
      *
-     * @return \fibe\Bundle\WWWConfBundle\Entity\ConfEvent 
+     * @return ConfEvent
      */
     public function getMainConfEvent()
     {
@@ -481,10 +491,10 @@ class WwwConf
     /**
      * Add events
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events
+     * @param ConfEvent $events
      * @return WwwConf
      */
-    public function addEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events)
+    public function addEvent(ConfEvent $events)
     {
         $this->events[] = $events;
     
@@ -494,9 +504,9 @@ class WwwConf
     /**
      * Remove events
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events
+     * @param ConfEvent $events
      */
-    public function removeEvent(\fibe\Bundle\WWWConfBundle\Entity\ConfEvent $events)
+    public function removeEvent(ConfEvent $events)
     {
         $this->events->removeElement($events);
     }
@@ -509,6 +519,39 @@ class WwwConf
     public function getEvents()
     {
         return $this->events;
+    }
+
+    /**
+     * Add categories
+     *
+     * @param Category $category
+     * @return WwwConf
+     */
+    public function addCategory(Category $category)
+    {
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param Category $category
+     */
+    public function removeCategory(Category $category)
+    {
+        $this->categories->removeElement($category);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 
      /**
@@ -732,7 +775,7 @@ class WwwConf
      /**
      * Set module
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\ConfEvent $module
+     * @param ConfEvent $module
      * @return WwwConf
      */
     public function setModule(\fibe\Bundle\WWWConfBundle\Entity\Module $module = null)
@@ -745,7 +788,7 @@ class WwwConf
     /**
      * Get module
      *
-     * @return \fibe\Bundle\WWWConfBundle\Entity\ConfEvent 
+     * @return ConfEvent
      */
     public function getModule()
     {
