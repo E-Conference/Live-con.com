@@ -10,7 +10,7 @@ Model = {
 			attributes : {
 				required : {
 					"summary" : {
-						setter : "setSummary"
+						setter : "setLabel"
           }
 				},
 				optionnal : { 
@@ -46,7 +46,7 @@ Model = {
 			attributes : {
 				required : {
 					"summary" : {
-    						setter : "setSummary"
+    						setter : "setLabel"
               }},
     				optionnal : {  
     					"description" : {

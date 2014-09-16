@@ -4,40 +4,30 @@
 
 {% block centerPanel %}
     {{ parent() }}
-    <div class="page-header">
-           
-            <div class="row">
-                <div class="col-lg-3">
-                     <h1>{% trans %}Role Types{% endtrans %}</h1>
-                </div>
-                <div class="col-lg-4">
-                    <!-- <a class="btn btn-info btn-create create" href="{{ path('schedule_roletype_new') }}">
-                         <i class="fa fa-plus"></i>
-                    </a>-->
-                </div>
-            </div>
+
+
+    <div class="row page-top-header ">
+        <div class="page-title  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+            <span>Role list</span>
+            <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'Role' }) }}" target="_blank" title="Help">
+                <i class="fa fa-question"></i>
+            </a>
         </div>
-    
-    <table class="table table-hover records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('schedule_roletype_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.name }}</td>
-                <td> 
-                    <a class="btn btn-default" href="{{ path('schedule_roletype_show', { 'id': entity.id }) }}"><i class="fa fa-eye"></i></a> 
-                    <!--<a class="btn btn-warning edit" href="{{ path('schedule_roletype_edit', { 'id': entity.id }) }}"><i class="fa fa-pencil"></i></a> -->
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+
+        <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+        </div>
+
+        <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+            <a class="btn btn-info btn-create create" href="{{ path('schedule_roletype_new') }}" title="Add a role">
+                <i class="fa fa-plus"></i> New role
+            </a>
+        </div>
+    </div>
+
+    <div class="row page-content">
+        <div id="person_list" class="table-responsive">
+            {% include "fibeWWWConfBundle:RoleType:list.html.twig" %}
+        </div>
+    </div>
 
 {% endblock %}

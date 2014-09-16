@@ -2,6 +2,7 @@
 
 namespace fibe\Bundle\WWWConfBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
 use IDCI\Bundle\SimpleScheduleBundle\Entity\Category;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -73,6 +74,13 @@ class WwwConf
     * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\Role", mappedBy="conference",cascade={"persist", "remove"})
     */
     private $roles;
+
+    /**
+    * RoleTypes
+    *
+    * @ORM\OneToMany(targetEntity="fibe\Bundle\WWWConfBundle\Entity\RoleType", mappedBy="conference",cascade={"persist", "remove"})
+    */
+    private $roleTypes;
 
     /**
     * Topics
@@ -274,10 +282,11 @@ class WwwConf
      */
     public function __construct()
     {
-        $this->events = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->confManagers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->roles = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->events = new ArrayCollection();
+        $this->confManagers = new ArrayCollection();
+        $this->roles = new ArrayCollection();
+        $this->roleTypes = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     /**
@@ -552,6 +561,48 @@ class WwwConf
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * roles
+     */
+
+    public function addRole(Role $role = null)
+    {
+      $this->roles[] = $role;
+
+      return $this;
+    }
+
+    public function removeRole(Role $role)
+    {
+      $this->roles->removeElement($role);
+    }
+
+    public function getRoles()
+    {
+      return $this->roles;
+    }
+
+    /**
+     * role types
+     */
+
+    public function addRoleType(RoleType $roleType = null)
+    {
+      $this->roleTypes[] = $roleType;
+
+      return $this;
+    }
+
+    public function removeRoleType(RoleType $roleType)
+    {
+      $this->roleTypes->removeElement($roleType);
+    }
+
+    public function getRoleTypes()
+    {
+      return $this->roleTypes;
     }
 
      /**

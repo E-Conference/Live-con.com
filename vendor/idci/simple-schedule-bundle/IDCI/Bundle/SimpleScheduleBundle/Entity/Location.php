@@ -142,13 +142,6 @@ class Location
         $this->slugify();
         return $this->slug;
     }
-
-
-    static public function getLocationsForSelect()
-    {
-       return $this->getUser()->getCurrentConf()->getLocations();
-    }
-
     /**
      * getGeo
      *

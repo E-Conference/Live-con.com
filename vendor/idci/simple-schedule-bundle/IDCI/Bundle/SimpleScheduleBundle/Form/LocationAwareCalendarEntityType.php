@@ -34,7 +34,7 @@ abstract class LocationAwareCalendarEntityType extends CalendarEntityType
                 'choices'=> $this->user->getCurrentConf()->getLocations()->toArray(),
                 'multiple'  => false,
                 'required' => false
-            )) 
+            ))
             // ->add('priority', 'choice', array(
             //     'choices' => range(0, 9)
             // ))

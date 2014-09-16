@@ -157,7 +157,7 @@ var Mapper = function(){
     }
     this.getConfName = function(){
         var confName = self["serialisedDatas"] && self["serialisedDatas"].conference 
-                            ? self["serialisedDatas"].conference.setSummary || self["serialisedDatas"].conference.setAcronym 
+                            ? self["serialisedDatas"].conference.setLabel || self["serialisedDatas"].conference.setAcronym
                             : undefined;
         return  confName || self.fileName || "file" ;
     }

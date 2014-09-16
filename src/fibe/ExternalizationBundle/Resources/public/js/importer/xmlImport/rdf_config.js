@@ -288,7 +288,7 @@ var rdfConfig = {
                     },{
                         fn : "text"
                     }],
-                    setter : 'setSummary'
+                    setter : 'setLabel'
                 },
                 {
                     format : [{
@@ -297,7 +297,7 @@ var rdfConfig = {
                     },{
                         fn : "text"
                     }],
-                    setter : 'setSummary'
+                    setter : 'setLabel'
                 },
                 {
                     format : [{
@@ -342,25 +342,18 @@ var rdfConfig = {
                 {
                     format : [{
                         fn : "children",
-                        arg : ["dtstart"]
+                        arg : ["dtstart",true]
                     },{
                         fn : "text"
+                    },{
+                        fn : "parseTime"
                     }],
                     setter : 'setStartAt'
-                },
+                }, 
                 {
                     format : [{
                         fn : "children",
-                        arg : ["dtend"]
-                    },{
-                        fn : "text"
-                    }],
-                    setter : 'setEndAt'
-                },
-                {
-                    format : [{
-                        fn : "children",
-                        arg : ["dtend"]
+                        arg : ["dtend",true]
                     },{ 
                         fn : "text",
                     },{

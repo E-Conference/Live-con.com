@@ -164,9 +164,12 @@ class UnshareCategoriesCommand extends ContainerAwareCommand
                           $newCat = $SocialEvent;
                           break;
                     }
-                  $event->removeCategorie($category);
-                  $event->addCategorie($newCat);
-                  $em->persist($event);
+                    if(null !== $newCat)
+                    {
+                        $event->removeCategorie($category);
+                        $event->addCategorie($newCat);
+                        $em->persist($event);
+                    }
                 }
             }
 

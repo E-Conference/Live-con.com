@@ -125,12 +125,13 @@ function Importer()
             return;
         } 
 
+        //processing steps
         doParseConference(); 
         doMappings();
         doFkProcessing();
         doStartAtLess();
         
-        // SEND TO IMPORT PHP SCRIPT 
+        // delete uri 
         for (var i=0;i<objects.locations.length;i++)
         
         {
@@ -155,7 +156,7 @@ function Importer()
         {
             if(empty == true && dataArray[i] && dataArray[i].length>0)empty = false;
         }
-        if(empty == true && !dataArray['conference']['setSummary'])
+        if(empty == true && !dataArray['conference']['setLabel'])
         {
             if(fallback!=undefined)fallback("nothing found... please check your file !"); 
             return;
@@ -254,7 +255,7 @@ function Importer()
 
                  //post processing
                 if(mapping.postProcess)
-                {
+                { 
                     if(mapping.postProcess(node,rtnArray,self.getNodeName(node,index)) === true)
                     {
                         //if it was the main conf event
@@ -401,6 +402,11 @@ function Importer()
         function computeFk(fkKey, fk, index)
         {
             // console.log("computeFk : "+fk,addArray);
+            if(!fkKey)
+            {
+                console.warn("error while retreiving fk of "+fk.entity+" to "+fk.setter+". Cannot find "+fkKey);
+                return; 
+            }
             var objInd = objectsIndexes[fkKey] || objectsIndexes[fkKey.replace(fk.fkArray+"-","")];
             if(!objInd )
             {
@@ -411,7 +417,7 @@ function Importer()
             if(objInd.array == "conference")
             {
                 // deleteKey(); 
-                // console.log("parent is mainConfEvent",objectMap[fk.entity][fk.setter]);
+                // console.log("parent is mainEvent",objectMap[fk.entity][fk.setter]);
                 return;
             }
             if(fk.fkSetter){
@@ -434,7 +440,7 @@ function Importer()
             // }
         }
 
-        //compute at the same time the mainConfEvent date
+        //compute at the same time the mainEvent date
         function doStartAtLess(){
             var earliestStart = moment('6000-10-10');
             var latestEnd = moment('1000-10-10');
@@ -458,7 +464,6 @@ function Importer()
                     //try to get children date
                     var childrenDate = getChildrenDate(i);
                     if(childrenDate)
-                    
                     {
                         event['setEndAt']   = childrenDate.end; 
                         event['setStartAt'] = childrenDate.start; 
@@ -569,6 +574,7 @@ function Importer()
         } 
         for (var i in format)
         {
+            if(!rtn)break;
             var currentFormat = format[i];
             if(log && utils[currentFormat.fn](rtn,currentFormat.arg,log)===undefined)
                 console.log( "couldn't have proceed "+currentFormat.fn+ " for ",rtn," with arg : ",currentFormat.arg);
