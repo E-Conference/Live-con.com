@@ -20,8 +20,8 @@ class RoleTypeRepository extends EntityRepository
      */
     public function getOrderedQueryBuilder()
     {
-        $qb = $this->createQueryBuilder('loc');
-        $qb->orderBy('loc.name', 'ASC');
+        $qb = $this->createQueryBuilder('roletype');
+        $qb->orderBy('roletype.name', 'ASC');
 
         return $qb;
     }
@@ -62,14 +62,22 @@ class RoleTypeRepository extends EntityRepository
 
         if(isset($params['id'])) {
             $qb
-                ->andWhere('loc.id = :id')
+                ->andWhere('roletype.id = :id')
                 ->setParameter('id', $params['id'])
             ;
         }
 
         if(isset($params['ids'])) {
             $qb
-                ->andWhere($qb->expr()->in('loc.id', $params['ids']))
+                ->andWhere($qb->expr()->in('roletype.id', $params['ids']))
+            ;
+        }
+
+
+        if(isset($params['conference_id'])) {
+            $qb
+                ->andWhere('roletype.conference = :conference_id')
+                ->setParameter('conference_id', $params['conference_id'])
             ;
         }
  
