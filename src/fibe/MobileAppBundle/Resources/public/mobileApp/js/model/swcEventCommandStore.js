@@ -308,7 +308,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    method : "GET", 
 		    serviceUri : "schedule_role.jsonp?",
 		    getQuery : function(parameters){	
-		      var ajaxData = {} ;
+          var ajaxData = {conference_id : parameters.conference.id} ;
 		      return ajaxData; 
 		    },
 		    
@@ -348,7 +348,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 		    serviceUri : "schedule_category.jsonp?",
 		    getQuery : function(parameters){	
 			  var conferenceUri = parameters.conferenceUri;
-		      var ajaxData = { } ;
+          var ajaxData = {conference_id : parameters.conference.id} ;
 		      return ajaxData; 
 		    },
 		    
@@ -518,7 +518,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							if(parameters.JSONdata.roles) {
 								for(var roleType in parameters.JSONdata.roles){
 									parameters.JSONdata.roles[roleType];
-									parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].role[roleType]+' at </h2>'));
+									parameters.contentEl.append($('<h2>'+(labels[parameters.conference.lang].role[roleType] || roleType)+' at </h2>'));
 									ViewAdapterText.appendList(parameters.JSONdata.roles[roleType],
 													 {baseHref:'#event/',
 													  hrefCllbck:function(str){return Encoder.encode(str["name"])+"/"+Encoder.encode(str["id"])}
