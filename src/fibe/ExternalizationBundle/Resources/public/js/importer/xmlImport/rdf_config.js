@@ -288,7 +288,7 @@ var rdfConfig = {
                     },{
                         fn : "text"
                     }],
-                    setter : 'setLabel'
+                    setter : 'setSummary'
                 },
                 {
                     format : [{
@@ -297,7 +297,7 @@ var rdfConfig = {
                     },{
                         fn : "text"
                     }],
-                    setter : 'setLabel'
+                    setter : 'setSummary'
                 },
                 {
                     format : [{
@@ -562,7 +562,7 @@ var rdfConfig = {
                     }); 
                 }
             }
-        }, 
+        }
     ]
-}
+};
  

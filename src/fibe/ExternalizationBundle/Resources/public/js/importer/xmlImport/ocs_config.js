@@ -36,7 +36,7 @@ var ocsConfig = {
     //preproccessing of the root node which contains the conference informations 
     parseConference : {
         //conference mapping
-        setLabel : {
+        setSummary : {
             format : [{
                 fn : "children",
                 arg : ["name"]
@@ -225,7 +225,7 @@ var ocsConfig = {
                         fn : "children",
                         arg : ["name"]
                     }],
-                    setter : 'setLabel'
+                    setter : 'setSummary'
                 },
                 {
                     format : [{

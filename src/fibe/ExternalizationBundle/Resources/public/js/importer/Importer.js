@@ -411,7 +411,7 @@ function Importer()
             if(!objInd )
             {
                 console.warn("error while retreiving fk of "+fk.entity+" to "+fk.setter+". Cannot find "+fkKey);
-                // deleteKey(); 
+                deleteKey();
                 return; 
             }
             if(objInd.array == "conference")
@@ -434,10 +434,10 @@ function Importer()
             {
                 objectMap[fk.entity][fk.setter] = objInd.index;
             }  
-            // function deleteKey()
-            // {
-            //         delete objectMap[fk.entity][fk.setter];  
-            // }
+            function deleteKey()
+            {
+                     delete objectMap[fk.entity][fk.setter];
+            }
         }
 
         //compute at the same time the mainEvent date
