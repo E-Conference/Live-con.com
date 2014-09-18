@@ -571,7 +571,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 							}
 							if(parameters.JSONdata.page){
 								parameters.contentEl.append($('<h2>'+labels[parameters.conference.lang].organization.homepage+'</h2>'));
-								parameters.contentEl.append($('<a href='+parameters.JSONdata.page+'>'+parameters.JSONdata.page+'</a>')); 
+								parameters.contentEl.append($('<a href="'+parameters.JSONdata.page+'">'+parameters.JSONdata.page+'</a>')); 
 								
 							}
 							if(parameters.JSONdata.country){
