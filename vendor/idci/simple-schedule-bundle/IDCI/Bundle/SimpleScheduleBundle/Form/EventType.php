@@ -28,18 +28,18 @@ class EventType extends LocationAwareCalendarEntityType
    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            
-             ->add('startAt', 'datetime', array(  
+
+             ->add('startAt', 'datetime', array(
                 'widget' =>'single_text',
-                'format' =>'dd/MM/yyyy HH:mm', 
-              
+                'format' =>'dd/MM/yyyy HH:mm',
+
             ))
-            ->add('endAt', 'datetime', array(  
+            ->add('endAt', 'datetime', array(
                 'widget' =>'single_text',
-                'format' =>'dd/MM/yyyy HH:mm', 
-             
+                'format' =>'dd/MM/yyyy HH:mm',
+
             ))
-            // ->add('isTransparent', null, array( 
+            // ->add('isTransparent', null, array(
             //     'label' => 'is Transparent',
             //     'required' => false
             // ))

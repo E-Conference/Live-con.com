@@ -156,7 +156,7 @@ xlsxMapper = {
             xlsxMapper.worker.onmessage = function(e) {
                     switch(e.data.t) {
                             case 'ready': break;
-                            case 'e': console.error(e.data.d);
+                            case 'e': console.error(e.data.d); break;
                             case 'xlsx': cb(JSON.parse(e.data.d)); break;
                     }
             };

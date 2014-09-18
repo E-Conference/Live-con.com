@@ -2,6 +2,9 @@
 
 namespace fibe\Bundle\WWWConfBundle\Controller;
 
+use Pagerfanta\Adapter\ArrayAdapter;
+use Pagerfanta\Exception\NotValidCurrentPageException;
+use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -10,7 +13,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use fibe\Bundle\WWWConfBundle\Entity\RoleType;
 use fibe\Bundle\WWWConfBundle\Form\RoleTypeType;
 
-use Symfony\Component\Security\Core\Exception\AccessDeniedException; 
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * RoleType controller.
@@ -22,22 +26,31 @@ class RoleTypeController extends Controller
     /**
      * Lists all RoleType entities.
      *
-     * @Route("/", name="schedule_roletype")
+     * @Route("/", name="schedule_roletype_index")
      * @Method("GET")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
          //Authorization Verification conference sched manager
         $user=$this->getUser();
         $authorization = $user->getAuthorizationByConference($user->getCurrentConf());
 
-        $em = $this->getDoctrine()->getManager();
+        $currentConf = $this->getUser()->getCurrentConf();
+        $entities = $currentConf->getRoleTypes()->toArray();
 
-        $entities = $em->getRepository('fibeWWWConfBundle:RoleType')->findAll();
+        $adapter = new ArrayAdapter($entities);
+        $pager = new PagerFanta($adapter);
+        $pager->setMaxPerPage($this->container->getParameter('max_per_page'));
+
+        try {
+          $pager->setCurrentPage($request->query->get('page', 1));
+        } catch (NotValidCurrentPageException $e) {
+          throw new NotFoundHttpException();
+        }
 
         return array(
-            'entities' => $entities,
+            'pager' => $pager,
             'authorized' => $authorization->getFlagconfDatas(),
         );
     }
@@ -66,10 +79,11 @@ class RoleTypeController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->setConference($this->getUser()->getCurrentConf());
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('schedule_roletype'));
+            return $this->redirect($this->generateUrl('schedule_roletype_index'));
         }
 
         return array(
@@ -208,7 +222,7 @@ class RoleTypeController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('schedule_roletype'));
+            return $this->redirect($this->generateUrl('schedule_roletype_index'));
         }
 
         return array(

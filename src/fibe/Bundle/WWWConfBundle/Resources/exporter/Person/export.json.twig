@@ -29,6 +29,16 @@
     {% endfor %}
     ],
     {% endspaceless %}
+    {% spaceless %}
+
+    {% for account in entity.accounts %}
+        {% if loop.first %}{% else %}{% endif %}
+
+        {% if account.socialService != null %}{{account.socialService.name|json_encode|raw()}}{% else %}"unknown"{% endif %}:  {% if account.accountName != null %}{{account.accountName|json_encode|raw()}}{% else %}""{% endif %},
+
+    {% endfor %}
+
+    {% endspaceless %}
      {% spaceless %}
      "organizations":
             [

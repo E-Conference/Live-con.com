@@ -10,6 +10,7 @@
 namespace IDCI\Bundle\SimpleScheduleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 use IDCI\Bundle\SimpleScheduleBundle\Util\StringTools;
 
 /**
@@ -47,7 +48,7 @@ class Category
     protected $label;
 
     /**
-     * @ORM\Column(type="string", length=128, unique=true)
+     * @ORM\Column(type="string", length=128)
      */
     protected $slug;
 
@@ -86,6 +87,14 @@ class Category
      * @ORM\ManyToMany(targetEntity="CalendarEntity", mappedBy="categories", cascade={"persist"})
      */
     private $calendarEntities;
+
+    /**
+     * Conference associated to these themes
+     *  @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="categories", cascade={"persist"})
+     * @ORM\JoinColumn(name="wwwConf_id", referencedColumnName="id")
+     *
+     */
+    protected $conference;
 
     /**
      * toString
@@ -394,10 +403,10 @@ class Category
     /**
      * Set parent
      *
-     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\Category $parent
+     * @param Category $parent
      * @return Category
      */
-    public function setParent(\IDCI\Bundle\SimpleScheduleBundle\Entity\Category $parent = null)
+    public function setParent(Category $parent = null)
     {
         $this->parent = $parent;
     
@@ -407,7 +416,7 @@ class Category
     /**
      * Get parent
      *
-     * @return \IDCI\Bundle\SimpleScheduleBundle\Entity\Category 
+     * @return Category
      */
     public function getParent()
     {
@@ -415,12 +424,35 @@ class Category
     }
 
     /**
+     * Set conference
+     *
+     * @param WwwConf $conference
+     * @return WwwConf
+     */
+    public function setConference(WwwConf $conference)
+    {
+        $this->conference = $conference;
+
+        return $this;
+    }
+
+    /**
+     * Get conference
+     *
+     * @return WwwConf
+     */
+    public function getConference()
+    {
+        return $this->conference;
+    }
+
+    /**
      * Add childs
      *
-     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\Category $childs
+     * @param Category $childs
      * @return Category
      */
-    public function addChild(\IDCI\Bundle\SimpleScheduleBundle\Entity\Category $childs)
+    public function addChild(Category $childs)
     {
         $this->childs[] = $childs;
     
@@ -430,9 +462,9 @@ class Category
     /**
      * Remove childs
      *
-     * @param \IDCI\Bundle\SimpleScheduleBundle\Entity\Category $childs
+     * @param Category $childs
      */
-    public function removeChild(\IDCI\Bundle\SimpleScheduleBundle\Entity\Category $childs)
+    public function removeChild(Category $childs)
     {
         $this->childs->removeElement($childs);
     }

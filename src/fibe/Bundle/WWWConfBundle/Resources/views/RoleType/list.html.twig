@@ -1,0 +1,32 @@
+
+ <table class="table table-hover records_list">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Label</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+             {% for entity in pager.currentPageResults %}
+                <tr>
+                    <td><a href="{{ path('schedule_roletype_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                    <td>{{ entity.name }}</td>
+                    <td>{{ entity.label }}</td>
+                    <td>
+                        <a class="btn btn-default" href="{{ path('schedule_roletype_show', { 'id': entity.id }) }}">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                       
+                        <a class="btn btn-warning edit" href="{{ path('schedule_roletype_edit', { 'id': entity.id }) }}">
+                             <i class="fa fa-pencil"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <p>
+            {{ pagerfanta(pager, 'twitter_bootstrap') }}
+        </p>

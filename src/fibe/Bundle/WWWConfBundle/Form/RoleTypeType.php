@@ -12,6 +12,7 @@ class RoleTypeType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('label')
         ;
     }
 

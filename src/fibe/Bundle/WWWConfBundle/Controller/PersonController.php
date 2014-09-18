@@ -132,13 +132,18 @@ class PersonController extends Controller
                 $em->persist($paper);
             }
 
+
+          foreach ($entity->getAccounts() as $account) {
+            $account->setOwner($entity);
+            $em->persist($account);
+          }
+
             $em->persist($entity);
             $em->flush();
 
             return $this->redirect($this->generateUrl('schedule_person_index'));
 
         }
-        var_dump($form->getErrors());
 
         return $this->render('fibeWWWConfBundle:Person:new.html.twig', array(
             'entity' => $entity,

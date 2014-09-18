@@ -97,7 +97,7 @@ class PersonRepository extends EntityRepository
     public function getOrderedQueryBuilder()
     {
         $qb = $this->createQueryBuilder('loc');
-        $qb->orderBy('loc.name', 'ASC');
+        $qb->orderBy('loc.familyName', 'ASC');
 
         return $qb;
     }

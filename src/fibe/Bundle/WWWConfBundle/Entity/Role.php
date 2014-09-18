@@ -130,10 +130,10 @@ class Role
     /**
      * Set type
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\RoleType $type
+     * @param RoleType $type
      * @return Role
      */
-    public function setType(\fibe\Bundle\WWWConfBundle\Entity\RoleType $type = null)
+    public function setType(RoleType $type)
     {
         $this->type = $type;
     
@@ -143,7 +143,7 @@ class Role
     /**
      * Get type
      *
-     * @return \fibe\Bundle\WWWConfBundle\Entity\RoleType 
+     * @return RoleType
      */
     public function getType()
     {

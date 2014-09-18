@@ -40,10 +40,10 @@
     {% spaceless %}
     "children":
     [
-    {% for child in entity.children %}
-        {% if loop.first %} {% else %},{% endif %}
-        { "id": "{{ child.id }}", "name": {% if child.getSummary() != null %}{{child.getSummary()|json_encode|raw()}}{% else %}""{% endif %} }
-    {% endfor %}
+    {% for child in entity.children %}{% if child.isInstant %}{% else %}
+              {% if loop.first %} {% else %},{% endif %}
+              { "id": "{{ child.id }}", "name": {% if child.getSummary() != null %}{{child.getSummary()|json_encode|raw()}}{% else %}""{% endif %} }
+    {% endif %}{% endfor %}
     ],
     "topics":
     [

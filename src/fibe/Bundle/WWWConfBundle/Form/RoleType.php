@@ -25,10 +25,11 @@ class RoleType extends AbstractType
                 'required' => true,
                 'empty_value' => '',
             ))
-            ->add('type',null,array(
+            ->add('type','entity',array(
+                'class' => 'fibeWWWConfBundle:RoleType',
                 'required' => true,
-                'label'   => 'Select role',
-                'empty_value' => '',
+                'label'   => 'Select its role',
+                'choices'=> $this->user->getCurrentConf()->getRoleTypes()->toArray(),
                 ))
       
         ;
