@@ -194,8 +194,13 @@ class Manager
             $format,
             self::cleanParams($params)
         );
-
-        $export->buildHeader();
+        if(isset($entities[0]))
+        {
+          $export->buildHeader($this->getEntityTransformerConfiguration($entities[0],$format));
+        }else
+        {
+          $export->buildHeader();
+        }
         foreach($entities as $entity) {
             $transformer = $this->guessTransformer($entity, $format);
             $export->addContent($transformer->transform($entity, $format));
