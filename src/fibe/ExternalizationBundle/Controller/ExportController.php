@@ -29,7 +29,7 @@ class ExportController extends Controller
 
         $export_form = $this->createFormBuilder()
         ->add('export_format', 'choice',array( 
-                               'choices'   => array('xml' => 'SWC','csv' => 'CSV'),
+                               'choices'   => array('xml' => 'SWC'),
                                'required'  => true,)
         )
         ->getForm();
@@ -58,7 +58,7 @@ class ExportController extends Controller
       
         $export_form = $this->createFormBuilder()
         ->add('export_format', 'choice',array( 
-                               'choices'   => array('xml' => 'SWC','csv' => 'CSV'),
+                               'choices'   => array('xml' => 'SWC'),
                                'required'  => true,)
         )
         ->getForm();
