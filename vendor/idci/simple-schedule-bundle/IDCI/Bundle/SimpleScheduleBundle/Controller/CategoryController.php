@@ -187,7 +187,7 @@ class CategoryController extends Controller
                 ))
             );
 
-            return $this->redirect($this->generateUrl('schedule_category_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('schedule_category_show', array('id' => $entity->getId())));
         }
 
         return array(
