@@ -74,6 +74,10 @@
                 <i class="fa fa-user fa-3x"></i> Persons
               </a>
 
+              <a style="padding-right:5px;" href="{{ path('schedule_roletype_index') }}">
+                <i class="fa fa-user fa-3x"></i> Roles
+              </a>
+
               {% if app.user.getCurrentConf().getModule().getPaperModule()== true %}
                 <a style="padding-right:5px;" href="{{ path('schedule_paper') }}">
                   <i class="fa fa-book fa-3x"></i> Publications
