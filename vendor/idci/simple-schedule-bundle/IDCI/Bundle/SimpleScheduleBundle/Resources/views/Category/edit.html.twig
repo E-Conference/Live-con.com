@@ -39,3 +39,37 @@
         </form>
     </div>
 {% endblock %}
+
+
+{% block stylesheets_page %}
+  <link rel="stylesheet" type="text/css" href="{{ asset('css/spectrum/spectrum.css')}}" />
+{% endblock stylesheets_page %}
+{% block javascripts_page %}
+  <script type="text/javascript" src="{{ asset('js/spectrum/spectrum.js')}}"></script>
+
+
+  <script type="text/javascript">
+    $( document ).ready(function() {
+
+
+      $(".color").spectrum({
+        flat: false,
+        showInput: true,
+        showInitial: true,
+        showAlpha: false,
+        disabled: false,
+        localStorageKey: "color",
+        showPalette: true,
+        showPaletteOnly: false,
+        showSelectionPalette: true,
+        clickoutFiresChange: false,
+        cancelText: "cancelText",
+        chooseText: "choose",
+        className: "colorpicker",
+        preferredFormat: "hex",
+        maxSelectionSize: 12,
+      });
+    });
+
+  </script>
+{% endblock%}
