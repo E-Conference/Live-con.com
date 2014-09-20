@@ -110,6 +110,7 @@ class CategoryController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->setConference($this->getUser()->getCurrentConf());
             $em->persist($entity);
             $em->flush();
 
