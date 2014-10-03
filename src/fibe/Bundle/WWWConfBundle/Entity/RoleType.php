@@ -49,7 +49,7 @@ class RoleType
      * role
      * Role how have this type
      *  
-     * @ORM\OneToMany(targetEntity="Role", mappedBy="type")
+     * @ORM\OneToMany(targetEntity="Role", mappedBy="type", cascade={"remove"})
      */
     private $roles;
 

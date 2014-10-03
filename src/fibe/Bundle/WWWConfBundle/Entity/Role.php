@@ -40,7 +40,7 @@ class Role
     
     /**
      *  
-     * @ORM\ManyToOne(targetEntity="Person", inversedBy="roles")
+     * @ORM\ManyToOne(targetEntity="Person", inversedBy="roles", cascade={"persist"})
      * @Assert\NotBlank(message="You have to choose a Person")
      *
      */
@@ -49,7 +49,7 @@ class Role
      /**
      * Event
      * Persons related to an event 
-     * @ORM\ManyToOne(targetEntity="ConfEvent", inversedBy="roles")
+     * @ORM\ManyToOne(targetEntity="ConfEvent", inversedBy="roles", cascade={"persist"})
      * @ORM\JoinColumn(name="event_id", referencedColumnName="id")
      * @Assert\NotBlank(message="You have to choose an event")
      * 
@@ -57,7 +57,7 @@ class Role
     private $event;
 
     /**
-     * @ORM\ManyToOne(targetEntity="RoleType", inversedBy="roles")
+     * @ORM\ManyToOne(targetEntity="RoleType", inversedBy="roles", cascade={"persist"})
      * @Assert\NotBlank(message="You have to choose an type")
      */
     private $type; 

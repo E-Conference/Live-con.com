@@ -159,7 +159,7 @@ class CategoryController extends Controller
      * Edits an existing Category entity.
      *
      * @Route("/{id}/update", name="schedule_category_update")
-     * @Method("POST")
+     * @Method("PUT")
      * @Template("IDCISimpleScheduleBundle:Category:edit.html.twig")
      */
     public function updateAction(Request $request, $id)

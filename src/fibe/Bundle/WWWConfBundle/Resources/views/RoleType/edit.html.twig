@@ -4,38 +4,44 @@
 
 {% block centerPanel %}
     {{ parent() }}
-    <h1>RoleType edit</h1>
-
-     <div class="row">
-         <div class="col-lg-5"></div>
-              <div class="col-lg-2 btn-group">
-                  <a type="button" href="{{ path('schedule_roletype_index') }}" class="btn btn-warning">
-                        <i class="fa fa-list"></i>
-                  </a>
-                   <form action="{{ path('schedule_roletype_delete', { 'id': entity.id }) }}" method="post">
-                      <input type="hidden" name="_method" value="DELETE" />
-                        {{ form_widget(delete_form) }}
-                    <button type="submit" class="btn btn-danger">
-                        <i class="fa fa-trash-o"></i>
-                    </button>
-                  </form> 
-              </div>    
-        </div>
-
-  <form action="{{ path('schedule_roletype_update', { 'id': entity.id }) }}"
-        method="post" {{ form_enctype(edit_form) }}>
-    <input type="hidden" name="_method" value="PUT"/>
-
-    <div class="row">
-      <div class="col-lg-2"></div>
-      <div class="col-lg-4">
-        {{ form_widget(edit_form) }}
-        <br/>
-        <button type="submit" class="btn btn-block btn-success">
-          <i class="fa fa-check"></i>
-        </button>
-      </div>
+<div class="row page-top-header ">
+    <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-3">
+        <span>Edit Role type</span>
+        <a class="btn btn-info" href="{{ path('documentation', { 'anchor': 'RoleType' }) }}" title="Help">
+            <i class="fa fa-question"></i>
+        </a>
     </div>
-  </form>
-    
-{% endblock %}
+
+    <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-7">
+    </div>
+    <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+        <a type="button" href="{{ path('schedule_roletype_index') }}" class="btn btn-warning" title="Go back to the list">
+            <i class="fa fa-list"></i>
+        </a>
+        <form action="{{ path('schedule_roletype_delete', { 'id': entity.id }) }}" method="post">
+            <input type="hidden" name="_method" value="DELETE" />
+            {{ form_widget(delete_form) }}
+            <button type="submit" class="btn btn-danger" title="Remove role type">
+                <i class="fa fa-trash-o"></i>
+            </button>
+        </form>
+    </div>
+</div>
+<div class="row page-content">
+    <form action="{{ path('schedule_roletype_update', { 'id': entity.id }) }}"
+          method="post" {{ form_enctype(edit_form) }}>
+        <input type="hidden" name="_method" value="PUT"/>
+
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-4">
+                {{ form_widget(edit_form) }}
+                <br/>
+                <button type="submit" class="btn btn-block btn-success">
+                    <i class="fa fa-check"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+    {% endblock %}

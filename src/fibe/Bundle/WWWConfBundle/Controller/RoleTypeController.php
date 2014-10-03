@@ -266,7 +266,7 @@ class RoleTypeController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('schedule_roletype'));
+        return $this->redirect($this->generateUrl('schedule_roletype_index'));
     }
 
     /**
