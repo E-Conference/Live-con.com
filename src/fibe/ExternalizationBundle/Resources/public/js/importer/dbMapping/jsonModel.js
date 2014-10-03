@@ -49,10 +49,10 @@ Model = {
     						setter : "setSummary"
               }},
     				optionnal : {  
-    					"description" : {
+    					"start" : {
     						setter : "setStartAt"
               },
-    					"description" : {
+    					"end" : {
     						setter : "setEndAt"
               },
     					"description" : {

@@ -21,7 +21,6 @@ use Pagerfanta\Adapter\ArrayAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Exception\NotValidCurrentPageException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 /**
  * Category controller.
@@ -39,7 +38,7 @@ class CategoryController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('IDCISimpleScheduleBundle:Category')->getOrdered();
+        $entities = $this->getUser()->getCurrentConf()->getCategories()->toArray();
 
         $adapter = new ArrayAdapter($entities);
         $pager = new PagerFanta($adapter);
@@ -87,7 +86,6 @@ class CategoryController extends Controller
      */
     public function newAction()
     {
-        throw new ServiceUnavailableHttpException('Not available yet.');
         $entity = new Category();
         $form   = $this->createForm(new CategoryType(), $entity);
 
@@ -106,13 +104,13 @@ class CategoryController extends Controller
      */
     public function createAction(Request $request)
     {
-        throw new ServiceUnavailableHttpException('Not available yet.');
         $entity  = new Category();
         $form = $this->createForm(new CategoryType(), $entity);
         $form->bind($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->setConference($this->getUser()->getCurrentConf());
             $em->persist($entity);
             $em->flush();
 
@@ -141,7 +139,6 @@ class CategoryController extends Controller
      */
     public function editAction($id)
     { 
-        throw new ServiceUnavailableHttpException('Not available yet.');
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IDCISimpleScheduleBundle:Category')->find($id);
 
@@ -167,7 +164,6 @@ class CategoryController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        throw new ServiceUnavailableHttpException('Not available yet.');
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IDCISimpleScheduleBundle:Category')->find($id);
 
@@ -191,7 +187,7 @@ class CategoryController extends Controller
                 ))
             );
 
-            return $this->redirect($this->generateUrl('schedule_category_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('schedule_category_show', array('id' => $entity->getId())));
         }
 
         return array(
@@ -209,7 +205,6 @@ class CategoryController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
-        throw new ServiceUnavailableHttpException('Not available yet.');
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -243,7 +238,6 @@ class CategoryController extends Controller
      */
     public function deleteFormAction($id)
     {
-        throw new ServiceUnavailableHttpException('Not available yet.');
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IDCISimpleScheduleBundle:Category')->find($id);
 
@@ -261,7 +255,6 @@ class CategoryController extends Controller
 
     private function createDeleteForm($id)
     {
-        throw new ServiceUnavailableHttpException('Not available yet.');
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
             ->getForm()

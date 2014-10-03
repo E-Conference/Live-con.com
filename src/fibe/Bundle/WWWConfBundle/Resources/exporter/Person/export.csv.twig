@@ -1,0 +1,43 @@
+{% set enclosure = '"' %}
+{% set delimiter = ';' %}
+
+{% autoescape false %}
+{% spaceless %}
+
+{{ enclosure }}{{ entity.id }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.firstName }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.familyName }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.description }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.page }}{{ enclosure }}{{ delimiter }}
+{{ enclosure }}{{ entity.image }}{{ enclosure }}{{ delimiter }}
+
+{% for role in entity.roles %}
+  {% if loop.first %}{{ enclosure }}{% else %}|{% endif %}
+  {{ role.type.name }} : {{ role.event }}
+  {% if loop.last%}{{ enclosure }}{% else %}{% endif %}
+{% endfor %}
+{{ delimiter }}
+
+{% for organization in entity.organizations %}
+  {% if loop.first %}{{ enclosure }}{% else %}|{% endif %}
+  {{ organization.name }}
+  {% if loop.last%}{{ enclosure }}{% else %}{% endif %}
+{% endfor %}
+{{ delimiter }}
+
+{% for paper in entity.papers %}
+  {% if loop.first %}{{ enclosure }}{% else %}|{% endif %}
+  {{ paper.title }}
+  {% if loop.last%}{{ enclosure }}{% else %}{% endif %}
+{% endfor %}
+{{ delimiter }}
+
+{% for account in entity.accounts %}
+  {% if loop.first %}{{ enclosure }}{% else %}|{% endif %}
+  {{ account.socialService }} : {{ account.accountName }}
+  {% if loop.last%}{{ enclosure }}{% else %}{% endif %}
+{% endfor %}
+{{ delimiter }}
+
+{% endspaceless %}
+{% endautoescape %}

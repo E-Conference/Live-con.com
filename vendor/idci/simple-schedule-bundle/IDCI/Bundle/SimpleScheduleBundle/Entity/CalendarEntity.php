@@ -9,6 +9,7 @@
 
 namespace IDCI\Bundle\SimpleScheduleBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -512,10 +513,10 @@ class CalendarEntity
      */
     public function __construct()
     {
-        $this->calendarEntities = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->xProperties = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->calendarEntities = new ArrayCollection();
+        $this->children = new ArrayCollection();
+        $this->xProperties = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
     
     /**
@@ -959,6 +960,16 @@ class CalendarEntity
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * Set categories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function setCategories($categories)
+    {
+        return $this->categories = $categories;
     }
 
     /**

@@ -22,6 +22,26 @@
                 <a class="btn btn-info btn-create create" href="{{ path('schedule_confevent_new') }}" title="Add an event">
                   <i class="fa fa-plus"></i>  New event
                 </a>
+                <div class="dropdown">
+                    <button class="btn btn-info" type="button" id="exportDropdownMenu" data-toggle="dropdown">
+                      <i class="fa fa-download"></i>  Export events
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="exportDropdownMenu">
+                        <li role="presentation" class="dropdown-header">format</li>
+                        <li role="presentation">
+                          <a role="menuitem" tabindex="-1" href="{{ path('exporter_api', { 'entity_reference': 'schedule_event', '_format': 'csv'}) }}?conference_id={{ app.user.currentConf.id }}">csv</a>
+                        </li>
+                        <li role="presentation">
+                          <a role="menuitem" tabindex="-1" href="{{ path('exporter_api', { 'entity_reference': 'schedule_event', '_format': 'ics'}) }}?conference_id={{ app.user.currentConf.id }}">ics</a>
+                        </li>
+                        <li role="presentation">
+                          <a role="menuitem" tabindex="-1" href="{{ path('exporter_api', { 'entity_reference': 'schedule_event', '_format': 'xml'}) }}?conference_id={{ app.user.currentConf.id }}">xml</a>
+                        </li>
+                        <li role="presentation">
+                          <a role="menuitem" tabindex="-1" href="{{ path('exporter_api', { 'entity_reference': 'schedule_event', '_format': 'json'}) }}?conference_id={{ app.user.currentConf.id }}">json</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     <div class="row page-content">

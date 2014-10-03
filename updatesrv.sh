@@ -1,3 +1,4 @@
+git pull
 php app/console doctrine:schema:update --force
 chmod -R 777 app/cache
 rm -R app/cache/* app/logs/*

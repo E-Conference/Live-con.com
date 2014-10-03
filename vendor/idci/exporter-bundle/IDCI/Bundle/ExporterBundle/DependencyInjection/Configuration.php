@@ -48,6 +48,7 @@ class Configuration implements ConfigurationInterface
                                                 ->arrayNode('options')
                                                     ->children()
                                                         ->scalarNode('template_path')->cannotBeEmpty()->end()
+                                                        ->scalarNode('header')->end()
                                                         ->scalarNode('template_name_format')->defaultValue('export.%s.twig')->cannotBeEmpty()->end()
                                                     ->end()
                                                 ->end()

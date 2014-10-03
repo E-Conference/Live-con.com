@@ -2,7 +2,10 @@
 
 namespace fibe\Bundle\WWWConfBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use fibe\Bundle\WWWConfBundle\Entity\Role;
+use fibe\Bundle\WWWConfBundle\Entity\WwwConf;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -49,6 +52,14 @@ class RoleType
      * @ORM\OneToMany(targetEntity="Role", mappedBy="type")
      */
     private $roles;
+
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="fibe\Bundle\WWWConfBundle\Entity\WwwConf", inversedBy="roleTypes", cascade={"persist"})
+     * @ORM\JoinColumn(name="conference_id", referencedColumnName="id")
+     *
+     */
+    private $conference;
     
 
     /**
@@ -56,7 +67,7 @@ class RoleType
      */
     public function __construct()
     {
-        $this->role = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->role = new ArrayCollection();
     }
     
     /**
@@ -72,10 +83,10 @@ class RoleType
     /**
      * Add role
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $role
+     * @param Role $role
      * @return RoleType
      */
-    public function addRole(\fibe\Bundle\WWWConfBundle\Entity\Role $role)
+    public function addRole(Role $role)
     {
         $this->role[] = $role;
     
@@ -85,9 +96,9 @@ class RoleType
     /**
      * Remove role
      *
-     * @param \fibe\Bundle\WWWConfBundle\Entity\Role $role
+     * @param Role $role
      */
-    public function removeRole(\fibe\Bundle\WWWConfBundle\Entity\Role $role)
+    public function removeRole(Role $role)
     {
         $this->role->removeElement($role);
     }
@@ -152,5 +163,28 @@ class RoleType
     public function getLabel()
     {
         return $this->label;
+    }
+
+  /**
+   * Set conference
+   *
+   * @param WwwConf $conf
+   * @return RoleType
+   */
+    public function setConference(WwwConf $conf)
+    {
+      $this->conference = $conf;
+
+      return $this;
+    }
+
+    /**
+     * Get conference
+     *
+     * @return WwwConf
+     */
+    public function getConference()
+    {
+      return $this->conference;
     }
 }

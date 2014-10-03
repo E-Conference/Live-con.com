@@ -69,13 +69,6 @@ class CategoryRepository extends EntityRepository
     {
         $qb = $this->getOrderedQueryBuilder();
 
-        if(isset($params['level'])) {
-            $qb
-                ->andWhere('cat.level = :level')
-                ->setParameter('level', $params['level'])
-            ;
-        }
-
         if(isset($params['id'])) {
             $qb
                 ->andWhere('cat.id = :id')
@@ -86,6 +79,21 @@ class CategoryRepository extends EntityRepository
         if(isset($params['ids'])) {
             $qb
                 ->andWhere($qb->expr()->in('cat.id', $params['ids']))
+            ;
+        }
+
+
+        if(isset($params['conference_id'])) {
+            $qb
+                ->andWhere('cat.conference = :conference_id')
+                ->setParameter('conference_id', $params['conference_id'])
+            ;
+        }
+
+        if(isset($params['level'])) {
+            $qb
+                ->andWhere('cat.level = :level')
+                ->setParameter('level', $params['level'])
             ;
         }
 

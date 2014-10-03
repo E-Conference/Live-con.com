@@ -24,7 +24,7 @@ xmlMapper = {
             }] 
         }
     },
-	map : function(data,nodePath,nodeCallBack,entryCallBack){
+    map : function(data,nodePath,nodeCallBack,entryCallBack){
         var $data = $(data);
         console.log("mapping : ",$data); 
            
@@ -62,7 +62,7 @@ xmlMapper = {
             }
  
         }
-	},  
+    },  
 
     // *required by Importer internal* 
     getNodeName : function(node){
@@ -127,18 +127,34 @@ xmlMapper = {
             })
             return rtn.length > 1 ? rtn : rtn.length == 1 ? rtn[0] : undefined;
         },
-        split : function(text,arg){
-            if(!text)return text;
-            var rtn = text.split(arg[0]);
-            switch(arg[1])
+        split : function(texts,arg){
+            var rtn = [];
+            if(typeof texts === "string")
             {
-            case "last":
-                rtn = rtn[rtn.length-1];
-            break;
-            default:
-                rtn = rtn[arg[1]];
+                return splitInternal(texts,arg)
             }
-            return rtn;
+            else{ 
+                $(texts).each( function(i,val){
+                    if(!val)return;
+                    var text = $(this).text().split(arg[0]);
+                    rtn.push(splitInternal(text,arg));
+                })
+                return rtn.length > 1 ? rtn : rtn.length == 1 ? rtn[0] : undefined;  
+            }
+            function splitInternal(text,arg)
+            { 
+                switch(arg[1])
+                {
+                    case "last":
+                        rtn = text[text.length-1];
+                    break;
+                    case "first":
+                        rtn = text[0];
+                    break;
+                    default:
+                        rtn = text[arg[1]];
+                }
+            }
         },
         localName : function(node){
             return $(node)[0].localName;
@@ -148,7 +164,7 @@ xmlMapper = {
         attr : function(node,arg){
             var rtn = [];
             $(node).each( function(){
-                rtn.push($(this).attr(arg[0]) );
+                rtn.push($(this).attr(arg[0]));
             })
             return rtn.length > 1 ? rtn : rtn.length == 1 ? rtn[0] : undefined;
         },

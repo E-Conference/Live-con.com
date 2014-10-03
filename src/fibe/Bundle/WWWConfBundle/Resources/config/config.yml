@@ -17,6 +17,10 @@ idci_exporter:
         schedule_event:
             class: "fibe\\Bundle\\WWWConfBundle\\Entity\\ConfEvent"
             formats:
+                csv:
+                    transformer:
+                        options:
+                            header: "id;summary;createdAt;endAt;startAt;duration;lastModifiedAt;description;comment;url;organizer;contacts;location.id;location.name;location.description;categories;roles"
                 jsonp:
                     transformer:
 #                        service: "idci_exporter.transformer_twig"
@@ -67,6 +71,10 @@ idci_exporter:
         schedule_person:
             class: "fibe\\Bundle\\WWWConfBundle\\Entity\\Person"
             formats:
+                csv:
+                    transformer:
+                        options:
+                            header: "id;firstName;familyName;description;page;image;roles;organizations;papers;accounts"
                 jsonp:
                     transformer:
 #                        service: "idci_exporter.transformer_twig"

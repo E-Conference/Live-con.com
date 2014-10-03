@@ -144,7 +144,6 @@ class PersonController extends Controller
             return $this->redirect($this->generateUrl('schedule_person_index'));
 
         }
-        var_dump($form->getErrors());
 
         return $this->render('fibeWWWConfBundle:Person:new.html.twig', array(
             'entity' => $entity,

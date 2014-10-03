@@ -15,13 +15,13 @@ class XmlExport extends AbstractExport
 
     public function buildHeader()
     {
-        /*$this->setContent('<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL.'<entities>'.PHP_EOL);*/
-        $this->setContent('<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL);
+        $this->setContent('<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL.'<entities>'.PHP_EOL);
+        /*$this->setContent('<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL);*/
     }
 
     public function buildFooter()
     {
-       //$this->setContent($this->getContent().'</entities>');
-         $this->setContent($this->getContent());
+       $this->setContent($this->getContent().'</entities>');
+//         $this->setContent($this->getContent());
     }
 }

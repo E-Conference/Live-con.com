@@ -3,38 +3,73 @@
 {% block title %}Category edit{% endblock title %}
 
 {% block centerPanel %}
-  {{ parent() }}
+    {{ parent() }}
 
     <div class="row page-top-header ">
-            <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                <span>Edit category</span>
-            </div>
+        <div class="page-title col-xs-5  col-sm-4 col-md-3 col-lg-2">
+            <span>Edit category</span>
+        </div>
 
-            <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
-            </div>
-            <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
-                 <a type="button" href="{{ path('schedule_topic') }}" class="btn btn-warning" title="Go back to the list">
-                    <i class="fa fa-list"></i>
-                 <form action="{{ path('schedule_category_delete', { 'id': entity.id }) }}" method="post">
-                   {{ form_widget(delete_form) }}
+        <div class=" col-xs-2 col-sm-4 col-md-6 col-lg-8">
+        </div>
+        <div class="page-btn-list  col-xs-5  col-sm-4 col-md-3 col-lg-2">
+             <a type="button" href="{{ path('schedule_category') }}" class="btn btn-warning" title="Go back to the list">
+                <i class="fa fa-list"></i>
+             </a>
+             <form action="{{ path('schedule_category_delete', { 'id': entity.id }) }}" method="post">
+                 {{ form_widget(delete_form) }}
                   <button type="submit" class="btn btn-danger" title="Remove category"><i class="fa fa-trash-o"></i></button>
-                  </form>
-            </div>
+              </form>
+        </div>
     </div>
-       <div class="row page-content">
-          <form action="{{ path('schedule_category_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
-              
-              {{ form_widget(edit_form) }}
-              
-               <div class="row-fluid">
-                      <div class="col-lg-9"></div>
-                      <div class="col-lg-2">
-                            <button type="submit" class="btn btn-default"><i class="fa fa-check"></i></button>
-                            <a class="btn btn-warning" href="{{ path('schedule_category') }}">
-                              <i class="fa fa-list"></i>
-                          </a>
-                      </div>
-                  </div>
-          </form>
-      </div>
-{% endblock body %}
+    <div class="row page-content">
+        <form action="{{ path('schedule_category_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+
+           {{ form_widget(edit_form) }}
+
+            <div class="row-fluid">
+                <div class="col-lg-9"></div>
+                <div class="col-lg-2">
+                    <button type="submit" class="btn btn-default"><i class="fa fa-check"></i></button>
+                    <a class="btn btn-warning" href="{{ path('schedule_category') }}">
+                        <i class="fa fa-list"></i>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+
+{% block stylesheets_page %}
+  <link rel="stylesheet" type="text/css" href="{{ asset('css/spectrum/spectrum.css')}}" />
+{% endblock stylesheets_page %}
+{% block javascripts_page %}
+  <script type="text/javascript" src="{{ asset('js/spectrum/spectrum.js')}}"></script>
+
+
+  <script type="text/javascript">
+    $( document ).ready(function() {
+
+
+      $(".color").spectrum({
+        flat: false,
+        showInput: true,
+        showInitial: true,
+        showAlpha: false,
+        disabled: false,
+        localStorageKey: "color",
+        showPalette: true,
+        showPaletteOnly: false,
+        showSelectionPalette: true,
+        clickoutFiresChange: false,
+        cancelText: "cancelText",
+        chooseText: "choose",
+        className: "colorpicker",
+        preferredFormat: "hex",
+        maxSelectionSize: 12,
+      });
+    });
+
+  </script>
+{% endblock%}

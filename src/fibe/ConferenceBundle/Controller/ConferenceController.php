@@ -2,6 +2,8 @@
 
 namespace fibe\ConferenceBundle\Controller;
 
+use fibe\Bundle\WWWConfBundle\Entity\RoleType;
+use IDCI\Bundle\SimpleScheduleBundle\Entity\Category;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,8 +15,6 @@ use fibe\Bundle\WWWConfBundle\Entity\ConfEvent;
 use fibe\Bundle\WWWConfBundle\Entity\MobileAppConfig;
 use fibe\Bundle\WWWConfBundle\Form\WwwConfType;
 use fibe\Bundle\WWWConfBundle\Form\ModuleType;
-use fibe\Bundle\WWWConfBundle\Form\WwwConfEventDefaultType;
-use fibe\Bundle\WWWConfBundle\Form\WwwConfDefaultType;
 
 use fibe\SecurityBundle\Entity\Authorization;
 
@@ -169,99 +169,218 @@ class ConferenceController extends Controller
      */
     public function createAction(Request $request)
     {
-            //Persist Conference
-            $em = $this->getDoctrine()->getManager();
-        
-            //Create the default conference
-            $entity = new WwwConf();
-            $entity->setLogoPath("livecon.png"); 
-            $em->persist($entity); 
+        //Persist Conference
+        $em = $this->getDoctrine()->getManager();
 
-            //Session user 
-            $user = $this->getUser();
+        //Create the default conference
+        $conference = new WwwConf();
+        $conference->setLogoPath("livecon.png");
+        $em->persist($conference);
 
-            //Module
-            $defaultModule = new Module();
-            $defaultModule->setPaperModule(1);
-            $defaultModule->setOrganizationModule(1);
-            $em->persist($defaultModule);
+        //Session user
+        $user = $this->getUser();
 
-            //Create new App config for the conference
-            $defaultAppConfig = new MobileAppConfig();
+        //Module
+        $defaultModule = new Module();
+        $defaultModule->setPaperModule(1);
+        $defaultModule->setOrganizationModule(1);
+        $em->persist($defaultModule);
 
-            //header color
-            $defaultAppConfig->setBGColorHeader("#f2f2f2");
-            $defaultAppConfig->setTitleColorHeader("#000000");
-            //navBar color
-            $defaultAppConfig->setBGColorNavBar("#305c6b");
-            $defaultAppConfig->setTitleColorNavBar("#f3f6f6");
-            //content color
-            $defaultAppConfig->setBGColorContent("#f3f6f6");
-            $defaultAppConfig->setTitleColorContent("#8c949c");
-            //buttons color 
-            $defaultAppConfig->setBGColorButton("#f3f6f6");
-            $defaultAppConfig->setTitleColorButton("#000000");
-            //footer color
-            $defaultAppConfig->setBGColorfooter("#305c6b");
-            $defaultAppConfig->setTitleColorFooter("#f3f6f6");
-            $defaultAppConfig->setIsPublished(true);
-            $defaultAppConfig->setDblpDatasource(true);
-            $defaultAppConfig->setGoogleDatasource(true);
-            $defaultAppConfig->setDuckduckgoDatasource(true);
-            $defaultAppConfig->setLang("EN");
-           
-            $em->persist($defaultAppConfig);
+        //Create new App config for the conference
+        $defaultAppConfig = new MobileAppConfig();
 
-            $categorie = $em->getRepository('IDCISimpleScheduleBundle:Category')->findOneByName("ConferenceEvent");
-            
-           //Main conf event  
-            $mainConfEvent = new ConfEvent();
-            $mainConfEvent->setSummary("Livecon Conference");
-            $mainConfEvent->setIsMainConfEvent(true);
-            $mainConfEvent->setStartAt( new \DateTime('now'));
-            $end = new \DateTime('now');
-            $mainConfEvent->setEndAt( $end->add(new \DateInterval('P2D')));
-            $mainConfEvent->addCategorie($categorie);
-            $mainConfEvent->setConference($entity);
-            $em->persist($mainConfEvent);
+        //header color
+        $defaultAppConfig->setBGColorHeader("#f2f2f2");
+        $defaultAppConfig->setTitleColorHeader("#000000");
+        //navBar color
+        $defaultAppConfig->setBGColorNavBar("#305c6b");
+        $defaultAppConfig->setTitleColorNavBar("#f3f6f6");
+        //content color
+        $defaultAppConfig->setBGColorContent("#f3f6f6");
+        $defaultAppConfig->setTitleColorContent("#8c949c");
+        //buttons color
+        $defaultAppConfig->setBGColorButton("#f3f6f6");
+        $defaultAppConfig->setTitleColorButton("#000000");
+        //footer color
+        $defaultAppConfig->setBGColorfooter("#305c6b");
+        $defaultAppConfig->setTitleColorFooter("#f3f6f6");
+        $defaultAppConfig->setIsPublished(true);
+        $defaultAppConfig->setDblpDatasource(true);
+        $defaultAppConfig->setGoogleDatasource(true);
+        $defaultAppConfig->setDuckduckgoDatasource(true);
+        $defaultAppConfig->setLang("EN");
+
+        $em->persist($defaultAppConfig);
+
+        //categories
+        $SocialEvent = new Category();
+        $SocialEvent->setName("SocialEvent");
+        $SocialEvent->setLabel("Social event")
+          ->setColor("#B186D7")
+          ->setConference($conference)
+          // ->setParent($NonAcademicEvent)
+        ;
+        $em->persist($SocialEvent);
+
+        $MealEvent = new Category();
+        $MealEvent->setName("MealEvent");
+        $MealEvent->setLabel("Meal Event")
+          ->setColor("#00a2e0")
+          ->setConference($conference)
+          // ->setParent($NonAcademicEvent)
+        ;
+        $em->persist($MealEvent);
+
+        $BreakEvent = new Category();
+        $BreakEvent->setName("BreakEvent");
+        $BreakEvent->setLabel("Break event")
+          ->setColor("#00a2e0")
+          ->setConference($conference)
+          // ->setParent($NonAcademicEvent)
+        ;
+        $em->persist($BreakEvent);
+
+        // academic
+
+        $KeynoteEvent = new Category();
+        $KeynoteEvent->setName("KeynoteEvent");
+        $KeynoteEvent->setLabel("Keynote event")
+          ->setColor("#afcbe0")
+          ->setConference($conference)
+          // ->setParent($AcademicEvent)
+        ;
+        $em->persist($KeynoteEvent);
+
+        $TrackEvent = new Category();
+        $TrackEvent->setName("TrackEvent");
+        $TrackEvent->setLabel("Track event")
+          ->setColor("#afcbe0")
+          ->setConference($conference)
+          // ->setParent($AcademicEvent)
+        ;
+        $em->persist($TrackEvent);
+
+        $PanelEvent = new Category();
+        $PanelEvent->setName("PanelEvent");
+        $PanelEvent->setLabel("Panel event")
+          ->setColor("#e7431e")
+          ->setConference($conference)
+          // ->setParent($AcademicEvent)
+        ;
+        $em->persist($PanelEvent);
+
+        $ConferenceEvent = new Category();
+        $ConferenceEvent->setName("ConferenceEvent");
+        $ConferenceEvent->setLabel("Conference event")
+          ->setColor("#b0ca0f")
+          ->setConference($conference)
+          // ->setParent($AcademicEvent)
+        ;
+        $em->persist($ConferenceEvent);
+
+        $WorkshopEvent = new Category();
+        $WorkshopEvent->setName("WorkshopEvent");
+        $WorkshopEvent->setLabel("Workshop event")
+          ->setColor("#EBD94E")
+          ->setConference($conference)
+          // ->setParent($AcademicEvent)
+        ;
+        $em->persist($WorkshopEvent);
+
+        $SessionEvent = new Category();
+        $SessionEvent->setName("SessionEvent");
+        $SessionEvent->setLabel("Session event")
+          ->setColor("#8F00FF")
+          ->setConference($conference)
+          // ->setParent($AcademicEvent)
+        ;
+        $em->persist($SessionEvent);
+
+        $TalkEvent = new Category();
+        $TalkEvent->setName("TalkEvent");
+        $TalkEvent->setLabel("Talk event")
+          ->setColor("#FF5A45")
+          ->setConference($conference)
+          // ->setParent($AcademicEvent)
+        ;
 
 
-            // conference location
-            $mainConfEventLocation = new Location();
-            $mainConfEventLocation->setName("Conference's location");
-            $mainConfEventLocation->addLocationAwareCalendarEntitie($mainConfEvent);
-            $mainConfEventLocation->setConference($entity);
-            $em->persist($mainConfEventLocation);
-            $mainConfEvent->setLocation($mainConfEventLocation);
-            $em->persist($mainConfEvent);
 
-            //Create authorization
-             $creatorAuthorization = new Authorization();
-             $creatorAuthorization->setConference($entity);
-             $creatorAuthorization->setUser($user);
-             $creatorAuthorization->setFlagApp(1);
-             $creatorAuthorization->setFlagSched(1);
-             $creatorAuthorization->setFlagconfDatas(1);
-             $creatorAuthorization->setFlagTeam(1);
-             $em->persist($creatorAuthorization);
+        //RoleType
+        $roleType = new RoleType();
+        $roleType->setName("Delegate");
+        $roleType->setLabel("Delegate");
+        $roleType->setConference($conference);
+        $em->persist($roleType);
 
-            //Linking app config to conference
-            $entity->setAppConfig($defaultAppConfig);
-            $entity->setMainConfEvent($mainConfEvent);
-            $entity->setModule($defaultModule);
+        $roleType = new RoleType();
+        $roleType->setName("Chair");
+        $roleType->setLabel("Chair");
+        $roleType->setConference($conference);
+        $em->persist($roleType);
 
-            //Add conference to current manager
-            $user->setCurrentConf($entity);
-            $user->addConference($entity); 
+        $roleType = new RoleType();
+        $roleType->setName("Presenter");
+        $roleType->setLabel("Presenter");
+        $roleType->setConference($conference);
+        $em->persist($roleType);
 
-            $em->persist($user);
-            $em->persist($entity); 
-            $em->flush();
+        $roleType = new RoleType();
+        $roleType->setName("ProgrammeCommitteeMember");
+        $roleType->setLabel("Programme Committee Member");
+        $roleType->setConference($conference);
+        $em->persist($roleType);
 
-            //Create slug after persist => visibleon endpoint
-            $entity->slugify();
-            $em->persist($entity); 
-            $em->flush();
+
+
+       //Main conf event
+        $mainConfEvent = new ConfEvent();
+        $mainConfEvent->setSummary("Livecon Conference");
+        $mainConfEvent->setIsMainConfEvent(true);
+        $mainConfEvent->setStartAt( new \DateTime('now'));
+        $end = new \DateTime('now');
+        $mainConfEvent->setEndAt( $end->add(new \DateInterval('P2D')));
+        $mainConfEvent->addCategorie($ConferenceEvent);
+        $mainConfEvent->setConference($conference);
+        $em->persist($mainConfEvent);
+
+
+        // conference location
+        $mainConfEventLocation = new Location();
+        $mainConfEventLocation->setName("Conference's location");
+        $mainConfEventLocation->addLocationAwareCalendarEntitie($mainConfEvent);
+        $mainConfEventLocation->setConference($conference);
+        $em->persist($mainConfEventLocation);
+        $mainConfEvent->setLocation($mainConfEventLocation);
+        $em->persist($mainConfEvent);
+
+        //Create authorization
+         $creatorAuthorization = new Authorization();
+         $creatorAuthorization->setConference($conference);
+         $creatorAuthorization->setUser($user);
+         $creatorAuthorization->setFlagApp(1);
+         $creatorAuthorization->setFlagSched(1);
+         $creatorAuthorization->setFlagconfDatas(1);
+         $creatorAuthorization->setFlagTeam(1);
+         $em->persist($creatorAuthorization);
+
+        //Linking app config to conference
+        $conference->setAppConfig($defaultAppConfig);
+        $conference->setMainConfEvent($mainConfEvent);
+        $conference->setModule($defaultModule);
+
+        //Add conference to current manager
+        $user->setCurrentConf($conference);
+        $user->addConference($conference);
+
+        $em->persist($user);
+        $em->persist($conference);
+        $em->flush();
+
+        //Create slug after persist => visibleon endpoint
+        $conference->slugify();
+        $em->persist($conference);
+        $em->flush();
 
 
         return $this->redirect($this->generateUrl('schedule_conference_edit')); 
