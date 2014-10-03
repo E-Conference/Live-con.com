@@ -34,12 +34,37 @@ class UnshareRoleTypesCommand extends ContainerAwareCommand
 
         foreach($conferences as $conference)
         {
-            foreach($conference->getRoles() as $role)
-            {
-                $roleType = $role->getType();
-                $roleType->setConference($conference);
-                $em->persist($roleType);
-            }
+//            foreach($conference->getRoles() as $role)
+//            {
+//                $roleType = $role->getType();
+//                $roleType->setConference($conference);
+//                $em->persist($roleType);
+//            }
+            //RoleType
+            $roleType = new RoleType();
+            $roleType->setName("Delegate");
+            $roleType->setLabel("Delegate");
+            $roleType->setConference($conference);
+            $em->persist($roleType);
+
+            $roleTypeChair = new RoleType();
+            $roleTypeChair->setName("Chair");
+            $roleTypeChair->setLabel("Chair");
+            $roleTypeChair->setConference($conference);
+            $em->persist($roleTypeChair);
+
+            $roleTypePresenter = new RoleType();
+            $roleTypePresenter->setName("Presenter");
+            $roleTypePresenter->setLabel("Presenter");
+            $roleTypePresenter->setConference($conference);
+            $em->persist($roleTypePresenter);
+
+            $roleType = new RoleType();
+            $roleType->setName("ProgrammeCommitteeMember");
+            $roleType->setLabel("Programme Committee Member");
+            $roleType->setConference($conference);
+            $em->persist($roleType);
+
 
         }
 

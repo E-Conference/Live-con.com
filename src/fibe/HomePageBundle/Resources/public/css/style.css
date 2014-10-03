@@ -181,9 +181,10 @@ outline: none;
 
 
 	#entete .grid_5{
-		width:400px;
-		margin-top: 120px;
-	}
+        width: 600px;
+        margin-top: 120px;
+        margin-bottom: 30px;
+    }
 
 	#entete h1{
 		font-size: 39px;
@@ -203,7 +204,7 @@ outline: none;
 	}
 
 	#entete p {
-		text-align: justify;
+		text-align: left;
 		margin-top: 5px;
 	}
 
@@ -656,7 +657,7 @@ outline: none;
 	position: relative;
 	background:#19313b;
 	width: 100%;
-	height: 220px;
+	height: 300px;
 	padding-top: 30px;
 }
 
