@@ -1097,9 +1097,7 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 								});
 							}
 
-							if(eventInfo.eventTwitterWidgetToken){ 
-								ViewAdapterText.appendTwitterTimeline(parameters.contentEl,eventInfo.eventTwitterWidgetToken, {});	   
-							}
+
 
 							if(eventInfo.eventRoles &&  eventInfo.eventRoles.length>0){
 								var roleType = [];
@@ -1114,6 +1112,10 @@ define(['jquery', 'underscore', 'encoder','view/ViewAdapter', 'view/ViewAdapterT
 									ViewAdapterText.appendButton($('#'+role.type),'#person/'+Encoder.encode(role.person.name)+"/"+Encoder.encode(role.person.id),role.person.name,{tiny : 'true'});
 								});
 							}
+
+                            if(eventInfo.eventTwitterWidgetToken){
+                                ViewAdapterText.appendTwitterTimeline(parameters.contentEl,eventInfo.eventTwitterWidgetToken, {});
+                            }
 						}
 					}
 					
