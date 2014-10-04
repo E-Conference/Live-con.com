@@ -335,7 +335,7 @@ class ConferenceController extends Controller
 
        //Main conf event
         $mainConfEvent = new ConfEvent();
-        $mainConfEvent->setSummary("Livecon Conference");
+        $mainConfEvent->setSummary("New Sympozer Conference");
         $mainConfEvent->setIsMainConfEvent(true);
         $mainConfEvent->setStartAt( new \DateTime('now'));
         $end = new \DateTime('now');

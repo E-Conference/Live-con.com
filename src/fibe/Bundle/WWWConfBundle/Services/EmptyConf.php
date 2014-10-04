@@ -58,7 +58,7 @@ class EmptyConf {
 
       $newMainConfEvent = new Event();
       $newMainConfEvent->setIsMainConfEvent(true);
-      $newMainConfEvent->setSummary("Livecon Conference"); 
+      $newMainConfEvent->setSummary("New Sympozer Conference");
       $newMainConfEvent->setStartAt( new \DateTime('now'));
       $end = new \DateTime('now');
       $newMainConfEvent->setEndAt( $end->add(new \DateInterval('P2D'))); 
