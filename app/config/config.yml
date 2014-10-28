@@ -89,6 +89,9 @@ fos_user:
         # Permet de définir le template de l'email à envoyer (en html)
         email:
               template: fibeSecurityBundle:Registration:registration.email.twig
+              from_email:
+                    address:        sympozer.contact@gmail.com
+                    sender_name:    Sympozer.com
     registration:
         form:
             type: fibe_user_registration
@@ -96,9 +99,9 @@ fos_user:
              enabled:   true # change to true for required email confirmation
     from_email:
          # Adresse de l'expediteur
-         address:      noreply@live-con.com
+         address:      noreply@sympozer.com
          # Nom de l'expediteur
-         sender_name:  Admin Livecon Manager
+         sender_name:  Admin Sympozer Manager
        
 
 gregwar_captcha: ~

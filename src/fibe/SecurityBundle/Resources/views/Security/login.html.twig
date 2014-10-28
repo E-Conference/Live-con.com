@@ -30,7 +30,7 @@
     <div class="container_12">
 
       <div id="login" class="grid_4">
-        <a href="http://live-con.com/" title="Livecon UPGRATE YOUR CONFERENCE"><img src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon" /></a>
+        <a href="http:/sympozer.com/" title="sympozer UPGRATE YOUR CONFERENCE"><img src="{{ asset('bundles/fibehomepage/img/logo.png') }}" alt="Livecon" /></a>
           <div style="color:#811B06"><strong>{{ error.message }}</strong></div>
         <form   action="{{ path('login_check') }}" method="post">
             <label for="username"><p>Login :</p></label>
@@ -41,7 +41,8 @@
             <br/>
             <input type="checkbox" id="remember_me" name="_remember_me" checked />
             <label for="remember_me">Remember me</label>
-
+            </br>
+            <a href="{{ path('fos_user_resetting_request') }}">Forgotten password ?</a>
             <br />
             <input class="btn btn-success" id="submitButton" type="submit" value="Connexion" />
         </form>

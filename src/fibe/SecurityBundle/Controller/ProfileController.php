@@ -86,4 +86,15 @@ class ProfileController extends ContainerAware
             )
         );
     }
+
+    /**
+     * show the user
+     */
+    public function showAction(Request $request)
+    {
+        return new RedirectResponse($this->container->get('router')->generate('dashboard_index'));
+
+
+    }
+
 }

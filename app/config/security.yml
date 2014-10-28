@@ -28,6 +28,11 @@ security:
             pattern:   ^/login$
             anonymous: true # On autorise les anonymes sur ce pare-feu
 
+        reset_pwd:
+              # Cette expression régulière permet de prendre /login (mais pas /login_check !)
+              pattern:   ^/resetting*
+              anonymous: true # On autorise les anonymes sur ce pare-feu
+
         main_homepage:
             # Cette expression régulière permet de prendre /login (mais pas /login_check !)
             pattern:   ^/$

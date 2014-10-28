@@ -1,15 +1,16 @@
 {# src/MyApp/MonBundle/Resources/views/User/registration.email.twig #}
 
-{% block subject %}Confirmation d'inscription{% endblock %}
+{% block subject %}Welcome to Sympozer{% endblock %}
 
 {% block body_text %}
 {% autoescape false %}
-Bonjour {{ user.username }} !
+Hi {{ user.username }} !
 
-Vous devez confirmé voter inscription [....] en cliquant sur le lien suivant : {{ confirmationUrl }}
+Welcome to sympozer, your new conference management system. We are glad to help make the best of your time and ugrade your event!
+To confirm your account or change your password, please follow this link : {{ confirmationUrl }}
 
-Amicalement,
-Administrateur de monsiteweb.com
+Best regards,
+The sympozer team
 {% endautoescape %}
 {% endblock %}
 
