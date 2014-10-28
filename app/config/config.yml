@@ -99,9 +99,9 @@ fos_user:
              enabled:   true # change to true for required email confirmation
     from_email:
          # Adresse de l'expediteur
-         address:      noreply@sympozer.com
+         address:      sympozer.contact@gmail.com
          # Nom de l'expediteur
-         sender_name:  Admin Sympozer Manager
+         sender_name:  Sympozer.com
        
 
 gregwar_captcha: ~
